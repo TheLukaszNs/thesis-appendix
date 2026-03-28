@@ -42,7 +42,19 @@ Implementacja systemu NL-to-SQL w środowisku Mastra: definicje przepływów, ag
 | `agents/viz.agent.ts` | Generowanie specyfikacji Vega-Lite |
 | `agents/retrieval.agent.ts` | Agent wyszukiwania RAG |
 
-### Główne katalogi
+### Ewaluatory (Scorers)
+
+| Plik | Rola |
+|---|---|
+| `scorers/sql-execution.scorer.ts` | Sprawdzenie poprawności wykonania SQL |
+| `scorers/sql-safety.scorer.ts` | Weryfikacja bezpieczeństwa zapytania |
+| `scorers/vega-contract.scorer.ts` | Zgodność specyfikacji Vega-Lite z kontraktem |
+| `scorers/intent-alignment.scorer.ts` | Zgodność wyniku z intencją pytania |
+| `scorers/efficiency.scorer.ts` | Ocena efektywności zapytania |
+| `scorers/utils.ts` | Funkcje pomocnicze ewaluatorów |
+| `scorers/index.ts` | Eksport wszystkich ewaluatorów |
+
+### Pozostałe katalogi i pliki
 
 | Ścieżka | Zawartość |
 |---|---|
@@ -50,11 +62,11 @@ Implementacja systemu NL-to-SQL w środowisku Mastra: definicje przepływów, ag
 | `agents/` | Wszystkie agenty Mastra |
 | `tools/` | Narzędzia Mastra (introspekcja schematu, wykonywanie SQL, EXPLAIN, próbkowanie) |
 | `db/` | Połączenie z bazą danych i funkcje pomocnicze |
-| `parsing/` | Narzędzia parsowania SQL i odpowiedzi |
-| `validation/` | Logika walidacji wyników |
-| `visualization/` | Funkcje pomocnicze specyfikacji Vega-Lite |
-| `scorers/` | Definicje ewaluatorów |
-| `config/` | Konfiguracja środowiska uruchomieniowego Mastra |
+| `contracts/workflow.contracts.ts` | Kontrakty typów wejścia/wyjścia przepływów |
+| `validation/issue-policy.ts` | Logika walidacji wyników |
+| `visualization/` | Normalizacja i weryfikacja poprawności specyfikacji Vega-Lite |
+| `config/model.config.ts` | Konfiguracja modeli językowych |
+| `types.ts` | Wspólne typy TypeScript |
 | `index.ts` | Punkt wejścia Mastra — rejestracja wszystkich przepływów i agentów |
 
 ---
@@ -84,8 +96,8 @@ Pliki konfiguracyjne znajdują się w katalogu `config/` i odpowiadają warunkom
 | `gemini/university.yaml` | simpleWorkflow | Gemini Flash |
 | `qwen/university.yaml` | simpleWorkflow | Qwen |
 | `ollama/university.yaml` | simpleWorkflow | Model lokalny przez Ollama |
-| `university-agent.yaml` | agentWorkflow | Agent oparty na GPT |
-| `university-complex.yaml` | complexWorkflow | Wieloetapowy planer |
+| `university-agent.yaml` | agentWorkflow | GPT — przepływ agentowy |
+| `university-complex.yaml` | complexWorkflow | GPT — przepływ złożony |
 | `university-network.yaml` | networkWorkflow | Wariant sieciowy |
 
 ### Wyniki eksperymentów
@@ -94,14 +106,10 @@ Wszystkie wyniki eksperymentów są przechowywane w katalogu `experiments/`, z j
 
 ```
 experiments/
-├── university/            ← bazowy prosty przepływ
+├── university/            ← bazowy przepływ (simpleWorkflow)
 ├── university-claude/     ← warunek: model Claude
-├── university-gemini/     ← warunek: model Gemini
-├── university-gemma3/     ← warunek: model Gemma 3
-├── university-qwen/       ← warunek: model Qwen
 ├── university-agent/      ← warunek: przepływ agentowy
-├── university-complex/    ← warunek: przepływ złożony
-└── university-network/    ← warunek: przepływ sieciowy
+└── university-complex/    ← warunek: przepływ złożony
 ```
 
 Każdy katalog uruchomienia zawiera: `manifest.json`, `summary.json`, `trace-cost-report.json`, `grades.json`, `sql-checks.json`, `golden-sql-results.json` oraz artefakty poszczególnych uruchomień (`run.json`, `query.sql`, `vega.raw.json`, `viz.png`).
