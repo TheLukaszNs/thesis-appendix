@@ -1,129 +1,129 @@
-# Appendix: Digital Supplementary Materials
+# Załącznik: Cyfrowe materiały uzupełniające
 
-This appendix contains the full source code and experimental data produced as part of the master thesis. The materials are organised into two self-contained directories, each corresponding to a distinct component of the implemented system.
+Niniejszy załącznik zawiera pełny kod źródłowy oraz dane eksperymentalne wytworzone w ramach pracy magisterskiej. Materiały są podzielone na dwa samodzielne katalogi, z których każdy odpowiada oddzielnemu komponentowi zaimplementowanego systemu.
 
 ---
 
-## Directory Structure
+## Struktura katalogów
 
 ```
 appendix/
-├── README.md                    ← this file
-├── A_workflow-system/           ← Mastra workflow/agent implementation (src/mastra/)
-└── B_experiment-runner/         ← the evaluation and experiment tooling
+├── README.md                    ← ten plik
+├── A_workflow-system/           ← implementacja przepływów i agentów Mastra (src/mastra/)
+└── B_experiment-runner/         ← narzędzie do przeprowadzania i oceny eksperymentów
 ```
 
 ---
 
-## A — Mastra Workflows (`A_workflow-system/`)
+## A — Przepływy Mastra (`A_workflow-system/`)
 
-The Mastra implementation of the NL-to-SQL system: workflow definitions, agents, tools, and supporting modules. This is the core of the system evaluated in the thesis — it accepts natural-language questions, generates SQL, executes it against a PostgreSQL database, and produces Vega-Lite visualisation specs.
+Implementacja systemu NL-to-SQL w środowisku Mastra: definicje przepływów, agentów, narzędzi oraz modułów pomocniczych. Jest to rdzeń systemu ocenianego w pracy — przyjmuje pytania w języku naturalnym, generuje zapytania SQL, wykonuje je na bazie danych PostgreSQL i tworzy specyfikacje wizualizacji w formacie Vega-Lite.
 
-**Framework:** Mastra 1.2, AI SDK, PostgreSQL, Vega-Lite.
+**Technologie:** Mastra 1.2, AI SDK, PostgreSQL, Vega-Lite.
 
-### Workflows
+### Przepływy (Workflows)
 
-| File | Workflow ID | Description |
+| Plik | ID przepływu | Opis |
 |---|---|---|
-| `workflows/simple.workflow.ts` | `simpleWorkflow` | Single-step: model generates SQL → execute → visualise |
-| `workflows/agent.workflow.ts` | `agentWorkflow` | Agent generates SQL and visualisation spec in one shot |
-| `workflows/complex.workflow.ts` | `complexWorkflow` | Planner + iterative SQL→validate loop (up to 3 attempts) |
-| `workflows/rag.workflow.ts` | `ragWorkflow` | RAG-augmented variant |
+| `workflows/simple.workflow.ts` | `simpleWorkflow` | Jednoetapowy: model generuje SQL → wykonanie → wizualizacja |
+| `workflows/agent.workflow.ts` | `agentWorkflow` | Agent generuje SQL i specyfikację wizualizacji w jednym kroku |
+| `workflows/complex.workflow.ts` | `complexWorkflow` | Planer + iteracyjna pętla SQL→walidacja (do 3 prób) |
+| `workflows/rag.workflow.ts` | `ragWorkflow` | Wariant z augmentacją RAG |
 
-### Agents
+### Agenty
 
-| File | Role |
+| Plik | Rola |
 |---|---|
-| `agents/sql.agent.ts` | Primary SQL generation agent |
-| `agents/one-shot.agent.ts` | One-shot SQL + visualisation agent |
-| `agents/planner.agent.ts` | Query planner (used by complexWorkflow) |
-| `agents/validator.agent.ts` | SQL validation step |
-| `agents/intent-parser.agent.ts` | Natural-language intent parsing |
-| `agents/viz.agent.ts` | Vega-Lite spec generation |
-| `agents/retrieval.agent.ts` | RAG retrieval agent |
+| `agents/sql.agent.ts` | Główny agent generujący zapytania SQL |
+| `agents/one-shot.agent.ts` | Agent jednoetapowy: SQL + wizualizacja |
+| `agents/planner.agent.ts` | Planer zapytań (używany przez complexWorkflow) |
+| `agents/validator.agent.ts` | Etap walidacji SQL |
+| `agents/intent-parser.agent.ts` | Parsowanie intencji w języku naturalnym |
+| `agents/viz.agent.ts` | Generowanie specyfikacji Vega-Lite |
+| `agents/retrieval.agent.ts` | Agent wyszukiwania RAG |
 
-### Notable directories
+### Główne katalogi
 
-| Path | Contents |
+| Ścieżka | Zawartość |
 |---|---|
-| `workflows/` | Workflow definitions (simple, agent, complex, rag) |
-| `agents/` | All Mastra agents |
-| `tools/` | Mastra tools (schema introspection, SQL execution, EXPLAIN, sampling) |
-| `db/` | Database connection and query helpers |
-| `parsing/` | SQL and response parsing utilities |
-| `validation/` | Output validation logic |
-| `visualization/` | Vega-Lite spec helpers |
-| `scorers/` | Evaluation scorer definitions |
-| `config/` | Mastra runtime configuration |
-| `index.ts` | Mastra entry point — registers all workflows and agents |
+| `workflows/` | Definicje przepływów (simple, agent, complex, rag) |
+| `agents/` | Wszystkie agenty Mastra |
+| `tools/` | Narzędzia Mastra (introspekcja schematu, wykonywanie SQL, EXPLAIN, próbkowanie) |
+| `db/` | Połączenie z bazą danych i funkcje pomocnicze |
+| `parsing/` | Narzędzia parsowania SQL i odpowiedzi |
+| `validation/` | Logika walidacji wyników |
+| `visualization/` | Funkcje pomocnicze specyfikacji Vega-Lite |
+| `scorers/` | Definicje ewaluatorów |
+| `config/` | Konfiguracja środowiska uruchomieniowego Mastra |
+| `index.ts` | Punkt wejścia Mastra — rejestracja wszystkich przepływów i agentów |
 
 ---
 
-## B — Experiment Runner (`B_experiment-runner/`)
+## B — Narzędzie eksperymentalne (`B_experiment-runner/`)
 
-A CLI tool (Bun runtime) for systematically running testset prompts against workflow endpoints, collecting structured artifacts, analysing LLM trace data from Postgres for cost/latency/token metrics, and producing comparison reports with Vega-Lite visualisations. Includes a local web UI for expert grading of outputs.
+Narzędzie wiersza poleceń (środowisko Bun) do systematycznego uruchamiania promptów ze zbioru testowego na endpointach przepływów, zbierania ustrukturyzowanych artefaktów, analizy danych śledzenia LLM z bazy Postgres pod kątem kosztów, opóźnień i liczby tokenów, a także generowania raportów porównawczych z wizualizacjami Vega-Lite. Zawiera lokalny interfejs webowy do ręcznej oceny wyników przez eksperta.
 
-**Tech stack:** Bun, TypeScript, Commander, Vite, React, Tailwind CSS v4, shadcn/ui, Vega-Lite.
+**Stos technologiczny:** Bun, TypeScript, Commander, Vite, React, Tailwind CSS v4, shadcn/ui, Vega-Lite.
 
-### CLI Commands
+### Polecenia CLI
 
 ```sh
-bun index.ts run     --config <path.yaml>           # Run an experiment
-bun index.ts analyze --experiment-dir <path>        # Re-analyse traces
-bun index.ts compare --target <A> --target <B>      # Compare two experiments
-bun index.ts grade   --target <selector>            # Launch expert grading UI
+bun index.ts run     --config <ścieżka.yaml>        # Uruchomienie eksperymentu
+bun index.ts analyze --experiment-dir <ścieżka>     # Ponowna analiza śladów
+bun index.ts compare --target <A> --target <B>      # Porównanie dwóch eksperymentów
+bun index.ts grade   --target <selektor>            # Uruchomienie interfejsu oceny
 ```
 
-### Experiment Configurations
+### Konfiguracje eksperymentów
 
-Configs live in `config/` and correspond to the experimental conditions evaluated in the thesis:
+Pliki konfiguracyjne znajdują się w katalogu `config/` i odpowiadają warunkom eksperymentalnym ocenianym w pracy:
 
-| Config | Workflow | Model |
+| Konfiguracja | Przepływ | Model |
 |---|---|---|
-| `claude/university.yaml` | simpleWorkflow | Claude (via Vercel AI) |
+| `claude/university.yaml` | simpleWorkflow | Claude (przez Vercel AI) |
 | `gemini/university.yaml` | simpleWorkflow | Gemini Flash |
 | `qwen/university.yaml` | simpleWorkflow | Qwen |
-| `ollama/university.yaml` | simpleWorkflow | Local model via Ollama |
-| `university-agent.yaml` | agentWorkflow | GPT-based agent |
-| `university-complex.yaml` | complexWorkflow | Multi-step planner |
-| `university-network.yaml` | networkWorkflow | Network variant |
+| `ollama/university.yaml` | simpleWorkflow | Model lokalny przez Ollama |
+| `university-agent.yaml` | agentWorkflow | Agent oparty na GPT |
+| `university-complex.yaml` | complexWorkflow | Wieloetapowy planer |
+| `university-network.yaml` | networkWorkflow | Wariant sieciowy |
 
-### Experiment Results
+### Wyniki eksperymentów
 
-All experiment outputs are stored under `experiments/` with one subdirectory per named condition, each containing timestamped invocation directories:
+Wszystkie wyniki eksperymentów są przechowywane w katalogu `experiments/`, z jednym podkatalogiem na każdy warunek eksperymentalny, zawierającym katalogi poszczególnych uruchomień oznaczone znacznikiem czasu:
 
 ```
 experiments/
-├── university/            ← baseline simple workflow
-├── university-claude/     ← Claude model condition
-├── university-gemini/     ← Gemini model condition
-├── university-gemma3/     ← Gemma 3 model condition
-├── university-qwen/       ← Qwen model condition
-├── university-agent/      ← agent workflow condition
-├── university-complex/    ← complex workflow condition
-└── university-network/    ← network workflow condition
+├── university/            ← bazowy prosty przepływ
+├── university-claude/     ← warunek: model Claude
+├── university-gemini/     ← warunek: model Gemini
+├── university-gemma3/     ← warunek: model Gemma 3
+├── university-qwen/       ← warunek: model Qwen
+├── university-agent/      ← warunek: przepływ agentowy
+├── university-complex/    ← warunek: przepływ złożony
+└── university-network/    ← warunek: przepływ sieciowy
 ```
 
-Each invocation directory contains: `manifest.json`, `summary.json`, `trace-cost-report.json`, `grades.json`, `sql-checks.json`, `golden-sql-results.json`, and per-run artifacts (`run.json`, `query.sql`, `vega.raw.json`, `viz.png`).
+Każdy katalog uruchomienia zawiera: `manifest.json`, `summary.json`, `trace-cost-report.json`, `grades.json`, `sql-checks.json`, `golden-sql-results.json` oraz artefakty poszczególnych uruchomień (`run.json`, `query.sql`, `vega.raw.json`, `viz.png`).
 
-### Testset
+### Zbiór testowy
 
-`testsets/university.jsonl` — the natural-language question testset used across all experiments, including `golden_sql` reference answers for execution accuracy (EX) evaluation.
+`testsets/university.jsonl` — zbiór pytań w języku naturalnym używany we wszystkich eksperymentach, zawierający wzorcowe zapytania SQL (`golden_sql`) do oceny dokładności wykonania (EX).
 
-### Notable directories
+### Główne katalogi
 
-| Path | Contents |
+| Ścieżka | Zawartość |
 |---|---|
-| `experiments/` | All experimental results and artifacts |
-| `results/analysis/` | Cross-experiment comparison reports and plots |
-| `testsets/` | JSONL testset files |
-| `config/` | YAML experiment configuration files |
-| `src/` | Full CLI and grading UI source code |
+| `experiments/` | Wszystkie wyniki eksperymentów i artefakty |
+| `results/analysis/` | Raporty porównawcze i wykresy |
+| `testsets/` | Pliki zbioru testowego w formacie JSONL |
+| `config/` | Pliki konfiguracyjne eksperymentów w formacie YAML |
+| `src/` | Pełny kod źródłowy CLI i interfejsu oceny |
 
 ---
 
-## Reproducibility Notes
+## Uwagi dotyczące odtwarzalności
 
-- The experiment runner (`B_experiment-runner/`) requires **Bun** and a running instance of the Mastra workflow system to execute experiments. Run `bun install` to restore dependencies.
-- The Mastra workflow system (`A_workflow-system/`) requires **Node.js**, **pnpm**, and **Docker**. Database credentials and API keys must be supplied via a `.env` file (see the original project's `.env.example` for required variables).
-- `node_modules/` and build artefacts are excluded from this appendix to keep file size manageable.
+- Narzędzie eksperymentalne (`B_experiment-runner/`) wymaga środowiska **Bun** oraz działającej instancji systemu przepływów Mastra. Zależności można przywrócić poleceniem `bun install`.
+- System przepływów Mastra (`A_workflow-system/`) wymaga **Node.js**, **pnpm** oraz **Dockera**. Dane uwierzytelniające do bazy danych i klucze API należy dostarczyć przez plik `.env` (wymagane zmienne środowiskowe opisane są w pliku `.env.example` oryginalnego projektu).
+- Katalogi `node_modules/` oraz artefakty kompilacji zostały pominięte w celu ograniczenia rozmiaru załącznika.
