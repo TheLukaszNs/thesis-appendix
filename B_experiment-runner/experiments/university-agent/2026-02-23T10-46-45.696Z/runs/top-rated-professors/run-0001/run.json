@@ -1,0 +1,168 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "top-rated-professors",
+  "caseDirectory": "top-rated-professors",
+  "repeatIndex": 1,
+  "prompt": "Who are the top 10 highest rated professors based on student evaluations?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Who are the top 10 highest rated professors based on student evaluations?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:49:26.510Z",
+    "endedAtUtc": "2026-02-23T10:49:45.638Z",
+    "durationMs": 19128
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2607",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:49:45 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Who are the top 10 highest rated professors based on student evaluations?\"},\"agent\":{\"payload\":{\"question\":\"Who are the top 10 highest rated professors based on student evaluations?\"},\"startedAt\":1771843766515,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  professors.id AS professor_id,\\n  CONCAT(professors.first_name, ' ', professors.last_name) AS professor_name,\\n  ROUND(AVG(evaluations.rating), 2) AS average_rating,\\n  COUNT(evaluations.rating) AS evaluation_count\\nFROM professors\\nJOIN evaluations ON evaluations.professor_id = professors.id\\nGROUP BY professors.id, professors.first_name, professors.last_name\\nORDER BY average_rating DESC, evaluation_count DESC\\nLIMIT 10;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Bar chart of the top 10 professors by average student evaluation rating.\",\"title\":\"Top 10 Highest Rated Professors (by Average Student Evaluation)\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\",\"sort\":\"-x\"},\"x\":{\"field\":\"average_rating\",\"type\":\"quantitative\",\"title\":\"Average Rating\"},\"color\":{\"field\":\"average_rating\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"average_rating\",\"type\":\"quantitative\",\"title\":\"Average Rating\"},{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Number of Evaluations\"}]}}},\"endedAt\":1771843785603},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  professors.id AS professor_id,\\n  CONCAT(professors.first_name, ' ', professors.last_name) AS professor_name,\\n  ROUND(AVG(evaluations.rating), 2) AS average_rating,\\n  COUNT(evaluations.rating) AS evaluation_count\\nFROM professors\\nJOIN evaluations ON evaluations.professor_id = professors.id\\nGROUP BY professors.id, professors.first_name, professors.last_name\\nORDER BY average_rating DESC, evaluation_count DESC\\nLIMIT 10;\"},\"startedAt\":1771843785605,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: relation \\\"evaluations\\\" does not exist\\nLINE 8: JOIN evaluations ON evaluations.professor_id = professors.id\\n             ^\",\"name\":\"Error\"},\"endedAt\":1771843785633}},\"input\":{\"question\":\"Who are the top 10 highest rated professors based on student evaluations?\"},\"error\":{\"message\":\"SQL execution failed: relation \\\"evaluations\\\" does not exist\\nLINE 8: JOIN evaluations ON evaluations.professor_id = professors.id\\n             ^\",\"name\":\"Error\"},\"traceId\":\"794c451e796e08eec9a511952223ab7e\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/top-rated-professors/run-0001/run.json",
+    "queryPath": "runs/top-rated-professors/run-0001/query.sql",
+    "vegaRawPath": "runs/top-rated-professors/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/top-rated-professors/run-0001/vega.resolved.json",
+    "imagePath": "runs/top-rated-professors/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:49:45.638Z",
+  "traceId": "794c451e796e08eec9a511952223ab7e",
+  "success": false,
+  "durationMs": 19128,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Who are the top 10 highest rated professors based on student evaluations?"
+      },
+      "agent": {
+        "payload": {
+          "question": "Who are the top 10 highest rated professors based on student evaluations?"
+        },
+        "startedAt": 1771843766515,
+        "status": "success",
+        "output": {
+          "sql": "SELECT\n  professors.id AS professor_id,\n  CONCAT(professors.first_name, ' ', professors.last_name) AS professor_name,\n  ROUND(AVG(evaluations.rating), 2) AS average_rating,\n  COUNT(evaluations.rating) AS evaluation_count\nFROM professors\nJOIN evaluations ON evaluations.professor_id = professors.id\nGROUP BY professors.id, professors.first_name, professors.last_name\nORDER BY average_rating DESC, evaluation_count DESC\nLIMIT 10;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Bar chart of the top 10 professors by average student evaluation rating.",
+            "title": "Top 10 Highest Rated Professors (by Average Student Evaluation)",
+            "data": {
+              "name": "query_result"
+            },
+            "width": 700,
+            "height": 400,
+            "mark": {
+              "type": "bar"
+            },
+            "encoding": {
+              "y": {
+                "field": "professor_name",
+                "type": "nominal",
+                "title": "Professor",
+                "sort": "-x"
+              },
+              "x": {
+                "field": "average_rating",
+                "type": "quantitative",
+                "title": "Average Rating"
+              },
+              "color": {
+                "field": "average_rating",
+                "type": "quantitative",
+                "legend": null
+              },
+              "tooltip": [
+                {
+                  "field": "professor_name",
+                  "type": "nominal",
+                  "title": "Professor"
+                },
+                {
+                  "field": "average_rating",
+                  "type": "quantitative",
+                  "title": "Average Rating"
+                },
+                {
+                  "field": "evaluation_count",
+                  "type": "quantitative",
+                  "title": "Number of Evaluations"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843785603
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT\n  professors.id AS professor_id,\n  CONCAT(professors.first_name, ' ', professors.last_name) AS professor_name,\n  ROUND(AVG(evaluations.rating), 2) AS average_rating,\n  COUNT(evaluations.rating) AS evaluation_count\nFROM professors\nJOIN evaluations ON evaluations.professor_id = professors.id\nGROUP BY professors.id, professors.first_name, professors.last_name\nORDER BY average_rating DESC, evaluation_count DESC\nLIMIT 10;"
+        },
+        "startedAt": 1771843785605,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: relation \"evaluations\" does not exist\nLINE 8: JOIN evaluations ON evaluations.professor_id = professors.id\n             ^",
+          "name": "Error"
+        },
+        "endedAt": 1771843785633
+      }
+    },
+    "input": {
+      "question": "Who are the top 10 highest rated professors based on student evaluations?"
+    },
+    "error": {
+      "message": "SQL execution failed: relation \"evaluations\" does not exist\nLINE 8: JOIN evaluations ON evaluations.professor_id = professors.id\n             ^",
+      "name": "Error"
+    },
+    "traceId": "794c451e796e08eec9a511952223ab7e"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:49:45.638Z",
+    "traceId": "794c451e796e08eec9a511952223ab7e",
+    "attempts": 4,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 270,
+      "outputTokens": 1501,
+      "totalTokens": 1771,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1088,
+      "costUsd": 0.0030695
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 270,
+        "outputTokens": 1501,
+        "totalTokens": 1771,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1088,
+        "costUsd": 0.0030695
+      }
+    ],
+    "warnings": []
+  }
+}

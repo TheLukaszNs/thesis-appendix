@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "grade-trend-by-year-and-semester",
+  "caseDirectory": "grade-trend-by-year-and-semester",
+  "repeatIndex": 1,
+  "prompt": "Show average grade progression over semesters and academic years",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show average grade progression over semesters and academic years"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:14:13.281Z",
+    "endedAtUtc": "2026-02-23T14:14:36.216Z",
+    "durationMs": 22935
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "3181",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:14:36 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Show average grade progression over semesters and academic years\"},\"sql\":{\"payload\":{\"question\":\"Show average grade progression over semesters and academic years\"},\"startedAt\":1771856053296,\"status\":\"success\",\"output\":{\"reasoning\":\"The user wants to see average grade progression over semesters and academic years. I need to join grades → enrollments → course_sections to get semester_type and academic_year, then aggregate grades by these dimensions. The grade_value column is a custom enum type, so I'll convert it to numeric using CASE or extract exam_score/project_score/attendance_score for numeric analysis. I'll use exam_score as the primary numeric grade metric, grouped by academic_year and semester_type, ordered chronologically.\",\"sql\":\"\\nSELECT \\n  cs.academic_year,\\n  cs.semester_type,\\n  ROUND(AVG(g.exam_score), 2) AS avg_exam_score,\\n  ROUND(AVG(g.project_score), 2) AS avg_project_score,\\n  ROUND(AVG(g.attendance_score), 2) AS avg_attendance_score,\\n  COUNT(DISTINCT e.student_id) AS student_count,\\n  COUNT(g.id) AS grade_count\\nFROM grades g\\nINNER JOIN enrollments e ON g.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nWHERE g.exam_score IS NOT NULL \\n   OR g.project_score IS NOT NULL \\n   OR g.attendance_score IS NOT NULL\\nGROUP BY cs.academic_year, cs.semester_type\\nORDER BY cs.academic_year, \\n  CASE \\n    WHEN cs.semester_type = 'Fall' THEN 1\\n    WHEN cs.semester_type = 'Spring' THEN 2\\n    WHEN cs.semester_type = 'Summer' THEN 3\\n    ELSE 4\\n  END\\n\",\"assumptions\":[\"Assuming exam_score, project_score, and attendance_score are the numeric grade components to average\",\"Assuming semester_type values follow standard academic calendar (Fall, Spring, Summer)\",\"Assuming academic_year is formatted as a string (e.g., '2023-2024')\",\"Filtering for records with at least one non-null score component\"]},\"endedAt\":1771856076199},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  cs.academic_year,\\n  cs.semester_type,\\n  ROUND(AVG(g.exam_score), 2) AS avg_exam_score,\\n  ROUND(AVG(g.project_score), 2) AS avg_project_score,\\n  ROUND(AVG(g.attendance_score), 2) AS avg_attendance_score,\\n  COUNT(DISTINCT e.student_id) AS student_count,\\n  COUNT(g.id) AS grade_count\\nFROM grades g\\nINNER JOIN enrollments e ON g.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nWHERE g.exam_score IS NOT NULL \\n   OR g.project_score IS NOT NULL \\n   OR g.attendance_score IS NOT NULL\\nGROUP BY cs.academic_year, cs.semester_type\\nORDER BY cs.academic_year, \\n  CASE \\n    WHEN cs.semester_type = 'Fall' THEN 1\\n    WHEN cs.semester_type = 'Spring' THEN 2\\n    WHEN cs.semester_type = 'Summer' THEN 3\\n    ELSE 4\\n  END\\n\"},\"startedAt\":1771856076202,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: invalid input value for enum semester_type: \\\"Fall\\\"\",\"name\":\"Error\"},\"endedAt\":1771856076211}},\"input\":{\"question\":\"Show average grade progression over semesters and academic years\"},\"error\":{\"message\":\"SQL execution failed: invalid input value for enum semester_type: \\\"Fall\\\"\",\"name\":\"Error\"},\"traceId\":\"dc830869b6e3deb6a90b772759bbd4a9\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/grade-trend-by-year-and-semester/run-0001/run.json",
+    "queryPath": "runs/grade-trend-by-year-and-semester/run-0001/query.sql",
+    "vegaRawPath": "runs/grade-trend-by-year-and-semester/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/grade-trend-by-year-and-semester/run-0001/vega.resolved.json",
+    "imagePath": "runs/grade-trend-by-year-and-semester/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:14:36.216Z",
+  "traceId": "dc830869b6e3deb6a90b772759bbd4a9",
+  "success": false,
+  "durationMs": 22935,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Show average grade progression over semesters and academic years"
+      },
+      "sql": {
+        "payload": {
+          "question": "Show average grade progression over semesters and academic years"
+        },
+        "startedAt": 1771856053296,
+        "status": "success",
+        "output": {
+          "reasoning": "The user wants to see average grade progression over semesters and academic years. I need to join grades → enrollments → course_sections to get semester_type and academic_year, then aggregate grades by these dimensions. The grade_value column is a custom enum type, so I'll convert it to numeric using CASE or extract exam_score/project_score/attendance_score for numeric analysis. I'll use exam_score as the primary numeric grade metric, grouped by academic_year and semester_type, ordered chronologically.",
+          "sql": "\nSELECT \n  cs.academic_year,\n  cs.semester_type,\n  ROUND(AVG(g.exam_score), 2) AS avg_exam_score,\n  ROUND(AVG(g.project_score), 2) AS avg_project_score,\n  ROUND(AVG(g.attendance_score), 2) AS avg_attendance_score,\n  COUNT(DISTINCT e.student_id) AS student_count,\n  COUNT(g.id) AS grade_count\nFROM grades g\nINNER JOIN enrollments e ON g.enrollment_id = e.id\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\nWHERE g.exam_score IS NOT NULL \n   OR g.project_score IS NOT NULL \n   OR g.attendance_score IS NOT NULL\nGROUP BY cs.academic_year, cs.semester_type\nORDER BY cs.academic_year, \n  CASE \n    WHEN cs.semester_type = 'Fall' THEN 1\n    WHEN cs.semester_type = 'Spring' THEN 2\n    WHEN cs.semester_type = 'Summer' THEN 3\n    ELSE 4\n  END\n",
+          "assumptions": [
+            "Assuming exam_score, project_score, and attendance_score are the numeric grade components to average",
+            "Assuming semester_type values follow standard academic calendar (Fall, Spring, Summer)",
+            "Assuming academic_year is formatted as a string (e.g., '2023-2024')",
+            "Filtering for records with at least one non-null score component"
+          ]
+        },
+        "endedAt": 1771856076199
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "\nSELECT \n  cs.academic_year,\n  cs.semester_type,\n  ROUND(AVG(g.exam_score), 2) AS avg_exam_score,\n  ROUND(AVG(g.project_score), 2) AS avg_project_score,\n  ROUND(AVG(g.attendance_score), 2) AS avg_attendance_score,\n  COUNT(DISTINCT e.student_id) AS student_count,\n  COUNT(g.id) AS grade_count\nFROM grades g\nINNER JOIN enrollments e ON g.enrollment_id = e.id\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\nWHERE g.exam_score IS NOT NULL \n   OR g.project_score IS NOT NULL \n   OR g.attendance_score IS NOT NULL\nGROUP BY cs.academic_year, cs.semester_type\nORDER BY cs.academic_year, \n  CASE \n    WHEN cs.semester_type = 'Fall' THEN 1\n    WHEN cs.semester_type = 'Spring' THEN 2\n    WHEN cs.semester_type = 'Summer' THEN 3\n    ELSE 4\n  END\n"
+        },
+        "startedAt": 1771856076202,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: invalid input value for enum semester_type: \"Fall\"",
+          "name": "Error"
+        },
+        "endedAt": 1771856076211
+      }
+    },
+    "input": {
+      "question": "Show average grade progression over semesters and academic years"
+    },
+    "error": {
+      "message": "SQL execution failed: invalid input value for enum semester_type: \"Fall\"",
+      "name": "Error"
+    },
+    "traceId": "dc830869b6e3deb6a90b772759bbd4a9"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.351Z",
+    "traceId": "dc830869b6e3deb6a90b772759bbd4a9",
+    "attempts": 1,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 17106,
+      "outputTokens": 766,
+      "totalTokens": 17872,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.020936
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 1,
+        "inputTokens": 17106,
+        "outputTokens": 766,
+        "totalTokens": 17872,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.020936
+      }
+    ],
+    "warnings": []
+  }
+}

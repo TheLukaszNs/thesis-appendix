@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "grade-trend-by-year-and-semester",
+  "caseDirectory": "grade-trend-by-year-and-semester",
+  "repeatIndex": 1,
+  "prompt": "Show average grade progression over semesters and academic years",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show average grade progression over semesters and academic years"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:54:16.827Z",
+    "endedAtUtc": "2026-02-23T10:54:35.751Z",
+    "durationMs": 18924
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2908",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:54:35 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Show average grade progression over semesters and academic years\"},\"agent\":{\"payload\":{\"question\":\"Show average grade progression over semesters and academic years\"},\"startedAt\":1771844056847,\"status\":\"success\",\"output\":{\"sql\":\"WITH avg_by_term AS (\\n  SELECT\\n    academic_year AS academic_year,\\n    semester AS semester,\\n    AVG(grade) AS avg_grade,\\n    COUNT(*) AS grade_count,\\n    MAX(semester_order) AS semester_order\\n  FROM grades\\n  GROUP BY academic_year, semester\\n)\\nSELECT\\n  academic_year AS academic_year,\\n  semester AS semester,\\n  COALESCE(semester_order, 0) AS semester_order,\\n  avg_grade AS avg_grade,\\n  grade_count AS grade_count,\\n  (CAST(SUBSTR(academic_year, 1, 4) AS INTEGER) * 10 + COALESCE(semester_order, 0)) AS time_index,\\n  (academic_year || ' ' || semester) AS term_label\\nFROM avg_by_term\\nORDER BY time_index ASC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Average grade progression over semesters and academic years\",\"title\":\"Average Grade Progression by Term\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"line\",\"point\":true},\"encoding\":{\"x\":{\"field\":\"term_label\",\"type\":\"ordinal\",\"title\":\"Term\",\"sort\":{\"field\":\"time_index\",\"op\":\"min\"}},\"y\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},\"color\":{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"semester\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Grades Count\"}]}}},\"endedAt\":1771844075655},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH avg_by_term AS (\\n  SELECT\\n    academic_year AS academic_year,\\n    semester AS semester,\\n    AVG(grade) AS avg_grade,\\n    COUNT(*) AS grade_count,\\n    MAX(semester_order) AS semester_order\\n  FROM grades\\n  GROUP BY academic_year, semester\\n)\\nSELECT\\n  academic_year AS academic_year,\\n  semester AS semester,\\n  COALESCE(semester_order, 0) AS semester_order,\\n  avg_grade AS avg_grade,\\n  grade_count AS grade_count,\\n  (CAST(SUBSTR(academic_year, 1, 4) AS INTEGER) * 10 + COALESCE(semester_order, 0)) AS time_index,\\n  (academic_year || ' ' || semester) AS term_label\\nFROM avg_by_term\\nORDER BY time_index ASC;\"},\"startedAt\":1771844075658,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column \\\"academic_year\\\" does not exist\\nLINE 4:     academic_year AS academic_year,\\n            ^\",\"name\":\"Error\"},\"endedAt\":1771844075746}},\"input\":{\"question\":\"Show average grade progression over semesters and academic years\"},\"error\":{\"message\":\"SQL execution failed: column \\\"academic_year\\\" does not exist\\nLINE 4:     academic_year AS academic_year,\\n            ^\",\"name\":\"Error\"},\"traceId\":\"f94bd252fb4b7fb8542c47aef58de0fd\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/grade-trend-by-year-and-semester/run-0001/run.json",
+    "queryPath": "runs/grade-trend-by-year-and-semester/run-0001/query.sql",
+    "vegaRawPath": "runs/grade-trend-by-year-and-semester/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/grade-trend-by-year-and-semester/run-0001/vega.resolved.json",
+    "imagePath": "runs/grade-trend-by-year-and-semester/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:54:35.751Z",
+  "traceId": "f94bd252fb4b7fb8542c47aef58de0fd",
+  "success": false,
+  "durationMs": 18924,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Show average grade progression over semesters and academic years"
+      },
+      "agent": {
+        "payload": {
+          "question": "Show average grade progression over semesters and academic years"
+        },
+        "startedAt": 1771844056847,
+        "status": "success",
+        "output": {
+          "sql": "WITH avg_by_term AS (\n  SELECT\n    academic_year AS academic_year,\n    semester AS semester,\n    AVG(grade) AS avg_grade,\n    COUNT(*) AS grade_count,\n    MAX(semester_order) AS semester_order\n  FROM grades\n  GROUP BY academic_year, semester\n)\nSELECT\n  academic_year AS academic_year,\n  semester AS semester,\n  COALESCE(semester_order, 0) AS semester_order,\n  avg_grade AS avg_grade,\n  grade_count AS grade_count,\n  (CAST(SUBSTR(academic_year, 1, 4) AS INTEGER) * 10 + COALESCE(semester_order, 0)) AS time_index,\n  (academic_year || ' ' || semester) AS term_label\nFROM avg_by_term\nORDER BY time_index ASC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Average grade progression over semesters and academic years",
+            "title": "Average Grade Progression by Term",
+            "data": {
+              "name": "query_result"
+            },
+            "mark": {
+              "type": "line",
+              "point": true
+            },
+            "encoding": {
+              "x": {
+                "field": "term_label",
+                "type": "ordinal",
+                "title": "Term",
+                "sort": {
+                  "field": "time_index",
+                  "op": "min"
+                }
+              },
+              "y": {
+                "field": "avg_grade",
+                "type": "quantitative",
+                "title": "Average Grade"
+              },
+              "color": {
+                "field": "academic_year",
+                "type": "nominal",
+                "title": "Academic Year"
+              },
+              "tooltip": [
+                {
+                  "field": "academic_year",
+                  "type": "nominal",
+                  "title": "Academic Year"
+                },
+                {
+                  "field": "semester",
+                  "type": "nominal",
+                  "title": "Semester"
+                },
+                {
+                  "field": "avg_grade",
+                  "type": "quantitative",
+                  "title": "Average Grade"
+                },
+                {
+                  "field": "grade_count",
+                  "type": "quantitative",
+                  "title": "Grades Count"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771844075655
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH avg_by_term AS (\n  SELECT\n    academic_year AS academic_year,\n    semester AS semester,\n    AVG(grade) AS avg_grade,\n    COUNT(*) AS grade_count,\n    MAX(semester_order) AS semester_order\n  FROM grades\n  GROUP BY academic_year, semester\n)\nSELECT\n  academic_year AS academic_year,\n  semester AS semester,\n  COALESCE(semester_order, 0) AS semester_order,\n  avg_grade AS avg_grade,\n  grade_count AS grade_count,\n  (CAST(SUBSTR(academic_year, 1, 4) AS INTEGER) * 10 + COALESCE(semester_order, 0)) AS time_index,\n  (academic_year || ' ' || semester) AS term_label\nFROM avg_by_term\nORDER BY time_index ASC;"
+        },
+        "startedAt": 1771844075658,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column \"academic_year\" does not exist\nLINE 4:     academic_year AS academic_year,\n            ^",
+          "name": "Error"
+        },
+        "endedAt": 1771844075746
+      }
+    },
+    "input": {
+      "question": "Show average grade progression over semesters and academic years"
+    },
+    "error": {
+      "message": "SQL execution failed: column \"academic_year\" does not exist\nLINE 4:     academic_year AS academic_year,\n            ^",
+      "name": "Error"
+    },
+    "traceId": "f94bd252fb4b7fb8542c47aef58de0fd"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:54:35.751Z",
+    "traceId": "f94bd252fb4b7fb8542c47aef58de0fd",
+    "attempts": 6,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 265,
+      "outputTokens": 1659,
+      "totalTokens": 1924,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1152,
+      "costUsd": 0.00338425
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 265,
+        "outputTokens": 1659,
+        "totalTokens": 1924,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1152,
+        "costUsd": 0.00338425
+      }
+    ],
+    "warnings": []
+  }
+}

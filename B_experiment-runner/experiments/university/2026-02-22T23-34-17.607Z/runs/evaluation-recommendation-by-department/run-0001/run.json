@@ -1,0 +1,332 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "evaluation-recommendation-by-department",
+  "caseDirectory": "evaluation-recommendation-by-department",
+  "repeatIndex": 1,
+  "prompt": "What percentage of students would recommend courses in each department?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What percentage of students would recommend courses in each department?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:51:45.103Z",
+    "endedAtUtc": "2026-02-22T23:52:47.910Z",
+    "durationMs": 62807
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "14988",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:52:47 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What percentage of students would recommend courses in each department?\"},\"sql\":{\"payload\":{\"question\":\"What percentage of students would recommend courses in each department?\"},\"startedAt\":1771804305120,\"status\":\"success\",\"output\":{\"reasoning\":\"Compute, per department, the percent of distinct students who submitted at least one evaluation for that department and who submitted at least one evaluation with would_recommend = true. Join evaluations -> enrollments -> course_sections -> courses -> departments, deduplicate by student+department, then aggregate to percent.\",\"sql\":\"WITH student_recommend AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    e.student_id AS student_id,\\n    MAX(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS any_recommend\\n  FROM public.course_evaluations ce\\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.courses c ON cs.course_id = c.id\\n  JOIN public.departments d ON c.department_id = d.id\\n  GROUP BY d.id, d.name, e.student_id\\n)\\nSELECT\\n  sr.department_id AS department_id,\\n  sr.department_name AS department_name,\\n  ROUND(100.0 * SUM(sr.any_recommend)::numeric / NULLIF(COUNT(*) , 0), 2) AS recommend_pct\\nFROM student_recommend sr\\nGROUP BY sr.department_id, sr.department_name\\nORDER BY recommend_pct DESC, sr.department_name;\",\"assumptions\":[\"Percentage is computed over distinct students who submitted at least one evaluation for the department (a student with multiple evaluations in a department is counted once).\",\"A student is counted as a 'would recommend' if they submitted at least one evaluation for the department with would_recommend = true.\",\"Departments with no evaluations are excluded from the result.\",\"Percentages are rounded to two decimal places.\"]},\"endedAt\":1771804345629},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH student_recommend AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    e.student_id AS student_id,\\n    MAX(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS any_recommend\\n  FROM public.course_evaluations ce\\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.courses c ON cs.course_id = c.id\\n  JOIN public.departments d ON c.department_id = d.id\\n  GROUP BY d.id, d.name, e.student_id\\n)\\nSELECT\\n  sr.department_id AS department_id,\\n  sr.department_name AS department_name,\\n  ROUND(100.0 * SUM(sr.any_recommend)::numeric / NULLIF(COUNT(*) , 0), 2) AS recommend_pct\\nFROM student_recommend sr\\nGROUP BY sr.department_id, sr.department_name\\nORDER BY recommend_pct DESC, sr.department_name;\"},\"startedAt\":1771804345632,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH student_recommend AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    e.student_id AS student_id,\\n    MAX(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS any_recommend\\n  FROM public.course_evaluations ce\\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.courses c ON cs.course_id = c.id\\n  JOIN public.departments d ON c.department_id = d.id\\n  GROUP BY d.id, d.name, e.student_id\\n)\\nSELECT\\n  sr.department_id AS department_id,\\n  sr.department_name AS department_name,\\n  ROUND(100.0 * SUM(sr.any_recommend)::numeric / NULLIF(COUNT(*) , 0), 2) AS recommend_pct\\nFROM student_recommend sr\\nGROUP BY sr.department_id, sr.department_name\\nORDER BY recommend_pct DESC, sr.department_name\",\"metadata\":{\"columns\":[\"department_id\",\"recommend_pct\",\"department_name\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"recommend_pct\":80,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"recommend_pct\":57.14,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"}]},\"data\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"recommend_pct\":80,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"recommend_pct\":57.14,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"recommend_pct\":50,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"recommend_pct\":50,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"recommend_pct\":42.86,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"recommend_pct\":12.5,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"}]},\"endedAt\":1771804345661},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"WITH student_recommend AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    e.student_id AS student_id,\\n    MAX(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS any_recommend\\n  FROM public.course_evaluations ce\\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.courses c ON cs.course_id = c.id\\n  JOIN public.departments d ON c.department_id = d.id\\n  GROUP BY d.id, d.name, e.student_id\\n)\\nSELECT\\n  sr.department_id AS department_id,\\n  sr.department_name AS department_name,\\n  ROUND(100.0 * SUM(sr.any_recommend)::numeric / NULLIF(COUNT(*) , 0), 2) AS recommend_pct\\nFROM student_recommend sr\\nGROUP BY sr.department_id, sr.department_name\\nORDER BY recommend_pct DESC, sr.department_name\",\"metadata\":{\"columns\":[\"department_id\",\"recommend_pct\",\"department_name\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"recommend_pct\":80,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"recommend_pct\":57.14,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"}]},\"data\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"recommend_pct\":80,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"recommend_pct\":57.14,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"recommend_pct\":50,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"recommend_pct\":50,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"recommend_pct\":42.86,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"recommend_pct\":12.5,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"}]},\"startedAt\":1771804345664,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"width\":600,\"height\":{\"step\":30},\"title\":\"Percentage of students who would recommend courses, by department\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":null},\"sort\":{\"field\":\"recommend_pct\",\"order\":\"descending\"}},\"x\":{\"field\":\"recommend_pct\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Recommend (%)\",\"format\":\".2f\"},\"scale\":{\"domain\":[0,100]}},\"color\":{\"value\":\"#4C78A8\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"recommend_pct\",\"type\":\"quantitative\",\"title\":\"Recommend (%)\",\"format\":\".2f\"},{\"field\":\"department_id\",\"type\":\"nominal\",\"title\":\"Department ID\"}]}},\"reasoning\":\"Horizontal bars show percentage recommending per department, sorted descending. Tooltip includes department name, percent, and id for reference.\"},\"endedAt\":1771804367882},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"width\":600,\"height\":{\"step\":30},\"title\":\"Percentage of students who would recommend courses, by department\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":null},\"sort\":{\"field\":\"recommend_pct\",\"order\":\"descending\"}},\"x\":{\"field\":\"recommend_pct\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Recommend (%)\",\"format\":\".2f\"},\"scale\":{\"domain\":[0,100]}},\"color\":{\"value\":\"#4C78A8\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"recommend_pct\",\"type\":\"quantitative\",\"title\":\"Recommend (%)\",\"format\":\".2f\"},{\"field\":\"department_id\",\"type\":\"nominal\",\"title\":\"Department ID\"}]}},\"reasoning\":\"Horizontal bars show percentage recommending per department, sorted descending. Tooltip includes department name, percent, and id for reference.\"},\"startedAt\":1771804367888,\"status\":\"success\",\"output\":{\"sql\":\"WITH student_recommend AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    e.student_id AS student_id,\\n    MAX(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS any_recommend\\n  FROM public.course_evaluations ce\\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.courses c ON cs.course_id = c.id\\n  JOIN public.departments d ON c.department_id = d.id\\n  GROUP BY d.id, d.name, e.student_id\\n)\\nSELECT\\n  sr.department_id AS department_id,\\n  sr.department_name AS department_name,\\n  ROUND(100.0 * SUM(sr.any_recommend)::numeric / NULLIF(COUNT(*) , 0), 2) AS recommend_pct\\nFROM student_recommend sr\\nGROUP BY sr.department_id, sr.department_name\\nORDER BY recommend_pct DESC, sr.department_name;\",\"data\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"recommend_pct\":80,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"recommend_pct\":57.14,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"recommend_pct\":50,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"recommend_pct\":50,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"recommend_pct\":42.86,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"recommend_pct\":12.5,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"}],\"metadata\":{\"columns\":[\"department_id\",\"recommend_pct\",\"department_name\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"recommend_pct\":80,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"recommend_pct\":57.14,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"width\":600,\"height\":{\"step\":30},\"title\":\"Percentage of students who would recommend courses, by department\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":null},\"sort\":{\"field\":\"recommend_pct\",\"order\":\"descending\"}},\"x\":{\"field\":\"recommend_pct\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Recommend (%)\",\"format\":\".2f\"},\"scale\":{\"domain\":[0,100]}},\"color\":{\"value\":\"#4C78A8\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"recommend_pct\",\"type\":\"quantitative\",\"title\":\"Recommend (%)\",\"format\":\".2f\"},{\"field\":\"department_id\",\"type\":\"nominal\",\"title\":\"Department ID\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771804367892}},\"input\":{\"question\":\"What percentage of students would recommend courses in each department?\"},\"result\":{\"sql\":\"WITH student_recommend AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    e.student_id AS student_id,\\n    MAX(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS any_recommend\\n  FROM public.course_evaluations ce\\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.courses c ON cs.course_id = c.id\\n  JOIN public.departments d ON c.department_id = d.id\\n  GROUP BY d.id, d.name, e.student_id\\n)\\nSELECT\\n  sr.department_id AS department_id,\\n  sr.department_name AS department_name,\\n  ROUND(100.0 * SUM(sr.any_recommend)::numeric / NULLIF(COUNT(*) , 0), 2) AS recommend_pct\\nFROM student_recommend sr\\nGROUP BY sr.department_id, sr.department_name\\nORDER BY recommend_pct DESC, sr.department_name;\",\"data\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"recommend_pct\":80,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"recommend_pct\":57.14,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"recommend_pct\":50,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"recommend_pct\":50,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"recommend_pct\":42.86,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"recommend_pct\":12.5,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"}],\"metadata\":{\"columns\":[\"department_id\",\"recommend_pct\",\"department_name\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"recommend_pct\":80,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"recommend_pct\":57.14,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"width\":600,\"height\":{\"step\":30},\"title\":\"Percentage of students who would recommend courses, by department\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":null},\"sort\":{\"field\":\"recommend_pct\",\"order\":\"descending\"}},\"x\":{\"field\":\"recommend_pct\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Recommend (%)\",\"format\":\".2f\"},\"scale\":{\"domain\":[0,100]}},\"color\":{\"value\":\"#4C78A8\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"recommend_pct\",\"type\":\"quantitative\",\"title\":\"Recommend (%)\",\"format\":\".2f\"},{\"field\":\"department_id\",\"type\":\"nominal\",\"title\":\"Department ID\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"54e98c4ecf93bf7717b826503c4b4d10\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/evaluation-recommendation-by-department/run-0001/run.json",
+    "queryPath": "runs/evaluation-recommendation-by-department/run-0001/query.sql",
+    "vegaRawPath": "runs/evaluation-recommendation-by-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/evaluation-recommendation-by-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/evaluation-recommendation-by-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:52:48.319Z",
+  "traceId": "54e98c4ecf93bf7717b826503c4b4d10",
+  "success": true,
+  "durationMs": 63216,
+  "resultRaw": {
+    "data": [
+      {
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "recommend_pct": 80,
+        "department_name": "Wydział Inżynierii Biomedycznej"
+      },
+      {
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "recommend_pct": 57.14,
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej"
+      },
+      {
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "recommend_pct": 50,
+        "department_name": "Wydział Informatyki i Nauki o Materiałach"
+      },
+      {
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "recommend_pct": 50,
+        "department_name": "Wydział Inżynierii Produkcji"
+      },
+      {
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "recommend_pct": 42.86,
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+      },
+      {
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "recommend_pct": 12.5,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 600,
+      "height": {
+        "step": 30
+      },
+      "title": "Percentage of students who would recommend courses, by department",
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "y": {
+          "field": "department_name",
+          "type": "nominal",
+          "axis": {
+            "title": null
+          },
+          "sort": {
+            "field": "recommend_pct",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "recommend_pct",
+          "type": "quantitative",
+          "axis": {
+            "title": "Recommend (%)",
+            "format": ".2f"
+          },
+          "scale": {
+            "domain": [
+              0,
+              100
+            ]
+          }
+        },
+        "color": {
+          "value": "#4C78A8"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "recommend_pct",
+            "type": "quantitative",
+            "title": "Recommend (%)",
+            "format": ".2f"
+          },
+          {
+            "field": "department_id",
+            "type": "nominal",
+            "title": "Department ID"
+          }
+        ]
+      }
+    },
+    "sql": "WITH student_recommend AS (\n  SELECT\n    d.id AS department_id,\n    d.name AS department_name,\n    e.student_id AS student_id,\n    MAX(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS any_recommend\n  FROM public.course_evaluations ce\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\n  JOIN public.courses c ON cs.course_id = c.id\n  JOIN public.departments d ON c.department_id = d.id\n  GROUP BY d.id, d.name, e.student_id\n)\nSELECT\n  sr.department_id AS department_id,\n  sr.department_name AS department_name,\n  ROUND(100.0 * SUM(sr.any_recommend)::numeric / NULLIF(COUNT(*) , 0), 2) AS recommend_pct\nFROM student_recommend sr\nGROUP BY sr.department_id, sr.department_name\nORDER BY recommend_pct DESC, sr.department_name;",
+    "metadata": {
+      "columns": [
+        "department_id",
+        "recommend_pct",
+        "department_name"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+          "recommend_pct": 80,
+          "department_name": "Wydział Inżynierii Biomedycznej"
+        },
+        {
+          "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+          "recommend_pct": 57.14,
+          "department_name": "Wydział Technologii i Inżynierii Chemicznej"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "recommend_pct": 80,
+        "department_name": "Wydział Inżynierii Biomedycznej"
+      },
+      {
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "recommend_pct": 57.14,
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej"
+      },
+      {
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "recommend_pct": 50,
+        "department_name": "Wydział Informatyki i Nauki o Materiałach"
+      },
+      {
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "recommend_pct": 50,
+        "department_name": "Wydział Inżynierii Produkcji"
+      },
+      {
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "recommend_pct": 42.86,
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+      },
+      {
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "recommend_pct": 12.5,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 600,
+      "height": {
+        "step": 30
+      },
+      "title": "Percentage of students who would recommend courses, by department",
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "y": {
+          "field": "department_name",
+          "type": "nominal",
+          "axis": {
+            "title": null
+          },
+          "sort": {
+            "field": "recommend_pct",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "recommend_pct",
+          "type": "quantitative",
+          "axis": {
+            "title": "Recommend (%)",
+            "format": ".2f"
+          },
+          "scale": {
+            "domain": [
+              0,
+              100
+            ]
+          }
+        },
+        "color": {
+          "value": "#4C78A8"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "recommend_pct",
+            "type": "quantitative",
+            "title": "Recommend (%)",
+            "format": ".2f"
+          },
+          {
+            "field": "department_id",
+            "type": "nominal",
+            "title": "Department ID"
+          }
+        ]
+      }
+    },
+    "sql": "WITH student_recommend AS (\n  SELECT\n    d.id AS department_id,\n    d.name AS department_name,\n    e.student_id AS student_id,\n    MAX(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS any_recommend\n  FROM public.course_evaluations ce\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\n  JOIN public.courses c ON cs.course_id = c.id\n  JOIN public.departments d ON c.department_id = d.id\n  GROUP BY d.id, d.name, e.student_id\n)\nSELECT\n  sr.department_id AS department_id,\n  sr.department_name AS department_name,\n  ROUND(100.0 * SUM(sr.any_recommend)::numeric / NULLIF(COUNT(*) , 0), 2) AS recommend_pct\nFROM student_recommend sr\nGROUP BY sr.department_id, sr.department_name\nORDER BY recommend_pct DESC, sr.department_name;",
+    "metadata": {
+      "columns": [
+        "department_id",
+        "recommend_pct",
+        "department_name"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+          "recommend_pct": 80,
+          "department_name": "Wydział Inżynierii Biomedycznej"
+        },
+        {
+          "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+          "recommend_pct": 57.14,
+          "department_name": "Wydział Technologii i Inżynierii Chemicznej"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:52:48.319Z",
+    "traceId": "54e98c4ecf93bf7717b826503c4b4d10",
+    "attempts": 3,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 22210,
+      "outputTokens": 3914,
+      "totalTokens": 26124,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2688,
+      "costUsd": 0.0133805
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 22210,
+        "outputTokens": 3914,
+        "totalTokens": 26124,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2688,
+        "costUsd": 0.0133805
+      }
+    ],
+    "warnings": []
+  }
+}

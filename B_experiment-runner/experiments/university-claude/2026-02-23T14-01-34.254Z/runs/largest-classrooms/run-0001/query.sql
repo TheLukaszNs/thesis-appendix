@@ -1,0 +1,1 @@
+SELECT id, building, room_number, capacity FROM public.classrooms ORDER BY capacity DESC LIMIT 10

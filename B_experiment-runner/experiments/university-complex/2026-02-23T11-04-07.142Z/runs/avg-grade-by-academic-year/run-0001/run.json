@@ -1,0 +1,276 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "avg-grade-by-academic-year",
+  "caseDirectory": "avg-grade-by-academic-year",
+  "repeatIndex": 1,
+  "prompt": "How has the average grade changed over academic years?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How has the average grade changed over academic years?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:27:12.755Z",
+    "endedAtUtc": "2026-02-23T11:29:07.765Z",
+    "durationMs": 115010
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "38150",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:29:07 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How has the average grade changed over academic years?\"},\"planner\":{\"payload\":{\"question\":\"How has the average grade changed over academic years?\"},\"startedAt\":1771846032763,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\"],\"dimensions\":[\"academic_year\"],\"filters\":[\"grades.exam_score IS NOT NULL\",\"grades.grade_date IS NOT NULL\"],\"grain\":\"academic_year\",\"aliases\":{\"CASE WHEN EXTRACT(MONTH FROM grades.grade_date) >= 8 THEN CONCAT((EXTRACT(YEAR FROM grades.grade_date))::int, '-', ((EXTRACT(YEAR FROM grades.grade_date))::int + 1)) ELSE CONCAT(((EXTRACT(YEAR FROM grades.grade_date))::int - 1), '-', (EXTRACT(YEAR FROM grades.grade_date))::int) END\":\"academic_year\",\"AVG(grades.exam_score)\":\"avg_exam_score\"},\"output_fields\":[\"academic_year\",\"avg_exam_score\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"avg_exam_score\",\"title\":\"Average exam score by academic year\"},\"assumptions\":[\"Use grades.exam_score (numeric) as the measure of 'grade' because grades.grade_value is a user-defined type (likely non-numeric) and cannot be reliably averaged without mapping.\",\"Academic year is derived from grades.grade_date. An academic year is defined to start on August 1. If grade_date month >= 8 then academic_year = 'YYYY-YYYY+1' (e.g., a grade on 2020-09-15 -> '2020-2021'), otherwise it's the prior-year span (e.g., 2021-05-10 -> '2020-2021').\",\"Exclude grade rows with NULL exam_score or NULL grade_date (they are filtered out in data_requirements.filters).\",\"No join to enrollments or other tables is required for this metric because exam_score and grade_date exist on the grades table. If you want to restrict to active enrollments or a subset of courses/students, an explicit join/filter on enrollments (or other tables) will be needed.\",\"Output field names must match the aliases exactly: academic_year, avg_exam_score.\",\"If you prefer a different academic-year boundary (e.g., July or September) or a different definition of 'average grade' (e.g., weighted combination of exam_score, project_score, attendance_score, or mapping letter grades to GPA), tell me and I will update the SQL/aliases accordingly.\"]}},\"endedAt\":1771846070615},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\"],\"dimensions\":[\"academic_year\"],\"filters\":[\"grades.exam_score IS NOT NULL\",\"grades.grade_date IS NOT NULL\"],\"grain\":\"academic_year\",\"aliases\":{\"CASE WHEN EXTRACT(MONTH FROM grades.grade_date) >= 8 THEN CONCAT((EXTRACT(YEAR FROM grades.grade_date))::int, '-', ((EXTRACT(YEAR FROM grades.grade_date))::int + 1)) ELSE CONCAT(((EXTRACT(YEAR FROM grades.grade_date))::int - 1), '-', (EXTRACT(YEAR FROM grades.grade_date))::int) END\":\"academic_year\",\"AVG(grades.exam_score)\":\"avg_exam_score\"},\"output_fields\":[\"academic_year\",\"avg_exam_score\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"avg_exam_score\",\"title\":\"Average exam score by academic year\"},\"assumptions\":[\"Use grades.exam_score (numeric) as the measure of 'grade' because grades.grade_value is a user-defined type (likely non-numeric) and cannot be reliably averaged without mapping.\",\"Academic year is derived from grades.grade_date. An academic year is defined to start on August 1. If grade_date month >= 8 then academic_year = 'YYYY-YYYY+1' (e.g., a grade on 2020-09-15 -> '2020-2021'), otherwise it's the prior-year span (e.g., 2021-05-10 -> '2020-2021').\",\"Exclude grade rows with NULL exam_score or NULL grade_date (they are filtered out in data_requirements.filters).\",\"No join to enrollments or other tables is required for this metric because exam_score and grade_date exist on the grades table. If you want to restrict to active enrollments or a subset of courses/students, an explicit join/filter on enrollments (or other tables) will be needed.\",\"Output field names must match the aliases exactly: academic_year, avg_exam_score.\",\"If you prefer a different academic-year boundary (e.g., July or September) or a different definition of 'average grade' (e.g., weighted combination of exam_score, project_score, attendance_score, or mapping letter grades to GPA), tell me and I will update the SQL/aliases accordingly.\"]}},\"startedAt\":1771846070621,\"status\":\"success\",\"output\":{\"question\":\"How has the average grade changed over academic years?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\"],\"dimensions\":[\"academic_year\"],\"filters\":[\"grades.exam_score IS NOT NULL\",\"grades.grade_date IS NOT NULL\"],\"grain\":\"academic_year\",\"aliases\":{\"CASE WHEN EXTRACT(MONTH FROM grades.grade_date) >= 8 THEN CONCAT((EXTRACT(YEAR FROM grades.grade_date))::int, '-', ((EXTRACT(YEAR FROM grades.grade_date))::int + 1)) ELSE CONCAT(((EXTRACT(YEAR FROM grades.grade_date))::int - 1), '-', (EXTRACT(YEAR FROM grades.grade_date))::int) END\":\"academic_year\",\"AVG(grades.exam_score)\":\"avg_exam_score\"},\"output_fields\":[\"academic_year\",\"avg_exam_score\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"avg_exam_score\",\"title\":\"Average exam score by academic year\"},\"assumptions\":[\"Use grades.exam_score (numeric) as the measure of 'grade' because grades.grade_value is a user-defined type (likely non-numeric) and cannot be reliably averaged without mapping.\",\"Academic year is derived from grades.grade_date. An academic year is defined to start on August 1. If grade_date month >= 8 then academic_year = 'YYYY-YYYY+1' (e.g., a grade on 2020-09-15 -> '2020-2021'), otherwise it's the prior-year span (e.g., 2021-05-10 -> '2020-2021').\",\"Exclude grade rows with NULL exam_score or NULL grade_date (they are filtered out in data_requirements.filters).\",\"No join to enrollments or other tables is required for this metric because exam_score and grade_date exist on the grades table. If you want to restrict to active enrollments or a subset of courses/students, an explicit join/filter on enrollments (or other tables) will be needed.\",\"Output field names must match the aliases exactly: academic_year, avg_exam_score.\",\"If you prefer a different academic-year boundary (e.g., July or September) or a different definition of 'average grade' (e.g., weighted combination of exam_score, project_score, attendance_score, or mapping letter grades to GPA), tell me and I will update the SQL/aliases accordingly.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771846070623},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"How has the average grade changed over academic years?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\"],\"dimensions\":[\"academic_year\"],\"filters\":[\"grades.exam_score IS NOT NULL\",\"grades.grade_date IS NOT NULL\"],\"grain\":\"academic_year\",\"aliases\":{\"CASE WHEN EXTRACT(MONTH FROM grades.grade_date) >= 8 THEN CONCAT((EXTRACT(YEAR FROM grades.grade_date))::int, '-', ((EXTRACT(YEAR FROM grades.grade_date))::int + 1)) ELSE CONCAT(((EXTRACT(YEAR FROM grades.grade_date))::int - 1), '-', (EXTRACT(YEAR FROM grades.grade_date))::int) END\":\"academic_year\",\"AVG(grades.exam_score)\":\"avg_exam_score\"},\"output_fields\":[\"academic_year\",\"avg_exam_score\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"avg_exam_score\",\"title\":\"Average exam score by academic year\"},\"assumptions\":[\"Use grades.exam_score (numeric) as the measure of 'grade' because grades.grade_value is a user-defined type (likely non-numeric) and cannot be reliably averaged without mapping.\",\"Academic year is derived from grades.grade_date. An academic year is defined to start on August 1. If grade_date month >= 8 then academic_year = 'YYYY-YYYY+1' (e.g., a grade on 2020-09-15 -> '2020-2021'), otherwise it's the prior-year span (e.g., 2021-05-10 -> '2020-2021').\",\"Exclude grade rows with NULL exam_score or NULL grade_date (they are filtered out in data_requirements.filters).\",\"No join to enrollments or other tables is required for this metric because exam_score and grade_date exist on the grades table. If you want to restrict to active enrollments or a subset of courses/students, an explicit join/filter on enrollments (or other tables) will be needed.\",\"Output field names must match the aliases exactly: academic_year, avg_exam_score.\",\"If you prefer a different academic-year boundary (e.g., July or September) or a different definition of 'average grade' (e.g., weighted combination of exam_score, project_score, attendance_score, or mapping letter grades to GPA), tell me and I will update the SQL/aliases accordingly.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT\\n  CASE\\n    WHEN EXTRACT(MONTH FROM g.grade_date) >= 8\\n    THEN CONCAT((EXTRACT(YEAR FROM g.grade_date))::int, '-', ((EXTRACT(YEAR FROM g.grade_date))::int + 1))\\n    ELSE CONCAT(((EXTRACT(YEAR FROM g.grade_date))::int - 1), '-', (EXTRACT(YEAR FROM g.grade_date))::int)\\n  END AS academic_year,\\n  AVG(g.exam_score) AS avg_exam_score\\nFROM public.grades g\\nWHERE g.exam_score IS NOT NULL\\n  AND g.grade_date IS NOT NULL\\nGROUP BY\\n  CASE\\n    WHEN EXTRACT(MONTH FROM g.grade_date) >= 8\\n    THEN CONCAT((EXTRACT(YEAR FROM g.grade_date))::int, '-', ((EXTRACT(YEAR FROM g.grade_date))::int + 1))\\n    ELSE CONCAT(((EXTRACT(YEAR FROM g.grade_date))::int - 1), '-', (EXTRACT(YEAR FROM g.grade_date))::int)\\n  END\\nORDER BY\\n  CASE\\n    WHEN EXTRACT(MONTH FROM g.grade_date) >= 8 THEN (EXTRACT(YEAR FROM g.grade_date))::int\\n    ELSE (EXTRACT(YEAR FROM g.grade_date))::int - 1\\n  END ASC;\",\"executionError\":\"column \\\"g.grade_date\\\" must appear in the GROUP BY clause or be used in an aggregate function\\nLINE 20:     WHEN EXTRACT(MONTH FROM g.grade_date) >= 8 THEN (EXTRACT...\\n                                     ^\",\"validationIssues\":[\"SQL execution failed: column \\\"g.grade_date\\\" must appear in the GROUP BY clause or be used in an aggregate function\\nLINE 20:     WHEN EXTRACT(MONTH FROM g.grade_date) >= 8 THEN (EXTRACT...\\n                                     ^\"],\"repairHint\":\"Fix SQL query structure, aliases, and filters before retrying.\"},\"historySummary\":\"Attempt 1: SQL execution failed: column \\\"g.grade_date\\\" must appear in the GROUP BY clause or be used in an aggregate function\\nLINE 20:     WHEN EXTRACT(MONTH FROM g.grade_date) >= 8 THEN (EXTRACT...\\n                                     ^\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Used the public.grades table (confirmed via schema inspection). Compute academic year starting August (month >= 8) per the provided definition, exclude NULL exam_score and grade_date, aggregate AVG(exam_score) grouped by academic year, and order deterministically by the academic-year start year.\",\"sql\":\"SELECT\\n  CASE\\n    WHEN EXTRACT(MONTH FROM g.grade_date) >= 8\\n    THEN CONCAT((EXTRACT(YEAR FROM g.grade_date))::int, '-', ((EXTRACT(YEAR FROM g.grade_date))::int + 1))\\n    ELSE CONCAT(((EXTRACT(YEAR FROM g.grade_date))::int - 1), '-', (EXTRACT(YEAR FROM g.grade_date))::int)\\n  END AS academic_year,\\n  AVG(g.exam_score) AS avg_exam_score\\nFROM public.grades g\\nWHERE g.exam_score IS NOT NULL\\n  AND g.grade_date IS NOT NULL\\nGROUP BY\\n  CASE\\n    WHEN EXTRACT(MONTH FROM g.grade_date) >= 8\\n    THEN CONCAT((EXTRACT(YEAR FROM g.grade_date))::int, '-', ((EXTRACT(YEAR FROM g.grade_date))::int + 1))\\n    ELSE CONCAT(((EXTRACT(YEAR FROM g.grade_date))::int - 1), '-', (EXTRACT(YEAR FROM g.grade_date))::int)\\n  END\\nORDER BY\\n  CASE\\n    WHEN EXTRACT(MONTH FROM g.grade_date) >= 8 THEN (EXTRACT(YEAR FROM g.grade_date))::int\\n    ELSE (EXTRACT(YEAR FROM g.grade_date))::int - 1\\n  END ASC;\",\"assumptions\":[\"grades.exam_score is the numeric measure to average and grades.grade_date is used to derive academic year (academic year starts in August).\",\"Only rows with non-NULL exam_score and grade_date are included.\",\"No additional joins or filters (e.g., by course or active enrollment) were requested, so none are applied.\"]},\"execution\":{\"ok\":false,\"sql\":\"SELECT\\n  CASE\\n    WHEN EXTRACT(MONTH FROM g.grade_date) >= 8\\n    THEN CONCAT((EXTRACT(YEAR FROM g.grade_date))::int, '-', ((EXTRACT(YEAR FROM g.grade_date))::int + 1))\\n    ELSE CONCAT(((EXTRACT(YEAR FROM g.grade_date))::int - 1), '-', (EXTRACT(YEAR FROM g.grade_date))::int)\\n  END AS academic_year,\\n  AVG(g.exam_score) AS avg_exam_score\\nFROM public.grades g\\nWHERE g.exam_score IS NOT NULL\\n  AND g.grade_date IS NOT NULL\\nGROUP BY\\n  CASE\\n    WHEN EXTRACT(MONTH FROM g.grade_date) >= 8\\n    THEN CONCAT((EXTRACT(YEAR FROM g.grade_date))::int, '-', ((EXTRACT(YEAR FROM g.grade_date))::int + 1))\\n    ELSE CONCAT(((EXTRACT(YEAR FROM g.grade_date))::int - 1), '-', (EXTRACT(YEAR FROM g.grade_date))::int)\\n  END\\nORDER BY\\n  CASE\\n    WHEN EXTRACT(MONTH FROM g.grade_date) >= 8 THEN (EXTRACT(YEAR FROM g.grade_date))::int\\n    ELSE (EXTRACT(YEAR FROM g.grade_date))::int - 1\\n  END ASC\",\"metadata\":{\"columns\":[],\"rowCount\":0,\"sample\":[]},\"data\":[],\"error\":{\"type\":\"execution\",\"message\":\"column \\\"g.grade_date\\\" must appear in the GROUP BY clause or be used in an aggregate function\\nLINE 20:     WHEN EXTRACT(MONTH FROM g.grade_date) >= 8 THEN (EXTRACT...\\n                                     ^\"}},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"mark\":\"text\",\"encoding\":{\"text\":{\"value\":\"SQL execution failed. Repair query and retry.\"}},\"title\":\"Execution failed\"},\"reasoning\":\"column \\\"g.grade_date\\\" must appear in the GROUP BY clause or be used in an aggregate function\\nLINE 20:     WHEN EXTRACT(MONTH FROM g.grade_date) >= 8 THEN (EXTRACT...\\n                                     ^\"},\"validation\":{\"passed\":false,\"score\":0,\"issues\":[\"SQL execution failed: column \\\"g.grade_date\\\" must appear in the GROUP BY clause or be used in an aggregate function\\nLINE 20:     WHEN EXTRACT(MONTH FROM g.grade_date) >= 8 THEN (EXTRACT...\\n                                     ^\"],\"repairPrompt\":\"Fix SQL query structure, aliases, and filters before retrying.\"}}},\"startedAt\":1771846101615,\"status\":\"success\",\"output\":{\"question\":\"How has the average grade changed over academic years?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\"],\"dimensions\":[\"academic_year\"],\"filters\":[\"grades.exam_score IS NOT NULL\",\"grades.grade_date IS NOT NULL\"],\"grain\":\"academic_year\",\"aliases\":{\"CASE WHEN EXTRACT(MONTH FROM grades.grade_date) >= 8 THEN CONCAT((EXTRACT(YEAR FROM grades.grade_date))::int, '-', ((EXTRACT(YEAR FROM grades.grade_date))::int + 1)) ELSE CONCAT(((EXTRACT(YEAR FROM grades.grade_date))::int - 1), '-', (EXTRACT(YEAR FROM grades.grade_date))::int) END\":\"academic_year\",\"AVG(grades.exam_score)\":\"avg_exam_score\"},\"output_fields\":[\"academic_year\",\"avg_exam_score\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"avg_exam_score\",\"title\":\"Average exam score by academic year\"},\"assumptions\":[\"Use grades.exam_score (numeric) as the measure of 'grade' because grades.grade_value is a user-defined type (likely non-numeric) and cannot be reliably averaged without mapping.\",\"Academic year is derived from grades.grade_date. An academic year is defined to start on August 1. If grade_date month >= 8 then academic_year = 'YYYY-YYYY+1' (e.g., a grade on 2020-09-15 -> '2020-2021'), otherwise it's the prior-year span (e.g., 2021-05-10 -> '2020-2021').\",\"Exclude grade rows with NULL exam_score or NULL grade_date (they are filtered out in data_requirements.filters).\",\"No join to enrollments or other tables is required for this metric because exam_score and grade_date exist on the grades table. If you want to restrict to active enrollments or a subset of courses/students, an explicit join/filter on enrollments (or other tables) will be needed.\",\"Output field names must match the aliases exactly: academic_year, avg_exam_score.\",\"If you prefer a different academic-year boundary (e.g., July or September) or a different definition of 'average grade' (e.g., weighted combination of exam_score, project_score, attendance_score, or mapping letter grades to GPA), tell me and I will update the SQL/aliases accordingly.\"]},\"attempt\":3,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"WITH per_row AS (\\n  SELECT\\n    CASE\\n      WHEN EXTRACT(MONTH FROM grade_date) >= 8 THEN (EXTRACT(YEAR FROM grade_date))::int\\n      ELSE (EXTRACT(YEAR FROM grade_date))::int - 1\\n    END AS academic_year_start,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM grade_date) >= 8\\n      THEN CONCAT((EXTRACT(YEAR FROM grade_date))::int, '-', ((EXTRACT(YEAR FROM grade_date))::int + 1))\\n      ELSE CONCAT(((EXTRACT(YEAR FROM grade_date))::int - 1), '-', (EXTRACT(YEAR FROM grade_date))::int)\\n    END AS academic_year,\\n    exam_score\\n  FROM public.grades g\\n  WHERE g.exam_score IS NOT NULL\\n    AND g.grade_date IS NOT NULL\\n)\\nSELECT\\n  academic_year AS academic_year,\\n  AVG(exam_score) AS avg_exam_score\\nFROM per_row\\nGROUP BY academic_year_start, academic_year\\nORDER BY academic_year_start ASC;\",\"validationIssues\":[\"The visualization encodes the exactly aliased fields academic_year and avg_exam_score which exist in metadata.columns — mapping is correct.\",\"academic_year is derived from a date and represents a temporal sequence; using an ordinal x type is acceptable, but using a temporal or numeric (academic_year_start) axis would better reflect a time series and ensure proper ordering/scale.\",\"The y-axis scale has \\\"zero\\\": false which can exaggerate perceptual changes in average scores; consider including zero for a more interpretable baseline when showing averages.\",\"metadata.rowCount is 3 but the sample contains only 2 rows — metadata inconsistency (warning about result metadata, not the visualization itself).\",\"If you want the line to reflect true chronological spacing (e.g., gaps if years missing) or enable time-based axis features, replace the academic_year string with a numeric/temporal field (academic_year_start) in the encoding.\"]},\"historySummary\":\"Attempt 1: SQL execution failed: column \\\"g.grade_date\\\" must appear in the GROUP BY clause or be used in an aggregate function\\nLINE 20:     WHEN EXTRACT(MONTH FROM g.grade_date) >= 8 THEN (EXTRACT...\\n                                     ^\\nAttempt 2: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Created a CTE that computes each row's academic_year and an integer academic_year_start (deterministic sort key). Grouping is done on those computed values to avoid referencing grade_date in GROUP BY/ORDER BY (fixes the previous error). Filters exclude NULLs as requested and output aliases match the plan.\",\"sql\":\"WITH per_row AS (\\n  SELECT\\n    CASE\\n      WHEN EXTRACT(MONTH FROM grade_date) >= 8 THEN (EXTRACT(YEAR FROM grade_date))::int\\n      ELSE (EXTRACT(YEAR FROM grade_date))::int - 1\\n    END AS academic_year_start,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM grade_date) >= 8\\n      THEN CONCAT((EXTRACT(YEAR FROM grade_date))::int, '-', ((EXTRACT(YEAR FROM grade_date))::int + 1))\\n      ELSE CONCAT(((EXTRACT(YEAR FROM grade_date))::int - 1), '-', (EXTRACT(YEAR FROM grade_date))::int)\\n    END AS academic_year,\\n    exam_score\\n  FROM public.grades g\\n  WHERE g.exam_score IS NOT NULL\\n    AND g.grade_date IS NOT NULL\\n)\\nSELECT\\n  academic_year AS academic_year,\\n  AVG(exam_score) AS avg_exam_score\\nFROM per_row\\nGROUP BY academic_year_start, academic_year\\nORDER BY academic_year_start ASC;\",\"assumptions\":[\"grades.exam_score is numeric and is the measure to average.\",\"Academic year starts August 1; academic_year label formatted as 'YYYY-YYYY+1' as specified.\",\"Rows with NULL exam_score or NULL grade_date are excluded.\",\"Using public.grades table only (no joins); academic_year_start is used to provide deterministic chronological ordering.\"]},\"execution\":{\"ok\":true,\"sql\":\"WITH per_row AS (\\n  SELECT\\n    CASE\\n      WHEN EXTRACT(MONTH FROM grade_date) >= 8 THEN (EXTRACT(YEAR FROM grade_date))::int\\n      ELSE (EXTRACT(YEAR FROM grade_date))::int - 1\\n    END AS academic_year_start,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM grade_date) >= 8\\n      THEN CONCAT((EXTRACT(YEAR FROM grade_date))::int, '-', ((EXTRACT(YEAR FROM grade_date))::int + 1))\\n      ELSE CONCAT(((EXTRACT(YEAR FROM grade_date))::int - 1), '-', (EXTRACT(YEAR FROM grade_date))::int)\\n    END AS academic_year,\\n    exam_score\\n  FROM public.grades g\\n  WHERE g.exam_score IS NOT NULL\\n    AND g.grade_date IS NOT NULL\\n)\\nSELECT\\n  academic_year AS academic_year,\\n  AVG(exam_score) AS avg_exam_score\\nFROM per_row\\nGROUP BY academic_year_start, academic_year\\nORDER BY academic_year_start ASC\",\"metadata\":{\"columns\":[\"academic_year\",\"avg_exam_score\"],\"rowCount\":3,\"sample\":[{\"academic_year\":\"2023-2024\",\"avg_exam_score\":63.772222222222226},{\"academic_year\":\"2024-2025\",\"avg_exam_score\":34.68928571428572}]},\"data\":[{\"academic_year\":\"2023-2024\",\"avg_exam_score\":63.772222222222226},{\"academic_year\":\"2024-2025\",\"avg_exam_score\":34.68928571428572},{\"academic_year\":\"2025-2026\",\"avg_exam_score\":60.93272727272727}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average exam score by academic year\",\"width\":640,\"height\":320,\"mark\":{\"type\":\"line\",\"point\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic year\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Average exam score\",\"scale\":{\"zero\":false}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic year\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg exam score\",\"format\":\".2f\"}]}},\"reasoning\":\"Line chart showing avg_exam_score by academic_year. academic_year is treated as an ordinal x-axis (string like '2023-2024'); points are shown to highlight each year and tooltip displays the exact average formatted to two decimals.\"},\"validation\":{\"passed\":true,\"score\":0.65,\"issues\":[\"The visualization encodes the exactly aliased fields academic_year and avg_exam_score which exist in metadata.columns — mapping is correct.\",\"academic_year is derived from a date and represents a temporal sequence; using an ordinal x type is acceptable, but using a temporal or numeric (academic_year_start) axis would better reflect a time series and ensure proper ordering/scale.\",\"The y-axis scale has \\\"zero\\\": false which can exaggerate perceptual changes in average scores; consider including zero for a more interpretable baseline when showing averages.\",\"metadata.rowCount is 3 but the sample contains only 2 rows — metadata inconsistency (warning about result metadata, not the visualization itself).\",\"If you want the line to reflect true chronological spacing (e.g., gaps if years missing) or enable time-based axis features, replace the academic_year string with a numeric/temporal field (academic_year_start) in the encoding.\"]}}},\"endedAt\":1771846147742,\"metadata\":{\"iterationCount\":2}},\"final-data\":{\"payload\":{\"question\":\"How has the average grade changed over academic years?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\"],\"dimensions\":[\"academic_year\"],\"filters\":[\"grades.exam_score IS NOT NULL\",\"grades.grade_date IS NOT NULL\"],\"grain\":\"academic_year\",\"aliases\":{\"CASE WHEN EXTRACT(MONTH FROM grades.grade_date) >= 8 THEN CONCAT((EXTRACT(YEAR FROM grades.grade_date))::int, '-', ((EXTRACT(YEAR FROM grades.grade_date))::int + 1)) ELSE CONCAT(((EXTRACT(YEAR FROM grades.grade_date))::int - 1), '-', (EXTRACT(YEAR FROM grades.grade_date))::int) END\":\"academic_year\",\"AVG(grades.exam_score)\":\"avg_exam_score\"},\"output_fields\":[\"academic_year\",\"avg_exam_score\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"avg_exam_score\",\"title\":\"Average exam score by academic year\"},\"assumptions\":[\"Use grades.exam_score (numeric) as the measure of 'grade' because grades.grade_value is a user-defined type (likely non-numeric) and cannot be reliably averaged without mapping.\",\"Academic year is derived from grades.grade_date. An academic year is defined to start on August 1. If grade_date month >= 8 then academic_year = 'YYYY-YYYY+1' (e.g., a grade on 2020-09-15 -> '2020-2021'), otherwise it's the prior-year span (e.g., 2021-05-10 -> '2020-2021').\",\"Exclude grade rows with NULL exam_score or NULL grade_date (they are filtered out in data_requirements.filters).\",\"No join to enrollments or other tables is required for this metric because exam_score and grade_date exist on the grades table. If you want to restrict to active enrollments or a subset of courses/students, an explicit join/filter on enrollments (or other tables) will be needed.\",\"Output field names must match the aliases exactly: academic_year, avg_exam_score.\",\"If you prefer a different academic-year boundary (e.g., July or September) or a different definition of 'average grade' (e.g., weighted combination of exam_score, project_score, attendance_score, or mapping letter grades to GPA), tell me and I will update the SQL/aliases accordingly.\"]},\"attempt\":3,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"WITH per_row AS (\\n  SELECT\\n    CASE\\n      WHEN EXTRACT(MONTH FROM grade_date) >= 8 THEN (EXTRACT(YEAR FROM grade_date))::int\\n      ELSE (EXTRACT(YEAR FROM grade_date))::int - 1\\n    END AS academic_year_start,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM grade_date) >= 8\\n      THEN CONCAT((EXTRACT(YEAR FROM grade_date))::int, '-', ((EXTRACT(YEAR FROM grade_date))::int + 1))\\n      ELSE CONCAT(((EXTRACT(YEAR FROM grade_date))::int - 1), '-', (EXTRACT(YEAR FROM grade_date))::int)\\n    END AS academic_year,\\n    exam_score\\n  FROM public.grades g\\n  WHERE g.exam_score IS NOT NULL\\n    AND g.grade_date IS NOT NULL\\n)\\nSELECT\\n  academic_year AS academic_year,\\n  AVG(exam_score) AS avg_exam_score\\nFROM per_row\\nGROUP BY academic_year_start, academic_year\\nORDER BY academic_year_start ASC;\",\"validationIssues\":[\"The visualization encodes the exactly aliased fields academic_year and avg_exam_score which exist in metadata.columns — mapping is correct.\",\"academic_year is derived from a date and represents a temporal sequence; using an ordinal x type is acceptable, but using a temporal or numeric (academic_year_start) axis would better reflect a time series and ensure proper ordering/scale.\",\"The y-axis scale has \\\"zero\\\": false which can exaggerate perceptual changes in average scores; consider including zero for a more interpretable baseline when showing averages.\",\"metadata.rowCount is 3 but the sample contains only 2 rows — metadata inconsistency (warning about result metadata, not the visualization itself).\",\"If you want the line to reflect true chronological spacing (e.g., gaps if years missing) or enable time-based axis features, replace the academic_year string with a numeric/temporal field (academic_year_start) in the encoding.\"]},\"historySummary\":\"Attempt 1: SQL execution failed: column \\\"g.grade_date\\\" must appear in the GROUP BY clause or be used in an aggregate function\\nLINE 20:     WHEN EXTRACT(MONTH FROM g.grade_date) >= 8 THEN (EXTRACT...\\n                                     ^\\nAttempt 2: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Created a CTE that computes each row's academic_year and an integer academic_year_start (deterministic sort key). Grouping is done on those computed values to avoid referencing grade_date in GROUP BY/ORDER BY (fixes the previous error). Filters exclude NULLs as requested and output aliases match the plan.\",\"sql\":\"WITH per_row AS (\\n  SELECT\\n    CASE\\n      WHEN EXTRACT(MONTH FROM grade_date) >= 8 THEN (EXTRACT(YEAR FROM grade_date))::int\\n      ELSE (EXTRACT(YEAR FROM grade_date))::int - 1\\n    END AS academic_year_start,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM grade_date) >= 8\\n      THEN CONCAT((EXTRACT(YEAR FROM grade_date))::int, '-', ((EXTRACT(YEAR FROM grade_date))::int + 1))\\n      ELSE CONCAT(((EXTRACT(YEAR FROM grade_date))::int - 1), '-', (EXTRACT(YEAR FROM grade_date))::int)\\n    END AS academic_year,\\n    exam_score\\n  FROM public.grades g\\n  WHERE g.exam_score IS NOT NULL\\n    AND g.grade_date IS NOT NULL\\n)\\nSELECT\\n  academic_year AS academic_year,\\n  AVG(exam_score) AS avg_exam_score\\nFROM per_row\\nGROUP BY academic_year_start, academic_year\\nORDER BY academic_year_start ASC;\",\"assumptions\":[\"grades.exam_score is numeric and is the measure to average.\",\"Academic year starts August 1; academic_year label formatted as 'YYYY-YYYY+1' as specified.\",\"Rows with NULL exam_score or NULL grade_date are excluded.\",\"Using public.grades table only (no joins); academic_year_start is used to provide deterministic chronological ordering.\"]},\"execution\":{\"ok\":true,\"sql\":\"WITH per_row AS (\\n  SELECT\\n    CASE\\n      WHEN EXTRACT(MONTH FROM grade_date) >= 8 THEN (EXTRACT(YEAR FROM grade_date))::int\\n      ELSE (EXTRACT(YEAR FROM grade_date))::int - 1\\n    END AS academic_year_start,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM grade_date) >= 8\\n      THEN CONCAT((EXTRACT(YEAR FROM grade_date))::int, '-', ((EXTRACT(YEAR FROM grade_date))::int + 1))\\n      ELSE CONCAT(((EXTRACT(YEAR FROM grade_date))::int - 1), '-', (EXTRACT(YEAR FROM grade_date))::int)\\n    END AS academic_year,\\n    exam_score\\n  FROM public.grades g\\n  WHERE g.exam_score IS NOT NULL\\n    AND g.grade_date IS NOT NULL\\n)\\nSELECT\\n  academic_year AS academic_year,\\n  AVG(exam_score) AS avg_exam_score\\nFROM per_row\\nGROUP BY academic_year_start, academic_year\\nORDER BY academic_year_start ASC\",\"metadata\":{\"columns\":[\"academic_year\",\"avg_exam_score\"],\"rowCount\":3,\"sample\":[{\"academic_year\":\"2023-2024\",\"avg_exam_score\":63.772222222222226},{\"academic_year\":\"2024-2025\",\"avg_exam_score\":34.68928571428572}]},\"data\":[{\"academic_year\":\"2023-2024\",\"avg_exam_score\":63.772222222222226},{\"academic_year\":\"2024-2025\",\"avg_exam_score\":34.68928571428572},{\"academic_year\":\"2025-2026\",\"avg_exam_score\":60.93272727272727}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average exam score by academic year\",\"width\":640,\"height\":320,\"mark\":{\"type\":\"line\",\"point\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic year\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Average exam score\",\"scale\":{\"zero\":false}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic year\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg exam score\",\"format\":\".2f\"}]}},\"reasoning\":\"Line chart showing avg_exam_score by academic_year. academic_year is treated as an ordinal x-axis (string like '2023-2024'); points are shown to highlight each year and tooltip displays the exact average formatted to two decimals.\"},\"validation\":{\"passed\":true,\"score\":0.65,\"issues\":[\"The visualization encodes the exactly aliased fields academic_year and avg_exam_score which exist in metadata.columns — mapping is correct.\",\"academic_year is derived from a date and represents a temporal sequence; using an ordinal x type is acceptable, but using a temporal or numeric (academic_year_start) axis would better reflect a time series and ensure proper ordering/scale.\",\"The y-axis scale has \\\"zero\\\": false which can exaggerate perceptual changes in average scores; consider including zero for a more interpretable baseline when showing averages.\",\"metadata.rowCount is 3 but the sample contains only 2 rows — metadata inconsistency (warning about result metadata, not the visualization itself).\",\"If you want the line to reflect true chronological spacing (e.g., gaps if years missing) or enable time-based axis features, replace the academic_year string with a numeric/temporal field (academic_year_start) in the encoding.\"]}}},\"startedAt\":1771846147745,\"status\":\"success\",\"output\":{\"sql\":\"WITH per_row AS (\\n  SELECT\\n    CASE\\n      WHEN EXTRACT(MONTH FROM grade_date) >= 8 THEN (EXTRACT(YEAR FROM grade_date))::int\\n      ELSE (EXTRACT(YEAR FROM grade_date))::int - 1\\n    END AS academic_year_start,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM grade_date) >= 8\\n      THEN CONCAT((EXTRACT(YEAR FROM grade_date))::int, '-', ((EXTRACT(YEAR FROM grade_date))::int + 1))\\n      ELSE CONCAT(((EXTRACT(YEAR FROM grade_date))::int - 1), '-', (EXTRACT(YEAR FROM grade_date))::int)\\n    END AS academic_year,\\n    exam_score\\n  FROM public.grades g\\n  WHERE g.exam_score IS NOT NULL\\n    AND g.grade_date IS NOT NULL\\n)\\nSELECT\\n  academic_year AS academic_year,\\n  AVG(exam_score) AS avg_exam_score\\nFROM per_row\\nGROUP BY academic_year_start, academic_year\\nORDER BY academic_year_start ASC;\",\"data\":[{\"academic_year\":\"2023-2024\",\"avg_exam_score\":63.772222222222226},{\"academic_year\":\"2024-2025\",\"avg_exam_score\":34.68928571428572},{\"academic_year\":\"2025-2026\",\"avg_exam_score\":60.93272727272727}],\"metadata\":{\"columns\":[\"academic_year\",\"avg_exam_score\"],\"rowCount\":3,\"sample\":[{\"academic_year\":\"2023-2024\",\"avg_exam_score\":63.772222222222226},{\"academic_year\":\"2024-2025\",\"avg_exam_score\":34.68928571428572}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average exam score by academic year\",\"width\":640,\"height\":320,\"mark\":{\"type\":\"line\",\"point\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic year\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Average exam score\",\"scale\":{\"zero\":false}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic year\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg exam score\",\"format\":\".2f\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.65,\"issues\":[\"The visualization encodes the exactly aliased fields academic_year and avg_exam_score which exist in metadata.columns — mapping is correct.\",\"academic_year is derived from a date and represents a temporal sequence; using an ordinal x type is acceptable, but using a temporal or numeric (academic_year_start) axis would better reflect a time series and ensure proper ordering/scale.\",\"The y-axis scale has \\\"zero\\\": false which can exaggerate perceptual changes in average scores; consider including zero for a more interpretable baseline when showing averages.\",\"metadata.rowCount is 3 but the sample contains only 2 rows — metadata inconsistency (warning about result metadata, not the visualization itself).\",\"If you want the line to reflect true chronological spacing (e.g., gaps if years missing) or enable time-based axis features, replace the academic_year string with a numeric/temporal field (academic_year_start) in the encoding.\"]},\"attempts\":{\"used\":2,\"max\":4,\"history\":[\"Attempt 1: SQL execution failed: column \\\"g.grade_date\\\" must appear in the GROUP BY clause or be used in an aggregate function\",\"LINE 20:     WHEN EXTRACT(MONTH FROM g.grade_date) >= 8 THEN (EXTRACT...\",\"                                     ^\",\"Attempt 2: passed\"]}},\"endedAt\":1771846147748}},\"input\":{\"question\":\"How has the average grade changed over academic years?\"},\"result\":{\"sql\":\"WITH per_row AS (\\n  SELECT\\n    CASE\\n      WHEN EXTRACT(MONTH FROM grade_date) >= 8 THEN (EXTRACT(YEAR FROM grade_date))::int\\n      ELSE (EXTRACT(YEAR FROM grade_date))::int - 1\\n    END AS academic_year_start,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM grade_date) >= 8\\n      THEN CONCAT((EXTRACT(YEAR FROM grade_date))::int, '-', ((EXTRACT(YEAR FROM grade_date))::int + 1))\\n      ELSE CONCAT(((EXTRACT(YEAR FROM grade_date))::int - 1), '-', (EXTRACT(YEAR FROM grade_date))::int)\\n    END AS academic_year,\\n    exam_score\\n  FROM public.grades g\\n  WHERE g.exam_score IS NOT NULL\\n    AND g.grade_date IS NOT NULL\\n)\\nSELECT\\n  academic_year AS academic_year,\\n  AVG(exam_score) AS avg_exam_score\\nFROM per_row\\nGROUP BY academic_year_start, academic_year\\nORDER BY academic_year_start ASC;\",\"data\":[{\"academic_year\":\"2023-2024\",\"avg_exam_score\":63.772222222222226},{\"academic_year\":\"2024-2025\",\"avg_exam_score\":34.68928571428572},{\"academic_year\":\"2025-2026\",\"avg_exam_score\":60.93272727272727}],\"metadata\":{\"columns\":[\"academic_year\",\"avg_exam_score\"],\"rowCount\":3,\"sample\":[{\"academic_year\":\"2023-2024\",\"avg_exam_score\":63.772222222222226},{\"academic_year\":\"2024-2025\",\"avg_exam_score\":34.68928571428572}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average exam score by academic year\",\"width\":640,\"height\":320,\"mark\":{\"type\":\"line\",\"point\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic year\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Average exam score\",\"scale\":{\"zero\":false}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic year\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg exam score\",\"format\":\".2f\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.65,\"issues\":[\"The visualization encodes the exactly aliased fields academic_year and avg_exam_score which exist in metadata.columns — mapping is correct.\",\"academic_year is derived from a date and represents a temporal sequence; using an ordinal x type is acceptable, but using a temporal or numeric (academic_year_start) axis would better reflect a time series and ensure proper ordering/scale.\",\"The y-axis scale has \\\"zero\\\": false which can exaggerate perceptual changes in average scores; consider including zero for a more interpretable baseline when showing averages.\",\"metadata.rowCount is 3 but the sample contains only 2 rows — metadata inconsistency (warning about result metadata, not the visualization itself).\",\"If you want the line to reflect true chronological spacing (e.g., gaps if years missing) or enable time-based axis features, replace the academic_year string with a numeric/temporal field (academic_year_start) in the encoding.\"]},\"attempts\":{\"used\":2,\"max\":4,\"history\":[\"Attempt 1: SQL execution failed: column \\\"g.grade_date\\\" must appear in the GROUP BY clause or be used in an aggregate function\",\"LINE 20:     WHEN EXTRACT(MONTH FROM g.grade_date) >= 8 THEN (EXTRACT...\",\"                                     ^\",\"Attempt 2: passed\"]}},\"traceId\":\"0b44e9a05784cc886203b3e61e90ccaf\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-grade-by-academic-year/run-0001/run.json",
+    "queryPath": "runs/avg-grade-by-academic-year/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-grade-by-academic-year/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-grade-by-academic-year/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-grade-by-academic-year/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:29:08.205Z",
+  "traceId": "0b44e9a05784cc886203b3e61e90ccaf",
+  "success": true,
+  "durationMs": 115450,
+  "resultRaw": {
+    "data": [
+      {
+        "academic_year": "2023-2024",
+        "avg_exam_score": 63.772222222222226
+      },
+      {
+        "academic_year": "2024-2025",
+        "avg_exam_score": 34.68928571428572
+      },
+      {
+        "academic_year": "2025-2026",
+        "avg_exam_score": 60.93272727272727
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average exam score by academic year",
+      "width": 640,
+      "height": 320,
+      "mark": {
+        "type": "line",
+        "point": true
+      },
+      "encoding": {
+        "x": {
+          "field": "academic_year",
+          "type": "ordinal",
+          "title": "Academic year",
+          "axis": {
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "avg_exam_score",
+          "type": "quantitative",
+          "title": "Average exam score",
+          "scale": {
+            "zero": false
+          }
+        },
+        "tooltip": [
+          {
+            "field": "academic_year",
+            "type": "ordinal",
+            "title": "Academic year"
+          },
+          {
+            "field": "avg_exam_score",
+            "type": "quantitative",
+            "title": "Avg exam score",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    "sql": "WITH per_row AS (\n  SELECT\n    CASE\n      WHEN EXTRACT(MONTH FROM grade_date) >= 8 THEN (EXTRACT(YEAR FROM grade_date))::int\n      ELSE (EXTRACT(YEAR FROM grade_date))::int - 1\n    END AS academic_year_start,\n    CASE\n      WHEN EXTRACT(MONTH FROM grade_date) >= 8\n      THEN CONCAT((EXTRACT(YEAR FROM grade_date))::int, '-', ((EXTRACT(YEAR FROM grade_date))::int + 1))\n      ELSE CONCAT(((EXTRACT(YEAR FROM grade_date))::int - 1), '-', (EXTRACT(YEAR FROM grade_date))::int)\n    END AS academic_year,\n    exam_score\n  FROM public.grades g\n  WHERE g.exam_score IS NOT NULL\n    AND g.grade_date IS NOT NULL\n)\nSELECT\n  academic_year AS academic_year,\n  AVG(exam_score) AS avg_exam_score\nFROM per_row\nGROUP BY academic_year_start, academic_year\nORDER BY academic_year_start ASC;",
+    "metadata": {
+      "columns": [
+        "academic_year",
+        "avg_exam_score"
+      ],
+      "rowCount": 3,
+      "sample": [
+        {
+          "academic_year": "2023-2024",
+          "avg_exam_score": 63.772222222222226
+        },
+        {
+          "academic_year": "2024-2025",
+          "avg_exam_score": 34.68928571428572
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.65,
+      "issues": [
+        "The visualization encodes the exactly aliased fields academic_year and avg_exam_score which exist in metadata.columns — mapping is correct.",
+        "academic_year is derived from a date and represents a temporal sequence; using an ordinal x type is acceptable, but using a temporal or numeric (academic_year_start) axis would better reflect a time series and ensure proper ordering/scale.",
+        "The y-axis scale has \"zero\": false which can exaggerate perceptual changes in average scores; consider including zero for a more interpretable baseline when showing averages.",
+        "metadata.rowCount is 3 but the sample contains only 2 rows — metadata inconsistency (warning about result metadata, not the visualization itself).",
+        "If you want the line to reflect true chronological spacing (e.g., gaps if years missing) or enable time-based axis features, replace the academic_year string with a numeric/temporal field (academic_year_start) in the encoding."
+      ]
+    },
+    "attempts": {
+      "used": 2,
+      "max": 4,
+      "history": [
+        "Attempt 1: SQL execution failed: column \"g.grade_date\" must appear in the GROUP BY clause or be used in an aggregate function",
+        "LINE 20:     WHEN EXTRACT(MONTH FROM g.grade_date) >= 8 THEN (EXTRACT...",
+        "^",
+        "Attempt 2: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "academic_year": "2023-2024",
+        "avg_exam_score": 63.772222222222226
+      },
+      {
+        "academic_year": "2024-2025",
+        "avg_exam_score": 34.68928571428572
+      },
+      {
+        "academic_year": "2025-2026",
+        "avg_exam_score": 60.93272727272727
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average exam score by academic year",
+      "width": 640,
+      "height": 320,
+      "mark": {
+        "type": "line",
+        "point": true
+      },
+      "encoding": {
+        "x": {
+          "field": "academic_year",
+          "type": "ordinal",
+          "title": "Academic year",
+          "axis": {
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "avg_exam_score",
+          "type": "quantitative",
+          "title": "Average exam score",
+          "scale": {
+            "zero": false
+          }
+        },
+        "tooltip": [
+          {
+            "field": "academic_year",
+            "type": "ordinal",
+            "title": "Academic year"
+          },
+          {
+            "field": "avg_exam_score",
+            "type": "quantitative",
+            "title": "Avg exam score",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    "sql": "WITH per_row AS (\n  SELECT\n    CASE\n      WHEN EXTRACT(MONTH FROM grade_date) >= 8 THEN (EXTRACT(YEAR FROM grade_date))::int\n      ELSE (EXTRACT(YEAR FROM grade_date))::int - 1\n    END AS academic_year_start,\n    CASE\n      WHEN EXTRACT(MONTH FROM grade_date) >= 8\n      THEN CONCAT((EXTRACT(YEAR FROM grade_date))::int, '-', ((EXTRACT(YEAR FROM grade_date))::int + 1))\n      ELSE CONCAT(((EXTRACT(YEAR FROM grade_date))::int - 1), '-', (EXTRACT(YEAR FROM grade_date))::int)\n    END AS academic_year,\n    exam_score\n  FROM public.grades g\n  WHERE g.exam_score IS NOT NULL\n    AND g.grade_date IS NOT NULL\n)\nSELECT\n  academic_year AS academic_year,\n  AVG(exam_score) AS avg_exam_score\nFROM per_row\nGROUP BY academic_year_start, academic_year\nORDER BY academic_year_start ASC;",
+    "metadata": {
+      "columns": [
+        "academic_year",
+        "avg_exam_score"
+      ],
+      "rowCount": 3,
+      "sample": [
+        {
+          "academic_year": "2023-2024",
+          "avg_exam_score": 63.772222222222226
+        },
+        {
+          "academic_year": "2024-2025",
+          "avg_exam_score": 34.68928571428572
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.65,
+      "issues": [
+        "The visualization encodes the exactly aliased fields academic_year and avg_exam_score which exist in metadata.columns — mapping is correct.",
+        "academic_year is derived from a date and represents a temporal sequence; using an ordinal x type is acceptable, but using a temporal or numeric (academic_year_start) axis would better reflect a time series and ensure proper ordering/scale.",
+        "The y-axis scale has \"zero\": false which can exaggerate perceptual changes in average scores; consider including zero for a more interpretable baseline when showing averages.",
+        "metadata.rowCount is 3 but the sample contains only 2 rows — metadata inconsistency (warning about result metadata, not the visualization itself).",
+        "If you want the line to reflect true chronological spacing (e.g., gaps if years missing) or enable time-based axis features, replace the academic_year string with a numeric/temporal field (academic_year_start) in the encoding."
+      ]
+    },
+    "attempts": {
+      "used": 2,
+      "max": 4,
+      "history": [
+        "Attempt 1: SQL execution failed: column \"g.grade_date\" must appear in the GROUP BY clause or be used in an aggregate function",
+        "LINE 20:     WHEN EXTRACT(MONTH FROM g.grade_date) >= 8 THEN (EXTRACT...",
+        "^",
+        "Attempt 2: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:29:08.205Z",
+    "traceId": "0b44e9a05784cc886203b3e61e90ccaf",
+    "attempts": 4,
+    "spanCount": 5,
+    "totals": {
+      "inputTokens": 25977,
+      "outputTokens": 7489,
+      "totalTokens": 33466,
+      "cachedInputTokens": 2560,
+      "reasoningTokens": 5056,
+      "costUsd": 0.02147225
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 5,
+        "inputTokens": 25977,
+        "outputTokens": 7489,
+        "totalTokens": 33466,
+        "cachedInputTokens": 2560,
+        "reasoningTokens": 5056,
+        "costUsd": 0.02147225
+      }
+    ],
+    "warnings": []
+  }
+}

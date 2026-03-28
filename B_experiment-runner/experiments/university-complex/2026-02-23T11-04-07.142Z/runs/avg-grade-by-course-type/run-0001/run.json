@@ -1,0 +1,284 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "avg-grade-by-course-type",
+  "caseDirectory": "avg-grade-by-course-type",
+  "repeatIndex": 1,
+  "prompt": "What is the average grade for each course type?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average grade for each course type?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:12:50.389Z",
+    "endedAtUtc": "2026-02-23T11:14:43.407Z",
+    "durationMs": 113018
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "32487",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:14:43 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the average grade for each course type?\"},\"planner\":{\"payload\":{\"question\":\"What is the average grade for each course type?\"},\"startedAt\":1771845170420,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG((COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF((CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0))\"],\"dimensions\":[\"courses.course_type\"],\"filters\":[\"(grades.exam_score IS NOT NULL OR grades.project_score IS NOT NULL OR grades.attendance_score IS NOT NULL)\"],\"grain\":\"per course_type\",\"aliases\":{\"courses.course_type\":\"course_type\",\"AVG((COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF((CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0))\":\"average_grade\"},\"output_fields\":[\"course_type\",\"average_grade\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_type\",\"y_axis\":\"average_grade\",\"title\":\"Average grade by course type\"},\"assumptions\":[\"There is no single numeric 'final_grade' column. The grades table exposes numeric components: exam_score, project_score, attendance_score. We compute each grade record's numeric grade as the average of the available (non-null) numeric components, then take the AVG(...) of those per course_type.\",\"We ignore the grades.grade_value column (USER-DEFINED) because its type/scale is unknown (could be letter grades). If you prefer a different mapping (e.g., convert letter grades), specify the mapping.\",\"Join path used (confirmed against schema): grades.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.course_id -> courses.id.\",\"We exclude grade records that have no numeric score components (i.e., all of exam_score, project_score, attendance_score are NULL) using the filter provided.\",\"course_type is a USER-DEFINED column on courses (confirmed in schema) and is used as the grouping dimension.\",\"If you want weighting between exam/project/attendance (instead of equal weighting), provide weights and we will update the metric expression accordingly.\"]}},\"endedAt\":1771845216145},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG((COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF((CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0))\"],\"dimensions\":[\"courses.course_type\"],\"filters\":[\"(grades.exam_score IS NOT NULL OR grades.project_score IS NOT NULL OR grades.attendance_score IS NOT NULL)\"],\"grain\":\"per course_type\",\"aliases\":{\"courses.course_type\":\"course_type\",\"AVG((COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF((CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0))\":\"average_grade\"},\"output_fields\":[\"course_type\",\"average_grade\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_type\",\"y_axis\":\"average_grade\",\"title\":\"Average grade by course type\"},\"assumptions\":[\"There is no single numeric 'final_grade' column. The grades table exposes numeric components: exam_score, project_score, attendance_score. We compute each grade record's numeric grade as the average of the available (non-null) numeric components, then take the AVG(...) of those per course_type.\",\"We ignore the grades.grade_value column (USER-DEFINED) because its type/scale is unknown (could be letter grades). If you prefer a different mapping (e.g., convert letter grades), specify the mapping.\",\"Join path used (confirmed against schema): grades.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.course_id -> courses.id.\",\"We exclude grade records that have no numeric score components (i.e., all of exam_score, project_score, attendance_score are NULL) using the filter provided.\",\"course_type is a USER-DEFINED column on courses (confirmed in schema) and is used as the grouping dimension.\",\"If you want weighting between exam/project/attendance (instead of equal weighting), provide weights and we will update the metric expression accordingly.\"]}},\"startedAt\":1771845216151,\"status\":\"success\",\"output\":{\"question\":\"What is the average grade for each course type?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG((COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF((CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0))\"],\"dimensions\":[\"courses.course_type\"],\"filters\":[\"(grades.exam_score IS NOT NULL OR grades.project_score IS NOT NULL OR grades.attendance_score IS NOT NULL)\"],\"grain\":\"per course_type\",\"aliases\":{\"courses.course_type\":\"course_type\",\"AVG((COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF((CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0))\":\"average_grade\"},\"output_fields\":[\"course_type\",\"average_grade\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_type\",\"y_axis\":\"average_grade\",\"title\":\"Average grade by course type\"},\"assumptions\":[\"There is no single numeric 'final_grade' column. The grades table exposes numeric components: exam_score, project_score, attendance_score. We compute each grade record's numeric grade as the average of the available (non-null) numeric components, then take the AVG(...) of those per course_type.\",\"We ignore the grades.grade_value column (USER-DEFINED) because its type/scale is unknown (could be letter grades). If you prefer a different mapping (e.g., convert letter grades), specify the mapping.\",\"Join path used (confirmed against schema): grades.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.course_id -> courses.id.\",\"We exclude grade records that have no numeric score components (i.e., all of exam_score, project_score, attendance_score are NULL) using the filter provided.\",\"course_type is a USER-DEFINED column on courses (confirmed in schema) and is used as the grouping dimension.\",\"If you want weighting between exam/project/attendance (instead of equal weighting), provide weights and we will update the metric expression accordingly.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771845216152},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"What is the average grade for each course type?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG((COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF((CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0))\"],\"dimensions\":[\"courses.course_type\"],\"filters\":[\"(grades.exam_score IS NOT NULL OR grades.project_score IS NOT NULL OR grades.attendance_score IS NOT NULL)\"],\"grain\":\"per course_type\",\"aliases\":{\"courses.course_type\":\"course_type\",\"AVG((COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF((CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0))\":\"average_grade\"},\"output_fields\":[\"course_type\",\"average_grade\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_type\",\"y_axis\":\"average_grade\",\"title\":\"Average grade by course type\"},\"assumptions\":[\"There is no single numeric 'final_grade' column. The grades table exposes numeric components: exam_score, project_score, attendance_score. We compute each grade record's numeric grade as the average of the available (non-null) numeric components, then take the AVG(...) of those per course_type.\",\"We ignore the grades.grade_value column (USER-DEFINED) because its type/scale is unknown (could be letter grades). If you prefer a different mapping (e.g., convert letter grades), specify the mapping.\",\"Join path used (confirmed against schema): grades.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.course_id -> courses.id.\",\"We exclude grade records that have no numeric score components (i.e., all of exam_score, project_score, attendance_score are NULL) using the filter provided.\",\"course_type is a USER-DEFINED column on courses (confirmed in schema) and is used as the grouping dimension.\",\"If you want weighting between exam/project/attendance (instead of equal weighting), provide weights and we will update the metric expression accordingly.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771845216155,\"status\":\"success\",\"output\":{\"question\":\"What is the average grade for each course type?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG((COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF((CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0))\"],\"dimensions\":[\"courses.course_type\"],\"filters\":[\"(grades.exam_score IS NOT NULL OR grades.project_score IS NOT NULL OR grades.attendance_score IS NOT NULL)\"],\"grain\":\"per course_type\",\"aliases\":{\"courses.course_type\":\"course_type\",\"AVG((COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF((CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0))\":\"average_grade\"},\"output_fields\":[\"course_type\",\"average_grade\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_type\",\"y_axis\":\"average_grade\",\"title\":\"Average grade by course type\"},\"assumptions\":[\"There is no single numeric 'final_grade' column. The grades table exposes numeric components: exam_score, project_score, attendance_score. We compute each grade record's numeric grade as the average of the available (non-null) numeric components, then take the AVG(...) of those per course_type.\",\"We ignore the grades.grade_value column (USER-DEFINED) because its type/scale is unknown (could be letter grades). If you prefer a different mapping (e.g., convert letter grades), specify the mapping.\",\"Join path used (confirmed against schema): grades.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.course_id -> courses.id.\",\"We exclude grade records that have no numeric score components (i.e., all of exam_score, project_score, attendance_score are NULL) using the filter provided.\",\"course_type is a USER-DEFINED column on courses (confirmed in schema) and is used as the grouping dimension.\",\"If you want weighting between exam/project/attendance (instead of equal weighting), provide weights and we will update the metric expression accordingly.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT c.course_type AS course_type,\\n       AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / NULLIF((CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0)) AS average_grade\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nWHERE (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\\nGROUP BY c.course_type\\nORDER BY c.course_type;\",\"validationIssues\":[\"Encoded fields (course_type, average_grade) are present in metadata.columns — OK.\",\"SQL groups by course_type and computes AVG(...) — the bar chart encodes course_type on x and average_grade on y, matching the aggregation — OK.\",\"The chart uses a nominal x-axis and quantitative y-axis and includes a matching title — OK.\",\"The SQL computes each grade record as the mean of its available numeric components and then takes the AVG of those record-level means (i.e., each record is weighted equally). If you intended a different weighting (e.g., by course enrollment or credit hours), adjust the query — advisory.\",\"Vega-Lite scale.zero is true (y-axis starts at 0); confirm this is desired for interpreting average grades — advisory.\",\"metadata.rowCount is 5 but the provided sample contains only 2 rows; this mismatch is likely harmless but worth checking data completeness — advisory.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"I inspected the public schema and confirmed the tables/columns and join path (grades -> enrollments -> course_sections -> courses). The query computes each grade record's numeric grade as the average of its non-null numeric components (exam_score, project_score, attendance_score), excludes records with no numeric components, then returns the average of those per courses.course_type.\",\"sql\":\"SELECT c.course_type AS course_type,\\n       AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / NULLIF((CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0)) AS average_grade\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nWHERE (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\\nGROUP BY c.course_type\\nORDER BY c.course_type;\",\"assumptions\":[\"Each grade record's numeric grade is the unweighted average of its available (non-null) components: exam_score, project_score, attendance_score.\",\"Grade records with all three numeric components NULL are excluded.\",\"The join path is: grades.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.course_id -> courses.id.\",\"We ignore grades.grade_value (USER-DEFINED) as its scale/type is unknown.\",\"course_type is a user-defined column on courses and is used as the grouping dimension.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT c.course_type AS course_type,\\n       AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / NULLIF((CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0)) AS average_grade\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nWHERE (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\\nGROUP BY c.course_type\\nORDER BY c.course_type\",\"metadata\":{\"columns\":[\"course_type\",\"average_grade\"],\"rowCount\":5,\"sample\":[{\"course_type\":\"LECTURE\",\"average_grade\":52.606904761904765},{\"course_type\":\"LABORATORY\",\"average_grade\":45.4745}]},\"data\":[{\"course_type\":\"LECTURE\",\"average_grade\":52.606904761904765},{\"course_type\":\"LABORATORY\",\"average_grade\":45.4745},{\"course_type\":\"PROJECT\",\"average_grade\":50.32482456140351},{\"course_type\":\"SEMINAR\",\"average_grade\":42.6275},{\"course_type\":\"EXERCISE\",\"average_grade\":54.25809523809524}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average grade by course type\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"course_type\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course Type\"}},\"y\":{\"field\":\"average_grade\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Grade\"},\"scale\":{\"zero\":true}},\"tooltip\":[{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"format\":\".2f\"}]}},\"reasoning\":\"Bar chart showing the mean computed numeric grade per course_type (already aggregated by the query). X is the categorical course_type, Y is the average_grade; tooltip provides exact values formatted to two decimals.\"},\"validation\":{\"passed\":true,\"score\":0.65,\"issues\":[\"Encoded fields (course_type, average_grade) are present in metadata.columns — OK.\",\"SQL groups by course_type and computes AVG(...) — the bar chart encodes course_type on x and average_grade on y, matching the aggregation — OK.\",\"The chart uses a nominal x-axis and quantitative y-axis and includes a matching title — OK.\",\"The SQL computes each grade record as the mean of its available numeric components and then takes the AVG of those record-level means (i.e., each record is weighted equally). If you intended a different weighting (e.g., by course enrollment or credit hours), adjust the query — advisory.\",\"Vega-Lite scale.zero is true (y-axis starts at 0); confirm this is desired for interpreting average grades — advisory.\",\"metadata.rowCount is 5 but the provided sample contains only 2 rows; this mismatch is likely harmless but worth checking data completeness — advisory.\"]}}},\"endedAt\":1771845283376,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"What is the average grade for each course type?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG((COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF((CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0))\"],\"dimensions\":[\"courses.course_type\"],\"filters\":[\"(grades.exam_score IS NOT NULL OR grades.project_score IS NOT NULL OR grades.attendance_score IS NOT NULL)\"],\"grain\":\"per course_type\",\"aliases\":{\"courses.course_type\":\"course_type\",\"AVG((COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF((CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0))\":\"average_grade\"},\"output_fields\":[\"course_type\",\"average_grade\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_type\",\"y_axis\":\"average_grade\",\"title\":\"Average grade by course type\"},\"assumptions\":[\"There is no single numeric 'final_grade' column. The grades table exposes numeric components: exam_score, project_score, attendance_score. We compute each grade record's numeric grade as the average of the available (non-null) numeric components, then take the AVG(...) of those per course_type.\",\"We ignore the grades.grade_value column (USER-DEFINED) because its type/scale is unknown (could be letter grades). If you prefer a different mapping (e.g., convert letter grades), specify the mapping.\",\"Join path used (confirmed against schema): grades.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.course_id -> courses.id.\",\"We exclude grade records that have no numeric score components (i.e., all of exam_score, project_score, attendance_score are NULL) using the filter provided.\",\"course_type is a USER-DEFINED column on courses (confirmed in schema) and is used as the grouping dimension.\",\"If you want weighting between exam/project/attendance (instead of equal weighting), provide weights and we will update the metric expression accordingly.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT c.course_type AS course_type,\\n       AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / NULLIF((CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0)) AS average_grade\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nWHERE (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\\nGROUP BY c.course_type\\nORDER BY c.course_type;\",\"validationIssues\":[\"Encoded fields (course_type, average_grade) are present in metadata.columns — OK.\",\"SQL groups by course_type and computes AVG(...) — the bar chart encodes course_type on x and average_grade on y, matching the aggregation — OK.\",\"The chart uses a nominal x-axis and quantitative y-axis and includes a matching title — OK.\",\"The SQL computes each grade record as the mean of its available numeric components and then takes the AVG of those record-level means (i.e., each record is weighted equally). If you intended a different weighting (e.g., by course enrollment or credit hours), adjust the query — advisory.\",\"Vega-Lite scale.zero is true (y-axis starts at 0); confirm this is desired for interpreting average grades — advisory.\",\"metadata.rowCount is 5 but the provided sample contains only 2 rows; this mismatch is likely harmless but worth checking data completeness — advisory.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"I inspected the public schema and confirmed the tables/columns and join path (grades -> enrollments -> course_sections -> courses). The query computes each grade record's numeric grade as the average of its non-null numeric components (exam_score, project_score, attendance_score), excludes records with no numeric components, then returns the average of those per courses.course_type.\",\"sql\":\"SELECT c.course_type AS course_type,\\n       AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / NULLIF((CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0)) AS average_grade\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nWHERE (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\\nGROUP BY c.course_type\\nORDER BY c.course_type;\",\"assumptions\":[\"Each grade record's numeric grade is the unweighted average of its available (non-null) components: exam_score, project_score, attendance_score.\",\"Grade records with all three numeric components NULL are excluded.\",\"The join path is: grades.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.course_id -> courses.id.\",\"We ignore grades.grade_value (USER-DEFINED) as its scale/type is unknown.\",\"course_type is a user-defined column on courses and is used as the grouping dimension.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT c.course_type AS course_type,\\n       AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / NULLIF((CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0)) AS average_grade\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nWHERE (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\\nGROUP BY c.course_type\\nORDER BY c.course_type\",\"metadata\":{\"columns\":[\"course_type\",\"average_grade\"],\"rowCount\":5,\"sample\":[{\"course_type\":\"LECTURE\",\"average_grade\":52.606904761904765},{\"course_type\":\"LABORATORY\",\"average_grade\":45.4745}]},\"data\":[{\"course_type\":\"LECTURE\",\"average_grade\":52.606904761904765},{\"course_type\":\"LABORATORY\",\"average_grade\":45.4745},{\"course_type\":\"PROJECT\",\"average_grade\":50.32482456140351},{\"course_type\":\"SEMINAR\",\"average_grade\":42.6275},{\"course_type\":\"EXERCISE\",\"average_grade\":54.25809523809524}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average grade by course type\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"course_type\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course Type\"}},\"y\":{\"field\":\"average_grade\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Grade\"},\"scale\":{\"zero\":true}},\"tooltip\":[{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"format\":\".2f\"}]}},\"reasoning\":\"Bar chart showing the mean computed numeric grade per course_type (already aggregated by the query). X is the categorical course_type, Y is the average_grade; tooltip provides exact values formatted to two decimals.\"},\"validation\":{\"passed\":true,\"score\":0.65,\"issues\":[\"Encoded fields (course_type, average_grade) are present in metadata.columns — OK.\",\"SQL groups by course_type and computes AVG(...) — the bar chart encodes course_type on x and average_grade on y, matching the aggregation — OK.\",\"The chart uses a nominal x-axis and quantitative y-axis and includes a matching title — OK.\",\"The SQL computes each grade record as the mean of its available numeric components and then takes the AVG of those record-level means (i.e., each record is weighted equally). If you intended a different weighting (e.g., by course enrollment or credit hours), adjust the query — advisory.\",\"Vega-Lite scale.zero is true (y-axis starts at 0); confirm this is desired for interpreting average grades — advisory.\",\"metadata.rowCount is 5 but the provided sample contains only 2 rows; this mismatch is likely harmless but worth checking data completeness — advisory.\"]}}},\"startedAt\":1771845283380,\"status\":\"success\",\"output\":{\"sql\":\"SELECT c.course_type AS course_type,\\n       AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / NULLIF((CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0)) AS average_grade\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nWHERE (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\\nGROUP BY c.course_type\\nORDER BY c.course_type;\",\"data\":[{\"course_type\":\"LECTURE\",\"average_grade\":52.606904761904765},{\"course_type\":\"LABORATORY\",\"average_grade\":45.4745},{\"course_type\":\"PROJECT\",\"average_grade\":50.32482456140351},{\"course_type\":\"SEMINAR\",\"average_grade\":42.6275},{\"course_type\":\"EXERCISE\",\"average_grade\":54.25809523809524}],\"metadata\":{\"columns\":[\"course_type\",\"average_grade\"],\"rowCount\":5,\"sample\":[{\"course_type\":\"LECTURE\",\"average_grade\":52.606904761904765},{\"course_type\":\"LABORATORY\",\"average_grade\":45.4745}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average grade by course type\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"course_type\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course Type\"}},\"y\":{\"field\":\"average_grade\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Grade\"},\"scale\":{\"zero\":true}},\"tooltip\":[{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"format\":\".2f\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.65,\"issues\":[\"Encoded fields (course_type, average_grade) are present in metadata.columns — OK.\",\"SQL groups by course_type and computes AVG(...) — the bar chart encodes course_type on x and average_grade on y, matching the aggregation — OK.\",\"The chart uses a nominal x-axis and quantitative y-axis and includes a matching title — OK.\",\"The SQL computes each grade record as the mean of its available numeric components and then takes the AVG of those record-level means (i.e., each record is weighted equally). If you intended a different weighting (e.g., by course enrollment or credit hours), adjust the query — advisory.\",\"Vega-Lite scale.zero is true (y-axis starts at 0); confirm this is desired for interpreting average grades — advisory.\",\"metadata.rowCount is 5 but the provided sample contains only 2 rows; this mismatch is likely harmless but worth checking data completeness — advisory.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771845283387}},\"input\":{\"question\":\"What is the average grade for each course type?\"},\"result\":{\"sql\":\"SELECT c.course_type AS course_type,\\n       AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / NULLIF((CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0)) AS average_grade\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nWHERE (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\\nGROUP BY c.course_type\\nORDER BY c.course_type;\",\"data\":[{\"course_type\":\"LECTURE\",\"average_grade\":52.606904761904765},{\"course_type\":\"LABORATORY\",\"average_grade\":45.4745},{\"course_type\":\"PROJECT\",\"average_grade\":50.32482456140351},{\"course_type\":\"SEMINAR\",\"average_grade\":42.6275},{\"course_type\":\"EXERCISE\",\"average_grade\":54.25809523809524}],\"metadata\":{\"columns\":[\"course_type\",\"average_grade\"],\"rowCount\":5,\"sample\":[{\"course_type\":\"LECTURE\",\"average_grade\":52.606904761904765},{\"course_type\":\"LABORATORY\",\"average_grade\":45.4745}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average grade by course type\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"course_type\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course Type\"}},\"y\":{\"field\":\"average_grade\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Grade\"},\"scale\":{\"zero\":true}},\"tooltip\":[{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"format\":\".2f\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.65,\"issues\":[\"Encoded fields (course_type, average_grade) are present in metadata.columns — OK.\",\"SQL groups by course_type and computes AVG(...) — the bar chart encodes course_type on x and average_grade on y, matching the aggregation — OK.\",\"The chart uses a nominal x-axis and quantitative y-axis and includes a matching title — OK.\",\"The SQL computes each grade record as the mean of its available numeric components and then takes the AVG of those record-level means (i.e., each record is weighted equally). If you intended a different weighting (e.g., by course enrollment or credit hours), adjust the query — advisory.\",\"Vega-Lite scale.zero is true (y-axis starts at 0); confirm this is desired for interpreting average grades — advisory.\",\"metadata.rowCount is 5 but the provided sample contains only 2 rows; this mismatch is likely harmless but worth checking data completeness — advisory.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"2fb425c035d3fc95d7fdcfa1693620aa\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-grade-by-course-type/run-0001/run.json",
+    "queryPath": "runs/avg-grade-by-course-type/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-grade-by-course-type/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-grade-by-course-type/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-grade-by-course-type/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:14:43.820Z",
+  "traceId": "2fb425c035d3fc95d7fdcfa1693620aa",
+  "success": true,
+  "durationMs": 113431,
+  "resultRaw": {
+    "data": [
+      {
+        "course_type": "LECTURE",
+        "average_grade": 52.606904761904765
+      },
+      {
+        "course_type": "LABORATORY",
+        "average_grade": 45.4745
+      },
+      {
+        "course_type": "PROJECT",
+        "average_grade": 50.32482456140351
+      },
+      {
+        "course_type": "SEMINAR",
+        "average_grade": 42.6275
+      },
+      {
+        "course_type": "EXERCISE",
+        "average_grade": 54.25809523809524
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average grade by course type",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "course_type",
+          "type": "nominal",
+          "axis": {
+            "title": "Course Type"
+          }
+        },
+        "y": {
+          "field": "average_grade",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average Grade"
+          },
+          "scale": {
+            "zero": true
+          }
+        },
+        "tooltip": [
+          {
+            "field": "course_type",
+            "type": "nominal",
+            "title": "Course Type"
+          },
+          {
+            "field": "average_grade",
+            "type": "quantitative",
+            "title": "Average Grade",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT c.course_type AS course_type,\n       AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / NULLIF((CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0)) AS average_grade\nFROM public.grades g\nJOIN public.enrollments e ON g.enrollment_id = e.id\nJOIN public.course_sections cs ON e.course_section_id = cs.id\nJOIN public.courses c ON cs.course_id = c.id\nWHERE (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\nGROUP BY c.course_type\nORDER BY c.course_type;",
+    "metadata": {
+      "columns": [
+        "course_type",
+        "average_grade"
+      ],
+      "rowCount": 5,
+      "sample": [
+        {
+          "course_type": "LECTURE",
+          "average_grade": 52.606904761904765
+        },
+        {
+          "course_type": "LABORATORY",
+          "average_grade": 45.4745
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.65,
+      "issues": [
+        "Encoded fields (course_type, average_grade) are present in metadata.columns — OK.",
+        "SQL groups by course_type and computes AVG(...) — the bar chart encodes course_type on x and average_grade on y, matching the aggregation — OK.",
+        "The chart uses a nominal x-axis and quantitative y-axis and includes a matching title — OK.",
+        "The SQL computes each grade record as the mean of its available numeric components and then takes the AVG of those record-level means (i.e., each record is weighted equally). If you intended a different weighting (e.g., by course enrollment or credit hours), adjust the query — advisory.",
+        "Vega-Lite scale.zero is true (y-axis starts at 0); confirm this is desired for interpreting average grades — advisory.",
+        "metadata.rowCount is 5 but the provided sample contains only 2 rows; this mismatch is likely harmless but worth checking data completeness — advisory."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "course_type": "LECTURE",
+        "average_grade": 52.606904761904765
+      },
+      {
+        "course_type": "LABORATORY",
+        "average_grade": 45.4745
+      },
+      {
+        "course_type": "PROJECT",
+        "average_grade": 50.32482456140351
+      },
+      {
+        "course_type": "SEMINAR",
+        "average_grade": 42.6275
+      },
+      {
+        "course_type": "EXERCISE",
+        "average_grade": 54.25809523809524
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average grade by course type",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "course_type",
+          "type": "nominal",
+          "axis": {
+            "title": "Course Type"
+          }
+        },
+        "y": {
+          "field": "average_grade",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average Grade"
+          },
+          "scale": {
+            "zero": true
+          }
+        },
+        "tooltip": [
+          {
+            "field": "course_type",
+            "type": "nominal",
+            "title": "Course Type"
+          },
+          {
+            "field": "average_grade",
+            "type": "quantitative",
+            "title": "Average Grade",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT c.course_type AS course_type,\n       AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / NULLIF((CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0)) AS average_grade\nFROM public.grades g\nJOIN public.enrollments e ON g.enrollment_id = e.id\nJOIN public.course_sections cs ON e.course_section_id = cs.id\nJOIN public.courses c ON cs.course_id = c.id\nWHERE (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\nGROUP BY c.course_type\nORDER BY c.course_type;",
+    "metadata": {
+      "columns": [
+        "course_type",
+        "average_grade"
+      ],
+      "rowCount": 5,
+      "sample": [
+        {
+          "course_type": "LECTURE",
+          "average_grade": 52.606904761904765
+        },
+        {
+          "course_type": "LABORATORY",
+          "average_grade": 45.4745
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.65,
+      "issues": [
+        "Encoded fields (course_type, average_grade) are present in metadata.columns — OK.",
+        "SQL groups by course_type and computes AVG(...) — the bar chart encodes course_type on x and average_grade on y, matching the aggregation — OK.",
+        "The chart uses a nominal x-axis and quantitative y-axis and includes a matching title — OK.",
+        "The SQL computes each grade record as the mean of its available numeric components and then takes the AVG of those record-level means (i.e., each record is weighted equally). If you intended a different weighting (e.g., by course enrollment or credit hours), adjust the query — advisory.",
+        "Vega-Lite scale.zero is true (y-axis starts at 0); confirm this is desired for interpreting average grades — advisory.",
+        "metadata.rowCount is 5 but the provided sample contains only 2 rows; this mismatch is likely harmless but worth checking data completeness — advisory."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:14:43.820Z",
+    "traceId": "2fb425c035d3fc95d7fdcfa1693620aa",
+    "attempts": 2,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 37064,
+      "outputTokens": 6011,
+      "totalTokens": 43075,
+      "cachedInputTokens": 1408,
+      "reasoningTokens": 3776,
+      "costUsd": 0.021288
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 37064,
+        "outputTokens": 6011,
+        "totalTokens": 43075,
+        "cachedInputTokens": 1408,
+        "reasoningTokens": 3776,
+        "costUsd": 0.021288
+      }
+    ],
+    "warnings": []
+  }
+}

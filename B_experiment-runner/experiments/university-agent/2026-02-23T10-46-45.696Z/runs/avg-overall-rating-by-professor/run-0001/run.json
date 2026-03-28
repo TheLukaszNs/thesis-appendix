@@ -1,0 +1,169 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "avg-overall-rating-by-professor",
+  "caseDirectory": "avg-overall-rating-by-professor",
+  "repeatIndex": 1,
+  "prompt": "Show the average overall course evaluation rating for each professor",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the average overall course evaluation rating for each professor"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:47:35.944Z",
+    "endedAtUtc": "2026-02-23T10:47:51.515Z",
+    "durationMs": 15571
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "1999",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:47:51 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Show the average overall course evaluation rating for each professor\"},\"agent\":{\"payload\":{\"question\":\"Show the average overall course evaluation rating for each professor\"},\"startedAt\":1771843655961,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  professor_id AS professor_id,\\n  professor_name AS professor_name,\\n  ROUND(AVG(overall_rating), 2) AS avg_overall_rating\\nFROM course_evaluations\\nGROUP BY professor_id, professor_name\\nORDER BY avg_overall_rating DESC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Overall Course Evaluation by Professor\",\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"sort\":{\"field\":\"avg_overall_rating\",\"order\":\"descending\"},\"axis\":{\"title\":\"Professor\",\"labelAngle\":-40}},\"x\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Avg Overall Rating\"}},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Avg Rating\"},{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"}]}}},\"endedAt\":1771843671485},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  professor_id AS professor_id,\\n  professor_name AS professor_name,\\n  ROUND(AVG(overall_rating), 2) AS avg_overall_rating\\nFROM course_evaluations\\nGROUP BY professor_id, professor_name\\nORDER BY avg_overall_rating DESC;\"},\"startedAt\":1771843671489,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column \\\"professor_id\\\" does not exist\\nLINE 3:   professor_id AS professor_id,\\n          ^\",\"name\":\"Error\"},\"endedAt\":1771843671510}},\"input\":{\"question\":\"Show the average overall course evaluation rating for each professor\"},\"error\":{\"message\":\"SQL execution failed: column \\\"professor_id\\\" does not exist\\nLINE 3:   professor_id AS professor_id,\\n          ^\",\"name\":\"Error\"},\"traceId\":\"96232d8a2242a4bd57f4cf3c79bc3e44\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-overall-rating-by-professor/run-0001/run.json",
+    "queryPath": "runs/avg-overall-rating-by-professor/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-overall-rating-by-professor/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-overall-rating-by-professor/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-overall-rating-by-professor/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:47:51.515Z",
+  "traceId": "96232d8a2242a4bd57f4cf3c79bc3e44",
+  "success": false,
+  "durationMs": 15572,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Show the average overall course evaluation rating for each professor"
+      },
+      "agent": {
+        "payload": {
+          "question": "Show the average overall course evaluation rating for each professor"
+        },
+        "startedAt": 1771843655961,
+        "status": "success",
+        "output": {
+          "sql": "SELECT\n  professor_id AS professor_id,\n  professor_name AS professor_name,\n  ROUND(AVG(overall_rating), 2) AS avg_overall_rating\nFROM course_evaluations\nGROUP BY professor_id, professor_name\nORDER BY avg_overall_rating DESC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "data": {
+              "name": "query_result"
+            },
+            "title": "Average Overall Course Evaluation by Professor",
+            "mark": {
+              "type": "bar",
+              "tooltip": true
+            },
+            "encoding": {
+              "y": {
+                "field": "professor_name",
+                "type": "nominal",
+                "sort": {
+                  "field": "avg_overall_rating",
+                  "order": "descending"
+                },
+                "axis": {
+                  "title": "Professor",
+                  "labelAngle": -40
+                }
+              },
+              "x": {
+                "field": "avg_overall_rating",
+                "type": "quantitative",
+                "axis": {
+                  "title": "Avg Overall Rating"
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "professor_name",
+                  "type": "nominal",
+                  "title": "Professor"
+                },
+                {
+                  "field": "avg_overall_rating",
+                  "type": "quantitative",
+                  "title": "Avg Rating"
+                },
+                {
+                  "field": "professor_id",
+                  "type": "nominal",
+                  "title": "Professor ID"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843671485
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT\n  professor_id AS professor_id,\n  professor_name AS professor_name,\n  ROUND(AVG(overall_rating), 2) AS avg_overall_rating\nFROM course_evaluations\nGROUP BY professor_id, professor_name\nORDER BY avg_overall_rating DESC;"
+        },
+        "startedAt": 1771843671489,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column \"professor_id\" does not exist\nLINE 3:   professor_id AS professor_id,\n          ^",
+          "name": "Error"
+        },
+        "endedAt": 1771843671510
+      }
+    },
+    "input": {
+      "question": "Show the average overall course evaluation rating for each professor"
+    },
+    "error": {
+      "message": "SQL execution failed: column \"professor_id\" does not exist\nLINE 3:   professor_id AS professor_id,\n          ^",
+      "name": "Error"
+    },
+    "traceId": "96232d8a2242a4bd57f4cf3c79bc3e44"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:47:51.515Z",
+    "traceId": "96232d8a2242a4bd57f4cf3c79bc3e44",
+    "attempts": 4,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 266,
+      "outputTokens": 1290,
+      "totalTokens": 1556,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 896,
+      "costUsd": 0.0026465
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 266,
+        "outputTokens": 1290,
+        "totalTokens": 1556,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 896,
+        "costUsd": 0.0026465
+      }
+    ],
+    "warnings": []
+  }
+}

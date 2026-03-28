@@ -1,0 +1,199 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "professor-experience-vs-rating",
+  "caseDirectory": "professor-experience-vs-rating",
+  "repeatIndex": 1,
+  "prompt": "Is there a relationship between professor hire date and their evaluation rating?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Is there a relationship between professor hire date and their evaluation rating?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:55:08.016Z",
+    "endedAtUtc": "2026-02-23T10:55:34.280Z",
+    "durationMs": 26264
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2648",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:55:34 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Is there a relationship between professor hire date and their evaluation rating?\"},\"agent\":{\"payload\":{\"question\":\"Is there a relationship between professor hire date and their evaluation rating?\"},\"startedAt\":1771844108049,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  CAST(EXTRACT(YEAR FROM p.hire_date) AS INTEGER) AS hire_year,\\n  AVG(e.rating) AS avg_rating,\\n  COUNT(DISTINCT p.id) AS professor_count,\\n  COUNT(e.id) AS eval_count\\nFROM professors p\\nJOIN evaluations e ON p.id = e.professor_id\\nWHERE p.hire_date IS NOT NULL\\n  AND e.rating IS NOT NULL\\nGROUP BY hire_year\\nORDER BY hire_year;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Professor hire year vs. average evaluation rating\",\"layer\":[{\"mark\":\"point\",\"encoding\":{\"x\":{\"field\":\"hire_year\",\"type\":\"quantitative\",\"title\":\"Hire year\"},\"y\":{\"field\":\"avg_rating\",\"type\":\"quantitative\",\"title\":\"Average evaluation rating\"},\"size\":{\"field\":\"professor_count\",\"type\":\"quantitative\",\"title\":\"Professor count\"},\"color\":{\"field\":\"professor_count\",\"type\":\"quantitative\",\"title\":\"Professor count\"},\"tooltip\":[{\"field\":\"hire_year\",\"type\":\"quantitative\",\"title\":\"Hire year\"},{\"field\":\"avg_rating\",\"type\":\"quantitative\",\"title\":\"Avg rating\"},{\"field\":\"professor_count\",\"type\":\"quantitative\",\"title\":\"Professors\"},{\"field\":\"eval_count\",\"type\":\"quantitative\",\"title\":\"Evaluations\"}]}},{\"transform\":[{\"regression\":\"avg_rating\",\"on\":\"hire_year\",\"method\":\"loess\"}],\"mark\":{\"type\":\"line\",\"color\":\"firebrick\"},\"encoding\":{\"x\":{\"field\":\"hire_year\",\"type\":\"quantitative\"},\"y\":{\"field\":\"avg_rating\",\"type\":\"quantitative\"}}}]}},\"endedAt\":1771844134154},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  CAST(EXTRACT(YEAR FROM p.hire_date) AS INTEGER) AS hire_year,\\n  AVG(e.rating) AS avg_rating,\\n  COUNT(DISTINCT p.id) AS professor_count,\\n  COUNT(e.id) AS eval_count\\nFROM professors p\\nJOIN evaluations e ON p.id = e.professor_id\\nWHERE p.hire_date IS NOT NULL\\n  AND e.rating IS NOT NULL\\nGROUP BY hire_year\\nORDER BY hire_year;\"},\"startedAt\":1771844134163,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: relation \\\"evaluations\\\" does not exist\\nLINE 8: JOIN evaluations e ON p.id = e.professor_id\\n             ^\",\"name\":\"Error\"},\"endedAt\":1771844134276}},\"input\":{\"question\":\"Is there a relationship between professor hire date and their evaluation rating?\"},\"error\":{\"message\":\"SQL execution failed: relation \\\"evaluations\\\" does not exist\\nLINE 8: JOIN evaluations e ON p.id = e.professor_id\\n             ^\",\"name\":\"Error\"},\"traceId\":\"0b6f893a18b047c5f7dc419c922fbe4a\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/professor-experience-vs-rating/run-0001/run.json",
+    "queryPath": "runs/professor-experience-vs-rating/run-0001/query.sql",
+    "vegaRawPath": "runs/professor-experience-vs-rating/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/professor-experience-vs-rating/run-0001/vega.resolved.json",
+    "imagePath": "runs/professor-experience-vs-rating/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:55:34.281Z",
+  "traceId": "0b6f893a18b047c5f7dc419c922fbe4a",
+  "success": false,
+  "durationMs": 26265,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Is there a relationship between professor hire date and their evaluation rating?"
+      },
+      "agent": {
+        "payload": {
+          "question": "Is there a relationship between professor hire date and their evaluation rating?"
+        },
+        "startedAt": 1771844108049,
+        "status": "success",
+        "output": {
+          "sql": "SELECT\n  CAST(EXTRACT(YEAR FROM p.hire_date) AS INTEGER) AS hire_year,\n  AVG(e.rating) AS avg_rating,\n  COUNT(DISTINCT p.id) AS professor_count,\n  COUNT(e.id) AS eval_count\nFROM professors p\nJOIN evaluations e ON p.id = e.professor_id\nWHERE p.hire_date IS NOT NULL\n  AND e.rating IS NOT NULL\nGROUP BY hire_year\nORDER BY hire_year;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "data": {
+              "name": "query_result"
+            },
+            "title": "Professor hire year vs. average evaluation rating",
+            "layer": [
+              {
+                "mark": "point",
+                "encoding": {
+                  "x": {
+                    "field": "hire_year",
+                    "type": "quantitative",
+                    "title": "Hire year"
+                  },
+                  "y": {
+                    "field": "avg_rating",
+                    "type": "quantitative",
+                    "title": "Average evaluation rating"
+                  },
+                  "size": {
+                    "field": "professor_count",
+                    "type": "quantitative",
+                    "title": "Professor count"
+                  },
+                  "color": {
+                    "field": "professor_count",
+                    "type": "quantitative",
+                    "title": "Professor count"
+                  },
+                  "tooltip": [
+                    {
+                      "field": "hire_year",
+                      "type": "quantitative",
+                      "title": "Hire year"
+                    },
+                    {
+                      "field": "avg_rating",
+                      "type": "quantitative",
+                      "title": "Avg rating"
+                    },
+                    {
+                      "field": "professor_count",
+                      "type": "quantitative",
+                      "title": "Professors"
+                    },
+                    {
+                      "field": "eval_count",
+                      "type": "quantitative",
+                      "title": "Evaluations"
+                    }
+                  ]
+                }
+              },
+              {
+                "transform": [
+                  {
+                    "regression": "avg_rating",
+                    "on": "hire_year",
+                    "method": "loess"
+                  }
+                ],
+                "mark": {
+                  "type": "line",
+                  "color": "firebrick"
+                },
+                "encoding": {
+                  "x": {
+                    "field": "hire_year",
+                    "type": "quantitative"
+                  },
+                  "y": {
+                    "field": "avg_rating",
+                    "type": "quantitative"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "endedAt": 1771844134154
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT\n  CAST(EXTRACT(YEAR FROM p.hire_date) AS INTEGER) AS hire_year,\n  AVG(e.rating) AS avg_rating,\n  COUNT(DISTINCT p.id) AS professor_count,\n  COUNT(e.id) AS eval_count\nFROM professors p\nJOIN evaluations e ON p.id = e.professor_id\nWHERE p.hire_date IS NOT NULL\n  AND e.rating IS NOT NULL\nGROUP BY hire_year\nORDER BY hire_year;"
+        },
+        "startedAt": 1771844134163,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: relation \"evaluations\" does not exist\nLINE 8: JOIN evaluations e ON p.id = e.professor_id\n             ^",
+          "name": "Error"
+        },
+        "endedAt": 1771844134276
+      }
+    },
+    "input": {
+      "question": "Is there a relationship between professor hire date and their evaluation rating?"
+    },
+    "error": {
+      "message": "SQL execution failed: relation \"evaluations\" does not exist\nLINE 8: JOIN evaluations e ON p.id = e.professor_id\n             ^",
+      "name": "Error"
+    },
+    "traceId": "0b6f893a18b047c5f7dc419c922fbe4a"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:55:34.281Z",
+    "traceId": "0b6f893a18b047c5f7dc419c922fbe4a",
+    "attempts": 6,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 269,
+      "outputTokens": 2152,
+      "totalTokens": 2421,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1728,
+      "costUsd": 0.00437125
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 269,
+        "outputTokens": 2152,
+        "totalTokens": 2421,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1728,
+        "costUsd": 0.00437125
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,260 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "active-vs-inactive-enrollments",
+  "caseDirectory": "active-vs-inactive-enrollments",
+  "repeatIndex": 1,
+  "prompt": "What is the ratio of active to inactive enrollments?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the ratio of active to inactive enrollments?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:20:19.609Z",
+    "endedAtUtc": "2026-02-23T11:21:52.428Z",
+    "durationMs": 92819
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "28124",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:21:52 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the ratio of active to inactive enrollments?\"},\"planner\":{\"payload\":{\"question\":\"What is the ratio of active to inactive enrollments?\"},\"startedAt\":1771845619620,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(*)\",\"SUM(CASE WHEN is_active THEN 1 ELSE 0 END) AS active_count\",\"SUM(CASE WHEN NOT is_active THEN 1 ELSE 0 END) AS inactive_count\",\"active_count::double precision / NULLIF(inactive_count, 0) AS active_to_inactive_ratio\"],\"dimensions\":[\"CASE WHEN is_active THEN 'active' ELSE 'inactive' END AS status\"],\"filters\":[\"none (use all rows in public.enrollments unless a time/window filter is requested)\"],\"grain\":\"status (one row per enrollment status: 'active' or 'inactive')\",\"aliases\":{\"CASE WHEN is_active THEN 'active' ELSE 'inactive' END\":\"status\",\"COUNT(*)\":\"count\",\"SUM(CASE WHEN is_active THEN 1 ELSE 0 END)\":\"active_count\",\"SUM(CASE WHEN NOT is_active THEN 1 ELSE 0 END)\":\"inactive_count\",\"active_count::double precision / NULLIF(inactive_count, 0)\":\"active_to_inactive_ratio\"},\"output_fields\":[\"status\",\"count\",\"active_to_inactive_ratio\"]},\"visual_requirements\":{\"chart_type\":\"pie\",\"x_axis\":\"status\",\"y_axis\":\"count\",\"color_group\":\"status\",\"title\":\"Active vs Inactive Enrollments\"},\"assumptions\":[\"The enrollments table and columns were verified in this session: public.enrollments with column is_active (boolean).\",\"Status is derived from the boolean is_active as: CASE WHEN is_active THEN 'active' ELSE 'inactive' END.\",\"The query will use all rows in public.enrollments (no date or cohort filters) unless the caller specifies a time window or additional filters.\",\"Ratio is defined as active_count / inactive_count. Division-by-zero is handled with NULLIF(inactive_count, 0); if inactive_count = 0 the ratio will be NULL.\",\"The SQL should return one row per status with the fields exactly aliased as: status, count, active_to_inactive_ratio (the visualization will use status and count; the ratio is provided for numeric reporting).\",\"If you prefer a single scalar result (just the ratio) instead of a categorical breakdown, request that explicitly and the plan will be adjusted to return active_count, inactive_count, and the scalar ratio as separate columns.\"]}},\"endedAt\":1771845656088},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(*)\",\"SUM(CASE WHEN is_active THEN 1 ELSE 0 END) AS active_count\",\"SUM(CASE WHEN NOT is_active THEN 1 ELSE 0 END) AS inactive_count\",\"active_count::double precision / NULLIF(inactive_count, 0) AS active_to_inactive_ratio\"],\"dimensions\":[\"CASE WHEN is_active THEN 'active' ELSE 'inactive' END AS status\"],\"filters\":[\"none (use all rows in public.enrollments unless a time/window filter is requested)\"],\"grain\":\"status (one row per enrollment status: 'active' or 'inactive')\",\"aliases\":{\"CASE WHEN is_active THEN 'active' ELSE 'inactive' END\":\"status\",\"COUNT(*)\":\"count\",\"SUM(CASE WHEN is_active THEN 1 ELSE 0 END)\":\"active_count\",\"SUM(CASE WHEN NOT is_active THEN 1 ELSE 0 END)\":\"inactive_count\",\"active_count::double precision / NULLIF(inactive_count, 0)\":\"active_to_inactive_ratio\"},\"output_fields\":[\"status\",\"count\",\"active_to_inactive_ratio\"]},\"visual_requirements\":{\"chart_type\":\"pie\",\"x_axis\":\"status\",\"y_axis\":\"count\",\"color_group\":\"status\",\"title\":\"Active vs Inactive Enrollments\"},\"assumptions\":[\"The enrollments table and columns were verified in this session: public.enrollments with column is_active (boolean).\",\"Status is derived from the boolean is_active as: CASE WHEN is_active THEN 'active' ELSE 'inactive' END.\",\"The query will use all rows in public.enrollments (no date or cohort filters) unless the caller specifies a time window or additional filters.\",\"Ratio is defined as active_count / inactive_count. Division-by-zero is handled with NULLIF(inactive_count, 0); if inactive_count = 0 the ratio will be NULL.\",\"The SQL should return one row per status with the fields exactly aliased as: status, count, active_to_inactive_ratio (the visualization will use status and count; the ratio is provided for numeric reporting).\",\"If you prefer a single scalar result (just the ratio) instead of a categorical breakdown, request that explicitly and the plan will be adjusted to return active_count, inactive_count, and the scalar ratio as separate columns.\"]}},\"startedAt\":1771845656097,\"status\":\"success\",\"output\":{\"question\":\"What is the ratio of active to inactive enrollments?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(*)\",\"SUM(CASE WHEN is_active THEN 1 ELSE 0 END) AS active_count\",\"SUM(CASE WHEN NOT is_active THEN 1 ELSE 0 END) AS inactive_count\",\"active_count::double precision / NULLIF(inactive_count, 0) AS active_to_inactive_ratio\"],\"dimensions\":[\"CASE WHEN is_active THEN 'active' ELSE 'inactive' END AS status\"],\"filters\":[\"none (use all rows in public.enrollments unless a time/window filter is requested)\"],\"grain\":\"status (one row per enrollment status: 'active' or 'inactive')\",\"aliases\":{\"CASE WHEN is_active THEN 'active' ELSE 'inactive' END\":\"status\",\"COUNT(*)\":\"count\",\"SUM(CASE WHEN is_active THEN 1 ELSE 0 END)\":\"active_count\",\"SUM(CASE WHEN NOT is_active THEN 1 ELSE 0 END)\":\"inactive_count\",\"active_count::double precision / NULLIF(inactive_count, 0)\":\"active_to_inactive_ratio\"},\"output_fields\":[\"status\",\"count\",\"active_to_inactive_ratio\"]},\"visual_requirements\":{\"chart_type\":\"pie\",\"x_axis\":\"status\",\"y_axis\":\"count\",\"color_group\":\"status\",\"title\":\"Active vs Inactive Enrollments\"},\"assumptions\":[\"The enrollments table and columns were verified in this session: public.enrollments with column is_active (boolean).\",\"Status is derived from the boolean is_active as: CASE WHEN is_active THEN 'active' ELSE 'inactive' END.\",\"The query will use all rows in public.enrollments (no date or cohort filters) unless the caller specifies a time window or additional filters.\",\"Ratio is defined as active_count / inactive_count. Division-by-zero is handled with NULLIF(inactive_count, 0); if inactive_count = 0 the ratio will be NULL.\",\"The SQL should return one row per status with the fields exactly aliased as: status, count, active_to_inactive_ratio (the visualization will use status and count; the ratio is provided for numeric reporting).\",\"If you prefer a single scalar result (just the ratio) instead of a categorical breakdown, request that explicitly and the plan will be adjusted to return active_count, inactive_count, and the scalar ratio as separate columns.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771845656099},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"What is the ratio of active to inactive enrollments?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(*)\",\"SUM(CASE WHEN is_active THEN 1 ELSE 0 END) AS active_count\",\"SUM(CASE WHEN NOT is_active THEN 1 ELSE 0 END) AS inactive_count\",\"active_count::double precision / NULLIF(inactive_count, 0) AS active_to_inactive_ratio\"],\"dimensions\":[\"CASE WHEN is_active THEN 'active' ELSE 'inactive' END AS status\"],\"filters\":[\"none (use all rows in public.enrollments unless a time/window filter is requested)\"],\"grain\":\"status (one row per enrollment status: 'active' or 'inactive')\",\"aliases\":{\"CASE WHEN is_active THEN 'active' ELSE 'inactive' END\":\"status\",\"COUNT(*)\":\"count\",\"SUM(CASE WHEN is_active THEN 1 ELSE 0 END)\":\"active_count\",\"SUM(CASE WHEN NOT is_active THEN 1 ELSE 0 END)\":\"inactive_count\",\"active_count::double precision / NULLIF(inactive_count, 0)\":\"active_to_inactive_ratio\"},\"output_fields\":[\"status\",\"count\",\"active_to_inactive_ratio\"]},\"visual_requirements\":{\"chart_type\":\"pie\",\"x_axis\":\"status\",\"y_axis\":\"count\",\"color_group\":\"status\",\"title\":\"Active vs Inactive Enrollments\"},\"assumptions\":[\"The enrollments table and columns were verified in this session: public.enrollments with column is_active (boolean).\",\"Status is derived from the boolean is_active as: CASE WHEN is_active THEN 'active' ELSE 'inactive' END.\",\"The query will use all rows in public.enrollments (no date or cohort filters) unless the caller specifies a time window or additional filters.\",\"Ratio is defined as active_count / inactive_count. Division-by-zero is handled with NULLIF(inactive_count, 0); if inactive_count = 0 the ratio will be NULL.\",\"The SQL should return one row per status with the fields exactly aliased as: status, count, active_to_inactive_ratio (the visualization will use status and count; the ratio is provided for numeric reporting).\",\"If you prefer a single scalar result (just the ratio) instead of a categorical breakdown, request that explicitly and the plan will be adjusted to return active_count, inactive_count, and the scalar ratio as separate columns.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771845656101,\"status\":\"success\",\"output\":{\"question\":\"What is the ratio of active to inactive enrollments?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(*)\",\"SUM(CASE WHEN is_active THEN 1 ELSE 0 END) AS active_count\",\"SUM(CASE WHEN NOT is_active THEN 1 ELSE 0 END) AS inactive_count\",\"active_count::double precision / NULLIF(inactive_count, 0) AS active_to_inactive_ratio\"],\"dimensions\":[\"CASE WHEN is_active THEN 'active' ELSE 'inactive' END AS status\"],\"filters\":[\"none (use all rows in public.enrollments unless a time/window filter is requested)\"],\"grain\":\"status (one row per enrollment status: 'active' or 'inactive')\",\"aliases\":{\"CASE WHEN is_active THEN 'active' ELSE 'inactive' END\":\"status\",\"COUNT(*)\":\"count\",\"SUM(CASE WHEN is_active THEN 1 ELSE 0 END)\":\"active_count\",\"SUM(CASE WHEN NOT is_active THEN 1 ELSE 0 END)\":\"inactive_count\",\"active_count::double precision / NULLIF(inactive_count, 0)\":\"active_to_inactive_ratio\"},\"output_fields\":[\"status\",\"count\",\"active_to_inactive_ratio\"]},\"visual_requirements\":{\"chart_type\":\"pie\",\"x_axis\":\"status\",\"y_axis\":\"count\",\"color_group\":\"status\",\"title\":\"Active vs Inactive Enrollments\"},\"assumptions\":[\"The enrollments table and columns were verified in this session: public.enrollments with column is_active (boolean).\",\"Status is derived from the boolean is_active as: CASE WHEN is_active THEN 'active' ELSE 'inactive' END.\",\"The query will use all rows in public.enrollments (no date or cohort filters) unless the caller specifies a time window or additional filters.\",\"Ratio is defined as active_count / inactive_count. Division-by-zero is handled with NULLIF(inactive_count, 0); if inactive_count = 0 the ratio will be NULL.\",\"The SQL should return one row per status with the fields exactly aliased as: status, count, active_to_inactive_ratio (the visualization will use status and count; the ratio is provided for numeric reporting).\",\"If you prefer a single scalar result (just the ratio) instead of a categorical breakdown, request that explicitly and the plan will be adjusted to return active_count, inactive_count, and the scalar ratio as separate columns.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"WITH totals AS (\\n  SELECT\\n    SUM(CASE WHEN is_active THEN 1 ELSE 0 END) AS active_count,\\n    SUM(CASE WHEN NOT is_active THEN 1 ELSE 0 END) AS inactive_count\\n  FROM public.enrollments\\n)\\nSELECT\\n  CASE WHEN e.is_active THEN 'active' ELSE 'inactive' END AS status,\\n  COUNT(*) AS count,\\n  totals.active_count::double precision / NULLIF(totals.inactive_count, 0) AS active_to_inactive_ratio\\nFROM public.enrollments e\\nCROSS JOIN totals\\nGROUP BY CASE WHEN e.is_active THEN 'active' ELSE 'inactive' END, totals.active_count, totals.inactive_count\\nORDER BY MAX(CASE WHEN e.is_active THEN 0 ELSE 1 END);\",\"validationIssues\":[\"The user asked for the ratio of active to inactive enrollments; the chart is a pie of counts and only exposes the ratio in the tooltip/row rather than as a single KPI or prominent numeric — this may not directly answer the question.\",\"The active_to_inactive_ratio is repeated for each slice (same value for both rows), which could be confusing to viewers expecting a single summary value.\",\"The SQL handles divide-by-zero via NULLIF(inactive_count, 0); if inactive_count = 0 the ratio will be NULL — ensure the visualization handles or communicates nulls appropriately.\",\"Minor: the query GROUP BY unnecessarily includes totals.active_count and totals.inactive_count (harmless but redundant).\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Preflight confirmed public.enrollments exists and has boolean column is_active. Query returns one row per status with counts and the active-to-inactive ratio (handled division-by-zero with NULLIF).\",\"sql\":\"WITH totals AS (\\n  SELECT\\n    SUM(CASE WHEN is_active THEN 1 ELSE 0 END) AS active_count,\\n    SUM(CASE WHEN NOT is_active THEN 1 ELSE 0 END) AS inactive_count\\n  FROM public.enrollments\\n)\\nSELECT\\n  CASE WHEN e.is_active THEN 'active' ELSE 'inactive' END AS status,\\n  COUNT(*) AS count,\\n  totals.active_count::double precision / NULLIF(totals.inactive_count, 0) AS active_to_inactive_ratio\\nFROM public.enrollments e\\nCROSS JOIN totals\\nGROUP BY CASE WHEN e.is_active THEN 'active' ELSE 'inactive' END, totals.active_count, totals.inactive_count\\nORDER BY MAX(CASE WHEN e.is_active THEN 0 ELSE 1 END);\",\"assumptions\":[\"The table public.enrollments and column is_active (boolean) exist as verified in this session.\",\"All rows in public.enrollments are included (no additional filters).\",\"Ratio is defined as active_count / inactive_count and returns NULL when inactive_count = 0 (handled via NULLIF).\",\"The output columns must be named exactly: status, count, active_to_inactive_ratio.\"]},\"execution\":{\"ok\":true,\"sql\":\"WITH totals AS (\\n  SELECT\\n    SUM(CASE WHEN is_active THEN 1 ELSE 0 END) AS active_count,\\n    SUM(CASE WHEN NOT is_active THEN 1 ELSE 0 END) AS inactive_count\\n  FROM public.enrollments\\n)\\nSELECT\\n  CASE WHEN e.is_active THEN 'active' ELSE 'inactive' END AS status,\\n  COUNT(*) AS count,\\n  totals.active_count::double precision / NULLIF(totals.inactive_count, 0) AS active_to_inactive_ratio\\nFROM public.enrollments e\\nCROSS JOIN totals\\nGROUP BY CASE WHEN e.is_active THEN 'active' ELSE 'inactive' END, totals.active_count, totals.inactive_count\\nORDER BY MAX(CASE WHEN e.is_active THEN 0 ELSE 1 END)\",\"metadata\":{\"columns\":[\"count\",\"status\",\"active_to_inactive_ratio\"],\"rowCount\":2,\"sample\":[{\"count\":57,\"status\":\"active\",\"active_to_inactive_ratio\":0.75},{\"count\":76,\"status\":\"inactive\",\"active_to_inactive_ratio\":0.75}]},\"data\":[{\"count\":57,\"status\":\"active\",\"active_to_inactive_ratio\":0.75},{\"count\":76,\"status\":\"inactive\",\"active_to_inactive_ratio\":0.75}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Active vs Inactive Enrollments\",\"mark\":{\"type\":\"arc\",\"innerRadius\":40},\"encoding\":{\"theta\":{\"field\":\"count\",\"type\":\"quantitative\"},\"color\":{\"field\":\"status\",\"type\":\"nominal\",\"legend\":{\"title\":\"Status\"}},\"tooltip\":[{\"field\":\"status\",\"type\":\"nominal\"},{\"field\":\"count\",\"type\":\"quantitative\"},{\"field\":\"active_to_inactive_ratio\",\"type\":\"quantitative\",\"format\":\".2f\"}]}},\"reasoning\":\"A pie (arc) chart uses 'count' for slice size (theta) and 'status' for color, matching the requested Active vs Inactive breakdown. Tooltip includes the count and the computed active_to_inactive_ratio for context.\"},\"validation\":{\"passed\":true,\"score\":0.7,\"issues\":[\"The user asked for the ratio of active to inactive enrollments; the chart is a pie of counts and only exposes the ratio in the tooltip/row rather than as a single KPI or prominent numeric — this may not directly answer the question.\",\"The active_to_inactive_ratio is repeated for each slice (same value for both rows), which could be confusing to viewers expecting a single summary value.\",\"The SQL handles divide-by-zero via NULLIF(inactive_count, 0); if inactive_count = 0 the ratio will be NULL — ensure the visualization handles or communicates nulls appropriately.\",\"Minor: the query GROUP BY unnecessarily includes totals.active_count and totals.inactive_count (harmless but redundant).\"]}}},\"endedAt\":1771845712395,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"What is the ratio of active to inactive enrollments?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(*)\",\"SUM(CASE WHEN is_active THEN 1 ELSE 0 END) AS active_count\",\"SUM(CASE WHEN NOT is_active THEN 1 ELSE 0 END) AS inactive_count\",\"active_count::double precision / NULLIF(inactive_count, 0) AS active_to_inactive_ratio\"],\"dimensions\":[\"CASE WHEN is_active THEN 'active' ELSE 'inactive' END AS status\"],\"filters\":[\"none (use all rows in public.enrollments unless a time/window filter is requested)\"],\"grain\":\"status (one row per enrollment status: 'active' or 'inactive')\",\"aliases\":{\"CASE WHEN is_active THEN 'active' ELSE 'inactive' END\":\"status\",\"COUNT(*)\":\"count\",\"SUM(CASE WHEN is_active THEN 1 ELSE 0 END)\":\"active_count\",\"SUM(CASE WHEN NOT is_active THEN 1 ELSE 0 END)\":\"inactive_count\",\"active_count::double precision / NULLIF(inactive_count, 0)\":\"active_to_inactive_ratio\"},\"output_fields\":[\"status\",\"count\",\"active_to_inactive_ratio\"]},\"visual_requirements\":{\"chart_type\":\"pie\",\"x_axis\":\"status\",\"y_axis\":\"count\",\"color_group\":\"status\",\"title\":\"Active vs Inactive Enrollments\"},\"assumptions\":[\"The enrollments table and columns were verified in this session: public.enrollments with column is_active (boolean).\",\"Status is derived from the boolean is_active as: CASE WHEN is_active THEN 'active' ELSE 'inactive' END.\",\"The query will use all rows in public.enrollments (no date or cohort filters) unless the caller specifies a time window or additional filters.\",\"Ratio is defined as active_count / inactive_count. Division-by-zero is handled with NULLIF(inactive_count, 0); if inactive_count = 0 the ratio will be NULL.\",\"The SQL should return one row per status with the fields exactly aliased as: status, count, active_to_inactive_ratio (the visualization will use status and count; the ratio is provided for numeric reporting).\",\"If you prefer a single scalar result (just the ratio) instead of a categorical breakdown, request that explicitly and the plan will be adjusted to return active_count, inactive_count, and the scalar ratio as separate columns.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"WITH totals AS (\\n  SELECT\\n    SUM(CASE WHEN is_active THEN 1 ELSE 0 END) AS active_count,\\n    SUM(CASE WHEN NOT is_active THEN 1 ELSE 0 END) AS inactive_count\\n  FROM public.enrollments\\n)\\nSELECT\\n  CASE WHEN e.is_active THEN 'active' ELSE 'inactive' END AS status,\\n  COUNT(*) AS count,\\n  totals.active_count::double precision / NULLIF(totals.inactive_count, 0) AS active_to_inactive_ratio\\nFROM public.enrollments e\\nCROSS JOIN totals\\nGROUP BY CASE WHEN e.is_active THEN 'active' ELSE 'inactive' END, totals.active_count, totals.inactive_count\\nORDER BY MAX(CASE WHEN e.is_active THEN 0 ELSE 1 END);\",\"validationIssues\":[\"The user asked for the ratio of active to inactive enrollments; the chart is a pie of counts and only exposes the ratio in the tooltip/row rather than as a single KPI or prominent numeric — this may not directly answer the question.\",\"The active_to_inactive_ratio is repeated for each slice (same value for both rows), which could be confusing to viewers expecting a single summary value.\",\"The SQL handles divide-by-zero via NULLIF(inactive_count, 0); if inactive_count = 0 the ratio will be NULL — ensure the visualization handles or communicates nulls appropriately.\",\"Minor: the query GROUP BY unnecessarily includes totals.active_count and totals.inactive_count (harmless but redundant).\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Preflight confirmed public.enrollments exists and has boolean column is_active. Query returns one row per status with counts and the active-to-inactive ratio (handled division-by-zero with NULLIF).\",\"sql\":\"WITH totals AS (\\n  SELECT\\n    SUM(CASE WHEN is_active THEN 1 ELSE 0 END) AS active_count,\\n    SUM(CASE WHEN NOT is_active THEN 1 ELSE 0 END) AS inactive_count\\n  FROM public.enrollments\\n)\\nSELECT\\n  CASE WHEN e.is_active THEN 'active' ELSE 'inactive' END AS status,\\n  COUNT(*) AS count,\\n  totals.active_count::double precision / NULLIF(totals.inactive_count, 0) AS active_to_inactive_ratio\\nFROM public.enrollments e\\nCROSS JOIN totals\\nGROUP BY CASE WHEN e.is_active THEN 'active' ELSE 'inactive' END, totals.active_count, totals.inactive_count\\nORDER BY MAX(CASE WHEN e.is_active THEN 0 ELSE 1 END);\",\"assumptions\":[\"The table public.enrollments and column is_active (boolean) exist as verified in this session.\",\"All rows in public.enrollments are included (no additional filters).\",\"Ratio is defined as active_count / inactive_count and returns NULL when inactive_count = 0 (handled via NULLIF).\",\"The output columns must be named exactly: status, count, active_to_inactive_ratio.\"]},\"execution\":{\"ok\":true,\"sql\":\"WITH totals AS (\\n  SELECT\\n    SUM(CASE WHEN is_active THEN 1 ELSE 0 END) AS active_count,\\n    SUM(CASE WHEN NOT is_active THEN 1 ELSE 0 END) AS inactive_count\\n  FROM public.enrollments\\n)\\nSELECT\\n  CASE WHEN e.is_active THEN 'active' ELSE 'inactive' END AS status,\\n  COUNT(*) AS count,\\n  totals.active_count::double precision / NULLIF(totals.inactive_count, 0) AS active_to_inactive_ratio\\nFROM public.enrollments e\\nCROSS JOIN totals\\nGROUP BY CASE WHEN e.is_active THEN 'active' ELSE 'inactive' END, totals.active_count, totals.inactive_count\\nORDER BY MAX(CASE WHEN e.is_active THEN 0 ELSE 1 END)\",\"metadata\":{\"columns\":[\"count\",\"status\",\"active_to_inactive_ratio\"],\"rowCount\":2,\"sample\":[{\"count\":57,\"status\":\"active\",\"active_to_inactive_ratio\":0.75},{\"count\":76,\"status\":\"inactive\",\"active_to_inactive_ratio\":0.75}]},\"data\":[{\"count\":57,\"status\":\"active\",\"active_to_inactive_ratio\":0.75},{\"count\":76,\"status\":\"inactive\",\"active_to_inactive_ratio\":0.75}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Active vs Inactive Enrollments\",\"mark\":{\"type\":\"arc\",\"innerRadius\":40},\"encoding\":{\"theta\":{\"field\":\"count\",\"type\":\"quantitative\"},\"color\":{\"field\":\"status\",\"type\":\"nominal\",\"legend\":{\"title\":\"Status\"}},\"tooltip\":[{\"field\":\"status\",\"type\":\"nominal\"},{\"field\":\"count\",\"type\":\"quantitative\"},{\"field\":\"active_to_inactive_ratio\",\"type\":\"quantitative\",\"format\":\".2f\"}]}},\"reasoning\":\"A pie (arc) chart uses 'count' for slice size (theta) and 'status' for color, matching the requested Active vs Inactive breakdown. Tooltip includes the count and the computed active_to_inactive_ratio for context.\"},\"validation\":{\"passed\":true,\"score\":0.7,\"issues\":[\"The user asked for the ratio of active to inactive enrollments; the chart is a pie of counts and only exposes the ratio in the tooltip/row rather than as a single KPI or prominent numeric — this may not directly answer the question.\",\"The active_to_inactive_ratio is repeated for each slice (same value for both rows), which could be confusing to viewers expecting a single summary value.\",\"The SQL handles divide-by-zero via NULLIF(inactive_count, 0); if inactive_count = 0 the ratio will be NULL — ensure the visualization handles or communicates nulls appropriately.\",\"Minor: the query GROUP BY unnecessarily includes totals.active_count and totals.inactive_count (harmless but redundant).\"]}}},\"startedAt\":1771845712399,\"status\":\"success\",\"output\":{\"sql\":\"WITH totals AS (\\n  SELECT\\n    SUM(CASE WHEN is_active THEN 1 ELSE 0 END) AS active_count,\\n    SUM(CASE WHEN NOT is_active THEN 1 ELSE 0 END) AS inactive_count\\n  FROM public.enrollments\\n)\\nSELECT\\n  CASE WHEN e.is_active THEN 'active' ELSE 'inactive' END AS status,\\n  COUNT(*) AS count,\\n  totals.active_count::double precision / NULLIF(totals.inactive_count, 0) AS active_to_inactive_ratio\\nFROM public.enrollments e\\nCROSS JOIN totals\\nGROUP BY CASE WHEN e.is_active THEN 'active' ELSE 'inactive' END, totals.active_count, totals.inactive_count\\nORDER BY MAX(CASE WHEN e.is_active THEN 0 ELSE 1 END);\",\"data\":[{\"count\":57,\"status\":\"active\",\"active_to_inactive_ratio\":0.75},{\"count\":76,\"status\":\"inactive\",\"active_to_inactive_ratio\":0.75}],\"metadata\":{\"columns\":[\"count\",\"status\",\"active_to_inactive_ratio\"],\"rowCount\":2,\"sample\":[{\"count\":57,\"status\":\"active\",\"active_to_inactive_ratio\":0.75},{\"count\":76,\"status\":\"inactive\",\"active_to_inactive_ratio\":0.75}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Active vs Inactive Enrollments\",\"mark\":{\"type\":\"arc\",\"innerRadius\":40},\"encoding\":{\"theta\":{\"field\":\"count\",\"type\":\"quantitative\"},\"color\":{\"field\":\"status\",\"type\":\"nominal\",\"legend\":{\"title\":\"Status\"}},\"tooltip\":[{\"field\":\"status\",\"type\":\"nominal\"},{\"field\":\"count\",\"type\":\"quantitative\"},{\"field\":\"active_to_inactive_ratio\",\"type\":\"quantitative\",\"format\":\".2f\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.7,\"issues\":[\"The user asked for the ratio of active to inactive enrollments; the chart is a pie of counts and only exposes the ratio in the tooltip/row rather than as a single KPI or prominent numeric — this may not directly answer the question.\",\"The active_to_inactive_ratio is repeated for each slice (same value for both rows), which could be confusing to viewers expecting a single summary value.\",\"The SQL handles divide-by-zero via NULLIF(inactive_count, 0); if inactive_count = 0 the ratio will be NULL — ensure the visualization handles or communicates nulls appropriately.\",\"Minor: the query GROUP BY unnecessarily includes totals.active_count and totals.inactive_count (harmless but redundant).\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771845712407}},\"input\":{\"question\":\"What is the ratio of active to inactive enrollments?\"},\"result\":{\"sql\":\"WITH totals AS (\\n  SELECT\\n    SUM(CASE WHEN is_active THEN 1 ELSE 0 END) AS active_count,\\n    SUM(CASE WHEN NOT is_active THEN 1 ELSE 0 END) AS inactive_count\\n  FROM public.enrollments\\n)\\nSELECT\\n  CASE WHEN e.is_active THEN 'active' ELSE 'inactive' END AS status,\\n  COUNT(*) AS count,\\n  totals.active_count::double precision / NULLIF(totals.inactive_count, 0) AS active_to_inactive_ratio\\nFROM public.enrollments e\\nCROSS JOIN totals\\nGROUP BY CASE WHEN e.is_active THEN 'active' ELSE 'inactive' END, totals.active_count, totals.inactive_count\\nORDER BY MAX(CASE WHEN e.is_active THEN 0 ELSE 1 END);\",\"data\":[{\"count\":57,\"status\":\"active\",\"active_to_inactive_ratio\":0.75},{\"count\":76,\"status\":\"inactive\",\"active_to_inactive_ratio\":0.75}],\"metadata\":{\"columns\":[\"count\",\"status\",\"active_to_inactive_ratio\"],\"rowCount\":2,\"sample\":[{\"count\":57,\"status\":\"active\",\"active_to_inactive_ratio\":0.75},{\"count\":76,\"status\":\"inactive\",\"active_to_inactive_ratio\":0.75}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Active vs Inactive Enrollments\",\"mark\":{\"type\":\"arc\",\"innerRadius\":40},\"encoding\":{\"theta\":{\"field\":\"count\",\"type\":\"quantitative\"},\"color\":{\"field\":\"status\",\"type\":\"nominal\",\"legend\":{\"title\":\"Status\"}},\"tooltip\":[{\"field\":\"status\",\"type\":\"nominal\"},{\"field\":\"count\",\"type\":\"quantitative\"},{\"field\":\"active_to_inactive_ratio\",\"type\":\"quantitative\",\"format\":\".2f\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.7,\"issues\":[\"The user asked for the ratio of active to inactive enrollments; the chart is a pie of counts and only exposes the ratio in the tooltip/row rather than as a single KPI or prominent numeric — this may not directly answer the question.\",\"The active_to_inactive_ratio is repeated for each slice (same value for both rows), which could be confusing to viewers expecting a single summary value.\",\"The SQL handles divide-by-zero via NULLIF(inactive_count, 0); if inactive_count = 0 the ratio will be NULL — ensure the visualization handles or communicates nulls appropriately.\",\"Minor: the query GROUP BY unnecessarily includes totals.active_count and totals.inactive_count (harmless but redundant).\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"0b5ab06edb5027f0764478c666839afe\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/active-vs-inactive-enrollments/run-0001/run.json",
+    "queryPath": "runs/active-vs-inactive-enrollments/run-0001/query.sql",
+    "vegaRawPath": "runs/active-vs-inactive-enrollments/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/active-vs-inactive-enrollments/run-0001/vega.resolved.json",
+    "imagePath": "runs/active-vs-inactive-enrollments/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:21:52.780Z",
+  "traceId": "0b5ab06edb5027f0764478c666839afe",
+  "success": true,
+  "durationMs": 93171,
+  "resultRaw": {
+    "data": [
+      {
+        "count": 57,
+        "status": "active",
+        "active_to_inactive_ratio": 0.75
+      },
+      {
+        "count": 76,
+        "status": "inactive",
+        "active_to_inactive_ratio": 0.75
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Active vs Inactive Enrollments",
+      "mark": {
+        "type": "arc",
+        "innerRadius": 40
+      },
+      "encoding": {
+        "theta": {
+          "field": "count",
+          "type": "quantitative"
+        },
+        "color": {
+          "field": "status",
+          "type": "nominal",
+          "legend": {
+            "title": "Status"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "status",
+            "type": "nominal"
+          },
+          {
+            "field": "count",
+            "type": "quantitative"
+          },
+          {
+            "field": "active_to_inactive_ratio",
+            "type": "quantitative",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    "sql": "WITH totals AS (\n  SELECT\n    SUM(CASE WHEN is_active THEN 1 ELSE 0 END) AS active_count,\n    SUM(CASE WHEN NOT is_active THEN 1 ELSE 0 END) AS inactive_count\n  FROM public.enrollments\n)\nSELECT\n  CASE WHEN e.is_active THEN 'active' ELSE 'inactive' END AS status,\n  COUNT(*) AS count,\n  totals.active_count::double precision / NULLIF(totals.inactive_count, 0) AS active_to_inactive_ratio\nFROM public.enrollments e\nCROSS JOIN totals\nGROUP BY CASE WHEN e.is_active THEN 'active' ELSE 'inactive' END, totals.active_count, totals.inactive_count\nORDER BY MAX(CASE WHEN e.is_active THEN 0 ELSE 1 END);",
+    "metadata": {
+      "columns": [
+        "count",
+        "status",
+        "active_to_inactive_ratio"
+      ],
+      "rowCount": 2,
+      "sample": [
+        {
+          "count": 57,
+          "status": "active",
+          "active_to_inactive_ratio": 0.75
+        },
+        {
+          "count": 76,
+          "status": "inactive",
+          "active_to_inactive_ratio": 0.75
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.7,
+      "issues": [
+        "The user asked for the ratio of active to inactive enrollments; the chart is a pie of counts and only exposes the ratio in the tooltip/row rather than as a single KPI or prominent numeric — this may not directly answer the question.",
+        "The active_to_inactive_ratio is repeated for each slice (same value for both rows), which could be confusing to viewers expecting a single summary value.",
+        "The SQL handles divide-by-zero via NULLIF(inactive_count, 0); if inactive_count = 0 the ratio will be NULL — ensure the visualization handles or communicates nulls appropriately.",
+        "Minor: the query GROUP BY unnecessarily includes totals.active_count and totals.inactive_count (harmless but redundant)."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "count": 57,
+        "status": "active",
+        "active_to_inactive_ratio": 0.75
+      },
+      {
+        "count": 76,
+        "status": "inactive",
+        "active_to_inactive_ratio": 0.75
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Active vs Inactive Enrollments",
+      "mark": {
+        "type": "arc",
+        "innerRadius": 40
+      },
+      "encoding": {
+        "theta": {
+          "field": "count",
+          "type": "quantitative"
+        },
+        "color": {
+          "field": "status",
+          "type": "nominal",
+          "legend": {
+            "title": "Status"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "status",
+            "type": "nominal"
+          },
+          {
+            "field": "count",
+            "type": "quantitative"
+          },
+          {
+            "field": "active_to_inactive_ratio",
+            "type": "quantitative",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    "sql": "WITH totals AS (\n  SELECT\n    SUM(CASE WHEN is_active THEN 1 ELSE 0 END) AS active_count,\n    SUM(CASE WHEN NOT is_active THEN 1 ELSE 0 END) AS inactive_count\n  FROM public.enrollments\n)\nSELECT\n  CASE WHEN e.is_active THEN 'active' ELSE 'inactive' END AS status,\n  COUNT(*) AS count,\n  totals.active_count::double precision / NULLIF(totals.inactive_count, 0) AS active_to_inactive_ratio\nFROM public.enrollments e\nCROSS JOIN totals\nGROUP BY CASE WHEN e.is_active THEN 'active' ELSE 'inactive' END, totals.active_count, totals.inactive_count\nORDER BY MAX(CASE WHEN e.is_active THEN 0 ELSE 1 END);",
+    "metadata": {
+      "columns": [
+        "count",
+        "status",
+        "active_to_inactive_ratio"
+      ],
+      "rowCount": 2,
+      "sample": [
+        {
+          "count": 57,
+          "status": "active",
+          "active_to_inactive_ratio": 0.75
+        },
+        {
+          "count": 76,
+          "status": "inactive",
+          "active_to_inactive_ratio": 0.75
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.7,
+      "issues": [
+        "The user asked for the ratio of active to inactive enrollments; the chart is a pie of counts and only exposes the ratio in the tooltip/row rather than as a single KPI or prominent numeric — this may not directly answer the question.",
+        "The active_to_inactive_ratio is repeated for each slice (same value for both rows), which could be confusing to viewers expecting a single summary value.",
+        "The SQL handles divide-by-zero via NULLIF(inactive_count, 0); if inactive_count = 0 the ratio will be NULL — ensure the visualization handles or communicates nulls appropriately.",
+        "Minor: the query GROUP BY unnecessarily includes totals.active_count and totals.inactive_count (harmless but redundant)."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:21:52.780Z",
+    "traceId": "0b5ab06edb5027f0764478c666839afe",
+    "attempts": 5,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 14125,
+      "outputTokens": 6473,
+      "totalTokens": 20598,
+      "cachedInputTokens": 2560,
+      "reasoningTokens": 4736,
+      "costUsd": 0.01647725
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 14125,
+        "outputTokens": 6473,
+        "totalTokens": 20598,
+        "cachedInputTokens": 2560,
+        "reasoningTokens": 4736,
+        "costUsd": 0.01647725
+      }
+    ],
+    "warnings": []
+  }
+}

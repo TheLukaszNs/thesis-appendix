@@ -1,0 +1,268 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "classrooms-equipment-matrix",
+  "caseDirectory": "classrooms-equipment-matrix",
+  "repeatIndex": 1,
+  "prompt": "Show classrooms grouped by equipment type: projector only, computers only, both, or neither",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show classrooms grouped by equipment type: projector only, computers only, both, or neither"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:51:45.226Z",
+    "endedAtUtc": "2026-02-22T23:52:32.405Z",
+    "durationMs": 47179
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "9735",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:52:32 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show classrooms grouped by equipment type: projector only, computers only, both, or neither\"},\"sql\":{\"payload\":{\"question\":\"Show classrooms grouped by equipment type: projector only, computers only, both, or neither\"},\"startedAt\":1771804305232,\"status\":\"success\",\"output\":{\"reasoning\":\"Categorize each classroom by the boolean columns has_projector and has_computers (confirmed present) using a CASE, then count per category. Order categories deterministically: both, projector only, computers only, neither.\",\"sql\":\"WITH categorized AS (\\n  SELECT\\n    CASE\\n      WHEN has_projector AND has_computers THEN 'both'\\n      WHEN has_projector AND NOT has_computers THEN 'projector only'\\n      WHEN NOT has_projector AND has_computers THEN 'computers only'\\n      ELSE 'neither'\\n    END AS equipment_group\\n  FROM public.classrooms\\n)\\nSELECT\\n  equipment_group AS equipment_group,\\n  COUNT(*) AS classroom_count\\nFROM categorized\\nGROUP BY equipment_group\\nORDER BY CASE equipment_group\\n  WHEN 'both' THEN 1\\n  WHEN 'projector only' THEN 2\\n  WHEN 'computers only' THEN 3\\n  WHEN 'neither' THEN 4\\n  ELSE 5\\nEND;\",\"assumptions\":[\"public.classrooms has boolean columns has_projector and has_computers (verified in schema)\",\"Count is across all classrooms (no additional filters such as building/room)\"]},\"endedAt\":1771804340230},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH categorized AS (\\n  SELECT\\n    CASE\\n      WHEN has_projector AND has_computers THEN 'both'\\n      WHEN has_projector AND NOT has_computers THEN 'projector only'\\n      WHEN NOT has_projector AND has_computers THEN 'computers only'\\n      ELSE 'neither'\\n    END AS equipment_group\\n  FROM public.classrooms\\n)\\nSELECT\\n  equipment_group AS equipment_group,\\n  COUNT(*) AS classroom_count\\nFROM categorized\\nGROUP BY equipment_group\\nORDER BY CASE equipment_group\\n  WHEN 'both' THEN 1\\n  WHEN 'projector only' THEN 2\\n  WHEN 'computers only' THEN 3\\n  WHEN 'neither' THEN 4\\n  ELSE 5\\nEND;\"},\"startedAt\":1771804340242,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH categorized AS (\\n  SELECT\\n    CASE\\n      WHEN has_projector AND has_computers THEN 'both'\\n      WHEN has_projector AND NOT has_computers THEN 'projector only'\\n      WHEN NOT has_projector AND has_computers THEN 'computers only'\\n      ELSE 'neither'\\n    END AS equipment_group\\n  FROM public.classrooms\\n)\\nSELECT\\n  equipment_group AS equipment_group,\\n  COUNT(*) AS classroom_count\\nFROM categorized\\nGROUP BY equipment_group\\nORDER BY CASE equipment_group\\n  WHEN 'both' THEN 1\\n  WHEN 'projector only' THEN 2\\n  WHEN 'computers only' THEN 3\\n  WHEN 'neither' THEN 4\\n  ELSE 5\\nEND\",\"metadata\":{\"columns\":[\"classroom_count\",\"equipment_group\"],\"rowCount\":4,\"sample\":[{\"classroom_count\":17,\"equipment_group\":\"both\"},{\"classroom_count\":19,\"equipment_group\":\"projector only\"}]},\"data\":[{\"classroom_count\":17,\"equipment_group\":\"both\"},{\"classroom_count\":19,\"equipment_group\":\"projector only\"},{\"classroom_count\":10,\"equipment_group\":\"computers only\"},{\"classroom_count\":13,\"equipment_group\":\"neither\"}]},\"endedAt\":1771804340282},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"WITH categorized AS (\\n  SELECT\\n    CASE\\n      WHEN has_projector AND has_computers THEN 'both'\\n      WHEN has_projector AND NOT has_computers THEN 'projector only'\\n      WHEN NOT has_projector AND has_computers THEN 'computers only'\\n      ELSE 'neither'\\n    END AS equipment_group\\n  FROM public.classrooms\\n)\\nSELECT\\n  equipment_group AS equipment_group,\\n  COUNT(*) AS classroom_count\\nFROM categorized\\nGROUP BY equipment_group\\nORDER BY CASE equipment_group\\n  WHEN 'both' THEN 1\\n  WHEN 'projector only' THEN 2\\n  WHEN 'computers only' THEN 3\\n  WHEN 'neither' THEN 4\\n  ELSE 5\\nEND\",\"metadata\":{\"columns\":[\"classroom_count\",\"equipment_group\"],\"rowCount\":4,\"sample\":[{\"classroom_count\":17,\"equipment_group\":\"both\"},{\"classroom_count\":19,\"equipment_group\":\"projector only\"}]},\"data\":[{\"classroom_count\":17,\"equipment_group\":\"both\"},{\"classroom_count\":19,\"equipment_group\":\"projector only\"},{\"classroom_count\":10,\"equipment_group\":\"computers only\"},{\"classroom_count\":13,\"equipment_group\":\"neither\"}]},\"startedAt\":1771804340285,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Classrooms by equipment group\",\"width\":480,\"height\":320,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"equipment_group\",\"type\":\"nominal\",\"title\":\"Equipment group\",\"sort\":[\"both\",\"projector only\",\"computers only\",\"neither\"]},\"y\":{\"field\":\"classroom_count\",\"type\":\"quantitative\",\"title\":\"Number of classrooms\"},\"color\":{\"field\":\"equipment_group\",\"type\":\"nominal\",\"legend\":null},\"tooltip\":[{\"field\":\"equipment_group\",\"type\":\"nominal\",\"title\":\"Equipment group\"},{\"field\":\"classroom_count\",\"type\":\"quantitative\",\"title\":\"Classrooms\"}]}},\"reasoning\":\"Bar chart grouped by equipment_group with a custom category order (both, projector only, computers only, neither). Tooltip shows group and count.\"},\"endedAt\":1771804352390},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Classrooms by equipment group\",\"width\":480,\"height\":320,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"equipment_group\",\"type\":\"nominal\",\"title\":\"Equipment group\",\"sort\":[\"both\",\"projector only\",\"computers only\",\"neither\"]},\"y\":{\"field\":\"classroom_count\",\"type\":\"quantitative\",\"title\":\"Number of classrooms\"},\"color\":{\"field\":\"equipment_group\",\"type\":\"nominal\",\"legend\":null},\"tooltip\":[{\"field\":\"equipment_group\",\"type\":\"nominal\",\"title\":\"Equipment group\"},{\"field\":\"classroom_count\",\"type\":\"quantitative\",\"title\":\"Classrooms\"}]}},\"reasoning\":\"Bar chart grouped by equipment_group with a custom category order (both, projector only, computers only, neither). Tooltip shows group and count.\"},\"startedAt\":1771804352395,\"status\":\"success\",\"output\":{\"sql\":\"WITH categorized AS (\\n  SELECT\\n    CASE\\n      WHEN has_projector AND has_computers THEN 'both'\\n      WHEN has_projector AND NOT has_computers THEN 'projector only'\\n      WHEN NOT has_projector AND has_computers THEN 'computers only'\\n      ELSE 'neither'\\n    END AS equipment_group\\n  FROM public.classrooms\\n)\\nSELECT\\n  equipment_group AS equipment_group,\\n  COUNT(*) AS classroom_count\\nFROM categorized\\nGROUP BY equipment_group\\nORDER BY CASE equipment_group\\n  WHEN 'both' THEN 1\\n  WHEN 'projector only' THEN 2\\n  WHEN 'computers only' THEN 3\\n  WHEN 'neither' THEN 4\\n  ELSE 5\\nEND;\",\"data\":[{\"classroom_count\":17,\"equipment_group\":\"both\"},{\"classroom_count\":19,\"equipment_group\":\"projector only\"},{\"classroom_count\":10,\"equipment_group\":\"computers only\"},{\"classroom_count\":13,\"equipment_group\":\"neither\"}],\"metadata\":{\"columns\":[\"classroom_count\",\"equipment_group\"],\"rowCount\":4,\"sample\":[{\"classroom_count\":17,\"equipment_group\":\"both\"},{\"classroom_count\":19,\"equipment_group\":\"projector only\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Classrooms by equipment group\",\"width\":480,\"height\":320,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"equipment_group\",\"type\":\"nominal\",\"title\":\"Equipment group\",\"sort\":[\"both\",\"projector only\",\"computers only\",\"neither\"]},\"y\":{\"field\":\"classroom_count\",\"type\":\"quantitative\",\"title\":\"Number of classrooms\"},\"color\":{\"field\":\"equipment_group\",\"type\":\"nominal\",\"legend\":null},\"tooltip\":[{\"field\":\"equipment_group\",\"type\":\"nominal\",\"title\":\"Equipment group\"},{\"field\":\"classroom_count\",\"type\":\"quantitative\",\"title\":\"Classrooms\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771804352397}},\"input\":{\"question\":\"Show classrooms grouped by equipment type: projector only, computers only, both, or neither\"},\"result\":{\"sql\":\"WITH categorized AS (\\n  SELECT\\n    CASE\\n      WHEN has_projector AND has_computers THEN 'both'\\n      WHEN has_projector AND NOT has_computers THEN 'projector only'\\n      WHEN NOT has_projector AND has_computers THEN 'computers only'\\n      ELSE 'neither'\\n    END AS equipment_group\\n  FROM public.classrooms\\n)\\nSELECT\\n  equipment_group AS equipment_group,\\n  COUNT(*) AS classroom_count\\nFROM categorized\\nGROUP BY equipment_group\\nORDER BY CASE equipment_group\\n  WHEN 'both' THEN 1\\n  WHEN 'projector only' THEN 2\\n  WHEN 'computers only' THEN 3\\n  WHEN 'neither' THEN 4\\n  ELSE 5\\nEND;\",\"data\":[{\"classroom_count\":17,\"equipment_group\":\"both\"},{\"classroom_count\":19,\"equipment_group\":\"projector only\"},{\"classroom_count\":10,\"equipment_group\":\"computers only\"},{\"classroom_count\":13,\"equipment_group\":\"neither\"}],\"metadata\":{\"columns\":[\"classroom_count\",\"equipment_group\"],\"rowCount\":4,\"sample\":[{\"classroom_count\":17,\"equipment_group\":\"both\"},{\"classroom_count\":19,\"equipment_group\":\"projector only\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Classrooms by equipment group\",\"width\":480,\"height\":320,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"equipment_group\",\"type\":\"nominal\",\"title\":\"Equipment group\",\"sort\":[\"both\",\"projector only\",\"computers only\",\"neither\"]},\"y\":{\"field\":\"classroom_count\",\"type\":\"quantitative\",\"title\":\"Number of classrooms\"},\"color\":{\"field\":\"equipment_group\",\"type\":\"nominal\",\"legend\":null},\"tooltip\":[{\"field\":\"equipment_group\",\"type\":\"nominal\",\"title\":\"Equipment group\"},{\"field\":\"classroom_count\",\"type\":\"quantitative\",\"title\":\"Classrooms\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"3593997b837a3cd0c7d487241bb1f4c0\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/classrooms-equipment-matrix/run-0001/run.json",
+    "queryPath": "runs/classrooms-equipment-matrix/run-0001/query.sql",
+    "vegaRawPath": "runs/classrooms-equipment-matrix/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/classrooms-equipment-matrix/run-0001/vega.resolved.json",
+    "imagePath": "runs/classrooms-equipment-matrix/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:52:32.770Z",
+  "traceId": "3593997b837a3cd0c7d487241bb1f4c0",
+  "success": true,
+  "durationMs": 47544,
+  "resultRaw": {
+    "data": [
+      {
+        "classroom_count": 17,
+        "equipment_group": "both"
+      },
+      {
+        "classroom_count": 19,
+        "equipment_group": "projector only"
+      },
+      {
+        "classroom_count": 10,
+        "equipment_group": "computers only"
+      },
+      {
+        "classroom_count": 13,
+        "equipment_group": "neither"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Classrooms by equipment group",
+      "width": 480,
+      "height": 320,
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "equipment_group",
+          "type": "nominal",
+          "title": "Equipment group",
+          "sort": [
+            "both",
+            "projector only",
+            "computers only",
+            "neither"
+          ]
+        },
+        "y": {
+          "field": "classroom_count",
+          "type": "quantitative",
+          "title": "Number of classrooms"
+        },
+        "color": {
+          "field": "equipment_group",
+          "type": "nominal",
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "equipment_group",
+            "type": "nominal",
+            "title": "Equipment group"
+          },
+          {
+            "field": "classroom_count",
+            "type": "quantitative",
+            "title": "Classrooms"
+          }
+        ]
+      }
+    },
+    "sql": "WITH categorized AS (\n  SELECT\n    CASE\n      WHEN has_projector AND has_computers THEN 'both'\n      WHEN has_projector AND NOT has_computers THEN 'projector only'\n      WHEN NOT has_projector AND has_computers THEN 'computers only'\n      ELSE 'neither'\n    END AS equipment_group\n  FROM public.classrooms\n)\nSELECT\n  equipment_group AS equipment_group,\n  COUNT(*) AS classroom_count\nFROM categorized\nGROUP BY equipment_group\nORDER BY CASE equipment_group\n  WHEN 'both' THEN 1\n  WHEN 'projector only' THEN 2\n  WHEN 'computers only' THEN 3\n  WHEN 'neither' THEN 4\n  ELSE 5\nEND;",
+    "metadata": {
+      "columns": [
+        "classroom_count",
+        "equipment_group"
+      ],
+      "rowCount": 4,
+      "sample": [
+        {
+          "classroom_count": 17,
+          "equipment_group": "both"
+        },
+        {
+          "classroom_count": 19,
+          "equipment_group": "projector only"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "classroom_count": 17,
+        "equipment_group": "both"
+      },
+      {
+        "classroom_count": 19,
+        "equipment_group": "projector only"
+      },
+      {
+        "classroom_count": 10,
+        "equipment_group": "computers only"
+      },
+      {
+        "classroom_count": 13,
+        "equipment_group": "neither"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Classrooms by equipment group",
+      "width": 480,
+      "height": 320,
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "equipment_group",
+          "type": "nominal",
+          "title": "Equipment group",
+          "sort": [
+            "both",
+            "projector only",
+            "computers only",
+            "neither"
+          ]
+        },
+        "y": {
+          "field": "classroom_count",
+          "type": "quantitative",
+          "title": "Number of classrooms"
+        },
+        "color": {
+          "field": "equipment_group",
+          "type": "nominal",
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "equipment_group",
+            "type": "nominal",
+            "title": "Equipment group"
+          },
+          {
+            "field": "classroom_count",
+            "type": "quantitative",
+            "title": "Classrooms"
+          }
+        ]
+      }
+    },
+    "sql": "WITH categorized AS (\n  SELECT\n    CASE\n      WHEN has_projector AND has_computers THEN 'both'\n      WHEN has_projector AND NOT has_computers THEN 'projector only'\n      WHEN NOT has_projector AND has_computers THEN 'computers only'\n      ELSE 'neither'\n    END AS equipment_group\n  FROM public.classrooms\n)\nSELECT\n  equipment_group AS equipment_group,\n  COUNT(*) AS classroom_count\nFROM categorized\nGROUP BY equipment_group\nORDER BY CASE equipment_group\n  WHEN 'both' THEN 1\n  WHEN 'projector only' THEN 2\n  WHEN 'computers only' THEN 3\n  WHEN 'neither' THEN 4\n  ELSE 5\nEND;",
+    "metadata": {
+      "columns": [
+        "classroom_count",
+        "equipment_group"
+      ],
+      "rowCount": 4,
+      "sample": [
+        {
+          "classroom_count": 17,
+          "equipment_group": "both"
+        },
+        {
+          "classroom_count": 19,
+          "equipment_group": "projector only"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:52:32.770Z",
+    "traceId": "3593997b837a3cd0c7d487241bb1f4c0",
+    "attempts": 3,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 5667,
+      "outputTokens": 2499,
+      "totalTokens": 8166,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1728,
+      "costUsd": 0.00641475
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 5667,
+        "outputTokens": 2499,
+        "totalTokens": 8166,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1728,
+        "costUsd": 0.00641475
+      }
+    ],
+    "warnings": []
+  }
+}

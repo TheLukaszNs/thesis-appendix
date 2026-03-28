@@ -1,0 +1,1 @@
+SELECT c.course_type AS course_type, AVG(c.credits) AS avg_credits FROM public.courses c GROUP BY c.course_type ORDER BY c.course_type;

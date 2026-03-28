@@ -1,0 +1,368 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "scholarship-per-student-by-dept",
+  "caseDirectory": "scholarship-per-student-by-dept",
+  "repeatIndex": 1,
+  "prompt": "What is the average scholarship amount per student in each department?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average scholarship amount per student in each department?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:32:06.808Z",
+    "endedAtUtc": "2026-02-23T11:33:48.381Z",
+    "durationMs": 101573
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "34434",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:33:48 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the average scholarship amount per student in each department?\"},\"planner\":{\"payload\":{\"question\":\"What is the average scholarship amount per student in each department?\"},\"startedAt\":1771846326824,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(COALESCE(student_totals.total_amount, 0))\",\"SUM(COALESCE(student_totals.total_amount, 0))\",\"COUNT(students.id)\"],\"dimensions\":[\"departments.id\",\"departments.name\"],\"filters\":[],\"grain\":\"per department\",\"aliases\":{\"departments.id\":\"department_id\",\"departments.name\":\"department_name\",\"AVG(COALESCE(student_totals.total_amount, 0))\":\"avg_scholarship_amount_per_student\",\"SUM(COALESCE(student_totals.total_amount, 0))\":\"total_scholarship_amount\",\"COUNT(students.id)\":\"student_count\"},\"output_fields\":[\"department_id\",\"department_name\",\"avg_scholarship_amount_per_student\",\"total_scholarship_amount\",\"student_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"avg_scholarship_amount_per_student\",\"title\":\"Average scholarship amount per student by department\"},\"assumptions\":[\"Tables and columns used were verified in this session: scholarships(student_id, amount), students(id, department_id), departments(id, name).\",\"Interpretation chosen: 'average scholarship amount per student in each department' means the mean of total scholarship dollars per student in that department, counting students with no scholarships as 0. Implementation: aggregate scholarships per student, join to students (all students in department), then take the average of those per-student totals.\",\"Timeframe: no date/academic_year filter applied; calculation uses all scholarships in the scholarships table. If you want a specific academic_year or semester, add a filter on scholarships.academic_year and/or semester_type.\",\"Aggregation details: student_totals is SUM(amount) grouped by scholarships.student_id. Departments are labeled by departments.name. department_id is provided for deterministic joins and drill-downs.\",\"Numeric handling: scholarships.amount is numeric; COALESCE(..., 0) is used so students without scholarships contribute 0 to the department average.\"]}},\"endedAt\":1771846378040},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(COALESCE(student_totals.total_amount, 0))\",\"SUM(COALESCE(student_totals.total_amount, 0))\",\"COUNT(students.id)\"],\"dimensions\":[\"departments.id\",\"departments.name\"],\"filters\":[],\"grain\":\"per department\",\"aliases\":{\"departments.id\":\"department_id\",\"departments.name\":\"department_name\",\"AVG(COALESCE(student_totals.total_amount, 0))\":\"avg_scholarship_amount_per_student\",\"SUM(COALESCE(student_totals.total_amount, 0))\":\"total_scholarship_amount\",\"COUNT(students.id)\":\"student_count\"},\"output_fields\":[\"department_id\",\"department_name\",\"avg_scholarship_amount_per_student\",\"total_scholarship_amount\",\"student_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"avg_scholarship_amount_per_student\",\"title\":\"Average scholarship amount per student by department\"},\"assumptions\":[\"Tables and columns used were verified in this session: scholarships(student_id, amount), students(id, department_id), departments(id, name).\",\"Interpretation chosen: 'average scholarship amount per student in each department' means the mean of total scholarship dollars per student in that department, counting students with no scholarships as 0. Implementation: aggregate scholarships per student, join to students (all students in department), then take the average of those per-student totals.\",\"Timeframe: no date/academic_year filter applied; calculation uses all scholarships in the scholarships table. If you want a specific academic_year or semester, add a filter on scholarships.academic_year and/or semester_type.\",\"Aggregation details: student_totals is SUM(amount) grouped by scholarships.student_id. Departments are labeled by departments.name. department_id is provided for deterministic joins and drill-downs.\",\"Numeric handling: scholarships.amount is numeric; COALESCE(..., 0) is used so students without scholarships contribute 0 to the department average.\"]}},\"startedAt\":1771846378045,\"status\":\"success\",\"output\":{\"question\":\"What is the average scholarship amount per student in each department?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(COALESCE(student_totals.total_amount, 0))\",\"SUM(COALESCE(student_totals.total_amount, 0))\",\"COUNT(students.id)\"],\"dimensions\":[\"departments.id\",\"departments.name\"],\"filters\":[],\"grain\":\"per department\",\"aliases\":{\"departments.id\":\"department_id\",\"departments.name\":\"department_name\",\"AVG(COALESCE(student_totals.total_amount, 0))\":\"avg_scholarship_amount_per_student\",\"SUM(COALESCE(student_totals.total_amount, 0))\":\"total_scholarship_amount\",\"COUNT(students.id)\":\"student_count\"},\"output_fields\":[\"department_id\",\"department_name\",\"avg_scholarship_amount_per_student\",\"total_scholarship_amount\",\"student_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"avg_scholarship_amount_per_student\",\"title\":\"Average scholarship amount per student by department\"},\"assumptions\":[\"Tables and columns used were verified in this session: scholarships(student_id, amount), students(id, department_id), departments(id, name).\",\"Interpretation chosen: 'average scholarship amount per student in each department' means the mean of total scholarship dollars per student in that department, counting students with no scholarships as 0. Implementation: aggregate scholarships per student, join to students (all students in department), then take the average of those per-student totals.\",\"Timeframe: no date/academic_year filter applied; calculation uses all scholarships in the scholarships table. If you want a specific academic_year or semester, add a filter on scholarships.academic_year and/or semester_type.\",\"Aggregation details: student_totals is SUM(amount) grouped by scholarships.student_id. Departments are labeled by departments.name. department_id is provided for deterministic joins and drill-downs.\",\"Numeric handling: scholarships.amount is numeric; COALESCE(..., 0) is used so students without scholarships contribute 0 to the department average.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771846378050},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"What is the average scholarship amount per student in each department?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(COALESCE(student_totals.total_amount, 0))\",\"SUM(COALESCE(student_totals.total_amount, 0))\",\"COUNT(students.id)\"],\"dimensions\":[\"departments.id\",\"departments.name\"],\"filters\":[],\"grain\":\"per department\",\"aliases\":{\"departments.id\":\"department_id\",\"departments.name\":\"department_name\",\"AVG(COALESCE(student_totals.total_amount, 0))\":\"avg_scholarship_amount_per_student\",\"SUM(COALESCE(student_totals.total_amount, 0))\":\"total_scholarship_amount\",\"COUNT(students.id)\":\"student_count\"},\"output_fields\":[\"department_id\",\"department_name\",\"avg_scholarship_amount_per_student\",\"total_scholarship_amount\",\"student_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"avg_scholarship_amount_per_student\",\"title\":\"Average scholarship amount per student by department\"},\"assumptions\":[\"Tables and columns used were verified in this session: scholarships(student_id, amount), students(id, department_id), departments(id, name).\",\"Interpretation chosen: 'average scholarship amount per student in each department' means the mean of total scholarship dollars per student in that department, counting students with no scholarships as 0. Implementation: aggregate scholarships per student, join to students (all students in department), then take the average of those per-student totals.\",\"Timeframe: no date/academic_year filter applied; calculation uses all scholarships in the scholarships table. If you want a specific academic_year or semester, add a filter on scholarships.academic_year and/or semester_type.\",\"Aggregation details: student_totals is SUM(amount) grouped by scholarships.student_id. Departments are labeled by departments.name. department_id is provided for deterministic joins and drill-downs.\",\"Numeric handling: scholarships.amount is numeric; COALESCE(..., 0) is used so students without scholarships contribute 0 to the department average.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771846378052,\"status\":\"success\",\"output\":{\"question\":\"What is the average scholarship amount per student in each department?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(COALESCE(student_totals.total_amount, 0))\",\"SUM(COALESCE(student_totals.total_amount, 0))\",\"COUNT(students.id)\"],\"dimensions\":[\"departments.id\",\"departments.name\"],\"filters\":[],\"grain\":\"per department\",\"aliases\":{\"departments.id\":\"department_id\",\"departments.name\":\"department_name\",\"AVG(COALESCE(student_totals.total_amount, 0))\":\"avg_scholarship_amount_per_student\",\"SUM(COALESCE(student_totals.total_amount, 0))\":\"total_scholarship_amount\",\"COUNT(students.id)\":\"student_count\"},\"output_fields\":[\"department_id\",\"department_name\",\"avg_scholarship_amount_per_student\",\"total_scholarship_amount\",\"student_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"avg_scholarship_amount_per_student\",\"title\":\"Average scholarship amount per student by department\"},\"assumptions\":[\"Tables and columns used were verified in this session: scholarships(student_id, amount), students(id, department_id), departments(id, name).\",\"Interpretation chosen: 'average scholarship amount per student in each department' means the mean of total scholarship dollars per student in that department, counting students with no scholarships as 0. Implementation: aggregate scholarships per student, join to students (all students in department), then take the average of those per-student totals.\",\"Timeframe: no date/academic_year filter applied; calculation uses all scholarships in the scholarships table. If you want a specific academic_year or semester, add a filter on scholarships.academic_year and/or semester_type.\",\"Aggregation details: student_totals is SUM(amount) grouped by scholarships.student_id. Departments are labeled by departments.name. department_id is provided for deterministic joins and drill-downs.\",\"Numeric handling: scholarships.amount is numeric; COALESCE(..., 0) is used so students without scholarships contribute 0 to the department average.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"WITH student_totals AS (\\n  SELECT\\n    student_id,\\n    SUM(amount) AS total_amount\\n  FROM public.scholarships\\n  GROUP BY student_id\\n)\\nSELECT\\n  d.id AS department_id,\\n  d.name AS department_name,\\n  AVG(COALESCE(st.total_amount, 0))::numeric AS avg_scholarship_amount_per_student,\\n  SUM(COALESCE(st.total_amount, 0))::numeric AS total_scholarship_amount,\\n  COUNT(s.id) AS student_count\\nFROM public.departments d\\nJOIN public.students s ON s.department_id = d.id\\nLEFT JOIN student_totals st ON st.student_id = s.id\\nGROUP BY d.id, d.name\\nORDER BY d.name ASC;\",\"validationIssues\":[\"Visualization uses department_name for the categorical axis — if you require a stable or lexicographic ordering independent of the query result, consider encoding an explicit sort (or using department_id for deterministic sort).\",\"Axis/tooltip do not indicate currency units; consider adding a unit (e.g., PLN, USD) to the y-axis title to match user expectation for amounts.\",\"SQL uses all-time scholarships (no date filter). If the user intended a specific academic year/semester, a filter must be added to the query (currently no temporal filter applied).\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Compute per-student scholarship totals (sum of scholarships.amount), include students with no scholarships as 0 via LEFT JOIN/COALESCE, then aggregate per department to produce average per student, total scholarship amount, and student count. Grouping and ordering are deterministic.\",\"sql\":\"WITH student_totals AS (\\n  SELECT\\n    student_id,\\n    SUM(amount) AS total_amount\\n  FROM public.scholarships\\n  GROUP BY student_id\\n)\\nSELECT\\n  d.id AS department_id,\\n  d.name AS department_name,\\n  AVG(COALESCE(st.total_amount, 0))::numeric AS avg_scholarship_amount_per_student,\\n  SUM(COALESCE(st.total_amount, 0))::numeric AS total_scholarship_amount,\\n  COUNT(s.id) AS student_count\\nFROM public.departments d\\nJOIN public.students s ON s.department_id = d.id\\nLEFT JOIN student_totals st ON st.student_id = s.id\\nGROUP BY d.id, d.name\\nORDER BY d.name ASC;\",\"assumptions\":[\"Use all rows in scholarships (no academic year/semester filter).\",\"Students without scholarship records should be counted with total 0 (handled via LEFT JOIN and COALESCE).\",\"Schema for tables is public and columns confirmed in this session: departments(id,name), students(id,department_id), scholarships(student_id,amount).\"]},\"execution\":{\"ok\":true,\"sql\":\"WITH student_totals AS (\\n  SELECT\\n    student_id,\\n    SUM(amount) AS total_amount\\n  FROM public.scholarships\\n  GROUP BY student_id\\n)\\nSELECT\\n  d.id AS department_id,\\n  d.name AS department_name,\\n  AVG(COALESCE(st.total_amount, 0))::numeric AS avg_scholarship_amount_per_student,\\n  SUM(COALESCE(st.total_amount, 0))::numeric AS total_scholarship_amount,\\n  COUNT(s.id) AS student_count\\nFROM public.departments d\\nJOIN public.students s ON s.department_id = d.id\\nLEFT JOIN student_totals st ON st.student_id = s.id\\nGROUP BY d.id, d.name\\nORDER BY d.name ASC\",\"metadata\":{\"columns\":[\"department_id\",\"student_count\",\"department_name\",\"total_scholarship_amount\",\"avg_scholarship_amount_per_student\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"total_scholarship_amount\":2500,\"avg_scholarship_amount_per_student\":119.04761904761905},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"student_count\":13,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"total_scholarship_amount\":0,\"avg_scholarship_amount_per_student\":0}]},\"data\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"total_scholarship_amount\":2500,\"avg_scholarship_amount_per_student\":119.04761904761905},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"student_count\":13,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"total_scholarship_amount\":0,\"avg_scholarship_amount_per_student\":0},{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"student_count\":20,\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"total_scholarship_amount\":2000,\"avg_scholarship_amount_per_student\":100},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"student_count\":19,\"department_name\":\"Wydział Inżynierii Produkcji\",\"total_scholarship_amount\":6000,\"avg_scholarship_amount_per_student\":315.7894736842105},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"student_count\":20,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_scholarship_amount\":12000,\"avg_scholarship_amount_per_student\":600},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"student_count\":22,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"total_scholarship_amount\":3000,\"avg_scholarship_amount_per_student\":136.36363636363637}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average scholarship amount per student by department\",\"width\":800,\"height\":420,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\",\"axis\":{\"labelAngle\":-40,\"labelLimit\":300}},\"y\":{\"field\":\"avg_scholarship_amount_per_student\",\"type\":\"quantitative\",\"title\":\"Avg scholarship per student\",\"axis\":{\"format\":\".2f\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"avg_scholarship_amount_per_student\",\"type\":\"quantitative\",\"title\":\"Avg scholarship per student\",\"format\":\".2f\"},{\"field\":\"total_scholarship_amount\",\"type\":\"quantitative\",\"title\":\"Total scholarship amount\",\"format\":\".2f\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student count\"}]}},\"reasoning\":\"Bar chart showing per-department average scholarship per student (students with no scholarships counted as 0). Tooltip includes department, average, total, and student count for context.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"Visualization uses department_name for the categorical axis — if you require a stable or lexicographic ordering independent of the query result, consider encoding an explicit sort (or using department_id for deterministic sort).\",\"Axis/tooltip do not indicate currency units; consider adding a unit (e.g., PLN, USD) to the y-axis title to match user expectation for amounts.\",\"SQL uses all-time scholarships (no date filter). If the user intended a specific academic year/semester, a filter must be added to the query (currently no temporal filter applied).\"]}}},\"endedAt\":1771846428345,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"What is the average scholarship amount per student in each department?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(COALESCE(student_totals.total_amount, 0))\",\"SUM(COALESCE(student_totals.total_amount, 0))\",\"COUNT(students.id)\"],\"dimensions\":[\"departments.id\",\"departments.name\"],\"filters\":[],\"grain\":\"per department\",\"aliases\":{\"departments.id\":\"department_id\",\"departments.name\":\"department_name\",\"AVG(COALESCE(student_totals.total_amount, 0))\":\"avg_scholarship_amount_per_student\",\"SUM(COALESCE(student_totals.total_amount, 0))\":\"total_scholarship_amount\",\"COUNT(students.id)\":\"student_count\"},\"output_fields\":[\"department_id\",\"department_name\",\"avg_scholarship_amount_per_student\",\"total_scholarship_amount\",\"student_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"avg_scholarship_amount_per_student\",\"title\":\"Average scholarship amount per student by department\"},\"assumptions\":[\"Tables and columns used were verified in this session: scholarships(student_id, amount), students(id, department_id), departments(id, name).\",\"Interpretation chosen: 'average scholarship amount per student in each department' means the mean of total scholarship dollars per student in that department, counting students with no scholarships as 0. Implementation: aggregate scholarships per student, join to students (all students in department), then take the average of those per-student totals.\",\"Timeframe: no date/academic_year filter applied; calculation uses all scholarships in the scholarships table. If you want a specific academic_year or semester, add a filter on scholarships.academic_year and/or semester_type.\",\"Aggregation details: student_totals is SUM(amount) grouped by scholarships.student_id. Departments are labeled by departments.name. department_id is provided for deterministic joins and drill-downs.\",\"Numeric handling: scholarships.amount is numeric; COALESCE(..., 0) is used so students without scholarships contribute 0 to the department average.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"WITH student_totals AS (\\n  SELECT\\n    student_id,\\n    SUM(amount) AS total_amount\\n  FROM public.scholarships\\n  GROUP BY student_id\\n)\\nSELECT\\n  d.id AS department_id,\\n  d.name AS department_name,\\n  AVG(COALESCE(st.total_amount, 0))::numeric AS avg_scholarship_amount_per_student,\\n  SUM(COALESCE(st.total_amount, 0))::numeric AS total_scholarship_amount,\\n  COUNT(s.id) AS student_count\\nFROM public.departments d\\nJOIN public.students s ON s.department_id = d.id\\nLEFT JOIN student_totals st ON st.student_id = s.id\\nGROUP BY d.id, d.name\\nORDER BY d.name ASC;\",\"validationIssues\":[\"Visualization uses department_name for the categorical axis — if you require a stable or lexicographic ordering independent of the query result, consider encoding an explicit sort (or using department_id for deterministic sort).\",\"Axis/tooltip do not indicate currency units; consider adding a unit (e.g., PLN, USD) to the y-axis title to match user expectation for amounts.\",\"SQL uses all-time scholarships (no date filter). If the user intended a specific academic year/semester, a filter must be added to the query (currently no temporal filter applied).\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Compute per-student scholarship totals (sum of scholarships.amount), include students with no scholarships as 0 via LEFT JOIN/COALESCE, then aggregate per department to produce average per student, total scholarship amount, and student count. Grouping and ordering are deterministic.\",\"sql\":\"WITH student_totals AS (\\n  SELECT\\n    student_id,\\n    SUM(amount) AS total_amount\\n  FROM public.scholarships\\n  GROUP BY student_id\\n)\\nSELECT\\n  d.id AS department_id,\\n  d.name AS department_name,\\n  AVG(COALESCE(st.total_amount, 0))::numeric AS avg_scholarship_amount_per_student,\\n  SUM(COALESCE(st.total_amount, 0))::numeric AS total_scholarship_amount,\\n  COUNT(s.id) AS student_count\\nFROM public.departments d\\nJOIN public.students s ON s.department_id = d.id\\nLEFT JOIN student_totals st ON st.student_id = s.id\\nGROUP BY d.id, d.name\\nORDER BY d.name ASC;\",\"assumptions\":[\"Use all rows in scholarships (no academic year/semester filter).\",\"Students without scholarship records should be counted with total 0 (handled via LEFT JOIN and COALESCE).\",\"Schema for tables is public and columns confirmed in this session: departments(id,name), students(id,department_id), scholarships(student_id,amount).\"]},\"execution\":{\"ok\":true,\"sql\":\"WITH student_totals AS (\\n  SELECT\\n    student_id,\\n    SUM(amount) AS total_amount\\n  FROM public.scholarships\\n  GROUP BY student_id\\n)\\nSELECT\\n  d.id AS department_id,\\n  d.name AS department_name,\\n  AVG(COALESCE(st.total_amount, 0))::numeric AS avg_scholarship_amount_per_student,\\n  SUM(COALESCE(st.total_amount, 0))::numeric AS total_scholarship_amount,\\n  COUNT(s.id) AS student_count\\nFROM public.departments d\\nJOIN public.students s ON s.department_id = d.id\\nLEFT JOIN student_totals st ON st.student_id = s.id\\nGROUP BY d.id, d.name\\nORDER BY d.name ASC\",\"metadata\":{\"columns\":[\"department_id\",\"student_count\",\"department_name\",\"total_scholarship_amount\",\"avg_scholarship_amount_per_student\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"total_scholarship_amount\":2500,\"avg_scholarship_amount_per_student\":119.04761904761905},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"student_count\":13,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"total_scholarship_amount\":0,\"avg_scholarship_amount_per_student\":0}]},\"data\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"total_scholarship_amount\":2500,\"avg_scholarship_amount_per_student\":119.04761904761905},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"student_count\":13,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"total_scholarship_amount\":0,\"avg_scholarship_amount_per_student\":0},{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"student_count\":20,\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"total_scholarship_amount\":2000,\"avg_scholarship_amount_per_student\":100},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"student_count\":19,\"department_name\":\"Wydział Inżynierii Produkcji\",\"total_scholarship_amount\":6000,\"avg_scholarship_amount_per_student\":315.7894736842105},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"student_count\":20,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_scholarship_amount\":12000,\"avg_scholarship_amount_per_student\":600},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"student_count\":22,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"total_scholarship_amount\":3000,\"avg_scholarship_amount_per_student\":136.36363636363637}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average scholarship amount per student by department\",\"width\":800,\"height\":420,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\",\"axis\":{\"labelAngle\":-40,\"labelLimit\":300}},\"y\":{\"field\":\"avg_scholarship_amount_per_student\",\"type\":\"quantitative\",\"title\":\"Avg scholarship per student\",\"axis\":{\"format\":\".2f\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"avg_scholarship_amount_per_student\",\"type\":\"quantitative\",\"title\":\"Avg scholarship per student\",\"format\":\".2f\"},{\"field\":\"total_scholarship_amount\",\"type\":\"quantitative\",\"title\":\"Total scholarship amount\",\"format\":\".2f\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student count\"}]}},\"reasoning\":\"Bar chart showing per-department average scholarship per student (students with no scholarships counted as 0). Tooltip includes department, average, total, and student count for context.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"Visualization uses department_name for the categorical axis — if you require a stable or lexicographic ordering independent of the query result, consider encoding an explicit sort (or using department_id for deterministic sort).\",\"Axis/tooltip do not indicate currency units; consider adding a unit (e.g., PLN, USD) to the y-axis title to match user expectation for amounts.\",\"SQL uses all-time scholarships (no date filter). If the user intended a specific academic year/semester, a filter must be added to the query (currently no temporal filter applied).\"]}}},\"startedAt\":1771846428349,\"status\":\"success\",\"output\":{\"sql\":\"WITH student_totals AS (\\n  SELECT\\n    student_id,\\n    SUM(amount) AS total_amount\\n  FROM public.scholarships\\n  GROUP BY student_id\\n)\\nSELECT\\n  d.id AS department_id,\\n  d.name AS department_name,\\n  AVG(COALESCE(st.total_amount, 0))::numeric AS avg_scholarship_amount_per_student,\\n  SUM(COALESCE(st.total_amount, 0))::numeric AS total_scholarship_amount,\\n  COUNT(s.id) AS student_count\\nFROM public.departments d\\nJOIN public.students s ON s.department_id = d.id\\nLEFT JOIN student_totals st ON st.student_id = s.id\\nGROUP BY d.id, d.name\\nORDER BY d.name ASC;\",\"data\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"total_scholarship_amount\":2500,\"avg_scholarship_amount_per_student\":119.04761904761905},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"student_count\":13,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"total_scholarship_amount\":0,\"avg_scholarship_amount_per_student\":0},{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"student_count\":20,\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"total_scholarship_amount\":2000,\"avg_scholarship_amount_per_student\":100},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"student_count\":19,\"department_name\":\"Wydział Inżynierii Produkcji\",\"total_scholarship_amount\":6000,\"avg_scholarship_amount_per_student\":315.7894736842105},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"student_count\":20,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_scholarship_amount\":12000,\"avg_scholarship_amount_per_student\":600},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"student_count\":22,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"total_scholarship_amount\":3000,\"avg_scholarship_amount_per_student\":136.36363636363637}],\"metadata\":{\"columns\":[\"department_id\",\"student_count\",\"department_name\",\"total_scholarship_amount\",\"avg_scholarship_amount_per_student\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"total_scholarship_amount\":2500,\"avg_scholarship_amount_per_student\":119.04761904761905},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"student_count\":13,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"total_scholarship_amount\":0,\"avg_scholarship_amount_per_student\":0}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average scholarship amount per student by department\",\"width\":800,\"height\":420,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\",\"axis\":{\"labelAngle\":-40,\"labelLimit\":300}},\"y\":{\"field\":\"avg_scholarship_amount_per_student\",\"type\":\"quantitative\",\"title\":\"Avg scholarship per student\",\"axis\":{\"format\":\".2f\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"avg_scholarship_amount_per_student\",\"type\":\"quantitative\",\"title\":\"Avg scholarship per student\",\"format\":\".2f\"},{\"field\":\"total_scholarship_amount\",\"type\":\"quantitative\",\"title\":\"Total scholarship amount\",\"format\":\".2f\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student count\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"Visualization uses department_name for the categorical axis — if you require a stable or lexicographic ordering independent of the query result, consider encoding an explicit sort (or using department_id for deterministic sort).\",\"Axis/tooltip do not indicate currency units; consider adding a unit (e.g., PLN, USD) to the y-axis title to match user expectation for amounts.\",\"SQL uses all-time scholarships (no date filter). If the user intended a specific academic year/semester, a filter must be added to the query (currently no temporal filter applied).\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771846428351}},\"input\":{\"question\":\"What is the average scholarship amount per student in each department?\"},\"result\":{\"sql\":\"WITH student_totals AS (\\n  SELECT\\n    student_id,\\n    SUM(amount) AS total_amount\\n  FROM public.scholarships\\n  GROUP BY student_id\\n)\\nSELECT\\n  d.id AS department_id,\\n  d.name AS department_name,\\n  AVG(COALESCE(st.total_amount, 0))::numeric AS avg_scholarship_amount_per_student,\\n  SUM(COALESCE(st.total_amount, 0))::numeric AS total_scholarship_amount,\\n  COUNT(s.id) AS student_count\\nFROM public.departments d\\nJOIN public.students s ON s.department_id = d.id\\nLEFT JOIN student_totals st ON st.student_id = s.id\\nGROUP BY d.id, d.name\\nORDER BY d.name ASC;\",\"data\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"total_scholarship_amount\":2500,\"avg_scholarship_amount_per_student\":119.04761904761905},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"student_count\":13,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"total_scholarship_amount\":0,\"avg_scholarship_amount_per_student\":0},{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"student_count\":20,\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"total_scholarship_amount\":2000,\"avg_scholarship_amount_per_student\":100},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"student_count\":19,\"department_name\":\"Wydział Inżynierii Produkcji\",\"total_scholarship_amount\":6000,\"avg_scholarship_amount_per_student\":315.7894736842105},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"student_count\":20,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_scholarship_amount\":12000,\"avg_scholarship_amount_per_student\":600},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"student_count\":22,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"total_scholarship_amount\":3000,\"avg_scholarship_amount_per_student\":136.36363636363637}],\"metadata\":{\"columns\":[\"department_id\",\"student_count\",\"department_name\",\"total_scholarship_amount\",\"avg_scholarship_amount_per_student\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"total_scholarship_amount\":2500,\"avg_scholarship_amount_per_student\":119.04761904761905},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"student_count\":13,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"total_scholarship_amount\":0,\"avg_scholarship_amount_per_student\":0}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average scholarship amount per student by department\",\"width\":800,\"height\":420,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\",\"axis\":{\"labelAngle\":-40,\"labelLimit\":300}},\"y\":{\"field\":\"avg_scholarship_amount_per_student\",\"type\":\"quantitative\",\"title\":\"Avg scholarship per student\",\"axis\":{\"format\":\".2f\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"avg_scholarship_amount_per_student\",\"type\":\"quantitative\",\"title\":\"Avg scholarship per student\",\"format\":\".2f\"},{\"field\":\"total_scholarship_amount\",\"type\":\"quantitative\",\"title\":\"Total scholarship amount\",\"format\":\".2f\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student count\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"Visualization uses department_name for the categorical axis — if you require a stable or lexicographic ordering independent of the query result, consider encoding an explicit sort (or using department_id for deterministic sort).\",\"Axis/tooltip do not indicate currency units; consider adding a unit (e.g., PLN, USD) to the y-axis title to match user expectation for amounts.\",\"SQL uses all-time scholarships (no date filter). If the user intended a specific academic year/semester, a filter must be added to the query (currently no temporal filter applied).\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"9d38fbb77c4e18930fb82b5920ecdd38\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/scholarship-per-student-by-dept/run-0001/run.json",
+    "queryPath": "runs/scholarship-per-student-by-dept/run-0001/query.sql",
+    "vegaRawPath": "runs/scholarship-per-student-by-dept/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/scholarship-per-student-by-dept/run-0001/vega.resolved.json",
+    "imagePath": "runs/scholarship-per-student-by-dept/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:33:49.000Z",
+  "traceId": "9d38fbb77c4e18930fb82b5920ecdd38",
+  "success": true,
+  "durationMs": 102192,
+  "resultRaw": {
+    "data": [
+      {
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "student_count": 21,
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "total_scholarship_amount": 2500,
+        "avg_scholarship_amount_per_student": 119.04761904761905
+      },
+      {
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "student_count": 13,
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "total_scholarship_amount": 0,
+        "avg_scholarship_amount_per_student": 0
+      },
+      {
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "student_count": 20,
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "total_scholarship_amount": 2000,
+        "avg_scholarship_amount_per_student": 100
+      },
+      {
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "student_count": 19,
+        "department_name": "Wydział Inżynierii Produkcji",
+        "total_scholarship_amount": 6000,
+        "avg_scholarship_amount_per_student": 315.7894736842105
+      },
+      {
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "student_count": 20,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "total_scholarship_amount": 12000,
+        "avg_scholarship_amount_per_student": 600
+      },
+      {
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "student_count": 22,
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "total_scholarship_amount": 3000,
+        "avg_scholarship_amount_per_student": 136.36363636363637
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average scholarship amount per student by department",
+      "width": 800,
+      "height": 420,
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "department_name",
+          "type": "nominal",
+          "title": "Department",
+          "axis": {
+            "labelAngle": -40,
+            "labelLimit": 300
+          }
+        },
+        "y": {
+          "field": "avg_scholarship_amount_per_student",
+          "type": "quantitative",
+          "title": "Avg scholarship per student",
+          "axis": {
+            "format": ".2f"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "avg_scholarship_amount_per_student",
+            "type": "quantitative",
+            "title": "Avg scholarship per student",
+            "format": ".2f"
+          },
+          {
+            "field": "total_scholarship_amount",
+            "type": "quantitative",
+            "title": "Total scholarship amount",
+            "format": ".2f"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Student count"
+          }
+        ]
+      }
+    },
+    "sql": "WITH student_totals AS (\n  SELECT\n    student_id,\n    SUM(amount) AS total_amount\n  FROM public.scholarships\n  GROUP BY student_id\n)\nSELECT\n  d.id AS department_id,\n  d.name AS department_name,\n  AVG(COALESCE(st.total_amount, 0))::numeric AS avg_scholarship_amount_per_student,\n  SUM(COALESCE(st.total_amount, 0))::numeric AS total_scholarship_amount,\n  COUNT(s.id) AS student_count\nFROM public.departments d\nJOIN public.students s ON s.department_id = d.id\nLEFT JOIN student_totals st ON st.student_id = s.id\nGROUP BY d.id, d.name\nORDER BY d.name ASC;",
+    "metadata": {
+      "columns": [
+        "department_id",
+        "student_count",
+        "department_name",
+        "total_scholarship_amount",
+        "avg_scholarship_amount_per_student"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "student_count": 21,
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "total_scholarship_amount": 2500,
+          "avg_scholarship_amount_per_student": 119.04761904761905
+        },
+        {
+          "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+          "student_count": 13,
+          "department_name": "Wydział Informatyki i Nauki o Materiałach",
+          "total_scholarship_amount": 0,
+          "avg_scholarship_amount_per_student": 0
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "Visualization uses department_name for the categorical axis — if you require a stable or lexicographic ordering independent of the query result, consider encoding an explicit sort (or using department_id for deterministic sort).",
+        "Axis/tooltip do not indicate currency units; consider adding a unit (e.g., PLN, USD) to the y-axis title to match user expectation for amounts.",
+        "SQL uses all-time scholarships (no date filter). If the user intended a specific academic year/semester, a filter must be added to the query (currently no temporal filter applied)."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "student_count": 21,
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "total_scholarship_amount": 2500,
+        "avg_scholarship_amount_per_student": 119.04761904761905
+      },
+      {
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "student_count": 13,
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "total_scholarship_amount": 0,
+        "avg_scholarship_amount_per_student": 0
+      },
+      {
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "student_count": 20,
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "total_scholarship_amount": 2000,
+        "avg_scholarship_amount_per_student": 100
+      },
+      {
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "student_count": 19,
+        "department_name": "Wydział Inżynierii Produkcji",
+        "total_scholarship_amount": 6000,
+        "avg_scholarship_amount_per_student": 315.7894736842105
+      },
+      {
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "student_count": 20,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "total_scholarship_amount": 12000,
+        "avg_scholarship_amount_per_student": 600
+      },
+      {
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "student_count": 22,
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "total_scholarship_amount": 3000,
+        "avg_scholarship_amount_per_student": 136.36363636363637
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average scholarship amount per student by department",
+      "width": 800,
+      "height": 420,
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "department_name",
+          "type": "nominal",
+          "title": "Department",
+          "axis": {
+            "labelAngle": -40,
+            "labelLimit": 300
+          }
+        },
+        "y": {
+          "field": "avg_scholarship_amount_per_student",
+          "type": "quantitative",
+          "title": "Avg scholarship per student",
+          "axis": {
+            "format": ".2f"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "avg_scholarship_amount_per_student",
+            "type": "quantitative",
+            "title": "Avg scholarship per student",
+            "format": ".2f"
+          },
+          {
+            "field": "total_scholarship_amount",
+            "type": "quantitative",
+            "title": "Total scholarship amount",
+            "format": ".2f"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Student count"
+          }
+        ]
+      }
+    },
+    "sql": "WITH student_totals AS (\n  SELECT\n    student_id,\n    SUM(amount) AS total_amount\n  FROM public.scholarships\n  GROUP BY student_id\n)\nSELECT\n  d.id AS department_id,\n  d.name AS department_name,\n  AVG(COALESCE(st.total_amount, 0))::numeric AS avg_scholarship_amount_per_student,\n  SUM(COALESCE(st.total_amount, 0))::numeric AS total_scholarship_amount,\n  COUNT(s.id) AS student_count\nFROM public.departments d\nJOIN public.students s ON s.department_id = d.id\nLEFT JOIN student_totals st ON st.student_id = s.id\nGROUP BY d.id, d.name\nORDER BY d.name ASC;",
+    "metadata": {
+      "columns": [
+        "department_id",
+        "student_count",
+        "department_name",
+        "total_scholarship_amount",
+        "avg_scholarship_amount_per_student"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "student_count": 21,
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "total_scholarship_amount": 2500,
+          "avg_scholarship_amount_per_student": 119.04761904761905
+        },
+        {
+          "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+          "student_count": 13,
+          "department_name": "Wydział Informatyki i Nauki o Materiałach",
+          "total_scholarship_amount": 0,
+          "avg_scholarship_amount_per_student": 0
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "Visualization uses department_name for the categorical axis — if you require a stable or lexicographic ordering independent of the query result, consider encoding an explicit sort (or using department_id for deterministic sort).",
+        "Axis/tooltip do not indicate currency units; consider adding a unit (e.g., PLN, USD) to the y-axis title to match user expectation for amounts.",
+        "SQL uses all-time scholarships (no date filter). If the user intended a specific academic year/semester, a filter must be added to the query (currently no temporal filter applied)."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:33:49.000Z",
+    "traceId": "9d38fbb77c4e18930fb82b5920ecdd38",
+    "attempts": 2,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 29870,
+      "outputTokens": 5855,
+      "totalTokens": 35725,
+      "cachedInputTokens": 3840,
+      "reasoningTokens": 3840,
+      "costUsd": 0.0191775
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 29870,
+        "outputTokens": 5855,
+        "totalTokens": 35725,
+        "cachedInputTokens": 3840,
+        "reasoningTokens": 3840,
+        "costUsd": 0.0191775
+      }
+    ],
+    "warnings": []
+  }
+}

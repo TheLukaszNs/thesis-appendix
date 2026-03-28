@@ -1,0 +1,650 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "grade-distribution-by-department",
+  "caseDirectory": "grade-distribution-by-department",
+  "repeatIndex": 1,
+  "prompt": "Show the grade distribution for each department",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the grade distribution for each department"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:37:31.323Z",
+    "endedAtUtc": "2026-02-22T23:38:35.023Z",
+    "durationMs": 63700
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "30984",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:38:35 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show the grade distribution for each department\"},\"sql\":{\"payload\":{\"question\":\"Show the grade distribution for each department\"},\"startedAt\":1771803451331,\"status\":\"success\",\"output\":{\"reasoning\":\"Aggregate grades by joining departments -> courses -> course_sections -> enrollments -> grades, group by department and grade_value, and compute per-department percentage. I exclude NULL grade_value entries (assumed not meaningful) so only observed grade categories are shown.\",\"sql\":\"WITH dept_grades AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    g.grade_value::text AS grade_value,\\n    COUNT(g.id) AS grade_count\\n  FROM public.departments d\\n  JOIN public.courses c ON c.department_id = d.id\\n  JOIN public.course_sections cs ON cs.course_id = c.id\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  JOIN public.grades g ON g.enrollment_id = e.id\\n  WHERE g.grade_value IS NOT NULL\\n  GROUP BY d.id, d.name, g.grade_value::text\\n)\\nSELECT\\n  department_id,\\n  department_name,\\n  grade_value,\\n  grade_count,\\n  ROUND((grade_count::numeric / SUM(grade_count) OVER (PARTITION BY department_id)) * 100, 2) AS pct_of_department\\nFROM dept_grades\\nORDER BY department_name, grade_value NULLS LAST;\",\"assumptions\":[\"grade_value is a categorical value (e.g., letter grades) and can be cast to text\",\"Show only departments/grade categories with at least one recorded (non-NULL) grade_value; departments with no grades will not appear in the result\",\"join path uses foreign keys: courses.department_id -> departments.id, course_sections.course_id -> courses.id, enrollments.course_section_id -> course_sections.id, grades.enrollment_id -> enrollments.id\"]},\"endedAt\":1771803497037},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH dept_grades AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    g.grade_value::text AS grade_value,\\n    COUNT(g.id) AS grade_count\\n  FROM public.departments d\\n  JOIN public.courses c ON c.department_id = d.id\\n  JOIN public.course_sections cs ON cs.course_id = c.id\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  JOIN public.grades g ON g.enrollment_id = e.id\\n  WHERE g.grade_value IS NOT NULL\\n  GROUP BY d.id, d.name, g.grade_value::text\\n)\\nSELECT\\n  department_id,\\n  department_name,\\n  grade_value,\\n  grade_count,\\n  ROUND((grade_count::numeric / SUM(grade_count) OVER (PARTITION BY department_id)) * 100, 2) AS pct_of_department\\nFROM dept_grades\\nORDER BY department_name, grade_value NULLS LAST;\"},\"startedAt\":1771803497040,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH dept_grades AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    g.grade_value::text AS grade_value,\\n    COUNT(g.id) AS grade_count\\n  FROM public.departments d\\n  JOIN public.courses c ON c.department_id = d.id\\n  JOIN public.course_sections cs ON cs.course_id = c.id\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  JOIN public.grades g ON g.enrollment_id = e.id\\n  WHERE g.grade_value IS NOT NULL\\n  GROUP BY d.id, d.name, g.grade_value::text\\n)\\nSELECT\\n  department_id,\\n  department_name,\\n  grade_value,\\n  grade_count,\\n  ROUND((grade_count::numeric / SUM(grade_count) OVER (PARTITION BY department_id)) * 100, 2) AS pct_of_department\\nFROM dept_grades\\nORDER BY department_name, grade_value NULLS LAST\",\"metadata\":{\"columns\":[\"grade_count\",\"grade_value\",\"department_id\",\"department_name\",\"pct_of_department\"],\"rowCount\":26,\"sample\":[{\"grade_count\":2,\"grade_value\":\"3.0\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":25},{\"grade_count\":3,\"grade_value\":\"3.5\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":37.5}]},\"data\":[{\"grade_count\":2,\"grade_value\":\"3.0\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":25},{\"grade_count\":3,\"grade_value\":\"3.5\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":37.5},{\"grade_count\":2,\"grade_value\":\"4.0\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":25},{\"grade_count\":1,\"grade_value\":\"5.0\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":12.5},{\"grade_count\":1,\"grade_value\":\"2.0\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"pct_of_department\":33.33},{\"grade_count\":1,\"grade_value\":\"3.5\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"pct_of_department\":33.33},{\"grade_count\":1,\"grade_value\":\"4.5\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"pct_of_department\":33.33},{\"grade_count\":2,\"grade_value\":\"2.0\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"pct_of_department\":25},{\"grade_count\":2,\"grade_value\":\"3.5\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"pct_of_department\":25},{\"grade_count\":1,\"grade_value\":\"4.0\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"pct_of_department\":12.5},{\"grade_count\":3,\"grade_value\":\"4.5\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"pct_of_department\":37.5},{\"grade_count\":3,\"grade_value\":\"2.0\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"pct_of_department\":30},{\"grade_count\":2,\"grade_value\":\"3.0\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"pct_of_department\":20},{\"grade_count\":2,\"grade_value\":\"4.5\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"pct_of_department\":20},{\"grade_count\":3,\"grade_value\":\"5.0\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"pct_of_department\":30},{\"grade_count\":2,\"grade_value\":\"2.0\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":12.5},{\"grade_count\":2,\"grade_value\":\"3.0\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":12.5},{\"grade_count\":2,\"grade_value\":\"3.5\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":12.5},{\"grade_count\":3,\"grade_value\":\"4.0\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":18.75},{\"grade_count\":4,\"grade_value\":\"4.5\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":25},{\"grade_count\":3,\"grade_value\":\"5.0\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":18.75},{\"grade_count\":1,\"grade_value\":\"2.0\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"pct_of_department\":14.29},{\"grade_count\":1,\"grade_value\":\"3.0\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"pct_of_department\":14.29},{\"grade_count\":1,\"grade_value\":\"3.5\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"pct_of_department\":14.29},{\"grade_count\":3,\"grade_value\":\"4.5\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"pct_of_department\":42.86},{\"grade_count\":1,\"grade_value\":\"5.0\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"pct_of_department\":14.29}]},\"endedAt\":1771803497094},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"WITH dept_grades AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    g.grade_value::text AS grade_value,\\n    COUNT(g.id) AS grade_count\\n  FROM public.departments d\\n  JOIN public.courses c ON c.department_id = d.id\\n  JOIN public.course_sections cs ON cs.course_id = c.id\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  JOIN public.grades g ON g.enrollment_id = e.id\\n  WHERE g.grade_value IS NOT NULL\\n  GROUP BY d.id, d.name, g.grade_value::text\\n)\\nSELECT\\n  department_id,\\n  department_name,\\n  grade_value,\\n  grade_count,\\n  ROUND((grade_count::numeric / SUM(grade_count) OVER (PARTITION BY department_id)) * 100, 2) AS pct_of_department\\nFROM dept_grades\\nORDER BY department_name, grade_value NULLS LAST\",\"metadata\":{\"columns\":[\"grade_count\",\"grade_value\",\"department_id\",\"department_name\",\"pct_of_department\"],\"rowCount\":26,\"sample\":[{\"grade_count\":2,\"grade_value\":\"3.0\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":25},{\"grade_count\":3,\"grade_value\":\"3.5\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":37.5}]},\"data\":[{\"grade_count\":2,\"grade_value\":\"3.0\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":25},{\"grade_count\":3,\"grade_value\":\"3.5\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":37.5},{\"grade_count\":2,\"grade_value\":\"4.0\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":25},{\"grade_count\":1,\"grade_value\":\"5.0\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":12.5},{\"grade_count\":1,\"grade_value\":\"2.0\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"pct_of_department\":33.33},{\"grade_count\":1,\"grade_value\":\"3.5\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"pct_of_department\":33.33},{\"grade_count\":1,\"grade_value\":\"4.5\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"pct_of_department\":33.33},{\"grade_count\":2,\"grade_value\":\"2.0\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"pct_of_department\":25},{\"grade_count\":2,\"grade_value\":\"3.5\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"pct_of_department\":25},{\"grade_count\":1,\"grade_value\":\"4.0\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"pct_of_department\":12.5},{\"grade_count\":3,\"grade_value\":\"4.5\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"pct_of_department\":37.5},{\"grade_count\":3,\"grade_value\":\"2.0\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"pct_of_department\":30},{\"grade_count\":2,\"grade_value\":\"3.0\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"pct_of_department\":20},{\"grade_count\":2,\"grade_value\":\"4.5\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"pct_of_department\":20},{\"grade_count\":3,\"grade_value\":\"5.0\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"pct_of_department\":30},{\"grade_count\":2,\"grade_value\":\"2.0\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":12.5},{\"grade_count\":2,\"grade_value\":\"3.0\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":12.5},{\"grade_count\":2,\"grade_value\":\"3.5\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":12.5},{\"grade_count\":3,\"grade_value\":\"4.0\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":18.75},{\"grade_count\":4,\"grade_value\":\"4.5\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":25},{\"grade_count\":3,\"grade_value\":\"5.0\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":18.75},{\"grade_count\":1,\"grade_value\":\"2.0\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"pct_of_department\":14.29},{\"grade_count\":1,\"grade_value\":\"3.0\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"pct_of_department\":14.29},{\"grade_count\":1,\"grade_value\":\"3.5\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"pct_of_department\":14.29},{\"grade_count\":3,\"grade_value\":\"4.5\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"pct_of_department\":42.86},{\"grade_count\":1,\"grade_value\":\"5.0\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"pct_of_department\":14.29}]},\"startedAt\":1771803497098,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Grade distribution by department (percent)\",\"data\":{\"name\":\"query_result\"},\"width\":800,\"height\":400,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-40,\"labelOverlap\":\"parity\",\"title\":\"Department\"}},\"y\":{\"field\":\"pct_of_department\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Percent of department (%)\"}},\"color\":{\"field\":\"grade_value\",\"type\":\"nominal\",\"legend\":{\"title\":\"Grade\"}},\"order\":{\"field\":\"grade_value\",\"sort\":\"descending\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"pct_of_department\",\"type\":\"quantitative\",\"title\":\"Pct of dept (%)\"}]}},\"reasoning\":\"Stacked bar chart showing each department on the x-axis with bars broken down by grade_value. The y-axis uses the precomputed pct_of_department so each department's bar shows percent distribution by grade; tooltip includes counts and percent for details.\"},\"endedAt\":1771803514981},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Grade distribution by department (percent)\",\"data\":{\"name\":\"query_result\"},\"width\":800,\"height\":400,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-40,\"labelOverlap\":\"parity\",\"title\":\"Department\"}},\"y\":{\"field\":\"pct_of_department\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Percent of department (%)\"}},\"color\":{\"field\":\"grade_value\",\"type\":\"nominal\",\"legend\":{\"title\":\"Grade\"}},\"order\":{\"field\":\"grade_value\",\"sort\":\"descending\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"pct_of_department\",\"type\":\"quantitative\",\"title\":\"Pct of dept (%)\"}]}},\"reasoning\":\"Stacked bar chart showing each department on the x-axis with bars broken down by grade_value. The y-axis uses the precomputed pct_of_department so each department's bar shows percent distribution by grade; tooltip includes counts and percent for details.\"},\"startedAt\":1771803514989,\"status\":\"success\",\"output\":{\"sql\":\"WITH dept_grades AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    g.grade_value::text AS grade_value,\\n    COUNT(g.id) AS grade_count\\n  FROM public.departments d\\n  JOIN public.courses c ON c.department_id = d.id\\n  JOIN public.course_sections cs ON cs.course_id = c.id\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  JOIN public.grades g ON g.enrollment_id = e.id\\n  WHERE g.grade_value IS NOT NULL\\n  GROUP BY d.id, d.name, g.grade_value::text\\n)\\nSELECT\\n  department_id,\\n  department_name,\\n  grade_value,\\n  grade_count,\\n  ROUND((grade_count::numeric / SUM(grade_count) OVER (PARTITION BY department_id)) * 100, 2) AS pct_of_department\\nFROM dept_grades\\nORDER BY department_name, grade_value NULLS LAST;\",\"data\":[{\"grade_count\":2,\"grade_value\":\"3.0\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":25},{\"grade_count\":3,\"grade_value\":\"3.5\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":37.5},{\"grade_count\":2,\"grade_value\":\"4.0\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":25},{\"grade_count\":1,\"grade_value\":\"5.0\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":12.5},{\"grade_count\":1,\"grade_value\":\"2.0\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"pct_of_department\":33.33},{\"grade_count\":1,\"grade_value\":\"3.5\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"pct_of_department\":33.33},{\"grade_count\":1,\"grade_value\":\"4.5\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"pct_of_department\":33.33},{\"grade_count\":2,\"grade_value\":\"2.0\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"pct_of_department\":25},{\"grade_count\":2,\"grade_value\":\"3.5\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"pct_of_department\":25},{\"grade_count\":1,\"grade_value\":\"4.0\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"pct_of_department\":12.5},{\"grade_count\":3,\"grade_value\":\"4.5\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"pct_of_department\":37.5},{\"grade_count\":3,\"grade_value\":\"2.0\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"pct_of_department\":30},{\"grade_count\":2,\"grade_value\":\"3.0\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"pct_of_department\":20},{\"grade_count\":2,\"grade_value\":\"4.5\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"pct_of_department\":20},{\"grade_count\":3,\"grade_value\":\"5.0\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"pct_of_department\":30},{\"grade_count\":2,\"grade_value\":\"2.0\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":12.5},{\"grade_count\":2,\"grade_value\":\"3.0\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":12.5},{\"grade_count\":2,\"grade_value\":\"3.5\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":12.5},{\"grade_count\":3,\"grade_value\":\"4.0\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":18.75},{\"grade_count\":4,\"grade_value\":\"4.5\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":25},{\"grade_count\":3,\"grade_value\":\"5.0\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":18.75},{\"grade_count\":1,\"grade_value\":\"2.0\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"pct_of_department\":14.29},{\"grade_count\":1,\"grade_value\":\"3.0\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"pct_of_department\":14.29},{\"grade_count\":1,\"grade_value\":\"3.5\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"pct_of_department\":14.29},{\"grade_count\":3,\"grade_value\":\"4.5\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"pct_of_department\":42.86},{\"grade_count\":1,\"grade_value\":\"5.0\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"pct_of_department\":14.29}],\"metadata\":{\"columns\":[\"grade_count\",\"grade_value\",\"department_id\",\"department_name\",\"pct_of_department\"],\"rowCount\":26,\"sample\":[{\"grade_count\":2,\"grade_value\":\"3.0\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":25},{\"grade_count\":3,\"grade_value\":\"3.5\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":37.5}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Grade distribution by department (percent)\",\"data\":{\"name\":\"query_result\"},\"width\":800,\"height\":400,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-40,\"labelOverlap\":\"parity\",\"title\":\"Department\"}},\"y\":{\"field\":\"pct_of_department\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Percent of department (%)\"}},\"color\":{\"field\":\"grade_value\",\"type\":\"nominal\",\"legend\":{\"title\":\"Grade\"}},\"order\":{\"field\":\"grade_value\",\"sort\":\"descending\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"pct_of_department\",\"type\":\"quantitative\",\"title\":\"Pct of dept (%)\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771803514993}},\"input\":{\"question\":\"Show the grade distribution for each department\"},\"result\":{\"sql\":\"WITH dept_grades AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    g.grade_value::text AS grade_value,\\n    COUNT(g.id) AS grade_count\\n  FROM public.departments d\\n  JOIN public.courses c ON c.department_id = d.id\\n  JOIN public.course_sections cs ON cs.course_id = c.id\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  JOIN public.grades g ON g.enrollment_id = e.id\\n  WHERE g.grade_value IS NOT NULL\\n  GROUP BY d.id, d.name, g.grade_value::text\\n)\\nSELECT\\n  department_id,\\n  department_name,\\n  grade_value,\\n  grade_count,\\n  ROUND((grade_count::numeric / SUM(grade_count) OVER (PARTITION BY department_id)) * 100, 2) AS pct_of_department\\nFROM dept_grades\\nORDER BY department_name, grade_value NULLS LAST;\",\"data\":[{\"grade_count\":2,\"grade_value\":\"3.0\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":25},{\"grade_count\":3,\"grade_value\":\"3.5\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":37.5},{\"grade_count\":2,\"grade_value\":\"4.0\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":25},{\"grade_count\":1,\"grade_value\":\"5.0\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":12.5},{\"grade_count\":1,\"grade_value\":\"2.0\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"pct_of_department\":33.33},{\"grade_count\":1,\"grade_value\":\"3.5\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"pct_of_department\":33.33},{\"grade_count\":1,\"grade_value\":\"4.5\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"pct_of_department\":33.33},{\"grade_count\":2,\"grade_value\":\"2.0\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"pct_of_department\":25},{\"grade_count\":2,\"grade_value\":\"3.5\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"pct_of_department\":25},{\"grade_count\":1,\"grade_value\":\"4.0\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"pct_of_department\":12.5},{\"grade_count\":3,\"grade_value\":\"4.5\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"pct_of_department\":37.5},{\"grade_count\":3,\"grade_value\":\"2.0\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"pct_of_department\":30},{\"grade_count\":2,\"grade_value\":\"3.0\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"pct_of_department\":20},{\"grade_count\":2,\"grade_value\":\"4.5\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"pct_of_department\":20},{\"grade_count\":3,\"grade_value\":\"5.0\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"pct_of_department\":30},{\"grade_count\":2,\"grade_value\":\"2.0\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":12.5},{\"grade_count\":2,\"grade_value\":\"3.0\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":12.5},{\"grade_count\":2,\"grade_value\":\"3.5\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":12.5},{\"grade_count\":3,\"grade_value\":\"4.0\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":18.75},{\"grade_count\":4,\"grade_value\":\"4.5\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":25},{\"grade_count\":3,\"grade_value\":\"5.0\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"pct_of_department\":18.75},{\"grade_count\":1,\"grade_value\":\"2.0\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"pct_of_department\":14.29},{\"grade_count\":1,\"grade_value\":\"3.0\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"pct_of_department\":14.29},{\"grade_count\":1,\"grade_value\":\"3.5\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"pct_of_department\":14.29},{\"grade_count\":3,\"grade_value\":\"4.5\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"pct_of_department\":42.86},{\"grade_count\":1,\"grade_value\":\"5.0\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"pct_of_department\":14.29}],\"metadata\":{\"columns\":[\"grade_count\",\"grade_value\",\"department_id\",\"department_name\",\"pct_of_department\"],\"rowCount\":26,\"sample\":[{\"grade_count\":2,\"grade_value\":\"3.0\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":25},{\"grade_count\":3,\"grade_value\":\"3.5\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"pct_of_department\":37.5}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Grade distribution by department (percent)\",\"data\":{\"name\":\"query_result\"},\"width\":800,\"height\":400,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-40,\"labelOverlap\":\"parity\",\"title\":\"Department\"}},\"y\":{\"field\":\"pct_of_department\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Percent of department (%)\"}},\"color\":{\"field\":\"grade_value\",\"type\":\"nominal\",\"legend\":{\"title\":\"Grade\"}},\"order\":{\"field\":\"grade_value\",\"sort\":\"descending\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"pct_of_department\",\"type\":\"quantitative\",\"title\":\"Pct of dept (%)\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"983d5cff8f41fadbd2016902b66b7ba8\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/grade-distribution-by-department/run-0001/run.json",
+    "queryPath": "runs/grade-distribution-by-department/run-0001/query.sql",
+    "vegaRawPath": "runs/grade-distribution-by-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/grade-distribution-by-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/grade-distribution-by-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:38:35.452Z",
+  "traceId": "983d5cff8f41fadbd2016902b66b7ba8",
+  "success": true,
+  "durationMs": 64129,
+  "resultRaw": {
+    "data": [
+      {
+        "grade_count": 2,
+        "grade_value": "3.0",
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "pct_of_department": 25
+      },
+      {
+        "grade_count": 3,
+        "grade_value": "3.5",
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "pct_of_department": 37.5
+      },
+      {
+        "grade_count": 2,
+        "grade_value": "4.0",
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "pct_of_department": 25
+      },
+      {
+        "grade_count": 1,
+        "grade_value": "5.0",
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "pct_of_department": 12.5
+      },
+      {
+        "grade_count": 1,
+        "grade_value": "2.0",
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "pct_of_department": 33.33
+      },
+      {
+        "grade_count": 1,
+        "grade_value": "3.5",
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "pct_of_department": 33.33
+      },
+      {
+        "grade_count": 1,
+        "grade_value": "4.5",
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "pct_of_department": 33.33
+      },
+      {
+        "grade_count": 2,
+        "grade_value": "2.0",
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "pct_of_department": 25
+      },
+      {
+        "grade_count": 2,
+        "grade_value": "3.5",
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "pct_of_department": 25
+      },
+      {
+        "grade_count": 1,
+        "grade_value": "4.0",
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "pct_of_department": 12.5
+      },
+      {
+        "grade_count": 3,
+        "grade_value": "4.5",
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "pct_of_department": 37.5
+      },
+      {
+        "grade_count": 3,
+        "grade_value": "2.0",
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "pct_of_department": 30
+      },
+      {
+        "grade_count": 2,
+        "grade_value": "3.0",
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "pct_of_department": 20
+      },
+      {
+        "grade_count": 2,
+        "grade_value": "4.5",
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "pct_of_department": 20
+      },
+      {
+        "grade_count": 3,
+        "grade_value": "5.0",
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "pct_of_department": 30
+      },
+      {
+        "grade_count": 2,
+        "grade_value": "2.0",
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "pct_of_department": 12.5
+      },
+      {
+        "grade_count": 2,
+        "grade_value": "3.0",
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "pct_of_department": 12.5
+      },
+      {
+        "grade_count": 2,
+        "grade_value": "3.5",
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "pct_of_department": 12.5
+      },
+      {
+        "grade_count": 3,
+        "grade_value": "4.0",
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "pct_of_department": 18.75
+      },
+      {
+        "grade_count": 4,
+        "grade_value": "4.5",
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "pct_of_department": 25
+      },
+      {
+        "grade_count": 3,
+        "grade_value": "5.0",
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "pct_of_department": 18.75
+      },
+      {
+        "grade_count": 1,
+        "grade_value": "2.0",
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "pct_of_department": 14.29
+      },
+      {
+        "grade_count": 1,
+        "grade_value": "3.0",
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "pct_of_department": 14.29
+      },
+      {
+        "grade_count": 1,
+        "grade_value": "3.5",
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "pct_of_department": 14.29
+      },
+      {
+        "grade_count": 3,
+        "grade_value": "4.5",
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "pct_of_department": 42.86
+      },
+      {
+        "grade_count": 1,
+        "grade_value": "5.0",
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "pct_of_department": 14.29
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Grade distribution by department (percent)",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 800,
+      "height": 400,
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "department_name",
+          "type": "nominal",
+          "axis": {
+            "labelAngle": -40,
+            "labelOverlap": "parity",
+            "title": "Department"
+          }
+        },
+        "y": {
+          "field": "pct_of_department",
+          "type": "quantitative",
+          "axis": {
+            "title": "Percent of department (%)"
+          }
+        },
+        "color": {
+          "field": "grade_value",
+          "type": "nominal",
+          "legend": {
+            "title": "Grade"
+          }
+        },
+        "order": {
+          "field": "grade_value",
+          "sort": "descending"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "grade_value",
+            "type": "nominal",
+            "title": "Grade"
+          },
+          {
+            "field": "grade_count",
+            "type": "quantitative",
+            "title": "Count"
+          },
+          {
+            "field": "pct_of_department",
+            "type": "quantitative",
+            "title": "Pct of dept (%)"
+          }
+        ]
+      }
+    },
+    "sql": "WITH dept_grades AS (\n  SELECT\n    d.id AS department_id,\n    d.name AS department_name,\n    g.grade_value::text AS grade_value,\n    COUNT(g.id) AS grade_count\n  FROM public.departments d\n  JOIN public.courses c ON c.department_id = d.id\n  JOIN public.course_sections cs ON cs.course_id = c.id\n  JOIN public.enrollments e ON e.course_section_id = cs.id\n  JOIN public.grades g ON g.enrollment_id = e.id\n  WHERE g.grade_value IS NOT NULL\n  GROUP BY d.id, d.name, g.grade_value::text\n)\nSELECT\n  department_id,\n  department_name,\n  grade_value,\n  grade_count,\n  ROUND((grade_count::numeric / SUM(grade_count) OVER (PARTITION BY department_id)) * 100, 2) AS pct_of_department\nFROM dept_grades\nORDER BY department_name, grade_value NULLS LAST;",
+    "metadata": {
+      "columns": [
+        "grade_count",
+        "grade_value",
+        "department_id",
+        "department_name",
+        "pct_of_department"
+      ],
+      "rowCount": 26,
+      "sample": [
+        {
+          "grade_count": 2,
+          "grade_value": "3.0",
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "pct_of_department": 25
+        },
+        {
+          "grade_count": 3,
+          "grade_value": "3.5",
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "pct_of_department": 37.5
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "grade_count": 2,
+        "grade_value": "3.0",
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "pct_of_department": 25
+      },
+      {
+        "grade_count": 3,
+        "grade_value": "3.5",
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "pct_of_department": 37.5
+      },
+      {
+        "grade_count": 2,
+        "grade_value": "4.0",
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "pct_of_department": 25
+      },
+      {
+        "grade_count": 1,
+        "grade_value": "5.0",
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "pct_of_department": 12.5
+      },
+      {
+        "grade_count": 1,
+        "grade_value": "2.0",
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "pct_of_department": 33.33
+      },
+      {
+        "grade_count": 1,
+        "grade_value": "3.5",
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "pct_of_department": 33.33
+      },
+      {
+        "grade_count": 1,
+        "grade_value": "4.5",
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "pct_of_department": 33.33
+      },
+      {
+        "grade_count": 2,
+        "grade_value": "2.0",
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "pct_of_department": 25
+      },
+      {
+        "grade_count": 2,
+        "grade_value": "3.5",
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "pct_of_department": 25
+      },
+      {
+        "grade_count": 1,
+        "grade_value": "4.0",
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "pct_of_department": 12.5
+      },
+      {
+        "grade_count": 3,
+        "grade_value": "4.5",
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "pct_of_department": 37.5
+      },
+      {
+        "grade_count": 3,
+        "grade_value": "2.0",
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "pct_of_department": 30
+      },
+      {
+        "grade_count": 2,
+        "grade_value": "3.0",
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "pct_of_department": 20
+      },
+      {
+        "grade_count": 2,
+        "grade_value": "4.5",
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "pct_of_department": 20
+      },
+      {
+        "grade_count": 3,
+        "grade_value": "5.0",
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "pct_of_department": 30
+      },
+      {
+        "grade_count": 2,
+        "grade_value": "2.0",
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "pct_of_department": 12.5
+      },
+      {
+        "grade_count": 2,
+        "grade_value": "3.0",
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "pct_of_department": 12.5
+      },
+      {
+        "grade_count": 2,
+        "grade_value": "3.5",
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "pct_of_department": 12.5
+      },
+      {
+        "grade_count": 3,
+        "grade_value": "4.0",
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "pct_of_department": 18.75
+      },
+      {
+        "grade_count": 4,
+        "grade_value": "4.5",
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "pct_of_department": 25
+      },
+      {
+        "grade_count": 3,
+        "grade_value": "5.0",
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "pct_of_department": 18.75
+      },
+      {
+        "grade_count": 1,
+        "grade_value": "2.0",
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "pct_of_department": 14.29
+      },
+      {
+        "grade_count": 1,
+        "grade_value": "3.0",
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "pct_of_department": 14.29
+      },
+      {
+        "grade_count": 1,
+        "grade_value": "3.5",
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "pct_of_department": 14.29
+      },
+      {
+        "grade_count": 3,
+        "grade_value": "4.5",
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "pct_of_department": 42.86
+      },
+      {
+        "grade_count": 1,
+        "grade_value": "5.0",
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "pct_of_department": 14.29
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Grade distribution by department (percent)",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 800,
+      "height": 400,
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "department_name",
+          "type": "nominal",
+          "axis": {
+            "labelAngle": -40,
+            "labelOverlap": "parity",
+            "title": "Department"
+          }
+        },
+        "y": {
+          "field": "pct_of_department",
+          "type": "quantitative",
+          "axis": {
+            "title": "Percent of department (%)"
+          }
+        },
+        "color": {
+          "field": "grade_value",
+          "type": "nominal",
+          "legend": {
+            "title": "Grade"
+          }
+        },
+        "order": {
+          "field": "grade_value",
+          "sort": "descending"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "grade_value",
+            "type": "nominal",
+            "title": "Grade"
+          },
+          {
+            "field": "grade_count",
+            "type": "quantitative",
+            "title": "Count"
+          },
+          {
+            "field": "pct_of_department",
+            "type": "quantitative",
+            "title": "Pct of dept (%)"
+          }
+        ]
+      }
+    },
+    "sql": "WITH dept_grades AS (\n  SELECT\n    d.id AS department_id,\n    d.name AS department_name,\n    g.grade_value::text AS grade_value,\n    COUNT(g.id) AS grade_count\n  FROM public.departments d\n  JOIN public.courses c ON c.department_id = d.id\n  JOIN public.course_sections cs ON cs.course_id = c.id\n  JOIN public.enrollments e ON e.course_section_id = cs.id\n  JOIN public.grades g ON g.enrollment_id = e.id\n  WHERE g.grade_value IS NOT NULL\n  GROUP BY d.id, d.name, g.grade_value::text\n)\nSELECT\n  department_id,\n  department_name,\n  grade_value,\n  grade_count,\n  ROUND((grade_count::numeric / SUM(grade_count) OVER (PARTITION BY department_id)) * 100, 2) AS pct_of_department\nFROM dept_grades\nORDER BY department_name, grade_value NULLS LAST;",
+    "metadata": {
+      "columns": [
+        "grade_count",
+        "grade_value",
+        "department_id",
+        "department_name",
+        "pct_of_department"
+      ],
+      "rowCount": 26,
+      "sample": [
+        {
+          "grade_count": 2,
+          "grade_value": "3.0",
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "pct_of_department": 25
+        },
+        {
+          "grade_count": 3,
+          "grade_value": "3.5",
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "pct_of_department": 37.5
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:38:35.452Z",
+    "traceId": "983d5cff8f41fadbd2016902b66b7ba8",
+    "attempts": 3,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 21532,
+      "outputTokens": 4756,
+      "totalTokens": 26288,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 3520,
+      "costUsd": 0.014895
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 21532,
+        "outputTokens": 4756,
+        "totalTokens": 26288,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 3520,
+        "costUsd": 0.014895
+      }
+    ],
+    "warnings": []
+  }
+}

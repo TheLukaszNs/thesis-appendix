@@ -1,0 +1,588 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "students-enrolled-per-course",
+  "caseDirectory": "students-enrolled-per-course",
+  "repeatIndex": 1,
+  "prompt": "How many students are enrolled in each course?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many students are enrolled in each course?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:11:36.920Z",
+    "endedAtUtc": "2026-02-23T11:13:19.142Z",
+    "durationMs": 102222
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "38460",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:13:19 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How many students are enrolled in each course?\"},\"planner\":{\"payload\":{\"question\":\"How many students are enrolled in each course?\"},\"startedAt\":1771845096937,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT enrollments.student_id)\"],\"dimensions\":[\"courses.id\",\"courses.code\",\"courses.name\"],\"filters\":[\"enrollments.is_active = true\"],\"grain\":\"per course (aggregate across all sections of a course)\",\"aliases\":{\"courses.id\":\"course_id\",\"courses.code\":\"course_code\",\"courses.name\":\"course_name\",\"COUNT(DISTINCT enrollments.student_id)\":\"enrolled_students\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"enrolled_students\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_name\",\"y_axis\":\"enrolled_students\",\"title\":\"Students Enrolled per Course\"},\"assumptions\":[\"Confirmed tables and columns via schema inspection: public.enrollments (student_id, course_section_id, is_active), public.course_sections (id, course_id), public.courses (id, code, name).\",\"Join path: enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id.\",\"Count uses COUNT(DISTINCT enrollments.student_id) to avoid double-counting a student who might appear in multiple sections of the same course. If you prefer counting enrollment rows instead, replace metric with COUNT(enrollments.id).\",\"Only active enrollments are counted (enrollments.is_active = true). If you want to include inactive enrollments, remove that filter.\",\"Grain is per course (aggregated across all sections and semesters). If you need enrollment by section or by semester/year, the plan must be adjusted.\",\"Output field aliases listed under output_fields must be returned exactly by the SQL used by the visualization.\"]}},\"endedAt\":1771845138353},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT enrollments.student_id)\"],\"dimensions\":[\"courses.id\",\"courses.code\",\"courses.name\"],\"filters\":[\"enrollments.is_active = true\"],\"grain\":\"per course (aggregate across all sections of a course)\",\"aliases\":{\"courses.id\":\"course_id\",\"courses.code\":\"course_code\",\"courses.name\":\"course_name\",\"COUNT(DISTINCT enrollments.student_id)\":\"enrolled_students\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"enrolled_students\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_name\",\"y_axis\":\"enrolled_students\",\"title\":\"Students Enrolled per Course\"},\"assumptions\":[\"Confirmed tables and columns via schema inspection: public.enrollments (student_id, course_section_id, is_active), public.course_sections (id, course_id), public.courses (id, code, name).\",\"Join path: enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id.\",\"Count uses COUNT(DISTINCT enrollments.student_id) to avoid double-counting a student who might appear in multiple sections of the same course. If you prefer counting enrollment rows instead, replace metric with COUNT(enrollments.id).\",\"Only active enrollments are counted (enrollments.is_active = true). If you want to include inactive enrollments, remove that filter.\",\"Grain is per course (aggregated across all sections and semesters). If you need enrollment by section or by semester/year, the plan must be adjusted.\",\"Output field aliases listed under output_fields must be returned exactly by the SQL used by the visualization.\"]}},\"startedAt\":1771845138366,\"status\":\"success\",\"output\":{\"question\":\"How many students are enrolled in each course?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT enrollments.student_id)\"],\"dimensions\":[\"courses.id\",\"courses.code\",\"courses.name\"],\"filters\":[\"enrollments.is_active = true\"],\"grain\":\"per course (aggregate across all sections of a course)\",\"aliases\":{\"courses.id\":\"course_id\",\"courses.code\":\"course_code\",\"courses.name\":\"course_name\",\"COUNT(DISTINCT enrollments.student_id)\":\"enrolled_students\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"enrolled_students\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_name\",\"y_axis\":\"enrolled_students\",\"title\":\"Students Enrolled per Course\"},\"assumptions\":[\"Confirmed tables and columns via schema inspection: public.enrollments (student_id, course_section_id, is_active), public.course_sections (id, course_id), public.courses (id, code, name).\",\"Join path: enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id.\",\"Count uses COUNT(DISTINCT enrollments.student_id) to avoid double-counting a student who might appear in multiple sections of the same course. If you prefer counting enrollment rows instead, replace metric with COUNT(enrollments.id).\",\"Only active enrollments are counted (enrollments.is_active = true). If you want to include inactive enrollments, remove that filter.\",\"Grain is per course (aggregated across all sections and semesters). If you need enrollment by section or by semester/year, the plan must be adjusted.\",\"Output field aliases listed under output_fields must be returned exactly by the SQL used by the visualization.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771845138369},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"How many students are enrolled in each course?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT enrollments.student_id)\"],\"dimensions\":[\"courses.id\",\"courses.code\",\"courses.name\"],\"filters\":[\"enrollments.is_active = true\"],\"grain\":\"per course (aggregate across all sections of a course)\",\"aliases\":{\"courses.id\":\"course_id\",\"courses.code\":\"course_code\",\"courses.name\":\"course_name\",\"COUNT(DISTINCT enrollments.student_id)\":\"enrolled_students\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"enrolled_students\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_name\",\"y_axis\":\"enrolled_students\",\"title\":\"Students Enrolled per Course\"},\"assumptions\":[\"Confirmed tables and columns via schema inspection: public.enrollments (student_id, course_section_id, is_active), public.course_sections (id, course_id), public.courses (id, code, name).\",\"Join path: enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id.\",\"Count uses COUNT(DISTINCT enrollments.student_id) to avoid double-counting a student who might appear in multiple sections of the same course. If you prefer counting enrollment rows instead, replace metric with COUNT(enrollments.id).\",\"Only active enrollments are counted (enrollments.is_active = true). If you want to include inactive enrollments, remove that filter.\",\"Grain is per course (aggregated across all sections and semesters). If you need enrollment by section or by semester/year, the plan must be adjusted.\",\"Output field aliases listed under output_fields must be returned exactly by the SQL used by the visualization.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771845138372,\"status\":\"success\",\"output\":{\"question\":\"How many students are enrolled in each course?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT enrollments.student_id)\"],\"dimensions\":[\"courses.id\",\"courses.code\",\"courses.name\"],\"filters\":[\"enrollments.is_active = true\"],\"grain\":\"per course (aggregate across all sections of a course)\",\"aliases\":{\"courses.id\":\"course_id\",\"courses.code\":\"course_code\",\"courses.name\":\"course_name\",\"COUNT(DISTINCT enrollments.student_id)\":\"enrolled_students\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"enrolled_students\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_name\",\"y_axis\":\"enrolled_students\",\"title\":\"Students Enrolled per Course\"},\"assumptions\":[\"Confirmed tables and columns via schema inspection: public.enrollments (student_id, course_section_id, is_active), public.course_sections (id, course_id), public.courses (id, code, name).\",\"Join path: enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id.\",\"Count uses COUNT(DISTINCT enrollments.student_id) to avoid double-counting a student who might appear in multiple sections of the same course. If you prefer counting enrollment rows instead, replace metric with COUNT(enrollments.id).\",\"Only active enrollments are counted (enrollments.is_active = true). If you want to include inactive enrollments, remove that filter.\",\"Grain is per course (aggregated across all sections and semesters). If you need enrollment by section or by semester/year, the plan must be adjusted.\",\"Output field aliases listed under output_fields must be returned exactly by the SQL used by the visualization.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT c.id AS course_id,\\n       c.code AS course_code,\\n       c.name AS course_name,\\n       COUNT(DISTINCT e.student_id) AS enrolled_students\\nFROM public.courses AS c\\nLEFT JOIN public.course_sections AS cs\\n  ON cs.course_id = c.id\\nLEFT JOIN public.enrollments AS e\\n  ON e.course_section_id = cs.id\\n  AND e.is_active = true\\nGROUP BY c.id, c.code, c.name\\nORDER BY enrolled_students DESC, c.code ASC;\",\"validationIssues\":[\"The SQL uses LEFT JOINs so courses with zero active enrollments will appear with enrolled_students = 0. If you intended to exclude courses without any active enrollments, use INNER JOIN (or filter WHERE enrolled_students > 0).\",\"A bar chart with course_name on the x-axis can get crowded for many courses (rowCount=26). Consider a horizontal bar chart, paging, or interactive filtering if labels overlap despite labelAngle=-40.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Aggregate active enrollments per course by joining courses -> course_sections -> enrollments and counting distinct student_id to avoid double-counting students in multiple sections. LEFT JOINs are used so courses with zero active enrollments appear with 0. Results ordered deterministically by enrolled count then course_code.\",\"sql\":\"SELECT c.id AS course_id,\\n       c.code AS course_code,\\n       c.name AS course_name,\\n       COUNT(DISTINCT e.student_id) AS enrolled_students\\nFROM public.courses AS c\\nLEFT JOIN public.course_sections AS cs\\n  ON cs.course_id = c.id\\nLEFT JOIN public.enrollments AS e\\n  ON e.course_section_id = cs.id\\n  AND e.is_active = true\\nGROUP BY c.id, c.code, c.name\\nORDER BY enrolled_students DESC, c.code ASC;\",\"assumptions\":[\"Tables and columns confirmed in public schema: enrollments(student_id, course_section_id, is_active), course_sections(id, course_id), courses(id, code, name).\",\"Join path: enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id.\",\"Counting uses COUNT(DISTINCT enrollments.student_id) to avoid double-counting a student across multiple sections of the same course.\",\"Only active enrollments are counted via e.is_active = true in the JOIN; courses with zero active enrollments are included (yielding 0).\",\"Output aliases must match planner output_fields: course_id, course_code, course_name, enrolled_students.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT c.id AS course_id,\\n       c.code AS course_code,\\n       c.name AS course_name,\\n       COUNT(DISTINCT e.student_id) AS enrolled_students\\nFROM public.courses AS c\\nLEFT JOIN public.course_sections AS cs\\n  ON cs.course_id = c.id\\nLEFT JOIN public.enrollments AS e\\n  ON e.course_section_id = cs.id\\n  AND e.is_active = true\\nGROUP BY c.id, c.code, c.name\\nORDER BY enrolled_students DESC, c.code ASC\",\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"enrolled_students\"],\"rowCount\":26,\"sample\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"enrolled_students\":7},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"enrolled_students\":5}]},\"data\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"enrolled_students\":7},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"enrolled_students\":5},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"enrolled_students\":5},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"enrolled_students\":4},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"enrolled_students\":4},{\"course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"enrolled_students\":4},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"enrolled_students\":4},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"enrolled_students\":3},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"enrolled_students\":3},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"enrolled_students\":3},{\"course_id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"enrolled_students\":2},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"enrolled_students\":2},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"enrolled_students\":2},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"enrolled_students\":2},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"enrolled_students\":2},{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"enrolled_students\":1},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"enrolled_students\":1},{\"course_id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"course_code\":\"HMI-889\",\"course_name\":\"Elektronika\",\"enrolled_students\":1},{\"course_id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"enrolled_students\":1},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"enrolled_students\":1},{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"enrolled_students\":0},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"enrolled_students\":0},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"enrolled_students\":0},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\",\"enrolled_students\":0},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\",\"enrolled_students\":0},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\",\"enrolled_students\":0}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Students Enrolled per Course\",\"width\":800,\"height\":420,\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"course_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course\",\"labelAngle\":-40},\"sort\":{\"field\":\"enrolled_students\",\"order\":\"descending\"}},\"y\":{\"field\":\"enrolled_students\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Enrolled Students\"}},\"tooltip\":[{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course\"},{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"enrolled_students\",\"type\":\"quantitative\",\"title\":\"Enrolled Students\"},{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"}]}},\"reasoning\":\"A vertical bar chart shows enrolled_students (quantitative) per course_name (nominal). Bars are sorted descending by enrolled_students to highlight largest enrollments; tooltip includes course_code and course_id for reference. The spec uses only fields present in the query_result metadata.\"},\"validation\":{\"passed\":true,\"score\":0.8,\"issues\":[\"The SQL uses LEFT JOINs so courses with zero active enrollments will appear with enrolled_students = 0. If you intended to exclude courses without any active enrollments, use INNER JOIN (or filter WHERE enrolled_students > 0).\",\"A bar chart with course_name on the x-axis can get crowded for many courses (rowCount=26). Consider a horizontal bar chart, paging, or interactive filtering if labels overlap despite labelAngle=-40.\"]}}},\"endedAt\":1771845199113,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"How many students are enrolled in each course?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT enrollments.student_id)\"],\"dimensions\":[\"courses.id\",\"courses.code\",\"courses.name\"],\"filters\":[\"enrollments.is_active = true\"],\"grain\":\"per course (aggregate across all sections of a course)\",\"aliases\":{\"courses.id\":\"course_id\",\"courses.code\":\"course_code\",\"courses.name\":\"course_name\",\"COUNT(DISTINCT enrollments.student_id)\":\"enrolled_students\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"enrolled_students\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_name\",\"y_axis\":\"enrolled_students\",\"title\":\"Students Enrolled per Course\"},\"assumptions\":[\"Confirmed tables and columns via schema inspection: public.enrollments (student_id, course_section_id, is_active), public.course_sections (id, course_id), public.courses (id, code, name).\",\"Join path: enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id.\",\"Count uses COUNT(DISTINCT enrollments.student_id) to avoid double-counting a student who might appear in multiple sections of the same course. If you prefer counting enrollment rows instead, replace metric with COUNT(enrollments.id).\",\"Only active enrollments are counted (enrollments.is_active = true). If you want to include inactive enrollments, remove that filter.\",\"Grain is per course (aggregated across all sections and semesters). If you need enrollment by section or by semester/year, the plan must be adjusted.\",\"Output field aliases listed under output_fields must be returned exactly by the SQL used by the visualization.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT c.id AS course_id,\\n       c.code AS course_code,\\n       c.name AS course_name,\\n       COUNT(DISTINCT e.student_id) AS enrolled_students\\nFROM public.courses AS c\\nLEFT JOIN public.course_sections AS cs\\n  ON cs.course_id = c.id\\nLEFT JOIN public.enrollments AS e\\n  ON e.course_section_id = cs.id\\n  AND e.is_active = true\\nGROUP BY c.id, c.code, c.name\\nORDER BY enrolled_students DESC, c.code ASC;\",\"validationIssues\":[\"The SQL uses LEFT JOINs so courses with zero active enrollments will appear with enrolled_students = 0. If you intended to exclude courses without any active enrollments, use INNER JOIN (or filter WHERE enrolled_students > 0).\",\"A bar chart with course_name on the x-axis can get crowded for many courses (rowCount=26). Consider a horizontal bar chart, paging, or interactive filtering if labels overlap despite labelAngle=-40.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Aggregate active enrollments per course by joining courses -> course_sections -> enrollments and counting distinct student_id to avoid double-counting students in multiple sections. LEFT JOINs are used so courses with zero active enrollments appear with 0. Results ordered deterministically by enrolled count then course_code.\",\"sql\":\"SELECT c.id AS course_id,\\n       c.code AS course_code,\\n       c.name AS course_name,\\n       COUNT(DISTINCT e.student_id) AS enrolled_students\\nFROM public.courses AS c\\nLEFT JOIN public.course_sections AS cs\\n  ON cs.course_id = c.id\\nLEFT JOIN public.enrollments AS e\\n  ON e.course_section_id = cs.id\\n  AND e.is_active = true\\nGROUP BY c.id, c.code, c.name\\nORDER BY enrolled_students DESC, c.code ASC;\",\"assumptions\":[\"Tables and columns confirmed in public schema: enrollments(student_id, course_section_id, is_active), course_sections(id, course_id), courses(id, code, name).\",\"Join path: enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id.\",\"Counting uses COUNT(DISTINCT enrollments.student_id) to avoid double-counting a student across multiple sections of the same course.\",\"Only active enrollments are counted via e.is_active = true in the JOIN; courses with zero active enrollments are included (yielding 0).\",\"Output aliases must match planner output_fields: course_id, course_code, course_name, enrolled_students.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT c.id AS course_id,\\n       c.code AS course_code,\\n       c.name AS course_name,\\n       COUNT(DISTINCT e.student_id) AS enrolled_students\\nFROM public.courses AS c\\nLEFT JOIN public.course_sections AS cs\\n  ON cs.course_id = c.id\\nLEFT JOIN public.enrollments AS e\\n  ON e.course_section_id = cs.id\\n  AND e.is_active = true\\nGROUP BY c.id, c.code, c.name\\nORDER BY enrolled_students DESC, c.code ASC\",\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"enrolled_students\"],\"rowCount\":26,\"sample\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"enrolled_students\":7},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"enrolled_students\":5}]},\"data\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"enrolled_students\":7},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"enrolled_students\":5},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"enrolled_students\":5},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"enrolled_students\":4},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"enrolled_students\":4},{\"course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"enrolled_students\":4},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"enrolled_students\":4},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"enrolled_students\":3},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"enrolled_students\":3},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"enrolled_students\":3},{\"course_id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"enrolled_students\":2},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"enrolled_students\":2},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"enrolled_students\":2},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"enrolled_students\":2},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"enrolled_students\":2},{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"enrolled_students\":1},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"enrolled_students\":1},{\"course_id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"course_code\":\"HMI-889\",\"course_name\":\"Elektronika\",\"enrolled_students\":1},{\"course_id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"enrolled_students\":1},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"enrolled_students\":1},{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"enrolled_students\":0},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"enrolled_students\":0},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"enrolled_students\":0},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\",\"enrolled_students\":0},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\",\"enrolled_students\":0},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\",\"enrolled_students\":0}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Students Enrolled per Course\",\"width\":800,\"height\":420,\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"course_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course\",\"labelAngle\":-40},\"sort\":{\"field\":\"enrolled_students\",\"order\":\"descending\"}},\"y\":{\"field\":\"enrolled_students\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Enrolled Students\"}},\"tooltip\":[{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course\"},{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"enrolled_students\",\"type\":\"quantitative\",\"title\":\"Enrolled Students\"},{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"}]}},\"reasoning\":\"A vertical bar chart shows enrolled_students (quantitative) per course_name (nominal). Bars are sorted descending by enrolled_students to highlight largest enrollments; tooltip includes course_code and course_id for reference. The spec uses only fields present in the query_result metadata.\"},\"validation\":{\"passed\":true,\"score\":0.8,\"issues\":[\"The SQL uses LEFT JOINs so courses with zero active enrollments will appear with enrolled_students = 0. If you intended to exclude courses without any active enrollments, use INNER JOIN (or filter WHERE enrolled_students > 0).\",\"A bar chart with course_name on the x-axis can get crowded for many courses (rowCount=26). Consider a horizontal bar chart, paging, or interactive filtering if labels overlap despite labelAngle=-40.\"]}}},\"startedAt\":1771845199117,\"status\":\"success\",\"output\":{\"sql\":\"SELECT c.id AS course_id,\\n       c.code AS course_code,\\n       c.name AS course_name,\\n       COUNT(DISTINCT e.student_id) AS enrolled_students\\nFROM public.courses AS c\\nLEFT JOIN public.course_sections AS cs\\n  ON cs.course_id = c.id\\nLEFT JOIN public.enrollments AS e\\n  ON e.course_section_id = cs.id\\n  AND e.is_active = true\\nGROUP BY c.id, c.code, c.name\\nORDER BY enrolled_students DESC, c.code ASC;\",\"data\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"enrolled_students\":7},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"enrolled_students\":5},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"enrolled_students\":5},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"enrolled_students\":4},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"enrolled_students\":4},{\"course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"enrolled_students\":4},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"enrolled_students\":4},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"enrolled_students\":3},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"enrolled_students\":3},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"enrolled_students\":3},{\"course_id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"enrolled_students\":2},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"enrolled_students\":2},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"enrolled_students\":2},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"enrolled_students\":2},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"enrolled_students\":2},{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"enrolled_students\":1},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"enrolled_students\":1},{\"course_id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"course_code\":\"HMI-889\",\"course_name\":\"Elektronika\",\"enrolled_students\":1},{\"course_id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"enrolled_students\":1},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"enrolled_students\":1},{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"enrolled_students\":0},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"enrolled_students\":0},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"enrolled_students\":0},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\",\"enrolled_students\":0},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\",\"enrolled_students\":0},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\",\"enrolled_students\":0}],\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"enrolled_students\"],\"rowCount\":26,\"sample\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"enrolled_students\":7},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"enrolled_students\":5}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Students Enrolled per Course\",\"width\":800,\"height\":420,\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"course_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course\",\"labelAngle\":-40},\"sort\":{\"field\":\"enrolled_students\",\"order\":\"descending\"}},\"y\":{\"field\":\"enrolled_students\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Enrolled Students\"}},\"tooltip\":[{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course\"},{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"enrolled_students\",\"type\":\"quantitative\",\"title\":\"Enrolled Students\"},{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.8,\"issues\":[\"The SQL uses LEFT JOINs so courses with zero active enrollments will appear with enrolled_students = 0. If you intended to exclude courses without any active enrollments, use INNER JOIN (or filter WHERE enrolled_students > 0).\",\"A bar chart with course_name on the x-axis can get crowded for many courses (rowCount=26). Consider a horizontal bar chart, paging, or interactive filtering if labels overlap despite labelAngle=-40.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771845199122}},\"input\":{\"question\":\"How many students are enrolled in each course?\"},\"result\":{\"sql\":\"SELECT c.id AS course_id,\\n       c.code AS course_code,\\n       c.name AS course_name,\\n       COUNT(DISTINCT e.student_id) AS enrolled_students\\nFROM public.courses AS c\\nLEFT JOIN public.course_sections AS cs\\n  ON cs.course_id = c.id\\nLEFT JOIN public.enrollments AS e\\n  ON e.course_section_id = cs.id\\n  AND e.is_active = true\\nGROUP BY c.id, c.code, c.name\\nORDER BY enrolled_students DESC, c.code ASC;\",\"data\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"enrolled_students\":7},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"enrolled_students\":5},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"enrolled_students\":5},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"enrolled_students\":4},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"enrolled_students\":4},{\"course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"enrolled_students\":4},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"enrolled_students\":4},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"enrolled_students\":3},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"enrolled_students\":3},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"enrolled_students\":3},{\"course_id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"enrolled_students\":2},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"enrolled_students\":2},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"enrolled_students\":2},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"enrolled_students\":2},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"enrolled_students\":2},{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"enrolled_students\":1},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"enrolled_students\":1},{\"course_id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"course_code\":\"HMI-889\",\"course_name\":\"Elektronika\",\"enrolled_students\":1},{\"course_id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"enrolled_students\":1},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"enrolled_students\":1},{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"enrolled_students\":0},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"enrolled_students\":0},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"enrolled_students\":0},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\",\"enrolled_students\":0},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\",\"enrolled_students\":0},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\",\"enrolled_students\":0}],\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"enrolled_students\"],\"rowCount\":26,\"sample\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"enrolled_students\":7},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"enrolled_students\":5}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Students Enrolled per Course\",\"width\":800,\"height\":420,\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"course_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course\",\"labelAngle\":-40},\"sort\":{\"field\":\"enrolled_students\",\"order\":\"descending\"}},\"y\":{\"field\":\"enrolled_students\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Enrolled Students\"}},\"tooltip\":[{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course\"},{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"enrolled_students\",\"type\":\"quantitative\",\"title\":\"Enrolled Students\"},{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.8,\"issues\":[\"The SQL uses LEFT JOINs so courses with zero active enrollments will appear with enrolled_students = 0. If you intended to exclude courses without any active enrollments, use INNER JOIN (or filter WHERE enrolled_students > 0).\",\"A bar chart with course_name on the x-axis can get crowded for many courses (rowCount=26). Consider a horizontal bar chart, paging, or interactive filtering if labels overlap despite labelAngle=-40.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"29d2e23b8652d16d841cf1c20c0304e0\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/students-enrolled-per-course/run-0001/run.json",
+    "queryPath": "runs/students-enrolled-per-course/run-0001/query.sql",
+    "vegaRawPath": "runs/students-enrolled-per-course/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/students-enrolled-per-course/run-0001/vega.resolved.json",
+    "imagePath": "runs/students-enrolled-per-course/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:13:19.668Z",
+  "traceId": "29d2e23b8652d16d841cf1c20c0304e0",
+  "success": true,
+  "durationMs": 102748,
+  "resultRaw": {
+    "data": [
+      {
+        "course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+        "course_code": "TJJ-354",
+        "course_name": "Projektowanie Aplikacji Webowych",
+        "enrolled_students": 7
+      },
+      {
+        "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "enrolled_students": 5
+      },
+      {
+        "course_id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "enrolled_students": 5
+      },
+      {
+        "course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "course_code": "AFI-682",
+        "course_name": "Matematyka Dyskretna",
+        "enrolled_students": 4
+      },
+      {
+        "course_id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+        "course_code": "FEO-908",
+        "course_name": "Analiza Matematyczna",
+        "enrolled_students": 4
+      },
+      {
+        "course_id": "59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23",
+        "course_code": "MKO-885",
+        "course_name": "Rachunek Prawdopodobieństwa",
+        "enrolled_students": 4
+      },
+      {
+        "course_id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "enrolled_students": 4
+      },
+      {
+        "course_id": "0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca",
+        "course_code": "PSC-614",
+        "course_name": "Architektura Komputerów",
+        "enrolled_students": 3
+      },
+      {
+        "course_id": "0b97f1bf-8c86-431a-a583-563354b1e01f",
+        "course_code": "RZR-301",
+        "course_name": "Sieci Komputerowe",
+        "enrolled_students": 3
+      },
+      {
+        "course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "course_code": "TAU-627",
+        "course_name": "Analiza Matematyczna",
+        "enrolled_students": 3
+      },
+      {
+        "course_id": "3d59b771-6ed9-47a0-b46f-f90c188f7863",
+        "course_code": "ARH-232",
+        "course_name": "Cloud Computing",
+        "enrolled_students": 2
+      },
+      {
+        "course_id": "7dc872b8-c34e-4061-8f34-8b4c099b6325",
+        "course_code": "BSS-943",
+        "course_name": "Algebra Liniowa",
+        "enrolled_students": 2
+      },
+      {
+        "course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+        "course_code": "FCL-532",
+        "course_name": "Uczenie Maszynowe",
+        "enrolled_students": 2
+      },
+      {
+        "course_id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "enrolled_students": 2
+      },
+      {
+        "course_id": "c0e00b1c-84d6-4ccd-999d-7c9197625f2e",
+        "course_code": "ZUQ-127",
+        "course_name": "Fizyka",
+        "enrolled_students": 2
+      },
+      {
+        "course_id": "91922683-9cba-47f2-bb00-babfbce3866f",
+        "course_code": "AAX-989",
+        "course_name": "Elektronika",
+        "enrolled_students": 1
+      },
+      {
+        "course_id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+        "course_code": "BEW-951",
+        "course_name": "Fizyka",
+        "enrolled_students": 1
+      },
+      {
+        "course_id": "47f61e5e-19e7-4b9e-b8d0-153ca7c76090",
+        "course_code": "HMI-889",
+        "course_name": "Elektronika",
+        "enrolled_students": 1
+      },
+      {
+        "course_id": "e6b62b9f-429a-423d-84c7-77b28a64b9a3",
+        "course_code": "JFH-143",
+        "course_name": "Architektura Komputerów",
+        "enrolled_students": 1
+      },
+      {
+        "course_id": "b18a39cf-8a1b-471c-b67a-94aa04eccfae",
+        "course_code": "WZC-570",
+        "course_name": "Programowanie Obiektowe",
+        "enrolled_students": 1
+      },
+      {
+        "course_id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+        "course_code": "FPW-573",
+        "course_name": "Programowanie Obiektowe",
+        "enrolled_students": 0
+      },
+      {
+        "course_id": "410a9134-116d-41eb-84bc-1b5144736995",
+        "course_code": "FWJ-758",
+        "course_name": "Bezpieczeństwo Systemów Komputerowych",
+        "enrolled_students": 0
+      },
+      {
+        "course_id": "d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5",
+        "course_code": "HPF-845",
+        "course_name": "Systemy Wbudowane",
+        "enrolled_students": 0
+      },
+      {
+        "course_id": "6002cfac-f371-4c9b-a048-8aaf1aae450a",
+        "course_code": "LUO-736",
+        "course_name": "Grafika Komputerowa",
+        "enrolled_students": 0
+      },
+      {
+        "course_id": "e89877df-7199-4b1f-a8e8-8e5c0872fe23",
+        "course_code": "NWG-686",
+        "course_name": "Programowanie Funkcyjne",
+        "enrolled_students": 0
+      },
+      {
+        "course_id": "32619ee8-5d87-49a4-9ca1-c94668909e2e",
+        "course_code": "SBW-955",
+        "course_name": "Sieci Komputerowe",
+        "enrolled_students": 0
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Students Enrolled per Course",
+      "width": 800,
+      "height": 420,
+      "mark": {
+        "type": "bar",
+        "cornerRadius": 3
+      },
+      "encoding": {
+        "x": {
+          "field": "course_name",
+          "type": "nominal",
+          "axis": {
+            "title": "Course",
+            "labelAngle": -40
+          },
+          "sort": {
+            "field": "enrolled_students",
+            "order": "descending"
+          }
+        },
+        "y": {
+          "field": "enrolled_students",
+          "type": "quantitative",
+          "axis": {
+            "title": "Enrolled Students"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "course_name",
+            "type": "nominal",
+            "title": "Course"
+          },
+          {
+            "field": "course_code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "enrolled_students",
+            "type": "quantitative",
+            "title": "Enrolled Students"
+          },
+          {
+            "field": "course_id",
+            "type": "nominal",
+            "title": "Course ID"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT c.id AS course_id,\n       c.code AS course_code,\n       c.name AS course_name,\n       COUNT(DISTINCT e.student_id) AS enrolled_students\nFROM public.courses AS c\nLEFT JOIN public.course_sections AS cs\n  ON cs.course_id = c.id\nLEFT JOIN public.enrollments AS e\n  ON e.course_section_id = cs.id\n  AND e.is_active = true\nGROUP BY c.id, c.code, c.name\nORDER BY enrolled_students DESC, c.code ASC;",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "course_code",
+        "course_name",
+        "enrolled_students"
+      ],
+      "rowCount": 26,
+      "sample": [
+        {
+          "course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+          "course_code": "TJJ-354",
+          "course_name": "Projektowanie Aplikacji Webowych",
+          "enrolled_students": 7
+        },
+        {
+          "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+          "course_code": "UQL-274",
+          "course_name": "Zarządzanie Projektami IT",
+          "enrolled_students": 5
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.8,
+      "issues": [
+        "The SQL uses LEFT JOINs so courses with zero active enrollments will appear with enrolled_students = 0. If you intended to exclude courses without any active enrollments, use INNER JOIN (or filter WHERE enrolled_students > 0).",
+        "A bar chart with course_name on the x-axis can get crowded for many courses (rowCount=26). Consider a horizontal bar chart, paging, or interactive filtering if labels overlap despite labelAngle=-40."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+        "course_code": "TJJ-354",
+        "course_name": "Projektowanie Aplikacji Webowych",
+        "enrolled_students": 7
+      },
+      {
+        "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "enrolled_students": 5
+      },
+      {
+        "course_id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "enrolled_students": 5
+      },
+      {
+        "course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "course_code": "AFI-682",
+        "course_name": "Matematyka Dyskretna",
+        "enrolled_students": 4
+      },
+      {
+        "course_id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+        "course_code": "FEO-908",
+        "course_name": "Analiza Matematyczna",
+        "enrolled_students": 4
+      },
+      {
+        "course_id": "59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23",
+        "course_code": "MKO-885",
+        "course_name": "Rachunek Prawdopodobieństwa",
+        "enrolled_students": 4
+      },
+      {
+        "course_id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "enrolled_students": 4
+      },
+      {
+        "course_id": "0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca",
+        "course_code": "PSC-614",
+        "course_name": "Architektura Komputerów",
+        "enrolled_students": 3
+      },
+      {
+        "course_id": "0b97f1bf-8c86-431a-a583-563354b1e01f",
+        "course_code": "RZR-301",
+        "course_name": "Sieci Komputerowe",
+        "enrolled_students": 3
+      },
+      {
+        "course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "course_code": "TAU-627",
+        "course_name": "Analiza Matematyczna",
+        "enrolled_students": 3
+      },
+      {
+        "course_id": "3d59b771-6ed9-47a0-b46f-f90c188f7863",
+        "course_code": "ARH-232",
+        "course_name": "Cloud Computing",
+        "enrolled_students": 2
+      },
+      {
+        "course_id": "7dc872b8-c34e-4061-8f34-8b4c099b6325",
+        "course_code": "BSS-943",
+        "course_name": "Algebra Liniowa",
+        "enrolled_students": 2
+      },
+      {
+        "course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+        "course_code": "FCL-532",
+        "course_name": "Uczenie Maszynowe",
+        "enrolled_students": 2
+      },
+      {
+        "course_id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "enrolled_students": 2
+      },
+      {
+        "course_id": "c0e00b1c-84d6-4ccd-999d-7c9197625f2e",
+        "course_code": "ZUQ-127",
+        "course_name": "Fizyka",
+        "enrolled_students": 2
+      },
+      {
+        "course_id": "91922683-9cba-47f2-bb00-babfbce3866f",
+        "course_code": "AAX-989",
+        "course_name": "Elektronika",
+        "enrolled_students": 1
+      },
+      {
+        "course_id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+        "course_code": "BEW-951",
+        "course_name": "Fizyka",
+        "enrolled_students": 1
+      },
+      {
+        "course_id": "47f61e5e-19e7-4b9e-b8d0-153ca7c76090",
+        "course_code": "HMI-889",
+        "course_name": "Elektronika",
+        "enrolled_students": 1
+      },
+      {
+        "course_id": "e6b62b9f-429a-423d-84c7-77b28a64b9a3",
+        "course_code": "JFH-143",
+        "course_name": "Architektura Komputerów",
+        "enrolled_students": 1
+      },
+      {
+        "course_id": "b18a39cf-8a1b-471c-b67a-94aa04eccfae",
+        "course_code": "WZC-570",
+        "course_name": "Programowanie Obiektowe",
+        "enrolled_students": 1
+      },
+      {
+        "course_id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+        "course_code": "FPW-573",
+        "course_name": "Programowanie Obiektowe",
+        "enrolled_students": 0
+      },
+      {
+        "course_id": "410a9134-116d-41eb-84bc-1b5144736995",
+        "course_code": "FWJ-758",
+        "course_name": "Bezpieczeństwo Systemów Komputerowych",
+        "enrolled_students": 0
+      },
+      {
+        "course_id": "d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5",
+        "course_code": "HPF-845",
+        "course_name": "Systemy Wbudowane",
+        "enrolled_students": 0
+      },
+      {
+        "course_id": "6002cfac-f371-4c9b-a048-8aaf1aae450a",
+        "course_code": "LUO-736",
+        "course_name": "Grafika Komputerowa",
+        "enrolled_students": 0
+      },
+      {
+        "course_id": "e89877df-7199-4b1f-a8e8-8e5c0872fe23",
+        "course_code": "NWG-686",
+        "course_name": "Programowanie Funkcyjne",
+        "enrolled_students": 0
+      },
+      {
+        "course_id": "32619ee8-5d87-49a4-9ca1-c94668909e2e",
+        "course_code": "SBW-955",
+        "course_name": "Sieci Komputerowe",
+        "enrolled_students": 0
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Students Enrolled per Course",
+      "width": 800,
+      "height": 420,
+      "mark": {
+        "type": "bar",
+        "cornerRadius": 3
+      },
+      "encoding": {
+        "x": {
+          "field": "course_name",
+          "type": "nominal",
+          "axis": {
+            "title": "Course",
+            "labelAngle": -40
+          },
+          "sort": {
+            "field": "enrolled_students",
+            "order": "descending"
+          }
+        },
+        "y": {
+          "field": "enrolled_students",
+          "type": "quantitative",
+          "axis": {
+            "title": "Enrolled Students"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "course_name",
+            "type": "nominal",
+            "title": "Course"
+          },
+          {
+            "field": "course_code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "enrolled_students",
+            "type": "quantitative",
+            "title": "Enrolled Students"
+          },
+          {
+            "field": "course_id",
+            "type": "nominal",
+            "title": "Course ID"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT c.id AS course_id,\n       c.code AS course_code,\n       c.name AS course_name,\n       COUNT(DISTINCT e.student_id) AS enrolled_students\nFROM public.courses AS c\nLEFT JOIN public.course_sections AS cs\n  ON cs.course_id = c.id\nLEFT JOIN public.enrollments AS e\n  ON e.course_section_id = cs.id\n  AND e.is_active = true\nGROUP BY c.id, c.code, c.name\nORDER BY enrolled_students DESC, c.code ASC;",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "course_code",
+        "course_name",
+        "enrolled_students"
+      ],
+      "rowCount": 26,
+      "sample": [
+        {
+          "course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+          "course_code": "TJJ-354",
+          "course_name": "Projektowanie Aplikacji Webowych",
+          "enrolled_students": 7
+        },
+        {
+          "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+          "course_code": "UQL-274",
+          "course_name": "Zarządzanie Projektami IT",
+          "enrolled_students": 5
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.8,
+      "issues": [
+        "The SQL uses LEFT JOINs so courses with zero active enrollments will appear with enrolled_students = 0. If you intended to exclude courses without any active enrollments, use INNER JOIN (or filter WHERE enrolled_students > 0).",
+        "A bar chart with course_name on the x-axis can get crowded for many courses (rowCount=26). Consider a horizontal bar chart, paging, or interactive filtering if labels overlap despite labelAngle=-40."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:13:19.668Z",
+    "traceId": "29d2e23b8652d16d841cf1c20c0304e0",
+    "attempts": 4,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 27130,
+      "outputTokens": 5392,
+      "totalTokens": 32522,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 3584,
+      "costUsd": 0.0175665
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 27130,
+        "outputTokens": 5392,
+        "totalTokens": 32522,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 3584,
+        "costUsd": 0.0175665
+      }
+    ],
+    "warnings": []
+  }
+}

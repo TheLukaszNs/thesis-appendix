@@ -1,0 +1,1 @@
+SELECT c.course_type AS course_type, COUNT(c.id) AS course_count FROM public.courses c GROUP BY c.course_type ORDER BY course_count DESC, course_type ASC;

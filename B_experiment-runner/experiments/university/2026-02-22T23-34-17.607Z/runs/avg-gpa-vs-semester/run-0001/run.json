@@ -1,0 +1,402 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "avg-gpa-vs-semester",
+  "caseDirectory": "avg-gpa-vs-semester",
+  "repeatIndex": 1,
+  "prompt": "How does average GPA vary by current semester?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How does average GPA vary by current semester?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:50:56.192Z",
+    "endedAtUtc": "2026-02-22T23:51:43.639Z",
+    "durationMs": 47447
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "10220",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:51:43 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How does average GPA vary by current semester?\"},\"sql\":{\"payload\":{\"question\":\"How does average GPA vary by current semester?\"},\"startedAt\":1771804256204,\"status\":\"success\",\"output\":{\"reasoning\":\"Compute average GPA per current_semester from public.students, excluding NULL GPAs and providing counts; order semesters ascending for deterministic results.\",\"sql\":\"SELECT current_semester AS semester,\\n       COUNT(1) FILTER (WHERE gpa IS NOT NULL) AS student_count,\\n       ROUND(AVG(gpa) FILTER (WHERE gpa IS NOT NULL), 2) AS avg_gpa\\nFROM public.students\\nGROUP BY current_semester\\nORDER BY current_semester;\",\"assumptions\":[\"Use public.students.current_semester (integer) as semester identifier\",\"Exclude NULL gpa values from average and student_count\",\"Round average GPA to 2 decimal places for readability\"]},\"endedAt\":1771804272887},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT current_semester AS semester,\\n       COUNT(1) FILTER (WHERE gpa IS NOT NULL) AS student_count,\\n       ROUND(AVG(gpa) FILTER (WHERE gpa IS NOT NULL), 2) AS avg_gpa\\nFROM public.students\\nGROUP BY current_semester\\nORDER BY current_semester;\"},\"startedAt\":1771804272893,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT current_semester AS semester,\\n       COUNT(1) FILTER (WHERE gpa IS NOT NULL) AS student_count,\\n       ROUND(AVG(gpa) FILTER (WHERE gpa IS NOT NULL), 2) AS avg_gpa\\nFROM public.students\\nGROUP BY current_semester\\nORDER BY current_semester\",\"metadata\":{\"columns\":[\"avg_gpa\",\"semester\",\"student_count\"],\"rowCount\":7,\"sample\":[{\"avg_gpa\":3.97,\"semester\":1,\"student_count\":18},{\"avg_gpa\":4.03,\"semester\":2,\"student_count\":12}]},\"data\":[{\"avg_gpa\":3.97,\"semester\":1,\"student_count\":18},{\"avg_gpa\":4.03,\"semester\":2,\"student_count\":12},{\"avg_gpa\":4.09,\"semester\":3,\"student_count\":19},{\"avg_gpa\":3.81,\"semester\":4,\"student_count\":14},{\"avg_gpa\":3.9,\"semester\":5,\"student_count\":12},{\"avg_gpa\":4.15,\"semester\":6,\"student_count\":21},{\"avg_gpa\":3.97,\"semester\":7,\"student_count\":11}]},\"endedAt\":1771804272918},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT current_semester AS semester,\\n       COUNT(1) FILTER (WHERE gpa IS NOT NULL) AS student_count,\\n       ROUND(AVG(gpa) FILTER (WHERE gpa IS NOT NULL), 2) AS avg_gpa\\nFROM public.students\\nGROUP BY current_semester\\nORDER BY current_semester\",\"metadata\":{\"columns\":[\"avg_gpa\",\"semester\",\"student_count\"],\"rowCount\":7,\"sample\":[{\"avg_gpa\":3.97,\"semester\":1,\"student_count\":18},{\"avg_gpa\":4.03,\"semester\":2,\"student_count\":12}]},\"data\":[{\"avg_gpa\":3.97,\"semester\":1,\"student_count\":18},{\"avg_gpa\":4.03,\"semester\":2,\"student_count\":12},{\"avg_gpa\":4.09,\"semester\":3,\"student_count\":19},{\"avg_gpa\":3.81,\"semester\":4,\"student_count\":14},{\"avg_gpa\":3.9,\"semester\":5,\"student_count\":12},{\"avg_gpa\":4.15,\"semester\":6,\"student_count\":21},{\"avg_gpa\":3.97,\"semester\":7,\"student_count\":11}]},\"startedAt\":1771804272921,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average GPA by Current Semester\",\"width\":600,\"height\":320,\"layer\":[{\"mark\":{\"type\":\"line\",\"interpolate\":\"monotone\"},\"encoding\":{\"x\":{\"field\":\"semester\",\"type\":\"quantitative\",\"title\":\"Current semester\"},\"y\":{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},\"tooltip\":[{\"field\":\"semester\",\"type\":\"quantitative\",\"title\":\"Semester\"},{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student count\"}]}},{\"mark\":{\"type\":\"point\",\"filled\":true,\"stroke\":\"black\"},\"encoding\":{\"x\":{\"field\":\"semester\",\"type\":\"quantitative\"},\"y\":{\"field\":\"avg_gpa\",\"type\":\"quantitative\"},\"size\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student count\"},\"tooltip\":[{\"field\":\"semester\",\"type\":\"quantitative\",\"title\":\"Semester\"},{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student count\"}]}}]},\"reasoning\":\"Line shows trend of average GPA across semesters; points are sized by student_count to indicate sample size. Tooltip provides exact values for semester, avg_gpa, and student_count.\"},\"endedAt\":1771804303617},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average GPA by Current Semester\",\"width\":600,\"height\":320,\"layer\":[{\"mark\":{\"type\":\"line\",\"interpolate\":\"monotone\"},\"encoding\":{\"x\":{\"field\":\"semester\",\"type\":\"quantitative\",\"title\":\"Current semester\"},\"y\":{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},\"tooltip\":[{\"field\":\"semester\",\"type\":\"quantitative\",\"title\":\"Semester\"},{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student count\"}]}},{\"mark\":{\"type\":\"point\",\"filled\":true,\"stroke\":\"black\"},\"encoding\":{\"x\":{\"field\":\"semester\",\"type\":\"quantitative\"},\"y\":{\"field\":\"avg_gpa\",\"type\":\"quantitative\"},\"size\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student count\"},\"tooltip\":[{\"field\":\"semester\",\"type\":\"quantitative\",\"title\":\"Semester\"},{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student count\"}]}}]},\"reasoning\":\"Line shows trend of average GPA across semesters; points are sized by student_count to indicate sample size. Tooltip provides exact values for semester, avg_gpa, and student_count.\"},\"startedAt\":1771804303619,\"status\":\"success\",\"output\":{\"sql\":\"SELECT current_semester AS semester,\\n       COUNT(1) FILTER (WHERE gpa IS NOT NULL) AS student_count,\\n       ROUND(AVG(gpa) FILTER (WHERE gpa IS NOT NULL), 2) AS avg_gpa\\nFROM public.students\\nGROUP BY current_semester\\nORDER BY current_semester;\",\"data\":[{\"avg_gpa\":3.97,\"semester\":1,\"student_count\":18},{\"avg_gpa\":4.03,\"semester\":2,\"student_count\":12},{\"avg_gpa\":4.09,\"semester\":3,\"student_count\":19},{\"avg_gpa\":3.81,\"semester\":4,\"student_count\":14},{\"avg_gpa\":3.9,\"semester\":5,\"student_count\":12},{\"avg_gpa\":4.15,\"semester\":6,\"student_count\":21},{\"avg_gpa\":3.97,\"semester\":7,\"student_count\":11}],\"metadata\":{\"columns\":[\"avg_gpa\",\"semester\",\"student_count\"],\"rowCount\":7,\"sample\":[{\"avg_gpa\":3.97,\"semester\":1,\"student_count\":18},{\"avg_gpa\":4.03,\"semester\":2,\"student_count\":12}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average GPA by Current Semester\",\"width\":600,\"height\":320,\"layer\":[{\"mark\":{\"type\":\"line\",\"interpolate\":\"monotone\"},\"encoding\":{\"x\":{\"field\":\"semester\",\"type\":\"quantitative\",\"title\":\"Current semester\"},\"y\":{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},\"tooltip\":[{\"field\":\"semester\",\"type\":\"quantitative\",\"title\":\"Semester\"},{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student count\"}]}},{\"mark\":{\"type\":\"point\",\"filled\":true,\"stroke\":\"black\"},\"encoding\":{\"x\":{\"field\":\"semester\",\"type\":\"quantitative\"},\"y\":{\"field\":\"avg_gpa\",\"type\":\"quantitative\"},\"size\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student count\"},\"tooltip\":[{\"field\":\"semester\",\"type\":\"quantitative\",\"title\":\"Semester\"},{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student count\"}]}}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"]}},\"endedAt\":1771804303621}},\"input\":{\"question\":\"How does average GPA vary by current semester?\"},\"result\":{\"sql\":\"SELECT current_semester AS semester,\\n       COUNT(1) FILTER (WHERE gpa IS NOT NULL) AS student_count,\\n       ROUND(AVG(gpa) FILTER (WHERE gpa IS NOT NULL), 2) AS avg_gpa\\nFROM public.students\\nGROUP BY current_semester\\nORDER BY current_semester;\",\"data\":[{\"avg_gpa\":3.97,\"semester\":1,\"student_count\":18},{\"avg_gpa\":4.03,\"semester\":2,\"student_count\":12},{\"avg_gpa\":4.09,\"semester\":3,\"student_count\":19},{\"avg_gpa\":3.81,\"semester\":4,\"student_count\":14},{\"avg_gpa\":3.9,\"semester\":5,\"student_count\":12},{\"avg_gpa\":4.15,\"semester\":6,\"student_count\":21},{\"avg_gpa\":3.97,\"semester\":7,\"student_count\":11}],\"metadata\":{\"columns\":[\"avg_gpa\",\"semester\",\"student_count\"],\"rowCount\":7,\"sample\":[{\"avg_gpa\":3.97,\"semester\":1,\"student_count\":18},{\"avg_gpa\":4.03,\"semester\":2,\"student_count\":12}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average GPA by Current Semester\",\"width\":600,\"height\":320,\"layer\":[{\"mark\":{\"type\":\"line\",\"interpolate\":\"monotone\"},\"encoding\":{\"x\":{\"field\":\"semester\",\"type\":\"quantitative\",\"title\":\"Current semester\"},\"y\":{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},\"tooltip\":[{\"field\":\"semester\",\"type\":\"quantitative\",\"title\":\"Semester\"},{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student count\"}]}},{\"mark\":{\"type\":\"point\",\"filled\":true,\"stroke\":\"black\"},\"encoding\":{\"x\":{\"field\":\"semester\",\"type\":\"quantitative\"},\"y\":{\"field\":\"avg_gpa\",\"type\":\"quantitative\"},\"size\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student count\"},\"tooltip\":[{\"field\":\"semester\",\"type\":\"quantitative\",\"title\":\"Semester\"},{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student count\"}]}}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"]}},\"traceId\":\"3a75e22c7d2b62c41c797780f63b3586\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-gpa-vs-semester/run-0001/run.json",
+    "queryPath": "runs/avg-gpa-vs-semester/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-gpa-vs-semester/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-gpa-vs-semester/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-gpa-vs-semester/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:51:44.090Z",
+  "traceId": "3a75e22c7d2b62c41c797780f63b3586",
+  "success": true,
+  "durationMs": 47898,
+  "resultRaw": {
+    "data": [
+      {
+        "avg_gpa": 3.97,
+        "semester": 1,
+        "student_count": 18
+      },
+      {
+        "avg_gpa": 4.03,
+        "semester": 2,
+        "student_count": 12
+      },
+      {
+        "avg_gpa": 4.09,
+        "semester": 3,
+        "student_count": 19
+      },
+      {
+        "avg_gpa": 3.81,
+        "semester": 4,
+        "student_count": 14
+      },
+      {
+        "avg_gpa": 3.9,
+        "semester": 5,
+        "student_count": 12
+      },
+      {
+        "avg_gpa": 4.15,
+        "semester": 6,
+        "student_count": 21
+      },
+      {
+        "avg_gpa": 3.97,
+        "semester": 7,
+        "student_count": 11
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average GPA by Current Semester",
+      "width": 600,
+      "height": 320,
+      "layer": [
+        {
+          "mark": {
+            "type": "line",
+            "interpolate": "monotone"
+          },
+          "encoding": {
+            "x": {
+              "field": "semester",
+              "type": "quantitative",
+              "title": "Current semester"
+            },
+            "y": {
+              "field": "avg_gpa",
+              "type": "quantitative",
+              "title": "Average GPA"
+            },
+            "tooltip": [
+              {
+                "field": "semester",
+                "type": "quantitative",
+                "title": "Semester"
+              },
+              {
+                "field": "avg_gpa",
+                "type": "quantitative",
+                "title": "Average GPA"
+              },
+              {
+                "field": "student_count",
+                "type": "quantitative",
+                "title": "Student count"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "point",
+            "filled": true,
+            "stroke": "black"
+          },
+          "encoding": {
+            "x": {
+              "field": "semester",
+              "type": "quantitative"
+            },
+            "y": {
+              "field": "avg_gpa",
+              "type": "quantitative"
+            },
+            "size": {
+              "field": "student_count",
+              "type": "quantitative",
+              "title": "Student count"
+            },
+            "tooltip": [
+              {
+                "field": "semester",
+                "type": "quantitative",
+                "title": "Semester"
+              },
+              {
+                "field": "avg_gpa",
+                "type": "quantitative",
+                "title": "Average GPA"
+              },
+              {
+                "field": "student_count",
+                "type": "quantitative",
+                "title": "Student count"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "sql": "SELECT current_semester AS semester,\n       COUNT(1) FILTER (WHERE gpa IS NOT NULL) AS student_count,\n       ROUND(AVG(gpa) FILTER (WHERE gpa IS NOT NULL), 2) AS avg_gpa\nFROM public.students\nGROUP BY current_semester\nORDER BY current_semester;",
+    "metadata": {
+      "columns": [
+        "avg_gpa",
+        "semester",
+        "student_count"
+      ],
+      "rowCount": 7,
+      "sample": [
+        {
+          "avg_gpa": 3.97,
+          "semester": 1,
+          "student_count": 18
+        },
+        {
+          "avg_gpa": 4.03,
+          "semester": 2,
+          "student_count": 12
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "avg_gpa": 3.97,
+        "semester": 1,
+        "student_count": 18
+      },
+      {
+        "avg_gpa": 4.03,
+        "semester": 2,
+        "student_count": 12
+      },
+      {
+        "avg_gpa": 4.09,
+        "semester": 3,
+        "student_count": 19
+      },
+      {
+        "avg_gpa": 3.81,
+        "semester": 4,
+        "student_count": 14
+      },
+      {
+        "avg_gpa": 3.9,
+        "semester": 5,
+        "student_count": 12
+      },
+      {
+        "avg_gpa": 4.15,
+        "semester": 6,
+        "student_count": 21
+      },
+      {
+        "avg_gpa": 3.97,
+        "semester": 7,
+        "student_count": 11
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average GPA by Current Semester",
+      "width": 600,
+      "height": 320,
+      "layer": [
+        {
+          "mark": {
+            "type": "line",
+            "interpolate": "monotone"
+          },
+          "encoding": {
+            "x": {
+              "field": "semester",
+              "type": "quantitative",
+              "title": "Current semester"
+            },
+            "y": {
+              "field": "avg_gpa",
+              "type": "quantitative",
+              "title": "Average GPA"
+            },
+            "tooltip": [
+              {
+                "field": "semester",
+                "type": "quantitative",
+                "title": "Semester"
+              },
+              {
+                "field": "avg_gpa",
+                "type": "quantitative",
+                "title": "Average GPA"
+              },
+              {
+                "field": "student_count",
+                "type": "quantitative",
+                "title": "Student count"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "point",
+            "filled": true,
+            "stroke": "black"
+          },
+          "encoding": {
+            "x": {
+              "field": "semester",
+              "type": "quantitative"
+            },
+            "y": {
+              "field": "avg_gpa",
+              "type": "quantitative"
+            },
+            "size": {
+              "field": "student_count",
+              "type": "quantitative",
+              "title": "Student count"
+            },
+            "tooltip": [
+              {
+                "field": "semester",
+                "type": "quantitative",
+                "title": "Semester"
+              },
+              {
+                "field": "avg_gpa",
+                "type": "quantitative",
+                "title": "Average GPA"
+              },
+              {
+                "field": "student_count",
+                "type": "quantitative",
+                "title": "Student count"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "sql": "SELECT current_semester AS semester,\n       COUNT(1) FILTER (WHERE gpa IS NOT NULL) AS student_count,\n       ROUND(AVG(gpa) FILTER (WHERE gpa IS NOT NULL), 2) AS avg_gpa\nFROM public.students\nGROUP BY current_semester\nORDER BY current_semester;",
+    "metadata": {
+      "columns": [
+        "avg_gpa",
+        "semester",
+        "student_count"
+      ],
+      "rowCount": 7,
+      "sample": [
+        {
+          "avg_gpa": 3.97,
+          "semester": 1,
+          "student_count": 18
+        },
+        {
+          "avg_gpa": 4.03,
+          "semester": 2,
+          "student_count": 12
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:51:44.090Z",
+    "traceId": "3a75e22c7d2b62c41c797780f63b3586",
+    "attempts": 2,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 5874,
+      "outputTokens": 2586,
+      "totalTokens": 8460,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1792,
+      "costUsd": 0.0066405
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 5874,
+        "outputTokens": 2586,
+        "totalTokens": 8460,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1792,
+        "costUsd": 0.0066405
+      }
+    ],
+    "warnings": []
+  }
+}

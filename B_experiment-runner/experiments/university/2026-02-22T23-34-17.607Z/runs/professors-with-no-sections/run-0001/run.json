@@ -1,0 +1,208 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "professors-with-no-sections",
+  "caseDirectory": "professors-with-no-sections",
+  "repeatIndex": 1,
+  "prompt": "How many professors have never taught a course section?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many professors have never taught a course section?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:47:51.123Z",
+    "endedAtUtc": "2026-02-22T23:48:24.054Z",
+    "durationMs": 32931
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "5384",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:48:24 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How many professors have never taught a course section?\"},\"sql\":{\"payload\":{\"question\":\"How many professors have never taught a course section?\"},\"startedAt\":1771804071137,\"status\":\"success\",\"output\":{\"reasoning\":\"Count professors with no matching course_sections rows by left-joining professors to course_sections and selecting rows where the join produced NULL (i.e., never taught any section).\",\"sql\":\"SELECT COUNT(p.id) AS never_taught_count\\nFROM public.professors AS p\\nLEFT JOIN public.course_sections AS cs\\n  ON cs.professor_id = p.id\\nWHERE cs.id IS NULL;\",\"assumptions\":[\"A professor is considered to have taught a section if their id appears in course_sections.professor_id.\",\"The public.professors and public.course_sections tables discovered during schema inspection are the correct tables to use for this question.\",\"Historical or archived teaching assignments (if stored elsewhere) are not required for this count; only rows in public.course_sections represent taught sections.\"]},\"endedAt\":1771804085499},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT COUNT(p.id) AS never_taught_count\\nFROM public.professors AS p\\nLEFT JOIN public.course_sections AS cs\\n  ON cs.professor_id = p.id\\nWHERE cs.id IS NULL;\"},\"startedAt\":1771804085502,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT COUNT(p.id) AS never_taught_count\\nFROM public.professors AS p\\nLEFT JOIN public.course_sections AS cs\\n  ON cs.professor_id = p.id\\nWHERE cs.id IS NULL\",\"metadata\":{\"columns\":[\"never_taught_count\"],\"rowCount\":1,\"sample\":[{\"never_taught_count\":25}]},\"data\":[{\"never_taught_count\":25}]},\"endedAt\":1771804085522},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT COUNT(p.id) AS never_taught_count\\nFROM public.professors AS p\\nLEFT JOIN public.course_sections AS cs\\n  ON cs.professor_id = p.id\\nWHERE cs.id IS NULL\",\"metadata\":{\"columns\":[\"never_taught_count\"],\"rowCount\":1,\"sample\":[{\"never_taught_count\":25}]},\"data\":[{\"never_taught_count\":25}]},\"startedAt\":1771804085525,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"width\":300,\"height\":120,\"title\":\"Professors Who Never Taught a Course Section\",\"mark\":{\"type\":\"text\",\"align\":\"center\",\"baseline\":\"middle\",\"fontSize\":48,\"fontWeight\":\"bold\"},\"encoding\":{\"x\":{\"value\":150},\"y\":{\"value\":60},\"text\":{\"field\":\"never_taught_count\",\"type\":\"quantitative\",\"format\":\"d\"},\"tooltip\":[{\"field\":\"never_taught_count\",\"type\":\"quantitative\",\"title\":\"Never taught count\"}]}},\"reasoning\":\"A single large text mark displays the count (never_taught_count) clearly; tooltip included for clarity.\"},\"endedAt\":1771804104034},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"width\":300,\"height\":120,\"title\":\"Professors Who Never Taught a Course Section\",\"mark\":{\"type\":\"text\",\"align\":\"center\",\"baseline\":\"middle\",\"fontSize\":48,\"fontWeight\":\"bold\"},\"encoding\":{\"x\":{\"value\":150},\"y\":{\"value\":60},\"text\":{\"field\":\"never_taught_count\",\"type\":\"quantitative\",\"format\":\"d\"},\"tooltip\":[{\"field\":\"never_taught_count\",\"type\":\"quantitative\",\"title\":\"Never taught count\"}]}},\"reasoning\":\"A single large text mark displays the count (never_taught_count) clearly; tooltip included for clarity.\"},\"startedAt\":1771804104039,\"status\":\"success\",\"output\":{\"sql\":\"SELECT COUNT(p.id) AS never_taught_count\\nFROM public.professors AS p\\nLEFT JOIN public.course_sections AS cs\\n  ON cs.professor_id = p.id\\nWHERE cs.id IS NULL;\",\"data\":[{\"never_taught_count\":25}],\"metadata\":{\"columns\":[\"never_taught_count\"],\"rowCount\":1,\"sample\":[{\"never_taught_count\":25}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"width\":300,\"height\":120,\"title\":\"Professors Who Never Taught a Course Section\",\"mark\":{\"type\":\"text\",\"align\":\"center\",\"baseline\":\"middle\",\"fontSize\":48,\"fontWeight\":\"bold\"},\"encoding\":{\"x\":{\"value\":150},\"y\":{\"value\":60},\"text\":{\"field\":\"never_taught_count\",\"type\":\"quantitative\",\"format\":\"d\"},\"tooltip\":[{\"field\":\"never_taught_count\",\"type\":\"quantitative\",\"title\":\"Never taught count\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771804104041}},\"input\":{\"question\":\"How many professors have never taught a course section?\"},\"result\":{\"sql\":\"SELECT COUNT(p.id) AS never_taught_count\\nFROM public.professors AS p\\nLEFT JOIN public.course_sections AS cs\\n  ON cs.professor_id = p.id\\nWHERE cs.id IS NULL;\",\"data\":[{\"never_taught_count\":25}],\"metadata\":{\"columns\":[\"never_taught_count\"],\"rowCount\":1,\"sample\":[{\"never_taught_count\":25}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"width\":300,\"height\":120,\"title\":\"Professors Who Never Taught a Course Section\",\"mark\":{\"type\":\"text\",\"align\":\"center\",\"baseline\":\"middle\",\"fontSize\":48,\"fontWeight\":\"bold\"},\"encoding\":{\"x\":{\"value\":150},\"y\":{\"value\":60},\"text\":{\"field\":\"never_taught_count\",\"type\":\"quantitative\",\"format\":\"d\"},\"tooltip\":[{\"field\":\"never_taught_count\",\"type\":\"quantitative\",\"title\":\"Never taught count\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"7f4336fc1711458a668a2e4f7ca1ae81\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/professors-with-no-sections/run-0001/run.json",
+    "queryPath": "runs/professors-with-no-sections/run-0001/query.sql",
+    "vegaRawPath": "runs/professors-with-no-sections/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/professors-with-no-sections/run-0001/vega.resolved.json",
+    "imagePath": "runs/professors-with-no-sections/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:48:24.458Z",
+  "traceId": "7f4336fc1711458a668a2e4f7ca1ae81",
+  "success": true,
+  "durationMs": 33335,
+  "resultRaw": {
+    "data": [
+      {
+        "never_taught_count": 25
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 300,
+      "height": 120,
+      "title": "Professors Who Never Taught a Course Section",
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "baseline": "middle",
+        "fontSize": 48,
+        "fontWeight": "bold"
+      },
+      "encoding": {
+        "x": {
+          "value": 150
+        },
+        "y": {
+          "value": 60
+        },
+        "text": {
+          "field": "never_taught_count",
+          "type": "quantitative",
+          "format": "d"
+        },
+        "tooltip": [
+          {
+            "field": "never_taught_count",
+            "type": "quantitative",
+            "title": "Never taught count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT COUNT(p.id) AS never_taught_count\nFROM public.professors AS p\nLEFT JOIN public.course_sections AS cs\n  ON cs.professor_id = p.id\nWHERE cs.id IS NULL;",
+    "metadata": {
+      "columns": [
+        "never_taught_count"
+      ],
+      "rowCount": 1,
+      "sample": [
+        {
+          "never_taught_count": 25
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "never_taught_count": 25
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 300,
+      "height": 120,
+      "title": "Professors Who Never Taught a Course Section",
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "baseline": "middle",
+        "fontSize": 48,
+        "fontWeight": "bold"
+      },
+      "encoding": {
+        "x": {
+          "value": 150
+        },
+        "y": {
+          "value": 60
+        },
+        "text": {
+          "field": "never_taught_count",
+          "type": "quantitative",
+          "format": "d"
+        },
+        "tooltip": [
+          {
+            "field": "never_taught_count",
+            "type": "quantitative",
+            "title": "Never taught count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT COUNT(p.id) AS never_taught_count\nFROM public.professors AS p\nLEFT JOIN public.course_sections AS cs\n  ON cs.professor_id = p.id\nWHERE cs.id IS NULL;",
+    "metadata": {
+      "columns": [
+        "never_taught_count"
+      ],
+      "rowCount": 1,
+      "sample": [
+        {
+          "never_taught_count": 25
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:48:24.458Z",
+    "traceId": "7f4336fc1711458a668a2e4f7ca1ae81",
+    "attempts": 5,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 8689,
+      "outputTokens": 2239,
+      "totalTokens": 10928,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1536,
+      "costUsd": 0.00665025
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 8689,
+        "outputTokens": 2239,
+        "totalTokens": 10928,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1536,
+        "costUsd": 0.00665025
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,1 @@
+SELECT EXTRACT(YEAR FROM date_of_birth)::int AS birth_year, COUNT(*) AS student_count FROM public.students WHERE date_of_birth IS NOT NULL GROUP BY birth_year ORDER BY birth_year ASC;

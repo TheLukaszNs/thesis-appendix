@@ -1,0 +1,340 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "courses-no-enrollments",
+  "caseDirectory": "courses-no-enrollments",
+  "repeatIndex": 1,
+  "prompt": "Which courses have no enrollments at all?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which courses have no enrollments at all?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:33:41.588Z",
+    "endedAtUtc": "2026-02-23T11:35:16.697Z",
+    "durationMs": 95109
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "28899",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:35:16 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Which courses have no enrollments at all?\"},\"planner\":{\"payload\":{\"question\":\"Which courses have no enrollments at all?\"},\"startedAt\":1771846421609,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(e.id) /* total enrollments aggregated across all sections of a course */\"],\"dimensions\":[\"c.id\",\"c.code\",\"c.name\"],\"filters\":[\"none (no WHERE filter). Use HAVING COUNT(e.id) = 0 to find courses with zero enrollments\"],\"grain\":\"one row per course\",\"aliases\":{\"c.id\":\"course_id\",\"c.code\":\"course_code\",\"c.name\":\"course_name\",\"COUNT(e.id)\":\"enrollment_count\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"enrollment_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_name\",\"y_axis\":\"enrollment_count\",\"title\":\"Courses with zero enrollments\"},\"assumptions\":[\"Schema 'public' contains tables: courses (alias c), course_sections (alias cs), enrollments (alias e) as discovered during preflight.\",\"Relationship used: course_sections.course_id -> courses.id and enrollments.course_section_id -> course_sections.id (confirmed).\",\"A course has 'no enrollments' if the total COUNT(enrollments.id) across all its sections is 0. Courses with no sections are included and considered to have zero enrollments.\",\"All enrollments are counted regardless of enrollments.is_active. If only active enrollments should be counted, add filter e.is_active = true before aggregation.\",\"No additional filters applied (e.g., academic_year, semester_type, course_type). If the user wants a narrower scope, add those filters and include corresponding fields in dimensions.\",\"Expected SQL (to be executed by downstream agent) should use LEFT JOINs and HAVING COUNT(e.id) = 0, for example:\\n\\nSELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(e.id) AS enrollment_count\\nFROM public.courses c\\nLEFT JOIN public.course_sections cs ON cs.course_id = c.id\\nLEFT JOIN public.enrollments e ON e.course_section_id = cs.id\\nGROUP BY c.id, c.code, c.name\\nHAVING COUNT(e.id) = 0;\"]}},\"endedAt\":1771846457446},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(e.id) /* total enrollments aggregated across all sections of a course */\"],\"dimensions\":[\"c.id\",\"c.code\",\"c.name\"],\"filters\":[\"none (no WHERE filter). Use HAVING COUNT(e.id) = 0 to find courses with zero enrollments\"],\"grain\":\"one row per course\",\"aliases\":{\"c.id\":\"course_id\",\"c.code\":\"course_code\",\"c.name\":\"course_name\",\"COUNT(e.id)\":\"enrollment_count\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"enrollment_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_name\",\"y_axis\":\"enrollment_count\",\"title\":\"Courses with zero enrollments\"},\"assumptions\":[\"Schema 'public' contains tables: courses (alias c), course_sections (alias cs), enrollments (alias e) as discovered during preflight.\",\"Relationship used: course_sections.course_id -> courses.id and enrollments.course_section_id -> course_sections.id (confirmed).\",\"A course has 'no enrollments' if the total COUNT(enrollments.id) across all its sections is 0. Courses with no sections are included and considered to have zero enrollments.\",\"All enrollments are counted regardless of enrollments.is_active. If only active enrollments should be counted, add filter e.is_active = true before aggregation.\",\"No additional filters applied (e.g., academic_year, semester_type, course_type). If the user wants a narrower scope, add those filters and include corresponding fields in dimensions.\",\"Expected SQL (to be executed by downstream agent) should use LEFT JOINs and HAVING COUNT(e.id) = 0, for example:\\n\\nSELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(e.id) AS enrollment_count\\nFROM public.courses c\\nLEFT JOIN public.course_sections cs ON cs.course_id = c.id\\nLEFT JOIN public.enrollments e ON e.course_section_id = cs.id\\nGROUP BY c.id, c.code, c.name\\nHAVING COUNT(e.id) = 0;\"]}},\"startedAt\":1771846457457,\"status\":\"success\",\"output\":{\"question\":\"Which courses have no enrollments at all?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(e.id) /* total enrollments aggregated across all sections of a course */\"],\"dimensions\":[\"c.id\",\"c.code\",\"c.name\"],\"filters\":[\"none (no WHERE filter). Use HAVING COUNT(e.id) = 0 to find courses with zero enrollments\"],\"grain\":\"one row per course\",\"aliases\":{\"c.id\":\"course_id\",\"c.code\":\"course_code\",\"c.name\":\"course_name\",\"COUNT(e.id)\":\"enrollment_count\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"enrollment_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_name\",\"y_axis\":\"enrollment_count\",\"title\":\"Courses with zero enrollments\"},\"assumptions\":[\"Schema 'public' contains tables: courses (alias c), course_sections (alias cs), enrollments (alias e) as discovered during preflight.\",\"Relationship used: course_sections.course_id -> courses.id and enrollments.course_section_id -> course_sections.id (confirmed).\",\"A course has 'no enrollments' if the total COUNT(enrollments.id) across all its sections is 0. Courses with no sections are included and considered to have zero enrollments.\",\"All enrollments are counted regardless of enrollments.is_active. If only active enrollments should be counted, add filter e.is_active = true before aggregation.\",\"No additional filters applied (e.g., academic_year, semester_type, course_type). If the user wants a narrower scope, add those filters and include corresponding fields in dimensions.\",\"Expected SQL (to be executed by downstream agent) should use LEFT JOINs and HAVING COUNT(e.id) = 0, for example:\\n\\nSELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(e.id) AS enrollment_count\\nFROM public.courses c\\nLEFT JOIN public.course_sections cs ON cs.course_id = c.id\\nLEFT JOIN public.enrollments e ON e.course_section_id = cs.id\\nGROUP BY c.id, c.code, c.name\\nHAVING COUNT(e.id) = 0;\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771846457459},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"Which courses have no enrollments at all?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(e.id) /* total enrollments aggregated across all sections of a course */\"],\"dimensions\":[\"c.id\",\"c.code\",\"c.name\"],\"filters\":[\"none (no WHERE filter). Use HAVING COUNT(e.id) = 0 to find courses with zero enrollments\"],\"grain\":\"one row per course\",\"aliases\":{\"c.id\":\"course_id\",\"c.code\":\"course_code\",\"c.name\":\"course_name\",\"COUNT(e.id)\":\"enrollment_count\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"enrollment_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_name\",\"y_axis\":\"enrollment_count\",\"title\":\"Courses with zero enrollments\"},\"assumptions\":[\"Schema 'public' contains tables: courses (alias c), course_sections (alias cs), enrollments (alias e) as discovered during preflight.\",\"Relationship used: course_sections.course_id -> courses.id and enrollments.course_section_id -> course_sections.id (confirmed).\",\"A course has 'no enrollments' if the total COUNT(enrollments.id) across all its sections is 0. Courses with no sections are included and considered to have zero enrollments.\",\"All enrollments are counted regardless of enrollments.is_active. If only active enrollments should be counted, add filter e.is_active = true before aggregation.\",\"No additional filters applied (e.g., academic_year, semester_type, course_type). If the user wants a narrower scope, add those filters and include corresponding fields in dimensions.\",\"Expected SQL (to be executed by downstream agent) should use LEFT JOINs and HAVING COUNT(e.id) = 0, for example:\\n\\nSELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(e.id) AS enrollment_count\\nFROM public.courses c\\nLEFT JOIN public.course_sections cs ON cs.course_id = c.id\\nLEFT JOIN public.enrollments e ON e.course_section_id = cs.id\\nGROUP BY c.id, c.code, c.name\\nHAVING COUNT(e.id) = 0;\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771846457464,\"status\":\"success\",\"output\":{\"question\":\"Which courses have no enrollments at all?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(e.id) /* total enrollments aggregated across all sections of a course */\"],\"dimensions\":[\"c.id\",\"c.code\",\"c.name\"],\"filters\":[\"none (no WHERE filter). Use HAVING COUNT(e.id) = 0 to find courses with zero enrollments\"],\"grain\":\"one row per course\",\"aliases\":{\"c.id\":\"course_id\",\"c.code\":\"course_code\",\"c.name\":\"course_name\",\"COUNT(e.id)\":\"enrollment_count\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"enrollment_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_name\",\"y_axis\":\"enrollment_count\",\"title\":\"Courses with zero enrollments\"},\"assumptions\":[\"Schema 'public' contains tables: courses (alias c), course_sections (alias cs), enrollments (alias e) as discovered during preflight.\",\"Relationship used: course_sections.course_id -> courses.id and enrollments.course_section_id -> course_sections.id (confirmed).\",\"A course has 'no enrollments' if the total COUNT(enrollments.id) across all its sections is 0. Courses with no sections are included and considered to have zero enrollments.\",\"All enrollments are counted regardless of enrollments.is_active. If only active enrollments should be counted, add filter e.is_active = true before aggregation.\",\"No additional filters applied (e.g., academic_year, semester_type, course_type). If the user wants a narrower scope, add those filters and include corresponding fields in dimensions.\",\"Expected SQL (to be executed by downstream agent) should use LEFT JOINs and HAVING COUNT(e.id) = 0, for example:\\n\\nSELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(e.id) AS enrollment_count\\nFROM public.courses c\\nLEFT JOIN public.course_sections cs ON cs.course_id = c.id\\nLEFT JOIN public.enrollments e ON e.course_section_id = cs.id\\nGROUP BY c.id, c.code, c.name\\nHAVING COUNT(e.id) = 0;\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(e.id) AS enrollment_count\\nFROM public.courses AS c\\nLEFT JOIN public.course_sections AS cs ON cs.course_id = c.id\\nLEFT JOIN public.enrollments AS e ON e.course_section_id = cs.id\\nGROUP BY c.id, c.code, c.name\\nHAVING COUNT(e.id) = 0\\nORDER BY c.code ASC;\",\"validationIssues\":[\"All encoded fields (course_id, course_code, course_name, enrollment_count) exist in metadata.columns — OK.\",\"Since enrollment_count = 0 for all rows, bar marks will have zero height and may be invisible; consider using text labels, a table, or another mark type to make zero-count courses visible.\",\"SQL orders by course_code ASC but the x-axis is course_name; the visual display order may not reflect the SQL ORDER BY (potential mismatch between data ordering and axis encoding).\",\"Color encoding by course_code is redundant with course_name on the x-axis and may add unnecessary legend clutter; it’s a presentation choice rather than a correctness issue.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Preflight confirmed tables and join keys in public schema (courses.id, course_sections.course_id, enrollments.course_section_id). Query uses LEFT JOINs and HAVING COUNT(e.id)=0 to return courses with zero enrollments, ordering deterministically by course_code.\",\"sql\":\"SELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(e.id) AS enrollment_count\\nFROM public.courses AS c\\nLEFT JOIN public.course_sections AS cs ON cs.course_id = c.id\\nLEFT JOIN public.enrollments AS e ON e.course_section_id = cs.id\\nGROUP BY c.id, c.code, c.name\\nHAVING COUNT(e.id) = 0\\nORDER BY c.code ASC;\",\"assumptions\":[\"Using all enrollments (no filter on enrollments.is_active).\",\"Courses without any sections are considered to have zero enrollments and are included.\",\"Schema and columns confirmed via preflight: public.courses(id, code, name), public.course_sections(course_id, id), public.enrollments(course_section_id, id)\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(e.id) AS enrollment_count\\nFROM public.courses AS c\\nLEFT JOIN public.course_sections AS cs ON cs.course_id = c.id\\nLEFT JOIN public.enrollments AS e ON e.course_section_id = cs.id\\nGROUP BY c.id, c.code, c.name\\nHAVING COUNT(e.id) = 0\\nORDER BY c.code ASC\",\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"enrollment_count\"],\"rowCount\":5,\"sample\":[{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"enrollment_count\":0},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"enrollment_count\":0}]},\"data\":[{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"enrollment_count\":0},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"enrollment_count\":0},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\",\"enrollment_count\":0},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\",\"enrollment_count\":0},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\",\"enrollment_count\":0}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Courses with zero enrollments\",\"width\":700,\"height\":320,\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"course_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course name\",\"labelAngle\":-40}},\"y\":{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Enrollment count\"}},\"color\":{\"field\":\"course_code\",\"type\":\"nominal\",\"legend\":{\"title\":\"Course code\"}},\"tooltip\":[{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course name\"},{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\"},{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"title\":\"Enrollment count\"},{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"}]}},\"reasoning\":\"A vertical bar chart uses course_name on the x-axis and enrollment_count on the y-axis as requested. Tooltip includes course_code and course_id so rows with zero height (enrollment_count = 0) remain identifiable. Color distinguishes courses by course_code.\"},\"validation\":{\"passed\":true,\"score\":0.7,\"issues\":[\"All encoded fields (course_id, course_code, course_name, enrollment_count) exist in metadata.columns — OK.\",\"Since enrollment_count = 0 for all rows, bar marks will have zero height and may be invisible; consider using text labels, a table, or another mark type to make zero-count courses visible.\",\"SQL orders by course_code ASC but the x-axis is course_name; the visual display order may not reflect the SQL ORDER BY (potential mismatch between data ordering and axis encoding).\",\"Color encoding by course_code is redundant with course_name on the x-axis and may add unnecessary legend clutter; it’s a presentation choice rather than a correctness issue.\"]}}},\"endedAt\":1771846516659,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"Which courses have no enrollments at all?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(e.id) /* total enrollments aggregated across all sections of a course */\"],\"dimensions\":[\"c.id\",\"c.code\",\"c.name\"],\"filters\":[\"none (no WHERE filter). Use HAVING COUNT(e.id) = 0 to find courses with zero enrollments\"],\"grain\":\"one row per course\",\"aliases\":{\"c.id\":\"course_id\",\"c.code\":\"course_code\",\"c.name\":\"course_name\",\"COUNT(e.id)\":\"enrollment_count\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"enrollment_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_name\",\"y_axis\":\"enrollment_count\",\"title\":\"Courses with zero enrollments\"},\"assumptions\":[\"Schema 'public' contains tables: courses (alias c), course_sections (alias cs), enrollments (alias e) as discovered during preflight.\",\"Relationship used: course_sections.course_id -> courses.id and enrollments.course_section_id -> course_sections.id (confirmed).\",\"A course has 'no enrollments' if the total COUNT(enrollments.id) across all its sections is 0. Courses with no sections are included and considered to have zero enrollments.\",\"All enrollments are counted regardless of enrollments.is_active. If only active enrollments should be counted, add filter e.is_active = true before aggregation.\",\"No additional filters applied (e.g., academic_year, semester_type, course_type). If the user wants a narrower scope, add those filters and include corresponding fields in dimensions.\",\"Expected SQL (to be executed by downstream agent) should use LEFT JOINs and HAVING COUNT(e.id) = 0, for example:\\n\\nSELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(e.id) AS enrollment_count\\nFROM public.courses c\\nLEFT JOIN public.course_sections cs ON cs.course_id = c.id\\nLEFT JOIN public.enrollments e ON e.course_section_id = cs.id\\nGROUP BY c.id, c.code, c.name\\nHAVING COUNT(e.id) = 0;\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(e.id) AS enrollment_count\\nFROM public.courses AS c\\nLEFT JOIN public.course_sections AS cs ON cs.course_id = c.id\\nLEFT JOIN public.enrollments AS e ON e.course_section_id = cs.id\\nGROUP BY c.id, c.code, c.name\\nHAVING COUNT(e.id) = 0\\nORDER BY c.code ASC;\",\"validationIssues\":[\"All encoded fields (course_id, course_code, course_name, enrollment_count) exist in metadata.columns — OK.\",\"Since enrollment_count = 0 for all rows, bar marks will have zero height and may be invisible; consider using text labels, a table, or another mark type to make zero-count courses visible.\",\"SQL orders by course_code ASC but the x-axis is course_name; the visual display order may not reflect the SQL ORDER BY (potential mismatch between data ordering and axis encoding).\",\"Color encoding by course_code is redundant with course_name on the x-axis and may add unnecessary legend clutter; it’s a presentation choice rather than a correctness issue.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Preflight confirmed tables and join keys in public schema (courses.id, course_sections.course_id, enrollments.course_section_id). Query uses LEFT JOINs and HAVING COUNT(e.id)=0 to return courses with zero enrollments, ordering deterministically by course_code.\",\"sql\":\"SELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(e.id) AS enrollment_count\\nFROM public.courses AS c\\nLEFT JOIN public.course_sections AS cs ON cs.course_id = c.id\\nLEFT JOIN public.enrollments AS e ON e.course_section_id = cs.id\\nGROUP BY c.id, c.code, c.name\\nHAVING COUNT(e.id) = 0\\nORDER BY c.code ASC;\",\"assumptions\":[\"Using all enrollments (no filter on enrollments.is_active).\",\"Courses without any sections are considered to have zero enrollments and are included.\",\"Schema and columns confirmed via preflight: public.courses(id, code, name), public.course_sections(course_id, id), public.enrollments(course_section_id, id)\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(e.id) AS enrollment_count\\nFROM public.courses AS c\\nLEFT JOIN public.course_sections AS cs ON cs.course_id = c.id\\nLEFT JOIN public.enrollments AS e ON e.course_section_id = cs.id\\nGROUP BY c.id, c.code, c.name\\nHAVING COUNT(e.id) = 0\\nORDER BY c.code ASC\",\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"enrollment_count\"],\"rowCount\":5,\"sample\":[{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"enrollment_count\":0},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"enrollment_count\":0}]},\"data\":[{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"enrollment_count\":0},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"enrollment_count\":0},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\",\"enrollment_count\":0},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\",\"enrollment_count\":0},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\",\"enrollment_count\":0}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Courses with zero enrollments\",\"width\":700,\"height\":320,\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"course_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course name\",\"labelAngle\":-40}},\"y\":{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Enrollment count\"}},\"color\":{\"field\":\"course_code\",\"type\":\"nominal\",\"legend\":{\"title\":\"Course code\"}},\"tooltip\":[{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course name\"},{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\"},{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"title\":\"Enrollment count\"},{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"}]}},\"reasoning\":\"A vertical bar chart uses course_name on the x-axis and enrollment_count on the y-axis as requested. Tooltip includes course_code and course_id so rows with zero height (enrollment_count = 0) remain identifiable. Color distinguishes courses by course_code.\"},\"validation\":{\"passed\":true,\"score\":0.7,\"issues\":[\"All encoded fields (course_id, course_code, course_name, enrollment_count) exist in metadata.columns — OK.\",\"Since enrollment_count = 0 for all rows, bar marks will have zero height and may be invisible; consider using text labels, a table, or another mark type to make zero-count courses visible.\",\"SQL orders by course_code ASC but the x-axis is course_name; the visual display order may not reflect the SQL ORDER BY (potential mismatch between data ordering and axis encoding).\",\"Color encoding by course_code is redundant with course_name on the x-axis and may add unnecessary legend clutter; it’s a presentation choice rather than a correctness issue.\"]}}},\"startedAt\":1771846516664,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(e.id) AS enrollment_count\\nFROM public.courses AS c\\nLEFT JOIN public.course_sections AS cs ON cs.course_id = c.id\\nLEFT JOIN public.enrollments AS e ON e.course_section_id = cs.id\\nGROUP BY c.id, c.code, c.name\\nHAVING COUNT(e.id) = 0\\nORDER BY c.code ASC;\",\"data\":[{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"enrollment_count\":0},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"enrollment_count\":0},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\",\"enrollment_count\":0},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\",\"enrollment_count\":0},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\",\"enrollment_count\":0}],\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"enrollment_count\"],\"rowCount\":5,\"sample\":[{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"enrollment_count\":0},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"enrollment_count\":0}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Courses with zero enrollments\",\"width\":700,\"height\":320,\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"course_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course name\",\"labelAngle\":-40}},\"y\":{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Enrollment count\"}},\"color\":{\"field\":\"course_code\",\"type\":\"nominal\",\"legend\":{\"title\":\"Course code\"}},\"tooltip\":[{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course name\"},{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\"},{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"title\":\"Enrollment count\"},{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.7,\"issues\":[\"All encoded fields (course_id, course_code, course_name, enrollment_count) exist in metadata.columns — OK.\",\"Since enrollment_count = 0 for all rows, bar marks will have zero height and may be invisible; consider using text labels, a table, or another mark type to make zero-count courses visible.\",\"SQL orders by course_code ASC but the x-axis is course_name; the visual display order may not reflect the SQL ORDER BY (potential mismatch between data ordering and axis encoding).\",\"Color encoding by course_code is redundant with course_name on the x-axis and may add unnecessary legend clutter; it’s a presentation choice rather than a correctness issue.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771846516669}},\"input\":{\"question\":\"Which courses have no enrollments at all?\"},\"result\":{\"sql\":\"SELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(e.id) AS enrollment_count\\nFROM public.courses AS c\\nLEFT JOIN public.course_sections AS cs ON cs.course_id = c.id\\nLEFT JOIN public.enrollments AS e ON e.course_section_id = cs.id\\nGROUP BY c.id, c.code, c.name\\nHAVING COUNT(e.id) = 0\\nORDER BY c.code ASC;\",\"data\":[{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"enrollment_count\":0},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"enrollment_count\":0},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\",\"enrollment_count\":0},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\",\"enrollment_count\":0},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\",\"enrollment_count\":0}],\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"enrollment_count\"],\"rowCount\":5,\"sample\":[{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"enrollment_count\":0},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"enrollment_count\":0}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Courses with zero enrollments\",\"width\":700,\"height\":320,\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"course_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course name\",\"labelAngle\":-40}},\"y\":{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Enrollment count\"}},\"color\":{\"field\":\"course_code\",\"type\":\"nominal\",\"legend\":{\"title\":\"Course code\"}},\"tooltip\":[{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course name\"},{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\"},{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"title\":\"Enrollment count\"},{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.7,\"issues\":[\"All encoded fields (course_id, course_code, course_name, enrollment_count) exist in metadata.columns — OK.\",\"Since enrollment_count = 0 for all rows, bar marks will have zero height and may be invisible; consider using text labels, a table, or another mark type to make zero-count courses visible.\",\"SQL orders by course_code ASC but the x-axis is course_name; the visual display order may not reflect the SQL ORDER BY (potential mismatch between data ordering and axis encoding).\",\"Color encoding by course_code is redundant with course_name on the x-axis and may add unnecessary legend clutter; it’s a presentation choice rather than a correctness issue.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"1dbcb9032746ceab2e9baa90e30b10c1\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/courses-no-enrollments/run-0001/run.json",
+    "queryPath": "runs/courses-no-enrollments/run-0001/query.sql",
+    "vegaRawPath": "runs/courses-no-enrollments/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/courses-no-enrollments/run-0001/vega.resolved.json",
+    "imagePath": "runs/courses-no-enrollments/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:35:17.105Z",
+  "traceId": "1dbcb9032746ceab2e9baa90e30b10c1",
+  "success": true,
+  "durationMs": 95517,
+  "resultRaw": {
+    "data": [
+      {
+        "course_id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+        "course_code": "FPW-573",
+        "course_name": "Programowanie Obiektowe",
+        "enrollment_count": 0
+      },
+      {
+        "course_id": "410a9134-116d-41eb-84bc-1b5144736995",
+        "course_code": "FWJ-758",
+        "course_name": "Bezpieczeństwo Systemów Komputerowych",
+        "enrollment_count": 0
+      },
+      {
+        "course_id": "6002cfac-f371-4c9b-a048-8aaf1aae450a",
+        "course_code": "LUO-736",
+        "course_name": "Grafika Komputerowa",
+        "enrollment_count": 0
+      },
+      {
+        "course_id": "e89877df-7199-4b1f-a8e8-8e5c0872fe23",
+        "course_code": "NWG-686",
+        "course_name": "Programowanie Funkcyjne",
+        "enrollment_count": 0
+      },
+      {
+        "course_id": "32619ee8-5d87-49a4-9ca1-c94668909e2e",
+        "course_code": "SBW-955",
+        "course_name": "Sieci Komputerowe",
+        "enrollment_count": 0
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Courses with zero enrollments",
+      "width": 700,
+      "height": 320,
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "course_name",
+          "type": "nominal",
+          "axis": {
+            "title": "Course name",
+            "labelAngle": -40
+          }
+        },
+        "y": {
+          "field": "enrollment_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Enrollment count"
+          }
+        },
+        "color": {
+          "field": "course_code",
+          "type": "nominal",
+          "legend": {
+            "title": "Course code"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "course_name",
+            "type": "nominal",
+            "title": "Course name"
+          },
+          {
+            "field": "course_code",
+            "type": "nominal",
+            "title": "Course code"
+          },
+          {
+            "field": "enrollment_count",
+            "type": "quantitative",
+            "title": "Enrollment count"
+          },
+          {
+            "field": "course_id",
+            "type": "nominal",
+            "title": "Course ID"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT\n  c.id AS course_id,\n  c.code AS course_code,\n  c.name AS course_name,\n  COUNT(e.id) AS enrollment_count\nFROM public.courses AS c\nLEFT JOIN public.course_sections AS cs ON cs.course_id = c.id\nLEFT JOIN public.enrollments AS e ON e.course_section_id = cs.id\nGROUP BY c.id, c.code, c.name\nHAVING COUNT(e.id) = 0\nORDER BY c.code ASC;",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "course_code",
+        "course_name",
+        "enrollment_count"
+      ],
+      "rowCount": 5,
+      "sample": [
+        {
+          "course_id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+          "course_code": "FPW-573",
+          "course_name": "Programowanie Obiektowe",
+          "enrollment_count": 0
+        },
+        {
+          "course_id": "410a9134-116d-41eb-84bc-1b5144736995",
+          "course_code": "FWJ-758",
+          "course_name": "Bezpieczeństwo Systemów Komputerowych",
+          "enrollment_count": 0
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.7,
+      "issues": [
+        "All encoded fields (course_id, course_code, course_name, enrollment_count) exist in metadata.columns — OK.",
+        "Since enrollment_count = 0 for all rows, bar marks will have zero height and may be invisible; consider using text labels, a table, or another mark type to make zero-count courses visible.",
+        "SQL orders by course_code ASC but the x-axis is course_name; the visual display order may not reflect the SQL ORDER BY (potential mismatch between data ordering and axis encoding).",
+        "Color encoding by course_code is redundant with course_name on the x-axis and may add unnecessary legend clutter; it’s a presentation choice rather than a correctness issue."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "course_id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+        "course_code": "FPW-573",
+        "course_name": "Programowanie Obiektowe",
+        "enrollment_count": 0
+      },
+      {
+        "course_id": "410a9134-116d-41eb-84bc-1b5144736995",
+        "course_code": "FWJ-758",
+        "course_name": "Bezpieczeństwo Systemów Komputerowych",
+        "enrollment_count": 0
+      },
+      {
+        "course_id": "6002cfac-f371-4c9b-a048-8aaf1aae450a",
+        "course_code": "LUO-736",
+        "course_name": "Grafika Komputerowa",
+        "enrollment_count": 0
+      },
+      {
+        "course_id": "e89877df-7199-4b1f-a8e8-8e5c0872fe23",
+        "course_code": "NWG-686",
+        "course_name": "Programowanie Funkcyjne",
+        "enrollment_count": 0
+      },
+      {
+        "course_id": "32619ee8-5d87-49a4-9ca1-c94668909e2e",
+        "course_code": "SBW-955",
+        "course_name": "Sieci Komputerowe",
+        "enrollment_count": 0
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Courses with zero enrollments",
+      "width": 700,
+      "height": 320,
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "course_name",
+          "type": "nominal",
+          "axis": {
+            "title": "Course name",
+            "labelAngle": -40
+          }
+        },
+        "y": {
+          "field": "enrollment_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Enrollment count"
+          }
+        },
+        "color": {
+          "field": "course_code",
+          "type": "nominal",
+          "legend": {
+            "title": "Course code"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "course_name",
+            "type": "nominal",
+            "title": "Course name"
+          },
+          {
+            "field": "course_code",
+            "type": "nominal",
+            "title": "Course code"
+          },
+          {
+            "field": "enrollment_count",
+            "type": "quantitative",
+            "title": "Enrollment count"
+          },
+          {
+            "field": "course_id",
+            "type": "nominal",
+            "title": "Course ID"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT\n  c.id AS course_id,\n  c.code AS course_code,\n  c.name AS course_name,\n  COUNT(e.id) AS enrollment_count\nFROM public.courses AS c\nLEFT JOIN public.course_sections AS cs ON cs.course_id = c.id\nLEFT JOIN public.enrollments AS e ON e.course_section_id = cs.id\nGROUP BY c.id, c.code, c.name\nHAVING COUNT(e.id) = 0\nORDER BY c.code ASC;",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "course_code",
+        "course_name",
+        "enrollment_count"
+      ],
+      "rowCount": 5,
+      "sample": [
+        {
+          "course_id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+          "course_code": "FPW-573",
+          "course_name": "Programowanie Obiektowe",
+          "enrollment_count": 0
+        },
+        {
+          "course_id": "410a9134-116d-41eb-84bc-1b5144736995",
+          "course_code": "FWJ-758",
+          "course_name": "Bezpieczeństwo Systemów Komputerowych",
+          "enrollment_count": 0
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.7,
+      "issues": [
+        "All encoded fields (course_id, course_code, course_name, enrollment_count) exist in metadata.columns — OK.",
+        "Since enrollment_count = 0 for all rows, bar marks will have zero height and may be invisible; consider using text labels, a table, or another mark type to make zero-count courses visible.",
+        "SQL orders by course_code ASC but the x-axis is course_name; the visual display order may not reflect the SQL ORDER BY (potential mismatch between data ordering and axis encoding).",
+        "Color encoding by course_code is redundant with course_name on the x-axis and may add unnecessary legend clutter; it’s a presentation choice rather than a correctness issue."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:35:17.105Z",
+    "traceId": "1dbcb9032746ceab2e9baa90e30b10c1",
+    "attempts": 2,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 27682,
+      "outputTokens": 5093,
+      "totalTokens": 32775,
+      "cachedInputTokens": 3840,
+      "reasoningTokens": 3072,
+      "costUsd": 0.0171065
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 27682,
+        "outputTokens": 5093,
+        "totalTokens": 32775,
+        "cachedInputTokens": 3840,
+        "reasoningTokens": 3072,
+        "costUsd": 0.0171065
+      }
+    ],
+    "warnings": []
+  }
+}

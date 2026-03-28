@@ -1,0 +1,165 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "students-enrolled-per-course",
+  "caseDirectory": "students-enrolled-per-course",
+  "repeatIndex": 1,
+  "prompt": "How many students are enrolled in each course?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many students are enrolled in each course?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:48:15.564Z",
+    "endedAtUtc": "2026-02-23T10:48:27.136Z",
+    "durationMs": 11572
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2135",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:48:27 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"How many students are enrolled in each course?\"},\"agent\":{\"payload\":{\"question\":\"How many students are enrolled in each course?\"},\"startedAt\":1771843695572,\"status\":\"success\",\"output\":{\"sql\":\"SELECT c.course_id AS course_id, c.course_name AS course_name, COUNT(DISTINCT e.student_id) AS student_count FROM courses c LEFT JOIN enrollments e ON c.course_id = e.course_id GROUP BY c.course_id, c.course_name ORDER BY student_count DESC, c.course_name ASC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Number of students enrolled in each course\",\"data\":{\"name\":\"query_result\"},\"title\":\"Students enrolled per course\",\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Number of Students\"},\"y\":{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course\",\"sort\":{\"field\":\"student_count\",\"order\":\"descending\"}},\"tooltip\":[{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course\"},{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Enrolled Students\"}]}}},\"endedAt\":1771843706964},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT c.course_id AS course_id, c.course_name AS course_name, COUNT(DISTINCT e.student_id) AS student_count FROM courses c LEFT JOIN enrollments e ON c.course_id = e.course_id GROUP BY c.course_id, c.course_name ORDER BY student_count DESC, c.course_name ASC;\"},\"startedAt\":1771843706968,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column c.course_id does not exist\\nLINE 2: ...t_count FROM courses c LEFT JOIN enrollments e ON c.course_i...\\n                                                             ^\",\"name\":\"Error\"},\"endedAt\":1771843707131}},\"input\":{\"question\":\"How many students are enrolled in each course?\"},\"error\":{\"message\":\"SQL execution failed: column c.course_id does not exist\\nLINE 2: ...t_count FROM courses c LEFT JOIN enrollments e ON c.course_i...\\n                                                             ^\",\"name\":\"Error\"},\"traceId\":\"08c6f88604a8fb7f398c99ca57997ad1\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/students-enrolled-per-course/run-0001/run.json",
+    "queryPath": "runs/students-enrolled-per-course/run-0001/query.sql",
+    "vegaRawPath": "runs/students-enrolled-per-course/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/students-enrolled-per-course/run-0001/vega.resolved.json",
+    "imagePath": "runs/students-enrolled-per-course/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:48:27.136Z",
+  "traceId": "08c6f88604a8fb7f398c99ca57997ad1",
+  "success": false,
+  "durationMs": 11572,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "How many students are enrolled in each course?"
+      },
+      "agent": {
+        "payload": {
+          "question": "How many students are enrolled in each course?"
+        },
+        "startedAt": 1771843695572,
+        "status": "success",
+        "output": {
+          "sql": "SELECT c.course_id AS course_id, c.course_name AS course_name, COUNT(DISTINCT e.student_id) AS student_count FROM courses c LEFT JOIN enrollments e ON c.course_id = e.course_id GROUP BY c.course_id, c.course_name ORDER BY student_count DESC, c.course_name ASC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Number of students enrolled in each course",
+            "data": {
+              "name": "query_result"
+            },
+            "title": "Students enrolled per course",
+            "mark": {
+              "type": "bar",
+              "tooltip": true
+            },
+            "encoding": {
+              "x": {
+                "field": "student_count",
+                "type": "quantitative",
+                "title": "Number of Students"
+              },
+              "y": {
+                "field": "course_name",
+                "type": "nominal",
+                "title": "Course",
+                "sort": {
+                  "field": "student_count",
+                  "order": "descending"
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "course_name",
+                  "type": "nominal",
+                  "title": "Course"
+                },
+                {
+                  "field": "course_id",
+                  "type": "nominal",
+                  "title": "Course ID"
+                },
+                {
+                  "field": "student_count",
+                  "type": "quantitative",
+                  "title": "Enrolled Students"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843706964
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT c.course_id AS course_id, c.course_name AS course_name, COUNT(DISTINCT e.student_id) AS student_count FROM courses c LEFT JOIN enrollments e ON c.course_id = e.course_id GROUP BY c.course_id, c.course_name ORDER BY student_count DESC, c.course_name ASC;"
+        },
+        "startedAt": 1771843706968,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column c.course_id does not exist\nLINE 2: ...t_count FROM courses c LEFT JOIN enrollments e ON c.course_i...\n                                                             ^",
+          "name": "Error"
+        },
+        "endedAt": 1771843707131
+      }
+    },
+    "input": {
+      "question": "How many students are enrolled in each course?"
+    },
+    "error": {
+      "message": "SQL execution failed: column c.course_id does not exist\nLINE 2: ...t_count FROM courses c LEFT JOIN enrollments e ON c.course_i...\n                                                             ^",
+      "name": "Error"
+    },
+    "traceId": "08c6f88604a8fb7f398c99ca57997ad1"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:48:27.136Z",
+    "traceId": "08c6f88604a8fb7f398c99ca57997ad1",
+    "attempts": 6,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 265,
+      "outputTokens": 1004,
+      "totalTokens": 1269,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 640,
+      "costUsd": 0.00207425
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 265,
+        "outputTokens": 1004,
+        "totalTokens": 1269,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 640,
+        "costUsd": 0.00207425
+      }
+    ],
+    "warnings": []
+  }
+}

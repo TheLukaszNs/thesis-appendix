@@ -1,0 +1,398 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "highest-scholarship-departments-per-year",
+  "caseDirectory": "highest-scholarship-departments-per-year",
+  "repeatIndex": 1,
+  "prompt": "Which department received the most total scholarship money each academic year?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which department received the most total scholarship money each academic year?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:54:13.274Z",
+    "endedAtUtc": "2026-02-22T23:54:58.993Z",
+    "durationMs": 45719
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "16187",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:54:58 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Which department received the most total scholarship money each academic year?\"},\"sql\":{\"payload\":{\"question\":\"Which department received the most total scholarship money each academic year?\"},\"startedAt\":1771804453288,\"status\":\"success\",\"output\":{\"reasoning\":\"Sum scholarships per department per academic_year, rank departments within each year by total_amount (tie-broken by department_name), and return the top department per year. Verified tables/columns via schema inspection.\",\"sql\":\"WITH totals AS (\\n  SELECT\\n    sch.academic_year AS academic_year,\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    SUM(sch.amount) AS total_amount\\n  FROM public.scholarships sch\\n  JOIN public.students stu ON sch.student_id = stu.id\\n  JOIN public.departments d ON stu.department_id = d.id\\n  GROUP BY sch.academic_year, d.id, d.name\\n),\\nranked AS (\\n  SELECT\\n    academic_year,\\n    department_id,\\n    department_name,\\n    total_amount,\\n    ROW_NUMBER() OVER (PARTITION BY academic_year ORDER BY total_amount DESC, department_name ASC) AS rn\\n  FROM totals\\n)\\nSELECT\\n  academic_year,\\n  department_id,\\n  department_name,\\n  total_amount\\nFROM ranked\\nWHERE rn = 1\\nORDER BY academic_year ASC;\",\"assumptions\":[\"scholarships.student_id -> students.id and students.department_id -> departments.id are correct foreign keys (verified in schema).\",\"academic_year in scholarships is the field to group by (stored as varchar).\",\"amount is the award value to sum (non-null numeric).\",\"If multiple departments tie for top total in a year, the department with the alphabetically first name is returned as the tie-breaker.\"]},\"endedAt\":1771804478928},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH totals AS (\\n  SELECT\\n    sch.academic_year AS academic_year,\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    SUM(sch.amount) AS total_amount\\n  FROM public.scholarships sch\\n  JOIN public.students stu ON sch.student_id = stu.id\\n  JOIN public.departments d ON stu.department_id = d.id\\n  GROUP BY sch.academic_year, d.id, d.name\\n),\\nranked AS (\\n  SELECT\\n    academic_year,\\n    department_id,\\n    department_name,\\n    total_amount,\\n    ROW_NUMBER() OVER (PARTITION BY academic_year ORDER BY total_amount DESC, department_name ASC) AS rn\\n  FROM totals\\n)\\nSELECT\\n  academic_year,\\n  department_id,\\n  department_name,\\n  total_amount\\nFROM ranked\\nWHERE rn = 1\\nORDER BY academic_year ASC;\"},\"startedAt\":1771804478934,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH totals AS (\\n  SELECT\\n    sch.academic_year AS academic_year,\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    SUM(sch.amount) AS total_amount\\n  FROM public.scholarships sch\\n  JOIN public.students stu ON sch.student_id = stu.id\\n  JOIN public.departments d ON stu.department_id = d.id\\n  GROUP BY sch.academic_year, d.id, d.name\\n),\\nranked AS (\\n  SELECT\\n    academic_year,\\n    department_id,\\n    department_name,\\n    total_amount,\\n    ROW_NUMBER() OVER (PARTITION BY academic_year ORDER BY total_amount DESC, department_name ASC) AS rn\\n  FROM totals\\n)\\nSELECT\\n  academic_year,\\n  department_id,\\n  department_name,\\n  total_amount\\nFROM ranked\\nWHERE rn = 1\\nORDER BY academic_year ASC\",\"metadata\":{\"columns\":[\"total_amount\",\"academic_year\",\"department_id\",\"department_name\"],\"rowCount\":4,\"sample\":[{\"total_amount\":1500,\"academic_year\":\"2019/2020\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"total_amount\":4500,\"academic_year\":\"2020/2021\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\"}]},\"data\":[{\"total_amount\":1500,\"academic_year\":\"2019/2020\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"total_amount\":4500,\"academic_year\":\"2020/2021\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"total_amount\":2000,\"academic_year\":\"2021/2022\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"total_amount\":12000,\"academic_year\":\"2023/2024\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"}]},\"endedAt\":1771804478952},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"WITH totals AS (\\n  SELECT\\n    sch.academic_year AS academic_year,\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    SUM(sch.amount) AS total_amount\\n  FROM public.scholarships sch\\n  JOIN public.students stu ON sch.student_id = stu.id\\n  JOIN public.departments d ON stu.department_id = d.id\\n  GROUP BY sch.academic_year, d.id, d.name\\n),\\nranked AS (\\n  SELECT\\n    academic_year,\\n    department_id,\\n    department_name,\\n    total_amount,\\n    ROW_NUMBER() OVER (PARTITION BY academic_year ORDER BY total_amount DESC, department_name ASC) AS rn\\n  FROM totals\\n)\\nSELECT\\n  academic_year,\\n  department_id,\\n  department_name,\\n  total_amount\\nFROM ranked\\nWHERE rn = 1\\nORDER BY academic_year ASC\",\"metadata\":{\"columns\":[\"total_amount\",\"academic_year\",\"department_id\",\"department_name\"],\"rowCount\":4,\"sample\":[{\"total_amount\":1500,\"academic_year\":\"2019/2020\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"total_amount\":4500,\"academic_year\":\"2020/2021\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\"}]},\"data\":[{\"total_amount\":1500,\"academic_year\":\"2019/2020\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"total_amount\":4500,\"academic_year\":\"2020/2021\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"total_amount\":2000,\"academic_year\":\"2021/2022\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"total_amount\":12000,\"academic_year\":\"2023/2024\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"}]},\"startedAt\":1771804478956,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Department with Highest Total Scholarships per Academic Year\",\"width\":600,\"height\":400,\"layer\":[{\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic Year\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total Scholarship Amount\"},\"color\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total Amount\"}]}},{\"mark\":{\"type\":\"text\",\"dy\":-8,\"fontWeight\":\"bold\"},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\"},\"y\":{\"field\":\"total_amount\",\"type\":\"quantitative\"},\"text\":{\"field\":\"department_name\",\"type\":\"nominal\"},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total Amount\"}]}}]},\"reasoning\":\"A vertical bar chart shows each academic year on the x-axis and the total scholarship amount on the y-axis. Bars are colored by the department with the highest total that year; department names are shown as labels above each bar and included in the tooltip for clarity.\"},\"endedAt\":1771804498979},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Department with Highest Total Scholarships per Academic Year\",\"width\":600,\"height\":400,\"layer\":[{\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic Year\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total Scholarship Amount\"},\"color\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total Amount\"}]}},{\"mark\":{\"type\":\"text\",\"dy\":-8,\"fontWeight\":\"bold\"},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\"},\"y\":{\"field\":\"total_amount\",\"type\":\"quantitative\"},\"text\":{\"field\":\"department_name\",\"type\":\"nominal\"},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total Amount\"}]}}]},\"reasoning\":\"A vertical bar chart shows each academic year on the x-axis and the total scholarship amount on the y-axis. Bars are colored by the department with the highest total that year; department names are shown as labels above each bar and included in the tooltip for clarity.\"},\"startedAt\":1771804498981,\"status\":\"success\",\"output\":{\"sql\":\"WITH totals AS (\\n  SELECT\\n    sch.academic_year AS academic_year,\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    SUM(sch.amount) AS total_amount\\n  FROM public.scholarships sch\\n  JOIN public.students stu ON sch.student_id = stu.id\\n  JOIN public.departments d ON stu.department_id = d.id\\n  GROUP BY sch.academic_year, d.id, d.name\\n),\\nranked AS (\\n  SELECT\\n    academic_year,\\n    department_id,\\n    department_name,\\n    total_amount,\\n    ROW_NUMBER() OVER (PARTITION BY academic_year ORDER BY total_amount DESC, department_name ASC) AS rn\\n  FROM totals\\n)\\nSELECT\\n  academic_year,\\n  department_id,\\n  department_name,\\n  total_amount\\nFROM ranked\\nWHERE rn = 1\\nORDER BY academic_year ASC;\",\"data\":[{\"total_amount\":1500,\"academic_year\":\"2019/2020\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"total_amount\":4500,\"academic_year\":\"2020/2021\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"total_amount\":2000,\"academic_year\":\"2021/2022\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"total_amount\":12000,\"academic_year\":\"2023/2024\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"}],\"metadata\":{\"columns\":[\"total_amount\",\"academic_year\",\"department_id\",\"department_name\"],\"rowCount\":4,\"sample\":[{\"total_amount\":1500,\"academic_year\":\"2019/2020\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"total_amount\":4500,\"academic_year\":\"2020/2021\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Department with Highest Total Scholarships per Academic Year\",\"width\":600,\"height\":400,\"layer\":[{\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic Year\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total Scholarship Amount\"},\"color\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total Amount\"}]}},{\"mark\":{\"type\":\"text\",\"dy\":-8,\"fontWeight\":\"bold\"},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\"},\"y\":{\"field\":\"total_amount\",\"type\":\"quantitative\"},\"text\":{\"field\":\"department_name\",\"type\":\"nominal\"},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total Amount\"}]}}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"]}},\"endedAt\":1771804498983}},\"input\":{\"question\":\"Which department received the most total scholarship money each academic year?\"},\"result\":{\"sql\":\"WITH totals AS (\\n  SELECT\\n    sch.academic_year AS academic_year,\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    SUM(sch.amount) AS total_amount\\n  FROM public.scholarships sch\\n  JOIN public.students stu ON sch.student_id = stu.id\\n  JOIN public.departments d ON stu.department_id = d.id\\n  GROUP BY sch.academic_year, d.id, d.name\\n),\\nranked AS (\\n  SELECT\\n    academic_year,\\n    department_id,\\n    department_name,\\n    total_amount,\\n    ROW_NUMBER() OVER (PARTITION BY academic_year ORDER BY total_amount DESC, department_name ASC) AS rn\\n  FROM totals\\n)\\nSELECT\\n  academic_year,\\n  department_id,\\n  department_name,\\n  total_amount\\nFROM ranked\\nWHERE rn = 1\\nORDER BY academic_year ASC;\",\"data\":[{\"total_amount\":1500,\"academic_year\":\"2019/2020\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"total_amount\":4500,\"academic_year\":\"2020/2021\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"total_amount\":2000,\"academic_year\":\"2021/2022\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"total_amount\":12000,\"academic_year\":\"2023/2024\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"}],\"metadata\":{\"columns\":[\"total_amount\",\"academic_year\",\"department_id\",\"department_name\"],\"rowCount\":4,\"sample\":[{\"total_amount\":1500,\"academic_year\":\"2019/2020\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"total_amount\":4500,\"academic_year\":\"2020/2021\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Department with Highest Total Scholarships per Academic Year\",\"width\":600,\"height\":400,\"layer\":[{\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic Year\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total Scholarship Amount\"},\"color\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total Amount\"}]}},{\"mark\":{\"type\":\"text\",\"dy\":-8,\"fontWeight\":\"bold\"},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\"},\"y\":{\"field\":\"total_amount\",\"type\":\"quantitative\"},\"text\":{\"field\":\"department_name\",\"type\":\"nominal\"},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total Amount\"}]}}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"]}},\"traceId\":\"0d46117f7da6fa734de8a86e8611cf59\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/highest-scholarship-departments-per-year/run-0001/run.json",
+    "queryPath": "runs/highest-scholarship-departments-per-year/run-0001/query.sql",
+    "vegaRawPath": "runs/highest-scholarship-departments-per-year/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/highest-scholarship-departments-per-year/run-0001/vega.resolved.json",
+    "imagePath": "runs/highest-scholarship-departments-per-year/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:54:59.384Z",
+  "traceId": "0d46117f7da6fa734de8a86e8611cf59",
+  "success": true,
+  "durationMs": 46110,
+  "resultRaw": {
+    "data": [
+      {
+        "total_amount": 1500,
+        "academic_year": "2019/2020",
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_name": "Wydział Inżynierii Produkcji"
+      },
+      {
+        "total_amount": 4500,
+        "academic_year": "2020/2021",
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_name": "Wydział Inżynierii Produkcji"
+      },
+      {
+        "total_amount": 2000,
+        "academic_year": "2021/2022",
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_name": "Wydział Inżynierii Biomedycznej"
+      },
+      {
+        "total_amount": 12000,
+        "academic_year": "2023/2024",
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Department with Highest Total Scholarships per Academic Year",
+      "width": 600,
+      "height": 400,
+      "layer": [
+        {
+          "mark": {
+            "type": "bar"
+          },
+          "encoding": {
+            "x": {
+              "field": "academic_year",
+              "type": "ordinal",
+              "title": "Academic Year",
+              "axis": {
+                "labelAngle": 0
+              }
+            },
+            "y": {
+              "field": "total_amount",
+              "type": "quantitative",
+              "title": "Total Scholarship Amount"
+            },
+            "color": {
+              "field": "department_name",
+              "type": "nominal",
+              "title": "Department"
+            },
+            "tooltip": [
+              {
+                "field": "academic_year",
+                "type": "nominal",
+                "title": "Academic Year"
+              },
+              {
+                "field": "department_name",
+                "type": "nominal",
+                "title": "Department"
+              },
+              {
+                "field": "total_amount",
+                "type": "quantitative",
+                "title": "Total Amount"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "dy": -8,
+            "fontWeight": "bold"
+          },
+          "encoding": {
+            "x": {
+              "field": "academic_year",
+              "type": "ordinal"
+            },
+            "y": {
+              "field": "total_amount",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "department_name",
+              "type": "nominal"
+            },
+            "tooltip": [
+              {
+                "field": "academic_year",
+                "type": "nominal",
+                "title": "Academic Year"
+              },
+              {
+                "field": "department_name",
+                "type": "nominal",
+                "title": "Department"
+              },
+              {
+                "field": "total_amount",
+                "type": "quantitative",
+                "title": "Total Amount"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "sql": "WITH totals AS (\n  SELECT\n    sch.academic_year AS academic_year,\n    d.id AS department_id,\n    d.name AS department_name,\n    SUM(sch.amount) AS total_amount\n  FROM public.scholarships sch\n  JOIN public.students stu ON sch.student_id = stu.id\n  JOIN public.departments d ON stu.department_id = d.id\n  GROUP BY sch.academic_year, d.id, d.name\n),\nranked AS (\n  SELECT\n    academic_year,\n    department_id,\n    department_name,\n    total_amount,\n    ROW_NUMBER() OVER (PARTITION BY academic_year ORDER BY total_amount DESC, department_name ASC) AS rn\n  FROM totals\n)\nSELECT\n  academic_year,\n  department_id,\n  department_name,\n  total_amount\nFROM ranked\nWHERE rn = 1\nORDER BY academic_year ASC;",
+    "metadata": {
+      "columns": [
+        "total_amount",
+        "academic_year",
+        "department_id",
+        "department_name"
+      ],
+      "rowCount": 4,
+      "sample": [
+        {
+          "total_amount": 1500,
+          "academic_year": "2019/2020",
+          "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+          "department_name": "Wydział Inżynierii Produkcji"
+        },
+        {
+          "total_amount": 4500,
+          "academic_year": "2020/2021",
+          "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+          "department_name": "Wydział Inżynierii Produkcji"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "total_amount": 1500,
+        "academic_year": "2019/2020",
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_name": "Wydział Inżynierii Produkcji"
+      },
+      {
+        "total_amount": 4500,
+        "academic_year": "2020/2021",
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_name": "Wydział Inżynierii Produkcji"
+      },
+      {
+        "total_amount": 2000,
+        "academic_year": "2021/2022",
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_name": "Wydział Inżynierii Biomedycznej"
+      },
+      {
+        "total_amount": 12000,
+        "academic_year": "2023/2024",
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Department with Highest Total Scholarships per Academic Year",
+      "width": 600,
+      "height": 400,
+      "layer": [
+        {
+          "mark": {
+            "type": "bar"
+          },
+          "encoding": {
+            "x": {
+              "field": "academic_year",
+              "type": "ordinal",
+              "title": "Academic Year",
+              "axis": {
+                "labelAngle": 0
+              }
+            },
+            "y": {
+              "field": "total_amount",
+              "type": "quantitative",
+              "title": "Total Scholarship Amount"
+            },
+            "color": {
+              "field": "department_name",
+              "type": "nominal",
+              "title": "Department"
+            },
+            "tooltip": [
+              {
+                "field": "academic_year",
+                "type": "nominal",
+                "title": "Academic Year"
+              },
+              {
+                "field": "department_name",
+                "type": "nominal",
+                "title": "Department"
+              },
+              {
+                "field": "total_amount",
+                "type": "quantitative",
+                "title": "Total Amount"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "dy": -8,
+            "fontWeight": "bold"
+          },
+          "encoding": {
+            "x": {
+              "field": "academic_year",
+              "type": "ordinal"
+            },
+            "y": {
+              "field": "total_amount",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "department_name",
+              "type": "nominal"
+            },
+            "tooltip": [
+              {
+                "field": "academic_year",
+                "type": "nominal",
+                "title": "Academic Year"
+              },
+              {
+                "field": "department_name",
+                "type": "nominal",
+                "title": "Department"
+              },
+              {
+                "field": "total_amount",
+                "type": "quantitative",
+                "title": "Total Amount"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "sql": "WITH totals AS (\n  SELECT\n    sch.academic_year AS academic_year,\n    d.id AS department_id,\n    d.name AS department_name,\n    SUM(sch.amount) AS total_amount\n  FROM public.scholarships sch\n  JOIN public.students stu ON sch.student_id = stu.id\n  JOIN public.departments d ON stu.department_id = d.id\n  GROUP BY sch.academic_year, d.id, d.name\n),\nranked AS (\n  SELECT\n    academic_year,\n    department_id,\n    department_name,\n    total_amount,\n    ROW_NUMBER() OVER (PARTITION BY academic_year ORDER BY total_amount DESC, department_name ASC) AS rn\n  FROM totals\n)\nSELECT\n  academic_year,\n  department_id,\n  department_name,\n  total_amount\nFROM ranked\nWHERE rn = 1\nORDER BY academic_year ASC;",
+    "metadata": {
+      "columns": [
+        "total_amount",
+        "academic_year",
+        "department_id",
+        "department_name"
+      ],
+      "rowCount": 4,
+      "sample": [
+        {
+          "total_amount": 1500,
+          "academic_year": "2019/2020",
+          "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+          "department_name": "Wydział Inżynierii Produkcji"
+        },
+        {
+          "total_amount": 4500,
+          "academic_year": "2020/2021",
+          "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+          "department_name": "Wydział Inżynierii Produkcji"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:54:59.384Z",
+    "traceId": "0d46117f7da6fa734de8a86e8611cf59",
+    "attempts": 6,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 12834,
+      "outputTokens": 3349,
+      "totalTokens": 16183,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2112,
+      "costUsd": 0.0099065
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 12834,
+        "outputTokens": 3349,
+        "totalTokens": 16183,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2112,
+        "costUsd": 0.0099065
+      }
+    ],
+    "warnings": []
+  }
+}

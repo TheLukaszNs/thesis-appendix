@@ -1,0 +1,90 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Average Course Evaluation Ratings Comparison",
+  "description": "Comparison of average overall, professor, content, and difficulty ratings across all evaluations",
+  "data": {
+    "name": "query_result",
+    "values": [
+      {
+        "avg_overall_rating": "3.00",
+        "avg_professor_rating": "3.05",
+        "avg_content_rating": "3.24",
+        "avg_difficulty_rating": "3.17"
+      }
+    ]
+  },
+  "transform": [
+    {
+      "fold": [
+        "avg_overall_rating",
+        "avg_professor_rating",
+        "avg_content_rating",
+        "avg_difficulty_rating"
+      ],
+      "as": [
+        "rating_type",
+        "rating_value"
+      ]
+    },
+    {
+      "calculate": "datum.rating_type === 'avg_overall_rating' ? 'Overall' : datum.rating_type === 'avg_professor_rating' ? 'Professor' : datum.rating_type === 'avg_content_rating' ? 'Content' : 'Difficulty'",
+      "as": "rating_label"
+    }
+  ],
+  "mark": {
+    "type": "bar",
+    "cornerRadius": 4
+  },
+  "encoding": {
+    "x": {
+      "field": "rating_label",
+      "type": "nominal",
+      "title": "Rating Category",
+      "axis": {
+        "labelAngle": 0
+      }
+    },
+    "y": {
+      "field": "rating_value",
+      "type": "quantitative",
+      "title": "Average Rating",
+      "scale": {
+        "domain": [
+          0,
+          5
+        ]
+      }
+    },
+    "color": {
+      "field": "rating_label",
+      "type": "nominal",
+      "scale": {
+        "scheme": "set2"
+      },
+      "legend": false
+    },
+    "tooltip": [
+      {
+        "field": "rating_label",
+        "type": "nominal",
+        "title": "Rating Type"
+      },
+      {
+        "field": "rating_value",
+        "type": "quantitative",
+        "title": "Average Rating",
+        "format": ".2f"
+      }
+    ]
+  },
+  "datasets": {
+    "query_result": [
+      {
+        "avg_overall_rating": "3.00",
+        "avg_professor_rating": "3.05",
+        "avg_content_rating": "3.24",
+        "avg_difficulty_rating": "3.17"
+      }
+    ]
+  }
+}

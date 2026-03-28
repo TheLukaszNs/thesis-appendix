@@ -1,0 +1,530 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "prerequisite-chain-length",
+  "caseDirectory": "prerequisite-chain-length",
+  "repeatIndex": 1,
+  "prompt": "Which courses are prerequisites for the most other courses?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which courses are prerequisites for the most other courses?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:22:30.372Z",
+    "endedAtUtc": "2026-02-23T11:23:53.526Z",
+    "durationMs": 83154
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "41859",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:23:53 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Which courses are prerequisites for the most other courses?\"},\"planner\":{\"payload\":{\"question\":\"Which courses are prerequisites for the most other courses?\"},\"startedAt\":1771845750378,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT prerequisites.course_id) AS dependent_count\"],\"dimensions\":[\"prerequisites.prerequisite_course_id\",\"courses.code\",\"courses.name\"],\"filters\":[\"include all rows from public.prerequisites (no filter on is_mandatory)\",\"only join prerequisite_course_id values that exist in public.courses (INNER JOIN)\"],\"grain\":\"per prerequisite course (one row per prerequisite course)\",\"aliases\":{\"prerequisites.prerequisite_course_id\":\"pr_course_id\",\"courses.code\":\"pr_course_code\",\"courses.name\":\"pr_course_name\",\"COUNT(DISTINCT prerequisites.course_id)\":\"dependent_count\"},\"output_fields\":[\"pr_course_id\",\"pr_course_code\",\"pr_course_name\",\"dependent_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"pr_course_code\",\"y_axis\":\"dependent_count\",\"title\":\"Courses that are prerequisites for the most other courses\"},\"assumptions\":[\"public.prerequisites.prerequisite_course_id and public.prerequisites.course_id are foreign keys referencing public.courses.id (confirmed by schema constraints).\",\"Count each dependent course once per (course <- prerequisite) relationship: use COUNT(DISTINCT prerequisites.course_id) to avoid duplicate dependent counts. The unique index on (course_id, prerequisite_course_id) further prevents duplicate rows.\",\"Include all prerequisites (both mandatory and optional). If you want only mandatory prerequisites, add filter prerequisites.is_mandatory = true.\",\"Do not exclude self-referential prerequisites unless requested (if present, they will count toward dependent_count).\",\"Result is intended to return one row per prerequisite course with its code and name and the number of courses that list it as a prerequisite, sorted descending by dependent_count for presentation. If the result set is large, downstream visualization should consider limiting to top N (e.g., top 20).\"]}},\"endedAt\":1771845780000},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT prerequisites.course_id) AS dependent_count\"],\"dimensions\":[\"prerequisites.prerequisite_course_id\",\"courses.code\",\"courses.name\"],\"filters\":[\"include all rows from public.prerequisites (no filter on is_mandatory)\",\"only join prerequisite_course_id values that exist in public.courses (INNER JOIN)\"],\"grain\":\"per prerequisite course (one row per prerequisite course)\",\"aliases\":{\"prerequisites.prerequisite_course_id\":\"pr_course_id\",\"courses.code\":\"pr_course_code\",\"courses.name\":\"pr_course_name\",\"COUNT(DISTINCT prerequisites.course_id)\":\"dependent_count\"},\"output_fields\":[\"pr_course_id\",\"pr_course_code\",\"pr_course_name\",\"dependent_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"pr_course_code\",\"y_axis\":\"dependent_count\",\"title\":\"Courses that are prerequisites for the most other courses\"},\"assumptions\":[\"public.prerequisites.prerequisite_course_id and public.prerequisites.course_id are foreign keys referencing public.courses.id (confirmed by schema constraints).\",\"Count each dependent course once per (course <- prerequisite) relationship: use COUNT(DISTINCT prerequisites.course_id) to avoid duplicate dependent counts. The unique index on (course_id, prerequisite_course_id) further prevents duplicate rows.\",\"Include all prerequisites (both mandatory and optional). If you want only mandatory prerequisites, add filter prerequisites.is_mandatory = true.\",\"Do not exclude self-referential prerequisites unless requested (if present, they will count toward dependent_count).\",\"Result is intended to return one row per prerequisite course with its code and name and the number of courses that list it as a prerequisite, sorted descending by dependent_count for presentation. If the result set is large, downstream visualization should consider limiting to top N (e.g., top 20).\"]}},\"startedAt\":1771845780008,\"status\":\"success\",\"output\":{\"question\":\"Which courses are prerequisites for the most other courses?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT prerequisites.course_id) AS dependent_count\"],\"dimensions\":[\"prerequisites.prerequisite_course_id\",\"courses.code\",\"courses.name\"],\"filters\":[\"include all rows from public.prerequisites (no filter on is_mandatory)\",\"only join prerequisite_course_id values that exist in public.courses (INNER JOIN)\"],\"grain\":\"per prerequisite course (one row per prerequisite course)\",\"aliases\":{\"prerequisites.prerequisite_course_id\":\"pr_course_id\",\"courses.code\":\"pr_course_code\",\"courses.name\":\"pr_course_name\",\"COUNT(DISTINCT prerequisites.course_id)\":\"dependent_count\"},\"output_fields\":[\"pr_course_id\",\"pr_course_code\",\"pr_course_name\",\"dependent_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"pr_course_code\",\"y_axis\":\"dependent_count\",\"title\":\"Courses that are prerequisites for the most other courses\"},\"assumptions\":[\"public.prerequisites.prerequisite_course_id and public.prerequisites.course_id are foreign keys referencing public.courses.id (confirmed by schema constraints).\",\"Count each dependent course once per (course <- prerequisite) relationship: use COUNT(DISTINCT prerequisites.course_id) to avoid duplicate dependent counts. The unique index on (course_id, prerequisite_course_id) further prevents duplicate rows.\",\"Include all prerequisites (both mandatory and optional). If you want only mandatory prerequisites, add filter prerequisites.is_mandatory = true.\",\"Do not exclude self-referential prerequisites unless requested (if present, they will count toward dependent_count).\",\"Result is intended to return one row per prerequisite course with its code and name and the number of courses that list it as a prerequisite, sorted descending by dependent_count for presentation. If the result set is large, downstream visualization should consider limiting to top N (e.g., top 20).\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771845780013},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"Which courses are prerequisites for the most other courses?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT prerequisites.course_id) AS dependent_count\"],\"dimensions\":[\"prerequisites.prerequisite_course_id\",\"courses.code\",\"courses.name\"],\"filters\":[\"include all rows from public.prerequisites (no filter on is_mandatory)\",\"only join prerequisite_course_id values that exist in public.courses (INNER JOIN)\"],\"grain\":\"per prerequisite course (one row per prerequisite course)\",\"aliases\":{\"prerequisites.prerequisite_course_id\":\"pr_course_id\",\"courses.code\":\"pr_course_code\",\"courses.name\":\"pr_course_name\",\"COUNT(DISTINCT prerequisites.course_id)\":\"dependent_count\"},\"output_fields\":[\"pr_course_id\",\"pr_course_code\",\"pr_course_name\",\"dependent_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"pr_course_code\",\"y_axis\":\"dependent_count\",\"title\":\"Courses that are prerequisites for the most other courses\"},\"assumptions\":[\"public.prerequisites.prerequisite_course_id and public.prerequisites.course_id are foreign keys referencing public.courses.id (confirmed by schema constraints).\",\"Count each dependent course once per (course <- prerequisite) relationship: use COUNT(DISTINCT prerequisites.course_id) to avoid duplicate dependent counts. The unique index on (course_id, prerequisite_course_id) further prevents duplicate rows.\",\"Include all prerequisites (both mandatory and optional). If you want only mandatory prerequisites, add filter prerequisites.is_mandatory = true.\",\"Do not exclude self-referential prerequisites unless requested (if present, they will count toward dependent_count).\",\"Result is intended to return one row per prerequisite course with its code and name and the number of courses that list it as a prerequisite, sorted descending by dependent_count for presentation. If the result set is large, downstream visualization should consider limiting to top N (e.g., top 20).\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771845780018,\"status\":\"success\",\"output\":{\"question\":\"Which courses are prerequisites for the most other courses?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT prerequisites.course_id) AS dependent_count\"],\"dimensions\":[\"prerequisites.prerequisite_course_id\",\"courses.code\",\"courses.name\"],\"filters\":[\"include all rows from public.prerequisites (no filter on is_mandatory)\",\"only join prerequisite_course_id values that exist in public.courses (INNER JOIN)\"],\"grain\":\"per prerequisite course (one row per prerequisite course)\",\"aliases\":{\"prerequisites.prerequisite_course_id\":\"pr_course_id\",\"courses.code\":\"pr_course_code\",\"courses.name\":\"pr_course_name\",\"COUNT(DISTINCT prerequisites.course_id)\":\"dependent_count\"},\"output_fields\":[\"pr_course_id\",\"pr_course_code\",\"pr_course_name\",\"dependent_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"pr_course_code\",\"y_axis\":\"dependent_count\",\"title\":\"Courses that are prerequisites for the most other courses\"},\"assumptions\":[\"public.prerequisites.prerequisite_course_id and public.prerequisites.course_id are foreign keys referencing public.courses.id (confirmed by schema constraints).\",\"Count each dependent course once per (course <- prerequisite) relationship: use COUNT(DISTINCT prerequisites.course_id) to avoid duplicate dependent counts. The unique index on (course_id, prerequisite_course_id) further prevents duplicate rows.\",\"Include all prerequisites (both mandatory and optional). If you want only mandatory prerequisites, add filter prerequisites.is_mandatory = true.\",\"Do not exclude self-referential prerequisites unless requested (if present, they will count toward dependent_count).\",\"Result is intended to return one row per prerequisite course with its code and name and the number of courses that list it as a prerequisite, sorted descending by dependent_count for presentation. If the result set is large, downstream visualization should consider limiting to top N (e.g., top 20).\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT p.prerequisite_course_id AS pr_course_id, c.code AS pr_course_code, c.name AS pr_course_name, COUNT(DISTINCT p.course_id) AS dependent_count\\nFROM public.prerequisites p\\nINNER JOIN public.courses c\\n  ON p.prerequisite_course_id = c.id\\nGROUP BY p.prerequisite_course_id, c.code, c.name\\nORDER BY dependent_count DESC, pr_course_code ASC;\",\"validationIssues\":[\"All encoded fields (pr_course_code, pr_course_name, dependent_count) exist in metadata.columns — good.\",\"The SQL performs aggregation (one row per prerequisite course with COUNT DISTINCT); the chart uses the aggregated dependent_count directly — mapping is consistent.\",\"Vega-Lite sorts x by dependent_count descending, but the SQL also specified a secondary ORDER BY pr_course_code ASC; Vega-Lite does not include the secondary tie-breaker, so ties may be ordered differently than the SQL result.\",\"pr_course_id (the primary key) is present in the SQL output but not used in the visualization; if pr_course_code is not unique across courses, multiple distinct pr_course_id rows could share the same pr_course_code and should be disambiguated (this is a potential ambiguity, not a blocker).\",\"The plan suggested possibly limiting to top N (e.g., top 20) for large result sets; the SQL has no LIMIT — if the result is large the chart may become crowded. Consider applying a LIMIT or filtering in the query or visualization.\",\"Color encodes dependent_count without a legend (legend:null). This is acceptable but may reduce interpretability; consider adding a legend or a continuous color scale label if color is intended to convey magnitude.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Count how many distinct courses list each course as a prerequisite by aggregating public.prerequisites (inner-joined to public.courses to ensure the prerequisite course exists). Return one row per prerequisite course with its code and name, sorted deterministically by dependent_count desc then code.\",\"sql\":\"SELECT p.prerequisite_course_id AS pr_course_id, c.code AS pr_course_code, c.name AS pr_course_name, COUNT(DISTINCT p.course_id) AS dependent_count\\nFROM public.prerequisites p\\nINNER JOIN public.courses c\\n  ON p.prerequisite_course_id = c.id\\nGROUP BY p.prerequisite_course_id, c.code, c.name\\nORDER BY dependent_count DESC, pr_course_code ASC;\",\"assumptions\":[\"Include all prerequisites (both mandatory and optional) as requested in plan.\",\"public.prerequisites.prerequisite_course_id and public.prerequisites.course_id reference public.courses.id (foreign keys confirmed).\",\"Count each dependent course once per (course <- prerequisite) relationship using COUNT(DISTINCT p.course_id).\",\"Deterministic ordering uses dependent_count DESC then pr_course_code ASC as a tie-breaker.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT p.prerequisite_course_id AS pr_course_id, c.code AS pr_course_code, c.name AS pr_course_name, COUNT(DISTINCT p.course_id) AS dependent_count\\nFROM public.prerequisites p\\nINNER JOIN public.courses c\\n  ON p.prerequisite_course_id = c.id\\nGROUP BY p.prerequisite_course_id, c.code, c.name\\nORDER BY dependent_count DESC, pr_course_code ASC\",\"metadata\":{\"columns\":[\"pr_course_id\",\"pr_course_code\",\"pr_course_name\",\"dependent_count\"],\"rowCount\":20,\"sample\":[{\"pr_course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"pr_course_code\":\"TAU-627\",\"pr_course_name\":\"Analiza Matematyczna\",\"dependent_count\":4},{\"pr_course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"pr_course_code\":\"FCL-532\",\"pr_course_name\":\"Uczenie Maszynowe\",\"dependent_count\":3}]},\"data\":[{\"pr_course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"pr_course_code\":\"TAU-627\",\"pr_course_name\":\"Analiza Matematyczna\",\"dependent_count\":4},{\"pr_course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"pr_course_code\":\"FCL-532\",\"pr_course_name\":\"Uczenie Maszynowe\",\"dependent_count\":3},{\"pr_course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"pr_course_code\":\"HPF-845\",\"pr_course_name\":\"Systemy Wbudowane\",\"dependent_count\":3},{\"pr_course_id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"pr_course_code\":\"JFH-143\",\"pr_course_name\":\"Architektura Komputerów\",\"dependent_count\":3},{\"pr_course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"pr_course_code\":\"AFI-682\",\"pr_course_name\":\"Matematyka Dyskretna\",\"dependent_count\":2},{\"pr_course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"pr_course_code\":\"BEW-951\",\"pr_course_name\":\"Fizyka\",\"dependent_count\":2},{\"pr_course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"pr_course_code\":\"MKO-885\",\"pr_course_name\":\"Rachunek Prawdopodobieństwa\",\"dependent_count\":2},{\"pr_course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"pr_course_code\":\"NWG-686\",\"pr_course_name\":\"Programowanie Funkcyjne\",\"dependent_count\":2},{\"pr_course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"pr_course_code\":\"RZR-301\",\"pr_course_name\":\"Sieci Komputerowe\",\"dependent_count\":2},{\"pr_course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"pr_course_code\":\"TJJ-354\",\"pr_course_name\":\"Projektowanie Aplikacji Webowych\",\"dependent_count\":2},{\"pr_course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"pr_course_code\":\"UQL-274\",\"pr_course_name\":\"Zarządzanie Projektami IT\",\"dependent_count\":2},{\"pr_course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"pr_course_code\":\"XQA-597\",\"pr_course_name\":\"Analiza Matematyczna\",\"dependent_count\":2},{\"pr_course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"pr_course_code\":\"ZUQ-127\",\"pr_course_name\":\"Fizyka\",\"dependent_count\":2},{\"pr_course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"pr_course_code\":\"AAX-989\",\"pr_course_name\":\"Elektronika\",\"dependent_count\":1},{\"pr_course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"pr_course_code\":\"FPW-573\",\"pr_course_name\":\"Programowanie Obiektowe\",\"dependent_count\":1},{\"pr_course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"pr_course_code\":\"FWJ-758\",\"pr_course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"dependent_count\":1},{\"pr_course_id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"pr_course_code\":\"HMI-889\",\"pr_course_name\":\"Elektronika\",\"dependent_count\":1},{\"pr_course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"pr_course_code\":\"SBW-955\",\"pr_course_name\":\"Sieci Komputerowe\",\"dependent_count\":1},{\"pr_course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"pr_course_code\":\"VBC-395\",\"pr_course_name\":\"Sieci Komputerowe\",\"dependent_count\":1},{\"pr_course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"pr_course_code\":\"YWI-134\",\"pr_course_name\":\"Metody Numeryczne\",\"dependent_count\":1}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Courses that are prerequisites for the most other courses\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"pr_course_code\",\"type\":\"nominal\",\"sort\":{\"field\":\"dependent_count\",\"order\":\"descending\"},\"axis\":{\"labelAngle\":-45,\"labelOverlap\":\"parity\",\"title\":\"Prerequisite course (code)\"}},\"y\":{\"field\":\"dependent_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of courses that list this as a prerequisite\"}},\"tooltip\":[{\"field\":\"pr_course_code\",\"type\":\"nominal\",\"title\":\"Course code\"},{\"field\":\"pr_course_name\",\"type\":\"nominal\",\"title\":\"Course name\"},{\"field\":\"dependent_count\",\"type\":\"quantitative\",\"title\":\"Dependent count\"}],\"color\":{\"field\":\"dependent_count\",\"type\":\"quantitative\",\"legend\":null,\"scale\":{\"scheme\":\"blues\"}}}},\"reasoning\":\"Vertical bar chart with pr_course_code on the x-axis and dependent_count on the y-axis. Bars are sorted descending by dependent_count; tooltip shows course code, name, and dependent count for clarity.\"},\"validation\":{\"passed\":true,\"score\":0.65,\"issues\":[\"All encoded fields (pr_course_code, pr_course_name, dependent_count) exist in metadata.columns — good.\",\"The SQL performs aggregation (one row per prerequisite course with COUNT DISTINCT); the chart uses the aggregated dependent_count directly — mapping is consistent.\",\"Vega-Lite sorts x by dependent_count descending, but the SQL also specified a secondary ORDER BY pr_course_code ASC; Vega-Lite does not include the secondary tie-breaker, so ties may be ordered differently than the SQL result.\",\"pr_course_id (the primary key) is present in the SQL output but not used in the visualization; if pr_course_code is not unique across courses, multiple distinct pr_course_id rows could share the same pr_course_code and should be disambiguated (this is a potential ambiguity, not a blocker).\",\"The plan suggested possibly limiting to top N (e.g., top 20) for large result sets; the SQL has no LIMIT — if the result is large the chart may become crowded. Consider applying a LIMIT or filtering in the query or visualization.\",\"Color encodes dependent_count without a legend (legend:null). This is acceptable but may reduce interpretability; consider adding a legend or a continuous color scale label if color is intended to convey magnitude.\"]}}},\"endedAt\":1771845833508,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"Which courses are prerequisites for the most other courses?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT prerequisites.course_id) AS dependent_count\"],\"dimensions\":[\"prerequisites.prerequisite_course_id\",\"courses.code\",\"courses.name\"],\"filters\":[\"include all rows from public.prerequisites (no filter on is_mandatory)\",\"only join prerequisite_course_id values that exist in public.courses (INNER JOIN)\"],\"grain\":\"per prerequisite course (one row per prerequisite course)\",\"aliases\":{\"prerequisites.prerequisite_course_id\":\"pr_course_id\",\"courses.code\":\"pr_course_code\",\"courses.name\":\"pr_course_name\",\"COUNT(DISTINCT prerequisites.course_id)\":\"dependent_count\"},\"output_fields\":[\"pr_course_id\",\"pr_course_code\",\"pr_course_name\",\"dependent_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"pr_course_code\",\"y_axis\":\"dependent_count\",\"title\":\"Courses that are prerequisites for the most other courses\"},\"assumptions\":[\"public.prerequisites.prerequisite_course_id and public.prerequisites.course_id are foreign keys referencing public.courses.id (confirmed by schema constraints).\",\"Count each dependent course once per (course <- prerequisite) relationship: use COUNT(DISTINCT prerequisites.course_id) to avoid duplicate dependent counts. The unique index on (course_id, prerequisite_course_id) further prevents duplicate rows.\",\"Include all prerequisites (both mandatory and optional). If you want only mandatory prerequisites, add filter prerequisites.is_mandatory = true.\",\"Do not exclude self-referential prerequisites unless requested (if present, they will count toward dependent_count).\",\"Result is intended to return one row per prerequisite course with its code and name and the number of courses that list it as a prerequisite, sorted descending by dependent_count for presentation. If the result set is large, downstream visualization should consider limiting to top N (e.g., top 20).\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT p.prerequisite_course_id AS pr_course_id, c.code AS pr_course_code, c.name AS pr_course_name, COUNT(DISTINCT p.course_id) AS dependent_count\\nFROM public.prerequisites p\\nINNER JOIN public.courses c\\n  ON p.prerequisite_course_id = c.id\\nGROUP BY p.prerequisite_course_id, c.code, c.name\\nORDER BY dependent_count DESC, pr_course_code ASC;\",\"validationIssues\":[\"All encoded fields (pr_course_code, pr_course_name, dependent_count) exist in metadata.columns — good.\",\"The SQL performs aggregation (one row per prerequisite course with COUNT DISTINCT); the chart uses the aggregated dependent_count directly — mapping is consistent.\",\"Vega-Lite sorts x by dependent_count descending, but the SQL also specified a secondary ORDER BY pr_course_code ASC; Vega-Lite does not include the secondary tie-breaker, so ties may be ordered differently than the SQL result.\",\"pr_course_id (the primary key) is present in the SQL output but not used in the visualization; if pr_course_code is not unique across courses, multiple distinct pr_course_id rows could share the same pr_course_code and should be disambiguated (this is a potential ambiguity, not a blocker).\",\"The plan suggested possibly limiting to top N (e.g., top 20) for large result sets; the SQL has no LIMIT — if the result is large the chart may become crowded. Consider applying a LIMIT or filtering in the query or visualization.\",\"Color encodes dependent_count without a legend (legend:null). This is acceptable but may reduce interpretability; consider adding a legend or a continuous color scale label if color is intended to convey magnitude.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Count how many distinct courses list each course as a prerequisite by aggregating public.prerequisites (inner-joined to public.courses to ensure the prerequisite course exists). Return one row per prerequisite course with its code and name, sorted deterministically by dependent_count desc then code.\",\"sql\":\"SELECT p.prerequisite_course_id AS pr_course_id, c.code AS pr_course_code, c.name AS pr_course_name, COUNT(DISTINCT p.course_id) AS dependent_count\\nFROM public.prerequisites p\\nINNER JOIN public.courses c\\n  ON p.prerequisite_course_id = c.id\\nGROUP BY p.prerequisite_course_id, c.code, c.name\\nORDER BY dependent_count DESC, pr_course_code ASC;\",\"assumptions\":[\"Include all prerequisites (both mandatory and optional) as requested in plan.\",\"public.prerequisites.prerequisite_course_id and public.prerequisites.course_id reference public.courses.id (foreign keys confirmed).\",\"Count each dependent course once per (course <- prerequisite) relationship using COUNT(DISTINCT p.course_id).\",\"Deterministic ordering uses dependent_count DESC then pr_course_code ASC as a tie-breaker.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT p.prerequisite_course_id AS pr_course_id, c.code AS pr_course_code, c.name AS pr_course_name, COUNT(DISTINCT p.course_id) AS dependent_count\\nFROM public.prerequisites p\\nINNER JOIN public.courses c\\n  ON p.prerequisite_course_id = c.id\\nGROUP BY p.prerequisite_course_id, c.code, c.name\\nORDER BY dependent_count DESC, pr_course_code ASC\",\"metadata\":{\"columns\":[\"pr_course_id\",\"pr_course_code\",\"pr_course_name\",\"dependent_count\"],\"rowCount\":20,\"sample\":[{\"pr_course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"pr_course_code\":\"TAU-627\",\"pr_course_name\":\"Analiza Matematyczna\",\"dependent_count\":4},{\"pr_course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"pr_course_code\":\"FCL-532\",\"pr_course_name\":\"Uczenie Maszynowe\",\"dependent_count\":3}]},\"data\":[{\"pr_course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"pr_course_code\":\"TAU-627\",\"pr_course_name\":\"Analiza Matematyczna\",\"dependent_count\":4},{\"pr_course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"pr_course_code\":\"FCL-532\",\"pr_course_name\":\"Uczenie Maszynowe\",\"dependent_count\":3},{\"pr_course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"pr_course_code\":\"HPF-845\",\"pr_course_name\":\"Systemy Wbudowane\",\"dependent_count\":3},{\"pr_course_id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"pr_course_code\":\"JFH-143\",\"pr_course_name\":\"Architektura Komputerów\",\"dependent_count\":3},{\"pr_course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"pr_course_code\":\"AFI-682\",\"pr_course_name\":\"Matematyka Dyskretna\",\"dependent_count\":2},{\"pr_course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"pr_course_code\":\"BEW-951\",\"pr_course_name\":\"Fizyka\",\"dependent_count\":2},{\"pr_course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"pr_course_code\":\"MKO-885\",\"pr_course_name\":\"Rachunek Prawdopodobieństwa\",\"dependent_count\":2},{\"pr_course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"pr_course_code\":\"NWG-686\",\"pr_course_name\":\"Programowanie Funkcyjne\",\"dependent_count\":2},{\"pr_course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"pr_course_code\":\"RZR-301\",\"pr_course_name\":\"Sieci Komputerowe\",\"dependent_count\":2},{\"pr_course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"pr_course_code\":\"TJJ-354\",\"pr_course_name\":\"Projektowanie Aplikacji Webowych\",\"dependent_count\":2},{\"pr_course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"pr_course_code\":\"UQL-274\",\"pr_course_name\":\"Zarządzanie Projektami IT\",\"dependent_count\":2},{\"pr_course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"pr_course_code\":\"XQA-597\",\"pr_course_name\":\"Analiza Matematyczna\",\"dependent_count\":2},{\"pr_course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"pr_course_code\":\"ZUQ-127\",\"pr_course_name\":\"Fizyka\",\"dependent_count\":2},{\"pr_course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"pr_course_code\":\"AAX-989\",\"pr_course_name\":\"Elektronika\",\"dependent_count\":1},{\"pr_course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"pr_course_code\":\"FPW-573\",\"pr_course_name\":\"Programowanie Obiektowe\",\"dependent_count\":1},{\"pr_course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"pr_course_code\":\"FWJ-758\",\"pr_course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"dependent_count\":1},{\"pr_course_id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"pr_course_code\":\"HMI-889\",\"pr_course_name\":\"Elektronika\",\"dependent_count\":1},{\"pr_course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"pr_course_code\":\"SBW-955\",\"pr_course_name\":\"Sieci Komputerowe\",\"dependent_count\":1},{\"pr_course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"pr_course_code\":\"VBC-395\",\"pr_course_name\":\"Sieci Komputerowe\",\"dependent_count\":1},{\"pr_course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"pr_course_code\":\"YWI-134\",\"pr_course_name\":\"Metody Numeryczne\",\"dependent_count\":1}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Courses that are prerequisites for the most other courses\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"pr_course_code\",\"type\":\"nominal\",\"sort\":{\"field\":\"dependent_count\",\"order\":\"descending\"},\"axis\":{\"labelAngle\":-45,\"labelOverlap\":\"parity\",\"title\":\"Prerequisite course (code)\"}},\"y\":{\"field\":\"dependent_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of courses that list this as a prerequisite\"}},\"tooltip\":[{\"field\":\"pr_course_code\",\"type\":\"nominal\",\"title\":\"Course code\"},{\"field\":\"pr_course_name\",\"type\":\"nominal\",\"title\":\"Course name\"},{\"field\":\"dependent_count\",\"type\":\"quantitative\",\"title\":\"Dependent count\"}],\"color\":{\"field\":\"dependent_count\",\"type\":\"quantitative\",\"legend\":null,\"scale\":{\"scheme\":\"blues\"}}}},\"reasoning\":\"Vertical bar chart with pr_course_code on the x-axis and dependent_count on the y-axis. Bars are sorted descending by dependent_count; tooltip shows course code, name, and dependent count for clarity.\"},\"validation\":{\"passed\":true,\"score\":0.65,\"issues\":[\"All encoded fields (pr_course_code, pr_course_name, dependent_count) exist in metadata.columns — good.\",\"The SQL performs aggregation (one row per prerequisite course with COUNT DISTINCT); the chart uses the aggregated dependent_count directly — mapping is consistent.\",\"Vega-Lite sorts x by dependent_count descending, but the SQL also specified a secondary ORDER BY pr_course_code ASC; Vega-Lite does not include the secondary tie-breaker, so ties may be ordered differently than the SQL result.\",\"pr_course_id (the primary key) is present in the SQL output but not used in the visualization; if pr_course_code is not unique across courses, multiple distinct pr_course_id rows could share the same pr_course_code and should be disambiguated (this is a potential ambiguity, not a blocker).\",\"The plan suggested possibly limiting to top N (e.g., top 20) for large result sets; the SQL has no LIMIT — if the result is large the chart may become crowded. Consider applying a LIMIT or filtering in the query or visualization.\",\"Color encodes dependent_count without a legend (legend:null). This is acceptable but may reduce interpretability; consider adding a legend or a continuous color scale label if color is intended to convey magnitude.\"]}}},\"startedAt\":1771845833511,\"status\":\"success\",\"output\":{\"sql\":\"SELECT p.prerequisite_course_id AS pr_course_id, c.code AS pr_course_code, c.name AS pr_course_name, COUNT(DISTINCT p.course_id) AS dependent_count\\nFROM public.prerequisites p\\nINNER JOIN public.courses c\\n  ON p.prerequisite_course_id = c.id\\nGROUP BY p.prerequisite_course_id, c.code, c.name\\nORDER BY dependent_count DESC, pr_course_code ASC;\",\"data\":[{\"pr_course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"pr_course_code\":\"TAU-627\",\"pr_course_name\":\"Analiza Matematyczna\",\"dependent_count\":4},{\"pr_course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"pr_course_code\":\"FCL-532\",\"pr_course_name\":\"Uczenie Maszynowe\",\"dependent_count\":3},{\"pr_course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"pr_course_code\":\"HPF-845\",\"pr_course_name\":\"Systemy Wbudowane\",\"dependent_count\":3},{\"pr_course_id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"pr_course_code\":\"JFH-143\",\"pr_course_name\":\"Architektura Komputerów\",\"dependent_count\":3},{\"pr_course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"pr_course_code\":\"AFI-682\",\"pr_course_name\":\"Matematyka Dyskretna\",\"dependent_count\":2},{\"pr_course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"pr_course_code\":\"BEW-951\",\"pr_course_name\":\"Fizyka\",\"dependent_count\":2},{\"pr_course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"pr_course_code\":\"MKO-885\",\"pr_course_name\":\"Rachunek Prawdopodobieństwa\",\"dependent_count\":2},{\"pr_course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"pr_course_code\":\"NWG-686\",\"pr_course_name\":\"Programowanie Funkcyjne\",\"dependent_count\":2},{\"pr_course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"pr_course_code\":\"RZR-301\",\"pr_course_name\":\"Sieci Komputerowe\",\"dependent_count\":2},{\"pr_course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"pr_course_code\":\"TJJ-354\",\"pr_course_name\":\"Projektowanie Aplikacji Webowych\",\"dependent_count\":2},{\"pr_course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"pr_course_code\":\"UQL-274\",\"pr_course_name\":\"Zarządzanie Projektami IT\",\"dependent_count\":2},{\"pr_course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"pr_course_code\":\"XQA-597\",\"pr_course_name\":\"Analiza Matematyczna\",\"dependent_count\":2},{\"pr_course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"pr_course_code\":\"ZUQ-127\",\"pr_course_name\":\"Fizyka\",\"dependent_count\":2},{\"pr_course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"pr_course_code\":\"AAX-989\",\"pr_course_name\":\"Elektronika\",\"dependent_count\":1},{\"pr_course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"pr_course_code\":\"FPW-573\",\"pr_course_name\":\"Programowanie Obiektowe\",\"dependent_count\":1},{\"pr_course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"pr_course_code\":\"FWJ-758\",\"pr_course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"dependent_count\":1},{\"pr_course_id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"pr_course_code\":\"HMI-889\",\"pr_course_name\":\"Elektronika\",\"dependent_count\":1},{\"pr_course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"pr_course_code\":\"SBW-955\",\"pr_course_name\":\"Sieci Komputerowe\",\"dependent_count\":1},{\"pr_course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"pr_course_code\":\"VBC-395\",\"pr_course_name\":\"Sieci Komputerowe\",\"dependent_count\":1},{\"pr_course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"pr_course_code\":\"YWI-134\",\"pr_course_name\":\"Metody Numeryczne\",\"dependent_count\":1}],\"metadata\":{\"columns\":[\"pr_course_id\",\"pr_course_code\",\"pr_course_name\",\"dependent_count\"],\"rowCount\":20,\"sample\":[{\"pr_course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"pr_course_code\":\"TAU-627\",\"pr_course_name\":\"Analiza Matematyczna\",\"dependent_count\":4},{\"pr_course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"pr_course_code\":\"FCL-532\",\"pr_course_name\":\"Uczenie Maszynowe\",\"dependent_count\":3}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Courses that are prerequisites for the most other courses\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"pr_course_code\",\"type\":\"nominal\",\"sort\":{\"field\":\"dependent_count\",\"order\":\"descending\"},\"axis\":{\"labelAngle\":-45,\"labelOverlap\":\"parity\",\"title\":\"Prerequisite course (code)\"}},\"y\":{\"field\":\"dependent_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of courses that list this as a prerequisite\"}},\"tooltip\":[{\"field\":\"pr_course_code\",\"type\":\"nominal\",\"title\":\"Course code\"},{\"field\":\"pr_course_name\",\"type\":\"nominal\",\"title\":\"Course name\"},{\"field\":\"dependent_count\",\"type\":\"quantitative\",\"title\":\"Dependent count\"}],\"color\":{\"field\":\"dependent_count\",\"type\":\"quantitative\",\"legend\":null,\"scale\":{\"scheme\":\"blues\"}}}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.65,\"issues\":[\"All encoded fields (pr_course_code, pr_course_name, dependent_count) exist in metadata.columns — good.\",\"The SQL performs aggregation (one row per prerequisite course with COUNT DISTINCT); the chart uses the aggregated dependent_count directly — mapping is consistent.\",\"Vega-Lite sorts x by dependent_count descending, but the SQL also specified a secondary ORDER BY pr_course_code ASC; Vega-Lite does not include the secondary tie-breaker, so ties may be ordered differently than the SQL result.\",\"pr_course_id (the primary key) is present in the SQL output but not used in the visualization; if pr_course_code is not unique across courses, multiple distinct pr_course_id rows could share the same pr_course_code and should be disambiguated (this is a potential ambiguity, not a blocker).\",\"The plan suggested possibly limiting to top N (e.g., top 20) for large result sets; the SQL has no LIMIT — if the result is large the chart may become crowded. Consider applying a LIMIT or filtering in the query or visualization.\",\"Color encodes dependent_count without a legend (legend:null). This is acceptable but may reduce interpretability; consider adding a legend or a continuous color scale label if color is intended to convey magnitude.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771845833514}},\"input\":{\"question\":\"Which courses are prerequisites for the most other courses?\"},\"result\":{\"sql\":\"SELECT p.prerequisite_course_id AS pr_course_id, c.code AS pr_course_code, c.name AS pr_course_name, COUNT(DISTINCT p.course_id) AS dependent_count\\nFROM public.prerequisites p\\nINNER JOIN public.courses c\\n  ON p.prerequisite_course_id = c.id\\nGROUP BY p.prerequisite_course_id, c.code, c.name\\nORDER BY dependent_count DESC, pr_course_code ASC;\",\"data\":[{\"pr_course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"pr_course_code\":\"TAU-627\",\"pr_course_name\":\"Analiza Matematyczna\",\"dependent_count\":4},{\"pr_course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"pr_course_code\":\"FCL-532\",\"pr_course_name\":\"Uczenie Maszynowe\",\"dependent_count\":3},{\"pr_course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"pr_course_code\":\"HPF-845\",\"pr_course_name\":\"Systemy Wbudowane\",\"dependent_count\":3},{\"pr_course_id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"pr_course_code\":\"JFH-143\",\"pr_course_name\":\"Architektura Komputerów\",\"dependent_count\":3},{\"pr_course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"pr_course_code\":\"AFI-682\",\"pr_course_name\":\"Matematyka Dyskretna\",\"dependent_count\":2},{\"pr_course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"pr_course_code\":\"BEW-951\",\"pr_course_name\":\"Fizyka\",\"dependent_count\":2},{\"pr_course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"pr_course_code\":\"MKO-885\",\"pr_course_name\":\"Rachunek Prawdopodobieństwa\",\"dependent_count\":2},{\"pr_course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"pr_course_code\":\"NWG-686\",\"pr_course_name\":\"Programowanie Funkcyjne\",\"dependent_count\":2},{\"pr_course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"pr_course_code\":\"RZR-301\",\"pr_course_name\":\"Sieci Komputerowe\",\"dependent_count\":2},{\"pr_course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"pr_course_code\":\"TJJ-354\",\"pr_course_name\":\"Projektowanie Aplikacji Webowych\",\"dependent_count\":2},{\"pr_course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"pr_course_code\":\"UQL-274\",\"pr_course_name\":\"Zarządzanie Projektami IT\",\"dependent_count\":2},{\"pr_course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"pr_course_code\":\"XQA-597\",\"pr_course_name\":\"Analiza Matematyczna\",\"dependent_count\":2},{\"pr_course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"pr_course_code\":\"ZUQ-127\",\"pr_course_name\":\"Fizyka\",\"dependent_count\":2},{\"pr_course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"pr_course_code\":\"AAX-989\",\"pr_course_name\":\"Elektronika\",\"dependent_count\":1},{\"pr_course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"pr_course_code\":\"FPW-573\",\"pr_course_name\":\"Programowanie Obiektowe\",\"dependent_count\":1},{\"pr_course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"pr_course_code\":\"FWJ-758\",\"pr_course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"dependent_count\":1},{\"pr_course_id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"pr_course_code\":\"HMI-889\",\"pr_course_name\":\"Elektronika\",\"dependent_count\":1},{\"pr_course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"pr_course_code\":\"SBW-955\",\"pr_course_name\":\"Sieci Komputerowe\",\"dependent_count\":1},{\"pr_course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"pr_course_code\":\"VBC-395\",\"pr_course_name\":\"Sieci Komputerowe\",\"dependent_count\":1},{\"pr_course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"pr_course_code\":\"YWI-134\",\"pr_course_name\":\"Metody Numeryczne\",\"dependent_count\":1}],\"metadata\":{\"columns\":[\"pr_course_id\",\"pr_course_code\",\"pr_course_name\",\"dependent_count\"],\"rowCount\":20,\"sample\":[{\"pr_course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"pr_course_code\":\"TAU-627\",\"pr_course_name\":\"Analiza Matematyczna\",\"dependent_count\":4},{\"pr_course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"pr_course_code\":\"FCL-532\",\"pr_course_name\":\"Uczenie Maszynowe\",\"dependent_count\":3}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Courses that are prerequisites for the most other courses\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"pr_course_code\",\"type\":\"nominal\",\"sort\":{\"field\":\"dependent_count\",\"order\":\"descending\"},\"axis\":{\"labelAngle\":-45,\"labelOverlap\":\"parity\",\"title\":\"Prerequisite course (code)\"}},\"y\":{\"field\":\"dependent_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of courses that list this as a prerequisite\"}},\"tooltip\":[{\"field\":\"pr_course_code\",\"type\":\"nominal\",\"title\":\"Course code\"},{\"field\":\"pr_course_name\",\"type\":\"nominal\",\"title\":\"Course name\"},{\"field\":\"dependent_count\",\"type\":\"quantitative\",\"title\":\"Dependent count\"}],\"color\":{\"field\":\"dependent_count\",\"type\":\"quantitative\",\"legend\":null,\"scale\":{\"scheme\":\"blues\"}}}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.65,\"issues\":[\"All encoded fields (pr_course_code, pr_course_name, dependent_count) exist in metadata.columns — good.\",\"The SQL performs aggregation (one row per prerequisite course with COUNT DISTINCT); the chart uses the aggregated dependent_count directly — mapping is consistent.\",\"Vega-Lite sorts x by dependent_count descending, but the SQL also specified a secondary ORDER BY pr_course_code ASC; Vega-Lite does not include the secondary tie-breaker, so ties may be ordered differently than the SQL result.\",\"pr_course_id (the primary key) is present in the SQL output but not used in the visualization; if pr_course_code is not unique across courses, multiple distinct pr_course_id rows could share the same pr_course_code and should be disambiguated (this is a potential ambiguity, not a blocker).\",\"The plan suggested possibly limiting to top N (e.g., top 20) for large result sets; the SQL has no LIMIT — if the result is large the chart may become crowded. Consider applying a LIMIT or filtering in the query or visualization.\",\"Color encodes dependent_count without a legend (legend:null). This is acceptable but may reduce interpretability; consider adding a legend or a continuous color scale label if color is intended to convey magnitude.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"c76914a797a92902270caf3a2e9b4cd2\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/prerequisite-chain-length/run-0001/run.json",
+    "queryPath": "runs/prerequisite-chain-length/run-0001/query.sql",
+    "vegaRawPath": "runs/prerequisite-chain-length/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/prerequisite-chain-length/run-0001/vega.resolved.json",
+    "imagePath": "runs/prerequisite-chain-length/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:23:53.929Z",
+  "traceId": "c76914a797a92902270caf3a2e9b4cd2",
+  "success": true,
+  "durationMs": 83557,
+  "resultRaw": {
+    "data": [
+      {
+        "pr_course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "pr_course_code": "TAU-627",
+        "pr_course_name": "Analiza Matematyczna",
+        "dependent_count": 4
+      },
+      {
+        "pr_course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+        "pr_course_code": "FCL-532",
+        "pr_course_name": "Uczenie Maszynowe",
+        "dependent_count": 3
+      },
+      {
+        "pr_course_id": "d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5",
+        "pr_course_code": "HPF-845",
+        "pr_course_name": "Systemy Wbudowane",
+        "dependent_count": 3
+      },
+      {
+        "pr_course_id": "e6b62b9f-429a-423d-84c7-77b28a64b9a3",
+        "pr_course_code": "JFH-143",
+        "pr_course_name": "Architektura Komputerów",
+        "dependent_count": 3
+      },
+      {
+        "pr_course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "pr_course_code": "AFI-682",
+        "pr_course_name": "Matematyka Dyskretna",
+        "dependent_count": 2
+      },
+      {
+        "pr_course_id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+        "pr_course_code": "BEW-951",
+        "pr_course_name": "Fizyka",
+        "dependent_count": 2
+      },
+      {
+        "pr_course_id": "59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23",
+        "pr_course_code": "MKO-885",
+        "pr_course_name": "Rachunek Prawdopodobieństwa",
+        "dependent_count": 2
+      },
+      {
+        "pr_course_id": "e89877df-7199-4b1f-a8e8-8e5c0872fe23",
+        "pr_course_code": "NWG-686",
+        "pr_course_name": "Programowanie Funkcyjne",
+        "dependent_count": 2
+      },
+      {
+        "pr_course_id": "0b97f1bf-8c86-431a-a583-563354b1e01f",
+        "pr_course_code": "RZR-301",
+        "pr_course_name": "Sieci Komputerowe",
+        "dependent_count": 2
+      },
+      {
+        "pr_course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+        "pr_course_code": "TJJ-354",
+        "pr_course_name": "Projektowanie Aplikacji Webowych",
+        "dependent_count": 2
+      },
+      {
+        "pr_course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "pr_course_code": "UQL-274",
+        "pr_course_name": "Zarządzanie Projektami IT",
+        "dependent_count": 2
+      },
+      {
+        "pr_course_id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "pr_course_code": "XQA-597",
+        "pr_course_name": "Analiza Matematyczna",
+        "dependent_count": 2
+      },
+      {
+        "pr_course_id": "c0e00b1c-84d6-4ccd-999d-7c9197625f2e",
+        "pr_course_code": "ZUQ-127",
+        "pr_course_name": "Fizyka",
+        "dependent_count": 2
+      },
+      {
+        "pr_course_id": "91922683-9cba-47f2-bb00-babfbce3866f",
+        "pr_course_code": "AAX-989",
+        "pr_course_name": "Elektronika",
+        "dependent_count": 1
+      },
+      {
+        "pr_course_id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+        "pr_course_code": "FPW-573",
+        "pr_course_name": "Programowanie Obiektowe",
+        "dependent_count": 1
+      },
+      {
+        "pr_course_id": "410a9134-116d-41eb-84bc-1b5144736995",
+        "pr_course_code": "FWJ-758",
+        "pr_course_name": "Bezpieczeństwo Systemów Komputerowych",
+        "dependent_count": 1
+      },
+      {
+        "pr_course_id": "47f61e5e-19e7-4b9e-b8d0-153ca7c76090",
+        "pr_course_code": "HMI-889",
+        "pr_course_name": "Elektronika",
+        "dependent_count": 1
+      },
+      {
+        "pr_course_id": "32619ee8-5d87-49a4-9ca1-c94668909e2e",
+        "pr_course_code": "SBW-955",
+        "pr_course_name": "Sieci Komputerowe",
+        "dependent_count": 1
+      },
+      {
+        "pr_course_id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "pr_course_code": "VBC-395",
+        "pr_course_name": "Sieci Komputerowe",
+        "dependent_count": 1
+      },
+      {
+        "pr_course_id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+        "pr_course_code": "YWI-134",
+        "pr_course_name": "Metody Numeryczne",
+        "dependent_count": 1
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Courses that are prerequisites for the most other courses",
+      "width": 700,
+      "height": 400,
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "pr_course_code",
+          "type": "nominal",
+          "sort": {
+            "field": "dependent_count",
+            "order": "descending"
+          },
+          "axis": {
+            "labelAngle": -45,
+            "labelOverlap": "parity",
+            "title": "Prerequisite course (code)"
+          }
+        },
+        "y": {
+          "field": "dependent_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Number of courses that list this as a prerequisite"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "pr_course_code",
+            "type": "nominal",
+            "title": "Course code"
+          },
+          {
+            "field": "pr_course_name",
+            "type": "nominal",
+            "title": "Course name"
+          },
+          {
+            "field": "dependent_count",
+            "type": "quantitative",
+            "title": "Dependent count"
+          }
+        ],
+        "color": {
+          "field": "dependent_count",
+          "type": "quantitative",
+          "legend": null,
+          "scale": {
+            "scheme": "blues"
+          }
+        }
+      }
+    },
+    "sql": "SELECT p.prerequisite_course_id AS pr_course_id, c.code AS pr_course_code, c.name AS pr_course_name, COUNT(DISTINCT p.course_id) AS dependent_count\nFROM public.prerequisites p\nINNER JOIN public.courses c\n  ON p.prerequisite_course_id = c.id\nGROUP BY p.prerequisite_course_id, c.code, c.name\nORDER BY dependent_count DESC, pr_course_code ASC;",
+    "metadata": {
+      "columns": [
+        "pr_course_id",
+        "pr_course_code",
+        "pr_course_name",
+        "dependent_count"
+      ],
+      "rowCount": 20,
+      "sample": [
+        {
+          "pr_course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+          "pr_course_code": "TAU-627",
+          "pr_course_name": "Analiza Matematyczna",
+          "dependent_count": 4
+        },
+        {
+          "pr_course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+          "pr_course_code": "FCL-532",
+          "pr_course_name": "Uczenie Maszynowe",
+          "dependent_count": 3
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.65,
+      "issues": [
+        "All encoded fields (pr_course_code, pr_course_name, dependent_count) exist in metadata.columns — good.",
+        "The SQL performs aggregation (one row per prerequisite course with COUNT DISTINCT); the chart uses the aggregated dependent_count directly — mapping is consistent.",
+        "Vega-Lite sorts x by dependent_count descending, but the SQL also specified a secondary ORDER BY pr_course_code ASC; Vega-Lite does not include the secondary tie-breaker, so ties may be ordered differently than the SQL result.",
+        "pr_course_id (the primary key) is present in the SQL output but not used in the visualization; if pr_course_code is not unique across courses, multiple distinct pr_course_id rows could share the same pr_course_code and should be disambiguated (this is a potential ambiguity, not a blocker).",
+        "The plan suggested possibly limiting to top N (e.g., top 20) for large result sets; the SQL has no LIMIT — if the result is large the chart may become crowded. Consider applying a LIMIT or filtering in the query or visualization.",
+        "Color encodes dependent_count without a legend (legend:null). This is acceptable but may reduce interpretability; consider adding a legend or a continuous color scale label if color is intended to convey magnitude."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "pr_course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "pr_course_code": "TAU-627",
+        "pr_course_name": "Analiza Matematyczna",
+        "dependent_count": 4
+      },
+      {
+        "pr_course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+        "pr_course_code": "FCL-532",
+        "pr_course_name": "Uczenie Maszynowe",
+        "dependent_count": 3
+      },
+      {
+        "pr_course_id": "d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5",
+        "pr_course_code": "HPF-845",
+        "pr_course_name": "Systemy Wbudowane",
+        "dependent_count": 3
+      },
+      {
+        "pr_course_id": "e6b62b9f-429a-423d-84c7-77b28a64b9a3",
+        "pr_course_code": "JFH-143",
+        "pr_course_name": "Architektura Komputerów",
+        "dependent_count": 3
+      },
+      {
+        "pr_course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "pr_course_code": "AFI-682",
+        "pr_course_name": "Matematyka Dyskretna",
+        "dependent_count": 2
+      },
+      {
+        "pr_course_id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+        "pr_course_code": "BEW-951",
+        "pr_course_name": "Fizyka",
+        "dependent_count": 2
+      },
+      {
+        "pr_course_id": "59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23",
+        "pr_course_code": "MKO-885",
+        "pr_course_name": "Rachunek Prawdopodobieństwa",
+        "dependent_count": 2
+      },
+      {
+        "pr_course_id": "e89877df-7199-4b1f-a8e8-8e5c0872fe23",
+        "pr_course_code": "NWG-686",
+        "pr_course_name": "Programowanie Funkcyjne",
+        "dependent_count": 2
+      },
+      {
+        "pr_course_id": "0b97f1bf-8c86-431a-a583-563354b1e01f",
+        "pr_course_code": "RZR-301",
+        "pr_course_name": "Sieci Komputerowe",
+        "dependent_count": 2
+      },
+      {
+        "pr_course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+        "pr_course_code": "TJJ-354",
+        "pr_course_name": "Projektowanie Aplikacji Webowych",
+        "dependent_count": 2
+      },
+      {
+        "pr_course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "pr_course_code": "UQL-274",
+        "pr_course_name": "Zarządzanie Projektami IT",
+        "dependent_count": 2
+      },
+      {
+        "pr_course_id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "pr_course_code": "XQA-597",
+        "pr_course_name": "Analiza Matematyczna",
+        "dependent_count": 2
+      },
+      {
+        "pr_course_id": "c0e00b1c-84d6-4ccd-999d-7c9197625f2e",
+        "pr_course_code": "ZUQ-127",
+        "pr_course_name": "Fizyka",
+        "dependent_count": 2
+      },
+      {
+        "pr_course_id": "91922683-9cba-47f2-bb00-babfbce3866f",
+        "pr_course_code": "AAX-989",
+        "pr_course_name": "Elektronika",
+        "dependent_count": 1
+      },
+      {
+        "pr_course_id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+        "pr_course_code": "FPW-573",
+        "pr_course_name": "Programowanie Obiektowe",
+        "dependent_count": 1
+      },
+      {
+        "pr_course_id": "410a9134-116d-41eb-84bc-1b5144736995",
+        "pr_course_code": "FWJ-758",
+        "pr_course_name": "Bezpieczeństwo Systemów Komputerowych",
+        "dependent_count": 1
+      },
+      {
+        "pr_course_id": "47f61e5e-19e7-4b9e-b8d0-153ca7c76090",
+        "pr_course_code": "HMI-889",
+        "pr_course_name": "Elektronika",
+        "dependent_count": 1
+      },
+      {
+        "pr_course_id": "32619ee8-5d87-49a4-9ca1-c94668909e2e",
+        "pr_course_code": "SBW-955",
+        "pr_course_name": "Sieci Komputerowe",
+        "dependent_count": 1
+      },
+      {
+        "pr_course_id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "pr_course_code": "VBC-395",
+        "pr_course_name": "Sieci Komputerowe",
+        "dependent_count": 1
+      },
+      {
+        "pr_course_id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+        "pr_course_code": "YWI-134",
+        "pr_course_name": "Metody Numeryczne",
+        "dependent_count": 1
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Courses that are prerequisites for the most other courses",
+      "width": 700,
+      "height": 400,
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "pr_course_code",
+          "type": "nominal",
+          "sort": {
+            "field": "dependent_count",
+            "order": "descending"
+          },
+          "axis": {
+            "labelAngle": -45,
+            "labelOverlap": "parity",
+            "title": "Prerequisite course (code)"
+          }
+        },
+        "y": {
+          "field": "dependent_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Number of courses that list this as a prerequisite"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "pr_course_code",
+            "type": "nominal",
+            "title": "Course code"
+          },
+          {
+            "field": "pr_course_name",
+            "type": "nominal",
+            "title": "Course name"
+          },
+          {
+            "field": "dependent_count",
+            "type": "quantitative",
+            "title": "Dependent count"
+          }
+        ],
+        "color": {
+          "field": "dependent_count",
+          "type": "quantitative",
+          "legend": null,
+          "scale": {
+            "scheme": "blues"
+          }
+        }
+      }
+    },
+    "sql": "SELECT p.prerequisite_course_id AS pr_course_id, c.code AS pr_course_code, c.name AS pr_course_name, COUNT(DISTINCT p.course_id) AS dependent_count\nFROM public.prerequisites p\nINNER JOIN public.courses c\n  ON p.prerequisite_course_id = c.id\nGROUP BY p.prerequisite_course_id, c.code, c.name\nORDER BY dependent_count DESC, pr_course_code ASC;",
+    "metadata": {
+      "columns": [
+        "pr_course_id",
+        "pr_course_code",
+        "pr_course_name",
+        "dependent_count"
+      ],
+      "rowCount": 20,
+      "sample": [
+        {
+          "pr_course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+          "pr_course_code": "TAU-627",
+          "pr_course_name": "Analiza Matematyczna",
+          "dependent_count": 4
+        },
+        {
+          "pr_course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+          "pr_course_code": "FCL-532",
+          "pr_course_name": "Uczenie Maszynowe",
+          "dependent_count": 3
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.65,
+      "issues": [
+        "All encoded fields (pr_course_code, pr_course_name, dependent_count) exist in metadata.columns — good.",
+        "The SQL performs aggregation (one row per prerequisite course with COUNT DISTINCT); the chart uses the aggregated dependent_count directly — mapping is consistent.",
+        "Vega-Lite sorts x by dependent_count descending, but the SQL also specified a secondary ORDER BY pr_course_code ASC; Vega-Lite does not include the secondary tie-breaker, so ties may be ordered differently than the SQL result.",
+        "pr_course_id (the primary key) is present in the SQL output but not used in the visualization; if pr_course_code is not unique across courses, multiple distinct pr_course_id rows could share the same pr_course_code and should be disambiguated (this is a potential ambiguity, not a blocker).",
+        "The plan suggested possibly limiting to top N (e.g., top 20) for large result sets; the SQL has no LIMIT — if the result is large the chart may become crowded. Consider applying a LIMIT or filtering in the query or visualization.",
+        "Color encodes dependent_count without a legend (legend:null). This is acceptable but may reduce interpretability; consider adding a legend or a continuous color scale label if color is intended to convey magnitude."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:23:53.929Z",
+    "traceId": "c76914a797a92902270caf3a2e9b4cd2",
+    "attempts": 6,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 18729,
+      "outputTokens": 5419,
+      "totalTokens": 24148,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 3456,
+      "costUsd": 0.01552025
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 18729,
+        "outputTokens": 5419,
+        "totalTokens": 24148,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 3456,
+        "costUsd": 0.01552025
+      }
+    ],
+    "warnings": []
+  }
+}

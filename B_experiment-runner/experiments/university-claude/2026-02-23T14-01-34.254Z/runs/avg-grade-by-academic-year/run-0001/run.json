@@ -1,0 +1,406 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "avg-grade-by-academic-year",
+  "caseDirectory": "avg-grade-by-academic-year",
+  "repeatIndex": 1,
+  "prompt": "How has the average grade changed over academic years?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How has the average grade changed over academic years?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:10:06.442Z",
+    "endedAtUtc": "2026-02-23T14:10:33.266Z",
+    "durationMs": 26824
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "15682",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:10:33 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How has the average grade changed over academic years?\"},\"sql\":{\"payload\":{\"question\":\"How has the average grade changed over academic years?\"},\"startedAt\":1771855806447,\"status\":\"success\",\"output\":{\"reasoning\":\"The user wants to see how average grades have changed over academic years. I've confirmed the schema structure: grades table contains exam_score, project_score, and attendance_score; enrollments links to course_sections which contains academic_year. The query groups grades by academic_year and calculates averages for each component score, ordered chronologically. This provides a clear trend view of grade changes across years.\",\"sql\":\"\\nSELECT \\n  cs.academic_year,\\n  ROUND(AVG(CAST(g.exam_score AS NUMERIC)), 2) AS avg_exam_score,\\n  ROUND(AVG(CAST(g.project_score AS NUMERIC)), 2) AS avg_project_score,\\n  ROUND(AVG(CAST(g.attendance_score AS NUMERIC)), 2) AS avg_attendance_score,\\n  COUNT(g.id) AS total_grades\\nFROM grades g\\nJOIN enrollments e ON g.enrollment_id = e.id\\nJOIN course_sections cs ON e.course_section_id = cs.id\\nWHERE g.exam_score IS NOT NULL \\n   OR g.project_score IS NOT NULL \\n   OR g.attendance_score IS NOT NULL\\nGROUP BY cs.academic_year\\nORDER BY cs.academic_year ASC\\n\",\"assumptions\":[\"Grades are composed of three components: exam_score, project_score, and attendance_score\",\"Academic year is the primary time dimension for grouping\",\"A grade record is included if it has at least one non-null score component\"]},\"endedAt\":1771855826146},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  cs.academic_year,\\n  ROUND(AVG(CAST(g.exam_score AS NUMERIC)), 2) AS avg_exam_score,\\n  ROUND(AVG(CAST(g.project_score AS NUMERIC)), 2) AS avg_project_score,\\n  ROUND(AVG(CAST(g.attendance_score AS NUMERIC)), 2) AS avg_attendance_score,\\n  COUNT(g.id) AS total_grades\\nFROM grades g\\nJOIN enrollments e ON g.enrollment_id = e.id\\nJOIN course_sections cs ON e.course_section_id = cs.id\\nWHERE g.exam_score IS NOT NULL \\n   OR g.project_score IS NOT NULL \\n   OR g.attendance_score IS NOT NULL\\nGROUP BY cs.academic_year\\nORDER BY cs.academic_year ASC\\n\"},\"startedAt\":1771855826152,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  cs.academic_year,\\n  ROUND(AVG(CAST(g.exam_score AS NUMERIC)), 2) AS avg_exam_score,\\n  ROUND(AVG(CAST(g.project_score AS NUMERIC)), 2) AS avg_project_score,\\n  ROUND(AVG(CAST(g.attendance_score AS NUMERIC)), 2) AS avg_attendance_score,\\n  COUNT(g.id) AS total_grades\\nFROM grades g\\nJOIN enrollments e ON g.enrollment_id = e.id\\nJOIN course_sections cs ON e.course_section_id = cs.id\\nWHERE g.exam_score IS NOT NULL \\n   OR g.project_score IS NOT NULL \\n   OR g.attendance_score IS NOT NULL\\nGROUP BY cs.academic_year\\nORDER BY cs.academic_year ASC\",\"metadata\":{\"columns\":[\"academic_year\",\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\",\"total_grades\"],\"rowCount\":6,\"sample\":[{\"academic_year\":\"2019/2020\",\"avg_exam_score\":\"41.93\",\"avg_project_score\":\"45.50\",\"avg_attendance_score\":\"56.43\",\"total_grades\":\"6\"},{\"academic_year\":\"2020/2021\",\"avg_exam_score\":\"49.36\",\"avg_project_score\":\"48.74\",\"avg_attendance_score\":\"57.42\",\"total_grades\":\"14\"}]},\"data\":[{\"academic_year\":\"2019/2020\",\"avg_exam_score\":\"41.93\",\"avg_project_score\":\"45.50\",\"avg_attendance_score\":\"56.43\",\"total_grades\":\"6\"},{\"academic_year\":\"2020/2021\",\"avg_exam_score\":\"49.36\",\"avg_project_score\":\"48.74\",\"avg_attendance_score\":\"57.42\",\"total_grades\":\"14\"},{\"academic_year\":\"2021/2022\",\"avg_exam_score\":\"33.68\",\"avg_project_score\":\"46.67\",\"avg_attendance_score\":\"62.63\",\"total_grades\":\"9\"},{\"academic_year\":\"2022/2023\",\"avg_exam_score\":\"64.24\",\"avg_project_score\":\"51.34\",\"avg_attendance_score\":\"54.39\",\"total_grades\":\"10\"},{\"academic_year\":\"2023/2024\",\"avg_exam_score\":\"45.31\",\"avg_project_score\":\"36.38\",\"avg_attendance_score\":\"57.45\",\"total_grades\":\"8\"},{\"academic_year\":\"2024/2025\",\"avg_exam_score\":\"76.30\",\"avg_project_score\":\"60.71\",\"avg_attendance_score\":\"49.72\",\"total_grades\":\"5\"}]},\"endedAt\":1771855826161},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  cs.academic_year,\\n  ROUND(AVG(CAST(g.exam_score AS NUMERIC)), 2) AS avg_exam_score,\\n  ROUND(AVG(CAST(g.project_score AS NUMERIC)), 2) AS avg_project_score,\\n  ROUND(AVG(CAST(g.attendance_score AS NUMERIC)), 2) AS avg_attendance_score,\\n  COUNT(g.id) AS total_grades\\nFROM grades g\\nJOIN enrollments e ON g.enrollment_id = e.id\\nJOIN course_sections cs ON e.course_section_id = cs.id\\nWHERE g.exam_score IS NOT NULL \\n   OR g.project_score IS NOT NULL \\n   OR g.attendance_score IS NOT NULL\\nGROUP BY cs.academic_year\\nORDER BY cs.academic_year ASC\",\"metadata\":{\"columns\":[\"academic_year\",\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\",\"total_grades\"],\"rowCount\":6,\"sample\":[{\"academic_year\":\"2019/2020\",\"avg_exam_score\":\"41.93\",\"avg_project_score\":\"45.50\",\"avg_attendance_score\":\"56.43\",\"total_grades\":\"6\"},{\"academic_year\":\"2020/2021\",\"avg_exam_score\":\"49.36\",\"avg_project_score\":\"48.74\",\"avg_attendance_score\":\"57.42\",\"total_grades\":\"14\"}]},\"data\":[{\"academic_year\":\"2019/2020\",\"avg_exam_score\":\"41.93\",\"avg_project_score\":\"45.50\",\"avg_attendance_score\":\"56.43\",\"total_grades\":\"6\"},{\"academic_year\":\"2020/2021\",\"avg_exam_score\":\"49.36\",\"avg_project_score\":\"48.74\",\"avg_attendance_score\":\"57.42\",\"total_grades\":\"14\"},{\"academic_year\":\"2021/2022\",\"avg_exam_score\":\"33.68\",\"avg_project_score\":\"46.67\",\"avg_attendance_score\":\"62.63\",\"total_grades\":\"9\"},{\"academic_year\":\"2022/2023\",\"avg_exam_score\":\"64.24\",\"avg_project_score\":\"51.34\",\"avg_attendance_score\":\"54.39\",\"total_grades\":\"10\"},{\"academic_year\":\"2023/2024\",\"avg_exam_score\":\"45.31\",\"avg_project_score\":\"36.38\",\"avg_attendance_score\":\"57.45\",\"total_grades\":\"8\"},{\"academic_year\":\"2024/2025\",\"avg_exam_score\":\"76.30\",\"avg_project_score\":\"60.71\",\"avg_attendance_score\":\"49.72\",\"total_grades\":\"5\"}]},\"startedAt\":1771855826162,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Grade Components by Academic Year\",\"description\":\"Trend of average exam, project, and attendance scores across academic years\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":400,\"mark\":\"line\",\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\",\"axis\":{\"labelAngle\":-45}},\"y\":{\"type\":\"quantitative\",\"title\":\"Average Score\",\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"score_type\",\"type\":\"nominal\",\"title\":\"Score Type\",\"scale\":{\"scheme\":\"category10\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"score_type\",\"type\":\"nominal\",\"title\":\"Score Type\"},{\"field\":\"score\",\"type\":\"quantitative\",\"title\":\"Average Score\",\"format\":\".2f\"}]},\"transform\":[{\"fold\":[\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\"],\"as\":[\"score_type\",\"score\"]},{\"calculate\":\"datum.score_type === 'avg_exam_score' ? 'Exam' : datum.score_type === 'avg_project_score' ? 'Project' : 'Attendance'\",\"as\":\"score_type\"}]},\"reasoning\":\"This multi-line chart visualizes the trend of three grade components (exam, project, and attendance scores) across academic years. The fold transform reshapes the data to enable comparison of all three metrics on the same y-axis. The line mark with color encoding makes it easy to track how each component evolves over time, revealing patterns in student performance across different assessment types.\"},\"endedAt\":1771855833244},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Grade Components by Academic Year\",\"description\":\"Trend of average exam, project, and attendance scores across academic years\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":400,\"mark\":\"line\",\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\",\"axis\":{\"labelAngle\":-45}},\"y\":{\"type\":\"quantitative\",\"title\":\"Average Score\",\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"score_type\",\"type\":\"nominal\",\"title\":\"Score Type\",\"scale\":{\"scheme\":\"category10\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"score_type\",\"type\":\"nominal\",\"title\":\"Score Type\"},{\"field\":\"score\",\"type\":\"quantitative\",\"title\":\"Average Score\",\"format\":\".2f\"}]},\"transform\":[{\"fold\":[\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\"],\"as\":[\"score_type\",\"score\"]},{\"calculate\":\"datum.score_type === 'avg_exam_score' ? 'Exam' : datum.score_type === 'avg_project_score' ? 'Project' : 'Attendance'\",\"as\":\"score_type\"}]},\"reasoning\":\"This multi-line chart visualizes the trend of three grade components (exam, project, and attendance scores) across academic years. The fold transform reshapes the data to enable comparison of all three metrics on the same y-axis. The line mark with color encoding makes it easy to track how each component evolves over time, revealing patterns in student performance across different assessment types.\"},\"startedAt\":1771855833249,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT \\n  cs.academic_year,\\n  ROUND(AVG(CAST(g.exam_score AS NUMERIC)), 2) AS avg_exam_score,\\n  ROUND(AVG(CAST(g.project_score AS NUMERIC)), 2) AS avg_project_score,\\n  ROUND(AVG(CAST(g.attendance_score AS NUMERIC)), 2) AS avg_attendance_score,\\n  COUNT(g.id) AS total_grades\\nFROM grades g\\nJOIN enrollments e ON g.enrollment_id = e.id\\nJOIN course_sections cs ON e.course_section_id = cs.id\\nWHERE g.exam_score IS NOT NULL \\n   OR g.project_score IS NOT NULL \\n   OR g.attendance_score IS NOT NULL\\nGROUP BY cs.academic_year\\nORDER BY cs.academic_year ASC\\n\",\"data\":[{\"academic_year\":\"2019/2020\",\"avg_exam_score\":\"41.93\",\"avg_project_score\":\"45.50\",\"avg_attendance_score\":\"56.43\",\"total_grades\":\"6\"},{\"academic_year\":\"2020/2021\",\"avg_exam_score\":\"49.36\",\"avg_project_score\":\"48.74\",\"avg_attendance_score\":\"57.42\",\"total_grades\":\"14\"},{\"academic_year\":\"2021/2022\",\"avg_exam_score\":\"33.68\",\"avg_project_score\":\"46.67\",\"avg_attendance_score\":\"62.63\",\"total_grades\":\"9\"},{\"academic_year\":\"2022/2023\",\"avg_exam_score\":\"64.24\",\"avg_project_score\":\"51.34\",\"avg_attendance_score\":\"54.39\",\"total_grades\":\"10\"},{\"academic_year\":\"2023/2024\",\"avg_exam_score\":\"45.31\",\"avg_project_score\":\"36.38\",\"avg_attendance_score\":\"57.45\",\"total_grades\":\"8\"},{\"academic_year\":\"2024/2025\",\"avg_exam_score\":\"76.30\",\"avg_project_score\":\"60.71\",\"avg_attendance_score\":\"49.72\",\"total_grades\":\"5\"}],\"metadata\":{\"columns\":[\"academic_year\",\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\",\"total_grades\"],\"rowCount\":6,\"sample\":[{\"academic_year\":\"2019/2020\",\"avg_exam_score\":\"41.93\",\"avg_project_score\":\"45.50\",\"avg_attendance_score\":\"56.43\",\"total_grades\":\"6\"},{\"academic_year\":\"2020/2021\",\"avg_exam_score\":\"49.36\",\"avg_project_score\":\"48.74\",\"avg_attendance_score\":\"57.42\",\"total_grades\":\"14\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Grade Components by Academic Year\",\"description\":\"Trend of average exam, project, and attendance scores across academic years\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":400,\"mark\":\"line\",\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\",\"axis\":{\"labelAngle\":-45}},\"y\":{\"type\":\"quantitative\",\"title\":\"Average Score\",\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"score_type\",\"type\":\"nominal\",\"title\":\"Score Type\",\"scale\":{\"scheme\":\"category10\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"score_type\",\"type\":\"nominal\",\"title\":\"Score Type\"},{\"field\":\"score\",\"type\":\"quantitative\",\"title\":\"Average Score\",\"format\":\".2f\"}]},\"transform\":[{\"fold\":[\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\"],\"as\":[\"score_type\",\"score\"]},{\"calculate\":\"datum.score_type === 'avg_exam_score' ? 'Exam' : datum.score_type === 'avg_project_score' ? 'Project' : 'Attendance'\",\"as\":\"score_type\"}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Encoding field 'score_type' is missing in SQL output columns.\",\"Encoding field 'score' is missing in SQL output columns.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Encoding field 'score_type' is missing in SQL output columns.\",\"Encoding field 'score' is missing in SQL output columns.\"]}},\"endedAt\":1771855833254}},\"input\":{\"question\":\"How has the average grade changed over academic years?\"},\"result\":{\"sql\":\"\\nSELECT \\n  cs.academic_year,\\n  ROUND(AVG(CAST(g.exam_score AS NUMERIC)), 2) AS avg_exam_score,\\n  ROUND(AVG(CAST(g.project_score AS NUMERIC)), 2) AS avg_project_score,\\n  ROUND(AVG(CAST(g.attendance_score AS NUMERIC)), 2) AS avg_attendance_score,\\n  COUNT(g.id) AS total_grades\\nFROM grades g\\nJOIN enrollments e ON g.enrollment_id = e.id\\nJOIN course_sections cs ON e.course_section_id = cs.id\\nWHERE g.exam_score IS NOT NULL \\n   OR g.project_score IS NOT NULL \\n   OR g.attendance_score IS NOT NULL\\nGROUP BY cs.academic_year\\nORDER BY cs.academic_year ASC\\n\",\"data\":[{\"academic_year\":\"2019/2020\",\"avg_exam_score\":\"41.93\",\"avg_project_score\":\"45.50\",\"avg_attendance_score\":\"56.43\",\"total_grades\":\"6\"},{\"academic_year\":\"2020/2021\",\"avg_exam_score\":\"49.36\",\"avg_project_score\":\"48.74\",\"avg_attendance_score\":\"57.42\",\"total_grades\":\"14\"},{\"academic_year\":\"2021/2022\",\"avg_exam_score\":\"33.68\",\"avg_project_score\":\"46.67\",\"avg_attendance_score\":\"62.63\",\"total_grades\":\"9\"},{\"academic_year\":\"2022/2023\",\"avg_exam_score\":\"64.24\",\"avg_project_score\":\"51.34\",\"avg_attendance_score\":\"54.39\",\"total_grades\":\"10\"},{\"academic_year\":\"2023/2024\",\"avg_exam_score\":\"45.31\",\"avg_project_score\":\"36.38\",\"avg_attendance_score\":\"57.45\",\"total_grades\":\"8\"},{\"academic_year\":\"2024/2025\",\"avg_exam_score\":\"76.30\",\"avg_project_score\":\"60.71\",\"avg_attendance_score\":\"49.72\",\"total_grades\":\"5\"}],\"metadata\":{\"columns\":[\"academic_year\",\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\",\"total_grades\"],\"rowCount\":6,\"sample\":[{\"academic_year\":\"2019/2020\",\"avg_exam_score\":\"41.93\",\"avg_project_score\":\"45.50\",\"avg_attendance_score\":\"56.43\",\"total_grades\":\"6\"},{\"academic_year\":\"2020/2021\",\"avg_exam_score\":\"49.36\",\"avg_project_score\":\"48.74\",\"avg_attendance_score\":\"57.42\",\"total_grades\":\"14\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Grade Components by Academic Year\",\"description\":\"Trend of average exam, project, and attendance scores across academic years\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":400,\"mark\":\"line\",\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\",\"axis\":{\"labelAngle\":-45}},\"y\":{\"type\":\"quantitative\",\"title\":\"Average Score\",\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"score_type\",\"type\":\"nominal\",\"title\":\"Score Type\",\"scale\":{\"scheme\":\"category10\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"score_type\",\"type\":\"nominal\",\"title\":\"Score Type\"},{\"field\":\"score\",\"type\":\"quantitative\",\"title\":\"Average Score\",\"format\":\".2f\"}]},\"transform\":[{\"fold\":[\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\"],\"as\":[\"score_type\",\"score\"]},{\"calculate\":\"datum.score_type === 'avg_exam_score' ? 'Exam' : datum.score_type === 'avg_project_score' ? 'Project' : 'Attendance'\",\"as\":\"score_type\"}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Encoding field 'score_type' is missing in SQL output columns.\",\"Encoding field 'score' is missing in SQL output columns.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Encoding field 'score_type' is missing in SQL output columns.\",\"Encoding field 'score' is missing in SQL output columns.\"]}},\"traceId\":\"15d1b25667d8d85ffca4770d14d778ba\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-grade-by-academic-year/run-0001/run.json",
+    "queryPath": "runs/avg-grade-by-academic-year/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-grade-by-academic-year/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-grade-by-academic-year/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-grade-by-academic-year/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:10:33.616Z",
+  "traceId": "15d1b25667d8d85ffca4770d14d778ba",
+  "success": true,
+  "durationMs": 27174,
+  "resultRaw": {
+    "data": [
+      {
+        "academic_year": "2019/2020",
+        "avg_exam_score": "41.93",
+        "avg_project_score": "45.50",
+        "avg_attendance_score": "56.43",
+        "total_grades": "6"
+      },
+      {
+        "academic_year": "2020/2021",
+        "avg_exam_score": "49.36",
+        "avg_project_score": "48.74",
+        "avg_attendance_score": "57.42",
+        "total_grades": "14"
+      },
+      {
+        "academic_year": "2021/2022",
+        "avg_exam_score": "33.68",
+        "avg_project_score": "46.67",
+        "avg_attendance_score": "62.63",
+        "total_grades": "9"
+      },
+      {
+        "academic_year": "2022/2023",
+        "avg_exam_score": "64.24",
+        "avg_project_score": "51.34",
+        "avg_attendance_score": "54.39",
+        "total_grades": "10"
+      },
+      {
+        "academic_year": "2023/2024",
+        "avg_exam_score": "45.31",
+        "avg_project_score": "36.38",
+        "avg_attendance_score": "57.45",
+        "total_grades": "8"
+      },
+      {
+        "academic_year": "2024/2025",
+        "avg_exam_score": "76.30",
+        "avg_project_score": "60.71",
+        "avg_attendance_score": "49.72",
+        "total_grades": "5"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Grade Components by Academic Year",
+      "description": "Trend of average exam, project, and attendance scores across academic years",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 700,
+      "height": 400,
+      "mark": "line",
+      "encoding": {
+        "x": {
+          "field": "academic_year",
+          "type": "nominal",
+          "title": "Academic Year",
+          "axis": {
+            "labelAngle": -45
+          }
+        },
+        "y": {
+          "type": "quantitative",
+          "title": "Average Score",
+          "scale": {
+            "domain": [
+              0,
+              100
+            ]
+          }
+        },
+        "color": {
+          "field": "score_type",
+          "type": "nominal",
+          "title": "Score Type",
+          "scale": {
+            "scheme": "category10"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "academic_year",
+            "type": "nominal",
+            "title": "Academic Year"
+          },
+          {
+            "field": "score_type",
+            "type": "nominal",
+            "title": "Score Type"
+          },
+          {
+            "field": "score",
+            "type": "quantitative",
+            "title": "Average Score",
+            "format": ".2f"
+          }
+        ]
+      },
+      "transform": [
+        {
+          "fold": [
+            "avg_exam_score",
+            "avg_project_score",
+            "avg_attendance_score"
+          ],
+          "as": [
+            "score_type",
+            "score"
+          ]
+        },
+        {
+          "calculate": "datum.score_type === 'avg_exam_score' ? 'Exam' : datum.score_type === 'avg_project_score' ? 'Project' : 'Attendance'",
+          "as": "score_type"
+        }
+      ]
+    },
+    "sql": "\nSELECT \n  cs.academic_year,\n  ROUND(AVG(CAST(g.exam_score AS NUMERIC)), 2) AS avg_exam_score,\n  ROUND(AVG(CAST(g.project_score AS NUMERIC)), 2) AS avg_project_score,\n  ROUND(AVG(CAST(g.attendance_score AS NUMERIC)), 2) AS avg_attendance_score,\n  COUNT(g.id) AS total_grades\nFROM grades g\nJOIN enrollments e ON g.enrollment_id = e.id\nJOIN course_sections cs ON e.course_section_id = cs.id\nWHERE g.exam_score IS NOT NULL \n   OR g.project_score IS NOT NULL \n   OR g.attendance_score IS NOT NULL\nGROUP BY cs.academic_year\nORDER BY cs.academic_year ASC\n",
+    "metadata": {
+      "columns": [
+        "academic_year",
+        "avg_exam_score",
+        "avg_project_score",
+        "avg_attendance_score",
+        "total_grades"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "academic_year": "2019/2020",
+          "avg_exam_score": "41.93",
+          "avg_project_score": "45.50",
+          "avg_attendance_score": "56.43",
+          "total_grades": "6"
+        },
+        {
+          "academic_year": "2020/2021",
+          "avg_exam_score": "49.36",
+          "avg_project_score": "48.74",
+          "avg_attendance_score": "57.42",
+          "total_grades": "14"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Encoding field 'score_type' is missing in SQL output columns.",
+        "Encoding field 'score' is missing in SQL output columns."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Encoding field 'score_type' is missing in SQL output columns.",
+        "Encoding field 'score' is missing in SQL output columns."
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "academic_year": "2019/2020",
+        "avg_exam_score": "41.93",
+        "avg_project_score": "45.50",
+        "avg_attendance_score": "56.43",
+        "total_grades": "6"
+      },
+      {
+        "academic_year": "2020/2021",
+        "avg_exam_score": "49.36",
+        "avg_project_score": "48.74",
+        "avg_attendance_score": "57.42",
+        "total_grades": "14"
+      },
+      {
+        "academic_year": "2021/2022",
+        "avg_exam_score": "33.68",
+        "avg_project_score": "46.67",
+        "avg_attendance_score": "62.63",
+        "total_grades": "9"
+      },
+      {
+        "academic_year": "2022/2023",
+        "avg_exam_score": "64.24",
+        "avg_project_score": "51.34",
+        "avg_attendance_score": "54.39",
+        "total_grades": "10"
+      },
+      {
+        "academic_year": "2023/2024",
+        "avg_exam_score": "45.31",
+        "avg_project_score": "36.38",
+        "avg_attendance_score": "57.45",
+        "total_grades": "8"
+      },
+      {
+        "academic_year": "2024/2025",
+        "avg_exam_score": "76.30",
+        "avg_project_score": "60.71",
+        "avg_attendance_score": "49.72",
+        "total_grades": "5"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Grade Components by Academic Year",
+      "description": "Trend of average exam, project, and attendance scores across academic years",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 700,
+      "height": 400,
+      "mark": "line",
+      "encoding": {
+        "x": {
+          "field": "academic_year",
+          "type": "nominal",
+          "title": "Academic Year",
+          "axis": {
+            "labelAngle": -45
+          }
+        },
+        "y": {
+          "type": "quantitative",
+          "title": "Average Score",
+          "scale": {
+            "domain": [
+              0,
+              100
+            ]
+          }
+        },
+        "color": {
+          "field": "score_type",
+          "type": "nominal",
+          "title": "Score Type",
+          "scale": {
+            "scheme": "category10"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "academic_year",
+            "type": "nominal",
+            "title": "Academic Year"
+          },
+          {
+            "field": "score_type",
+            "type": "nominal",
+            "title": "Score Type"
+          },
+          {
+            "field": "score",
+            "type": "quantitative",
+            "title": "Average Score",
+            "format": ".2f"
+          }
+        ]
+      },
+      "transform": [
+        {
+          "fold": [
+            "avg_exam_score",
+            "avg_project_score",
+            "avg_attendance_score"
+          ],
+          "as": [
+            "score_type",
+            "score"
+          ]
+        },
+        {
+          "calculate": "datum.score_type === 'avg_exam_score' ? 'Exam' : datum.score_type === 'avg_project_score' ? 'Project' : 'Attendance'",
+          "as": "score_type"
+        }
+      ]
+    },
+    "sql": "\nSELECT \n  cs.academic_year,\n  ROUND(AVG(CAST(g.exam_score AS NUMERIC)), 2) AS avg_exam_score,\n  ROUND(AVG(CAST(g.project_score AS NUMERIC)), 2) AS avg_project_score,\n  ROUND(AVG(CAST(g.attendance_score AS NUMERIC)), 2) AS avg_attendance_score,\n  COUNT(g.id) AS total_grades\nFROM grades g\nJOIN enrollments e ON g.enrollment_id = e.id\nJOIN course_sections cs ON e.course_section_id = cs.id\nWHERE g.exam_score IS NOT NULL \n   OR g.project_score IS NOT NULL \n   OR g.attendance_score IS NOT NULL\nGROUP BY cs.academic_year\nORDER BY cs.academic_year ASC\n",
+    "metadata": {
+      "columns": [
+        "academic_year",
+        "avg_exam_score",
+        "avg_project_score",
+        "avg_attendance_score",
+        "total_grades"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "academic_year": "2019/2020",
+          "avg_exam_score": "41.93",
+          "avg_project_score": "45.50",
+          "avg_attendance_score": "56.43",
+          "total_grades": "6"
+        },
+        {
+          "academic_year": "2020/2021",
+          "avg_exam_score": "49.36",
+          "avg_project_score": "48.74",
+          "avg_attendance_score": "57.42",
+          "total_grades": "14"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Encoding field 'score_type' is missing in SQL output columns.",
+        "Encoding field 'score' is missing in SQL output columns."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Encoding field 'score_type' is missing in SQL output columns.",
+        "Encoding field 'score' is missing in SQL output columns."
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.275Z",
+    "traceId": "15d1b25667d8d85ffca4770d14d778ba",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 17308,
+      "outputTokens": 1515,
+      "totalTokens": 18823,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.024883
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 17308,
+        "outputTokens": 1515,
+        "totalTokens": 18823,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.024883
+      }
+    ],
+    "warnings": []
+  }
+}

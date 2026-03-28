@@ -1,0 +1,260 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "course-evaluation-over-time",
+  "caseDirectory": "course-evaluation-over-time",
+  "repeatIndex": 1,
+  "prompt": "How has the average overall evaluation rating changed per academic year?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How has the average overall evaluation rating changed per academic year?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:39:36.333Z",
+    "endedAtUtc": "2026-02-23T11:41:10.996Z",
+    "durationMs": 94663
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "29766",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:41:10 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How has the average overall evaluation rating changed per academic year?\"},\"planner\":{\"payload\":{\"question\":\"How has the average overall evaluation rating changed per academic year?\"},\"startedAt\":1771846776344,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.overall_rating)\"],\"dimensions\":[\"academic_year\"],\"filters\":[\"course_evaluations.overall_rating IS NOT NULL\",\"course_evaluations.submitted_at IS NOT NULL\"],\"grain\":\"academic year (annual, grouped by academic year)\",\"aliases\":{\"CASE WHEN EXTRACT(MONTH FROM course_evaluations.submitted_at) >= 8 THEN (EXTRACT(YEAR FROM course_evaluations.submitted_at)::int)::text || '-' || (EXTRACT(YEAR FROM course_evaluations.submitted_at)::int + 1)::text ELSE ((EXTRACT(YEAR FROM course_evaluations.submitted_at)::int - 1)::text || '-' || (EXTRACT(YEAR FROM course_evaluations.submitted_at)::int)::text) END\":\"academic_year\",\"AVG(course_evaluations.overall_rating)\":\"avg_overall_rating\"},\"output_fields\":[\"academic_year\",\"avg_overall_rating\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"avg_overall_rating\",\"title\":\"Average Overall Evaluation Rating by Academic Year\"},\"assumptions\":[\"There is no explicit academic_year column in the schema; academic year is derived from course_evaluations.submitted_at.\",\"Academic year is defined here as Aug 1 through Jul 31. Rows with submitted_at in Aug–Dec are assigned to 'YEAR-(YEAR+1)' (e.g., Aug 2023 → '2023-2024'); rows in Jan–Jul are assigned to '(YEAR-1)-YEAR' (e.g., Mar 2024 → '2023-2024').\",\"We use a simple arithmetic average of overall_rating (integer) per academic year (AVG(overall_rating)).\",\"Only records with non-null submitted_at and overall_rating are included (filters listed). If you want to restrict overall_rating to an expected scale (e.g., 1-5), specify that and we will add a filter.\",\"submitted_at timezone is used as stored; no additional timezone normalization is applied.\",\"If you prefer a different academic-year boundary (e.g., Sept 1 start) or a calendar-year grouping, specify and the SQL expression for academic_year will be adjusted.\"]}},\"endedAt\":1771846811188},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.overall_rating)\"],\"dimensions\":[\"academic_year\"],\"filters\":[\"course_evaluations.overall_rating IS NOT NULL\",\"course_evaluations.submitted_at IS NOT NULL\"],\"grain\":\"academic year (annual, grouped by academic year)\",\"aliases\":{\"CASE WHEN EXTRACT(MONTH FROM course_evaluations.submitted_at) >= 8 THEN (EXTRACT(YEAR FROM course_evaluations.submitted_at)::int)::text || '-' || (EXTRACT(YEAR FROM course_evaluations.submitted_at)::int + 1)::text ELSE ((EXTRACT(YEAR FROM course_evaluations.submitted_at)::int - 1)::text || '-' || (EXTRACT(YEAR FROM course_evaluations.submitted_at)::int)::text) END\":\"academic_year\",\"AVG(course_evaluations.overall_rating)\":\"avg_overall_rating\"},\"output_fields\":[\"academic_year\",\"avg_overall_rating\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"avg_overall_rating\",\"title\":\"Average Overall Evaluation Rating by Academic Year\"},\"assumptions\":[\"There is no explicit academic_year column in the schema; academic year is derived from course_evaluations.submitted_at.\",\"Academic year is defined here as Aug 1 through Jul 31. Rows with submitted_at in Aug–Dec are assigned to 'YEAR-(YEAR+1)' (e.g., Aug 2023 → '2023-2024'); rows in Jan–Jul are assigned to '(YEAR-1)-YEAR' (e.g., Mar 2024 → '2023-2024').\",\"We use a simple arithmetic average of overall_rating (integer) per academic year (AVG(overall_rating)).\",\"Only records with non-null submitted_at and overall_rating are included (filters listed). If you want to restrict overall_rating to an expected scale (e.g., 1-5), specify that and we will add a filter.\",\"submitted_at timezone is used as stored; no additional timezone normalization is applied.\",\"If you prefer a different academic-year boundary (e.g., Sept 1 start) or a calendar-year grouping, specify and the SQL expression for academic_year will be adjusted.\"]}},\"startedAt\":1771846811199,\"status\":\"success\",\"output\":{\"question\":\"How has the average overall evaluation rating changed per academic year?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.overall_rating)\"],\"dimensions\":[\"academic_year\"],\"filters\":[\"course_evaluations.overall_rating IS NOT NULL\",\"course_evaluations.submitted_at IS NOT NULL\"],\"grain\":\"academic year (annual, grouped by academic year)\",\"aliases\":{\"CASE WHEN EXTRACT(MONTH FROM course_evaluations.submitted_at) >= 8 THEN (EXTRACT(YEAR FROM course_evaluations.submitted_at)::int)::text || '-' || (EXTRACT(YEAR FROM course_evaluations.submitted_at)::int + 1)::text ELSE ((EXTRACT(YEAR FROM course_evaluations.submitted_at)::int - 1)::text || '-' || (EXTRACT(YEAR FROM course_evaluations.submitted_at)::int)::text) END\":\"academic_year\",\"AVG(course_evaluations.overall_rating)\":\"avg_overall_rating\"},\"output_fields\":[\"academic_year\",\"avg_overall_rating\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"avg_overall_rating\",\"title\":\"Average Overall Evaluation Rating by Academic Year\"},\"assumptions\":[\"There is no explicit academic_year column in the schema; academic year is derived from course_evaluations.submitted_at.\",\"Academic year is defined here as Aug 1 through Jul 31. Rows with submitted_at in Aug–Dec are assigned to 'YEAR-(YEAR+1)' (e.g., Aug 2023 → '2023-2024'); rows in Jan–Jul are assigned to '(YEAR-1)-YEAR' (e.g., Mar 2024 → '2023-2024').\",\"We use a simple arithmetic average of overall_rating (integer) per academic year (AVG(overall_rating)).\",\"Only records with non-null submitted_at and overall_rating are included (filters listed). If you want to restrict overall_rating to an expected scale (e.g., 1-5), specify that and we will add a filter.\",\"submitted_at timezone is used as stored; no additional timezone normalization is applied.\",\"If you prefer a different academic-year boundary (e.g., Sept 1 start) or a calendar-year grouping, specify and the SQL expression for academic_year will be adjusted.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771846811202},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"How has the average overall evaluation rating changed per academic year?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.overall_rating)\"],\"dimensions\":[\"academic_year\"],\"filters\":[\"course_evaluations.overall_rating IS NOT NULL\",\"course_evaluations.submitted_at IS NOT NULL\"],\"grain\":\"academic year (annual, grouped by academic year)\",\"aliases\":{\"CASE WHEN EXTRACT(MONTH FROM course_evaluations.submitted_at) >= 8 THEN (EXTRACT(YEAR FROM course_evaluations.submitted_at)::int)::text || '-' || (EXTRACT(YEAR FROM course_evaluations.submitted_at)::int + 1)::text ELSE ((EXTRACT(YEAR FROM course_evaluations.submitted_at)::int - 1)::text || '-' || (EXTRACT(YEAR FROM course_evaluations.submitted_at)::int)::text) END\":\"academic_year\",\"AVG(course_evaluations.overall_rating)\":\"avg_overall_rating\"},\"output_fields\":[\"academic_year\",\"avg_overall_rating\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"avg_overall_rating\",\"title\":\"Average Overall Evaluation Rating by Academic Year\"},\"assumptions\":[\"There is no explicit academic_year column in the schema; academic year is derived from course_evaluations.submitted_at.\",\"Academic year is defined here as Aug 1 through Jul 31. Rows with submitted_at in Aug–Dec are assigned to 'YEAR-(YEAR+1)' (e.g., Aug 2023 → '2023-2024'); rows in Jan–Jul are assigned to '(YEAR-1)-YEAR' (e.g., Mar 2024 → '2023-2024').\",\"We use a simple arithmetic average of overall_rating (integer) per academic year (AVG(overall_rating)).\",\"Only records with non-null submitted_at and overall_rating are included (filters listed). If you want to restrict overall_rating to an expected scale (e.g., 1-5), specify that and we will add a filter.\",\"submitted_at timezone is used as stored; no additional timezone normalization is applied.\",\"If you prefer a different academic-year boundary (e.g., Sept 1 start) or a calendar-year grouping, specify and the SQL expression for academic_year will be adjusted.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771846811207,\"status\":\"success\",\"output\":{\"question\":\"How has the average overall evaluation rating changed per academic year?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.overall_rating)\"],\"dimensions\":[\"academic_year\"],\"filters\":[\"course_evaluations.overall_rating IS NOT NULL\",\"course_evaluations.submitted_at IS NOT NULL\"],\"grain\":\"academic year (annual, grouped by academic year)\",\"aliases\":{\"CASE WHEN EXTRACT(MONTH FROM course_evaluations.submitted_at) >= 8 THEN (EXTRACT(YEAR FROM course_evaluations.submitted_at)::int)::text || '-' || (EXTRACT(YEAR FROM course_evaluations.submitted_at)::int + 1)::text ELSE ((EXTRACT(YEAR FROM course_evaluations.submitted_at)::int - 1)::text || '-' || (EXTRACT(YEAR FROM course_evaluations.submitted_at)::int)::text) END\":\"academic_year\",\"AVG(course_evaluations.overall_rating)\":\"avg_overall_rating\"},\"output_fields\":[\"academic_year\",\"avg_overall_rating\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"avg_overall_rating\",\"title\":\"Average Overall Evaluation Rating by Academic Year\"},\"assumptions\":[\"There is no explicit academic_year column in the schema; academic year is derived from course_evaluations.submitted_at.\",\"Academic year is defined here as Aug 1 through Jul 31. Rows with submitted_at in Aug–Dec are assigned to 'YEAR-(YEAR+1)' (e.g., Aug 2023 → '2023-2024'); rows in Jan–Jul are assigned to '(YEAR-1)-YEAR' (e.g., Mar 2024 → '2023-2024').\",\"We use a simple arithmetic average of overall_rating (integer) per academic year (AVG(overall_rating)).\",\"Only records with non-null submitted_at and overall_rating are included (filters listed). If you want to restrict overall_rating to an expected scale (e.g., 1-5), specify that and we will add a filter.\",\"submitted_at timezone is used as stored; no additional timezone normalization is applied.\",\"If you prefer a different academic-year boundary (e.g., Sept 1 start) or a calendar-year grouping, specify and the SQL expression for academic_year will be adjusted.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"WITH ev AS (\\n  SELECT\\n    submitted_at,\\n    overall_rating,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM submitted_at) >= 8\\n      THEN (EXTRACT(YEAR FROM submitted_at)::int)::text || '-' || (EXTRACT(YEAR FROM submitted_at)::int + 1)::text\\n      ELSE ((EXTRACT(YEAR FROM submitted_at)::int - 1)::text || '-' || (EXTRACT(YEAR FROM submitted_at)::int)::text)\\n    END AS academic_year,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM submitted_at) >= 8\\n      THEN EXTRACT(YEAR FROM submitted_at)::int\\n      ELSE (EXTRACT(YEAR FROM submitted_at)::int - 1)\\n    END AS start_year\\n  FROM public.course_evaluations\\n  WHERE overall_rating IS NOT NULL\\n    AND submitted_at IS NOT NULL\\n)\\nSELECT\\n  academic_year AS academic_year,\\n  ROUND(AVG(overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM ev\\nGROUP BY academic_year, start_year\\nORDER BY start_year ASC;\",\"validationIssues\":[\"X encoding uses type \\\"ordinal\\\" for academic_year. Because this is a temporal series, consider encoding with a temporal/numeric axis (e.g., include a start_year numeric field or convert to a proper date) so ordering and axis semantics are explicit.\",\"The SQL orders results by start_year, but start_year is not included in the final output schema; if you rely on explicit sort preservation in the chart, include start_year (or add an explicit sort) to guarantee chronological ordering in all environments.\",\"metadata.rowCount is 3 but the provided sample only contains 2 rows — this discrepancy may indicate incomplete sample data in metadata.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Derived academic year from course_evaluations.submitted_at (Aug–Jul boundary) and averaged overall_rating per academic year; ordered by the academic-year start for deterministic chronological order.\",\"sql\":\"WITH ev AS (\\n  SELECT\\n    submitted_at,\\n    overall_rating,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM submitted_at) >= 8\\n      THEN (EXTRACT(YEAR FROM submitted_at)::int)::text || '-' || (EXTRACT(YEAR FROM submitted_at)::int + 1)::text\\n      ELSE ((EXTRACT(YEAR FROM submitted_at)::int - 1)::text || '-' || (EXTRACT(YEAR FROM submitted_at)::int)::text)\\n    END AS academic_year,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM submitted_at) >= 8\\n      THEN EXTRACT(YEAR FROM submitted_at)::int\\n      ELSE (EXTRACT(YEAR FROM submitted_at)::int - 1)\\n    END AS start_year\\n  FROM public.course_evaluations\\n  WHERE overall_rating IS NOT NULL\\n    AND submitted_at IS NOT NULL\\n)\\nSELECT\\n  academic_year AS academic_year,\\n  ROUND(AVG(overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM ev\\nGROUP BY academic_year, start_year\\nORDER BY start_year ASC;\",\"assumptions\":[\"Academic year runs Aug 1 through Jul 31 and is labeled as 'YYYY-YYYY' where Aug–Dec use submitted_at year as start and Jan–Jul use (year-1) as start.\",\"Use simple arithmetic average of overall_rating per academic year (AVG(overall_rating)).\",\"Include only rows with non-null submitted_at and overall_rating per the plan.\",\"No additional normalization of submitted_at timezone is applied.\"]},\"execution\":{\"ok\":true,\"sql\":\"WITH ev AS (\\n  SELECT\\n    submitted_at,\\n    overall_rating,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM submitted_at) >= 8\\n      THEN (EXTRACT(YEAR FROM submitted_at)::int)::text || '-' || (EXTRACT(YEAR FROM submitted_at)::int + 1)::text\\n      ELSE ((EXTRACT(YEAR FROM submitted_at)::int - 1)::text || '-' || (EXTRACT(YEAR FROM submitted_at)::int)::text)\\n    END AS academic_year,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM submitted_at) >= 8\\n      THEN EXTRACT(YEAR FROM submitted_at)::int\\n      ELSE (EXTRACT(YEAR FROM submitted_at)::int - 1)\\n    END AS start_year\\n  FROM public.course_evaluations\\n  WHERE overall_rating IS NOT NULL\\n    AND submitted_at IS NOT NULL\\n)\\nSELECT\\n  academic_year AS academic_year,\\n  ROUND(AVG(overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM ev\\nGROUP BY academic_year, start_year\\nORDER BY start_year ASC\",\"metadata\":{\"columns\":[\"academic_year\",\"avg_overall_rating\"],\"rowCount\":3,\"sample\":[{\"academic_year\":\"2023-2024\",\"avg_overall_rating\":3.5},{\"academic_year\":\"2024-2025\",\"avg_overall_rating\":2.67}]},\"data\":[{\"academic_year\":\"2023-2024\",\"avg_overall_rating\":3.5},{\"academic_year\":\"2024-2025\",\"avg_overall_rating\":2.67},{\"academic_year\":\"2025-2026\",\"avg_overall_rating\":3.25}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Overall Evaluation Rating by Academic Year\",\"width\":640,\"height\":360,\"mark\":{\"type\":\"line\",\"point\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Academic Year\"}},\"y\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Overall Rating\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic Year\"},{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Avg Overall Rating\"}]}},\"reasoning\":\"Line chart with academic_year on the x-axis (ordinal categories like '2023-2024') and avg_overall_rating on the y-axis. Points and tooltips are enabled so exact averages per academic year are easy to read.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"X encoding uses type \\\"ordinal\\\" for academic_year. Because this is a temporal series, consider encoding with a temporal/numeric axis (e.g., include a start_year numeric field or convert to a proper date) so ordering and axis semantics are explicit.\",\"The SQL orders results by start_year, but start_year is not included in the final output schema; if you rely on explicit sort preservation in the chart, include start_year (or add an explicit sort) to guarantee chronological ordering in all environments.\",\"metadata.rowCount is 3 but the provided sample only contains 2 rows — this discrepancy may indicate incomplete sample data in metadata.\"]}}},\"endedAt\":1771846870968,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"How has the average overall evaluation rating changed per academic year?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.overall_rating)\"],\"dimensions\":[\"academic_year\"],\"filters\":[\"course_evaluations.overall_rating IS NOT NULL\",\"course_evaluations.submitted_at IS NOT NULL\"],\"grain\":\"academic year (annual, grouped by academic year)\",\"aliases\":{\"CASE WHEN EXTRACT(MONTH FROM course_evaluations.submitted_at) >= 8 THEN (EXTRACT(YEAR FROM course_evaluations.submitted_at)::int)::text || '-' || (EXTRACT(YEAR FROM course_evaluations.submitted_at)::int + 1)::text ELSE ((EXTRACT(YEAR FROM course_evaluations.submitted_at)::int - 1)::text || '-' || (EXTRACT(YEAR FROM course_evaluations.submitted_at)::int)::text) END\":\"academic_year\",\"AVG(course_evaluations.overall_rating)\":\"avg_overall_rating\"},\"output_fields\":[\"academic_year\",\"avg_overall_rating\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"avg_overall_rating\",\"title\":\"Average Overall Evaluation Rating by Academic Year\"},\"assumptions\":[\"There is no explicit academic_year column in the schema; academic year is derived from course_evaluations.submitted_at.\",\"Academic year is defined here as Aug 1 through Jul 31. Rows with submitted_at in Aug–Dec are assigned to 'YEAR-(YEAR+1)' (e.g., Aug 2023 → '2023-2024'); rows in Jan–Jul are assigned to '(YEAR-1)-YEAR' (e.g., Mar 2024 → '2023-2024').\",\"We use a simple arithmetic average of overall_rating (integer) per academic year (AVG(overall_rating)).\",\"Only records with non-null submitted_at and overall_rating are included (filters listed). If you want to restrict overall_rating to an expected scale (e.g., 1-5), specify that and we will add a filter.\",\"submitted_at timezone is used as stored; no additional timezone normalization is applied.\",\"If you prefer a different academic-year boundary (e.g., Sept 1 start) or a calendar-year grouping, specify and the SQL expression for academic_year will be adjusted.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"WITH ev AS (\\n  SELECT\\n    submitted_at,\\n    overall_rating,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM submitted_at) >= 8\\n      THEN (EXTRACT(YEAR FROM submitted_at)::int)::text || '-' || (EXTRACT(YEAR FROM submitted_at)::int + 1)::text\\n      ELSE ((EXTRACT(YEAR FROM submitted_at)::int - 1)::text || '-' || (EXTRACT(YEAR FROM submitted_at)::int)::text)\\n    END AS academic_year,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM submitted_at) >= 8\\n      THEN EXTRACT(YEAR FROM submitted_at)::int\\n      ELSE (EXTRACT(YEAR FROM submitted_at)::int - 1)\\n    END AS start_year\\n  FROM public.course_evaluations\\n  WHERE overall_rating IS NOT NULL\\n    AND submitted_at IS NOT NULL\\n)\\nSELECT\\n  academic_year AS academic_year,\\n  ROUND(AVG(overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM ev\\nGROUP BY academic_year, start_year\\nORDER BY start_year ASC;\",\"validationIssues\":[\"X encoding uses type \\\"ordinal\\\" for academic_year. Because this is a temporal series, consider encoding with a temporal/numeric axis (e.g., include a start_year numeric field or convert to a proper date) so ordering and axis semantics are explicit.\",\"The SQL orders results by start_year, but start_year is not included in the final output schema; if you rely on explicit sort preservation in the chart, include start_year (or add an explicit sort) to guarantee chronological ordering in all environments.\",\"metadata.rowCount is 3 but the provided sample only contains 2 rows — this discrepancy may indicate incomplete sample data in metadata.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Derived academic year from course_evaluations.submitted_at (Aug–Jul boundary) and averaged overall_rating per academic year; ordered by the academic-year start for deterministic chronological order.\",\"sql\":\"WITH ev AS (\\n  SELECT\\n    submitted_at,\\n    overall_rating,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM submitted_at) >= 8\\n      THEN (EXTRACT(YEAR FROM submitted_at)::int)::text || '-' || (EXTRACT(YEAR FROM submitted_at)::int + 1)::text\\n      ELSE ((EXTRACT(YEAR FROM submitted_at)::int - 1)::text || '-' || (EXTRACT(YEAR FROM submitted_at)::int)::text)\\n    END AS academic_year,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM submitted_at) >= 8\\n      THEN EXTRACT(YEAR FROM submitted_at)::int\\n      ELSE (EXTRACT(YEAR FROM submitted_at)::int - 1)\\n    END AS start_year\\n  FROM public.course_evaluations\\n  WHERE overall_rating IS NOT NULL\\n    AND submitted_at IS NOT NULL\\n)\\nSELECT\\n  academic_year AS academic_year,\\n  ROUND(AVG(overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM ev\\nGROUP BY academic_year, start_year\\nORDER BY start_year ASC;\",\"assumptions\":[\"Academic year runs Aug 1 through Jul 31 and is labeled as 'YYYY-YYYY' where Aug–Dec use submitted_at year as start and Jan–Jul use (year-1) as start.\",\"Use simple arithmetic average of overall_rating per academic year (AVG(overall_rating)).\",\"Include only rows with non-null submitted_at and overall_rating per the plan.\",\"No additional normalization of submitted_at timezone is applied.\"]},\"execution\":{\"ok\":true,\"sql\":\"WITH ev AS (\\n  SELECT\\n    submitted_at,\\n    overall_rating,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM submitted_at) >= 8\\n      THEN (EXTRACT(YEAR FROM submitted_at)::int)::text || '-' || (EXTRACT(YEAR FROM submitted_at)::int + 1)::text\\n      ELSE ((EXTRACT(YEAR FROM submitted_at)::int - 1)::text || '-' || (EXTRACT(YEAR FROM submitted_at)::int)::text)\\n    END AS academic_year,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM submitted_at) >= 8\\n      THEN EXTRACT(YEAR FROM submitted_at)::int\\n      ELSE (EXTRACT(YEAR FROM submitted_at)::int - 1)\\n    END AS start_year\\n  FROM public.course_evaluations\\n  WHERE overall_rating IS NOT NULL\\n    AND submitted_at IS NOT NULL\\n)\\nSELECT\\n  academic_year AS academic_year,\\n  ROUND(AVG(overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM ev\\nGROUP BY academic_year, start_year\\nORDER BY start_year ASC\",\"metadata\":{\"columns\":[\"academic_year\",\"avg_overall_rating\"],\"rowCount\":3,\"sample\":[{\"academic_year\":\"2023-2024\",\"avg_overall_rating\":3.5},{\"academic_year\":\"2024-2025\",\"avg_overall_rating\":2.67}]},\"data\":[{\"academic_year\":\"2023-2024\",\"avg_overall_rating\":3.5},{\"academic_year\":\"2024-2025\",\"avg_overall_rating\":2.67},{\"academic_year\":\"2025-2026\",\"avg_overall_rating\":3.25}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Overall Evaluation Rating by Academic Year\",\"width\":640,\"height\":360,\"mark\":{\"type\":\"line\",\"point\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Academic Year\"}},\"y\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Overall Rating\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic Year\"},{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Avg Overall Rating\"}]}},\"reasoning\":\"Line chart with academic_year on the x-axis (ordinal categories like '2023-2024') and avg_overall_rating on the y-axis. Points and tooltips are enabled so exact averages per academic year are easy to read.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"X encoding uses type \\\"ordinal\\\" for academic_year. Because this is a temporal series, consider encoding with a temporal/numeric axis (e.g., include a start_year numeric field or convert to a proper date) so ordering and axis semantics are explicit.\",\"The SQL orders results by start_year, but start_year is not included in the final output schema; if you rely on explicit sort preservation in the chart, include start_year (or add an explicit sort) to guarantee chronological ordering in all environments.\",\"metadata.rowCount is 3 but the provided sample only contains 2 rows — this discrepancy may indicate incomplete sample data in metadata.\"]}}},\"startedAt\":1771846870973,\"status\":\"success\",\"output\":{\"sql\":\"WITH ev AS (\\n  SELECT\\n    submitted_at,\\n    overall_rating,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM submitted_at) >= 8\\n      THEN (EXTRACT(YEAR FROM submitted_at)::int)::text || '-' || (EXTRACT(YEAR FROM submitted_at)::int + 1)::text\\n      ELSE ((EXTRACT(YEAR FROM submitted_at)::int - 1)::text || '-' || (EXTRACT(YEAR FROM submitted_at)::int)::text)\\n    END AS academic_year,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM submitted_at) >= 8\\n      THEN EXTRACT(YEAR FROM submitted_at)::int\\n      ELSE (EXTRACT(YEAR FROM submitted_at)::int - 1)\\n    END AS start_year\\n  FROM public.course_evaluations\\n  WHERE overall_rating IS NOT NULL\\n    AND submitted_at IS NOT NULL\\n)\\nSELECT\\n  academic_year AS academic_year,\\n  ROUND(AVG(overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM ev\\nGROUP BY academic_year, start_year\\nORDER BY start_year ASC;\",\"data\":[{\"academic_year\":\"2023-2024\",\"avg_overall_rating\":3.5},{\"academic_year\":\"2024-2025\",\"avg_overall_rating\":2.67},{\"academic_year\":\"2025-2026\",\"avg_overall_rating\":3.25}],\"metadata\":{\"columns\":[\"academic_year\",\"avg_overall_rating\"],\"rowCount\":3,\"sample\":[{\"academic_year\":\"2023-2024\",\"avg_overall_rating\":3.5},{\"academic_year\":\"2024-2025\",\"avg_overall_rating\":2.67}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Overall Evaluation Rating by Academic Year\",\"width\":640,\"height\":360,\"mark\":{\"type\":\"line\",\"point\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Academic Year\"}},\"y\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Overall Rating\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic Year\"},{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Avg Overall Rating\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"X encoding uses type \\\"ordinal\\\" for academic_year. Because this is a temporal series, consider encoding with a temporal/numeric axis (e.g., include a start_year numeric field or convert to a proper date) so ordering and axis semantics are explicit.\",\"The SQL orders results by start_year, but start_year is not included in the final output schema; if you rely on explicit sort preservation in the chart, include start_year (or add an explicit sort) to guarantee chronological ordering in all environments.\",\"metadata.rowCount is 3 but the provided sample only contains 2 rows — this discrepancy may indicate incomplete sample data in metadata.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771846870977}},\"input\":{\"question\":\"How has the average overall evaluation rating changed per academic year?\"},\"result\":{\"sql\":\"WITH ev AS (\\n  SELECT\\n    submitted_at,\\n    overall_rating,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM submitted_at) >= 8\\n      THEN (EXTRACT(YEAR FROM submitted_at)::int)::text || '-' || (EXTRACT(YEAR FROM submitted_at)::int + 1)::text\\n      ELSE ((EXTRACT(YEAR FROM submitted_at)::int - 1)::text || '-' || (EXTRACT(YEAR FROM submitted_at)::int)::text)\\n    END AS academic_year,\\n    CASE\\n      WHEN EXTRACT(MONTH FROM submitted_at) >= 8\\n      THEN EXTRACT(YEAR FROM submitted_at)::int\\n      ELSE (EXTRACT(YEAR FROM submitted_at)::int - 1)\\n    END AS start_year\\n  FROM public.course_evaluations\\n  WHERE overall_rating IS NOT NULL\\n    AND submitted_at IS NOT NULL\\n)\\nSELECT\\n  academic_year AS academic_year,\\n  ROUND(AVG(overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM ev\\nGROUP BY academic_year, start_year\\nORDER BY start_year ASC;\",\"data\":[{\"academic_year\":\"2023-2024\",\"avg_overall_rating\":3.5},{\"academic_year\":\"2024-2025\",\"avg_overall_rating\":2.67},{\"academic_year\":\"2025-2026\",\"avg_overall_rating\":3.25}],\"metadata\":{\"columns\":[\"academic_year\",\"avg_overall_rating\"],\"rowCount\":3,\"sample\":[{\"academic_year\":\"2023-2024\",\"avg_overall_rating\":3.5},{\"academic_year\":\"2024-2025\",\"avg_overall_rating\":2.67}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Overall Evaluation Rating by Academic Year\",\"width\":640,\"height\":360,\"mark\":{\"type\":\"line\",\"point\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Academic Year\"}},\"y\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Overall Rating\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic Year\"},{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Avg Overall Rating\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"X encoding uses type \\\"ordinal\\\" for academic_year. Because this is a temporal series, consider encoding with a temporal/numeric axis (e.g., include a start_year numeric field or convert to a proper date) so ordering and axis semantics are explicit.\",\"The SQL orders results by start_year, but start_year is not included in the final output schema; if you rely on explicit sort preservation in the chart, include start_year (or add an explicit sort) to guarantee chronological ordering in all environments.\",\"metadata.rowCount is 3 but the provided sample only contains 2 rows — this discrepancy may indicate incomplete sample data in metadata.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"87b2912e99ff4e2acf2912f6cce42155\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/course-evaluation-over-time/run-0001/run.json",
+    "queryPath": "runs/course-evaluation-over-time/run-0001/query.sql",
+    "vegaRawPath": "runs/course-evaluation-over-time/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/course-evaluation-over-time/run-0001/vega.resolved.json",
+    "imagePath": "runs/course-evaluation-over-time/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:41:11.380Z",
+  "traceId": "87b2912e99ff4e2acf2912f6cce42155",
+  "success": true,
+  "durationMs": 95047,
+  "resultRaw": {
+    "data": [
+      {
+        "academic_year": "2023-2024",
+        "avg_overall_rating": 3.5
+      },
+      {
+        "academic_year": "2024-2025",
+        "avg_overall_rating": 2.67
+      },
+      {
+        "academic_year": "2025-2026",
+        "avg_overall_rating": 3.25
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Overall Evaluation Rating by Academic Year",
+      "width": 640,
+      "height": 360,
+      "mark": {
+        "type": "line",
+        "point": true
+      },
+      "encoding": {
+        "x": {
+          "field": "academic_year",
+          "type": "ordinal",
+          "axis": {
+            "title": "Academic Year"
+          }
+        },
+        "y": {
+          "field": "avg_overall_rating",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average Overall Rating"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "academic_year",
+            "type": "ordinal",
+            "title": "Academic Year"
+          },
+          {
+            "field": "avg_overall_rating",
+            "type": "quantitative",
+            "title": "Avg Overall Rating"
+          }
+        ]
+      }
+    },
+    "sql": "WITH ev AS (\n  SELECT\n    submitted_at,\n    overall_rating,\n    CASE\n      WHEN EXTRACT(MONTH FROM submitted_at) >= 8\n      THEN (EXTRACT(YEAR FROM submitted_at)::int)::text || '-' || (EXTRACT(YEAR FROM submitted_at)::int + 1)::text\n      ELSE ((EXTRACT(YEAR FROM submitted_at)::int - 1)::text || '-' || (EXTRACT(YEAR FROM submitted_at)::int)::text)\n    END AS academic_year,\n    CASE\n      WHEN EXTRACT(MONTH FROM submitted_at) >= 8\n      THEN EXTRACT(YEAR FROM submitted_at)::int\n      ELSE (EXTRACT(YEAR FROM submitted_at)::int - 1)\n    END AS start_year\n  FROM public.course_evaluations\n  WHERE overall_rating IS NOT NULL\n    AND submitted_at IS NOT NULL\n)\nSELECT\n  academic_year AS academic_year,\n  ROUND(AVG(overall_rating)::numeric, 2) AS avg_overall_rating\nFROM ev\nGROUP BY academic_year, start_year\nORDER BY start_year ASC;",
+    "metadata": {
+      "columns": [
+        "academic_year",
+        "avg_overall_rating"
+      ],
+      "rowCount": 3,
+      "sample": [
+        {
+          "academic_year": "2023-2024",
+          "avg_overall_rating": 3.5
+        },
+        {
+          "academic_year": "2024-2025",
+          "avg_overall_rating": 2.67
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "X encoding uses type \"ordinal\" for academic_year. Because this is a temporal series, consider encoding with a temporal/numeric axis (e.g., include a start_year numeric field or convert to a proper date) so ordering and axis semantics are explicit.",
+        "The SQL orders results by start_year, but start_year is not included in the final output schema; if you rely on explicit sort preservation in the chart, include start_year (or add an explicit sort) to guarantee chronological ordering in all environments.",
+        "metadata.rowCount is 3 but the provided sample only contains 2 rows — this discrepancy may indicate incomplete sample data in metadata."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "academic_year": "2023-2024",
+        "avg_overall_rating": 3.5
+      },
+      {
+        "academic_year": "2024-2025",
+        "avg_overall_rating": 2.67
+      },
+      {
+        "academic_year": "2025-2026",
+        "avg_overall_rating": 3.25
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Overall Evaluation Rating by Academic Year",
+      "width": 640,
+      "height": 360,
+      "mark": {
+        "type": "line",
+        "point": true
+      },
+      "encoding": {
+        "x": {
+          "field": "academic_year",
+          "type": "ordinal",
+          "axis": {
+            "title": "Academic Year"
+          }
+        },
+        "y": {
+          "field": "avg_overall_rating",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average Overall Rating"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "academic_year",
+            "type": "ordinal",
+            "title": "Academic Year"
+          },
+          {
+            "field": "avg_overall_rating",
+            "type": "quantitative",
+            "title": "Avg Overall Rating"
+          }
+        ]
+      }
+    },
+    "sql": "WITH ev AS (\n  SELECT\n    submitted_at,\n    overall_rating,\n    CASE\n      WHEN EXTRACT(MONTH FROM submitted_at) >= 8\n      THEN (EXTRACT(YEAR FROM submitted_at)::int)::text || '-' || (EXTRACT(YEAR FROM submitted_at)::int + 1)::text\n      ELSE ((EXTRACT(YEAR FROM submitted_at)::int - 1)::text || '-' || (EXTRACT(YEAR FROM submitted_at)::int)::text)\n    END AS academic_year,\n    CASE\n      WHEN EXTRACT(MONTH FROM submitted_at) >= 8\n      THEN EXTRACT(YEAR FROM submitted_at)::int\n      ELSE (EXTRACT(YEAR FROM submitted_at)::int - 1)\n    END AS start_year\n  FROM public.course_evaluations\n  WHERE overall_rating IS NOT NULL\n    AND submitted_at IS NOT NULL\n)\nSELECT\n  academic_year AS academic_year,\n  ROUND(AVG(overall_rating)::numeric, 2) AS avg_overall_rating\nFROM ev\nGROUP BY academic_year, start_year\nORDER BY start_year ASC;",
+    "metadata": {
+      "columns": [
+        "academic_year",
+        "avg_overall_rating"
+      ],
+      "rowCount": 3,
+      "sample": [
+        {
+          "academic_year": "2023-2024",
+          "avg_overall_rating": 3.5
+        },
+        {
+          "academic_year": "2024-2025",
+          "avg_overall_rating": 2.67
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "X encoding uses type \"ordinal\" for academic_year. Because this is a temporal series, consider encoding with a temporal/numeric axis (e.g., include a start_year numeric field or convert to a proper date) so ordering and axis semantics are explicit.",
+        "The SQL orders results by start_year, but start_year is not included in the final output schema; if you rely on explicit sort preservation in the chart, include start_year (or add an explicit sort) to guarantee chronological ordering in all environments.",
+        "metadata.rowCount is 3 but the provided sample only contains 2 rows — this discrepancy may indicate incomplete sample data in metadata."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:41:11.380Z",
+    "traceId": "87b2912e99ff4e2acf2912f6cce42155",
+    "attempts": 5,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 14433,
+      "outputTokens": 5684,
+      "totalTokens": 20117,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 3840,
+      "costUsd": 0.01497625
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 14433,
+        "outputTokens": 5684,
+        "totalTokens": 20117,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 3840,
+        "costUsd": 0.01497625
+      }
+    ],
+    "warnings": []
+  }
+}

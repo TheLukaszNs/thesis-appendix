@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "grade-distribution-by-department",
+  "caseDirectory": "grade-distribution-by-department",
+  "repeatIndex": 1,
+  "prompt": "Show the grade distribution for each department",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the grade distribution for each department"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:48:10.956Z",
+    "endedAtUtc": "2026-02-23T10:48:33.037Z",
+    "durationMs": 22081
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2426",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:48:33 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Show the grade distribution for each department\"},\"agent\":{\"payload\":{\"question\":\"Show the grade distribution for each department\"},\"startedAt\":1771843690963,\"status\":\"success\",\"output\":{\"sql\":\"WITH dept_grade_counts AS (\\n  SELECT\\n    d.name AS department_name,\\n    e.grade AS grade,\\n    COUNT(*) AS count\\n  FROM enrollments e\\n  JOIN courses c ON e.course_id = c.id\\n  JOIN departments d ON c.department_id = d.id\\n  GROUP BY d.name, e.grade\\n)\\nSELECT\\n  department_name,\\n  grade,\\n  count,\\n  ROUND(100.0 * count / SUM(count) OVER (PARTITION BY department_name), 2) AS pct\\nFROM dept_grade_counts\\nORDER BY department_name, grade;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Grade distribution by department (proportion by grade)\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\",\"labelAngle\":-40}},\"y\":{\"field\":\"count\",\"type\":\"quantitative\",\"stack\":\"normalize\",\"axis\":{\"title\":\"Proportion\"}},\"color\":{\"field\":\"grade\",\"type\":\"nominal\",\"title\":\"Grade\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"grade\",\"type\":\"nominal\",\"title\":\"Grade\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"pct\",\"type\":\"quantitative\",\"title\":\"Percent\"}]}}},\"endedAt\":1771843712957},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH dept_grade_counts AS (\\n  SELECT\\n    d.name AS department_name,\\n    e.grade AS grade,\\n    COUNT(*) AS count\\n  FROM enrollments e\\n  JOIN courses c ON e.course_id = c.id\\n  JOIN departments d ON c.department_id = d.id\\n  GROUP BY d.name, e.grade\\n)\\nSELECT\\n  department_name,\\n  grade,\\n  count,\\n  ROUND(100.0 * count / SUM(count) OVER (PARTITION BY department_name), 2) AS pct\\nFROM dept_grade_counts\\nORDER BY department_name, grade;\"},\"startedAt\":1771843712959,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column e.course_id does not exist\\nLINE 8:   JOIN courses c ON e.course_id = c.id\\n                            ^\",\"name\":\"Error\"},\"endedAt\":1771843713031}},\"input\":{\"question\":\"Show the grade distribution for each department\"},\"error\":{\"message\":\"SQL execution failed: column e.course_id does not exist\\nLINE 8:   JOIN courses c ON e.course_id = c.id\\n                            ^\",\"name\":\"Error\"},\"traceId\":\"e2e760193907590aff911b03ea7df823\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/grade-distribution-by-department/run-0001/run.json",
+    "queryPath": "runs/grade-distribution-by-department/run-0001/query.sql",
+    "vegaRawPath": "runs/grade-distribution-by-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/grade-distribution-by-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/grade-distribution-by-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:48:33.037Z",
+  "traceId": "e2e760193907590aff911b03ea7df823",
+  "success": false,
+  "durationMs": 22081,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Show the grade distribution for each department"
+      },
+      "agent": {
+        "payload": {
+          "question": "Show the grade distribution for each department"
+        },
+        "startedAt": 1771843690963,
+        "status": "success",
+        "output": {
+          "sql": "WITH dept_grade_counts AS (\n  SELECT\n    d.name AS department_name,\n    e.grade AS grade,\n    COUNT(*) AS count\n  FROM enrollments e\n  JOIN courses c ON e.course_id = c.id\n  JOIN departments d ON c.department_id = d.id\n  GROUP BY d.name, e.grade\n)\nSELECT\n  department_name,\n  grade,\n  count,\n  ROUND(100.0 * count / SUM(count) OVER (PARTITION BY department_name), 2) AS pct\nFROM dept_grade_counts\nORDER BY department_name, grade;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "data": {
+              "name": "query_result"
+            },
+            "title": "Grade distribution by department (proportion by grade)",
+            "mark": {
+              "type": "bar"
+            },
+            "encoding": {
+              "x": {
+                "field": "department_name",
+                "type": "nominal",
+                "axis": {
+                  "title": "Department",
+                  "labelAngle": -40
+                }
+              },
+              "y": {
+                "field": "count",
+                "type": "quantitative",
+                "stack": "normalize",
+                "axis": {
+                  "title": "Proportion"
+                }
+              },
+              "color": {
+                "field": "grade",
+                "type": "nominal",
+                "title": "Grade"
+              },
+              "tooltip": [
+                {
+                  "field": "department_name",
+                  "type": "nominal",
+                  "title": "Department"
+                },
+                {
+                  "field": "grade",
+                  "type": "nominal",
+                  "title": "Grade"
+                },
+                {
+                  "field": "count",
+                  "type": "quantitative",
+                  "title": "Count"
+                },
+                {
+                  "field": "pct",
+                  "type": "quantitative",
+                  "title": "Percent"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843712957
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH dept_grade_counts AS (\n  SELECT\n    d.name AS department_name,\n    e.grade AS grade,\n    COUNT(*) AS count\n  FROM enrollments e\n  JOIN courses c ON e.course_id = c.id\n  JOIN departments d ON c.department_id = d.id\n  GROUP BY d.name, e.grade\n)\nSELECT\n  department_name,\n  grade,\n  count,\n  ROUND(100.0 * count / SUM(count) OVER (PARTITION BY department_name), 2) AS pct\nFROM dept_grade_counts\nORDER BY department_name, grade;"
+        },
+        "startedAt": 1771843712959,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column e.course_id does not exist\nLINE 8:   JOIN courses c ON e.course_id = c.id\n                            ^",
+          "name": "Error"
+        },
+        "endedAt": 1771843713031
+      }
+    },
+    "input": {
+      "question": "Show the grade distribution for each department"
+    },
+    "error": {
+      "message": "SQL execution failed: column e.course_id does not exist\nLINE 8:   JOIN courses c ON e.course_id = c.id\n                            ^",
+      "name": "Error"
+    },
+    "traceId": "e2e760193907590aff911b03ea7df823"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:48:33.037Z",
+    "traceId": "e2e760193907590aff911b03ea7df823",
+    "attempts": 6,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 263,
+      "outputTokens": 1725,
+      "totalTokens": 1988,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1408,
+      "costUsd": 0.00351575
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 263,
+        "outputTokens": 1725,
+        "totalTokens": 1988,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1408,
+        "costUsd": 0.00351575
+      }
+    ],
+    "warnings": []
+  }
+}

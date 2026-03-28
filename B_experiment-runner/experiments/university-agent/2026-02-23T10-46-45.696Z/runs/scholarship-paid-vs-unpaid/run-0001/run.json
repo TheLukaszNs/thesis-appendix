@@ -1,0 +1,168 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "scholarship-paid-vs-unpaid",
+  "caseDirectory": "scholarship-paid-vs-unpaid",
+  "repeatIndex": 1,
+  "prompt": "How many scholarships have been paid vs not yet paid?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many scholarships have been paid vs not yet paid?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:50:45.344Z",
+    "endedAtUtc": "2026-02-23T10:51:01.308Z",
+    "durationMs": 15964
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2424",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:51:01 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"How many scholarships have been paid vs not yet paid?\"},\"agent\":{\"payload\":{\"question\":\"How many scholarships have been paid vs not yet paid?\"},\"startedAt\":1771843845351,\"status\":\"success\",\"output\":{\"sql\":\"WITH counts AS (\\n  SELECT\\n    CASE WHEN paid_at IS NOT NULL THEN 'Paid' ELSE 'Not Paid' END AS payment_state,\\n    COUNT(*) AS scholarship_count\\n  FROM scholarships\\n  GROUP BY CASE WHEN paid_at IS NOT NULL THEN 'Paid' ELSE 'Not Paid' END\\n)\\nSELECT\\n  payment_state,\\n  scholarship_count\\nFROM counts\\nORDER BY scholarship_count DESC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Number of scholarships that have been paid vs not yet paid.\",\"title\":\"Scholarships: Paid vs Not Paid\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"payment_state\",\"type\":\"nominal\",\"axis\":{\"title\":\"Payment State\"},\"sort\":null},\"y\":{\"field\":\"scholarship_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of Scholarships\"}},\"color\":{\"field\":\"payment_state\",\"type\":\"nominal\",\"legend\":{\"title\":\"Payment State\"}},\"tooltip\":[{\"field\":\"payment_state\",\"type\":\"nominal\",\"title\":\"Payment State\"},{\"field\":\"scholarship_count\",\"type\":\"quantitative\",\"title\":\"Count\"}]}}},\"endedAt\":1771843861234},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH counts AS (\\n  SELECT\\n    CASE WHEN paid_at IS NOT NULL THEN 'Paid' ELSE 'Not Paid' END AS payment_state,\\n    COUNT(*) AS scholarship_count\\n  FROM scholarships\\n  GROUP BY CASE WHEN paid_at IS NOT NULL THEN 'Paid' ELSE 'Not Paid' END\\n)\\nSELECT\\n  payment_state,\\n  scholarship_count\\nFROM counts\\nORDER BY scholarship_count DESC;\"},\"startedAt\":1771843861238,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column \\\"paid_at\\\" does not exist\\nLINE 4:     CASE WHEN paid_at IS NOT NULL THEN 'Paid' ELSE 'Not Paid...\\n                      ^\\nHINT:  Perhaps you meant to reference the column \\\"scholarships.paid_date\\\".\",\"name\":\"Error\"},\"endedAt\":1771843861305}},\"input\":{\"question\":\"How many scholarships have been paid vs not yet paid?\"},\"error\":{\"message\":\"SQL execution failed: column \\\"paid_at\\\" does not exist\\nLINE 4:     CASE WHEN paid_at IS NOT NULL THEN 'Paid' ELSE 'Not Paid...\\n                      ^\\nHINT:  Perhaps you meant to reference the column \\\"scholarships.paid_date\\\".\",\"name\":\"Error\"},\"traceId\":\"ded8601754d185c738a96a1546db2366\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/scholarship-paid-vs-unpaid/run-0001/run.json",
+    "queryPath": "runs/scholarship-paid-vs-unpaid/run-0001/query.sql",
+    "vegaRawPath": "runs/scholarship-paid-vs-unpaid/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/scholarship-paid-vs-unpaid/run-0001/vega.resolved.json",
+    "imagePath": "runs/scholarship-paid-vs-unpaid/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:51:01.308Z",
+  "traceId": "ded8601754d185c738a96a1546db2366",
+  "success": false,
+  "durationMs": 15964,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "How many scholarships have been paid vs not yet paid?"
+      },
+      "agent": {
+        "payload": {
+          "question": "How many scholarships have been paid vs not yet paid?"
+        },
+        "startedAt": 1771843845351,
+        "status": "success",
+        "output": {
+          "sql": "WITH counts AS (\n  SELECT\n    CASE WHEN paid_at IS NOT NULL THEN 'Paid' ELSE 'Not Paid' END AS payment_state,\n    COUNT(*) AS scholarship_count\n  FROM scholarships\n  GROUP BY CASE WHEN paid_at IS NOT NULL THEN 'Paid' ELSE 'Not Paid' END\n)\nSELECT\n  payment_state,\n  scholarship_count\nFROM counts\nORDER BY scholarship_count DESC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Number of scholarships that have been paid vs not yet paid.",
+            "title": "Scholarships: Paid vs Not Paid",
+            "data": {
+              "name": "query_result"
+            },
+            "mark": {
+              "type": "bar",
+              "tooltip": true
+            },
+            "encoding": {
+              "x": {
+                "field": "payment_state",
+                "type": "nominal",
+                "axis": {
+                  "title": "Payment State"
+                },
+                "sort": null
+              },
+              "y": {
+                "field": "scholarship_count",
+                "type": "quantitative",
+                "axis": {
+                  "title": "Number of Scholarships"
+                }
+              },
+              "color": {
+                "field": "payment_state",
+                "type": "nominal",
+                "legend": {
+                  "title": "Payment State"
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "payment_state",
+                  "type": "nominal",
+                  "title": "Payment State"
+                },
+                {
+                  "field": "scholarship_count",
+                  "type": "quantitative",
+                  "title": "Count"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843861234
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH counts AS (\n  SELECT\n    CASE WHEN paid_at IS NOT NULL THEN 'Paid' ELSE 'Not Paid' END AS payment_state,\n    COUNT(*) AS scholarship_count\n  FROM scholarships\n  GROUP BY CASE WHEN paid_at IS NOT NULL THEN 'Paid' ELSE 'Not Paid' END\n)\nSELECT\n  payment_state,\n  scholarship_count\nFROM counts\nORDER BY scholarship_count DESC;"
+        },
+        "startedAt": 1771843861238,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column \"paid_at\" does not exist\nLINE 4:     CASE WHEN paid_at IS NOT NULL THEN 'Paid' ELSE 'Not Paid...\n                      ^\nHINT:  Perhaps you meant to reference the column \"scholarships.paid_date\".",
+          "name": "Error"
+        },
+        "endedAt": 1771843861305
+      }
+    },
+    "input": {
+      "question": "How many scholarships have been paid vs not yet paid?"
+    },
+    "error": {
+      "message": "SQL execution failed: column \"paid_at\" does not exist\nLINE 4:     CASE WHEN paid_at IS NOT NULL THEN 'Paid' ELSE 'Not Paid...\n                      ^\nHINT:  Perhaps you meant to reference the column \"scholarships.paid_date\".",
+      "name": "Error"
+    },
+    "traceId": "ded8601754d185c738a96a1546db2366"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:51:01.309Z",
+    "traceId": "ded8601754d185c738a96a1546db2366",
+    "attempts": 3,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 267,
+      "outputTokens": 1121,
+      "totalTokens": 1388,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 704,
+      "costUsd": 0.00230875
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 267,
+        "outputTokens": 1121,
+        "totalTokens": 1388,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 704,
+        "costUsd": 0.00230875
+      }
+    ],
+    "warnings": []
+  }
+}

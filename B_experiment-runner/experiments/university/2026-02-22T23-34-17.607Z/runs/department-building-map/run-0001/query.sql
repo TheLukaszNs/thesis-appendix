@@ -1,0 +1,1 @@
+SELECT d.building AS building, array_agg(d.name ORDER BY d.name) AS departments FROM public.departments d WHERE d.building IS NOT NULL GROUP BY d.building ORDER BY d.building;

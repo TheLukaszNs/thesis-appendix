@@ -1,0 +1,572 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "avg-difficulty-by-course",
+  "caseDirectory": "avg-difficulty-by-course",
+  "repeatIndex": 1,
+  "prompt": "What is the average difficulty rating for each course?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average difficulty rating for each course?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:36:22.398Z",
+    "endedAtUtc": "2026-02-22T23:37:17.200Z",
+    "durationMs": 54802
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "23767",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:37:17 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the average difficulty rating for each course?\"},\"sql\":{\"payload\":{\"question\":\"What is the average difficulty rating for each course?\"},\"startedAt\":1771803382427,\"status\":\"success\",\"output\":{\"reasoning\":\"Join course_evaluations -> enrollments -> course_sections -> courses to compute per-course average difficulty. Use LEFT JOIN so courses without evaluations appear with NULL average; order deterministically by average then code.\",\"sql\":\"WITH evaluation_pairs AS (\\n  SELECT\\n    cs.course_id,\\n    ce.difficulty_rating\\n  FROM public.course_evaluations ce\\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n)\\nSELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  ROUND(AVG(ep.difficulty_rating)::numeric, 2) AS average_difficulty\\nFROM public.courses c\\nLEFT JOIN evaluation_pairs ep ON ep.course_id = c.id\\nGROUP BY c.id, c.code, c.name\\nORDER BY average_difficulty DESC NULLS LAST, c.code;\",\"assumptions\":[\"Return all courses; courses with no evaluations will show average_difficulty = NULL.\",\"difficulty_rating is stored in course_evaluations.difficulty_rating (integer, not nullable).\"]},\"endedAt\":1771803419805},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH evaluation_pairs AS (\\n  SELECT\\n    cs.course_id,\\n    ce.difficulty_rating\\n  FROM public.course_evaluations ce\\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n)\\nSELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  ROUND(AVG(ep.difficulty_rating)::numeric, 2) AS average_difficulty\\nFROM public.courses c\\nLEFT JOIN evaluation_pairs ep ON ep.course_id = c.id\\nGROUP BY c.id, c.code, c.name\\nORDER BY average_difficulty DESC NULLS LAST, c.code;\"},\"startedAt\":1771803419812,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH evaluation_pairs AS (\\n  SELECT\\n    cs.course_id,\\n    ce.difficulty_rating\\n  FROM public.course_evaluations ce\\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n)\\nSELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  ROUND(AVG(ep.difficulty_rating)::numeric, 2) AS average_difficulty\\nFROM public.courses c\\nLEFT JOIN evaluation_pairs ep ON ep.course_id = c.id\\nGROUP BY c.id, c.code, c.name\\nORDER BY average_difficulty DESC NULLS LAST, c.code\",\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"average_difficulty\"],\"rowCount\":26,\"sample\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"average_difficulty\":4.5},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"average_difficulty\":4.5}]},\"data\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"average_difficulty\":4.5},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"average_difficulty\":4.5},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"average_difficulty\":4.25},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"average_difficulty\":4},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"average_difficulty\":4},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"average_difficulty\":4},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"average_difficulty\":3.5},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"average_difficulty\":3},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"average_difficulty\":2.75},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"average_difficulty\":2.5},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"average_difficulty\":2.25},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"average_difficulty\":2},{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"average_difficulty\":2},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"average_difficulty\":1.5},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"average_difficulty\":1.5},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"average_difficulty\":1},{\"course_id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"average_difficulty\":null},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"average_difficulty\":null},{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"average_difficulty\":null},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"average_difficulty\":null},{\"course_id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"course_code\":\"HMI-889\",\"course_name\":\"Elektronika\",\"average_difficulty\":null},{\"course_id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"average_difficulty\":null},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\",\"average_difficulty\":null},{\"course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"average_difficulty\":null},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\",\"average_difficulty\":null},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\",\"average_difficulty\":null}]},\"endedAt\":1771803419838},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"WITH evaluation_pairs AS (\\n  SELECT\\n    cs.course_id,\\n    ce.difficulty_rating\\n  FROM public.course_evaluations ce\\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n)\\nSELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  ROUND(AVG(ep.difficulty_rating)::numeric, 2) AS average_difficulty\\nFROM public.courses c\\nLEFT JOIN evaluation_pairs ep ON ep.course_id = c.id\\nGROUP BY c.id, c.code, c.name\\nORDER BY average_difficulty DESC NULLS LAST, c.code\",\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"average_difficulty\"],\"rowCount\":26,\"sample\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"average_difficulty\":4.5},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"average_difficulty\":4.5}]},\"data\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"average_difficulty\":4.5},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"average_difficulty\":4.5},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"average_difficulty\":4.25},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"average_difficulty\":4},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"average_difficulty\":4},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"average_difficulty\":4},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"average_difficulty\":3.5},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"average_difficulty\":3},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"average_difficulty\":2.75},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"average_difficulty\":2.5},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"average_difficulty\":2.25},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"average_difficulty\":2},{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"average_difficulty\":2},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"average_difficulty\":1.5},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"average_difficulty\":1.5},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"average_difficulty\":1},{\"course_id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"average_difficulty\":null},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"average_difficulty\":null},{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"average_difficulty\":null},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"average_difficulty\":null},{\"course_id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"course_code\":\"HMI-889\",\"course_name\":\"Elektronika\",\"average_difficulty\":null},{\"course_id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"average_difficulty\":null},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\",\"average_difficulty\":null},{\"course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"average_difficulty\":null},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\",\"average_difficulty\":null},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\",\"average_difficulty\":null}]},\"startedAt\":1771803419842,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Difficulty Rating by Course\",\"height\":{\"step\":20},\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course\",\"sort\":{\"field\":\"average_difficulty\",\"order\":\"descending\"}},\"x\":{\"field\":\"average_difficulty\",\"type\":\"quantitative\",\"title\":\"Average Difficulty\",\"scale\":{\"domain\":[0,5]}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"average_difficulty\",\"type\":\"quantitative\",\"title\":\"Average Difficulty\"}]}},\"reasoning\":\"Horizontal bar chart showing average difficulty per course (ordered descending). Tooltip includes course name and code for context.\"},\"endedAt\":1771803437167},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Difficulty Rating by Course\",\"height\":{\"step\":20},\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course\",\"sort\":{\"field\":\"average_difficulty\",\"order\":\"descending\"}},\"x\":{\"field\":\"average_difficulty\",\"type\":\"quantitative\",\"title\":\"Average Difficulty\",\"scale\":{\"domain\":[0,5]}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"average_difficulty\",\"type\":\"quantitative\",\"title\":\"Average Difficulty\"}]}},\"reasoning\":\"Horizontal bar chart showing average difficulty per course (ordered descending). Tooltip includes course name and code for context.\"},\"startedAt\":1771803437176,\"status\":\"success\",\"output\":{\"sql\":\"WITH evaluation_pairs AS (\\n  SELECT\\n    cs.course_id,\\n    ce.difficulty_rating\\n  FROM public.course_evaluations ce\\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n)\\nSELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  ROUND(AVG(ep.difficulty_rating)::numeric, 2) AS average_difficulty\\nFROM public.courses c\\nLEFT JOIN evaluation_pairs ep ON ep.course_id = c.id\\nGROUP BY c.id, c.code, c.name\\nORDER BY average_difficulty DESC NULLS LAST, c.code;\",\"data\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"average_difficulty\":4.5},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"average_difficulty\":4.5},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"average_difficulty\":4.25},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"average_difficulty\":4},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"average_difficulty\":4},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"average_difficulty\":4},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"average_difficulty\":3.5},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"average_difficulty\":3},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"average_difficulty\":2.75},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"average_difficulty\":2.5},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"average_difficulty\":2.25},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"average_difficulty\":2},{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"average_difficulty\":2},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"average_difficulty\":1.5},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"average_difficulty\":1.5},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"average_difficulty\":1},{\"course_id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"average_difficulty\":null},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"average_difficulty\":null},{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"average_difficulty\":null},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"average_difficulty\":null},{\"course_id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"course_code\":\"HMI-889\",\"course_name\":\"Elektronika\",\"average_difficulty\":null},{\"course_id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"average_difficulty\":null},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\",\"average_difficulty\":null},{\"course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"average_difficulty\":null},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\",\"average_difficulty\":null},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\",\"average_difficulty\":null}],\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"average_difficulty\"],\"rowCount\":26,\"sample\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"average_difficulty\":4.5},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"average_difficulty\":4.5}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Difficulty Rating by Course\",\"height\":{\"step\":20},\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course\",\"sort\":{\"field\":\"average_difficulty\",\"order\":\"descending\"}},\"x\":{\"field\":\"average_difficulty\",\"type\":\"quantitative\",\"title\":\"Average Difficulty\",\"scale\":{\"domain\":[0,5]}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"average_difficulty\",\"type\":\"quantitative\",\"title\":\"Average Difficulty\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771803437182}},\"input\":{\"question\":\"What is the average difficulty rating for each course?\"},\"result\":{\"sql\":\"WITH evaluation_pairs AS (\\n  SELECT\\n    cs.course_id,\\n    ce.difficulty_rating\\n  FROM public.course_evaluations ce\\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n)\\nSELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  ROUND(AVG(ep.difficulty_rating)::numeric, 2) AS average_difficulty\\nFROM public.courses c\\nLEFT JOIN evaluation_pairs ep ON ep.course_id = c.id\\nGROUP BY c.id, c.code, c.name\\nORDER BY average_difficulty DESC NULLS LAST, c.code;\",\"data\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"average_difficulty\":4.5},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"average_difficulty\":4.5},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"average_difficulty\":4.25},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"average_difficulty\":4},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"average_difficulty\":4},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"average_difficulty\":4},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"average_difficulty\":3.5},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"average_difficulty\":3},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"average_difficulty\":2.75},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"average_difficulty\":2.5},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"average_difficulty\":2.25},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"average_difficulty\":2},{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"average_difficulty\":2},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"average_difficulty\":1.5},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"average_difficulty\":1.5},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"average_difficulty\":1},{\"course_id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"average_difficulty\":null},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"average_difficulty\":null},{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"average_difficulty\":null},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"average_difficulty\":null},{\"course_id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"course_code\":\"HMI-889\",\"course_name\":\"Elektronika\",\"average_difficulty\":null},{\"course_id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"average_difficulty\":null},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\",\"average_difficulty\":null},{\"course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"average_difficulty\":null},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\",\"average_difficulty\":null},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\",\"average_difficulty\":null}],\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"average_difficulty\"],\"rowCount\":26,\"sample\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"average_difficulty\":4.5},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"average_difficulty\":4.5}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Difficulty Rating by Course\",\"height\":{\"step\":20},\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course\",\"sort\":{\"field\":\"average_difficulty\",\"order\":\"descending\"}},\"x\":{\"field\":\"average_difficulty\",\"type\":\"quantitative\",\"title\":\"Average Difficulty\",\"scale\":{\"domain\":[0,5]}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"average_difficulty\",\"type\":\"quantitative\",\"title\":\"Average Difficulty\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"64d45613f9e100cd1459fa4bacb16e73\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-difficulty-by-course/run-0001/run.json",
+    "queryPath": "runs/avg-difficulty-by-course/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-difficulty-by-course/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-difficulty-by-course/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-difficulty-by-course/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:37:17.594Z",
+  "traceId": "64d45613f9e100cd1459fa4bacb16e73",
+  "success": true,
+  "durationMs": 55196,
+  "resultRaw": {
+    "data": [
+      {
+        "course_id": "91922683-9cba-47f2-bb00-babfbce3866f",
+        "course_code": "AAX-989",
+        "course_name": "Elektronika",
+        "average_difficulty": 4.5
+      },
+      {
+        "course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+        "course_code": "FCL-532",
+        "course_name": "Uczenie Maszynowe",
+        "average_difficulty": 4.5
+      },
+      {
+        "course_id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "average_difficulty": 4.25
+      },
+      {
+        "course_id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+        "course_code": "FEO-908",
+        "course_name": "Analiza Matematyczna",
+        "average_difficulty": 4
+      },
+      {
+        "course_id": "d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5",
+        "course_code": "HPF-845",
+        "course_name": "Systemy Wbudowane",
+        "average_difficulty": 4
+      },
+      {
+        "course_id": "b18a39cf-8a1b-471c-b67a-94aa04eccfae",
+        "course_code": "WZC-570",
+        "course_name": "Programowanie Obiektowe",
+        "average_difficulty": 4
+      },
+      {
+        "course_id": "0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca",
+        "course_code": "PSC-614",
+        "course_name": "Architektura Komputerów",
+        "average_difficulty": 3.5
+      },
+      {
+        "course_id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "average_difficulty": 3
+      },
+      {
+        "course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "course_code": "AFI-682",
+        "course_name": "Matematyka Dyskretna",
+        "average_difficulty": 2.75
+      },
+      {
+        "course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "course_code": "TAU-627",
+        "course_name": "Analiza Matematyczna",
+        "average_difficulty": 2.5
+      },
+      {
+        "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "average_difficulty": 2.25
+      },
+      {
+        "course_id": "0b97f1bf-8c86-431a-a583-563354b1e01f",
+        "course_code": "RZR-301",
+        "course_name": "Sieci Komputerowe",
+        "average_difficulty": 2
+      },
+      {
+        "course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+        "course_code": "TJJ-354",
+        "course_name": "Projektowanie Aplikacji Webowych",
+        "average_difficulty": 2
+      },
+      {
+        "course_id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "average_difficulty": 1.5
+      },
+      {
+        "course_id": "c0e00b1c-84d6-4ccd-999d-7c9197625f2e",
+        "course_code": "ZUQ-127",
+        "course_name": "Fizyka",
+        "average_difficulty": 1.5
+      },
+      {
+        "course_id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+        "course_code": "BEW-951",
+        "course_name": "Fizyka",
+        "average_difficulty": 1
+      },
+      {
+        "course_id": "3d59b771-6ed9-47a0-b46f-f90c188f7863",
+        "course_code": "ARH-232",
+        "course_name": "Cloud Computing",
+        "average_difficulty": null
+      },
+      {
+        "course_id": "7dc872b8-c34e-4061-8f34-8b4c099b6325",
+        "course_code": "BSS-943",
+        "course_name": "Algebra Liniowa",
+        "average_difficulty": null
+      },
+      {
+        "course_id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+        "course_code": "FPW-573",
+        "course_name": "Programowanie Obiektowe",
+        "average_difficulty": null
+      },
+      {
+        "course_id": "410a9134-116d-41eb-84bc-1b5144736995",
+        "course_code": "FWJ-758",
+        "course_name": "Bezpieczeństwo Systemów Komputerowych",
+        "average_difficulty": null
+      },
+      {
+        "course_id": "47f61e5e-19e7-4b9e-b8d0-153ca7c76090",
+        "course_code": "HMI-889",
+        "course_name": "Elektronika",
+        "average_difficulty": null
+      },
+      {
+        "course_id": "e6b62b9f-429a-423d-84c7-77b28a64b9a3",
+        "course_code": "JFH-143",
+        "course_name": "Architektura Komputerów",
+        "average_difficulty": null
+      },
+      {
+        "course_id": "6002cfac-f371-4c9b-a048-8aaf1aae450a",
+        "course_code": "LUO-736",
+        "course_name": "Grafika Komputerowa",
+        "average_difficulty": null
+      },
+      {
+        "course_id": "59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23",
+        "course_code": "MKO-885",
+        "course_name": "Rachunek Prawdopodobieństwa",
+        "average_difficulty": null
+      },
+      {
+        "course_id": "e89877df-7199-4b1f-a8e8-8e5c0872fe23",
+        "course_code": "NWG-686",
+        "course_name": "Programowanie Funkcyjne",
+        "average_difficulty": null
+      },
+      {
+        "course_id": "32619ee8-5d87-49a4-9ca1-c94668909e2e",
+        "course_code": "SBW-955",
+        "course_name": "Sieci Komputerowe",
+        "average_difficulty": null
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Difficulty Rating by Course",
+      "height": {
+        "step": 20
+      },
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "y": {
+          "field": "course_code",
+          "type": "nominal",
+          "title": "Course",
+          "sort": {
+            "field": "average_difficulty",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "average_difficulty",
+          "type": "quantitative",
+          "title": "Average Difficulty",
+          "scale": {
+            "domain": [
+              0,
+              5
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "course_code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "course_name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "average_difficulty",
+            "type": "quantitative",
+            "title": "Average Difficulty"
+          }
+        ]
+      }
+    },
+    "sql": "WITH evaluation_pairs AS (\n  SELECT\n    cs.course_id,\n    ce.difficulty_rating\n  FROM public.course_evaluations ce\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\n)\nSELECT\n  c.id AS course_id,\n  c.code AS course_code,\n  c.name AS course_name,\n  ROUND(AVG(ep.difficulty_rating)::numeric, 2) AS average_difficulty\nFROM public.courses c\nLEFT JOIN evaluation_pairs ep ON ep.course_id = c.id\nGROUP BY c.id, c.code, c.name\nORDER BY average_difficulty DESC NULLS LAST, c.code;",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "course_code",
+        "course_name",
+        "average_difficulty"
+      ],
+      "rowCount": 26,
+      "sample": [
+        {
+          "course_id": "91922683-9cba-47f2-bb00-babfbce3866f",
+          "course_code": "AAX-989",
+          "course_name": "Elektronika",
+          "average_difficulty": 4.5
+        },
+        {
+          "course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+          "course_code": "FCL-532",
+          "course_name": "Uczenie Maszynowe",
+          "average_difficulty": 4.5
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "course_id": "91922683-9cba-47f2-bb00-babfbce3866f",
+        "course_code": "AAX-989",
+        "course_name": "Elektronika",
+        "average_difficulty": 4.5
+      },
+      {
+        "course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+        "course_code": "FCL-532",
+        "course_name": "Uczenie Maszynowe",
+        "average_difficulty": 4.5
+      },
+      {
+        "course_id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "average_difficulty": 4.25
+      },
+      {
+        "course_id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+        "course_code": "FEO-908",
+        "course_name": "Analiza Matematyczna",
+        "average_difficulty": 4
+      },
+      {
+        "course_id": "d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5",
+        "course_code": "HPF-845",
+        "course_name": "Systemy Wbudowane",
+        "average_difficulty": 4
+      },
+      {
+        "course_id": "b18a39cf-8a1b-471c-b67a-94aa04eccfae",
+        "course_code": "WZC-570",
+        "course_name": "Programowanie Obiektowe",
+        "average_difficulty": 4
+      },
+      {
+        "course_id": "0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca",
+        "course_code": "PSC-614",
+        "course_name": "Architektura Komputerów",
+        "average_difficulty": 3.5
+      },
+      {
+        "course_id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "average_difficulty": 3
+      },
+      {
+        "course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "course_code": "AFI-682",
+        "course_name": "Matematyka Dyskretna",
+        "average_difficulty": 2.75
+      },
+      {
+        "course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "course_code": "TAU-627",
+        "course_name": "Analiza Matematyczna",
+        "average_difficulty": 2.5
+      },
+      {
+        "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "average_difficulty": 2.25
+      },
+      {
+        "course_id": "0b97f1bf-8c86-431a-a583-563354b1e01f",
+        "course_code": "RZR-301",
+        "course_name": "Sieci Komputerowe",
+        "average_difficulty": 2
+      },
+      {
+        "course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+        "course_code": "TJJ-354",
+        "course_name": "Projektowanie Aplikacji Webowych",
+        "average_difficulty": 2
+      },
+      {
+        "course_id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "average_difficulty": 1.5
+      },
+      {
+        "course_id": "c0e00b1c-84d6-4ccd-999d-7c9197625f2e",
+        "course_code": "ZUQ-127",
+        "course_name": "Fizyka",
+        "average_difficulty": 1.5
+      },
+      {
+        "course_id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+        "course_code": "BEW-951",
+        "course_name": "Fizyka",
+        "average_difficulty": 1
+      },
+      {
+        "course_id": "3d59b771-6ed9-47a0-b46f-f90c188f7863",
+        "course_code": "ARH-232",
+        "course_name": "Cloud Computing",
+        "average_difficulty": null
+      },
+      {
+        "course_id": "7dc872b8-c34e-4061-8f34-8b4c099b6325",
+        "course_code": "BSS-943",
+        "course_name": "Algebra Liniowa",
+        "average_difficulty": null
+      },
+      {
+        "course_id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+        "course_code": "FPW-573",
+        "course_name": "Programowanie Obiektowe",
+        "average_difficulty": null
+      },
+      {
+        "course_id": "410a9134-116d-41eb-84bc-1b5144736995",
+        "course_code": "FWJ-758",
+        "course_name": "Bezpieczeństwo Systemów Komputerowych",
+        "average_difficulty": null
+      },
+      {
+        "course_id": "47f61e5e-19e7-4b9e-b8d0-153ca7c76090",
+        "course_code": "HMI-889",
+        "course_name": "Elektronika",
+        "average_difficulty": null
+      },
+      {
+        "course_id": "e6b62b9f-429a-423d-84c7-77b28a64b9a3",
+        "course_code": "JFH-143",
+        "course_name": "Architektura Komputerów",
+        "average_difficulty": null
+      },
+      {
+        "course_id": "6002cfac-f371-4c9b-a048-8aaf1aae450a",
+        "course_code": "LUO-736",
+        "course_name": "Grafika Komputerowa",
+        "average_difficulty": null
+      },
+      {
+        "course_id": "59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23",
+        "course_code": "MKO-885",
+        "course_name": "Rachunek Prawdopodobieństwa",
+        "average_difficulty": null
+      },
+      {
+        "course_id": "e89877df-7199-4b1f-a8e8-8e5c0872fe23",
+        "course_code": "NWG-686",
+        "course_name": "Programowanie Funkcyjne",
+        "average_difficulty": null
+      },
+      {
+        "course_id": "32619ee8-5d87-49a4-9ca1-c94668909e2e",
+        "course_code": "SBW-955",
+        "course_name": "Sieci Komputerowe",
+        "average_difficulty": null
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Difficulty Rating by Course",
+      "height": {
+        "step": 20
+      },
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "y": {
+          "field": "course_code",
+          "type": "nominal",
+          "title": "Course",
+          "sort": {
+            "field": "average_difficulty",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "average_difficulty",
+          "type": "quantitative",
+          "title": "Average Difficulty",
+          "scale": {
+            "domain": [
+              0,
+              5
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "course_code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "course_name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "average_difficulty",
+            "type": "quantitative",
+            "title": "Average Difficulty"
+          }
+        ]
+      }
+    },
+    "sql": "WITH evaluation_pairs AS (\n  SELECT\n    cs.course_id,\n    ce.difficulty_rating\n  FROM public.course_evaluations ce\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\n)\nSELECT\n  c.id AS course_id,\n  c.code AS course_code,\n  c.name AS course_name,\n  ROUND(AVG(ep.difficulty_rating)::numeric, 2) AS average_difficulty\nFROM public.courses c\nLEFT JOIN evaluation_pairs ep ON ep.course_id = c.id\nGROUP BY c.id, c.code, c.name\nORDER BY average_difficulty DESC NULLS LAST, c.code;",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "course_code",
+        "course_name",
+        "average_difficulty"
+      ],
+      "rowCount": 26,
+      "sample": [
+        {
+          "course_id": "91922683-9cba-47f2-bb00-babfbce3866f",
+          "course_code": "AAX-989",
+          "course_name": "Elektronika",
+          "average_difficulty": 4.5
+        },
+        {
+          "course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+          "course_code": "FCL-532",
+          "course_name": "Uczenie Maszynowe",
+          "average_difficulty": 4.5
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:37:17.594Z",
+    "traceId": "64d45613f9e100cd1459fa4bacb16e73",
+    "attempts": 4,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 17111,
+      "outputTokens": 3285,
+      "totalTokens": 20396,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2240,
+      "costUsd": 0.01084775
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 17111,
+        "outputTokens": 3285,
+        "totalTokens": 20396,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2240,
+        "costUsd": 0.01084775
+      }
+    ],
+    "warnings": []
+  }
+}

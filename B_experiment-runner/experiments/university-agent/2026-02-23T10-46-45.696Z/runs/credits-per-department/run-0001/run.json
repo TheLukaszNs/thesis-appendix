@@ -1,0 +1,166 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "credits-per-department",
+  "caseDirectory": "credits-per-department",
+  "repeatIndex": 1,
+  "prompt": "What is the total number of credits offered by each department?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the total number of credits offered by each department?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:48:54.033Z",
+    "endedAtUtc": "2026-02-23T10:49:06.131Z",
+    "durationMs": 12098
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2083",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:49:06 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"What is the total number of credits offered by each department?\"},\"agent\":{\"payload\":{\"question\":\"What is the total number of credits offered by each department?\"},\"startedAt\":1771843734046,\"status\":\"success\",\"output\":{\"sql\":\"SELECT COALESCE(department, 'Unknown') AS department, SUM(credits) AS total_credits FROM courses GROUP BY COALESCE(department, 'Unknown') ORDER BY total_credits DESC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Bar chart showing total credits offered by each department.\",\"title\":\"Total Credits Offered by Department\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"department\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\"},\"sort\":{\"field\":\"total_credits\",\"order\":\"descending\"}},\"x\":{\"field\":\"total_credits\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Total Credits\"}},\"tooltip\":[{\"field\":\"department\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"total_credits\",\"type\":\"quantitative\",\"title\":\"Total Credits\"}]}}},\"endedAt\":1771843746088},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT COALESCE(department, 'Unknown') AS department, SUM(credits) AS total_credits FROM courses GROUP BY COALESCE(department, 'Unknown') ORDER BY total_credits DESC;\"},\"startedAt\":1771843746093,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column \\\"department\\\" does not exist\\nLINE 2: SELECT COALESCE(department, 'Unknown') AS department, SUM(cr...\\n                        ^\\nHINT:  Perhaps you meant to reference the column \\\"courses.department_id\\\".\",\"name\":\"Error\"},\"endedAt\":1771843746126}},\"input\":{\"question\":\"What is the total number of credits offered by each department?\"},\"error\":{\"message\":\"SQL execution failed: column \\\"department\\\" does not exist\\nLINE 2: SELECT COALESCE(department, 'Unknown') AS department, SUM(cr...\\n                        ^\\nHINT:  Perhaps you meant to reference the column \\\"courses.department_id\\\".\",\"name\":\"Error\"},\"traceId\":\"d120a37809abbd9ce5d107774b7c250e\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/credits-per-department/run-0001/run.json",
+    "queryPath": "runs/credits-per-department/run-0001/query.sql",
+    "vegaRawPath": "runs/credits-per-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/credits-per-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/credits-per-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:49:06.131Z",
+  "traceId": "d120a37809abbd9ce5d107774b7c250e",
+  "success": false,
+  "durationMs": 12098,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "What is the total number of credits offered by each department?"
+      },
+      "agent": {
+        "payload": {
+          "question": "What is the total number of credits offered by each department?"
+        },
+        "startedAt": 1771843734046,
+        "status": "success",
+        "output": {
+          "sql": "SELECT COALESCE(department, 'Unknown') AS department, SUM(credits) AS total_credits FROM courses GROUP BY COALESCE(department, 'Unknown') ORDER BY total_credits DESC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Bar chart showing total credits offered by each department.",
+            "title": "Total Credits Offered by Department",
+            "data": {
+              "name": "query_result"
+            },
+            "width": 700,
+            "height": 400,
+            "mark": {
+              "type": "bar",
+              "tooltip": true
+            },
+            "encoding": {
+              "y": {
+                "field": "department",
+                "type": "nominal",
+                "axis": {
+                  "title": "Department"
+                },
+                "sort": {
+                  "field": "total_credits",
+                  "order": "descending"
+                }
+              },
+              "x": {
+                "field": "total_credits",
+                "type": "quantitative",
+                "axis": {
+                  "title": "Total Credits"
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "department",
+                  "type": "nominal",
+                  "title": "Department"
+                },
+                {
+                  "field": "total_credits",
+                  "type": "quantitative",
+                  "title": "Total Credits"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843746088
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT COALESCE(department, 'Unknown') AS department, SUM(credits) AS total_credits FROM courses GROUP BY COALESCE(department, 'Unknown') ORDER BY total_credits DESC;"
+        },
+        "startedAt": 1771843746093,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column \"department\" does not exist\nLINE 2: SELECT COALESCE(department, 'Unknown') AS department, SUM(cr...\n                        ^\nHINT:  Perhaps you meant to reference the column \"courses.department_id\".",
+          "name": "Error"
+        },
+        "endedAt": 1771843746126
+      }
+    },
+    "input": {
+      "question": "What is the total number of credits offered by each department?"
+    },
+    "error": {
+      "message": "SQL execution failed: column \"department\" does not exist\nLINE 2: SELECT COALESCE(department, 'Unknown') AS department, SUM(cr...\n                        ^\nHINT:  Perhaps you meant to reference the column \"courses.department_id\".",
+      "name": "Error"
+    },
+    "traceId": "d120a37809abbd9ce5d107774b7c250e"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:49:06.131Z",
+    "traceId": "d120a37809abbd9ce5d107774b7c250e",
+    "attempts": 6,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 268,
+      "outputTokens": 964,
+      "totalTokens": 1232,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 640,
+      "costUsd": 0.001995
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 268,
+        "outputTokens": 964,
+        "totalTokens": 1232,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 640,
+        "costUsd": 0.001995
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,172 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "avg-section-size-by-department",
+  "caseDirectory": "avg-section-size-by-department",
+  "repeatIndex": 1,
+  "prompt": "What is the average maximum section size per department?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average maximum section size per department?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:50:58.367Z",
+    "endedAtUtc": "2026-02-23T10:51:15.736Z",
+    "durationMs": 17369
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2485",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:51:15 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"What is the average maximum section size per department?\"},\"agent\":{\"payload\":{\"question\":\"What is the average maximum section size per department?\"},\"startedAt\":1771843858375,\"status\":\"success\",\"output\":{\"sql\":\"WITH dept_sections AS (\\n  SELECT d.id AS department_id,\\n         d.name AS department_name,\\n         s.max_size AS section_max_size\\n  FROM sections s\\n  JOIN departments d ON s.department_id = d.id\\n  WHERE s.max_size IS NOT NULL\\n)\\nSELECT\\n  department_name AS department_name,\\n  AVG(section_max_size) AS avg_max_section_size,\\n  COUNT(*) AS section_count\\nFROM dept_sections\\nGROUP BY department_name\\nORDER BY avg_max_section_size DESC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Average maximum section size per department\",\"title\":\"Average maximum section size per department\",\"data\":{\"name\":\"query_result\"},\"width\":800,\"height\":400,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\"},\"sort\":\"-x\"},\"x\":{\"field\":\"avg_max_section_size\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average of section max size\"}},\"color\":{\"field\":\"avg_max_section_size\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"avg_max_section_size\",\"type\":\"quantitative\",\"title\":\"Avg max section size\"},{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Section count\"}]}}},\"endedAt\":1771843875685},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH dept_sections AS (\\n  SELECT d.id AS department_id,\\n         d.name AS department_name,\\n         s.max_size AS section_max_size\\n  FROM sections s\\n  JOIN departments d ON s.department_id = d.id\\n  WHERE s.max_size IS NOT NULL\\n)\\nSELECT\\n  department_name AS department_name,\\n  AVG(section_max_size) AS avg_max_section_size,\\n  COUNT(*) AS section_count\\nFROM dept_sections\\nGROUP BY department_name\\nORDER BY avg_max_section_size DESC;\"},\"startedAt\":1771843875691,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: relation \\\"sections\\\" does not exist\\nLINE 6:   FROM sections s\\n               ^\",\"name\":\"Error\"},\"endedAt\":1771843875731}},\"input\":{\"question\":\"What is the average maximum section size per department?\"},\"error\":{\"message\":\"SQL execution failed: relation \\\"sections\\\" does not exist\\nLINE 6:   FROM sections s\\n               ^\",\"name\":\"Error\"},\"traceId\":\"698194ecc8730ad1fa588102c60b5f42\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-section-size-by-department/run-0001/run.json",
+    "queryPath": "runs/avg-section-size-by-department/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-section-size-by-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-section-size-by-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-section-size-by-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:51:15.737Z",
+  "traceId": "698194ecc8730ad1fa588102c60b5f42",
+  "success": false,
+  "durationMs": 17370,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "What is the average maximum section size per department?"
+      },
+      "agent": {
+        "payload": {
+          "question": "What is the average maximum section size per department?"
+        },
+        "startedAt": 1771843858375,
+        "status": "success",
+        "output": {
+          "sql": "WITH dept_sections AS (\n  SELECT d.id AS department_id,\n         d.name AS department_name,\n         s.max_size AS section_max_size\n  FROM sections s\n  JOIN departments d ON s.department_id = d.id\n  WHERE s.max_size IS NOT NULL\n)\nSELECT\n  department_name AS department_name,\n  AVG(section_max_size) AS avg_max_section_size,\n  COUNT(*) AS section_count\nFROM dept_sections\nGROUP BY department_name\nORDER BY avg_max_section_size DESC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Average maximum section size per department",
+            "title": "Average maximum section size per department",
+            "data": {
+              "name": "query_result"
+            },
+            "width": 800,
+            "height": 400,
+            "mark": {
+              "type": "bar"
+            },
+            "encoding": {
+              "y": {
+                "field": "department_name",
+                "type": "nominal",
+                "axis": {
+                  "title": "Department"
+                },
+                "sort": "-x"
+              },
+              "x": {
+                "field": "avg_max_section_size",
+                "type": "quantitative",
+                "axis": {
+                  "title": "Average of section max size"
+                }
+              },
+              "color": {
+                "field": "avg_max_section_size",
+                "type": "quantitative",
+                "legend": null
+              },
+              "tooltip": [
+                {
+                  "field": "department_name",
+                  "type": "nominal",
+                  "title": "Department"
+                },
+                {
+                  "field": "avg_max_section_size",
+                  "type": "quantitative",
+                  "title": "Avg max section size"
+                },
+                {
+                  "field": "section_count",
+                  "type": "quantitative",
+                  "title": "Section count"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843875685
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH dept_sections AS (\n  SELECT d.id AS department_id,\n         d.name AS department_name,\n         s.max_size AS section_max_size\n  FROM sections s\n  JOIN departments d ON s.department_id = d.id\n  WHERE s.max_size IS NOT NULL\n)\nSELECT\n  department_name AS department_name,\n  AVG(section_max_size) AS avg_max_section_size,\n  COUNT(*) AS section_count\nFROM dept_sections\nGROUP BY department_name\nORDER BY avg_max_section_size DESC;"
+        },
+        "startedAt": 1771843875691,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: relation \"sections\" does not exist\nLINE 6:   FROM sections s\n               ^",
+          "name": "Error"
+        },
+        "endedAt": 1771843875731
+      }
+    },
+    "input": {
+      "question": "What is the average maximum section size per department?"
+    },
+    "error": {
+      "message": "SQL execution failed: relation \"sections\" does not exist\nLINE 6:   FROM sections s\n               ^",
+      "name": "Error"
+    },
+    "traceId": "698194ecc8730ad1fa588102c60b5f42"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:51:15.737Z",
+    "traceId": "698194ecc8730ad1fa588102c60b5f42",
+    "attempts": 6,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 266,
+      "outputTokens": 1134,
+      "totalTokens": 1400,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 768,
+      "costUsd": 0.0023345
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 266,
+        "outputTokens": 1134,
+        "totalTokens": 1400,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 768,
+        "costUsd": 0.0023345
+      }
+    ],
+    "warnings": []
+  }
+}

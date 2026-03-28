@@ -1,0 +1,482 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "enrollment-trend-by-department",
+  "caseDirectory": "enrollment-trend-by-department",
+  "repeatIndex": 1,
+  "prompt": "Show enrollment trends by department over academic years",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show enrollment trends by department over academic years"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:34:15.647Z",
+    "endedAtUtc": "2026-02-23T11:35:56.083Z",
+    "durationMs": 100436
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "37722",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:35:56 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show enrollment trends by department over academic years\"},\"planner\":{\"payload\":{\"question\":\"Show enrollment trends by department over academic years\"},\"startedAt\":1771846455724,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"SUM(CASE WHEN public.enrollments.is_active = true THEN 1 ELSE 0 END)\"],\"dimensions\":[\"public.departments.name\",\"public.course_sections.academic_year\"],\"filters\":[\"public.course_sections.academic_year IS NOT NULL\",\"public.enrollments.is_active = true\"],\"grain\":\"department by academic_year (one row per department + academic_year)\",\"aliases\":{\"public.course_sections.academic_year\":\"academic_year\",\"public.departments.name\":\"department_name\",\"SUM(CASE WHEN public.enrollments.is_active = true THEN 1 ELSE 0 END)\":\"enrollment_count\"},\"output_fields\":[\"academic_year\",\"department_name\",\"enrollment_count\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"enrollment_count\",\"color_group\":\"department_name\",\"title\":\"Enrollment trends by department over academic years\"},\"assumptions\":[\"Join path used: public.enrollments.course_section_id -> public.course_sections.id -> public.courses.id -> public.departments.id (foreign key constraints confirming these links exist were observed).\",\"We count active enrollment rows (enrollments.is_active = true). If you prefer unique students per department-year, use COUNT(DISTINCT public.enrollments.student_id) instead.\",\"Inner joins will be used (only departments with at least one enrollment will appear). If you want departments with zero enrollments shown, use LEFT JOIN from departments and COALESCE the metric to 0.\",\"academic_year is stored as text (character varying). It may not sort chronologically unless values are in a sortable format (e.g., '2020-2021'). If needed, parse or normalize academic_year to ensure proper chronological ordering.\",\"Metric expression alias 'enrollment_count' and dimension aliases 'academic_year' and 'department_name' are the exact output field names the visualization expects.\"]}},\"endedAt\":1771846490259},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"SUM(CASE WHEN public.enrollments.is_active = true THEN 1 ELSE 0 END)\"],\"dimensions\":[\"public.departments.name\",\"public.course_sections.academic_year\"],\"filters\":[\"public.course_sections.academic_year IS NOT NULL\",\"public.enrollments.is_active = true\"],\"grain\":\"department by academic_year (one row per department + academic_year)\",\"aliases\":{\"public.course_sections.academic_year\":\"academic_year\",\"public.departments.name\":\"department_name\",\"SUM(CASE WHEN public.enrollments.is_active = true THEN 1 ELSE 0 END)\":\"enrollment_count\"},\"output_fields\":[\"academic_year\",\"department_name\",\"enrollment_count\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"enrollment_count\",\"color_group\":\"department_name\",\"title\":\"Enrollment trends by department over academic years\"},\"assumptions\":[\"Join path used: public.enrollments.course_section_id -> public.course_sections.id -> public.courses.id -> public.departments.id (foreign key constraints confirming these links exist were observed).\",\"We count active enrollment rows (enrollments.is_active = true). If you prefer unique students per department-year, use COUNT(DISTINCT public.enrollments.student_id) instead.\",\"Inner joins will be used (only departments with at least one enrollment will appear). If you want departments with zero enrollments shown, use LEFT JOIN from departments and COALESCE the metric to 0.\",\"academic_year is stored as text (character varying). It may not sort chronologically unless values are in a sortable format (e.g., '2020-2021'). If needed, parse or normalize academic_year to ensure proper chronological ordering.\",\"Metric expression alias 'enrollment_count' and dimension aliases 'academic_year' and 'department_name' are the exact output field names the visualization expects.\"]}},\"startedAt\":1771846490263,\"status\":\"success\",\"output\":{\"question\":\"Show enrollment trends by department over academic years\",\"plan\":{\"data_requirements\":{\"metrics\":[\"SUM(CASE WHEN public.enrollments.is_active = true THEN 1 ELSE 0 END)\"],\"dimensions\":[\"public.departments.name\",\"public.course_sections.academic_year\"],\"filters\":[\"public.course_sections.academic_year IS NOT NULL\",\"public.enrollments.is_active = true\"],\"grain\":\"department by academic_year (one row per department + academic_year)\",\"aliases\":{\"public.course_sections.academic_year\":\"academic_year\",\"public.departments.name\":\"department_name\",\"SUM(CASE WHEN public.enrollments.is_active = true THEN 1 ELSE 0 END)\":\"enrollment_count\"},\"output_fields\":[\"academic_year\",\"department_name\",\"enrollment_count\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"enrollment_count\",\"color_group\":\"department_name\",\"title\":\"Enrollment trends by department over academic years\"},\"assumptions\":[\"Join path used: public.enrollments.course_section_id -> public.course_sections.id -> public.courses.id -> public.departments.id (foreign key constraints confirming these links exist were observed).\",\"We count active enrollment rows (enrollments.is_active = true). If you prefer unique students per department-year, use COUNT(DISTINCT public.enrollments.student_id) instead.\",\"Inner joins will be used (only departments with at least one enrollment will appear). If you want departments with zero enrollments shown, use LEFT JOIN from departments and COALESCE the metric to 0.\",\"academic_year is stored as text (character varying). It may not sort chronologically unless values are in a sortable format (e.g., '2020-2021'). If needed, parse or normalize academic_year to ensure proper chronological ordering.\",\"Metric expression alias 'enrollment_count' and dimension aliases 'academic_year' and 'department_name' are the exact output field names the visualization expects.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771846490266},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"Show enrollment trends by department over academic years\",\"plan\":{\"data_requirements\":{\"metrics\":[\"SUM(CASE WHEN public.enrollments.is_active = true THEN 1 ELSE 0 END)\"],\"dimensions\":[\"public.departments.name\",\"public.course_sections.academic_year\"],\"filters\":[\"public.course_sections.academic_year IS NOT NULL\",\"public.enrollments.is_active = true\"],\"grain\":\"department by academic_year (one row per department + academic_year)\",\"aliases\":{\"public.course_sections.academic_year\":\"academic_year\",\"public.departments.name\":\"department_name\",\"SUM(CASE WHEN public.enrollments.is_active = true THEN 1 ELSE 0 END)\":\"enrollment_count\"},\"output_fields\":[\"academic_year\",\"department_name\",\"enrollment_count\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"enrollment_count\",\"color_group\":\"department_name\",\"title\":\"Enrollment trends by department over academic years\"},\"assumptions\":[\"Join path used: public.enrollments.course_section_id -> public.course_sections.id -> public.courses.id -> public.departments.id (foreign key constraints confirming these links exist were observed).\",\"We count active enrollment rows (enrollments.is_active = true). If you prefer unique students per department-year, use COUNT(DISTINCT public.enrollments.student_id) instead.\",\"Inner joins will be used (only departments with at least one enrollment will appear). If you want departments with zero enrollments shown, use LEFT JOIN from departments and COALESCE the metric to 0.\",\"academic_year is stored as text (character varying). It may not sort chronologically unless values are in a sortable format (e.g., '2020-2021'). If needed, parse or normalize academic_year to ensure proper chronological ordering.\",\"Metric expression alias 'enrollment_count' and dimension aliases 'academic_year' and 'department_name' are the exact output field names the visualization expects.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771846490268,\"status\":\"success\",\"output\":{\"question\":\"Show enrollment trends by department over academic years\",\"plan\":{\"data_requirements\":{\"metrics\":[\"SUM(CASE WHEN public.enrollments.is_active = true THEN 1 ELSE 0 END)\"],\"dimensions\":[\"public.departments.name\",\"public.course_sections.academic_year\"],\"filters\":[\"public.course_sections.academic_year IS NOT NULL\",\"public.enrollments.is_active = true\"],\"grain\":\"department by academic_year (one row per department + academic_year)\",\"aliases\":{\"public.course_sections.academic_year\":\"academic_year\",\"public.departments.name\":\"department_name\",\"SUM(CASE WHEN public.enrollments.is_active = true THEN 1 ELSE 0 END)\":\"enrollment_count\"},\"output_fields\":[\"academic_year\",\"department_name\",\"enrollment_count\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"enrollment_count\",\"color_group\":\"department_name\",\"title\":\"Enrollment trends by department over academic years\"},\"assumptions\":[\"Join path used: public.enrollments.course_section_id -> public.course_sections.id -> public.courses.id -> public.departments.id (foreign key constraints confirming these links exist were observed).\",\"We count active enrollment rows (enrollments.is_active = true). If you prefer unique students per department-year, use COUNT(DISTINCT public.enrollments.student_id) instead.\",\"Inner joins will be used (only departments with at least one enrollment will appear). If you want departments with zero enrollments shown, use LEFT JOIN from departments and COALESCE the metric to 0.\",\"academic_year is stored as text (character varying). It may not sort chronologically unless values are in a sortable format (e.g., '2020-2021'). If needed, parse or normalize academic_year to ensure proper chronological ordering.\",\"Metric expression alias 'enrollment_count' and dimension aliases 'academic_year' and 'department_name' are the exact output field names the visualization expects.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT\\n  cs.academic_year AS academic_year,\\n  d.name AS department_name,\\n  SUM(CASE WHEN e.is_active = true THEN 1 ELSE 0 END) AS enrollment_count\\nFROM public.enrollments e\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nJOIN public.departments d ON c.department_id = d.id\\nWHERE cs.academic_year IS NOT NULL\\n  AND e.is_active = true\\nGROUP BY cs.academic_year, d.name\\nORDER BY cs.academic_year ASC, d.name ASC;\",\"validationIssues\":[\"academic_year is encoded as type 'ordinal' and the plan says academic_year is stored as text — if academic_year values are not lexicographically sortable you may get incorrect chronological ordering. Consider parsing/normalizing to a temporal type or providing an explicit sort order for years.\",\"The SQL currently counts active enrollment rows (SUM(CASE WHEN e.is_active THEN 1 ELSE 0 END)). If you intended unique students per department-year, use COUNT(DISTINCT e.student_id) instead.\",\"The query uses inner joins, so departments with zero enrollments will be excluded. If you want to show departments with zero enrollments, use a LEFT JOIN from departments and COALESCE the metric to 0.\",\"If there are many departments, a single multi-line chart can become cluttered — consider filtering, interactive legend, or small multiples for clarity.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Use confirmed tables and columns to aggregate active enrollment rows by department and academic_year. Inner joins follow the validated FK path and filters ensure only non-null academic_year and active enrollments are counted. Result grouped per department+year and deterministically ordered.\",\"sql\":\"SELECT\\n  cs.academic_year AS academic_year,\\n  d.name AS department_name,\\n  SUM(CASE WHEN e.is_active = true THEN 1 ELSE 0 END) AS enrollment_count\\nFROM public.enrollments e\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nJOIN public.departments d ON c.department_id = d.id\\nWHERE cs.academic_year IS NOT NULL\\n  AND e.is_active = true\\nGROUP BY cs.academic_year, d.name\\nORDER BY cs.academic_year ASC, d.name ASC;\",\"assumptions\":[\"Counting enrollment rows (active enrollments) not distinct students; to count distinct students use COUNT(DISTINCT e.student_id).\",\"Using inner joins (departments without enrollments will be excluded).\",\"academic_year is stored as text; ORDER BY academic_year ASC sorts lexically — may not reflect chronological order if values are not in a sortable format (e.g., '2020-2021').\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT\\n  cs.academic_year AS academic_year,\\n  d.name AS department_name,\\n  SUM(CASE WHEN e.is_active = true THEN 1 ELSE 0 END) AS enrollment_count\\nFROM public.enrollments e\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nJOIN public.departments d ON c.department_id = d.id\\nWHERE cs.academic_year IS NOT NULL\\n  AND e.is_active = true\\nGROUP BY cs.academic_year, d.name\\nORDER BY cs.academic_year ASC, d.name ASC\",\"metadata\":{\"columns\":[\"academic_year\",\"department_name\",\"enrollment_count\"],\"rowCount\":21,\"sample\":[{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollment_count\":1},{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollment_count\":1}]},\"data\":[{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollment_count\":1},{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollment_count\":1},{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollment_count\":1},{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollment_count\":2},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollment_count\":2},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollment_count\":2},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollment_count\":2},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollment_count\":2},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollment_count\":7},{\"academic_year\":\"2021/2022\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollment_count\":2},{\"academic_year\":\"2021/2022\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollment_count\":2},{\"academic_year\":\"2021/2022\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollment_count\":4},{\"academic_year\":\"2022/2023\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollment_count\":2},{\"academic_year\":\"2022/2023\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollment_count\":4},{\"academic_year\":\"2022/2023\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollment_count\":3},{\"academic_year\":\"2023/2024\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollment_count\":7},{\"academic_year\":\"2023/2024\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollment_count\":2},{\"academic_year\":\"2023/2024\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollment_count\":3},{\"academic_year\":\"2024/2025\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollment_count\":5},{\"academic_year\":\"2024/2025\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollment_count\":1},{\"academic_year\":\"2024/2025\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollment_count\":2}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Enrollment trends by department over academic years\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"line\",\"point\":true,\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic Year\",\"axis\":{\"labelAngle\":-40},\"sort\":{\"field\":\"academic_year\",\"order\":\"ascending\"}},\"y\":{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"title\":\"Enrollment Count\"},\"color\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic Year\"},{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"title\":\"Enrollment Count\"}]}},\"reasoning\":\"Line chart with points, coloring by department_name. academic_year is treated as ordinal text (e.g., '2019/2020') so sort is set to ascending on that field to preserve chronological ordering where possible. Tooltip shows department, year, and count.\"},\"validation\":{\"passed\":true,\"score\":0.7,\"issues\":[\"academic_year is encoded as type 'ordinal' and the plan says academic_year is stored as text — if academic_year values are not lexicographically sortable you may get incorrect chronological ordering. Consider parsing/normalizing to a temporal type or providing an explicit sort order for years.\",\"The SQL currently counts active enrollment rows (SUM(CASE WHEN e.is_active THEN 1 ELSE 0 END)). If you intended unique students per department-year, use COUNT(DISTINCT e.student_id) instead.\",\"The query uses inner joins, so departments with zero enrollments will be excluded. If you want to show departments with zero enrollments, use a LEFT JOIN from departments and COALESCE the metric to 0.\",\"If there are many departments, a single multi-line chart can become cluttered — consider filtering, interactive legend, or small multiples for clarity.\"]}}},\"endedAt\":1771846556053,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"Show enrollment trends by department over academic years\",\"plan\":{\"data_requirements\":{\"metrics\":[\"SUM(CASE WHEN public.enrollments.is_active = true THEN 1 ELSE 0 END)\"],\"dimensions\":[\"public.departments.name\",\"public.course_sections.academic_year\"],\"filters\":[\"public.course_sections.academic_year IS NOT NULL\",\"public.enrollments.is_active = true\"],\"grain\":\"department by academic_year (one row per department + academic_year)\",\"aliases\":{\"public.course_sections.academic_year\":\"academic_year\",\"public.departments.name\":\"department_name\",\"SUM(CASE WHEN public.enrollments.is_active = true THEN 1 ELSE 0 END)\":\"enrollment_count\"},\"output_fields\":[\"academic_year\",\"department_name\",\"enrollment_count\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"enrollment_count\",\"color_group\":\"department_name\",\"title\":\"Enrollment trends by department over academic years\"},\"assumptions\":[\"Join path used: public.enrollments.course_section_id -> public.course_sections.id -> public.courses.id -> public.departments.id (foreign key constraints confirming these links exist were observed).\",\"We count active enrollment rows (enrollments.is_active = true). If you prefer unique students per department-year, use COUNT(DISTINCT public.enrollments.student_id) instead.\",\"Inner joins will be used (only departments with at least one enrollment will appear). If you want departments with zero enrollments shown, use LEFT JOIN from departments and COALESCE the metric to 0.\",\"academic_year is stored as text (character varying). It may not sort chronologically unless values are in a sortable format (e.g., '2020-2021'). If needed, parse or normalize academic_year to ensure proper chronological ordering.\",\"Metric expression alias 'enrollment_count' and dimension aliases 'academic_year' and 'department_name' are the exact output field names the visualization expects.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT\\n  cs.academic_year AS academic_year,\\n  d.name AS department_name,\\n  SUM(CASE WHEN e.is_active = true THEN 1 ELSE 0 END) AS enrollment_count\\nFROM public.enrollments e\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nJOIN public.departments d ON c.department_id = d.id\\nWHERE cs.academic_year IS NOT NULL\\n  AND e.is_active = true\\nGROUP BY cs.academic_year, d.name\\nORDER BY cs.academic_year ASC, d.name ASC;\",\"validationIssues\":[\"academic_year is encoded as type 'ordinal' and the plan says academic_year is stored as text — if academic_year values are not lexicographically sortable you may get incorrect chronological ordering. Consider parsing/normalizing to a temporal type or providing an explicit sort order for years.\",\"The SQL currently counts active enrollment rows (SUM(CASE WHEN e.is_active THEN 1 ELSE 0 END)). If you intended unique students per department-year, use COUNT(DISTINCT e.student_id) instead.\",\"The query uses inner joins, so departments with zero enrollments will be excluded. If you want to show departments with zero enrollments, use a LEFT JOIN from departments and COALESCE the metric to 0.\",\"If there are many departments, a single multi-line chart can become cluttered — consider filtering, interactive legend, or small multiples for clarity.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Use confirmed tables and columns to aggregate active enrollment rows by department and academic_year. Inner joins follow the validated FK path and filters ensure only non-null academic_year and active enrollments are counted. Result grouped per department+year and deterministically ordered.\",\"sql\":\"SELECT\\n  cs.academic_year AS academic_year,\\n  d.name AS department_name,\\n  SUM(CASE WHEN e.is_active = true THEN 1 ELSE 0 END) AS enrollment_count\\nFROM public.enrollments e\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nJOIN public.departments d ON c.department_id = d.id\\nWHERE cs.academic_year IS NOT NULL\\n  AND e.is_active = true\\nGROUP BY cs.academic_year, d.name\\nORDER BY cs.academic_year ASC, d.name ASC;\",\"assumptions\":[\"Counting enrollment rows (active enrollments) not distinct students; to count distinct students use COUNT(DISTINCT e.student_id).\",\"Using inner joins (departments without enrollments will be excluded).\",\"academic_year is stored as text; ORDER BY academic_year ASC sorts lexically — may not reflect chronological order if values are not in a sortable format (e.g., '2020-2021').\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT\\n  cs.academic_year AS academic_year,\\n  d.name AS department_name,\\n  SUM(CASE WHEN e.is_active = true THEN 1 ELSE 0 END) AS enrollment_count\\nFROM public.enrollments e\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nJOIN public.departments d ON c.department_id = d.id\\nWHERE cs.academic_year IS NOT NULL\\n  AND e.is_active = true\\nGROUP BY cs.academic_year, d.name\\nORDER BY cs.academic_year ASC, d.name ASC\",\"metadata\":{\"columns\":[\"academic_year\",\"department_name\",\"enrollment_count\"],\"rowCount\":21,\"sample\":[{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollment_count\":1},{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollment_count\":1}]},\"data\":[{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollment_count\":1},{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollment_count\":1},{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollment_count\":1},{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollment_count\":2},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollment_count\":2},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollment_count\":2},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollment_count\":2},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollment_count\":2},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollment_count\":7},{\"academic_year\":\"2021/2022\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollment_count\":2},{\"academic_year\":\"2021/2022\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollment_count\":2},{\"academic_year\":\"2021/2022\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollment_count\":4},{\"academic_year\":\"2022/2023\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollment_count\":2},{\"academic_year\":\"2022/2023\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollment_count\":4},{\"academic_year\":\"2022/2023\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollment_count\":3},{\"academic_year\":\"2023/2024\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollment_count\":7},{\"academic_year\":\"2023/2024\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollment_count\":2},{\"academic_year\":\"2023/2024\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollment_count\":3},{\"academic_year\":\"2024/2025\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollment_count\":5},{\"academic_year\":\"2024/2025\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollment_count\":1},{\"academic_year\":\"2024/2025\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollment_count\":2}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Enrollment trends by department over academic years\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"line\",\"point\":true,\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic Year\",\"axis\":{\"labelAngle\":-40},\"sort\":{\"field\":\"academic_year\",\"order\":\"ascending\"}},\"y\":{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"title\":\"Enrollment Count\"},\"color\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic Year\"},{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"title\":\"Enrollment Count\"}]}},\"reasoning\":\"Line chart with points, coloring by department_name. academic_year is treated as ordinal text (e.g., '2019/2020') so sort is set to ascending on that field to preserve chronological ordering where possible. Tooltip shows department, year, and count.\"},\"validation\":{\"passed\":true,\"score\":0.7,\"issues\":[\"academic_year is encoded as type 'ordinal' and the plan says academic_year is stored as text — if academic_year values are not lexicographically sortable you may get incorrect chronological ordering. Consider parsing/normalizing to a temporal type or providing an explicit sort order for years.\",\"The SQL currently counts active enrollment rows (SUM(CASE WHEN e.is_active THEN 1 ELSE 0 END)). If you intended unique students per department-year, use COUNT(DISTINCT e.student_id) instead.\",\"The query uses inner joins, so departments with zero enrollments will be excluded. If you want to show departments with zero enrollments, use a LEFT JOIN from departments and COALESCE the metric to 0.\",\"If there are many departments, a single multi-line chart can become cluttered — consider filtering, interactive legend, or small multiples for clarity.\"]}}},\"startedAt\":1771846556057,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  cs.academic_year AS academic_year,\\n  d.name AS department_name,\\n  SUM(CASE WHEN e.is_active = true THEN 1 ELSE 0 END) AS enrollment_count\\nFROM public.enrollments e\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nJOIN public.departments d ON c.department_id = d.id\\nWHERE cs.academic_year IS NOT NULL\\n  AND e.is_active = true\\nGROUP BY cs.academic_year, d.name\\nORDER BY cs.academic_year ASC, d.name ASC;\",\"data\":[{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollment_count\":1},{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollment_count\":1},{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollment_count\":1},{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollment_count\":2},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollment_count\":2},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollment_count\":2},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollment_count\":2},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollment_count\":2},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollment_count\":7},{\"academic_year\":\"2021/2022\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollment_count\":2},{\"academic_year\":\"2021/2022\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollment_count\":2},{\"academic_year\":\"2021/2022\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollment_count\":4},{\"academic_year\":\"2022/2023\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollment_count\":2},{\"academic_year\":\"2022/2023\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollment_count\":4},{\"academic_year\":\"2022/2023\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollment_count\":3},{\"academic_year\":\"2023/2024\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollment_count\":7},{\"academic_year\":\"2023/2024\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollment_count\":2},{\"academic_year\":\"2023/2024\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollment_count\":3},{\"academic_year\":\"2024/2025\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollment_count\":5},{\"academic_year\":\"2024/2025\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollment_count\":1},{\"academic_year\":\"2024/2025\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollment_count\":2}],\"metadata\":{\"columns\":[\"academic_year\",\"department_name\",\"enrollment_count\"],\"rowCount\":21,\"sample\":[{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollment_count\":1},{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollment_count\":1}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Enrollment trends by department over academic years\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"line\",\"point\":true,\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic Year\",\"axis\":{\"labelAngle\":-40},\"sort\":{\"field\":\"academic_year\",\"order\":\"ascending\"}},\"y\":{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"title\":\"Enrollment Count\"},\"color\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic Year\"},{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"title\":\"Enrollment Count\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.7,\"issues\":[\"academic_year is encoded as type 'ordinal' and the plan says academic_year is stored as text — if academic_year values are not lexicographically sortable you may get incorrect chronological ordering. Consider parsing/normalizing to a temporal type or providing an explicit sort order for years.\",\"The SQL currently counts active enrollment rows (SUM(CASE WHEN e.is_active THEN 1 ELSE 0 END)). If you intended unique students per department-year, use COUNT(DISTINCT e.student_id) instead.\",\"The query uses inner joins, so departments with zero enrollments will be excluded. If you want to show departments with zero enrollments, use a LEFT JOIN from departments and COALESCE the metric to 0.\",\"If there are many departments, a single multi-line chart can become cluttered — consider filtering, interactive legend, or small multiples for clarity.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771846556063}},\"input\":{\"question\":\"Show enrollment trends by department over academic years\"},\"result\":{\"sql\":\"SELECT\\n  cs.academic_year AS academic_year,\\n  d.name AS department_name,\\n  SUM(CASE WHEN e.is_active = true THEN 1 ELSE 0 END) AS enrollment_count\\nFROM public.enrollments e\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nJOIN public.departments d ON c.department_id = d.id\\nWHERE cs.academic_year IS NOT NULL\\n  AND e.is_active = true\\nGROUP BY cs.academic_year, d.name\\nORDER BY cs.academic_year ASC, d.name ASC;\",\"data\":[{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollment_count\":1},{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollment_count\":1},{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollment_count\":1},{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollment_count\":2},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollment_count\":2},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollment_count\":2},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollment_count\":2},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollment_count\":2},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollment_count\":7},{\"academic_year\":\"2021/2022\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollment_count\":2},{\"academic_year\":\"2021/2022\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollment_count\":2},{\"academic_year\":\"2021/2022\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollment_count\":4},{\"academic_year\":\"2022/2023\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollment_count\":2},{\"academic_year\":\"2022/2023\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollment_count\":4},{\"academic_year\":\"2022/2023\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollment_count\":3},{\"academic_year\":\"2023/2024\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollment_count\":7},{\"academic_year\":\"2023/2024\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollment_count\":2},{\"academic_year\":\"2023/2024\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollment_count\":3},{\"academic_year\":\"2024/2025\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollment_count\":5},{\"academic_year\":\"2024/2025\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollment_count\":1},{\"academic_year\":\"2024/2025\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollment_count\":2}],\"metadata\":{\"columns\":[\"academic_year\",\"department_name\",\"enrollment_count\"],\"rowCount\":21,\"sample\":[{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollment_count\":1},{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollment_count\":1}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Enrollment trends by department over academic years\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"line\",\"point\":true,\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic Year\",\"axis\":{\"labelAngle\":-40},\"sort\":{\"field\":\"academic_year\",\"order\":\"ascending\"}},\"y\":{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"title\":\"Enrollment Count\"},\"color\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic Year\"},{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"title\":\"Enrollment Count\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.7,\"issues\":[\"academic_year is encoded as type 'ordinal' and the plan says academic_year is stored as text — if academic_year values are not lexicographically sortable you may get incorrect chronological ordering. Consider parsing/normalizing to a temporal type or providing an explicit sort order for years.\",\"The SQL currently counts active enrollment rows (SUM(CASE WHEN e.is_active THEN 1 ELSE 0 END)). If you intended unique students per department-year, use COUNT(DISTINCT e.student_id) instead.\",\"The query uses inner joins, so departments with zero enrollments will be excluded. If you want to show departments with zero enrollments, use a LEFT JOIN from departments and COALESCE the metric to 0.\",\"If there are many departments, a single multi-line chart can become cluttered — consider filtering, interactive legend, or small multiples for clarity.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"923fab54b98a32dd7949974a0513b472\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/enrollment-trend-by-department/run-0001/run.json",
+    "queryPath": "runs/enrollment-trend-by-department/run-0001/query.sql",
+    "vegaRawPath": "runs/enrollment-trend-by-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/enrollment-trend-by-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/enrollment-trend-by-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:35:56.574Z",
+  "traceId": "923fab54b98a32dd7949974a0513b472",
+  "success": true,
+  "durationMs": 100928,
+  "resultRaw": {
+    "data": [
+      {
+        "academic_year": "2019/2020",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "enrollment_count": 1
+      },
+      {
+        "academic_year": "2019/2020",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "enrollment_count": 1
+      },
+      {
+        "academic_year": "2019/2020",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "enrollment_count": 1
+      },
+      {
+        "academic_year": "2019/2020",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "enrollment_count": 2
+      },
+      {
+        "academic_year": "2020/2021",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "enrollment_count": 2
+      },
+      {
+        "academic_year": "2020/2021",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "enrollment_count": 2
+      },
+      {
+        "academic_year": "2020/2021",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "enrollment_count": 2
+      },
+      {
+        "academic_year": "2020/2021",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "enrollment_count": 2
+      },
+      {
+        "academic_year": "2020/2021",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "enrollment_count": 7
+      },
+      {
+        "academic_year": "2021/2022",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "enrollment_count": 2
+      },
+      {
+        "academic_year": "2021/2022",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "enrollment_count": 2
+      },
+      {
+        "academic_year": "2021/2022",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "enrollment_count": 4
+      },
+      {
+        "academic_year": "2022/2023",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "enrollment_count": 2
+      },
+      {
+        "academic_year": "2022/2023",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "enrollment_count": 4
+      },
+      {
+        "academic_year": "2022/2023",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "enrollment_count": 3
+      },
+      {
+        "academic_year": "2023/2024",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "enrollment_count": 7
+      },
+      {
+        "academic_year": "2023/2024",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "enrollment_count": 2
+      },
+      {
+        "academic_year": "2023/2024",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "enrollment_count": 3
+      },
+      {
+        "academic_year": "2024/2025",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "enrollment_count": 5
+      },
+      {
+        "academic_year": "2024/2025",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "enrollment_count": 1
+      },
+      {
+        "academic_year": "2024/2025",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "enrollment_count": 2
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Enrollment trends by department over academic years",
+      "width": 700,
+      "height": 400,
+      "mark": {
+        "type": "line",
+        "point": true,
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "academic_year",
+          "type": "ordinal",
+          "title": "Academic Year",
+          "axis": {
+            "labelAngle": -40
+          },
+          "sort": {
+            "field": "academic_year",
+            "order": "ascending"
+          }
+        },
+        "y": {
+          "field": "enrollment_count",
+          "type": "quantitative",
+          "title": "Enrollment Count"
+        },
+        "color": {
+          "field": "department_name",
+          "type": "nominal",
+          "title": "Department"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "academic_year",
+            "type": "ordinal",
+            "title": "Academic Year"
+          },
+          {
+            "field": "enrollment_count",
+            "type": "quantitative",
+            "title": "Enrollment Count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT\n  cs.academic_year AS academic_year,\n  d.name AS department_name,\n  SUM(CASE WHEN e.is_active = true THEN 1 ELSE 0 END) AS enrollment_count\nFROM public.enrollments e\nJOIN public.course_sections cs ON e.course_section_id = cs.id\nJOIN public.courses c ON cs.course_id = c.id\nJOIN public.departments d ON c.department_id = d.id\nWHERE cs.academic_year IS NOT NULL\n  AND e.is_active = true\nGROUP BY cs.academic_year, d.name\nORDER BY cs.academic_year ASC, d.name ASC;",
+    "metadata": {
+      "columns": [
+        "academic_year",
+        "department_name",
+        "enrollment_count"
+      ],
+      "rowCount": 21,
+      "sample": [
+        {
+          "academic_year": "2019/2020",
+          "department_name": "Wydział Inżynierii Biomedycznej",
+          "enrollment_count": 1
+        },
+        {
+          "academic_year": "2019/2020",
+          "department_name": "Wydział Inżynierii Produkcji",
+          "enrollment_count": 1
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.7,
+      "issues": [
+        "academic_year is encoded as type 'ordinal' and the plan says academic_year is stored as text — if academic_year values are not lexicographically sortable you may get incorrect chronological ordering. Consider parsing/normalizing to a temporal type or providing an explicit sort order for years.",
+        "The SQL currently counts active enrollment rows (SUM(CASE WHEN e.is_active THEN 1 ELSE 0 END)). If you intended unique students per department-year, use COUNT(DISTINCT e.student_id) instead.",
+        "The query uses inner joins, so departments with zero enrollments will be excluded. If you want to show departments with zero enrollments, use a LEFT JOIN from departments and COALESCE the metric to 0.",
+        "If there are many departments, a single multi-line chart can become cluttered — consider filtering, interactive legend, or small multiples for clarity."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "academic_year": "2019/2020",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "enrollment_count": 1
+      },
+      {
+        "academic_year": "2019/2020",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "enrollment_count": 1
+      },
+      {
+        "academic_year": "2019/2020",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "enrollment_count": 1
+      },
+      {
+        "academic_year": "2019/2020",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "enrollment_count": 2
+      },
+      {
+        "academic_year": "2020/2021",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "enrollment_count": 2
+      },
+      {
+        "academic_year": "2020/2021",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "enrollment_count": 2
+      },
+      {
+        "academic_year": "2020/2021",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "enrollment_count": 2
+      },
+      {
+        "academic_year": "2020/2021",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "enrollment_count": 2
+      },
+      {
+        "academic_year": "2020/2021",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "enrollment_count": 7
+      },
+      {
+        "academic_year": "2021/2022",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "enrollment_count": 2
+      },
+      {
+        "academic_year": "2021/2022",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "enrollment_count": 2
+      },
+      {
+        "academic_year": "2021/2022",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "enrollment_count": 4
+      },
+      {
+        "academic_year": "2022/2023",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "enrollment_count": 2
+      },
+      {
+        "academic_year": "2022/2023",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "enrollment_count": 4
+      },
+      {
+        "academic_year": "2022/2023",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "enrollment_count": 3
+      },
+      {
+        "academic_year": "2023/2024",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "enrollment_count": 7
+      },
+      {
+        "academic_year": "2023/2024",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "enrollment_count": 2
+      },
+      {
+        "academic_year": "2023/2024",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "enrollment_count": 3
+      },
+      {
+        "academic_year": "2024/2025",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "enrollment_count": 5
+      },
+      {
+        "academic_year": "2024/2025",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "enrollment_count": 1
+      },
+      {
+        "academic_year": "2024/2025",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "enrollment_count": 2
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Enrollment trends by department over academic years",
+      "width": 700,
+      "height": 400,
+      "mark": {
+        "type": "line",
+        "point": true,
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "academic_year",
+          "type": "ordinal",
+          "title": "Academic Year",
+          "axis": {
+            "labelAngle": -40
+          },
+          "sort": {
+            "field": "academic_year",
+            "order": "ascending"
+          }
+        },
+        "y": {
+          "field": "enrollment_count",
+          "type": "quantitative",
+          "title": "Enrollment Count"
+        },
+        "color": {
+          "field": "department_name",
+          "type": "nominal",
+          "title": "Department"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "academic_year",
+            "type": "ordinal",
+            "title": "Academic Year"
+          },
+          {
+            "field": "enrollment_count",
+            "type": "quantitative",
+            "title": "Enrollment Count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT\n  cs.academic_year AS academic_year,\n  d.name AS department_name,\n  SUM(CASE WHEN e.is_active = true THEN 1 ELSE 0 END) AS enrollment_count\nFROM public.enrollments e\nJOIN public.course_sections cs ON e.course_section_id = cs.id\nJOIN public.courses c ON cs.course_id = c.id\nJOIN public.departments d ON c.department_id = d.id\nWHERE cs.academic_year IS NOT NULL\n  AND e.is_active = true\nGROUP BY cs.academic_year, d.name\nORDER BY cs.academic_year ASC, d.name ASC;",
+    "metadata": {
+      "columns": [
+        "academic_year",
+        "department_name",
+        "enrollment_count"
+      ],
+      "rowCount": 21,
+      "sample": [
+        {
+          "academic_year": "2019/2020",
+          "department_name": "Wydział Inżynierii Biomedycznej",
+          "enrollment_count": 1
+        },
+        {
+          "academic_year": "2019/2020",
+          "department_name": "Wydział Inżynierii Produkcji",
+          "enrollment_count": 1
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.7,
+      "issues": [
+        "academic_year is encoded as type 'ordinal' and the plan says academic_year is stored as text — if academic_year values are not lexicographically sortable you may get incorrect chronological ordering. Consider parsing/normalizing to a temporal type or providing an explicit sort order for years.",
+        "The SQL currently counts active enrollment rows (SUM(CASE WHEN e.is_active THEN 1 ELSE 0 END)). If you intended unique students per department-year, use COUNT(DISTINCT e.student_id) instead.",
+        "The query uses inner joins, so departments with zero enrollments will be excluded. If you want to show departments with zero enrollments, use a LEFT JOIN from departments and COALESCE the metric to 0.",
+        "If there are many departments, a single multi-line chart can become cluttered — consider filtering, interactive legend, or small multiples for clarity."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:35:56.574Z",
+    "traceId": "923fab54b98a32dd7949974a0513b472",
+    "attempts": 2,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 27800,
+      "outputTokens": 6068,
+      "totalTokens": 33868,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 4096,
+      "costUsd": 0.019086
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 27800,
+        "outputTokens": 6068,
+        "totalTokens": 33868,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 4096,
+        "costUsd": 0.019086
+      }
+    ],
+    "warnings": []
+  }
+}

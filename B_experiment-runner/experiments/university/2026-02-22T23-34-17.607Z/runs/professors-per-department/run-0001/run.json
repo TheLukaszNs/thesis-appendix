@@ -1,0 +1,310 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "professors-per-department",
+  "caseDirectory": "professors-per-department",
+  "repeatIndex": 1,
+  "prompt": "How many professors work in each department?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many professors work in each department?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:34:17.618Z",
+    "endedAtUtc": "2026-02-22T23:34:44.245Z",
+    "durationMs": 26627
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "10876",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:34:44 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How many professors work in each department?\"},\"sql\":{\"payload\":{\"question\":\"How many professors work in each department?\"},\"startedAt\":1771803257698,\"status\":\"success\",\"output\":{\"reasoning\":\"Count professors per department using confirmed columns professors.department_id -> departments.id; include departments with zero professors via LEFT JOIN and order deterministically by count desc then name.\",\"sql\":\"SELECT d.id AS department_id, d.name AS department_name, COUNT(p.id) AS professor_count FROM public.departments AS d LEFT JOIN public.professors AS p ON p.department_id = d.id GROUP BY d.id, d.name ORDER BY professor_count DESC, d.name ASC;\",\"assumptions\":[\"Each professor row's department is indicated by professors.department_id and references departments.id (confirmed).\",\"Return all departments including those with zero professors (hence LEFT JOIN).\"]},\"endedAt\":1771803271494},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT d.id AS department_id, d.name AS department_name, COUNT(p.id) AS professor_count FROM public.departments AS d LEFT JOIN public.professors AS p ON p.department_id = d.id GROUP BY d.id, d.name ORDER BY professor_count DESC, d.name ASC;\"},\"startedAt\":1771803271501,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT d.id AS department_id, d.name AS department_name, COUNT(p.id) AS professor_count FROM public.departments AS d LEFT JOIN public.professors AS p ON p.department_id = d.id GROUP BY d.id, d.name ORDER BY professor_count DESC, d.name ASC\",\"metadata\":{\"columns\":[\"department_id\",\"department_name\",\"professor_count\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"professor_count\":10},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"professor_count\":10}]},\"data\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"professor_count\":10},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"professor_count\":10},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"professor_count\":9},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"professor_count\":9},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"professor_count\":7},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"professor_count\":5}]},\"endedAt\":1771803271540},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT d.id AS department_id, d.name AS department_name, COUNT(p.id) AS professor_count FROM public.departments AS d LEFT JOIN public.professors AS p ON p.department_id = d.id GROUP BY d.id, d.name ORDER BY professor_count DESC, d.name ASC\",\"metadata\":{\"columns\":[\"department_id\",\"department_name\",\"professor_count\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"professor_count\":10},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"professor_count\":10}]},\"data\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"professor_count\":10},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"professor_count\":10},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"professor_count\":9},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"professor_count\":9},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"professor_count\":7},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"professor_count\":5}]},\"startedAt\":1771803271546,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of Professors per Department\",\"width\":700,\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":{\"field\":\"professor_count\",\"order\":\"descending\"},\"axis\":{\"title\":\"Department\"}},\"x\":{\"field\":\"professor_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Professor Count\"}},\"color\":{\"field\":\"professor_count\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"professor_count\",\"type\":\"quantitative\",\"title\":\"Professors\"},{\"field\":\"department_id\",\"type\":\"nominal\",\"title\":\"Department ID\"}]}},\"reasoning\":\"Horizontal bar chart shows professor_count per department_name, sorted descending; tooltip includes department_id for reference.\"},\"endedAt\":1771803284205},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of Professors per Department\",\"width\":700,\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":{\"field\":\"professor_count\",\"order\":\"descending\"},\"axis\":{\"title\":\"Department\"}},\"x\":{\"field\":\"professor_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Professor Count\"}},\"color\":{\"field\":\"professor_count\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"professor_count\",\"type\":\"quantitative\",\"title\":\"Professors\"},{\"field\":\"department_id\",\"type\":\"nominal\",\"title\":\"Department ID\"}]}},\"reasoning\":\"Horizontal bar chart shows professor_count per department_name, sorted descending; tooltip includes department_id for reference.\"},\"startedAt\":1771803284213,\"status\":\"success\",\"output\":{\"sql\":\"SELECT d.id AS department_id, d.name AS department_name, COUNT(p.id) AS professor_count FROM public.departments AS d LEFT JOIN public.professors AS p ON p.department_id = d.id GROUP BY d.id, d.name ORDER BY professor_count DESC, d.name ASC;\",\"data\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"professor_count\":10},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"professor_count\":10},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"professor_count\":9},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"professor_count\":9},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"professor_count\":7},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"professor_count\":5}],\"metadata\":{\"columns\":[\"department_id\",\"department_name\",\"professor_count\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"professor_count\":10},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"professor_count\":10}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of Professors per Department\",\"width\":700,\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":{\"field\":\"professor_count\",\"order\":\"descending\"},\"axis\":{\"title\":\"Department\"}},\"x\":{\"field\":\"professor_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Professor Count\"}},\"color\":{\"field\":\"professor_count\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"professor_count\",\"type\":\"quantitative\",\"title\":\"Professors\"},{\"field\":\"department_id\",\"type\":\"nominal\",\"title\":\"Department ID\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771803284219}},\"input\":{\"question\":\"How many professors work in each department?\"},\"result\":{\"sql\":\"SELECT d.id AS department_id, d.name AS department_name, COUNT(p.id) AS professor_count FROM public.departments AS d LEFT JOIN public.professors AS p ON p.department_id = d.id GROUP BY d.id, d.name ORDER BY professor_count DESC, d.name ASC;\",\"data\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"professor_count\":10},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"professor_count\":10},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"professor_count\":9},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"professor_count\":9},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"professor_count\":7},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"professor_count\":5}],\"metadata\":{\"columns\":[\"department_id\",\"department_name\",\"professor_count\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"professor_count\":10},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"professor_count\":10}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of Professors per Department\",\"width\":700,\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":{\"field\":\"professor_count\",\"order\":\"descending\"},\"axis\":{\"title\":\"Department\"}},\"x\":{\"field\":\"professor_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Professor Count\"}},\"color\":{\"field\":\"professor_count\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"professor_count\",\"type\":\"quantitative\",\"title\":\"Professors\"},{\"field\":\"department_id\",\"type\":\"nominal\",\"title\":\"Department ID\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"a1fdc8c59e196911a70acfef03e0518d\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/professors-per-department/run-0001/run.json",
+    "queryPath": "runs/professors-per-department/run-0001/query.sql",
+    "vegaRawPath": "runs/professors-per-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/professors-per-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/professors-per-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:34:44.811Z",
+  "traceId": "a1fdc8c59e196911a70acfef03e0518d",
+  "success": true,
+  "durationMs": 27193,
+  "resultRaw": {
+    "data": [
+      {
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "professor_count": 10
+      },
+      {
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "professor_count": 10
+      },
+      {
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "professor_count": 9
+      },
+      {
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "professor_count": 9
+      },
+      {
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "professor_count": 7
+      },
+      {
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "professor_count": 5
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Number of Professors per Department",
+      "width": 700,
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "department_name",
+          "type": "nominal",
+          "sort": {
+            "field": "professor_count",
+            "order": "descending"
+          },
+          "axis": {
+            "title": "Department"
+          }
+        },
+        "x": {
+          "field": "professor_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Professor Count"
+          }
+        },
+        "color": {
+          "field": "professor_count",
+          "type": "quantitative",
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "professor_count",
+            "type": "quantitative",
+            "title": "Professors"
+          },
+          {
+            "field": "department_id",
+            "type": "nominal",
+            "title": "Department ID"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT d.id AS department_id, d.name AS department_name, COUNT(p.id) AS professor_count FROM public.departments AS d LEFT JOIN public.professors AS p ON p.department_id = d.id GROUP BY d.id, d.name ORDER BY professor_count DESC, d.name ASC;",
+    "metadata": {
+      "columns": [
+        "department_id",
+        "department_name",
+        "professor_count"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+          "department_name": "Wydział Inżynierii Biomedycznej",
+          "professor_count": 10
+        },
+        {
+          "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+          "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+          "professor_count": 10
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "professor_count": 10
+      },
+      {
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "professor_count": 10
+      },
+      {
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "professor_count": 9
+      },
+      {
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "professor_count": 9
+      },
+      {
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "professor_count": 7
+      },
+      {
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "professor_count": 5
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Number of Professors per Department",
+      "width": 700,
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "department_name",
+          "type": "nominal",
+          "sort": {
+            "field": "professor_count",
+            "order": "descending"
+          },
+          "axis": {
+            "title": "Department"
+          }
+        },
+        "x": {
+          "field": "professor_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Professor Count"
+          }
+        },
+        "color": {
+          "field": "professor_count",
+          "type": "quantitative",
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "professor_count",
+            "type": "quantitative",
+            "title": "Professors"
+          },
+          {
+            "field": "department_id",
+            "type": "nominal",
+            "title": "Department ID"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT d.id AS department_id, d.name AS department_name, COUNT(p.id) AS professor_count FROM public.departments AS d LEFT JOIN public.professors AS p ON p.department_id = d.id GROUP BY d.id, d.name ORDER BY professor_count DESC, d.name ASC;",
+    "metadata": {
+      "columns": [
+        "department_id",
+        "department_name",
+        "professor_count"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+          "department_name": "Wydział Inżynierii Biomedycznej",
+          "professor_count": 10
+        },
+        {
+          "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+          "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+          "professor_count": 10
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:34:44.812Z",
+    "traceId": "a1fdc8c59e196911a70acfef03e0518d",
+    "attempts": 5,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 8464,
+      "outputTokens": 1888,
+      "totalTokens": 10352,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1088,
+      "costUsd": 0.005892
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 8464,
+        "outputTokens": 1888,
+        "totalTokens": 10352,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1088,
+        "costUsd": 0.005892
+      }
+    ],
+    "warnings": []
+  }
+}

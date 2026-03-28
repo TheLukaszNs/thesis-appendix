@@ -1,0 +1,1 @@
+SELECT d.name AS department, AVG(s.gpa) AS average_gpa FROM students s JOIN departments d ON s.department_id = d.id WHERE s.gpa IS NOT NULL GROUP BY d.id, d.name ORDER BY d.name

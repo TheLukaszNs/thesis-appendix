@@ -1,0 +1,398 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "room-utilization-by-building",
+  "caseDirectory": "room-utilization-by-building",
+  "repeatIndex": 1,
+  "prompt": "How many course sections are taught in each building?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many course sections are taught in each building?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:45:12.965Z",
+    "endedAtUtc": "2026-02-22T23:45:57.788Z",
+    "durationMs": 44823
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "9444",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:45:57 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How many course sections are taught in each building?\"},\"sql\":{\"payload\":{\"question\":\"How many course sections are taught in each building?\"},\"startedAt\":1771803912988,\"status\":\"success\",\"output\":{\"reasoning\":\"Count course_sections associated with classrooms grouped by the classrooms.building. Use a LEFT JOIN so buildings with zero assigned sections appear; sections with NULL classroom_id are excluded because they cannot be tied to a building. Order deterministically by count desc then building name.\",\"sql\":\"SELECT b.building AS building, COUNT(cs.id) AS section_count FROM public.classrooms b LEFT JOIN public.course_sections cs ON cs.classroom_id = b.id GROUP BY b.building ORDER BY section_count DESC, b.building ASC;\",\"assumptions\":[\"classrooms.id is the PK referenced by course_sections.classroom_id\",\"classrooms.building contains the building name to group by\",\"course_sections with classroom_id IS NULL are not counted because they have no building association\",\"include buildings with zero assigned sections via LEFT JOIN\"]},\"endedAt\":1771803942999},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT b.building AS building, COUNT(cs.id) AS section_count FROM public.classrooms b LEFT JOIN public.course_sections cs ON cs.classroom_id = b.id GROUP BY b.building ORDER BY section_count DESC, b.building ASC;\"},\"startedAt\":1771803943000,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT b.building AS building, COUNT(cs.id) AS section_count FROM public.classrooms b LEFT JOIN public.course_sections cs ON cs.classroom_id = b.id GROUP BY b.building ORDER BY section_count DESC, b.building ASC\",\"metadata\":{\"columns\":[\"building\",\"section_count\"],\"rowCount\":20,\"sample\":[{\"building\":\"RB1\",\"section_count\":6},{\"building\":\"K2\",\"section_count\":4}]},\"data\":[{\"building\":\"RB1\",\"section_count\":6},{\"building\":\"K2\",\"section_count\":4},{\"building\":\"A2\",\"section_count\":3},{\"building\":\"D\",\"section_count\":3},{\"building\":\"RB3\",\"section_count\":3},{\"building\":\"K3\",\"section_count\":2},{\"building\":\"K4\",\"section_count\":2},{\"building\":\"RN2\",\"section_count\":2},{\"building\":\"A1\",\"section_count\":1},{\"building\":\"B1\",\"section_count\":1},{\"building\":\"C\",\"section_count\":1},{\"building\":\"K5\",\"section_count\":1},{\"building\":\"RB2\",\"section_count\":1},{\"building\":\"RM2\",\"section_count\":1},{\"building\":\"RM3\",\"section_count\":1},{\"building\":\"RN1\",\"section_count\":1},{\"building\":\"A\",\"section_count\":0},{\"building\":\"B\",\"section_count\":0},{\"building\":\"K1\",\"section_count\":0},{\"building\":\"RM1\",\"section_count\":0}]},\"endedAt\":1771803943038},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT b.building AS building, COUNT(cs.id) AS section_count FROM public.classrooms b LEFT JOIN public.course_sections cs ON cs.classroom_id = b.id GROUP BY b.building ORDER BY section_count DESC, b.building ASC\",\"metadata\":{\"columns\":[\"building\",\"section_count\"],\"rowCount\":20,\"sample\":[{\"building\":\"RB1\",\"section_count\":6},{\"building\":\"K2\",\"section_count\":4}]},\"data\":[{\"building\":\"RB1\",\"section_count\":6},{\"building\":\"K2\",\"section_count\":4},{\"building\":\"A2\",\"section_count\":3},{\"building\":\"D\",\"section_count\":3},{\"building\":\"RB3\",\"section_count\":3},{\"building\":\"K3\",\"section_count\":2},{\"building\":\"K4\",\"section_count\":2},{\"building\":\"RN2\",\"section_count\":2},{\"building\":\"A1\",\"section_count\":1},{\"building\":\"B1\",\"section_count\":1},{\"building\":\"C\",\"section_count\":1},{\"building\":\"K5\",\"section_count\":1},{\"building\":\"RB2\",\"section_count\":1},{\"building\":\"RM2\",\"section_count\":1},{\"building\":\"RM3\",\"section_count\":1},{\"building\":\"RN1\",\"section_count\":1},{\"building\":\"A\",\"section_count\":0},{\"building\":\"B\",\"section_count\":0},{\"building\":\"K1\",\"section_count\":0},{\"building\":\"RM1\",\"section_count\":0}]},\"startedAt\":1771803943040,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of course sections taught in each building\",\"width\":700,\"height\":420,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\",\"sort\":\"-x\"},\"x\":{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Section count\"},\"color\":{\"field\":\"section_count\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"legend\":{\"title\":\"Sections\"}},\"tooltip\":[{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\"},{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Section count\"}]}},\"reasoning\":\"Horizontal bars show counts per building, sorted descending so the buildings with the most course sections appear at the top; color encodes the same count for quick visual emphasis.\"},\"endedAt\":1771803957765},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of course sections taught in each building\",\"width\":700,\"height\":420,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\",\"sort\":\"-x\"},\"x\":{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Section count\"},\"color\":{\"field\":\"section_count\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"legend\":{\"title\":\"Sections\"}},\"tooltip\":[{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\"},{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Section count\"}]}},\"reasoning\":\"Horizontal bars show counts per building, sorted descending so the buildings with the most course sections appear at the top; color encodes the same count for quick visual emphasis.\"},\"startedAt\":1771803957771,\"status\":\"success\",\"output\":{\"sql\":\"SELECT b.building AS building, COUNT(cs.id) AS section_count FROM public.classrooms b LEFT JOIN public.course_sections cs ON cs.classroom_id = b.id GROUP BY b.building ORDER BY section_count DESC, b.building ASC;\",\"data\":[{\"building\":\"RB1\",\"section_count\":6},{\"building\":\"K2\",\"section_count\":4},{\"building\":\"A2\",\"section_count\":3},{\"building\":\"D\",\"section_count\":3},{\"building\":\"RB3\",\"section_count\":3},{\"building\":\"K3\",\"section_count\":2},{\"building\":\"K4\",\"section_count\":2},{\"building\":\"RN2\",\"section_count\":2},{\"building\":\"A1\",\"section_count\":1},{\"building\":\"B1\",\"section_count\":1},{\"building\":\"C\",\"section_count\":1},{\"building\":\"K5\",\"section_count\":1},{\"building\":\"RB2\",\"section_count\":1},{\"building\":\"RM2\",\"section_count\":1},{\"building\":\"RM3\",\"section_count\":1},{\"building\":\"RN1\",\"section_count\":1},{\"building\":\"A\",\"section_count\":0},{\"building\":\"B\",\"section_count\":0},{\"building\":\"K1\",\"section_count\":0},{\"building\":\"RM1\",\"section_count\":0}],\"metadata\":{\"columns\":[\"building\",\"section_count\"],\"rowCount\":20,\"sample\":[{\"building\":\"RB1\",\"section_count\":6},{\"building\":\"K2\",\"section_count\":4}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of course sections taught in each building\",\"width\":700,\"height\":420,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\",\"sort\":\"-x\"},\"x\":{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Section count\"},\"color\":{\"field\":\"section_count\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"legend\":{\"title\":\"Sections\"}},\"tooltip\":[{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\"},{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Section count\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771803957773}},\"input\":{\"question\":\"How many course sections are taught in each building?\"},\"result\":{\"sql\":\"SELECT b.building AS building, COUNT(cs.id) AS section_count FROM public.classrooms b LEFT JOIN public.course_sections cs ON cs.classroom_id = b.id GROUP BY b.building ORDER BY section_count DESC, b.building ASC;\",\"data\":[{\"building\":\"RB1\",\"section_count\":6},{\"building\":\"K2\",\"section_count\":4},{\"building\":\"A2\",\"section_count\":3},{\"building\":\"D\",\"section_count\":3},{\"building\":\"RB3\",\"section_count\":3},{\"building\":\"K3\",\"section_count\":2},{\"building\":\"K4\",\"section_count\":2},{\"building\":\"RN2\",\"section_count\":2},{\"building\":\"A1\",\"section_count\":1},{\"building\":\"B1\",\"section_count\":1},{\"building\":\"C\",\"section_count\":1},{\"building\":\"K5\",\"section_count\":1},{\"building\":\"RB2\",\"section_count\":1},{\"building\":\"RM2\",\"section_count\":1},{\"building\":\"RM3\",\"section_count\":1},{\"building\":\"RN1\",\"section_count\":1},{\"building\":\"A\",\"section_count\":0},{\"building\":\"B\",\"section_count\":0},{\"building\":\"K1\",\"section_count\":0},{\"building\":\"RM1\",\"section_count\":0}],\"metadata\":{\"columns\":[\"building\",\"section_count\"],\"rowCount\":20,\"sample\":[{\"building\":\"RB1\",\"section_count\":6},{\"building\":\"K2\",\"section_count\":4}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of course sections taught in each building\",\"width\":700,\"height\":420,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\",\"sort\":\"-x\"},\"x\":{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Section count\"},\"color\":{\"field\":\"section_count\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"legend\":{\"title\":\"Sections\"}},\"tooltip\":[{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\"},{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Section count\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"27904468bb2a7c162df1eea6a65b4b46\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/room-utilization-by-building/run-0001/run.json",
+    "queryPath": "runs/room-utilization-by-building/run-0001/query.sql",
+    "vegaRawPath": "runs/room-utilization-by-building/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/room-utilization-by-building/run-0001/vega.resolved.json",
+    "imagePath": "runs/room-utilization-by-building/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:45:58.225Z",
+  "traceId": "27904468bb2a7c162df1eea6a65b4b46",
+  "success": true,
+  "durationMs": 45260,
+  "resultRaw": {
+    "data": [
+      {
+        "building": "RB1",
+        "section_count": 6
+      },
+      {
+        "building": "K2",
+        "section_count": 4
+      },
+      {
+        "building": "A2",
+        "section_count": 3
+      },
+      {
+        "building": "D",
+        "section_count": 3
+      },
+      {
+        "building": "RB3",
+        "section_count": 3
+      },
+      {
+        "building": "K3",
+        "section_count": 2
+      },
+      {
+        "building": "K4",
+        "section_count": 2
+      },
+      {
+        "building": "RN2",
+        "section_count": 2
+      },
+      {
+        "building": "A1",
+        "section_count": 1
+      },
+      {
+        "building": "B1",
+        "section_count": 1
+      },
+      {
+        "building": "C",
+        "section_count": 1
+      },
+      {
+        "building": "K5",
+        "section_count": 1
+      },
+      {
+        "building": "RB2",
+        "section_count": 1
+      },
+      {
+        "building": "RM2",
+        "section_count": 1
+      },
+      {
+        "building": "RM3",
+        "section_count": 1
+      },
+      {
+        "building": "RN1",
+        "section_count": 1
+      },
+      {
+        "building": "A",
+        "section_count": 0
+      },
+      {
+        "building": "B",
+        "section_count": 0
+      },
+      {
+        "building": "K1",
+        "section_count": 0
+      },
+      {
+        "building": "RM1",
+        "section_count": 0
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Number of course sections taught in each building",
+      "width": 700,
+      "height": 420,
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "y": {
+          "field": "building",
+          "type": "nominal",
+          "title": "Building",
+          "sort": "-x"
+        },
+        "x": {
+          "field": "section_count",
+          "type": "quantitative",
+          "title": "Section count"
+        },
+        "color": {
+          "field": "section_count",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "blues"
+          },
+          "legend": {
+            "title": "Sections"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "building",
+            "type": "nominal",
+            "title": "Building"
+          },
+          {
+            "field": "section_count",
+            "type": "quantitative",
+            "title": "Section count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT b.building AS building, COUNT(cs.id) AS section_count FROM public.classrooms b LEFT JOIN public.course_sections cs ON cs.classroom_id = b.id GROUP BY b.building ORDER BY section_count DESC, b.building ASC;",
+    "metadata": {
+      "columns": [
+        "building",
+        "section_count"
+      ],
+      "rowCount": 20,
+      "sample": [
+        {
+          "building": "RB1",
+          "section_count": 6
+        },
+        {
+          "building": "K2",
+          "section_count": 4
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "building": "RB1",
+        "section_count": 6
+      },
+      {
+        "building": "K2",
+        "section_count": 4
+      },
+      {
+        "building": "A2",
+        "section_count": 3
+      },
+      {
+        "building": "D",
+        "section_count": 3
+      },
+      {
+        "building": "RB3",
+        "section_count": 3
+      },
+      {
+        "building": "K3",
+        "section_count": 2
+      },
+      {
+        "building": "K4",
+        "section_count": 2
+      },
+      {
+        "building": "RN2",
+        "section_count": 2
+      },
+      {
+        "building": "A1",
+        "section_count": 1
+      },
+      {
+        "building": "B1",
+        "section_count": 1
+      },
+      {
+        "building": "C",
+        "section_count": 1
+      },
+      {
+        "building": "K5",
+        "section_count": 1
+      },
+      {
+        "building": "RB2",
+        "section_count": 1
+      },
+      {
+        "building": "RM2",
+        "section_count": 1
+      },
+      {
+        "building": "RM3",
+        "section_count": 1
+      },
+      {
+        "building": "RN1",
+        "section_count": 1
+      },
+      {
+        "building": "A",
+        "section_count": 0
+      },
+      {
+        "building": "B",
+        "section_count": 0
+      },
+      {
+        "building": "K1",
+        "section_count": 0
+      },
+      {
+        "building": "RM1",
+        "section_count": 0
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Number of course sections taught in each building",
+      "width": 700,
+      "height": 420,
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "y": {
+          "field": "building",
+          "type": "nominal",
+          "title": "Building",
+          "sort": "-x"
+        },
+        "x": {
+          "field": "section_count",
+          "type": "quantitative",
+          "title": "Section count"
+        },
+        "color": {
+          "field": "section_count",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "blues"
+          },
+          "legend": {
+            "title": "Sections"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "building",
+            "type": "nominal",
+            "title": "Building"
+          },
+          {
+            "field": "section_count",
+            "type": "quantitative",
+            "title": "Section count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT b.building AS building, COUNT(cs.id) AS section_count FROM public.classrooms b LEFT JOIN public.course_sections cs ON cs.classroom_id = b.id GROUP BY b.building ORDER BY section_count DESC, b.building ASC;",
+    "metadata": {
+      "columns": [
+        "building",
+        "section_count"
+      ],
+      "rowCount": 20,
+      "sample": [
+        {
+          "building": "RB1",
+          "section_count": 6
+        },
+        {
+          "building": "K2",
+          "section_count": 4
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:45:58.225Z",
+    "traceId": "27904468bb2a7c162df1eea6a65b4b46",
+    "attempts": 2,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 8635,
+      "outputTokens": 2691,
+      "totalTokens": 11326,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1920,
+      "costUsd": 0.00754075
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 8635,
+        "outputTokens": 2691,
+        "totalTokens": 11326,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1920,
+        "costUsd": 0.00754075
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,180 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "students-multiple-scholarships",
+  "caseDirectory": "students-multiple-scholarships",
+  "repeatIndex": 1,
+  "prompt": "How many students have received more than one scholarship?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many students have received more than one scholarship?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:14:18.329Z",
+    "endedAtUtc": "2026-02-23T14:14:36.793Z",
+    "durationMs": 18464
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "4805",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:14:36 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How many students have received more than one scholarship?\"},\"sql\":{\"payload\":{\"question\":\"How many students have received more than one scholarship?\"},\"startedAt\":1771856058341,\"status\":\"success\",\"output\":{\"reasoning\":\"The question asks for the count of students who have received more than one scholarship. The scholarships table has a student_id column that links to students. I need to group by student_id, count the number of scholarships per student, filter for those with more than 1, and then count the distinct students. This is a straightforward aggregation query.\",\"sql\":\"SELECT COUNT(DISTINCT student_id) AS student_count\\nFROM scholarships\\nGROUP BY student_id\\nHAVING COUNT(*) > 1\",\"assumptions\":[\"The scholarships table contains one row per scholarship award\",\"A student receiving multiple scholarships will have multiple rows in the scholarships table with the same student_id\"]},\"endedAt\":1771856073744},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT COUNT(DISTINCT student_id) AS student_count\\nFROM scholarships\\nGROUP BY student_id\\nHAVING COUNT(*) > 1\"},\"startedAt\":1771856073748,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT COUNT(DISTINCT student_id) AS student_count\\nFROM scholarships\\nGROUP BY student_id\\nHAVING COUNT(*) > 1\",\"metadata\":{\"columns\":[\"student_count\"],\"rowCount\":1,\"sample\":[{\"student_count\":\"1\"}]},\"data\":[{\"student_count\":\"1\"}]},\"endedAt\":1771856073755},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT COUNT(DISTINCT student_id) AS student_count\\nFROM scholarships\\nGROUP BY student_id\\nHAVING COUNT(*) > 1\",\"metadata\":{\"columns\":[\"student_count\"],\"rowCount\":1,\"sample\":[{\"student_count\":\"1\"}]},\"data\":[{\"student_count\":\"1\"}]},\"startedAt\":1771856073757,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Students with Multiple Scholarships\",\"description\":\"Count of students who have received more than one scholarship\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"text\",\"fontSize\":48,\"fontWeight\":\"bold\",\"align\":\"center\"},\"encoding\":{\"text\":{\"field\":\"student_count\",\"type\":\"quantitative\"}},\"width\":400,\"height\":200},\"reasoning\":\"This query returns a single aggregate count. A large text display is the most appropriate visualization for presenting a single key metric. The result shows 1 student has received more than one scholarship.\"},\"endedAt\":1771856076776},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Students with Multiple Scholarships\",\"description\":\"Count of students who have received more than one scholarship\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"text\",\"fontSize\":48,\"fontWeight\":\"bold\",\"align\":\"center\"},\"encoding\":{\"text\":{\"field\":\"student_count\",\"type\":\"quantitative\"}},\"width\":400,\"height\":200},\"reasoning\":\"This query returns a single aggregate count. A large text display is the most appropriate visualization for presenting a single key metric. The result shows 1 student has received more than one scholarship.\"},\"startedAt\":1771856076778,\"status\":\"success\",\"output\":{\"sql\":\"SELECT COUNT(DISTINCT student_id) AS student_count\\nFROM scholarships\\nGROUP BY student_id\\nHAVING COUNT(*) > 1\",\"data\":[{\"student_count\":\"1\"}],\"metadata\":{\"columns\":[\"student_count\"],\"rowCount\":1,\"sample\":[{\"student_count\":\"1\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Students with Multiple Scholarships\",\"description\":\"Count of students who have received more than one scholarship\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"text\",\"fontSize\":48,\"fontWeight\":\"bold\",\"align\":\"center\"},\"encoding\":{\"text\":{\"field\":\"student_count\",\"type\":\"quantitative\"}},\"width\":400,\"height\":200},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771856076781}},\"input\":{\"question\":\"How many students have received more than one scholarship?\"},\"result\":{\"sql\":\"SELECT COUNT(DISTINCT student_id) AS student_count\\nFROM scholarships\\nGROUP BY student_id\\nHAVING COUNT(*) > 1\",\"data\":[{\"student_count\":\"1\"}],\"metadata\":{\"columns\":[\"student_count\"],\"rowCount\":1,\"sample\":[{\"student_count\":\"1\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Students with Multiple Scholarships\",\"description\":\"Count of students who have received more than one scholarship\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"text\",\"fontSize\":48,\"fontWeight\":\"bold\",\"align\":\"center\"},\"encoding\":{\"text\":{\"field\":\"student_count\",\"type\":\"quantitative\"}},\"width\":400,\"height\":200},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"570154e89ad3c9c4e4bda7e91f72dc44\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/students-multiple-scholarships/run-0001/run.json",
+    "queryPath": "runs/students-multiple-scholarships/run-0001/query.sql",
+    "vegaRawPath": "runs/students-multiple-scholarships/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/students-multiple-scholarships/run-0001/vega.resolved.json",
+    "imagePath": "runs/students-multiple-scholarships/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:14:37.189Z",
+  "traceId": "570154e89ad3c9c4e4bda7e91f72dc44",
+  "success": true,
+  "durationMs": 18860,
+  "resultRaw": {
+    "data": [
+      {
+        "student_count": "1"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Students with Multiple Scholarships",
+      "description": "Count of students who have received more than one scholarship",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 48,
+        "fontWeight": "bold",
+        "align": "center"
+      },
+      "encoding": {
+        "text": {
+          "field": "student_count",
+          "type": "quantitative"
+        }
+      },
+      "width": 400,
+      "height": 200
+    },
+    "sql": "SELECT COUNT(DISTINCT student_id) AS student_count\nFROM scholarships\nGROUP BY student_id\nHAVING COUNT(*) > 1",
+    "metadata": {
+      "columns": [
+        "student_count"
+      ],
+      "rowCount": 1,
+      "sample": [
+        {
+          "student_count": "1"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "student_count": "1"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Students with Multiple Scholarships",
+      "description": "Count of students who have received more than one scholarship",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 48,
+        "fontWeight": "bold",
+        "align": "center"
+      },
+      "encoding": {
+        "text": {
+          "field": "student_count",
+          "type": "quantitative"
+        }
+      },
+      "width": 400,
+      "height": 200
+    },
+    "sql": "SELECT COUNT(DISTINCT student_id) AS student_count\nFROM scholarships\nGROUP BY student_id\nHAVING COUNT(*) > 1",
+    "metadata": {
+      "columns": [
+        "student_count"
+      ],
+      "rowCount": 1,
+      "sample": [
+        {
+          "student_count": "1"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.433Z",
+    "traceId": "570154e89ad3c9c4e4bda7e91f72dc44",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 10108,
+      "outputTokens": 579,
+      "totalTokens": 10687,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.013003
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 10108,
+        "outputTokens": 579,
+        "totalTokens": 10687,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.013003
+      }
+    ],
+    "warnings": []
+  }
+}

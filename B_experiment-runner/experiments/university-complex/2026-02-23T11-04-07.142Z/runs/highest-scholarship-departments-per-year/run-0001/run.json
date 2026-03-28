@@ -1,0 +1,314 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "highest-scholarship-departments-per-year",
+  "caseDirectory": "highest-scholarship-departments-per-year",
+  "repeatIndex": 1,
+  "prompt": "Which department received the most total scholarship money each academic year?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which department received the most total scholarship money each academic year?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:40:31.757Z",
+    "endedAtUtc": "2026-02-23T11:42:00.900Z",
+    "durationMs": 89143
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "31104",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:42:00 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Which department received the most total scholarship money each academic year?\"},\"planner\":{\"payload\":{\"question\":\"Which department received the most total scholarship money each academic year?\"},\"startedAt\":1771846831763,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"SUM(scholarships.amount)\"],\"dimensions\":[\"scholarships.academic_year\",\"departments.name\"],\"filters\":[\"scholarships.student_id = students.id\",\"students.department_id = departments.id\",\"scholarships.amount IS NOT NULL\"],\"grain\":\"one row per academic_year containing the department with the highest total scholarship amount (top department per academic_year)\",\"aliases\":{\"scholarships.academic_year\":\"academic_year\",\"departments.name\":\"department_name\",\"SUM(scholarships.amount)\":\"total_scholarship_amount\"},\"output_fields\":[\"academic_year\",\"department_name\",\"total_scholarship_amount\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"academic_year\",\"y_axis\":\"total_scholarship_amount\",\"color_group\":\"department_name\",\"title\":\"Top scholarship-recipient department by academic year (total amount)\"},\"assumptions\":[\"Table and column existence confirmed in preflight: scholarships(amount, academic_year, student_id), students(id, department_id), departments(id, name).\",\"Include all scholarship records present in scholarships regardless of paid_date or semester_type unless downstream filter is requested.\",\"Academic year is stored as scholarships.academic_year (varchar); values are comparable as strings. If normalization needed (e.g., '2020/2021' vs '2020-21'), downstream ETL should standardize.\",\"Ties: if two or more departments have the same highest total for an academic_year, downstream SQL should use RANK() (not ROW_NUMBER) to return all tied top departments. The required output_fields support multiple rows per academic_year in that case.\",\"Department is identified/displayed by departments.name. If unique identification is required, use departments.code (unique) instead; this plan uses name for readability.\",\"Joins must use scholarships.student_id = students.id and students.department_id = departments.id as listed in filters.\"]}},\"endedAt\":1771846868084},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"SUM(scholarships.amount)\"],\"dimensions\":[\"scholarships.academic_year\",\"departments.name\"],\"filters\":[\"scholarships.student_id = students.id\",\"students.department_id = departments.id\",\"scholarships.amount IS NOT NULL\"],\"grain\":\"one row per academic_year containing the department with the highest total scholarship amount (top department per academic_year)\",\"aliases\":{\"scholarships.academic_year\":\"academic_year\",\"departments.name\":\"department_name\",\"SUM(scholarships.amount)\":\"total_scholarship_amount\"},\"output_fields\":[\"academic_year\",\"department_name\",\"total_scholarship_amount\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"academic_year\",\"y_axis\":\"total_scholarship_amount\",\"color_group\":\"department_name\",\"title\":\"Top scholarship-recipient department by academic year (total amount)\"},\"assumptions\":[\"Table and column existence confirmed in preflight: scholarships(amount, academic_year, student_id), students(id, department_id), departments(id, name).\",\"Include all scholarship records present in scholarships regardless of paid_date or semester_type unless downstream filter is requested.\",\"Academic year is stored as scholarships.academic_year (varchar); values are comparable as strings. If normalization needed (e.g., '2020/2021' vs '2020-21'), downstream ETL should standardize.\",\"Ties: if two or more departments have the same highest total for an academic_year, downstream SQL should use RANK() (not ROW_NUMBER) to return all tied top departments. The required output_fields support multiple rows per academic_year in that case.\",\"Department is identified/displayed by departments.name. If unique identification is required, use departments.code (unique) instead; this plan uses name for readability.\",\"Joins must use scholarships.student_id = students.id and students.department_id = departments.id as listed in filters.\"]}},\"startedAt\":1771846868110,\"status\":\"success\",\"output\":{\"question\":\"Which department received the most total scholarship money each academic year?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"SUM(scholarships.amount)\"],\"dimensions\":[\"scholarships.academic_year\",\"departments.name\"],\"filters\":[\"scholarships.student_id = students.id\",\"students.department_id = departments.id\",\"scholarships.amount IS NOT NULL\"],\"grain\":\"one row per academic_year containing the department with the highest total scholarship amount (top department per academic_year)\",\"aliases\":{\"scholarships.academic_year\":\"academic_year\",\"departments.name\":\"department_name\",\"SUM(scholarships.amount)\":\"total_scholarship_amount\"},\"output_fields\":[\"academic_year\",\"department_name\",\"total_scholarship_amount\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"academic_year\",\"y_axis\":\"total_scholarship_amount\",\"color_group\":\"department_name\",\"title\":\"Top scholarship-recipient department by academic year (total amount)\"},\"assumptions\":[\"Table and column existence confirmed in preflight: scholarships(amount, academic_year, student_id), students(id, department_id), departments(id, name).\",\"Include all scholarship records present in scholarships regardless of paid_date or semester_type unless downstream filter is requested.\",\"Academic year is stored as scholarships.academic_year (varchar); values are comparable as strings. If normalization needed (e.g., '2020/2021' vs '2020-21'), downstream ETL should standardize.\",\"Ties: if two or more departments have the same highest total for an academic_year, downstream SQL should use RANK() (not ROW_NUMBER) to return all tied top departments. The required output_fields support multiple rows per academic_year in that case.\",\"Department is identified/displayed by departments.name. If unique identification is required, use departments.code (unique) instead; this plan uses name for readability.\",\"Joins must use scholarships.student_id = students.id and students.department_id = departments.id as listed in filters.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771846868117},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"Which department received the most total scholarship money each academic year?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"SUM(scholarships.amount)\"],\"dimensions\":[\"scholarships.academic_year\",\"departments.name\"],\"filters\":[\"scholarships.student_id = students.id\",\"students.department_id = departments.id\",\"scholarships.amount IS NOT NULL\"],\"grain\":\"one row per academic_year containing the department with the highest total scholarship amount (top department per academic_year)\",\"aliases\":{\"scholarships.academic_year\":\"academic_year\",\"departments.name\":\"department_name\",\"SUM(scholarships.amount)\":\"total_scholarship_amount\"},\"output_fields\":[\"academic_year\",\"department_name\",\"total_scholarship_amount\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"academic_year\",\"y_axis\":\"total_scholarship_amount\",\"color_group\":\"department_name\",\"title\":\"Top scholarship-recipient department by academic year (total amount)\"},\"assumptions\":[\"Table and column existence confirmed in preflight: scholarships(amount, academic_year, student_id), students(id, department_id), departments(id, name).\",\"Include all scholarship records present in scholarships regardless of paid_date or semester_type unless downstream filter is requested.\",\"Academic year is stored as scholarships.academic_year (varchar); values are comparable as strings. If normalization needed (e.g., '2020/2021' vs '2020-21'), downstream ETL should standardize.\",\"Ties: if two or more departments have the same highest total for an academic_year, downstream SQL should use RANK() (not ROW_NUMBER) to return all tied top departments. The required output_fields support multiple rows per academic_year in that case.\",\"Department is identified/displayed by departments.name. If unique identification is required, use departments.code (unique) instead; this plan uses name for readability.\",\"Joins must use scholarships.student_id = students.id and students.department_id = departments.id as listed in filters.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771846868122,\"status\":\"success\",\"output\":{\"question\":\"Which department received the most total scholarship money each academic year?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"SUM(scholarships.amount)\"],\"dimensions\":[\"scholarships.academic_year\",\"departments.name\"],\"filters\":[\"scholarships.student_id = students.id\",\"students.department_id = departments.id\",\"scholarships.amount IS NOT NULL\"],\"grain\":\"one row per academic_year containing the department with the highest total scholarship amount (top department per academic_year)\",\"aliases\":{\"scholarships.academic_year\":\"academic_year\",\"departments.name\":\"department_name\",\"SUM(scholarships.amount)\":\"total_scholarship_amount\"},\"output_fields\":[\"academic_year\",\"department_name\",\"total_scholarship_amount\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"academic_year\",\"y_axis\":\"total_scholarship_amount\",\"color_group\":\"department_name\",\"title\":\"Top scholarship-recipient department by academic year (total amount)\"},\"assumptions\":[\"Table and column existence confirmed in preflight: scholarships(amount, academic_year, student_id), students(id, department_id), departments(id, name).\",\"Include all scholarship records present in scholarships regardless of paid_date or semester_type unless downstream filter is requested.\",\"Academic year is stored as scholarships.academic_year (varchar); values are comparable as strings. If normalization needed (e.g., '2020/2021' vs '2020-21'), downstream ETL should standardize.\",\"Ties: if two or more departments have the same highest total for an academic_year, downstream SQL should use RANK() (not ROW_NUMBER) to return all tied top departments. The required output_fields support multiple rows per academic_year in that case.\",\"Department is identified/displayed by departments.name. If unique identification is required, use departments.code (unique) instead; this plan uses name for readability.\",\"Joins must use scholarships.student_id = students.id and students.department_id = departments.id as listed in filters.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"WITH dept_total AS (\\n  SELECT\\n    sch.academic_year AS academic_year,\\n    d.name AS department_name,\\n    SUM(sch.amount) AS total_scholarship_amount\\n  FROM public.scholarships AS sch\\n  JOIN public.students AS stu ON sch.student_id = stu.id\\n  JOIN public.departments AS d ON stu.department_id = d.id\\n  WHERE sch.amount IS NOT NULL\\n  GROUP BY sch.academic_year, d.name\\n)\\nSELECT\\n  academic_year,\\n  department_name,\\n  total_scholarship_amount\\nFROM (\\n  SELECT\\n    academic_year,\\n    department_name,\\n    total_scholarship_amount,\\n    RANK() OVER (PARTITION BY academic_year ORDER BY total_scholarship_amount DESC) AS dept_rank\\n  FROM dept_total\\n) AS ranked\\nWHERE dept_rank = 1\\nORDER BY academic_year ASC, department_name ASC;\",\"validationIssues\":[\"academic_year is treated as ordinal/nominal (string) in the visualization — if academic_year is a true temporal value (or should be normalized), consider using a temporal axis or normalizing the field first.\",\"If there are ties (RANK() used in SQL), the chart will render multiple bars for the same academic_year (grouped by color) — confirm this grouped-bar behavior matches the desired presentation (vs. e.g., a single label or stacked representation).\",\"Metadata rowCount is 4 but the provided sample contains 2 rows — minor inconsistency in metadata.sample vs metadata.rowCount.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Aggregate scholarship amounts per department and academic year, use RANK() partitioned by academic_year to include ties, and return departments with rank = 1. Joins and columns were confirmed in preflight.\",\"sql\":\"WITH dept_total AS (\\n  SELECT\\n    sch.academic_year AS academic_year,\\n    d.name AS department_name,\\n    SUM(sch.amount) AS total_scholarship_amount\\n  FROM public.scholarships AS sch\\n  JOIN public.students AS stu ON sch.student_id = stu.id\\n  JOIN public.departments AS d ON stu.department_id = d.id\\n  WHERE sch.amount IS NOT NULL\\n  GROUP BY sch.academic_year, d.name\\n)\\nSELECT\\n  academic_year,\\n  department_name,\\n  total_scholarship_amount\\nFROM (\\n  SELECT\\n    academic_year,\\n    department_name,\\n    total_scholarship_amount,\\n    RANK() OVER (PARTITION BY academic_year ORDER BY total_scholarship_amount DESC) AS dept_rank\\n  FROM dept_total\\n) AS ranked\\nWHERE dept_rank = 1\\nORDER BY academic_year ASC, department_name ASC;\",\"assumptions\":[\"Tables and columns confirmed in preflight: public.scholarships(amount, academic_year, student_id), public.students(id, department_id), public.departments(id, name).\",\"Academic year is stored in scholarships.academic_year and is comparable as text; no normalization performed here.\",\"Ties are returned for top departments per academic_year using RANK().\"]},\"execution\":{\"ok\":true,\"sql\":\"WITH dept_total AS (\\n  SELECT\\n    sch.academic_year AS academic_year,\\n    d.name AS department_name,\\n    SUM(sch.amount) AS total_scholarship_amount\\n  FROM public.scholarships AS sch\\n  JOIN public.students AS stu ON sch.student_id = stu.id\\n  JOIN public.departments AS d ON stu.department_id = d.id\\n  WHERE sch.amount IS NOT NULL\\n  GROUP BY sch.academic_year, d.name\\n)\\nSELECT\\n  academic_year,\\n  department_name,\\n  total_scholarship_amount\\nFROM (\\n  SELECT\\n    academic_year,\\n    department_name,\\n    total_scholarship_amount,\\n    RANK() OVER (PARTITION BY academic_year ORDER BY total_scholarship_amount DESC) AS dept_rank\\n  FROM dept_total\\n) AS ranked\\nWHERE dept_rank = 1\\nORDER BY academic_year ASC, department_name ASC\",\"metadata\":{\"columns\":[\"academic_year\",\"department_name\",\"total_scholarship_amount\"],\"rowCount\":4,\"sample\":[{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"total_scholarship_amount\":1500},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"total_scholarship_amount\":4500}]},\"data\":[{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"total_scholarship_amount\":1500},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"total_scholarship_amount\":4500},{\"academic_year\":\"2021/2022\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"total_scholarship_amount\":2000},{\"academic_year\":\"2023/2024\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_scholarship_amount\":12000}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Top scholarship-recipient department by academic year (total amount)\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"cornerRadiusEnd\":3},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Academic year\"},\"sort\":{\"field\":\"academic_year\",\"order\":\"ascending\"}},\"y\":{\"field\":\"total_scholarship_amount\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Total scholarship amount\"}},\"color\":{\"field\":\"department_name\",\"type\":\"nominal\",\"legend\":{\"title\":\"Department\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic year\"},{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"total_scholarship_amount\",\"type\":\"quantitative\",\"title\":\"Total scholarship amount\"}]}},\"reasoning\":\"Bar chart shows, for each academic year, the department with the highest total scholarship amount. Color groups by department_name; tooltip includes all output fields.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"academic_year is treated as ordinal/nominal (string) in the visualization — if academic_year is a true temporal value (or should be normalized), consider using a temporal axis or normalizing the field first.\",\"If there are ties (RANK() used in SQL), the chart will render multiple bars for the same academic_year (grouped by color) — confirm this grouped-bar behavior matches the desired presentation (vs. e.g., a single label or stacked representation).\",\"Metadata rowCount is 4 but the provided sample contains 2 rows — minor inconsistency in metadata.sample vs metadata.rowCount.\"]}}},\"endedAt\":1771846920881,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"Which department received the most total scholarship money each academic year?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"SUM(scholarships.amount)\"],\"dimensions\":[\"scholarships.academic_year\",\"departments.name\"],\"filters\":[\"scholarships.student_id = students.id\",\"students.department_id = departments.id\",\"scholarships.amount IS NOT NULL\"],\"grain\":\"one row per academic_year containing the department with the highest total scholarship amount (top department per academic_year)\",\"aliases\":{\"scholarships.academic_year\":\"academic_year\",\"departments.name\":\"department_name\",\"SUM(scholarships.amount)\":\"total_scholarship_amount\"},\"output_fields\":[\"academic_year\",\"department_name\",\"total_scholarship_amount\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"academic_year\",\"y_axis\":\"total_scholarship_amount\",\"color_group\":\"department_name\",\"title\":\"Top scholarship-recipient department by academic year (total amount)\"},\"assumptions\":[\"Table and column existence confirmed in preflight: scholarships(amount, academic_year, student_id), students(id, department_id), departments(id, name).\",\"Include all scholarship records present in scholarships regardless of paid_date or semester_type unless downstream filter is requested.\",\"Academic year is stored as scholarships.academic_year (varchar); values are comparable as strings. If normalization needed (e.g., '2020/2021' vs '2020-21'), downstream ETL should standardize.\",\"Ties: if two or more departments have the same highest total for an academic_year, downstream SQL should use RANK() (not ROW_NUMBER) to return all tied top departments. The required output_fields support multiple rows per academic_year in that case.\",\"Department is identified/displayed by departments.name. If unique identification is required, use departments.code (unique) instead; this plan uses name for readability.\",\"Joins must use scholarships.student_id = students.id and students.department_id = departments.id as listed in filters.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"WITH dept_total AS (\\n  SELECT\\n    sch.academic_year AS academic_year,\\n    d.name AS department_name,\\n    SUM(sch.amount) AS total_scholarship_amount\\n  FROM public.scholarships AS sch\\n  JOIN public.students AS stu ON sch.student_id = stu.id\\n  JOIN public.departments AS d ON stu.department_id = d.id\\n  WHERE sch.amount IS NOT NULL\\n  GROUP BY sch.academic_year, d.name\\n)\\nSELECT\\n  academic_year,\\n  department_name,\\n  total_scholarship_amount\\nFROM (\\n  SELECT\\n    academic_year,\\n    department_name,\\n    total_scholarship_amount,\\n    RANK() OVER (PARTITION BY academic_year ORDER BY total_scholarship_amount DESC) AS dept_rank\\n  FROM dept_total\\n) AS ranked\\nWHERE dept_rank = 1\\nORDER BY academic_year ASC, department_name ASC;\",\"validationIssues\":[\"academic_year is treated as ordinal/nominal (string) in the visualization — if academic_year is a true temporal value (or should be normalized), consider using a temporal axis or normalizing the field first.\",\"If there are ties (RANK() used in SQL), the chart will render multiple bars for the same academic_year (grouped by color) — confirm this grouped-bar behavior matches the desired presentation (vs. e.g., a single label or stacked representation).\",\"Metadata rowCount is 4 but the provided sample contains 2 rows — minor inconsistency in metadata.sample vs metadata.rowCount.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Aggregate scholarship amounts per department and academic year, use RANK() partitioned by academic_year to include ties, and return departments with rank = 1. Joins and columns were confirmed in preflight.\",\"sql\":\"WITH dept_total AS (\\n  SELECT\\n    sch.academic_year AS academic_year,\\n    d.name AS department_name,\\n    SUM(sch.amount) AS total_scholarship_amount\\n  FROM public.scholarships AS sch\\n  JOIN public.students AS stu ON sch.student_id = stu.id\\n  JOIN public.departments AS d ON stu.department_id = d.id\\n  WHERE sch.amount IS NOT NULL\\n  GROUP BY sch.academic_year, d.name\\n)\\nSELECT\\n  academic_year,\\n  department_name,\\n  total_scholarship_amount\\nFROM (\\n  SELECT\\n    academic_year,\\n    department_name,\\n    total_scholarship_amount,\\n    RANK() OVER (PARTITION BY academic_year ORDER BY total_scholarship_amount DESC) AS dept_rank\\n  FROM dept_total\\n) AS ranked\\nWHERE dept_rank = 1\\nORDER BY academic_year ASC, department_name ASC;\",\"assumptions\":[\"Tables and columns confirmed in preflight: public.scholarships(amount, academic_year, student_id), public.students(id, department_id), public.departments(id, name).\",\"Academic year is stored in scholarships.academic_year and is comparable as text; no normalization performed here.\",\"Ties are returned for top departments per academic_year using RANK().\"]},\"execution\":{\"ok\":true,\"sql\":\"WITH dept_total AS (\\n  SELECT\\n    sch.academic_year AS academic_year,\\n    d.name AS department_name,\\n    SUM(sch.amount) AS total_scholarship_amount\\n  FROM public.scholarships AS sch\\n  JOIN public.students AS stu ON sch.student_id = stu.id\\n  JOIN public.departments AS d ON stu.department_id = d.id\\n  WHERE sch.amount IS NOT NULL\\n  GROUP BY sch.academic_year, d.name\\n)\\nSELECT\\n  academic_year,\\n  department_name,\\n  total_scholarship_amount\\nFROM (\\n  SELECT\\n    academic_year,\\n    department_name,\\n    total_scholarship_amount,\\n    RANK() OVER (PARTITION BY academic_year ORDER BY total_scholarship_amount DESC) AS dept_rank\\n  FROM dept_total\\n) AS ranked\\nWHERE dept_rank = 1\\nORDER BY academic_year ASC, department_name ASC\",\"metadata\":{\"columns\":[\"academic_year\",\"department_name\",\"total_scholarship_amount\"],\"rowCount\":4,\"sample\":[{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"total_scholarship_amount\":1500},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"total_scholarship_amount\":4500}]},\"data\":[{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"total_scholarship_amount\":1500},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"total_scholarship_amount\":4500},{\"academic_year\":\"2021/2022\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"total_scholarship_amount\":2000},{\"academic_year\":\"2023/2024\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_scholarship_amount\":12000}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Top scholarship-recipient department by academic year (total amount)\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"cornerRadiusEnd\":3},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Academic year\"},\"sort\":{\"field\":\"academic_year\",\"order\":\"ascending\"}},\"y\":{\"field\":\"total_scholarship_amount\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Total scholarship amount\"}},\"color\":{\"field\":\"department_name\",\"type\":\"nominal\",\"legend\":{\"title\":\"Department\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic year\"},{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"total_scholarship_amount\",\"type\":\"quantitative\",\"title\":\"Total scholarship amount\"}]}},\"reasoning\":\"Bar chart shows, for each academic year, the department with the highest total scholarship amount. Color groups by department_name; tooltip includes all output fields.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"academic_year is treated as ordinal/nominal (string) in the visualization — if academic_year is a true temporal value (or should be normalized), consider using a temporal axis or normalizing the field first.\",\"If there are ties (RANK() used in SQL), the chart will render multiple bars for the same academic_year (grouped by color) — confirm this grouped-bar behavior matches the desired presentation (vs. e.g., a single label or stacked representation).\",\"Metadata rowCount is 4 but the provided sample contains 2 rows — minor inconsistency in metadata.sample vs metadata.rowCount.\"]}}},\"startedAt\":1771846920884,\"status\":\"success\",\"output\":{\"sql\":\"WITH dept_total AS (\\n  SELECT\\n    sch.academic_year AS academic_year,\\n    d.name AS department_name,\\n    SUM(sch.amount) AS total_scholarship_amount\\n  FROM public.scholarships AS sch\\n  JOIN public.students AS stu ON sch.student_id = stu.id\\n  JOIN public.departments AS d ON stu.department_id = d.id\\n  WHERE sch.amount IS NOT NULL\\n  GROUP BY sch.academic_year, d.name\\n)\\nSELECT\\n  academic_year,\\n  department_name,\\n  total_scholarship_amount\\nFROM (\\n  SELECT\\n    academic_year,\\n    department_name,\\n    total_scholarship_amount,\\n    RANK() OVER (PARTITION BY academic_year ORDER BY total_scholarship_amount DESC) AS dept_rank\\n  FROM dept_total\\n) AS ranked\\nWHERE dept_rank = 1\\nORDER BY academic_year ASC, department_name ASC;\",\"data\":[{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"total_scholarship_amount\":1500},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"total_scholarship_amount\":4500},{\"academic_year\":\"2021/2022\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"total_scholarship_amount\":2000},{\"academic_year\":\"2023/2024\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_scholarship_amount\":12000}],\"metadata\":{\"columns\":[\"academic_year\",\"department_name\",\"total_scholarship_amount\"],\"rowCount\":4,\"sample\":[{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"total_scholarship_amount\":1500},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"total_scholarship_amount\":4500}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Top scholarship-recipient department by academic year (total amount)\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"cornerRadiusEnd\":3},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Academic year\"},\"sort\":{\"field\":\"academic_year\",\"order\":\"ascending\"}},\"y\":{\"field\":\"total_scholarship_amount\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Total scholarship amount\"}},\"color\":{\"field\":\"department_name\",\"type\":\"nominal\",\"legend\":{\"title\":\"Department\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic year\"},{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"total_scholarship_amount\",\"type\":\"quantitative\",\"title\":\"Total scholarship amount\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"academic_year is treated as ordinal/nominal (string) in the visualization — if academic_year is a true temporal value (or should be normalized), consider using a temporal axis or normalizing the field first.\",\"If there are ties (RANK() used in SQL), the chart will render multiple bars for the same academic_year (grouped by color) — confirm this grouped-bar behavior matches the desired presentation (vs. e.g., a single label or stacked representation).\",\"Metadata rowCount is 4 but the provided sample contains 2 rows — minor inconsistency in metadata.sample vs metadata.rowCount.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771846920886}},\"input\":{\"question\":\"Which department received the most total scholarship money each academic year?\"},\"result\":{\"sql\":\"WITH dept_total AS (\\n  SELECT\\n    sch.academic_year AS academic_year,\\n    d.name AS department_name,\\n    SUM(sch.amount) AS total_scholarship_amount\\n  FROM public.scholarships AS sch\\n  JOIN public.students AS stu ON sch.student_id = stu.id\\n  JOIN public.departments AS d ON stu.department_id = d.id\\n  WHERE sch.amount IS NOT NULL\\n  GROUP BY sch.academic_year, d.name\\n)\\nSELECT\\n  academic_year,\\n  department_name,\\n  total_scholarship_amount\\nFROM (\\n  SELECT\\n    academic_year,\\n    department_name,\\n    total_scholarship_amount,\\n    RANK() OVER (PARTITION BY academic_year ORDER BY total_scholarship_amount DESC) AS dept_rank\\n  FROM dept_total\\n) AS ranked\\nWHERE dept_rank = 1\\nORDER BY academic_year ASC, department_name ASC;\",\"data\":[{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"total_scholarship_amount\":1500},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"total_scholarship_amount\":4500},{\"academic_year\":\"2021/2022\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"total_scholarship_amount\":2000},{\"academic_year\":\"2023/2024\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_scholarship_amount\":12000}],\"metadata\":{\"columns\":[\"academic_year\",\"department_name\",\"total_scholarship_amount\"],\"rowCount\":4,\"sample\":[{\"academic_year\":\"2019/2020\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"total_scholarship_amount\":1500},{\"academic_year\":\"2020/2021\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"total_scholarship_amount\":4500}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Top scholarship-recipient department by academic year (total amount)\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"cornerRadiusEnd\":3},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Academic year\"},\"sort\":{\"field\":\"academic_year\",\"order\":\"ascending\"}},\"y\":{\"field\":\"total_scholarship_amount\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Total scholarship amount\"}},\"color\":{\"field\":\"department_name\",\"type\":\"nominal\",\"legend\":{\"title\":\"Department\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic year\"},{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"total_scholarship_amount\",\"type\":\"quantitative\",\"title\":\"Total scholarship amount\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"academic_year is treated as ordinal/nominal (string) in the visualization — if academic_year is a true temporal value (or should be normalized), consider using a temporal axis or normalizing the field first.\",\"If there are ties (RANK() used in SQL), the chart will render multiple bars for the same academic_year (grouped by color) — confirm this grouped-bar behavior matches the desired presentation (vs. e.g., a single label or stacked representation).\",\"Metadata rowCount is 4 but the provided sample contains 2 rows — minor inconsistency in metadata.sample vs metadata.rowCount.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"beac33965cc48c5e71f38fcb332dc2b5\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/highest-scholarship-departments-per-year/run-0001/run.json",
+    "queryPath": "runs/highest-scholarship-departments-per-year/run-0001/query.sql",
+    "vegaRawPath": "runs/highest-scholarship-departments-per-year/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/highest-scholarship-departments-per-year/run-0001/vega.resolved.json",
+    "imagePath": "runs/highest-scholarship-departments-per-year/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:42:01.306Z",
+  "traceId": "beac33965cc48c5e71f38fcb332dc2b5",
+  "success": true,
+  "durationMs": 89549,
+  "resultRaw": {
+    "data": [
+      {
+        "academic_year": "2019/2020",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "total_scholarship_amount": 1500
+      },
+      {
+        "academic_year": "2020/2021",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "total_scholarship_amount": 4500
+      },
+      {
+        "academic_year": "2021/2022",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "total_scholarship_amount": 2000
+      },
+      {
+        "academic_year": "2023/2024",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "total_scholarship_amount": 12000
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Top scholarship-recipient department by academic year (total amount)",
+      "width": 700,
+      "height": 400,
+      "mark": {
+        "type": "bar",
+        "cornerRadiusEnd": 3
+      },
+      "encoding": {
+        "x": {
+          "field": "academic_year",
+          "type": "ordinal",
+          "axis": {
+            "title": "Academic year"
+          },
+          "sort": {
+            "field": "academic_year",
+            "order": "ascending"
+          }
+        },
+        "y": {
+          "field": "total_scholarship_amount",
+          "type": "quantitative",
+          "axis": {
+            "title": "Total scholarship amount"
+          }
+        },
+        "color": {
+          "field": "department_name",
+          "type": "nominal",
+          "legend": {
+            "title": "Department"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "academic_year",
+            "type": "nominal",
+            "title": "Academic year"
+          },
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "total_scholarship_amount",
+            "type": "quantitative",
+            "title": "Total scholarship amount"
+          }
+        ]
+      }
+    },
+    "sql": "WITH dept_total AS (\n  SELECT\n    sch.academic_year AS academic_year,\n    d.name AS department_name,\n    SUM(sch.amount) AS total_scholarship_amount\n  FROM public.scholarships AS sch\n  JOIN public.students AS stu ON sch.student_id = stu.id\n  JOIN public.departments AS d ON stu.department_id = d.id\n  WHERE sch.amount IS NOT NULL\n  GROUP BY sch.academic_year, d.name\n)\nSELECT\n  academic_year,\n  department_name,\n  total_scholarship_amount\nFROM (\n  SELECT\n    academic_year,\n    department_name,\n    total_scholarship_amount,\n    RANK() OVER (PARTITION BY academic_year ORDER BY total_scholarship_amount DESC) AS dept_rank\n  FROM dept_total\n) AS ranked\nWHERE dept_rank = 1\nORDER BY academic_year ASC, department_name ASC;",
+    "metadata": {
+      "columns": [
+        "academic_year",
+        "department_name",
+        "total_scholarship_amount"
+      ],
+      "rowCount": 4,
+      "sample": [
+        {
+          "academic_year": "2019/2020",
+          "department_name": "Wydział Inżynierii Produkcji",
+          "total_scholarship_amount": 1500
+        },
+        {
+          "academic_year": "2020/2021",
+          "department_name": "Wydział Inżynierii Produkcji",
+          "total_scholarship_amount": 4500
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "academic_year is treated as ordinal/nominal (string) in the visualization — if academic_year is a true temporal value (or should be normalized), consider using a temporal axis or normalizing the field first.",
+        "If there are ties (RANK() used in SQL), the chart will render multiple bars for the same academic_year (grouped by color) — confirm this grouped-bar behavior matches the desired presentation (vs. e.g., a single label or stacked representation).",
+        "Metadata rowCount is 4 but the provided sample contains 2 rows — minor inconsistency in metadata.sample vs metadata.rowCount."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "academic_year": "2019/2020",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "total_scholarship_amount": 1500
+      },
+      {
+        "academic_year": "2020/2021",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "total_scholarship_amount": 4500
+      },
+      {
+        "academic_year": "2021/2022",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "total_scholarship_amount": 2000
+      },
+      {
+        "academic_year": "2023/2024",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "total_scholarship_amount": 12000
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Top scholarship-recipient department by academic year (total amount)",
+      "width": 700,
+      "height": 400,
+      "mark": {
+        "type": "bar",
+        "cornerRadiusEnd": 3
+      },
+      "encoding": {
+        "x": {
+          "field": "academic_year",
+          "type": "ordinal",
+          "axis": {
+            "title": "Academic year"
+          },
+          "sort": {
+            "field": "academic_year",
+            "order": "ascending"
+          }
+        },
+        "y": {
+          "field": "total_scholarship_amount",
+          "type": "quantitative",
+          "axis": {
+            "title": "Total scholarship amount"
+          }
+        },
+        "color": {
+          "field": "department_name",
+          "type": "nominal",
+          "legend": {
+            "title": "Department"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "academic_year",
+            "type": "nominal",
+            "title": "Academic year"
+          },
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "total_scholarship_amount",
+            "type": "quantitative",
+            "title": "Total scholarship amount"
+          }
+        ]
+      }
+    },
+    "sql": "WITH dept_total AS (\n  SELECT\n    sch.academic_year AS academic_year,\n    d.name AS department_name,\n    SUM(sch.amount) AS total_scholarship_amount\n  FROM public.scholarships AS sch\n  JOIN public.students AS stu ON sch.student_id = stu.id\n  JOIN public.departments AS d ON stu.department_id = d.id\n  WHERE sch.amount IS NOT NULL\n  GROUP BY sch.academic_year, d.name\n)\nSELECT\n  academic_year,\n  department_name,\n  total_scholarship_amount\nFROM (\n  SELECT\n    academic_year,\n    department_name,\n    total_scholarship_amount,\n    RANK() OVER (PARTITION BY academic_year ORDER BY total_scholarship_amount DESC) AS dept_rank\n  FROM dept_total\n) AS ranked\nWHERE dept_rank = 1\nORDER BY academic_year ASC, department_name ASC;",
+    "metadata": {
+      "columns": [
+        "academic_year",
+        "department_name",
+        "total_scholarship_amount"
+      ],
+      "rowCount": 4,
+      "sample": [
+        {
+          "academic_year": "2019/2020",
+          "department_name": "Wydział Inżynierii Produkcji",
+          "total_scholarship_amount": 1500
+        },
+        {
+          "academic_year": "2020/2021",
+          "department_name": "Wydział Inżynierii Produkcji",
+          "total_scholarship_amount": 4500
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "academic_year is treated as ordinal/nominal (string) in the visualization — if academic_year is a true temporal value (or should be normalized), consider using a temporal axis or normalizing the field first.",
+        "If there are ties (RANK() used in SQL), the chart will render multiple bars for the same academic_year (grouped by color) — confirm this grouped-bar behavior matches the desired presentation (vs. e.g., a single label or stacked representation).",
+        "Metadata rowCount is 4 but the provided sample contains 2 rows — minor inconsistency in metadata.sample vs metadata.rowCount."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:42:01.306Z",
+    "traceId": "beac33965cc48c5e71f38fcb332dc2b5",
+    "attempts": 5,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 28366,
+      "outputTokens": 5776,
+      "totalTokens": 34142,
+      "cachedInputTokens": 3840,
+      "reasoningTokens": 3776,
+      "costUsd": 0.0186435
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 28366,
+        "outputTokens": 5776,
+        "totalTokens": 34142,
+        "cachedInputTokens": 3840,
+        "reasoningTokens": 3776,
+        "costUsd": 0.0186435
+      }
+    ],
+    "warnings": []
+  }
+}

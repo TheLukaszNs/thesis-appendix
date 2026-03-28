@@ -1,0 +1,518 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "scholarship-amount-distribution",
+  "caseDirectory": "scholarship-amount-distribution",
+  "repeatIndex": 1,
+  "prompt": "Show the distribution of individual scholarship amounts",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the distribution of individual scholarship amounts"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:46:33.212Z",
+    "endedAtUtc": "2026-02-22T23:47:45.692Z",
+    "durationMs": 72480
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "18676",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:47:45 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show the distribution of individual scholarship amounts\"},\"sql\":{\"payload\":{\"question\":\"Show the distribution of individual scholarship amounts\"},\"startedAt\":1771803993243,\"status\":\"success\",\"output\":{\"reasoning\":\"Use width_bucket to split scholarship amounts into 10 deterministic buckets, count entries per bucket and compute percent and cumulative percent. Verified table public.scholarships and column amount exist.\",\"sql\":\"WITH stats AS (\\n  SELECT\\n    MIN(amount) AS min_amount,\\n    MAX(amount) AS max_amount,\\n    COUNT(*) AS total_count\\n  FROM public.scholarships\\n), buckets AS (\\n  SELECT\\n    width_bucket(s.amount, st.min_amount, st.max_amount, 10) AS bucket\\n  FROM public.scholarships s\\n  CROSS JOIN stats st\\n), grp AS (\\n  SELECT\\n    bucket AS bucket_number,\\n    COUNT(*) AS cnt\\n  FROM buckets\\n  GROUP BY bucket\\n)\\nSELECT\\n  g.bucket_number AS bucket_number,\\n  CASE\\n    WHEN g.bucket_number = 0 THEN NULL\\n    ELSE ROUND((st.min_amount + ((g.bucket_number - 1)::numeric / 10) * (st.max_amount - st.min_amount))::numeric, 2)\\n  END AS bucket_min,\\n  CASE\\n    WHEN g.bucket_number = 0 THEN NULL\\n    ELSE ROUND((st.min_amount + (g.bucket_number::numeric / 10) * (st.max_amount - st.min_amount))::numeric, 2)\\n  END AS bucket_max,\\n  g.cnt AS count,\\n  ROUND(100.0 * g.cnt / st.total_count::numeric, 2) AS pct,\\n  ROUND(100.0 * SUM(g.cnt) OVER (ORDER BY g.bucket_number) / st.total_count::numeric, 2) AS cumulative_pct\\nFROM grp g\\nCROSS JOIN stats st\\nORDER BY g.bucket_number;\",\"assumptions\":[\"There are no NULL values in scholarships.amount (column is NOT NULL per schema).\",\"Distribution bucket count is 10 (chosen for a readable histogram).\",\"Table examined is public.scholarships and column amount is numeric (confirmed via schema inspection).\"]},\"endedAt\":1771804025398},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH stats AS (\\n  SELECT\\n    MIN(amount) AS min_amount,\\n    MAX(amount) AS max_amount,\\n    COUNT(*) AS total_count\\n  FROM public.scholarships\\n), buckets AS (\\n  SELECT\\n    width_bucket(s.amount, st.min_amount, st.max_amount, 10) AS bucket\\n  FROM public.scholarships s\\n  CROSS JOIN stats st\\n), grp AS (\\n  SELECT\\n    bucket AS bucket_number,\\n    COUNT(*) AS cnt\\n  FROM buckets\\n  GROUP BY bucket\\n)\\nSELECT\\n  g.bucket_number AS bucket_number,\\n  CASE\\n    WHEN g.bucket_number = 0 THEN NULL\\n    ELSE ROUND((st.min_amount + ((g.bucket_number - 1)::numeric / 10) * (st.max_amount - st.min_amount))::numeric, 2)\\n  END AS bucket_min,\\n  CASE\\n    WHEN g.bucket_number = 0 THEN NULL\\n    ELSE ROUND((st.min_amount + (g.bucket_number::numeric / 10) * (st.max_amount - st.min_amount))::numeric, 2)\\n  END AS bucket_max,\\n  g.cnt AS count,\\n  ROUND(100.0 * g.cnt / st.total_count::numeric, 2) AS pct,\\n  ROUND(100.0 * SUM(g.cnt) OVER (ORDER BY g.bucket_number) / st.total_count::numeric, 2) AS cumulative_pct\\nFROM grp g\\nCROSS JOIN stats st\\nORDER BY g.bucket_number;\"},\"startedAt\":1771804025402,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH stats AS (\\n  SELECT\\n    MIN(amount) AS min_amount,\\n    MAX(amount) AS max_amount,\\n    COUNT(*) AS total_count\\n  FROM public.scholarships\\n), buckets AS (\\n  SELECT\\n    width_bucket(s.amount, st.min_amount, st.max_amount, 10) AS bucket\\n  FROM public.scholarships s\\n  CROSS JOIN stats st\\n), grp AS (\\n  SELECT\\n    bucket AS bucket_number,\\n    COUNT(*) AS cnt\\n  FROM buckets\\n  GROUP BY bucket\\n)\\nSELECT\\n  g.bucket_number AS bucket_number,\\n  CASE\\n    WHEN g.bucket_number = 0 THEN NULL\\n    ELSE ROUND((st.min_amount + ((g.bucket_number - 1)::numeric / 10) * (st.max_amount - st.min_amount))::numeric, 2)\\n  END AS bucket_min,\\n  CASE\\n    WHEN g.bucket_number = 0 THEN NULL\\n    ELSE ROUND((st.min_amount + (g.bucket_number::numeric / 10) * (st.max_amount - st.min_amount))::numeric, 2)\\n  END AS bucket_max,\\n  g.cnt AS count,\\n  ROUND(100.0 * g.cnt / st.total_count::numeric, 2) AS pct,\\n  ROUND(100.0 * SUM(g.cnt) OVER (ORDER BY g.bucket_number) / st.total_count::numeric, 2) AS cumulative_pct\\nFROM grp g\\nCROSS JOIN stats st\\nORDER BY g.bucket_number\",\"metadata\":{\"columns\":[\"pct\",\"count\",\"bucket_max\",\"bucket_min\",\"bucket_number\",\"cumulative_pct\"],\"rowCount\":7,\"sample\":[{\"pct\":10,\"count\":1,\"bucket_max\":1400,\"bucket_min\":1000,\"bucket_number\":1,\"cumulative_pct\":10},{\"pct\":20,\"count\":2,\"bucket_max\":1800,\"bucket_min\":1400,\"bucket_number\":2,\"cumulative_pct\":30}]},\"data\":[{\"pct\":10,\"count\":1,\"bucket_max\":1400,\"bucket_min\":1000,\"bucket_number\":1,\"cumulative_pct\":10},{\"pct\":20,\"count\":2,\"bucket_max\":1800,\"bucket_min\":1400,\"bucket_number\":2,\"cumulative_pct\":30},{\"pct\":20,\"count\":2,\"bucket_max\":2200,\"bucket_min\":1800,\"bucket_number\":3,\"cumulative_pct\":50},{\"pct\":10,\"count\":1,\"bucket_max\":2600,\"bucket_min\":2200,\"bucket_number\":4,\"cumulative_pct\":60},{\"pct\":20,\"count\":2,\"bucket_max\":3400,\"bucket_min\":3000,\"bucket_number\":6,\"cumulative_pct\":80},{\"pct\":10,\"count\":1,\"bucket_max\":4200,\"bucket_min\":3800,\"bucket_number\":8,\"cumulative_pct\":90},{\"pct\":10,\"count\":1,\"bucket_max\":5400,\"bucket_min\":5000,\"bucket_number\":11,\"cumulative_pct\":100}]},\"endedAt\":1771804025434},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"WITH stats AS (\\n  SELECT\\n    MIN(amount) AS min_amount,\\n    MAX(amount) AS max_amount,\\n    COUNT(*) AS total_count\\n  FROM public.scholarships\\n), buckets AS (\\n  SELECT\\n    width_bucket(s.amount, st.min_amount, st.max_amount, 10) AS bucket\\n  FROM public.scholarships s\\n  CROSS JOIN stats st\\n), grp AS (\\n  SELECT\\n    bucket AS bucket_number,\\n    COUNT(*) AS cnt\\n  FROM buckets\\n  GROUP BY bucket\\n)\\nSELECT\\n  g.bucket_number AS bucket_number,\\n  CASE\\n    WHEN g.bucket_number = 0 THEN NULL\\n    ELSE ROUND((st.min_amount + ((g.bucket_number - 1)::numeric / 10) * (st.max_amount - st.min_amount))::numeric, 2)\\n  END AS bucket_min,\\n  CASE\\n    WHEN g.bucket_number = 0 THEN NULL\\n    ELSE ROUND((st.min_amount + (g.bucket_number::numeric / 10) * (st.max_amount - st.min_amount))::numeric, 2)\\n  END AS bucket_max,\\n  g.cnt AS count,\\n  ROUND(100.0 * g.cnt / st.total_count::numeric, 2) AS pct,\\n  ROUND(100.0 * SUM(g.cnt) OVER (ORDER BY g.bucket_number) / st.total_count::numeric, 2) AS cumulative_pct\\nFROM grp g\\nCROSS JOIN stats st\\nORDER BY g.bucket_number\",\"metadata\":{\"columns\":[\"pct\",\"count\",\"bucket_max\",\"bucket_min\",\"bucket_number\",\"cumulative_pct\"],\"rowCount\":7,\"sample\":[{\"pct\":10,\"count\":1,\"bucket_max\":1400,\"bucket_min\":1000,\"bucket_number\":1,\"cumulative_pct\":10},{\"pct\":20,\"count\":2,\"bucket_max\":1800,\"bucket_min\":1400,\"bucket_number\":2,\"cumulative_pct\":30}]},\"data\":[{\"pct\":10,\"count\":1,\"bucket_max\":1400,\"bucket_min\":1000,\"bucket_number\":1,\"cumulative_pct\":10},{\"pct\":20,\"count\":2,\"bucket_max\":1800,\"bucket_min\":1400,\"bucket_number\":2,\"cumulative_pct\":30},{\"pct\":20,\"count\":2,\"bucket_max\":2200,\"bucket_min\":1800,\"bucket_number\":3,\"cumulative_pct\":50},{\"pct\":10,\"count\":1,\"bucket_max\":2600,\"bucket_min\":2200,\"bucket_number\":4,\"cumulative_pct\":60},{\"pct\":20,\"count\":2,\"bucket_max\":3400,\"bucket_min\":3000,\"bucket_number\":6,\"cumulative_pct\":80},{\"pct\":10,\"count\":1,\"bucket_max\":4200,\"bucket_min\":3800,\"bucket_number\":8,\"cumulative_pct\":90},{\"pct\":10,\"count\":1,\"bucket_max\":5400,\"bucket_min\":5000,\"bucket_number\":11,\"cumulative_pct\":100}]},\"startedAt\":1771804025438,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Distribution of Individual Scholarship Amounts (bucketed)\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":400,\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":2},\"encoding\":{\"x\":{\"field\":\"bucket_number\",\"type\":\"ordinal\",\"title\":\"Bucket number (lower to higher amounts)\"},\"y\":{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"},\"tooltip\":[{\"field\":\"bucket_min\",\"type\":\"quantitative\",\"title\":\"Bucket min\"},{\"field\":\"bucket_max\",\"type\":\"quantitative\",\"title\":\"Bucket max\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"pct\",\"type\":\"quantitative\",\"title\":\"Pct of total (%)\"},{\"field\":\"cumulative_pct\",\"type\":\"quantitative\",\"title\":\"Cumulative pct (%)\"}],\"color\":{\"value\":\"#4C78A8\"}}},{\"mark\":{\"type\":\"line\",\"point\":true,\"strokeWidth\":2,\"clip\":true},\"encoding\":{\"x\":{\"field\":\"bucket_number\",\"type\":\"ordinal\"},\"y\":{\"field\":\"cumulative_pct\",\"type\":\"quantitative\",\"title\":\"Cumulative %\"},\"tooltip\":[{\"field\":\"bucket_min\",\"type\":\"quantitative\",\"title\":\"Bucket min\"},{\"field\":\"bucket_max\",\"type\":\"quantitative\",\"title\":\"Bucket max\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"pct\",\"type\":\"quantitative\",\"title\":\"Pct of total (%)\"},{\"field\":\"cumulative_pct\",\"type\":\"quantitative\",\"title\":\"Cumulative pct (%)\"}],\"color\":{\"value\":\"#E45756\"}}}],\"resolve\":{\"scale\":{\"y\":\"independent\"}}},\"reasoning\":\"Bar chart shows bucketed counts of scholarship amounts (x = bucket number). A line overlays the cumulative percentage to help see how scholarship amounts accumulate across buckets. Tooltips include the bucket min/max and percentage details.\"},\"endedAt\":1771804065673},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Distribution of Individual Scholarship Amounts (bucketed)\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":400,\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":2},\"encoding\":{\"x\":{\"field\":\"bucket_number\",\"type\":\"ordinal\",\"title\":\"Bucket number (lower to higher amounts)\"},\"y\":{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"},\"tooltip\":[{\"field\":\"bucket_min\",\"type\":\"quantitative\",\"title\":\"Bucket min\"},{\"field\":\"bucket_max\",\"type\":\"quantitative\",\"title\":\"Bucket max\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"pct\",\"type\":\"quantitative\",\"title\":\"Pct of total (%)\"},{\"field\":\"cumulative_pct\",\"type\":\"quantitative\",\"title\":\"Cumulative pct (%)\"}],\"color\":{\"value\":\"#4C78A8\"}}},{\"mark\":{\"type\":\"line\",\"point\":true,\"strokeWidth\":2,\"clip\":true},\"encoding\":{\"x\":{\"field\":\"bucket_number\",\"type\":\"ordinal\"},\"y\":{\"field\":\"cumulative_pct\",\"type\":\"quantitative\",\"title\":\"Cumulative %\"},\"tooltip\":[{\"field\":\"bucket_min\",\"type\":\"quantitative\",\"title\":\"Bucket min\"},{\"field\":\"bucket_max\",\"type\":\"quantitative\",\"title\":\"Bucket max\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"pct\",\"type\":\"quantitative\",\"title\":\"Pct of total (%)\"},{\"field\":\"cumulative_pct\",\"type\":\"quantitative\",\"title\":\"Cumulative pct (%)\"}],\"color\":{\"value\":\"#E45756\"}}}],\"resolve\":{\"scale\":{\"y\":\"independent\"}}},\"reasoning\":\"Bar chart shows bucketed counts of scholarship amounts (x = bucket number). A line overlays the cumulative percentage to help see how scholarship amounts accumulate across buckets. Tooltips include the bucket min/max and percentage details.\"},\"startedAt\":1771804065678,\"status\":\"success\",\"output\":{\"sql\":\"WITH stats AS (\\n  SELECT\\n    MIN(amount) AS min_amount,\\n    MAX(amount) AS max_amount,\\n    COUNT(*) AS total_count\\n  FROM public.scholarships\\n), buckets AS (\\n  SELECT\\n    width_bucket(s.amount, st.min_amount, st.max_amount, 10) AS bucket\\n  FROM public.scholarships s\\n  CROSS JOIN stats st\\n), grp AS (\\n  SELECT\\n    bucket AS bucket_number,\\n    COUNT(*) AS cnt\\n  FROM buckets\\n  GROUP BY bucket\\n)\\nSELECT\\n  g.bucket_number AS bucket_number,\\n  CASE\\n    WHEN g.bucket_number = 0 THEN NULL\\n    ELSE ROUND((st.min_amount + ((g.bucket_number - 1)::numeric / 10) * (st.max_amount - st.min_amount))::numeric, 2)\\n  END AS bucket_min,\\n  CASE\\n    WHEN g.bucket_number = 0 THEN NULL\\n    ELSE ROUND((st.min_amount + (g.bucket_number::numeric / 10) * (st.max_amount - st.min_amount))::numeric, 2)\\n  END AS bucket_max,\\n  g.cnt AS count,\\n  ROUND(100.0 * g.cnt / st.total_count::numeric, 2) AS pct,\\n  ROUND(100.0 * SUM(g.cnt) OVER (ORDER BY g.bucket_number) / st.total_count::numeric, 2) AS cumulative_pct\\nFROM grp g\\nCROSS JOIN stats st\\nORDER BY g.bucket_number;\",\"data\":[{\"pct\":10,\"count\":1,\"bucket_max\":1400,\"bucket_min\":1000,\"bucket_number\":1,\"cumulative_pct\":10},{\"pct\":20,\"count\":2,\"bucket_max\":1800,\"bucket_min\":1400,\"bucket_number\":2,\"cumulative_pct\":30},{\"pct\":20,\"count\":2,\"bucket_max\":2200,\"bucket_min\":1800,\"bucket_number\":3,\"cumulative_pct\":50},{\"pct\":10,\"count\":1,\"bucket_max\":2600,\"bucket_min\":2200,\"bucket_number\":4,\"cumulative_pct\":60},{\"pct\":20,\"count\":2,\"bucket_max\":3400,\"bucket_min\":3000,\"bucket_number\":6,\"cumulative_pct\":80},{\"pct\":10,\"count\":1,\"bucket_max\":4200,\"bucket_min\":3800,\"bucket_number\":8,\"cumulative_pct\":90},{\"pct\":10,\"count\":1,\"bucket_max\":5400,\"bucket_min\":5000,\"bucket_number\":11,\"cumulative_pct\":100}],\"metadata\":{\"columns\":[\"pct\",\"count\",\"bucket_max\",\"bucket_min\",\"bucket_number\",\"cumulative_pct\"],\"rowCount\":7,\"sample\":[{\"pct\":10,\"count\":1,\"bucket_max\":1400,\"bucket_min\":1000,\"bucket_number\":1,\"cumulative_pct\":10},{\"pct\":20,\"count\":2,\"bucket_max\":1800,\"bucket_min\":1400,\"bucket_number\":2,\"cumulative_pct\":30}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Distribution of Individual Scholarship Amounts (bucketed)\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":400,\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":2},\"encoding\":{\"x\":{\"field\":\"bucket_number\",\"type\":\"ordinal\",\"title\":\"Bucket number (lower to higher amounts)\"},\"y\":{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"},\"tooltip\":[{\"field\":\"bucket_min\",\"type\":\"quantitative\",\"title\":\"Bucket min\"},{\"field\":\"bucket_max\",\"type\":\"quantitative\",\"title\":\"Bucket max\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"pct\",\"type\":\"quantitative\",\"title\":\"Pct of total (%)\"},{\"field\":\"cumulative_pct\",\"type\":\"quantitative\",\"title\":\"Cumulative pct (%)\"}],\"color\":{\"value\":\"#4C78A8\"}}},{\"mark\":{\"type\":\"line\",\"point\":true,\"strokeWidth\":2,\"clip\":true},\"encoding\":{\"x\":{\"field\":\"bucket_number\",\"type\":\"ordinal\"},\"y\":{\"field\":\"cumulative_pct\",\"type\":\"quantitative\",\"title\":\"Cumulative %\"},\"tooltip\":[{\"field\":\"bucket_min\",\"type\":\"quantitative\",\"title\":\"Bucket min\"},{\"field\":\"bucket_max\",\"type\":\"quantitative\",\"title\":\"Bucket max\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"pct\",\"type\":\"quantitative\",\"title\":\"Pct of total (%)\"},{\"field\":\"cumulative_pct\",\"type\":\"quantitative\",\"title\":\"Cumulative pct (%)\"}],\"color\":{\"value\":\"#E45756\"}}}],\"resolve\":{\"scale\":{\"y\":\"independent\"}}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"]}},\"endedAt\":1771804065680}},\"input\":{\"question\":\"Show the distribution of individual scholarship amounts\"},\"result\":{\"sql\":\"WITH stats AS (\\n  SELECT\\n    MIN(amount) AS min_amount,\\n    MAX(amount) AS max_amount,\\n    COUNT(*) AS total_count\\n  FROM public.scholarships\\n), buckets AS (\\n  SELECT\\n    width_bucket(s.amount, st.min_amount, st.max_amount, 10) AS bucket\\n  FROM public.scholarships s\\n  CROSS JOIN stats st\\n), grp AS (\\n  SELECT\\n    bucket AS bucket_number,\\n    COUNT(*) AS cnt\\n  FROM buckets\\n  GROUP BY bucket\\n)\\nSELECT\\n  g.bucket_number AS bucket_number,\\n  CASE\\n    WHEN g.bucket_number = 0 THEN NULL\\n    ELSE ROUND((st.min_amount + ((g.bucket_number - 1)::numeric / 10) * (st.max_amount - st.min_amount))::numeric, 2)\\n  END AS bucket_min,\\n  CASE\\n    WHEN g.bucket_number = 0 THEN NULL\\n    ELSE ROUND((st.min_amount + (g.bucket_number::numeric / 10) * (st.max_amount - st.min_amount))::numeric, 2)\\n  END AS bucket_max,\\n  g.cnt AS count,\\n  ROUND(100.0 * g.cnt / st.total_count::numeric, 2) AS pct,\\n  ROUND(100.0 * SUM(g.cnt) OVER (ORDER BY g.bucket_number) / st.total_count::numeric, 2) AS cumulative_pct\\nFROM grp g\\nCROSS JOIN stats st\\nORDER BY g.bucket_number;\",\"data\":[{\"pct\":10,\"count\":1,\"bucket_max\":1400,\"bucket_min\":1000,\"bucket_number\":1,\"cumulative_pct\":10},{\"pct\":20,\"count\":2,\"bucket_max\":1800,\"bucket_min\":1400,\"bucket_number\":2,\"cumulative_pct\":30},{\"pct\":20,\"count\":2,\"bucket_max\":2200,\"bucket_min\":1800,\"bucket_number\":3,\"cumulative_pct\":50},{\"pct\":10,\"count\":1,\"bucket_max\":2600,\"bucket_min\":2200,\"bucket_number\":4,\"cumulative_pct\":60},{\"pct\":20,\"count\":2,\"bucket_max\":3400,\"bucket_min\":3000,\"bucket_number\":6,\"cumulative_pct\":80},{\"pct\":10,\"count\":1,\"bucket_max\":4200,\"bucket_min\":3800,\"bucket_number\":8,\"cumulative_pct\":90},{\"pct\":10,\"count\":1,\"bucket_max\":5400,\"bucket_min\":5000,\"bucket_number\":11,\"cumulative_pct\":100}],\"metadata\":{\"columns\":[\"pct\",\"count\",\"bucket_max\",\"bucket_min\",\"bucket_number\",\"cumulative_pct\"],\"rowCount\":7,\"sample\":[{\"pct\":10,\"count\":1,\"bucket_max\":1400,\"bucket_min\":1000,\"bucket_number\":1,\"cumulative_pct\":10},{\"pct\":20,\"count\":2,\"bucket_max\":1800,\"bucket_min\":1400,\"bucket_number\":2,\"cumulative_pct\":30}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Distribution of Individual Scholarship Amounts (bucketed)\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":400,\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":2},\"encoding\":{\"x\":{\"field\":\"bucket_number\",\"type\":\"ordinal\",\"title\":\"Bucket number (lower to higher amounts)\"},\"y\":{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"},\"tooltip\":[{\"field\":\"bucket_min\",\"type\":\"quantitative\",\"title\":\"Bucket min\"},{\"field\":\"bucket_max\",\"type\":\"quantitative\",\"title\":\"Bucket max\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"pct\",\"type\":\"quantitative\",\"title\":\"Pct of total (%)\"},{\"field\":\"cumulative_pct\",\"type\":\"quantitative\",\"title\":\"Cumulative pct (%)\"}],\"color\":{\"value\":\"#4C78A8\"}}},{\"mark\":{\"type\":\"line\",\"point\":true,\"strokeWidth\":2,\"clip\":true},\"encoding\":{\"x\":{\"field\":\"bucket_number\",\"type\":\"ordinal\"},\"y\":{\"field\":\"cumulative_pct\",\"type\":\"quantitative\",\"title\":\"Cumulative %\"},\"tooltip\":[{\"field\":\"bucket_min\",\"type\":\"quantitative\",\"title\":\"Bucket min\"},{\"field\":\"bucket_max\",\"type\":\"quantitative\",\"title\":\"Bucket max\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"pct\",\"type\":\"quantitative\",\"title\":\"Pct of total (%)\"},{\"field\":\"cumulative_pct\",\"type\":\"quantitative\",\"title\":\"Cumulative pct (%)\"}],\"color\":{\"value\":\"#E45756\"}}}],\"resolve\":{\"scale\":{\"y\":\"independent\"}}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"]}},\"traceId\":\"c566e9c52771eb9804753356d4189753\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/scholarship-amount-distribution/run-0001/run.json",
+    "queryPath": "runs/scholarship-amount-distribution/run-0001/query.sql",
+    "vegaRawPath": "runs/scholarship-amount-distribution/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/scholarship-amount-distribution/run-0001/vega.resolved.json",
+    "imagePath": "runs/scholarship-amount-distribution/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:47:46.076Z",
+  "traceId": "c566e9c52771eb9804753356d4189753",
+  "success": true,
+  "durationMs": 72864,
+  "resultRaw": {
+    "data": [
+      {
+        "pct": 10,
+        "count": 1,
+        "bucket_max": 1400,
+        "bucket_min": 1000,
+        "bucket_number": 1,
+        "cumulative_pct": 10
+      },
+      {
+        "pct": 20,
+        "count": 2,
+        "bucket_max": 1800,
+        "bucket_min": 1400,
+        "bucket_number": 2,
+        "cumulative_pct": 30
+      },
+      {
+        "pct": 20,
+        "count": 2,
+        "bucket_max": 2200,
+        "bucket_min": 1800,
+        "bucket_number": 3,
+        "cumulative_pct": 50
+      },
+      {
+        "pct": 10,
+        "count": 1,
+        "bucket_max": 2600,
+        "bucket_min": 2200,
+        "bucket_number": 4,
+        "cumulative_pct": 60
+      },
+      {
+        "pct": 20,
+        "count": 2,
+        "bucket_max": 3400,
+        "bucket_min": 3000,
+        "bucket_number": 6,
+        "cumulative_pct": 80
+      },
+      {
+        "pct": 10,
+        "count": 1,
+        "bucket_max": 4200,
+        "bucket_min": 3800,
+        "bucket_number": 8,
+        "cumulative_pct": 90
+      },
+      {
+        "pct": 10,
+        "count": 1,
+        "bucket_max": 5400,
+        "bucket_min": 5000,
+        "bucket_number": 11,
+        "cumulative_pct": 100
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Distribution of Individual Scholarship Amounts (bucketed)",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 700,
+      "height": 400,
+      "layer": [
+        {
+          "mark": {
+            "type": "bar",
+            "cornerRadius": 2
+          },
+          "encoding": {
+            "x": {
+              "field": "bucket_number",
+              "type": "ordinal",
+              "title": "Bucket number (lower to higher amounts)"
+            },
+            "y": {
+              "field": "count",
+              "type": "quantitative",
+              "title": "Count"
+            },
+            "tooltip": [
+              {
+                "field": "bucket_min",
+                "type": "quantitative",
+                "title": "Bucket min"
+              },
+              {
+                "field": "bucket_max",
+                "type": "quantitative",
+                "title": "Bucket max"
+              },
+              {
+                "field": "count",
+                "type": "quantitative",
+                "title": "Count"
+              },
+              {
+                "field": "pct",
+                "type": "quantitative",
+                "title": "Pct of total (%)"
+              },
+              {
+                "field": "cumulative_pct",
+                "type": "quantitative",
+                "title": "Cumulative pct (%)"
+              }
+            ],
+            "color": {
+              "value": "#4C78A8"
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "line",
+            "point": true,
+            "strokeWidth": 2,
+            "clip": true
+          },
+          "encoding": {
+            "x": {
+              "field": "bucket_number",
+              "type": "ordinal"
+            },
+            "y": {
+              "field": "cumulative_pct",
+              "type": "quantitative",
+              "title": "Cumulative %"
+            },
+            "tooltip": [
+              {
+                "field": "bucket_min",
+                "type": "quantitative",
+                "title": "Bucket min"
+              },
+              {
+                "field": "bucket_max",
+                "type": "quantitative",
+                "title": "Bucket max"
+              },
+              {
+                "field": "count",
+                "type": "quantitative",
+                "title": "Count"
+              },
+              {
+                "field": "pct",
+                "type": "quantitative",
+                "title": "Pct of total (%)"
+              },
+              {
+                "field": "cumulative_pct",
+                "type": "quantitative",
+                "title": "Cumulative pct (%)"
+              }
+            ],
+            "color": {
+              "value": "#E45756"
+            }
+          }
+        }
+      ],
+      "resolve": {
+        "scale": {
+          "y": "independent"
+        }
+      }
+    },
+    "sql": "WITH stats AS (\n  SELECT\n    MIN(amount) AS min_amount,\n    MAX(amount) AS max_amount,\n    COUNT(*) AS total_count\n  FROM public.scholarships\n), buckets AS (\n  SELECT\n    width_bucket(s.amount, st.min_amount, st.max_amount, 10) AS bucket\n  FROM public.scholarships s\n  CROSS JOIN stats st\n), grp AS (\n  SELECT\n    bucket AS bucket_number,\n    COUNT(*) AS cnt\n  FROM buckets\n  GROUP BY bucket\n)\nSELECT\n  g.bucket_number AS bucket_number,\n  CASE\n    WHEN g.bucket_number = 0 THEN NULL\n    ELSE ROUND((st.min_amount + ((g.bucket_number - 1)::numeric / 10) * (st.max_amount - st.min_amount))::numeric, 2)\n  END AS bucket_min,\n  CASE\n    WHEN g.bucket_number = 0 THEN NULL\n    ELSE ROUND((st.min_amount + (g.bucket_number::numeric / 10) * (st.max_amount - st.min_amount))::numeric, 2)\n  END AS bucket_max,\n  g.cnt AS count,\n  ROUND(100.0 * g.cnt / st.total_count::numeric, 2) AS pct,\n  ROUND(100.0 * SUM(g.cnt) OVER (ORDER BY g.bucket_number) / st.total_count::numeric, 2) AS cumulative_pct\nFROM grp g\nCROSS JOIN stats st\nORDER BY g.bucket_number;",
+    "metadata": {
+      "columns": [
+        "pct",
+        "count",
+        "bucket_max",
+        "bucket_min",
+        "bucket_number",
+        "cumulative_pct"
+      ],
+      "rowCount": 7,
+      "sample": [
+        {
+          "pct": 10,
+          "count": 1,
+          "bucket_max": 1400,
+          "bucket_min": 1000,
+          "bucket_number": 1,
+          "cumulative_pct": 10
+        },
+        {
+          "pct": 20,
+          "count": 2,
+          "bucket_max": 1800,
+          "bucket_min": 1400,
+          "bucket_number": 2,
+          "cumulative_pct": 30
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "pct": 10,
+        "count": 1,
+        "bucket_max": 1400,
+        "bucket_min": 1000,
+        "bucket_number": 1,
+        "cumulative_pct": 10
+      },
+      {
+        "pct": 20,
+        "count": 2,
+        "bucket_max": 1800,
+        "bucket_min": 1400,
+        "bucket_number": 2,
+        "cumulative_pct": 30
+      },
+      {
+        "pct": 20,
+        "count": 2,
+        "bucket_max": 2200,
+        "bucket_min": 1800,
+        "bucket_number": 3,
+        "cumulative_pct": 50
+      },
+      {
+        "pct": 10,
+        "count": 1,
+        "bucket_max": 2600,
+        "bucket_min": 2200,
+        "bucket_number": 4,
+        "cumulative_pct": 60
+      },
+      {
+        "pct": 20,
+        "count": 2,
+        "bucket_max": 3400,
+        "bucket_min": 3000,
+        "bucket_number": 6,
+        "cumulative_pct": 80
+      },
+      {
+        "pct": 10,
+        "count": 1,
+        "bucket_max": 4200,
+        "bucket_min": 3800,
+        "bucket_number": 8,
+        "cumulative_pct": 90
+      },
+      {
+        "pct": 10,
+        "count": 1,
+        "bucket_max": 5400,
+        "bucket_min": 5000,
+        "bucket_number": 11,
+        "cumulative_pct": 100
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Distribution of Individual Scholarship Amounts (bucketed)",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 700,
+      "height": 400,
+      "layer": [
+        {
+          "mark": {
+            "type": "bar",
+            "cornerRadius": 2
+          },
+          "encoding": {
+            "x": {
+              "field": "bucket_number",
+              "type": "ordinal",
+              "title": "Bucket number (lower to higher amounts)"
+            },
+            "y": {
+              "field": "count",
+              "type": "quantitative",
+              "title": "Count"
+            },
+            "tooltip": [
+              {
+                "field": "bucket_min",
+                "type": "quantitative",
+                "title": "Bucket min"
+              },
+              {
+                "field": "bucket_max",
+                "type": "quantitative",
+                "title": "Bucket max"
+              },
+              {
+                "field": "count",
+                "type": "quantitative",
+                "title": "Count"
+              },
+              {
+                "field": "pct",
+                "type": "quantitative",
+                "title": "Pct of total (%)"
+              },
+              {
+                "field": "cumulative_pct",
+                "type": "quantitative",
+                "title": "Cumulative pct (%)"
+              }
+            ],
+            "color": {
+              "value": "#4C78A8"
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "line",
+            "point": true,
+            "strokeWidth": 2,
+            "clip": true
+          },
+          "encoding": {
+            "x": {
+              "field": "bucket_number",
+              "type": "ordinal"
+            },
+            "y": {
+              "field": "cumulative_pct",
+              "type": "quantitative",
+              "title": "Cumulative %"
+            },
+            "tooltip": [
+              {
+                "field": "bucket_min",
+                "type": "quantitative",
+                "title": "Bucket min"
+              },
+              {
+                "field": "bucket_max",
+                "type": "quantitative",
+                "title": "Bucket max"
+              },
+              {
+                "field": "count",
+                "type": "quantitative",
+                "title": "Count"
+              },
+              {
+                "field": "pct",
+                "type": "quantitative",
+                "title": "Pct of total (%)"
+              },
+              {
+                "field": "cumulative_pct",
+                "type": "quantitative",
+                "title": "Cumulative pct (%)"
+              }
+            ],
+            "color": {
+              "value": "#E45756"
+            }
+          }
+        }
+      ],
+      "resolve": {
+        "scale": {
+          "y": "independent"
+        }
+      }
+    },
+    "sql": "WITH stats AS (\n  SELECT\n    MIN(amount) AS min_amount,\n    MAX(amount) AS max_amount,\n    COUNT(*) AS total_count\n  FROM public.scholarships\n), buckets AS (\n  SELECT\n    width_bucket(s.amount, st.min_amount, st.max_amount, 10) AS bucket\n  FROM public.scholarships s\n  CROSS JOIN stats st\n), grp AS (\n  SELECT\n    bucket AS bucket_number,\n    COUNT(*) AS cnt\n  FROM buckets\n  GROUP BY bucket\n)\nSELECT\n  g.bucket_number AS bucket_number,\n  CASE\n    WHEN g.bucket_number = 0 THEN NULL\n    ELSE ROUND((st.min_amount + ((g.bucket_number - 1)::numeric / 10) * (st.max_amount - st.min_amount))::numeric, 2)\n  END AS bucket_min,\n  CASE\n    WHEN g.bucket_number = 0 THEN NULL\n    ELSE ROUND((st.min_amount + (g.bucket_number::numeric / 10) * (st.max_amount - st.min_amount))::numeric, 2)\n  END AS bucket_max,\n  g.cnt AS count,\n  ROUND(100.0 * g.cnt / st.total_count::numeric, 2) AS pct,\n  ROUND(100.0 * SUM(g.cnt) OVER (ORDER BY g.bucket_number) / st.total_count::numeric, 2) AS cumulative_pct\nFROM grp g\nCROSS JOIN stats st\nORDER BY g.bucket_number;",
+    "metadata": {
+      "columns": [
+        "pct",
+        "count",
+        "bucket_max",
+        "bucket_min",
+        "bucket_number",
+        "cumulative_pct"
+      ],
+      "rowCount": 7,
+      "sample": [
+        {
+          "pct": 10,
+          "count": 1,
+          "bucket_max": 1400,
+          "bucket_min": 1000,
+          "bucket_number": 1,
+          "cumulative_pct": 10
+        },
+        {
+          "pct": 20,
+          "count": 2,
+          "bucket_max": 1800,
+          "bucket_min": 1400,
+          "bucket_number": 2,
+          "cumulative_pct": 30
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:47:46.076Z",
+    "traceId": "c566e9c52771eb9804753356d4189753",
+    "attempts": 6,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 6033,
+      "outputTokens": 3877,
+      "totalTokens": 9910,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2560,
+      "costUsd": 0.00926225
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 6033,
+        "outputTokens": 3877,
+        "totalTokens": 9910,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2560,
+        "costUsd": 0.00926225
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,282 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "course-evaluation-over-time",
+  "caseDirectory": "course-evaluation-over-time",
+  "repeatIndex": 1,
+  "prompt": "How has the average overall evaluation rating changed per academic year?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How has the average overall evaluation rating changed per academic year?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:14:54.728Z",
+    "endedAtUtc": "2026-02-23T14:15:26.274Z",
+    "durationMs": 31546
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "9060",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:15:26 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How has the average overall evaluation rating changed per academic year?\"},\"sql\":{\"payload\":{\"question\":\"How has the average overall evaluation rating changed per academic year?\"},\"startedAt\":1771856094737,\"status\":\"success\",\"output\":{\"reasoning\":\"The user wants to see how the average overall evaluation rating has changed per academic year. I need to join course_evaluations with enrollments and course_sections to get the academic_year, then group by academic_year and calculate the average of overall_rating. The course_sections table contains the academic_year field, and course_evaluations contains the overall_rating. I'll order by academic_year to show the trend over time.\",\"sql\":\"\\nSELECT \\n  cs.academic_year,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM course_evaluations ce\\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.academic_year\\nORDER BY cs.academic_year ASC\\n\",\"assumptions\":[\"The academic_year field in course_sections represents the academic year for each course section\",\"overall_rating is a numeric field representing the evaluation rating\",\"We are aggregating all evaluations across all courses and professors for each academic year\"]},\"endedAt\":1771856123042},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  cs.academic_year,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM course_evaluations ce\\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.academic_year\\nORDER BY cs.academic_year ASC\\n\"},\"startedAt\":1771856123049,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  cs.academic_year,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM course_evaluations ce\\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.academic_year\\nORDER BY cs.academic_year ASC\",\"metadata\":{\"columns\":[\"academic_year\",\"avg_overall_rating\"],\"rowCount\":6,\"sample\":[{\"academic_year\":\"2019/2020\",\"avg_overall_rating\":\"3.00\"},{\"academic_year\":\"2020/2021\",\"avg_overall_rating\":\"2.73\"}]},\"data\":[{\"academic_year\":\"2019/2020\",\"avg_overall_rating\":\"3.00\"},{\"academic_year\":\"2020/2021\",\"avg_overall_rating\":\"2.73\"},{\"academic_year\":\"2021/2022\",\"avg_overall_rating\":\"2.50\"},{\"academic_year\":\"2022/2023\",\"avg_overall_rating\":\"3.13\"},{\"academic_year\":\"2023/2024\",\"avg_overall_rating\":\"2.83\"},{\"academic_year\":\"2024/2025\",\"avg_overall_rating\":\"3.67\"}]},\"endedAt\":1771856123063},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  cs.academic_year,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM course_evaluations ce\\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.academic_year\\nORDER BY cs.academic_year ASC\",\"metadata\":{\"columns\":[\"academic_year\",\"avg_overall_rating\"],\"rowCount\":6,\"sample\":[{\"academic_year\":\"2019/2020\",\"avg_overall_rating\":\"3.00\"},{\"academic_year\":\"2020/2021\",\"avg_overall_rating\":\"2.73\"}]},\"data\":[{\"academic_year\":\"2019/2020\",\"avg_overall_rating\":\"3.00\"},{\"academic_year\":\"2020/2021\",\"avg_overall_rating\":\"2.73\"},{\"academic_year\":\"2021/2022\",\"avg_overall_rating\":\"2.50\"},{\"academic_year\":\"2022/2023\",\"avg_overall_rating\":\"3.13\"},{\"academic_year\":\"2023/2024\",\"avg_overall_rating\":\"2.83\"},{\"academic_year\":\"2024/2025\",\"avg_overall_rating\":\"3.67\"}]},\"startedAt\":1771856123067,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Overall Evaluation Rating by Academic Year\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"line\",\"point\":true,\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\",\"axis\":{\"labelAngle\":-45}},\"y\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"scale\":{\"domain\":[0,5]}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"format\":\".2f\"}]}},\"reasoning\":\"Line chart with points is ideal for showing trends over time (academic years). The x-axis displays academic years in chronological order, while the y-axis shows the average overall rating on a 0-5 scale. Tooltips provide precise values on hover, and the connected line makes it easy to see the trajectory of rating changes across years.\"},\"endedAt\":1771856126250},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Overall Evaluation Rating by Academic Year\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"line\",\"point\":true,\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\",\"axis\":{\"labelAngle\":-45}},\"y\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"scale\":{\"domain\":[0,5]}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"format\":\".2f\"}]}},\"reasoning\":\"Line chart with points is ideal for showing trends over time (academic years). The x-axis displays academic years in chronological order, while the y-axis shows the average overall rating on a 0-5 scale. Tooltips provide precise values on hover, and the connected line makes it easy to see the trajectory of rating changes across years.\"},\"startedAt\":1771856126255,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT \\n  cs.academic_year,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM course_evaluations ce\\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.academic_year\\nORDER BY cs.academic_year ASC\\n\",\"data\":[{\"academic_year\":\"2019/2020\",\"avg_overall_rating\":\"3.00\"},{\"academic_year\":\"2020/2021\",\"avg_overall_rating\":\"2.73\"},{\"academic_year\":\"2021/2022\",\"avg_overall_rating\":\"2.50\"},{\"academic_year\":\"2022/2023\",\"avg_overall_rating\":\"3.13\"},{\"academic_year\":\"2023/2024\",\"avg_overall_rating\":\"2.83\"},{\"academic_year\":\"2024/2025\",\"avg_overall_rating\":\"3.67\"}],\"metadata\":{\"columns\":[\"academic_year\",\"avg_overall_rating\"],\"rowCount\":6,\"sample\":[{\"academic_year\":\"2019/2020\",\"avg_overall_rating\":\"3.00\"},{\"academic_year\":\"2020/2021\",\"avg_overall_rating\":\"2.73\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Overall Evaluation Rating by Academic Year\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"line\",\"point\":true,\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\",\"axis\":{\"labelAngle\":-45}},\"y\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"scale\":{\"domain\":[0,5]}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"format\":\".2f\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771856126258}},\"input\":{\"question\":\"How has the average overall evaluation rating changed per academic year?\"},\"result\":{\"sql\":\"\\nSELECT \\n  cs.academic_year,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM course_evaluations ce\\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.academic_year\\nORDER BY cs.academic_year ASC\\n\",\"data\":[{\"academic_year\":\"2019/2020\",\"avg_overall_rating\":\"3.00\"},{\"academic_year\":\"2020/2021\",\"avg_overall_rating\":\"2.73\"},{\"academic_year\":\"2021/2022\",\"avg_overall_rating\":\"2.50\"},{\"academic_year\":\"2022/2023\",\"avg_overall_rating\":\"3.13\"},{\"academic_year\":\"2023/2024\",\"avg_overall_rating\":\"2.83\"},{\"academic_year\":\"2024/2025\",\"avg_overall_rating\":\"3.67\"}],\"metadata\":{\"columns\":[\"academic_year\",\"avg_overall_rating\"],\"rowCount\":6,\"sample\":[{\"academic_year\":\"2019/2020\",\"avg_overall_rating\":\"3.00\"},{\"academic_year\":\"2020/2021\",\"avg_overall_rating\":\"2.73\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Overall Evaluation Rating by Academic Year\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"line\",\"point\":true,\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\",\"axis\":{\"labelAngle\":-45}},\"y\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"scale\":{\"domain\":[0,5]}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"format\":\".2f\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"a5687801f376616be102cdeca7943e82\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/course-evaluation-over-time/run-0001/run.json",
+    "queryPath": "runs/course-evaluation-over-time/run-0001/query.sql",
+    "vegaRawPath": "runs/course-evaluation-over-time/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/course-evaluation-over-time/run-0001/vega.resolved.json",
+    "imagePath": "runs/course-evaluation-over-time/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:15:26.697Z",
+  "traceId": "a5687801f376616be102cdeca7943e82",
+  "success": true,
+  "durationMs": 31969,
+  "resultRaw": {
+    "data": [
+      {
+        "academic_year": "2019/2020",
+        "avg_overall_rating": "3.00"
+      },
+      {
+        "academic_year": "2020/2021",
+        "avg_overall_rating": "2.73"
+      },
+      {
+        "academic_year": "2021/2022",
+        "avg_overall_rating": "2.50"
+      },
+      {
+        "academic_year": "2022/2023",
+        "avg_overall_rating": "3.13"
+      },
+      {
+        "academic_year": "2023/2024",
+        "avg_overall_rating": "2.83"
+      },
+      {
+        "academic_year": "2024/2025",
+        "avg_overall_rating": "3.67"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Overall Evaluation Rating by Academic Year",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": {
+        "type": "line",
+        "point": true,
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "academic_year",
+          "type": "nominal",
+          "title": "Academic Year",
+          "axis": {
+            "labelAngle": -45
+          }
+        },
+        "y": {
+          "field": "avg_overall_rating",
+          "type": "quantitative",
+          "title": "Average Overall Rating",
+          "scale": {
+            "domain": [
+              0,
+              5
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "academic_year",
+            "type": "nominal",
+            "title": "Academic Year"
+          },
+          {
+            "field": "avg_overall_rating",
+            "type": "quantitative",
+            "title": "Average Overall Rating",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    "sql": "\nSELECT \n  cs.academic_year,\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\nFROM course_evaluations ce\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\nGROUP BY cs.academic_year\nORDER BY cs.academic_year ASC\n",
+    "metadata": {
+      "columns": [
+        "academic_year",
+        "avg_overall_rating"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "academic_year": "2019/2020",
+          "avg_overall_rating": "3.00"
+        },
+        {
+          "academic_year": "2020/2021",
+          "avg_overall_rating": "2.73"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "academic_year": "2019/2020",
+        "avg_overall_rating": "3.00"
+      },
+      {
+        "academic_year": "2020/2021",
+        "avg_overall_rating": "2.73"
+      },
+      {
+        "academic_year": "2021/2022",
+        "avg_overall_rating": "2.50"
+      },
+      {
+        "academic_year": "2022/2023",
+        "avg_overall_rating": "3.13"
+      },
+      {
+        "academic_year": "2023/2024",
+        "avg_overall_rating": "2.83"
+      },
+      {
+        "academic_year": "2024/2025",
+        "avg_overall_rating": "3.67"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Overall Evaluation Rating by Academic Year",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": {
+        "type": "line",
+        "point": true,
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "academic_year",
+          "type": "nominal",
+          "title": "Academic Year",
+          "axis": {
+            "labelAngle": -45
+          }
+        },
+        "y": {
+          "field": "avg_overall_rating",
+          "type": "quantitative",
+          "title": "Average Overall Rating",
+          "scale": {
+            "domain": [
+              0,
+              5
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "academic_year",
+            "type": "nominal",
+            "title": "Academic Year"
+          },
+          {
+            "field": "avg_overall_rating",
+            "type": "quantitative",
+            "title": "Average Overall Rating",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    "sql": "\nSELECT \n  cs.academic_year,\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\nFROM course_evaluations ce\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\nGROUP BY cs.academic_year\nORDER BY cs.academic_year ASC\n",
+    "metadata": {
+      "columns": [
+        "academic_year",
+        "avg_overall_rating"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "academic_year": "2019/2020",
+          "avg_overall_rating": "3.00"
+        },
+        {
+          "academic_year": "2020/2021",
+          "avg_overall_rating": "2.73"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.297Z",
+    "traceId": "a5687801f376616be102cdeca7943e82",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 18326,
+      "outputTokens": 949,
+      "totalTokens": 19275,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.023071
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 18326,
+        "outputTokens": 949,
+        "totalTokens": 19275,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.023071
+      }
+    ],
+    "warnings": []
+  }
+}

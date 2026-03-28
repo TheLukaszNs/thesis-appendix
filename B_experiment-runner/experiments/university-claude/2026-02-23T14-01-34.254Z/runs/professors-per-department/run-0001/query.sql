@@ -1,0 +1,1 @@
+SELECT d.name AS department_name, COUNT(p.id) AS professor_count FROM departments d LEFT JOIN professors p ON d.id = p.department_id GROUP BY d.id, d.name ORDER BY d.name

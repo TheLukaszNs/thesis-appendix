@@ -1,0 +1,284 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "scholarship-amount-vs-gpa",
+  "caseDirectory": "scholarship-amount-vs-gpa",
+  "repeatIndex": 1,
+  "prompt": "Show average GPA for different scholarship amount ranges",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show average GPA for different scholarship amount ranges"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:41:15.412Z",
+    "endedAtUtc": "2026-02-23T11:43:09.339Z",
+    "durationMs": 113927
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "36916",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:43:09 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show average GPA for different scholarship amount ranges\"},\"planner\":{\"payload\":{\"question\":\"Show average GPA for different scholarship amount ranges\"},\"startedAt\":1771846875419,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(student_totals.gpa)\",\"COUNT(*)\"],\"dimensions\":[\"amount_range\"],\"filters\":[\"students.gpa IS NOT NULL\",\"scholarships.student_id = students.id\",\"scholarships.amount IS NOT NULL\"],\"grain\":\"student-level (each row is one student aggregated by total scholarship amount across all scholarship records)\",\"aliases\":{\"AVG(student_totals.gpa)\":\"avg_gpa\",\"COUNT(*)\":\"student_count\",\"CASE WHEN student_totals.total_scholarship < 1000 THEN '<1k' WHEN student_totals.total_scholarship >= 1000 AND student_totals.total_scholarship < 5000 THEN '1k-4.9k' WHEN student_totals.total_scholarship >= 5000 AND student_totals.total_scholarship < 10000 THEN '5k-9.9k' ELSE '>=10k' END\":\"amount_range\",\"SUM(scholarships.amount) /* per student */\":\"total_scholarship\"},\"output_fields\":[\"amount_range\",\"avg_gpa\",\"student_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"amount_range\",\"y_axis\":\"avg_gpa\",\"color_group\":\"student_count\",\"title\":\"Average GPA by Total Scholarship Amount Range\"},\"assumptions\":[\"Tables and columns used are public.students (id, gpa) and public.scholarships (student_id, amount) as discovered in the preflight.\",\"A student's total scholarship amount is computed by SUM(scholarships.amount) across all scholarship records for that student (no time restriction / across all years).\",\"We include only students who have at least one scholarship record (i.e., students with no scholarships are excluded).\",\"Students with NULL GPA are excluded (filter: students.gpa IS NOT NULL).\",\"Scholarship.amount is numeric and non-null for included scholarship records (we filter scholarships.amount IS NOT NULL).\",\"Amount buckets (chosen to resolve ambiguity) are: '<1k' for total < 1000, '1k-4.9k' for [1000,5000), '5k-9.9k' for [5000,10000), and '>=10k' for total >= 10000. Boundaries are inclusive of the lower bound and exclusive of the upper bound except the last bucket.\",\"If you prefer a different bucketing (e.g., per-award instead of total-per-student, include students with zero scholarship, or limit to a specific academic year), specify and I will regenerate the plan and aliases accordingly.\",\"The SQL implementation recommended (example) is: WITH student_totals AS ( SELECT s.id AS student_id, s.gpa AS gpa, SUM(sc.amount) AS total_scholarship FROM public.students s JOIN public.scholarships sc ON sc.student_id = s.id WHERE s.gpa IS NOT NULL GROUP BY s.id, s.gpa ) SELECT CASE WHEN total_scholarship < 1000 THEN '<1k' WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k' WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k' ELSE '>=10k' END AS amount_range, AVG(gpa) AS avg_gpa, COUNT(*) AS student_count FROM student_totals GROUP BY amount_range ORDER BY amount_range;\",\"Color encoding uses student_count (an output field) to indicate number of students in each bucket; set to null if color grouping is not desired.\"]}},\"endedAt\":1771846915615},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(student_totals.gpa)\",\"COUNT(*)\"],\"dimensions\":[\"amount_range\"],\"filters\":[\"students.gpa IS NOT NULL\",\"scholarships.student_id = students.id\",\"scholarships.amount IS NOT NULL\"],\"grain\":\"student-level (each row is one student aggregated by total scholarship amount across all scholarship records)\",\"aliases\":{\"AVG(student_totals.gpa)\":\"avg_gpa\",\"COUNT(*)\":\"student_count\",\"CASE WHEN student_totals.total_scholarship < 1000 THEN '<1k' WHEN student_totals.total_scholarship >= 1000 AND student_totals.total_scholarship < 5000 THEN '1k-4.9k' WHEN student_totals.total_scholarship >= 5000 AND student_totals.total_scholarship < 10000 THEN '5k-9.9k' ELSE '>=10k' END\":\"amount_range\",\"SUM(scholarships.amount) /* per student */\":\"total_scholarship\"},\"output_fields\":[\"amount_range\",\"avg_gpa\",\"student_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"amount_range\",\"y_axis\":\"avg_gpa\",\"color_group\":\"student_count\",\"title\":\"Average GPA by Total Scholarship Amount Range\"},\"assumptions\":[\"Tables and columns used are public.students (id, gpa) and public.scholarships (student_id, amount) as discovered in the preflight.\",\"A student's total scholarship amount is computed by SUM(scholarships.amount) across all scholarship records for that student (no time restriction / across all years).\",\"We include only students who have at least one scholarship record (i.e., students with no scholarships are excluded).\",\"Students with NULL GPA are excluded (filter: students.gpa IS NOT NULL).\",\"Scholarship.amount is numeric and non-null for included scholarship records (we filter scholarships.amount IS NOT NULL).\",\"Amount buckets (chosen to resolve ambiguity) are: '<1k' for total < 1000, '1k-4.9k' for [1000,5000), '5k-9.9k' for [5000,10000), and '>=10k' for total >= 10000. Boundaries are inclusive of the lower bound and exclusive of the upper bound except the last bucket.\",\"If you prefer a different bucketing (e.g., per-award instead of total-per-student, include students with zero scholarship, or limit to a specific academic year), specify and I will regenerate the plan and aliases accordingly.\",\"The SQL implementation recommended (example) is: WITH student_totals AS ( SELECT s.id AS student_id, s.gpa AS gpa, SUM(sc.amount) AS total_scholarship FROM public.students s JOIN public.scholarships sc ON sc.student_id = s.id WHERE s.gpa IS NOT NULL GROUP BY s.id, s.gpa ) SELECT CASE WHEN total_scholarship < 1000 THEN '<1k' WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k' WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k' ELSE '>=10k' END AS amount_range, AVG(gpa) AS avg_gpa, COUNT(*) AS student_count FROM student_totals GROUP BY amount_range ORDER BY amount_range;\",\"Color encoding uses student_count (an output field) to indicate number of students in each bucket; set to null if color grouping is not desired.\"]}},\"startedAt\":1771846915623,\"status\":\"success\",\"output\":{\"question\":\"Show average GPA for different scholarship amount ranges\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(student_totals.gpa)\",\"COUNT(*)\"],\"dimensions\":[\"amount_range\"],\"filters\":[\"students.gpa IS NOT NULL\",\"scholarships.student_id = students.id\",\"scholarships.amount IS NOT NULL\"],\"grain\":\"student-level (each row is one student aggregated by total scholarship amount across all scholarship records)\",\"aliases\":{\"AVG(student_totals.gpa)\":\"avg_gpa\",\"COUNT(*)\":\"student_count\",\"CASE WHEN student_totals.total_scholarship < 1000 THEN '<1k' WHEN student_totals.total_scholarship >= 1000 AND student_totals.total_scholarship < 5000 THEN '1k-4.9k' WHEN student_totals.total_scholarship >= 5000 AND student_totals.total_scholarship < 10000 THEN '5k-9.9k' ELSE '>=10k' END\":\"amount_range\",\"SUM(scholarships.amount) /* per student */\":\"total_scholarship\"},\"output_fields\":[\"amount_range\",\"avg_gpa\",\"student_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"amount_range\",\"y_axis\":\"avg_gpa\",\"color_group\":\"student_count\",\"title\":\"Average GPA by Total Scholarship Amount Range\"},\"assumptions\":[\"Tables and columns used are public.students (id, gpa) and public.scholarships (student_id, amount) as discovered in the preflight.\",\"A student's total scholarship amount is computed by SUM(scholarships.amount) across all scholarship records for that student (no time restriction / across all years).\",\"We include only students who have at least one scholarship record (i.e., students with no scholarships are excluded).\",\"Students with NULL GPA are excluded (filter: students.gpa IS NOT NULL).\",\"Scholarship.amount is numeric and non-null for included scholarship records (we filter scholarships.amount IS NOT NULL).\",\"Amount buckets (chosen to resolve ambiguity) are: '<1k' for total < 1000, '1k-4.9k' for [1000,5000), '5k-9.9k' for [5000,10000), and '>=10k' for total >= 10000. Boundaries are inclusive of the lower bound and exclusive of the upper bound except the last bucket.\",\"If you prefer a different bucketing (e.g., per-award instead of total-per-student, include students with zero scholarship, or limit to a specific academic year), specify and I will regenerate the plan and aliases accordingly.\",\"The SQL implementation recommended (example) is: WITH student_totals AS ( SELECT s.id AS student_id, s.gpa AS gpa, SUM(sc.amount) AS total_scholarship FROM public.students s JOIN public.scholarships sc ON sc.student_id = s.id WHERE s.gpa IS NOT NULL GROUP BY s.id, s.gpa ) SELECT CASE WHEN total_scholarship < 1000 THEN '<1k' WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k' WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k' ELSE '>=10k' END AS amount_range, AVG(gpa) AS avg_gpa, COUNT(*) AS student_count FROM student_totals GROUP BY amount_range ORDER BY amount_range;\",\"Color encoding uses student_count (an output field) to indicate number of students in each bucket; set to null if color grouping is not desired.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771846915625},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"Show average GPA for different scholarship amount ranges\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(student_totals.gpa)\",\"COUNT(*)\"],\"dimensions\":[\"amount_range\"],\"filters\":[\"students.gpa IS NOT NULL\",\"scholarships.student_id = students.id\",\"scholarships.amount IS NOT NULL\"],\"grain\":\"student-level (each row is one student aggregated by total scholarship amount across all scholarship records)\",\"aliases\":{\"AVG(student_totals.gpa)\":\"avg_gpa\",\"COUNT(*)\":\"student_count\",\"CASE WHEN student_totals.total_scholarship < 1000 THEN '<1k' WHEN student_totals.total_scholarship >= 1000 AND student_totals.total_scholarship < 5000 THEN '1k-4.9k' WHEN student_totals.total_scholarship >= 5000 AND student_totals.total_scholarship < 10000 THEN '5k-9.9k' ELSE '>=10k' END\":\"amount_range\",\"SUM(scholarships.amount) /* per student */\":\"total_scholarship\"},\"output_fields\":[\"amount_range\",\"avg_gpa\",\"student_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"amount_range\",\"y_axis\":\"avg_gpa\",\"color_group\":\"student_count\",\"title\":\"Average GPA by Total Scholarship Amount Range\"},\"assumptions\":[\"Tables and columns used are public.students (id, gpa) and public.scholarships (student_id, amount) as discovered in the preflight.\",\"A student's total scholarship amount is computed by SUM(scholarships.amount) across all scholarship records for that student (no time restriction / across all years).\",\"We include only students who have at least one scholarship record (i.e., students with no scholarships are excluded).\",\"Students with NULL GPA are excluded (filter: students.gpa IS NOT NULL).\",\"Scholarship.amount is numeric and non-null for included scholarship records (we filter scholarships.amount IS NOT NULL).\",\"Amount buckets (chosen to resolve ambiguity) are: '<1k' for total < 1000, '1k-4.9k' for [1000,5000), '5k-9.9k' for [5000,10000), and '>=10k' for total >= 10000. Boundaries are inclusive of the lower bound and exclusive of the upper bound except the last bucket.\",\"If you prefer a different bucketing (e.g., per-award instead of total-per-student, include students with zero scholarship, or limit to a specific academic year), specify and I will regenerate the plan and aliases accordingly.\",\"The SQL implementation recommended (example) is: WITH student_totals AS ( SELECT s.id AS student_id, s.gpa AS gpa, SUM(sc.amount) AS total_scholarship FROM public.students s JOIN public.scholarships sc ON sc.student_id = s.id WHERE s.gpa IS NOT NULL GROUP BY s.id, s.gpa ) SELECT CASE WHEN total_scholarship < 1000 THEN '<1k' WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k' WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k' ELSE '>=10k' END AS amount_range, AVG(gpa) AS avg_gpa, COUNT(*) AS student_count FROM student_totals GROUP BY amount_range ORDER BY amount_range;\",\"Color encoding uses student_count (an output field) to indicate number of students in each bucket; set to null if color grouping is not desired.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771846915628,\"status\":\"success\",\"output\":{\"question\":\"Show average GPA for different scholarship amount ranges\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(student_totals.gpa)\",\"COUNT(*)\"],\"dimensions\":[\"amount_range\"],\"filters\":[\"students.gpa IS NOT NULL\",\"scholarships.student_id = students.id\",\"scholarships.amount IS NOT NULL\"],\"grain\":\"student-level (each row is one student aggregated by total scholarship amount across all scholarship records)\",\"aliases\":{\"AVG(student_totals.gpa)\":\"avg_gpa\",\"COUNT(*)\":\"student_count\",\"CASE WHEN student_totals.total_scholarship < 1000 THEN '<1k' WHEN student_totals.total_scholarship >= 1000 AND student_totals.total_scholarship < 5000 THEN '1k-4.9k' WHEN student_totals.total_scholarship >= 5000 AND student_totals.total_scholarship < 10000 THEN '5k-9.9k' ELSE '>=10k' END\":\"amount_range\",\"SUM(scholarships.amount) /* per student */\":\"total_scholarship\"},\"output_fields\":[\"amount_range\",\"avg_gpa\",\"student_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"amount_range\",\"y_axis\":\"avg_gpa\",\"color_group\":\"student_count\",\"title\":\"Average GPA by Total Scholarship Amount Range\"},\"assumptions\":[\"Tables and columns used are public.students (id, gpa) and public.scholarships (student_id, amount) as discovered in the preflight.\",\"A student's total scholarship amount is computed by SUM(scholarships.amount) across all scholarship records for that student (no time restriction / across all years).\",\"We include only students who have at least one scholarship record (i.e., students with no scholarships are excluded).\",\"Students with NULL GPA are excluded (filter: students.gpa IS NOT NULL).\",\"Scholarship.amount is numeric and non-null for included scholarship records (we filter scholarships.amount IS NOT NULL).\",\"Amount buckets (chosen to resolve ambiguity) are: '<1k' for total < 1000, '1k-4.9k' for [1000,5000), '5k-9.9k' for [5000,10000), and '>=10k' for total >= 10000. Boundaries are inclusive of the lower bound and exclusive of the upper bound except the last bucket.\",\"If you prefer a different bucketing (e.g., per-award instead of total-per-student, include students with zero scholarship, or limit to a specific academic year), specify and I will regenerate the plan and aliases accordingly.\",\"The SQL implementation recommended (example) is: WITH student_totals AS ( SELECT s.id AS student_id, s.gpa AS gpa, SUM(sc.amount) AS total_scholarship FROM public.students s JOIN public.scholarships sc ON sc.student_id = s.id WHERE s.gpa IS NOT NULL GROUP BY s.id, s.gpa ) SELECT CASE WHEN total_scholarship < 1000 THEN '<1k' WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k' WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k' ELSE '>=10k' END AS amount_range, AVG(gpa) AS avg_gpa, COUNT(*) AS student_count FROM student_totals GROUP BY amount_range ORDER BY amount_range;\",\"Color encoding uses student_count (an output field) to indicate number of students in each bucket; set to null if color grouping is not desired.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"WITH student_totals AS (\\n  SELECT\\n    s.id AS student_id,\\n    s.gpa AS gpa,\\n    SUM(sc.amount) AS total_scholarship\\n  FROM public.students s\\n  JOIN public.scholarships sc ON sc.student_id = s.id\\n  WHERE s.gpa IS NOT NULL\\n    AND sc.amount IS NOT NULL\\n  GROUP BY s.id, s.gpa\\n)\\nSELECT\\n  CASE\\n    WHEN total_scholarship < 1000 THEN '<1k'\\n    WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k'\\n    WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k'\\n    ELSE '>=10k'\\n  END AS amount_range,\\n  AVG(gpa) AS avg_gpa,\\n  COUNT(*) AS student_count\\nFROM student_totals\\nGROUP BY\\n  CASE\\n    WHEN total_scholarship < 1000 THEN '<1k'\\n    WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k'\\n    WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k'\\n    ELSE '>=10k'\\n  END\\nORDER BY MIN(total_scholarship) ASC;\",\"validationIssues\":[\"Only 2 of the 4 defined amount buckets appear in the query result (rowCount=2) — buckets with zero students are absent from the chart; consider showing zero-count buckets if desired.\",\"X axis is encoded as nominal; since amount ranges are ordered, using an ordinal type (or relying on the explicit sort) makes the intended order clearer.\",\"Color encodes student_count with a continuous color scale; for small integer counts this can be misleading — consider a discrete color/annotation or explicit labels if you want to emphasize exact counts.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Preflight confirmed public.students (id,gpa) and public.scholarships (student_id,amount). I aggregate scholarships per student (excluding NULL GPA and NULL amounts), bucket total scholarship per student into the requested ranges, then compute average GPA and student count per bucket. Ordering is deterministic by the group's minimum total_scholarship to preserve bucket order.\",\"sql\":\"WITH student_totals AS (\\n  SELECT\\n    s.id AS student_id,\\n    s.gpa AS gpa,\\n    SUM(sc.amount) AS total_scholarship\\n  FROM public.students s\\n  JOIN public.scholarships sc ON sc.student_id = s.id\\n  WHERE s.gpa IS NOT NULL\\n    AND sc.amount IS NOT NULL\\n  GROUP BY s.id, s.gpa\\n)\\nSELECT\\n  CASE\\n    WHEN total_scholarship < 1000 THEN '<1k'\\n    WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k'\\n    WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k'\\n    ELSE '>=10k'\\n  END AS amount_range,\\n  AVG(gpa) AS avg_gpa,\\n  COUNT(*) AS student_count\\nFROM student_totals\\nGROUP BY\\n  CASE\\n    WHEN total_scholarship < 1000 THEN '<1k'\\n    WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k'\\n    WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k'\\n    ELSE '>=10k'\\n  END\\nORDER BY MIN(total_scholarship) ASC;\",\"assumptions\":[\"public.students has columns id (uuid) and gpa (numeric) as discovered\",\"public.scholarships has columns student_id (uuid) and amount (numeric) as discovered\",\"Compute each student's total scholarship as SUM(scholarships.amount) across all scholarship records (no time filter)\",\"Exclude students with NULL gpa and exclude scholarship records with NULL amount\",\"Include only students with at least one scholarship (inner join)\",\"Buckets: '<1k' for total < 1000, '1k-4.9k' for [1000,5000), '5k-9.9k' for [5000,10000), '>=10k' for total >=10000\",\"Result fields must be amount_range, avg_gpa, student_count; ordering is deterministic via MIN(total_scholarship)\"]},\"execution\":{\"ok\":true,\"sql\":\"WITH student_totals AS (\\n  SELECT\\n    s.id AS student_id,\\n    s.gpa AS gpa,\\n    SUM(sc.amount) AS total_scholarship\\n  FROM public.students s\\n  JOIN public.scholarships sc ON sc.student_id = s.id\\n  WHERE s.gpa IS NOT NULL\\n    AND sc.amount IS NOT NULL\\n  GROUP BY s.id, s.gpa\\n)\\nSELECT\\n  CASE\\n    WHEN total_scholarship < 1000 THEN '<1k'\\n    WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k'\\n    WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k'\\n    ELSE '>=10k'\\n  END AS amount_range,\\n  AVG(gpa) AS avg_gpa,\\n  COUNT(*) AS student_count\\nFROM student_totals\\nGROUP BY\\n  CASE\\n    WHEN total_scholarship < 1000 THEN '<1k'\\n    WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k'\\n    WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k'\\n    ELSE '>=10k'\\n  END\\nORDER BY MIN(total_scholarship) ASC\",\"metadata\":{\"columns\":[\"avg_gpa\",\"amount_range\",\"student_count\"],\"rowCount\":2,\"sample\":[{\"avg_gpa\":4.13875,\"amount_range\":\"1k-4.9k\",\"student_count\":8},{\"avg_gpa\":3.52,\"amount_range\":\"5k-9.9k\",\"student_count\":1}]},\"data\":[{\"avg_gpa\":4.13875,\"amount_range\":\"1k-4.9k\",\"student_count\":8},{\"avg_gpa\":3.52,\"amount_range\":\"5k-9.9k\",\"student_count\":1}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average GPA by Total Scholarship Amount Range\",\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"amount_range\",\"type\":\"nominal\",\"title\":\"Scholarship Amount Range\",\"sort\":[\"<1k\",\"1k-4.9k\",\"5k-9.9k\",\">=10k\"]},\"y\":{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},\"color\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\",\"scale\":{\"scheme\":\"blues\"}},\"tooltip\":[{\"field\":\"amount_range\",\"type\":\"nominal\",\"title\":\"Amount Range\"},{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"format\":\".2f\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"reasoning\":\"Vertical bar chart showing average GPA per total-scholarship bucket (x). Color encodes number of students in each bucket (student_count). Tooltip provides exact values. X-order is fixed to the intended buckets.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"Only 2 of the 4 defined amount buckets appear in the query result (rowCount=2) — buckets with zero students are absent from the chart; consider showing zero-count buckets if desired.\",\"X axis is encoded as nominal; since amount ranges are ordered, using an ordinal type (or relying on the explicit sort) makes the intended order clearer.\",\"Color encodes student_count with a continuous color scale; for small integer counts this can be misleading — consider a discrete color/annotation or explicit labels if you want to emphasize exact counts.\"]}}},\"endedAt\":1771846989315,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"Show average GPA for different scholarship amount ranges\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(student_totals.gpa)\",\"COUNT(*)\"],\"dimensions\":[\"amount_range\"],\"filters\":[\"students.gpa IS NOT NULL\",\"scholarships.student_id = students.id\",\"scholarships.amount IS NOT NULL\"],\"grain\":\"student-level (each row is one student aggregated by total scholarship amount across all scholarship records)\",\"aliases\":{\"AVG(student_totals.gpa)\":\"avg_gpa\",\"COUNT(*)\":\"student_count\",\"CASE WHEN student_totals.total_scholarship < 1000 THEN '<1k' WHEN student_totals.total_scholarship >= 1000 AND student_totals.total_scholarship < 5000 THEN '1k-4.9k' WHEN student_totals.total_scholarship >= 5000 AND student_totals.total_scholarship < 10000 THEN '5k-9.9k' ELSE '>=10k' END\":\"amount_range\",\"SUM(scholarships.amount) /* per student */\":\"total_scholarship\"},\"output_fields\":[\"amount_range\",\"avg_gpa\",\"student_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"amount_range\",\"y_axis\":\"avg_gpa\",\"color_group\":\"student_count\",\"title\":\"Average GPA by Total Scholarship Amount Range\"},\"assumptions\":[\"Tables and columns used are public.students (id, gpa) and public.scholarships (student_id, amount) as discovered in the preflight.\",\"A student's total scholarship amount is computed by SUM(scholarships.amount) across all scholarship records for that student (no time restriction / across all years).\",\"We include only students who have at least one scholarship record (i.e., students with no scholarships are excluded).\",\"Students with NULL GPA are excluded (filter: students.gpa IS NOT NULL).\",\"Scholarship.amount is numeric and non-null for included scholarship records (we filter scholarships.amount IS NOT NULL).\",\"Amount buckets (chosen to resolve ambiguity) are: '<1k' for total < 1000, '1k-4.9k' for [1000,5000), '5k-9.9k' for [5000,10000), and '>=10k' for total >= 10000. Boundaries are inclusive of the lower bound and exclusive of the upper bound except the last bucket.\",\"If you prefer a different bucketing (e.g., per-award instead of total-per-student, include students with zero scholarship, or limit to a specific academic year), specify and I will regenerate the plan and aliases accordingly.\",\"The SQL implementation recommended (example) is: WITH student_totals AS ( SELECT s.id AS student_id, s.gpa AS gpa, SUM(sc.amount) AS total_scholarship FROM public.students s JOIN public.scholarships sc ON sc.student_id = s.id WHERE s.gpa IS NOT NULL GROUP BY s.id, s.gpa ) SELECT CASE WHEN total_scholarship < 1000 THEN '<1k' WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k' WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k' ELSE '>=10k' END AS amount_range, AVG(gpa) AS avg_gpa, COUNT(*) AS student_count FROM student_totals GROUP BY amount_range ORDER BY amount_range;\",\"Color encoding uses student_count (an output field) to indicate number of students in each bucket; set to null if color grouping is not desired.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"WITH student_totals AS (\\n  SELECT\\n    s.id AS student_id,\\n    s.gpa AS gpa,\\n    SUM(sc.amount) AS total_scholarship\\n  FROM public.students s\\n  JOIN public.scholarships sc ON sc.student_id = s.id\\n  WHERE s.gpa IS NOT NULL\\n    AND sc.amount IS NOT NULL\\n  GROUP BY s.id, s.gpa\\n)\\nSELECT\\n  CASE\\n    WHEN total_scholarship < 1000 THEN '<1k'\\n    WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k'\\n    WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k'\\n    ELSE '>=10k'\\n  END AS amount_range,\\n  AVG(gpa) AS avg_gpa,\\n  COUNT(*) AS student_count\\nFROM student_totals\\nGROUP BY\\n  CASE\\n    WHEN total_scholarship < 1000 THEN '<1k'\\n    WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k'\\n    WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k'\\n    ELSE '>=10k'\\n  END\\nORDER BY MIN(total_scholarship) ASC;\",\"validationIssues\":[\"Only 2 of the 4 defined amount buckets appear in the query result (rowCount=2) — buckets with zero students are absent from the chart; consider showing zero-count buckets if desired.\",\"X axis is encoded as nominal; since amount ranges are ordered, using an ordinal type (or relying on the explicit sort) makes the intended order clearer.\",\"Color encodes student_count with a continuous color scale; for small integer counts this can be misleading — consider a discrete color/annotation or explicit labels if you want to emphasize exact counts.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Preflight confirmed public.students (id,gpa) and public.scholarships (student_id,amount). I aggregate scholarships per student (excluding NULL GPA and NULL amounts), bucket total scholarship per student into the requested ranges, then compute average GPA and student count per bucket. Ordering is deterministic by the group's minimum total_scholarship to preserve bucket order.\",\"sql\":\"WITH student_totals AS (\\n  SELECT\\n    s.id AS student_id,\\n    s.gpa AS gpa,\\n    SUM(sc.amount) AS total_scholarship\\n  FROM public.students s\\n  JOIN public.scholarships sc ON sc.student_id = s.id\\n  WHERE s.gpa IS NOT NULL\\n    AND sc.amount IS NOT NULL\\n  GROUP BY s.id, s.gpa\\n)\\nSELECT\\n  CASE\\n    WHEN total_scholarship < 1000 THEN '<1k'\\n    WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k'\\n    WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k'\\n    ELSE '>=10k'\\n  END AS amount_range,\\n  AVG(gpa) AS avg_gpa,\\n  COUNT(*) AS student_count\\nFROM student_totals\\nGROUP BY\\n  CASE\\n    WHEN total_scholarship < 1000 THEN '<1k'\\n    WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k'\\n    WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k'\\n    ELSE '>=10k'\\n  END\\nORDER BY MIN(total_scholarship) ASC;\",\"assumptions\":[\"public.students has columns id (uuid) and gpa (numeric) as discovered\",\"public.scholarships has columns student_id (uuid) and amount (numeric) as discovered\",\"Compute each student's total scholarship as SUM(scholarships.amount) across all scholarship records (no time filter)\",\"Exclude students with NULL gpa and exclude scholarship records with NULL amount\",\"Include only students with at least one scholarship (inner join)\",\"Buckets: '<1k' for total < 1000, '1k-4.9k' for [1000,5000), '5k-9.9k' for [5000,10000), '>=10k' for total >=10000\",\"Result fields must be amount_range, avg_gpa, student_count; ordering is deterministic via MIN(total_scholarship)\"]},\"execution\":{\"ok\":true,\"sql\":\"WITH student_totals AS (\\n  SELECT\\n    s.id AS student_id,\\n    s.gpa AS gpa,\\n    SUM(sc.amount) AS total_scholarship\\n  FROM public.students s\\n  JOIN public.scholarships sc ON sc.student_id = s.id\\n  WHERE s.gpa IS NOT NULL\\n    AND sc.amount IS NOT NULL\\n  GROUP BY s.id, s.gpa\\n)\\nSELECT\\n  CASE\\n    WHEN total_scholarship < 1000 THEN '<1k'\\n    WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k'\\n    WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k'\\n    ELSE '>=10k'\\n  END AS amount_range,\\n  AVG(gpa) AS avg_gpa,\\n  COUNT(*) AS student_count\\nFROM student_totals\\nGROUP BY\\n  CASE\\n    WHEN total_scholarship < 1000 THEN '<1k'\\n    WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k'\\n    WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k'\\n    ELSE '>=10k'\\n  END\\nORDER BY MIN(total_scholarship) ASC\",\"metadata\":{\"columns\":[\"avg_gpa\",\"amount_range\",\"student_count\"],\"rowCount\":2,\"sample\":[{\"avg_gpa\":4.13875,\"amount_range\":\"1k-4.9k\",\"student_count\":8},{\"avg_gpa\":3.52,\"amount_range\":\"5k-9.9k\",\"student_count\":1}]},\"data\":[{\"avg_gpa\":4.13875,\"amount_range\":\"1k-4.9k\",\"student_count\":8},{\"avg_gpa\":3.52,\"amount_range\":\"5k-9.9k\",\"student_count\":1}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average GPA by Total Scholarship Amount Range\",\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"amount_range\",\"type\":\"nominal\",\"title\":\"Scholarship Amount Range\",\"sort\":[\"<1k\",\"1k-4.9k\",\"5k-9.9k\",\">=10k\"]},\"y\":{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},\"color\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\",\"scale\":{\"scheme\":\"blues\"}},\"tooltip\":[{\"field\":\"amount_range\",\"type\":\"nominal\",\"title\":\"Amount Range\"},{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"format\":\".2f\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"reasoning\":\"Vertical bar chart showing average GPA per total-scholarship bucket (x). Color encodes number of students in each bucket (student_count). Tooltip provides exact values. X-order is fixed to the intended buckets.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"Only 2 of the 4 defined amount buckets appear in the query result (rowCount=2) — buckets with zero students are absent from the chart; consider showing zero-count buckets if desired.\",\"X axis is encoded as nominal; since amount ranges are ordered, using an ordinal type (or relying on the explicit sort) makes the intended order clearer.\",\"Color encodes student_count with a continuous color scale; for small integer counts this can be misleading — consider a discrete color/annotation or explicit labels if you want to emphasize exact counts.\"]}}},\"startedAt\":1771846989319,\"status\":\"success\",\"output\":{\"sql\":\"WITH student_totals AS (\\n  SELECT\\n    s.id AS student_id,\\n    s.gpa AS gpa,\\n    SUM(sc.amount) AS total_scholarship\\n  FROM public.students s\\n  JOIN public.scholarships sc ON sc.student_id = s.id\\n  WHERE s.gpa IS NOT NULL\\n    AND sc.amount IS NOT NULL\\n  GROUP BY s.id, s.gpa\\n)\\nSELECT\\n  CASE\\n    WHEN total_scholarship < 1000 THEN '<1k'\\n    WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k'\\n    WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k'\\n    ELSE '>=10k'\\n  END AS amount_range,\\n  AVG(gpa) AS avg_gpa,\\n  COUNT(*) AS student_count\\nFROM student_totals\\nGROUP BY\\n  CASE\\n    WHEN total_scholarship < 1000 THEN '<1k'\\n    WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k'\\n    WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k'\\n    ELSE '>=10k'\\n  END\\nORDER BY MIN(total_scholarship) ASC;\",\"data\":[{\"avg_gpa\":4.13875,\"amount_range\":\"1k-4.9k\",\"student_count\":8},{\"avg_gpa\":3.52,\"amount_range\":\"5k-9.9k\",\"student_count\":1}],\"metadata\":{\"columns\":[\"avg_gpa\",\"amount_range\",\"student_count\"],\"rowCount\":2,\"sample\":[{\"avg_gpa\":4.13875,\"amount_range\":\"1k-4.9k\",\"student_count\":8},{\"avg_gpa\":3.52,\"amount_range\":\"5k-9.9k\",\"student_count\":1}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average GPA by Total Scholarship Amount Range\",\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"amount_range\",\"type\":\"nominal\",\"title\":\"Scholarship Amount Range\",\"sort\":[\"<1k\",\"1k-4.9k\",\"5k-9.9k\",\">=10k\"]},\"y\":{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},\"color\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\",\"scale\":{\"scheme\":\"blues\"}},\"tooltip\":[{\"field\":\"amount_range\",\"type\":\"nominal\",\"title\":\"Amount Range\"},{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"format\":\".2f\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"Only 2 of the 4 defined amount buckets appear in the query result (rowCount=2) — buckets with zero students are absent from the chart; consider showing zero-count buckets if desired.\",\"X axis is encoded as nominal; since amount ranges are ordered, using an ordinal type (or relying on the explicit sort) makes the intended order clearer.\",\"Color encodes student_count with a continuous color scale; for small integer counts this can be misleading — consider a discrete color/annotation or explicit labels if you want to emphasize exact counts.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771846989323}},\"input\":{\"question\":\"Show average GPA for different scholarship amount ranges\"},\"result\":{\"sql\":\"WITH student_totals AS (\\n  SELECT\\n    s.id AS student_id,\\n    s.gpa AS gpa,\\n    SUM(sc.amount) AS total_scholarship\\n  FROM public.students s\\n  JOIN public.scholarships sc ON sc.student_id = s.id\\n  WHERE s.gpa IS NOT NULL\\n    AND sc.amount IS NOT NULL\\n  GROUP BY s.id, s.gpa\\n)\\nSELECT\\n  CASE\\n    WHEN total_scholarship < 1000 THEN '<1k'\\n    WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k'\\n    WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k'\\n    ELSE '>=10k'\\n  END AS amount_range,\\n  AVG(gpa) AS avg_gpa,\\n  COUNT(*) AS student_count\\nFROM student_totals\\nGROUP BY\\n  CASE\\n    WHEN total_scholarship < 1000 THEN '<1k'\\n    WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k'\\n    WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k'\\n    ELSE '>=10k'\\n  END\\nORDER BY MIN(total_scholarship) ASC;\",\"data\":[{\"avg_gpa\":4.13875,\"amount_range\":\"1k-4.9k\",\"student_count\":8},{\"avg_gpa\":3.52,\"amount_range\":\"5k-9.9k\",\"student_count\":1}],\"metadata\":{\"columns\":[\"avg_gpa\",\"amount_range\",\"student_count\"],\"rowCount\":2,\"sample\":[{\"avg_gpa\":4.13875,\"amount_range\":\"1k-4.9k\",\"student_count\":8},{\"avg_gpa\":3.52,\"amount_range\":\"5k-9.9k\",\"student_count\":1}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average GPA by Total Scholarship Amount Range\",\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"amount_range\",\"type\":\"nominal\",\"title\":\"Scholarship Amount Range\",\"sort\":[\"<1k\",\"1k-4.9k\",\"5k-9.9k\",\">=10k\"]},\"y\":{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},\"color\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\",\"scale\":{\"scheme\":\"blues\"}},\"tooltip\":[{\"field\":\"amount_range\",\"type\":\"nominal\",\"title\":\"Amount Range\"},{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"format\":\".2f\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"Only 2 of the 4 defined amount buckets appear in the query result (rowCount=2) — buckets with zero students are absent from the chart; consider showing zero-count buckets if desired.\",\"X axis is encoded as nominal; since amount ranges are ordered, using an ordinal type (or relying on the explicit sort) makes the intended order clearer.\",\"Color encodes student_count with a continuous color scale; for small integer counts this can be misleading — consider a discrete color/annotation or explicit labels if you want to emphasize exact counts.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"4e85810be471813c306f111b8ac1df0b\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/scholarship-amount-vs-gpa/run-0001/run.json",
+    "queryPath": "runs/scholarship-amount-vs-gpa/run-0001/query.sql",
+    "vegaRawPath": "runs/scholarship-amount-vs-gpa/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/scholarship-amount-vs-gpa/run-0001/vega.resolved.json",
+    "imagePath": "runs/scholarship-amount-vs-gpa/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:43:09.915Z",
+  "traceId": "4e85810be471813c306f111b8ac1df0b",
+  "success": true,
+  "durationMs": 114503,
+  "resultRaw": {
+    "data": [
+      {
+        "avg_gpa": 4.13875,
+        "amount_range": "1k-4.9k",
+        "student_count": 8
+      },
+      {
+        "avg_gpa": 3.52,
+        "amount_range": "5k-9.9k",
+        "student_count": 1
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average GPA by Total Scholarship Amount Range",
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "amount_range",
+          "type": "nominal",
+          "title": "Scholarship Amount Range",
+          "sort": [
+            "<1k",
+            "1k-4.9k",
+            "5k-9.9k",
+            ">=10k"
+          ]
+        },
+        "y": {
+          "field": "avg_gpa",
+          "type": "quantitative",
+          "title": "Average GPA"
+        },
+        "color": {
+          "field": "student_count",
+          "type": "quantitative",
+          "title": "Student Count",
+          "scale": {
+            "scheme": "blues"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "amount_range",
+            "type": "nominal",
+            "title": "Amount Range"
+          },
+          {
+            "field": "avg_gpa",
+            "type": "quantitative",
+            "title": "Average GPA",
+            "format": ".2f"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Student Count"
+          }
+        ]
+      }
+    },
+    "sql": "WITH student_totals AS (\n  SELECT\n    s.id AS student_id,\n    s.gpa AS gpa,\n    SUM(sc.amount) AS total_scholarship\n  FROM public.students s\n  JOIN public.scholarships sc ON sc.student_id = s.id\n  WHERE s.gpa IS NOT NULL\n    AND sc.amount IS NOT NULL\n  GROUP BY s.id, s.gpa\n)\nSELECT\n  CASE\n    WHEN total_scholarship < 1000 THEN '<1k'\n    WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k'\n    WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k'\n    ELSE '>=10k'\n  END AS amount_range,\n  AVG(gpa) AS avg_gpa,\n  COUNT(*) AS student_count\nFROM student_totals\nGROUP BY\n  CASE\n    WHEN total_scholarship < 1000 THEN '<1k'\n    WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k'\n    WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k'\n    ELSE '>=10k'\n  END\nORDER BY MIN(total_scholarship) ASC;",
+    "metadata": {
+      "columns": [
+        "avg_gpa",
+        "amount_range",
+        "student_count"
+      ],
+      "rowCount": 2,
+      "sample": [
+        {
+          "avg_gpa": 4.13875,
+          "amount_range": "1k-4.9k",
+          "student_count": 8
+        },
+        {
+          "avg_gpa": 3.52,
+          "amount_range": "5k-9.9k",
+          "student_count": 1
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "Only 2 of the 4 defined amount buckets appear in the query result (rowCount=2) — buckets with zero students are absent from the chart; consider showing zero-count buckets if desired.",
+        "X axis is encoded as nominal; since amount ranges are ordered, using an ordinal type (or relying on the explicit sort) makes the intended order clearer.",
+        "Color encodes student_count with a continuous color scale; for small integer counts this can be misleading — consider a discrete color/annotation or explicit labels if you want to emphasize exact counts."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "avg_gpa": 4.13875,
+        "amount_range": "1k-4.9k",
+        "student_count": 8
+      },
+      {
+        "avg_gpa": 3.52,
+        "amount_range": "5k-9.9k",
+        "student_count": 1
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average GPA by Total Scholarship Amount Range",
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "amount_range",
+          "type": "nominal",
+          "title": "Scholarship Amount Range",
+          "sort": [
+            "<1k",
+            "1k-4.9k",
+            "5k-9.9k",
+            ">=10k"
+          ]
+        },
+        "y": {
+          "field": "avg_gpa",
+          "type": "quantitative",
+          "title": "Average GPA"
+        },
+        "color": {
+          "field": "student_count",
+          "type": "quantitative",
+          "title": "Student Count",
+          "scale": {
+            "scheme": "blues"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "amount_range",
+            "type": "nominal",
+            "title": "Amount Range"
+          },
+          {
+            "field": "avg_gpa",
+            "type": "quantitative",
+            "title": "Average GPA",
+            "format": ".2f"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Student Count"
+          }
+        ]
+      }
+    },
+    "sql": "WITH student_totals AS (\n  SELECT\n    s.id AS student_id,\n    s.gpa AS gpa,\n    SUM(sc.amount) AS total_scholarship\n  FROM public.students s\n  JOIN public.scholarships sc ON sc.student_id = s.id\n  WHERE s.gpa IS NOT NULL\n    AND sc.amount IS NOT NULL\n  GROUP BY s.id, s.gpa\n)\nSELECT\n  CASE\n    WHEN total_scholarship < 1000 THEN '<1k'\n    WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k'\n    WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k'\n    ELSE '>=10k'\n  END AS amount_range,\n  AVG(gpa) AS avg_gpa,\n  COUNT(*) AS student_count\nFROM student_totals\nGROUP BY\n  CASE\n    WHEN total_scholarship < 1000 THEN '<1k'\n    WHEN total_scholarship >= 1000 AND total_scholarship < 5000 THEN '1k-4.9k'\n    WHEN total_scholarship >= 5000 AND total_scholarship < 10000 THEN '5k-9.9k'\n    ELSE '>=10k'\n  END\nORDER BY MIN(total_scholarship) ASC;",
+    "metadata": {
+      "columns": [
+        "avg_gpa",
+        "amount_range",
+        "student_count"
+      ],
+      "rowCount": 2,
+      "sample": [
+        {
+          "avg_gpa": 4.13875,
+          "amount_range": "1k-4.9k",
+          "student_count": 8
+        },
+        {
+          "avg_gpa": 3.52,
+          "amount_range": "5k-9.9k",
+          "student_count": 1
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "Only 2 of the 4 defined amount buckets appear in the query result (rowCount=2) — buckets with zero students are absent from the chart; consider showing zero-count buckets if desired.",
+        "X axis is encoded as nominal; since amount ranges are ordered, using an ordinal type (or relying on the explicit sort) makes the intended order clearer.",
+        "Color encodes student_count with a continuous color scale; for small integer counts this can be misleading — consider a discrete color/annotation or explicit labels if you want to emphasize exact counts."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:43:09.915Z",
+    "traceId": "4e85810be471813c306f111b8ac1df0b",
+    "attempts": 5,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 23588,
+      "outputTokens": 7908,
+      "totalTokens": 31496,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 5440,
+      "costUsd": 0.021713
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 23588,
+        "outputTokens": 7908,
+        "totalTokens": 31496,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 5440,
+        "costUsd": 0.021713
+      }
+    ],
+    "warnings": []
+  }
+}

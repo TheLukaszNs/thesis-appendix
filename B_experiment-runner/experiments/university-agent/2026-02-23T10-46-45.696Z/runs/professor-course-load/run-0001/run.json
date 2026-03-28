@@ -1,0 +1,157 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "professor-course-load",
+  "caseDirectory": "professor-course-load",
+  "repeatIndex": 1,
+  "prompt": "How many course sections does each professor teach?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many course sections does each professor teach?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:47:54.533Z",
+    "endedAtUtc": "2026-02-23T10:48:09.792Z",
+    "durationMs": 15259
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2132",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:48:09 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"How many course sections does each professor teach?\"},\"agent\":{\"payload\":{\"question\":\"How many course sections does each professor teach?\"},\"startedAt\":1771843674542,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  p.professor_id AS professor_id,\\n  p.name AS professor_name,\\n  COUNT(s.section_id) AS section_count\\nFROM professors AS p\\nLEFT JOIN course_sections AS s\\n  ON s.professor_id = p.professor_id\\nGROUP BY p.professor_id, p.name\\nORDER BY section_count DESC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Bar chart showing number of course sections taught by each professor.\",\"title\":\"Course sections per professor\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\",\"sort\":{\"field\":\"section_count\",\"order\":\"descending\"}},\"y\":{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Number of sections\"},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Sections\"}]}}},\"endedAt\":1771843689719},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  p.professor_id AS professor_id,\\n  p.name AS professor_name,\\n  COUNT(s.section_id) AS section_count\\nFROM professors AS p\\nLEFT JOIN course_sections AS s\\n  ON s.professor_id = p.professor_id\\nGROUP BY p.professor_id, p.name\\nORDER BY section_count DESC;\"},\"startedAt\":1771843689726,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column p.professor_id does not exist\\nLINE 8:   ON s.professor_id = p.professor_id\\n                              ^\\nHINT:  Perhaps you meant to reference the column \\\"s.professor_id\\\".\",\"name\":\"Error\"},\"endedAt\":1771843689786}},\"input\":{\"question\":\"How many course sections does each professor teach?\"},\"error\":{\"message\":\"SQL execution failed: column p.professor_id does not exist\\nLINE 8:   ON s.professor_id = p.professor_id\\n                              ^\\nHINT:  Perhaps you meant to reference the column \\\"s.professor_id\\\".\",\"name\":\"Error\"},\"traceId\":\"5e91c754fae21925523b457f6895edab\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/professor-course-load/run-0001/run.json",
+    "queryPath": "runs/professor-course-load/run-0001/query.sql",
+    "vegaRawPath": "runs/professor-course-load/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/professor-course-load/run-0001/vega.resolved.json",
+    "imagePath": "runs/professor-course-load/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:48:09.792Z",
+  "traceId": "5e91c754fae21925523b457f6895edab",
+  "success": false,
+  "durationMs": 15259,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "How many course sections does each professor teach?"
+      },
+      "agent": {
+        "payload": {
+          "question": "How many course sections does each professor teach?"
+        },
+        "startedAt": 1771843674542,
+        "status": "success",
+        "output": {
+          "sql": "SELECT\n  p.professor_id AS professor_id,\n  p.name AS professor_name,\n  COUNT(s.section_id) AS section_count\nFROM professors AS p\nLEFT JOIN course_sections AS s\n  ON s.professor_id = p.professor_id\nGROUP BY p.professor_id, p.name\nORDER BY section_count DESC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Bar chart showing number of course sections taught by each professor.",
+            "title": "Course sections per professor",
+            "data": {
+              "name": "query_result"
+            },
+            "mark": "bar",
+            "encoding": {
+              "x": {
+                "field": "professor_name",
+                "type": "nominal",
+                "title": "Professor",
+                "sort": {
+                  "field": "section_count",
+                  "order": "descending"
+                }
+              },
+              "y": {
+                "field": "section_count",
+                "type": "quantitative",
+                "title": "Number of sections"
+              },
+              "tooltip": [
+                {
+                  "field": "professor_name",
+                  "type": "nominal",
+                  "title": "Professor"
+                },
+                {
+                  "field": "section_count",
+                  "type": "quantitative",
+                  "title": "Sections"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843689719
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT\n  p.professor_id AS professor_id,\n  p.name AS professor_name,\n  COUNT(s.section_id) AS section_count\nFROM professors AS p\nLEFT JOIN course_sections AS s\n  ON s.professor_id = p.professor_id\nGROUP BY p.professor_id, p.name\nORDER BY section_count DESC;"
+        },
+        "startedAt": 1771843689726,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column p.professor_id does not exist\nLINE 8:   ON s.professor_id = p.professor_id\n                              ^\nHINT:  Perhaps you meant to reference the column \"s.professor_id\".",
+          "name": "Error"
+        },
+        "endedAt": 1771843689786
+      }
+    },
+    "input": {
+      "question": "How many course sections does each professor teach?"
+    },
+    "error": {
+      "message": "SQL execution failed: column p.professor_id does not exist\nLINE 8:   ON s.professor_id = p.professor_id\n                              ^\nHINT:  Perhaps you meant to reference the column \"s.professor_id\".",
+      "name": "Error"
+    },
+    "traceId": "5e91c754fae21925523b457f6895edab"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:48:09.792Z",
+    "traceId": "5e91c754fae21925523b457f6895edab",
+    "attempts": 2,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 265,
+      "outputTokens": 1078,
+      "totalTokens": 1343,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 832,
+      "costUsd": 0.00222225
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 265,
+        "outputTokens": 1078,
+        "totalTokens": 1343,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 832,
+        "costUsd": 0.00222225
+      }
+    ],
+    "warnings": []
+  }
+}

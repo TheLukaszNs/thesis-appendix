@@ -1,0 +1,118 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Average Grades Comparison: Winter vs Summer Semesters",
+  "data": {
+    "name": "query_result",
+    "values": [
+      {
+        "semester_type": "WINTER",
+        "avg_exam_score": "47.73",
+        "avg_project_score": "49.98",
+        "avg_attendance_score": "57.56",
+        "avg_overall_score": "43.26"
+      },
+      {
+        "semester_type": "SUMMER",
+        "avg_exam_score": "51.79",
+        "avg_project_score": "44.97",
+        "avg_attendance_score": "55.65",
+        "avg_overall_score": "45.34"
+      }
+    ]
+  },
+  "transform": [
+    {
+      "fold": [
+        "avg_exam_score",
+        "avg_project_score",
+        "avg_attendance_score",
+        "avg_overall_score"
+      ],
+      "as": [
+        "score_type",
+        "score_value"
+      ]
+    }
+  ],
+  "mark": "bar",
+  "encoding": {
+    "x": {
+      "field": "semester_type",
+      "type": "nominal",
+      "title": "Semester Type",
+      "axis": {
+        "labelAngle": 0
+      }
+    },
+    "y": {
+      "field": "score_value",
+      "type": "quantitative",
+      "title": "Average Score"
+    },
+    "color": {
+      "field": "score_type",
+      "type": "nominal",
+      "title": "Score Type",
+      "scale": {
+        "domain": [
+          "avg_exam_score",
+          "avg_project_score",
+          "avg_attendance_score",
+          "avg_overall_score"
+        ],
+        "range": [
+          "#e41a1c",
+          "#377eb8",
+          "#4daf4a",
+          "#984ea3"
+        ]
+      },
+      "legend": {
+        "labelExpr": "datum.label === 'avg_exam_score' ? 'Exam' : datum.label === 'avg_project_score' ? 'Project' : datum.label === 'avg_attendance_score' ? 'Attendance' : 'Overall'"
+      }
+    },
+    "xOffset": {
+      "field": "score_type"
+    },
+    "tooltip": [
+      {
+        "field": "semester_type",
+        "type": "nominal",
+        "title": "Semester"
+      },
+      {
+        "field": "score_type",
+        "type": "nominal",
+        "title": "Score Type",
+        "format": "",
+        "formatType": "json"
+      },
+      {
+        "field": "score_value",
+        "type": "quantitative",
+        "title": "Average Score",
+        "format": ".2f"
+      }
+    ]
+  },
+  "width": 600,
+  "height": 400,
+  "datasets": {
+    "query_result": [
+      {
+        "semester_type": "WINTER",
+        "avg_exam_score": "47.73",
+        "avg_project_score": "49.98",
+        "avg_attendance_score": "57.56",
+        "avg_overall_score": "43.26"
+      },
+      {
+        "semester_type": "SUMMER",
+        "avg_exam_score": "51.79",
+        "avg_project_score": "44.97",
+        "avg_attendance_score": "55.65",
+        "avg_overall_score": "45.34"
+      }
+    ]
+  }
+}

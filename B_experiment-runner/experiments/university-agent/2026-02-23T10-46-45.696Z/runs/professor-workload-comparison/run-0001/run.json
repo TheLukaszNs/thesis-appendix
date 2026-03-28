@@ -1,0 +1,158 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "professor-workload-comparison",
+  "caseDirectory": "professor-workload-comparison",
+  "repeatIndex": 1,
+  "prompt": "Compare the number of distinct courses taught by each professor",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Compare the number of distinct courses taught by each professor"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:53:54.402Z",
+    "endedAtUtc": "2026-02-23T10:54:25.895Z",
+    "durationMs": 31493
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2134",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:54:25 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Compare the number of distinct courses taught by each professor\"},\"agent\":{\"payload\":{\"question\":\"Compare the number of distinct courses taught by each professor\"},\"startedAt\":1771844034409,\"status\":\"success\",\"output\":{\"sql\":\"SELECT p.professor_id AS professor_id,\\n       p.name AS professor_name,\\n       COUNT(DISTINCT t.course_id) AS distinct_courses_count\\nFROM professors AS p\\nLEFT JOIN teaches AS t ON p.professor_id = t.professor_id\\nGROUP BY p.professor_id, p.name\\nORDER BY distinct_courses_count DESC\\nLIMIT 1000;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Bar chart comparing the number of distinct courses taught by each professor.\",\"data\":{\"name\":\"query_result\"},\"title\":\"Distinct courses taught per professor\",\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"sort\":\"-x\",\"axis\":{\"title\":\"Professor\"}},\"x\":{\"field\":\"distinct_courses_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Distinct courses taught\"}},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"distinct_courses_count\",\"type\":\"quantitative\",\"title\":\"Distinct courses\"}]}}},\"endedAt\":1771844065853},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT p.professor_id AS professor_id,\\n       p.name AS professor_name,\\n       COUNT(DISTINCT t.course_id) AS distinct_courses_count\\nFROM professors AS p\\nLEFT JOIN teaches AS t ON p.professor_id = t.professor_id\\nGROUP BY p.professor_id, p.name\\nORDER BY distinct_courses_count DESC\\nLIMIT 1000;\"},\"startedAt\":1771844065858,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: relation \\\"teaches\\\" does not exist\\nLINE 6: LEFT JOIN teaches AS t ON p.professor_id = t.professor_id\\n                  ^\",\"name\":\"Error\"},\"endedAt\":1771844065891}},\"input\":{\"question\":\"Compare the number of distinct courses taught by each professor\"},\"error\":{\"message\":\"SQL execution failed: relation \\\"teaches\\\" does not exist\\nLINE 6: LEFT JOIN teaches AS t ON p.professor_id = t.professor_id\\n                  ^\",\"name\":\"Error\"},\"traceId\":\"b18eeab97f4a3ef566711b82735a3c14\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/professor-workload-comparison/run-0001/run.json",
+    "queryPath": "runs/professor-workload-comparison/run-0001/query.sql",
+    "vegaRawPath": "runs/professor-workload-comparison/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/professor-workload-comparison/run-0001/vega.resolved.json",
+    "imagePath": "runs/professor-workload-comparison/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:54:25.895Z",
+  "traceId": "b18eeab97f4a3ef566711b82735a3c14",
+  "success": false,
+  "durationMs": 31493,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Compare the number of distinct courses taught by each professor"
+      },
+      "agent": {
+        "payload": {
+          "question": "Compare the number of distinct courses taught by each professor"
+        },
+        "startedAt": 1771844034409,
+        "status": "success",
+        "output": {
+          "sql": "SELECT p.professor_id AS professor_id,\n       p.name AS professor_name,\n       COUNT(DISTINCT t.course_id) AS distinct_courses_count\nFROM professors AS p\nLEFT JOIN teaches AS t ON p.professor_id = t.professor_id\nGROUP BY p.professor_id, p.name\nORDER BY distinct_courses_count DESC\nLIMIT 1000;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Bar chart comparing the number of distinct courses taught by each professor.",
+            "data": {
+              "name": "query_result"
+            },
+            "title": "Distinct courses taught per professor",
+            "mark": "bar",
+            "encoding": {
+              "y": {
+                "field": "professor_name",
+                "type": "nominal",
+                "sort": "-x",
+                "axis": {
+                  "title": "Professor"
+                }
+              },
+              "x": {
+                "field": "distinct_courses_count",
+                "type": "quantitative",
+                "axis": {
+                  "title": "Distinct courses taught"
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "professor_name",
+                  "type": "nominal",
+                  "title": "Professor"
+                },
+                {
+                  "field": "distinct_courses_count",
+                  "type": "quantitative",
+                  "title": "Distinct courses"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771844065853
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT p.professor_id AS professor_id,\n       p.name AS professor_name,\n       COUNT(DISTINCT t.course_id) AS distinct_courses_count\nFROM professors AS p\nLEFT JOIN teaches AS t ON p.professor_id = t.professor_id\nGROUP BY p.professor_id, p.name\nORDER BY distinct_courses_count DESC\nLIMIT 1000;"
+        },
+        "startedAt": 1771844065858,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: relation \"teaches\" does not exist\nLINE 6: LEFT JOIN teaches AS t ON p.professor_id = t.professor_id\n                  ^",
+          "name": "Error"
+        },
+        "endedAt": 1771844065891
+      }
+    },
+    "input": {
+      "question": "Compare the number of distinct courses taught by each professor"
+    },
+    "error": {
+      "message": "SQL execution failed: relation \"teaches\" does not exist\nLINE 6: LEFT JOIN teaches AS t ON p.professor_id = t.professor_id\n                  ^",
+      "name": "Error"
+    },
+    "traceId": "b18eeab97f4a3ef566711b82735a3c14"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:54:25.895Z",
+    "traceId": "b18eeab97f4a3ef566711b82735a3c14",
+    "attempts": 6,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 266,
+      "outputTokens": 1283,
+      "totalTokens": 1549,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 960,
+      "costUsd": 0.0026325
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 266,
+        "outputTokens": 1283,
+        "totalTokens": 1549,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 960,
+        "costUsd": 0.0026325
+      }
+    ],
+    "warnings": []
+  }
+}

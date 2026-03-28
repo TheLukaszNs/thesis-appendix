@@ -1,0 +1,1 @@
+SELECT current_semester, COUNT(*) AS student_count FROM students GROUP BY current_semester ORDER BY current_semester ASC

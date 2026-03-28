@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "section-fill-rate",
+  "caseDirectory": "section-fill-rate",
+  "repeatIndex": 1,
+  "prompt": "What is the average fill rate of course sections?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average fill rate of course sections?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:48:48.695Z",
+    "endedAtUtc": "2026-02-23T10:49:12.517Z",
+    "durationMs": 23822
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "1883",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:49:12 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"What is the average fill rate of course sections?\"},\"agent\":{\"payload\":{\"question\":\"What is the average fill rate of course sections?\"},\"startedAt\":1771843728702,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  AVG(CASE WHEN capacity > 0 THEN CAST(enrolled_count AS FLOAT)/NULLIF(capacity,0) ELSE NULL END) AS average_fill_rate,\\n  COUNT(*) AS section_count\\nFROM course_sections\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average fill rate of course sections\",\"data\":{\"name\":\"query_result\"},\"description\":\"Shows the overall average fill rate (enrolled / capacity) across all course sections and the number of sections used in the calculation.\",\"mark\":{\"type\":\"text\",\"align\":\"center\",\"baseline\":\"middle\"},\"encoding\":{\"text\":{\"field\":\"average_fill_rate\",\"type\":\"quantitative\",\"format\":\".1%\"},\"tooltip\":[{\"field\":\"average_fill_rate\",\"type\":\"quantitative\",\"title\":\"Average fill rate\",\"format\":\".1%\"},{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Number of sections\"}]}}},\"endedAt\":1771843752451},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  AVG(CASE WHEN capacity > 0 THEN CAST(enrolled_count AS FLOAT)/NULLIF(capacity,0) ELSE NULL END) AS average_fill_rate,\\n  COUNT(*) AS section_count\\nFROM course_sections\"},\"startedAt\":1771843752457,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column \\\"capacity\\\" does not exist\\nLINE 3:   AVG(CASE WHEN capacity > 0 THEN CAST(enrolled_count AS FLO...\\n                        ^\",\"name\":\"Error\"},\"endedAt\":1771843752513}},\"input\":{\"question\":\"What is the average fill rate of course sections?\"},\"error\":{\"message\":\"SQL execution failed: column \\\"capacity\\\" does not exist\\nLINE 3:   AVG(CASE WHEN capacity > 0 THEN CAST(enrolled_count AS FLO...\\n                        ^\",\"name\":\"Error\"},\"traceId\":\"99eced7af021f6002a4544a9064e4f0e\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/section-fill-rate/run-0001/run.json",
+    "queryPath": "runs/section-fill-rate/run-0001/query.sql",
+    "vegaRawPath": "runs/section-fill-rate/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/section-fill-rate/run-0001/vega.resolved.json",
+    "imagePath": "runs/section-fill-rate/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:49:12.517Z",
+  "traceId": "99eced7af021f6002a4544a9064e4f0e",
+  "success": false,
+  "durationMs": 23822,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "What is the average fill rate of course sections?"
+      },
+      "agent": {
+        "payload": {
+          "question": "What is the average fill rate of course sections?"
+        },
+        "startedAt": 1771843728702,
+        "status": "success",
+        "output": {
+          "sql": "SELECT\n  AVG(CASE WHEN capacity > 0 THEN CAST(enrolled_count AS FLOAT)/NULLIF(capacity,0) ELSE NULL END) AS average_fill_rate,\n  COUNT(*) AS section_count\nFROM course_sections",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "title": "Average fill rate of course sections",
+            "data": {
+              "name": "query_result"
+            },
+            "description": "Shows the overall average fill rate (enrolled / capacity) across all course sections and the number of sections used in the calculation.",
+            "mark": {
+              "type": "text",
+              "align": "center",
+              "baseline": "middle"
+            },
+            "encoding": {
+              "text": {
+                "field": "average_fill_rate",
+                "type": "quantitative",
+                "format": ".1%"
+              },
+              "tooltip": [
+                {
+                  "field": "average_fill_rate",
+                  "type": "quantitative",
+                  "title": "Average fill rate",
+                  "format": ".1%"
+                },
+                {
+                  "field": "section_count",
+                  "type": "quantitative",
+                  "title": "Number of sections"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843752451
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT\n  AVG(CASE WHEN capacity > 0 THEN CAST(enrolled_count AS FLOAT)/NULLIF(capacity,0) ELSE NULL END) AS average_fill_rate,\n  COUNT(*) AS section_count\nFROM course_sections"
+        },
+        "startedAt": 1771843752457,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column \"capacity\" does not exist\nLINE 3:   AVG(CASE WHEN capacity > 0 THEN CAST(enrolled_count AS FLO...\n                        ^",
+          "name": "Error"
+        },
+        "endedAt": 1771843752513
+      }
+    },
+    "input": {
+      "question": "What is the average fill rate of course sections?"
+    },
+    "error": {
+      "message": "SQL execution failed: column \"capacity\" does not exist\nLINE 3:   AVG(CASE WHEN capacity > 0 THEN CAST(enrolled_count AS FLO...\n                        ^",
+      "name": "Error"
+    },
+    "traceId": "99eced7af021f6002a4544a9064e4f0e"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:49:12.517Z",
+    "traceId": "99eced7af021f6002a4544a9064e4f0e",
+    "attempts": 4,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 266,
+      "outputTokens": 1552,
+      "totalTokens": 1818,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1216,
+      "costUsd": 0.0031705
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 266,
+        "outputTokens": 1552,
+        "totalTokens": 1818,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1216,
+        "costUsd": 0.0031705
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,378 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "course-sections-per-professor-department",
+  "caseDirectory": "course-sections-per-professor-department",
+  "repeatIndex": 1,
+  "prompt": "Average number of sections taught per professor by department",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Average number of sections taught per professor by department"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:28:52.693Z",
+    "endedAtUtc": "2026-02-23T11:30:27.084Z",
+    "durationMs": 94391
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "32113",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:30:27 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Average number of sections taught per professor by department\"},\"planner\":{\"payload\":{\"question\":\"Average number of sections taught per professor by department\"},\"startedAt\":1771846132707,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(cs.id) AS total_sections\",\"COUNT(DISTINCT p.id) AS professor_count\",\"(COUNT(cs.id)::float / NULLIF(COUNT(DISTINCT p.id), 0)) AS avg_sections_per_professor\"],\"dimensions\":[\"d.id\",\"d.name\"],\"filters\":[],\"grain\":\"department\",\"aliases\":{\"d.id\":\"department_id\",\"d.name\":\"department_name\",\"COUNT(cs.id)\":\"total_sections\",\"COUNT(DISTINCT p.id)\":\"professor_count\",\"(COUNT(cs.id)::float / NULLIF(COUNT(DISTINCT p.id), 0))\":\"avg_sections_per_professor\"},\"output_fields\":[\"department_id\",\"department_name\",\"professor_count\",\"total_sections\",\"avg_sections_per_professor\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"avg_sections_per_professor\",\"title\":\"Average Sections per Professor by Department\"},\"assumptions\":[\"All professors are assigned to a department via professors.department_id (column is NOT NULL); departments with no professors will not appear in the result because the aggregation starts from the professors table.\",\"Average is computed across all time (no academic_year or semester filter applied). If a time-limited view is desired, a filter on course_sections.academic_year and/or course_sections.semester_type should be added.\",\"A course_sections row represents one taught section instance; total_sections = count of course_sections rows for professors in the department.\",\"Professors with zero sections should be included in the denominator (we will LEFT JOIN course_sections to professors to include them).\",\"If professor_count is 0 (not expected since professors.department_id is NOT NULL), avg_sections_per_professor will be NULL due to NULLIF division guard.\",\"Joins required: professors p LEFT JOIN course_sections cs ON p.id = cs.professor_id JOIN departments d ON p.department_id = d.id.\"]}},\"endedAt\":1771846169350},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(cs.id) AS total_sections\",\"COUNT(DISTINCT p.id) AS professor_count\",\"(COUNT(cs.id)::float / NULLIF(COUNT(DISTINCT p.id), 0)) AS avg_sections_per_professor\"],\"dimensions\":[\"d.id\",\"d.name\"],\"filters\":[],\"grain\":\"department\",\"aliases\":{\"d.id\":\"department_id\",\"d.name\":\"department_name\",\"COUNT(cs.id)\":\"total_sections\",\"COUNT(DISTINCT p.id)\":\"professor_count\",\"(COUNT(cs.id)::float / NULLIF(COUNT(DISTINCT p.id), 0))\":\"avg_sections_per_professor\"},\"output_fields\":[\"department_id\",\"department_name\",\"professor_count\",\"total_sections\",\"avg_sections_per_professor\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"avg_sections_per_professor\",\"title\":\"Average Sections per Professor by Department\"},\"assumptions\":[\"All professors are assigned to a department via professors.department_id (column is NOT NULL); departments with no professors will not appear in the result because the aggregation starts from the professors table.\",\"Average is computed across all time (no academic_year or semester filter applied). If a time-limited view is desired, a filter on course_sections.academic_year and/or course_sections.semester_type should be added.\",\"A course_sections row represents one taught section instance; total_sections = count of course_sections rows for professors in the department.\",\"Professors with zero sections should be included in the denominator (we will LEFT JOIN course_sections to professors to include them).\",\"If professor_count is 0 (not expected since professors.department_id is NOT NULL), avg_sections_per_professor will be NULL due to NULLIF division guard.\",\"Joins required: professors p LEFT JOIN course_sections cs ON p.id = cs.professor_id JOIN departments d ON p.department_id = d.id.\"]}},\"startedAt\":1771846169358,\"status\":\"success\",\"output\":{\"question\":\"Average number of sections taught per professor by department\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(cs.id) AS total_sections\",\"COUNT(DISTINCT p.id) AS professor_count\",\"(COUNT(cs.id)::float / NULLIF(COUNT(DISTINCT p.id), 0)) AS avg_sections_per_professor\"],\"dimensions\":[\"d.id\",\"d.name\"],\"filters\":[],\"grain\":\"department\",\"aliases\":{\"d.id\":\"department_id\",\"d.name\":\"department_name\",\"COUNT(cs.id)\":\"total_sections\",\"COUNT(DISTINCT p.id)\":\"professor_count\",\"(COUNT(cs.id)::float / NULLIF(COUNT(DISTINCT p.id), 0))\":\"avg_sections_per_professor\"},\"output_fields\":[\"department_id\",\"department_name\",\"professor_count\",\"total_sections\",\"avg_sections_per_professor\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"avg_sections_per_professor\",\"title\":\"Average Sections per Professor by Department\"},\"assumptions\":[\"All professors are assigned to a department via professors.department_id (column is NOT NULL); departments with no professors will not appear in the result because the aggregation starts from the professors table.\",\"Average is computed across all time (no academic_year or semester filter applied). If a time-limited view is desired, a filter on course_sections.academic_year and/or course_sections.semester_type should be added.\",\"A course_sections row represents one taught section instance; total_sections = count of course_sections rows for professors in the department.\",\"Professors with zero sections should be included in the denominator (we will LEFT JOIN course_sections to professors to include them).\",\"If professor_count is 0 (not expected since professors.department_id is NOT NULL), avg_sections_per_professor will be NULL due to NULLIF division guard.\",\"Joins required: professors p LEFT JOIN course_sections cs ON p.id = cs.professor_id JOIN departments d ON p.department_id = d.id.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771846169360},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"Average number of sections taught per professor by department\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(cs.id) AS total_sections\",\"COUNT(DISTINCT p.id) AS professor_count\",\"(COUNT(cs.id)::float / NULLIF(COUNT(DISTINCT p.id), 0)) AS avg_sections_per_professor\"],\"dimensions\":[\"d.id\",\"d.name\"],\"filters\":[],\"grain\":\"department\",\"aliases\":{\"d.id\":\"department_id\",\"d.name\":\"department_name\",\"COUNT(cs.id)\":\"total_sections\",\"COUNT(DISTINCT p.id)\":\"professor_count\",\"(COUNT(cs.id)::float / NULLIF(COUNT(DISTINCT p.id), 0))\":\"avg_sections_per_professor\"},\"output_fields\":[\"department_id\",\"department_name\",\"professor_count\",\"total_sections\",\"avg_sections_per_professor\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"avg_sections_per_professor\",\"title\":\"Average Sections per Professor by Department\"},\"assumptions\":[\"All professors are assigned to a department via professors.department_id (column is NOT NULL); departments with no professors will not appear in the result because the aggregation starts from the professors table.\",\"Average is computed across all time (no academic_year or semester filter applied). If a time-limited view is desired, a filter on course_sections.academic_year and/or course_sections.semester_type should be added.\",\"A course_sections row represents one taught section instance; total_sections = count of course_sections rows for professors in the department.\",\"Professors with zero sections should be included in the denominator (we will LEFT JOIN course_sections to professors to include them).\",\"If professor_count is 0 (not expected since professors.department_id is NOT NULL), avg_sections_per_professor will be NULL due to NULLIF division guard.\",\"Joins required: professors p LEFT JOIN course_sections cs ON p.id = cs.professor_id JOIN departments d ON p.department_id = d.id.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771846169362,\"status\":\"success\",\"output\":{\"question\":\"Average number of sections taught per professor by department\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(cs.id) AS total_sections\",\"COUNT(DISTINCT p.id) AS professor_count\",\"(COUNT(cs.id)::float / NULLIF(COUNT(DISTINCT p.id), 0)) AS avg_sections_per_professor\"],\"dimensions\":[\"d.id\",\"d.name\"],\"filters\":[],\"grain\":\"department\",\"aliases\":{\"d.id\":\"department_id\",\"d.name\":\"department_name\",\"COUNT(cs.id)\":\"total_sections\",\"COUNT(DISTINCT p.id)\":\"professor_count\",\"(COUNT(cs.id)::float / NULLIF(COUNT(DISTINCT p.id), 0))\":\"avg_sections_per_professor\"},\"output_fields\":[\"department_id\",\"department_name\",\"professor_count\",\"total_sections\",\"avg_sections_per_professor\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"avg_sections_per_professor\",\"title\":\"Average Sections per Professor by Department\"},\"assumptions\":[\"All professors are assigned to a department via professors.department_id (column is NOT NULL); departments with no professors will not appear in the result because the aggregation starts from the professors table.\",\"Average is computed across all time (no academic_year or semester filter applied). If a time-limited view is desired, a filter on course_sections.academic_year and/or course_sections.semester_type should be added.\",\"A course_sections row represents one taught section instance; total_sections = count of course_sections rows for professors in the department.\",\"Professors with zero sections should be included in the denominator (we will LEFT JOIN course_sections to professors to include them).\",\"If professor_count is 0 (not expected since professors.department_id is NOT NULL), avg_sections_per_professor will be NULL due to NULLIF division guard.\",\"Joins required: professors p LEFT JOIN course_sections cs ON p.id = cs.professor_id JOIN departments d ON p.department_id = d.id.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT d.id AS department_id,\\n       d.name AS department_name,\\n       COUNT(DISTINCT p.id) AS professor_count,\\n       COUNT(cs.id) AS total_sections,\\n       (COUNT(cs.id)::double precision / NULLIF(COUNT(DISTINCT p.id), 0)) AS avg_sections_per_professor\\nFROM public.professors p\\nJOIN public.departments d ON p.department_id = d.id\\nLEFT JOIN public.course_sections cs ON cs.professor_id = p.id\\nGROUP BY d.id, d.name\\nORDER BY d.name;\",\"validationIssues\":[\"Departments with no professors will be omitted because the query starts FROM professors and INNER JOINs departments. If you want empty departments included, start FROM departments and LEFT JOIN professors/course_sections.\",\"If professor_count = 0 the avg_sections_per_professor expression yields NULL (due to NULLIF); bars will be missing for those departments—use COALESCE(..., 0) if you prefer showing 0.\",\"Vega-Lite encoding does not include an explicit x-axis sort; relying on the SQL ORDER BY may work but is not guaranteed in all renderers. Add an explicit sort if a stable ordering is required.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Start from professors (to include professors with zero sections), join their department, left-join course_sections to count sections. Aggregate by department id and name, compute counts and average with NULLIF to avoid division-by-zero, and order deterministically by department_name.\",\"sql\":\"SELECT d.id AS department_id,\\n       d.name AS department_name,\\n       COUNT(DISTINCT p.id) AS professor_count,\\n       COUNT(cs.id) AS total_sections,\\n       (COUNT(cs.id)::double precision / NULLIF(COUNT(DISTINCT p.id), 0)) AS avg_sections_per_professor\\nFROM public.professors p\\nJOIN public.departments d ON p.department_id = d.id\\nLEFT JOIN public.course_sections cs ON cs.professor_id = p.id\\nGROUP BY d.id, d.name\\nORDER BY d.name;\",\"assumptions\":[\"professors.department_id is NOT NULL so every professor is assigned to a department (as confirmed by schema).\",\"A course_sections row represents one taught section instance; total_sections = count of course_sections rows for professors in the department.\",\"No academic year/semester filter is applied (average over all time).\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT d.id AS department_id,\\n       d.name AS department_name,\\n       COUNT(DISTINCT p.id) AS professor_count,\\n       COUNT(cs.id) AS total_sections,\\n       (COUNT(cs.id)::double precision / NULLIF(COUNT(DISTINCT p.id), 0)) AS avg_sections_per_professor\\nFROM public.professors p\\nJOIN public.departments d ON p.department_id = d.id\\nLEFT JOIN public.course_sections cs ON cs.professor_id = p.id\\nGROUP BY d.id, d.name\\nORDER BY d.name\",\"metadata\":{\"columns\":[\"department_id\",\"total_sections\",\"department_name\",\"professor_count\",\"avg_sections_per_professor\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"total_sections\":5,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"professor_count\":9,\"avg_sections_per_professor\":0.5555555555555556},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"total_sections\":7,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"professor_count\":7,\"avg_sections_per_professor\":1}]},\"data\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"total_sections\":5,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"professor_count\":9,\"avg_sections_per_professor\":0.5555555555555556},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"total_sections\":7,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"professor_count\":7,\"avg_sections_per_professor\":1},{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"total_sections\":9,\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"professor_count\":10,\"avg_sections_per_professor\":0.9},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"total_sections\":2,\"department_name\":\"Wydział Inżynierii Produkcji\",\"professor_count\":5,\"avg_sections_per_professor\":0.4},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"total_sections\":4,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"professor_count\":9,\"avg_sections_per_professor\":0.4444444444444444},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"total_sections\":7,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"professor_count\":10,\"avg_sections_per_professor\":0.7}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Sections per Professor by Department\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\",\"labelAngle\":-40}},\"y\":{\"field\":\"avg_sections_per_professor\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Sections per Professor\"}},\"color\":{\"value\":\"#4C78A8\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"avg_sections_per_professor\",\"type\":\"quantitative\",\"title\":\"Avg Sections/Professor\",\"format\":\".2f\"},{\"field\":\"professor_count\",\"type\":\"quantitative\",\"title\":\"Professor Count\"},{\"field\":\"total_sections\",\"type\":\"quantitative\",\"title\":\"Total Sections\"},{\"field\":\"department_id\",\"type\":\"nominal\",\"title\":\"Department ID\"}]}},\"reasoning\":\"Bar chart showing average sections per professor (y) by department name (x). Tooltip includes counts and department id for context; department names are shown along the x-axis with tilted labels to improve readability.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"Departments with no professors will be omitted because the query starts FROM professors and INNER JOINs departments. If you want empty departments included, start FROM departments and LEFT JOIN professors/course_sections.\",\"If professor_count = 0 the avg_sections_per_professor expression yields NULL (due to NULLIF); bars will be missing for those departments—use COALESCE(..., 0) if you prefer showing 0.\",\"Vega-Lite encoding does not include an explicit x-axis sort; relying on the SQL ORDER BY may work but is not guaranteed in all renderers. Add an explicit sort if a stable ordering is required.\"]}}},\"endedAt\":1771846227058,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"Average number of sections taught per professor by department\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(cs.id) AS total_sections\",\"COUNT(DISTINCT p.id) AS professor_count\",\"(COUNT(cs.id)::float / NULLIF(COUNT(DISTINCT p.id), 0)) AS avg_sections_per_professor\"],\"dimensions\":[\"d.id\",\"d.name\"],\"filters\":[],\"grain\":\"department\",\"aliases\":{\"d.id\":\"department_id\",\"d.name\":\"department_name\",\"COUNT(cs.id)\":\"total_sections\",\"COUNT(DISTINCT p.id)\":\"professor_count\",\"(COUNT(cs.id)::float / NULLIF(COUNT(DISTINCT p.id), 0))\":\"avg_sections_per_professor\"},\"output_fields\":[\"department_id\",\"department_name\",\"professor_count\",\"total_sections\",\"avg_sections_per_professor\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"avg_sections_per_professor\",\"title\":\"Average Sections per Professor by Department\"},\"assumptions\":[\"All professors are assigned to a department via professors.department_id (column is NOT NULL); departments with no professors will not appear in the result because the aggregation starts from the professors table.\",\"Average is computed across all time (no academic_year or semester filter applied). If a time-limited view is desired, a filter on course_sections.academic_year and/or course_sections.semester_type should be added.\",\"A course_sections row represents one taught section instance; total_sections = count of course_sections rows for professors in the department.\",\"Professors with zero sections should be included in the denominator (we will LEFT JOIN course_sections to professors to include them).\",\"If professor_count is 0 (not expected since professors.department_id is NOT NULL), avg_sections_per_professor will be NULL due to NULLIF division guard.\",\"Joins required: professors p LEFT JOIN course_sections cs ON p.id = cs.professor_id JOIN departments d ON p.department_id = d.id.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT d.id AS department_id,\\n       d.name AS department_name,\\n       COUNT(DISTINCT p.id) AS professor_count,\\n       COUNT(cs.id) AS total_sections,\\n       (COUNT(cs.id)::double precision / NULLIF(COUNT(DISTINCT p.id), 0)) AS avg_sections_per_professor\\nFROM public.professors p\\nJOIN public.departments d ON p.department_id = d.id\\nLEFT JOIN public.course_sections cs ON cs.professor_id = p.id\\nGROUP BY d.id, d.name\\nORDER BY d.name;\",\"validationIssues\":[\"Departments with no professors will be omitted because the query starts FROM professors and INNER JOINs departments. If you want empty departments included, start FROM departments and LEFT JOIN professors/course_sections.\",\"If professor_count = 0 the avg_sections_per_professor expression yields NULL (due to NULLIF); bars will be missing for those departments—use COALESCE(..., 0) if you prefer showing 0.\",\"Vega-Lite encoding does not include an explicit x-axis sort; relying on the SQL ORDER BY may work but is not guaranteed in all renderers. Add an explicit sort if a stable ordering is required.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Start from professors (to include professors with zero sections), join their department, left-join course_sections to count sections. Aggregate by department id and name, compute counts and average with NULLIF to avoid division-by-zero, and order deterministically by department_name.\",\"sql\":\"SELECT d.id AS department_id,\\n       d.name AS department_name,\\n       COUNT(DISTINCT p.id) AS professor_count,\\n       COUNT(cs.id) AS total_sections,\\n       (COUNT(cs.id)::double precision / NULLIF(COUNT(DISTINCT p.id), 0)) AS avg_sections_per_professor\\nFROM public.professors p\\nJOIN public.departments d ON p.department_id = d.id\\nLEFT JOIN public.course_sections cs ON cs.professor_id = p.id\\nGROUP BY d.id, d.name\\nORDER BY d.name;\",\"assumptions\":[\"professors.department_id is NOT NULL so every professor is assigned to a department (as confirmed by schema).\",\"A course_sections row represents one taught section instance; total_sections = count of course_sections rows for professors in the department.\",\"No academic year/semester filter is applied (average over all time).\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT d.id AS department_id,\\n       d.name AS department_name,\\n       COUNT(DISTINCT p.id) AS professor_count,\\n       COUNT(cs.id) AS total_sections,\\n       (COUNT(cs.id)::double precision / NULLIF(COUNT(DISTINCT p.id), 0)) AS avg_sections_per_professor\\nFROM public.professors p\\nJOIN public.departments d ON p.department_id = d.id\\nLEFT JOIN public.course_sections cs ON cs.professor_id = p.id\\nGROUP BY d.id, d.name\\nORDER BY d.name\",\"metadata\":{\"columns\":[\"department_id\",\"total_sections\",\"department_name\",\"professor_count\",\"avg_sections_per_professor\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"total_sections\":5,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"professor_count\":9,\"avg_sections_per_professor\":0.5555555555555556},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"total_sections\":7,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"professor_count\":7,\"avg_sections_per_professor\":1}]},\"data\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"total_sections\":5,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"professor_count\":9,\"avg_sections_per_professor\":0.5555555555555556},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"total_sections\":7,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"professor_count\":7,\"avg_sections_per_professor\":1},{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"total_sections\":9,\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"professor_count\":10,\"avg_sections_per_professor\":0.9},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"total_sections\":2,\"department_name\":\"Wydział Inżynierii Produkcji\",\"professor_count\":5,\"avg_sections_per_professor\":0.4},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"total_sections\":4,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"professor_count\":9,\"avg_sections_per_professor\":0.4444444444444444},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"total_sections\":7,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"professor_count\":10,\"avg_sections_per_professor\":0.7}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Sections per Professor by Department\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\",\"labelAngle\":-40}},\"y\":{\"field\":\"avg_sections_per_professor\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Sections per Professor\"}},\"color\":{\"value\":\"#4C78A8\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"avg_sections_per_professor\",\"type\":\"quantitative\",\"title\":\"Avg Sections/Professor\",\"format\":\".2f\"},{\"field\":\"professor_count\",\"type\":\"quantitative\",\"title\":\"Professor Count\"},{\"field\":\"total_sections\",\"type\":\"quantitative\",\"title\":\"Total Sections\"},{\"field\":\"department_id\",\"type\":\"nominal\",\"title\":\"Department ID\"}]}},\"reasoning\":\"Bar chart showing average sections per professor (y) by department name (x). Tooltip includes counts and department id for context; department names are shown along the x-axis with tilted labels to improve readability.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"Departments with no professors will be omitted because the query starts FROM professors and INNER JOINs departments. If you want empty departments included, start FROM departments and LEFT JOIN professors/course_sections.\",\"If professor_count = 0 the avg_sections_per_professor expression yields NULL (due to NULLIF); bars will be missing for those departments—use COALESCE(..., 0) if you prefer showing 0.\",\"Vega-Lite encoding does not include an explicit x-axis sort; relying on the SQL ORDER BY may work but is not guaranteed in all renderers. Add an explicit sort if a stable ordering is required.\"]}}},\"startedAt\":1771846227064,\"status\":\"success\",\"output\":{\"sql\":\"SELECT d.id AS department_id,\\n       d.name AS department_name,\\n       COUNT(DISTINCT p.id) AS professor_count,\\n       COUNT(cs.id) AS total_sections,\\n       (COUNT(cs.id)::double precision / NULLIF(COUNT(DISTINCT p.id), 0)) AS avg_sections_per_professor\\nFROM public.professors p\\nJOIN public.departments d ON p.department_id = d.id\\nLEFT JOIN public.course_sections cs ON cs.professor_id = p.id\\nGROUP BY d.id, d.name\\nORDER BY d.name;\",\"data\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"total_sections\":5,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"professor_count\":9,\"avg_sections_per_professor\":0.5555555555555556},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"total_sections\":7,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"professor_count\":7,\"avg_sections_per_professor\":1},{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"total_sections\":9,\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"professor_count\":10,\"avg_sections_per_professor\":0.9},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"total_sections\":2,\"department_name\":\"Wydział Inżynierii Produkcji\",\"professor_count\":5,\"avg_sections_per_professor\":0.4},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"total_sections\":4,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"professor_count\":9,\"avg_sections_per_professor\":0.4444444444444444},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"total_sections\":7,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"professor_count\":10,\"avg_sections_per_professor\":0.7}],\"metadata\":{\"columns\":[\"department_id\",\"total_sections\",\"department_name\",\"professor_count\",\"avg_sections_per_professor\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"total_sections\":5,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"professor_count\":9,\"avg_sections_per_professor\":0.5555555555555556},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"total_sections\":7,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"professor_count\":7,\"avg_sections_per_professor\":1}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Sections per Professor by Department\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\",\"labelAngle\":-40}},\"y\":{\"field\":\"avg_sections_per_professor\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Sections per Professor\"}},\"color\":{\"value\":\"#4C78A8\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"avg_sections_per_professor\",\"type\":\"quantitative\",\"title\":\"Avg Sections/Professor\",\"format\":\".2f\"},{\"field\":\"professor_count\",\"type\":\"quantitative\",\"title\":\"Professor Count\"},{\"field\":\"total_sections\",\"type\":\"quantitative\",\"title\":\"Total Sections\"},{\"field\":\"department_id\",\"type\":\"nominal\",\"title\":\"Department ID\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"Departments with no professors will be omitted because the query starts FROM professors and INNER JOINs departments. If you want empty departments included, start FROM departments and LEFT JOIN professors/course_sections.\",\"If professor_count = 0 the avg_sections_per_professor expression yields NULL (due to NULLIF); bars will be missing for those departments—use COALESCE(..., 0) if you prefer showing 0.\",\"Vega-Lite encoding does not include an explicit x-axis sort; relying on the SQL ORDER BY may work but is not guaranteed in all renderers. Add an explicit sort if a stable ordering is required.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771846227069}},\"input\":{\"question\":\"Average number of sections taught per professor by department\"},\"result\":{\"sql\":\"SELECT d.id AS department_id,\\n       d.name AS department_name,\\n       COUNT(DISTINCT p.id) AS professor_count,\\n       COUNT(cs.id) AS total_sections,\\n       (COUNT(cs.id)::double precision / NULLIF(COUNT(DISTINCT p.id), 0)) AS avg_sections_per_professor\\nFROM public.professors p\\nJOIN public.departments d ON p.department_id = d.id\\nLEFT JOIN public.course_sections cs ON cs.professor_id = p.id\\nGROUP BY d.id, d.name\\nORDER BY d.name;\",\"data\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"total_sections\":5,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"professor_count\":9,\"avg_sections_per_professor\":0.5555555555555556},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"total_sections\":7,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"professor_count\":7,\"avg_sections_per_professor\":1},{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"total_sections\":9,\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"professor_count\":10,\"avg_sections_per_professor\":0.9},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"total_sections\":2,\"department_name\":\"Wydział Inżynierii Produkcji\",\"professor_count\":5,\"avg_sections_per_professor\":0.4},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"total_sections\":4,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"professor_count\":9,\"avg_sections_per_professor\":0.4444444444444444},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"total_sections\":7,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"professor_count\":10,\"avg_sections_per_professor\":0.7}],\"metadata\":{\"columns\":[\"department_id\",\"total_sections\",\"department_name\",\"professor_count\",\"avg_sections_per_professor\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"total_sections\":5,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"professor_count\":9,\"avg_sections_per_professor\":0.5555555555555556},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"total_sections\":7,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"professor_count\":7,\"avg_sections_per_professor\":1}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Sections per Professor by Department\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\",\"labelAngle\":-40}},\"y\":{\"field\":\"avg_sections_per_professor\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Sections per Professor\"}},\"color\":{\"value\":\"#4C78A8\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"avg_sections_per_professor\",\"type\":\"quantitative\",\"title\":\"Avg Sections/Professor\",\"format\":\".2f\"},{\"field\":\"professor_count\",\"type\":\"quantitative\",\"title\":\"Professor Count\"},{\"field\":\"total_sections\",\"type\":\"quantitative\",\"title\":\"Total Sections\"},{\"field\":\"department_id\",\"type\":\"nominal\",\"title\":\"Department ID\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"Departments with no professors will be omitted because the query starts FROM professors and INNER JOINs departments. If you want empty departments included, start FROM departments and LEFT JOIN professors/course_sections.\",\"If professor_count = 0 the avg_sections_per_professor expression yields NULL (due to NULLIF); bars will be missing for those departments—use COALESCE(..., 0) if you prefer showing 0.\",\"Vega-Lite encoding does not include an explicit x-axis sort; relying on the SQL ORDER BY may work but is not guaranteed in all renderers. Add an explicit sort if a stable ordering is required.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"7ad980fa29cef42704bd016e6d7c1445\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/course-sections-per-professor-department/run-0001/run.json",
+    "queryPath": "runs/course-sections-per-professor-department/run-0001/query.sql",
+    "vegaRawPath": "runs/course-sections-per-professor-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/course-sections-per-professor-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/course-sections-per-professor-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:30:27.554Z",
+  "traceId": "7ad980fa29cef42704bd016e6d7c1445",
+  "success": true,
+  "durationMs": 94861,
+  "resultRaw": {
+    "data": [
+      {
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "total_sections": 5,
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "professor_count": 9,
+        "avg_sections_per_professor": 0.5555555555555556
+      },
+      {
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "total_sections": 7,
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "professor_count": 7,
+        "avg_sections_per_professor": 1
+      },
+      {
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "total_sections": 9,
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "professor_count": 10,
+        "avg_sections_per_professor": 0.9
+      },
+      {
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "total_sections": 2,
+        "department_name": "Wydział Inżynierii Produkcji",
+        "professor_count": 5,
+        "avg_sections_per_professor": 0.4
+      },
+      {
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "total_sections": 4,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "professor_count": 9,
+        "avg_sections_per_professor": 0.4444444444444444
+      },
+      {
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "total_sections": 7,
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "professor_count": 10,
+        "avg_sections_per_professor": 0.7
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Sections per Professor by Department",
+      "width": 700,
+      "height": 400,
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "department_name",
+          "type": "nominal",
+          "axis": {
+            "title": "Department",
+            "labelAngle": -40
+          }
+        },
+        "y": {
+          "field": "avg_sections_per_professor",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average Sections per Professor"
+          }
+        },
+        "color": {
+          "value": "#4C78A8"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "avg_sections_per_professor",
+            "type": "quantitative",
+            "title": "Avg Sections/Professor",
+            "format": ".2f"
+          },
+          {
+            "field": "professor_count",
+            "type": "quantitative",
+            "title": "Professor Count"
+          },
+          {
+            "field": "total_sections",
+            "type": "quantitative",
+            "title": "Total Sections"
+          },
+          {
+            "field": "department_id",
+            "type": "nominal",
+            "title": "Department ID"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT d.id AS department_id,\n       d.name AS department_name,\n       COUNT(DISTINCT p.id) AS professor_count,\n       COUNT(cs.id) AS total_sections,\n       (COUNT(cs.id)::double precision / NULLIF(COUNT(DISTINCT p.id), 0)) AS avg_sections_per_professor\nFROM public.professors p\nJOIN public.departments d ON p.department_id = d.id\nLEFT JOIN public.course_sections cs ON cs.professor_id = p.id\nGROUP BY d.id, d.name\nORDER BY d.name;",
+    "metadata": {
+      "columns": [
+        "department_id",
+        "total_sections",
+        "department_name",
+        "professor_count",
+        "avg_sections_per_professor"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "total_sections": 5,
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "professor_count": 9,
+          "avg_sections_per_professor": 0.5555555555555556
+        },
+        {
+          "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+          "total_sections": 7,
+          "department_name": "Wydział Informatyki i Nauki o Materiałach",
+          "professor_count": 7,
+          "avg_sections_per_professor": 1
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "Departments with no professors will be omitted because the query starts FROM professors and INNER JOINs departments. If you want empty departments included, start FROM departments and LEFT JOIN professors/course_sections.",
+        "If professor_count = 0 the avg_sections_per_professor expression yields NULL (due to NULLIF); bars will be missing for those departments—use COALESCE(..., 0) if you prefer showing 0.",
+        "Vega-Lite encoding does not include an explicit x-axis sort; relying on the SQL ORDER BY may work but is not guaranteed in all renderers. Add an explicit sort if a stable ordering is required."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "total_sections": 5,
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "professor_count": 9,
+        "avg_sections_per_professor": 0.5555555555555556
+      },
+      {
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "total_sections": 7,
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "professor_count": 7,
+        "avg_sections_per_professor": 1
+      },
+      {
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "total_sections": 9,
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "professor_count": 10,
+        "avg_sections_per_professor": 0.9
+      },
+      {
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "total_sections": 2,
+        "department_name": "Wydział Inżynierii Produkcji",
+        "professor_count": 5,
+        "avg_sections_per_professor": 0.4
+      },
+      {
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "total_sections": 4,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "professor_count": 9,
+        "avg_sections_per_professor": 0.4444444444444444
+      },
+      {
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "total_sections": 7,
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "professor_count": 10,
+        "avg_sections_per_professor": 0.7
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Sections per Professor by Department",
+      "width": 700,
+      "height": 400,
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "department_name",
+          "type": "nominal",
+          "axis": {
+            "title": "Department",
+            "labelAngle": -40
+          }
+        },
+        "y": {
+          "field": "avg_sections_per_professor",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average Sections per Professor"
+          }
+        },
+        "color": {
+          "value": "#4C78A8"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "avg_sections_per_professor",
+            "type": "quantitative",
+            "title": "Avg Sections/Professor",
+            "format": ".2f"
+          },
+          {
+            "field": "professor_count",
+            "type": "quantitative",
+            "title": "Professor Count"
+          },
+          {
+            "field": "total_sections",
+            "type": "quantitative",
+            "title": "Total Sections"
+          },
+          {
+            "field": "department_id",
+            "type": "nominal",
+            "title": "Department ID"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT d.id AS department_id,\n       d.name AS department_name,\n       COUNT(DISTINCT p.id) AS professor_count,\n       COUNT(cs.id) AS total_sections,\n       (COUNT(cs.id)::double precision / NULLIF(COUNT(DISTINCT p.id), 0)) AS avg_sections_per_professor\nFROM public.professors p\nJOIN public.departments d ON p.department_id = d.id\nLEFT JOIN public.course_sections cs ON cs.professor_id = p.id\nGROUP BY d.id, d.name\nORDER BY d.name;",
+    "metadata": {
+      "columns": [
+        "department_id",
+        "total_sections",
+        "department_name",
+        "professor_count",
+        "avg_sections_per_professor"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "total_sections": 5,
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "professor_count": 9,
+          "avg_sections_per_professor": 0.5555555555555556
+        },
+        {
+          "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+          "total_sections": 7,
+          "department_name": "Wydział Informatyki i Nauki o Materiałach",
+          "professor_count": 7,
+          "avg_sections_per_professor": 1
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "Departments with no professors will be omitted because the query starts FROM professors and INNER JOINs departments. If you want empty departments included, start FROM departments and LEFT JOIN professors/course_sections.",
+        "If professor_count = 0 the avg_sections_per_professor expression yields NULL (due to NULLIF); bars will be missing for those departments—use COALESCE(..., 0) if you prefer showing 0.",
+        "Vega-Lite encoding does not include an explicit x-axis sort; relying on the SQL ORDER BY may work but is not guaranteed in all renderers. Add an explicit sort if a stable ordering is required."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:30:27.554Z",
+    "traceId": "7ad980fa29cef42704bd016e6d7c1445",
+    "attempts": 5,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 27814,
+      "outputTokens": 5879,
+      "totalTokens": 33693,
+      "cachedInputTokens": 3840,
+      "reasoningTokens": 3904,
+      "costUsd": 0.0187115
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 27814,
+        "outputTokens": 5879,
+        "totalTokens": 33693,
+        "cachedInputTokens": 3840,
+        "reasoningTokens": 3904,
+        "costUsd": 0.0187115
+      }
+    ],
+    "warnings": []
+  }
+}

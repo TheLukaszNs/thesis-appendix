@@ -1,0 +1,342 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "professor-experience-vs-rating",
+  "caseDirectory": "professor-experience-vs-rating",
+  "repeatIndex": 1,
+  "prompt": "Is there a relationship between professor hire date and their evaluation rating?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Is there a relationship between professor hire date and their evaluation rating?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:40:44.071Z",
+    "endedAtUtc": "2026-02-23T11:42:30.398Z",
+    "durationMs": 106327
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "32836",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:42:30 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Is there a relationship between professor hire date and their evaluation rating?\"},\"planner\":{\"payload\":{\"question\":\"Is there a relationship between professor hire date and their evaluation rating?\"},\"startedAt\":1771846844077,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.professor_rating) AS avg_professor_rating\",\"COUNT(course_evaluations.id) AS eval_count\"],\"dimensions\":[\"professors.id\",\"professors.hire_date\",\"DATE_PART('year', AGE(current_date, professors.hire_date))\"],\"filters\":[\"professors.hire_date IS NOT NULL\",\"course_evaluations.professor_rating IS NOT NULL\",\"course_evaluations.professor_rating BETWEEN 1 AND 5\",\"COUNT(course_evaluations.id) >= 5 /* per-professor minimum evaluations filter (apply in HAVING when aggregating) */\"],\"grain\":\"one row per professor (aggregate evaluations by professor)\",\"aliases\":{\"professors.id\":\"professor_id\",\"professors.hire_date\":\"hire_date\",\"DATE_PART('year', AGE(current_date, professors.hire_date))\":\"years_since_hire\",\"AVG(course_evaluations.professor_rating)\":\"avg_professor_rating\",\"COUNT(course_evaluations.id)\":\"eval_count\"},\"output_fields\":[\"professor_id\",\"hire_date\",\"years_since_hire\",\"avg_professor_rating\",\"eval_count\"]},\"visual_requirements\":{\"chart_type\":\"scatter\",\"x_axis\":\"years_since_hire\",\"y_axis\":\"avg_professor_rating\",\"color_group\":\"eval_count\",\"title\":\"Professor average rating vs. years since hire\"},\"assumptions\":[\"Join path used (confirmed in schema): course_evaluations.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.professor_id -> professors.id.\",\"We measure 'evaluation rating' using course_evaluations.professor_rating (not overall_rating).\",\"Aggregate at the professor level: average(professor_rating) per professor.\",\"Hire date is available in professors.hire_date (confirmed) and converted to years since hire using DATE_PART('year', AGE(current_date, hire_date)).\",\"Exclude evaluations/professors with NULL ratings or NULL hire_date (filters applied).\",\"To reduce noise, include only professors with at least 5 evaluations (this should be applied as a HAVING COUNT(course_evaluations.id) >= 5). If you prefer no minimum, remove that filter.\",\"Professor rating is expected to be integer in the observed range 1-5 (confirmed column data_type is integer); we filter to that range.\",\"Color/size encoding uses eval_count to show number of evaluations per professor; visualization consumer may map eval_count to point size or color.\",\"Current date (current_date) is used to compute years since hire; replace with a reference date if a different time anchor is required.\"]}},\"endedAt\":1771846886258},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.professor_rating) AS avg_professor_rating\",\"COUNT(course_evaluations.id) AS eval_count\"],\"dimensions\":[\"professors.id\",\"professors.hire_date\",\"DATE_PART('year', AGE(current_date, professors.hire_date))\"],\"filters\":[\"professors.hire_date IS NOT NULL\",\"course_evaluations.professor_rating IS NOT NULL\",\"course_evaluations.professor_rating BETWEEN 1 AND 5\",\"COUNT(course_evaluations.id) >= 5 /* per-professor minimum evaluations filter (apply in HAVING when aggregating) */\"],\"grain\":\"one row per professor (aggregate evaluations by professor)\",\"aliases\":{\"professors.id\":\"professor_id\",\"professors.hire_date\":\"hire_date\",\"DATE_PART('year', AGE(current_date, professors.hire_date))\":\"years_since_hire\",\"AVG(course_evaluations.professor_rating)\":\"avg_professor_rating\",\"COUNT(course_evaluations.id)\":\"eval_count\"},\"output_fields\":[\"professor_id\",\"hire_date\",\"years_since_hire\",\"avg_professor_rating\",\"eval_count\"]},\"visual_requirements\":{\"chart_type\":\"scatter\",\"x_axis\":\"years_since_hire\",\"y_axis\":\"avg_professor_rating\",\"color_group\":\"eval_count\",\"title\":\"Professor average rating vs. years since hire\"},\"assumptions\":[\"Join path used (confirmed in schema): course_evaluations.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.professor_id -> professors.id.\",\"We measure 'evaluation rating' using course_evaluations.professor_rating (not overall_rating).\",\"Aggregate at the professor level: average(professor_rating) per professor.\",\"Hire date is available in professors.hire_date (confirmed) and converted to years since hire using DATE_PART('year', AGE(current_date, hire_date)).\",\"Exclude evaluations/professors with NULL ratings or NULL hire_date (filters applied).\",\"To reduce noise, include only professors with at least 5 evaluations (this should be applied as a HAVING COUNT(course_evaluations.id) >= 5). If you prefer no minimum, remove that filter.\",\"Professor rating is expected to be integer in the observed range 1-5 (confirmed column data_type is integer); we filter to that range.\",\"Color/size encoding uses eval_count to show number of evaluations per professor; visualization consumer may map eval_count to point size or color.\",\"Current date (current_date) is used to compute years since hire; replace with a reference date if a different time anchor is required.\"]}},\"startedAt\":1771846886267,\"status\":\"success\",\"output\":{\"question\":\"Is there a relationship between professor hire date and their evaluation rating?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.professor_rating) AS avg_professor_rating\",\"COUNT(course_evaluations.id) AS eval_count\"],\"dimensions\":[\"professors.id\",\"professors.hire_date\",\"DATE_PART('year', AGE(current_date, professors.hire_date))\"],\"filters\":[\"professors.hire_date IS NOT NULL\",\"course_evaluations.professor_rating IS NOT NULL\",\"course_evaluations.professor_rating BETWEEN 1 AND 5\",\"COUNT(course_evaluations.id) >= 5 /* per-professor minimum evaluations filter (apply in HAVING when aggregating) */\"],\"grain\":\"one row per professor (aggregate evaluations by professor)\",\"aliases\":{\"professors.id\":\"professor_id\",\"professors.hire_date\":\"hire_date\",\"DATE_PART('year', AGE(current_date, professors.hire_date))\":\"years_since_hire\",\"AVG(course_evaluations.professor_rating)\":\"avg_professor_rating\",\"COUNT(course_evaluations.id)\":\"eval_count\"},\"output_fields\":[\"professor_id\",\"hire_date\",\"years_since_hire\",\"avg_professor_rating\",\"eval_count\"]},\"visual_requirements\":{\"chart_type\":\"scatter\",\"x_axis\":\"years_since_hire\",\"y_axis\":\"avg_professor_rating\",\"color_group\":\"eval_count\",\"title\":\"Professor average rating vs. years since hire\"},\"assumptions\":[\"Join path used (confirmed in schema): course_evaluations.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.professor_id -> professors.id.\",\"We measure 'evaluation rating' using course_evaluations.professor_rating (not overall_rating).\",\"Aggregate at the professor level: average(professor_rating) per professor.\",\"Hire date is available in professors.hire_date (confirmed) and converted to years since hire using DATE_PART('year', AGE(current_date, hire_date)).\",\"Exclude evaluations/professors with NULL ratings or NULL hire_date (filters applied).\",\"To reduce noise, include only professors with at least 5 evaluations (this should be applied as a HAVING COUNT(course_evaluations.id) >= 5). If you prefer no minimum, remove that filter.\",\"Professor rating is expected to be integer in the observed range 1-5 (confirmed column data_type is integer); we filter to that range.\",\"Color/size encoding uses eval_count to show number of evaluations per professor; visualization consumer may map eval_count to point size or color.\",\"Current date (current_date) is used to compute years since hire; replace with a reference date if a different time anchor is required.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771846886269},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"Is there a relationship between professor hire date and their evaluation rating?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.professor_rating) AS avg_professor_rating\",\"COUNT(course_evaluations.id) AS eval_count\"],\"dimensions\":[\"professors.id\",\"professors.hire_date\",\"DATE_PART('year', AGE(current_date, professors.hire_date))\"],\"filters\":[\"professors.hire_date IS NOT NULL\",\"course_evaluations.professor_rating IS NOT NULL\",\"course_evaluations.professor_rating BETWEEN 1 AND 5\",\"COUNT(course_evaluations.id) >= 5 /* per-professor minimum evaluations filter (apply in HAVING when aggregating) */\"],\"grain\":\"one row per professor (aggregate evaluations by professor)\",\"aliases\":{\"professors.id\":\"professor_id\",\"professors.hire_date\":\"hire_date\",\"DATE_PART('year', AGE(current_date, professors.hire_date))\":\"years_since_hire\",\"AVG(course_evaluations.professor_rating)\":\"avg_professor_rating\",\"COUNT(course_evaluations.id)\":\"eval_count\"},\"output_fields\":[\"professor_id\",\"hire_date\",\"years_since_hire\",\"avg_professor_rating\",\"eval_count\"]},\"visual_requirements\":{\"chart_type\":\"scatter\",\"x_axis\":\"years_since_hire\",\"y_axis\":\"avg_professor_rating\",\"color_group\":\"eval_count\",\"title\":\"Professor average rating vs. years since hire\"},\"assumptions\":[\"Join path used (confirmed in schema): course_evaluations.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.professor_id -> professors.id.\",\"We measure 'evaluation rating' using course_evaluations.professor_rating (not overall_rating).\",\"Aggregate at the professor level: average(professor_rating) per professor.\",\"Hire date is available in professors.hire_date (confirmed) and converted to years since hire using DATE_PART('year', AGE(current_date, hire_date)).\",\"Exclude evaluations/professors with NULL ratings or NULL hire_date (filters applied).\",\"To reduce noise, include only professors with at least 5 evaluations (this should be applied as a HAVING COUNT(course_evaluations.id) >= 5). If you prefer no minimum, remove that filter.\",\"Professor rating is expected to be integer in the observed range 1-5 (confirmed column data_type is integer); we filter to that range.\",\"Color/size encoding uses eval_count to show number of evaluations per professor; visualization consumer may map eval_count to point size or color.\",\"Current date (current_date) is used to compute years since hire; replace with a reference date if a different time anchor is required.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771846886273,\"status\":\"success\",\"output\":{\"question\":\"Is there a relationship between professor hire date and their evaluation rating?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.professor_rating) AS avg_professor_rating\",\"COUNT(course_evaluations.id) AS eval_count\"],\"dimensions\":[\"professors.id\",\"professors.hire_date\",\"DATE_PART('year', AGE(current_date, professors.hire_date))\"],\"filters\":[\"professors.hire_date IS NOT NULL\",\"course_evaluations.professor_rating IS NOT NULL\",\"course_evaluations.professor_rating BETWEEN 1 AND 5\",\"COUNT(course_evaluations.id) >= 5 /* per-professor minimum evaluations filter (apply in HAVING when aggregating) */\"],\"grain\":\"one row per professor (aggregate evaluations by professor)\",\"aliases\":{\"professors.id\":\"professor_id\",\"professors.hire_date\":\"hire_date\",\"DATE_PART('year', AGE(current_date, professors.hire_date))\":\"years_since_hire\",\"AVG(course_evaluations.professor_rating)\":\"avg_professor_rating\",\"COUNT(course_evaluations.id)\":\"eval_count\"},\"output_fields\":[\"professor_id\",\"hire_date\",\"years_since_hire\",\"avg_professor_rating\",\"eval_count\"]},\"visual_requirements\":{\"chart_type\":\"scatter\",\"x_axis\":\"years_since_hire\",\"y_axis\":\"avg_professor_rating\",\"color_group\":\"eval_count\",\"title\":\"Professor average rating vs. years since hire\"},\"assumptions\":[\"Join path used (confirmed in schema): course_evaluations.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.professor_id -> professors.id.\",\"We measure 'evaluation rating' using course_evaluations.professor_rating (not overall_rating).\",\"Aggregate at the professor level: average(professor_rating) per professor.\",\"Hire date is available in professors.hire_date (confirmed) and converted to years since hire using DATE_PART('year', AGE(current_date, hire_date)).\",\"Exclude evaluations/professors with NULL ratings or NULL hire_date (filters applied).\",\"To reduce noise, include only professors with at least 5 evaluations (this should be applied as a HAVING COUNT(course_evaluations.id) >= 5). If you prefer no minimum, remove that filter.\",\"Professor rating is expected to be integer in the observed range 1-5 (confirmed column data_type is integer); we filter to that range.\",\"Color/size encoding uses eval_count to show number of evaluations per professor; visualization consumer may map eval_count to point size or color.\",\"Current date (current_date) is used to compute years since hire; replace with a reference date if a different time anchor is required.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT p.id AS professor_id,\\n       p.hire_date AS hire_date,\\n       DATE_PART('year', AGE(current_date, p.hire_date))::integer AS years_since_hire,\\n       ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\\n       COUNT(ce.id) AS eval_count\\nFROM public.professors p\\nJOIN public.course_sections cs ON cs.professor_id = p.id\\nJOIN public.enrollments e ON e.course_section_id = cs.id\\nJOIN public.course_evaluations ce ON ce.enrollment_id = e.id\\nWHERE p.hire_date IS NOT NULL\\n  AND ce.professor_rating BETWEEN 1 AND 5\\nGROUP BY p.id, p.hire_date\\nHAVING COUNT(ce.id) >= 5\\nORDER BY years_since_hire ASC, professor_id ASC;\",\"validationIssues\":[\"Color and size both map to eval_count — redundant and may be visually confusing; consider using only one encoding (color or size) for eval_count.\",\"You use years_since_hire (quantitative) rather than hire_date (temporal). This matches the plan, but if you intended a calendar-time analysis, put hire_date on a temporal axis instead.\",\"metadata.rowCount shows a single sample row — verify the full query returns enough professors/points for a meaningful scatter plot.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Aggregate average professor_rating per professor (only professors with hire_date and at least 5 evaluations), compute years since hire, and order deterministically by years_since_hire and professor_id. Joins follow the confirmed path: course_evaluations -> enrollments -> course_sections -> professors.\",\"sql\":\"SELECT p.id AS professor_id,\\n       p.hire_date AS hire_date,\\n       DATE_PART('year', AGE(current_date, p.hire_date))::integer AS years_since_hire,\\n       ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\\n       COUNT(ce.id) AS eval_count\\nFROM public.professors p\\nJOIN public.course_sections cs ON cs.professor_id = p.id\\nJOIN public.enrollments e ON e.course_section_id = cs.id\\nJOIN public.course_evaluations ce ON ce.enrollment_id = e.id\\nWHERE p.hire_date IS NOT NULL\\n  AND ce.professor_rating BETWEEN 1 AND 5\\nGROUP BY p.id, p.hire_date\\nHAVING COUNT(ce.id) >= 5\\nORDER BY years_since_hire ASC, professor_id ASC;\",\"assumptions\":[\"Join path: course_evaluations.enrollment_id -> enrollments.id -> course_sections.id -> course_sections.professor_id -> professors.id (confirmed).\",\"Use course_evaluations.professor_rating as the metric and filter ratings to the 1-5 range.\",\"Exclude professors with NULL hire_date.\",\"Only include professors with at least 5 evaluations (HAVING COUNT >= 5).\",\"years_since_hire is computed using DATE_PART('year', AGE(current_date, hire_date)) and rounded avg to 2 decimals for clarity.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT p.id AS professor_id,\\n       p.hire_date AS hire_date,\\n       DATE_PART('year', AGE(current_date, p.hire_date))::integer AS years_since_hire,\\n       ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\\n       COUNT(ce.id) AS eval_count\\nFROM public.professors p\\nJOIN public.course_sections cs ON cs.professor_id = p.id\\nJOIN public.enrollments e ON e.course_section_id = cs.id\\nJOIN public.course_evaluations ce ON ce.enrollment_id = e.id\\nWHERE p.hire_date IS NOT NULL\\n  AND ce.professor_rating BETWEEN 1 AND 5\\nGROUP BY p.id, p.hire_date\\nHAVING COUNT(ce.id) >= 5\\nORDER BY years_since_hire ASC, professor_id ASC\",\"metadata\":{\"columns\":[\"hire_date\",\"eval_count\",\"professor_id\",\"years_since_hire\",\"avg_professor_rating\"],\"rowCount\":1,\"sample\":[{\"hire_date\":\"2002-12-11\",\"eval_count\":5,\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"years_since_hire\":23,\"avg_professor_rating\":3.2}]},\"data\":[{\"hire_date\":\"2002-12-11\",\"eval_count\":5,\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"years_since_hire\":23,\"avg_professor_rating\":3.2}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Professor average rating vs. years since hire\",\"width\":700,\"height\":420,\"mark\":{\"type\":\"point\",\"filled\":true,\"opacity\":0.85,\"stroke\":\"gray\"},\"encoding\":{\"x\":{\"field\":\"years_since_hire\",\"type\":\"quantitative\",\"title\":\"Years since hire\",\"axis\":{\"grid\":true}},\"y\":{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"title\":\"Average professor rating\",\"scale\":{\"domain\":[1,5]},\"axis\":{\"grid\":true}},\"color\":{\"field\":\"eval_count\",\"type\":\"quantitative\",\"title\":\"Number of evaluations\",\"scale\":{\"scheme\":\"blues\"}},\"size\":{\"field\":\"eval_count\",\"type\":\"quantitative\",\"title\":\"Number of evaluations\",\"scale\":{\"range\":[40,600]}},\"tooltip\":[{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"},{\"field\":\"hire_date\",\"type\":\"temporal\",\"title\":\"Hire date\"},{\"field\":\"years_since_hire\",\"type\":\"quantitative\",\"title\":\"Years since hire\"},{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"title\":\"Avg rating\"},{\"field\":\"eval_count\",\"type\":\"quantitative\",\"title\":\"Evaluation count\"}]}},\"reasoning\":\"Scatter plot maps years_since_hire (x) to average professor rating (y). Eval_count is encoded as color and size to surface the number of evaluations per professor; tooltip includes all returned fields for inspection. Y domain fixed to 1–5 to match rating scale.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"Color and size both map to eval_count — redundant and may be visually confusing; consider using only one encoding (color or size) for eval_count.\",\"You use years_since_hire (quantitative) rather than hire_date (temporal). This matches the plan, but if you intended a calendar-time analysis, put hire_date on a temporal axis instead.\",\"metadata.rowCount shows a single sample row — verify the full query returns enough professors/points for a meaningful scatter plot.\"]}}},\"endedAt\":1771846950348,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"Is there a relationship between professor hire date and their evaluation rating?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.professor_rating) AS avg_professor_rating\",\"COUNT(course_evaluations.id) AS eval_count\"],\"dimensions\":[\"professors.id\",\"professors.hire_date\",\"DATE_PART('year', AGE(current_date, professors.hire_date))\"],\"filters\":[\"professors.hire_date IS NOT NULL\",\"course_evaluations.professor_rating IS NOT NULL\",\"course_evaluations.professor_rating BETWEEN 1 AND 5\",\"COUNT(course_evaluations.id) >= 5 /* per-professor minimum evaluations filter (apply in HAVING when aggregating) */\"],\"grain\":\"one row per professor (aggregate evaluations by professor)\",\"aliases\":{\"professors.id\":\"professor_id\",\"professors.hire_date\":\"hire_date\",\"DATE_PART('year', AGE(current_date, professors.hire_date))\":\"years_since_hire\",\"AVG(course_evaluations.professor_rating)\":\"avg_professor_rating\",\"COUNT(course_evaluations.id)\":\"eval_count\"},\"output_fields\":[\"professor_id\",\"hire_date\",\"years_since_hire\",\"avg_professor_rating\",\"eval_count\"]},\"visual_requirements\":{\"chart_type\":\"scatter\",\"x_axis\":\"years_since_hire\",\"y_axis\":\"avg_professor_rating\",\"color_group\":\"eval_count\",\"title\":\"Professor average rating vs. years since hire\"},\"assumptions\":[\"Join path used (confirmed in schema): course_evaluations.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.professor_id -> professors.id.\",\"We measure 'evaluation rating' using course_evaluations.professor_rating (not overall_rating).\",\"Aggregate at the professor level: average(professor_rating) per professor.\",\"Hire date is available in professors.hire_date (confirmed) and converted to years since hire using DATE_PART('year', AGE(current_date, hire_date)).\",\"Exclude evaluations/professors with NULL ratings or NULL hire_date (filters applied).\",\"To reduce noise, include only professors with at least 5 evaluations (this should be applied as a HAVING COUNT(course_evaluations.id) >= 5). If you prefer no minimum, remove that filter.\",\"Professor rating is expected to be integer in the observed range 1-5 (confirmed column data_type is integer); we filter to that range.\",\"Color/size encoding uses eval_count to show number of evaluations per professor; visualization consumer may map eval_count to point size or color.\",\"Current date (current_date) is used to compute years since hire; replace with a reference date if a different time anchor is required.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT p.id AS professor_id,\\n       p.hire_date AS hire_date,\\n       DATE_PART('year', AGE(current_date, p.hire_date))::integer AS years_since_hire,\\n       ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\\n       COUNT(ce.id) AS eval_count\\nFROM public.professors p\\nJOIN public.course_sections cs ON cs.professor_id = p.id\\nJOIN public.enrollments e ON e.course_section_id = cs.id\\nJOIN public.course_evaluations ce ON ce.enrollment_id = e.id\\nWHERE p.hire_date IS NOT NULL\\n  AND ce.professor_rating BETWEEN 1 AND 5\\nGROUP BY p.id, p.hire_date\\nHAVING COUNT(ce.id) >= 5\\nORDER BY years_since_hire ASC, professor_id ASC;\",\"validationIssues\":[\"Color and size both map to eval_count — redundant and may be visually confusing; consider using only one encoding (color or size) for eval_count.\",\"You use years_since_hire (quantitative) rather than hire_date (temporal). This matches the plan, but if you intended a calendar-time analysis, put hire_date on a temporal axis instead.\",\"metadata.rowCount shows a single sample row — verify the full query returns enough professors/points for a meaningful scatter plot.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Aggregate average professor_rating per professor (only professors with hire_date and at least 5 evaluations), compute years since hire, and order deterministically by years_since_hire and professor_id. Joins follow the confirmed path: course_evaluations -> enrollments -> course_sections -> professors.\",\"sql\":\"SELECT p.id AS professor_id,\\n       p.hire_date AS hire_date,\\n       DATE_PART('year', AGE(current_date, p.hire_date))::integer AS years_since_hire,\\n       ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\\n       COUNT(ce.id) AS eval_count\\nFROM public.professors p\\nJOIN public.course_sections cs ON cs.professor_id = p.id\\nJOIN public.enrollments e ON e.course_section_id = cs.id\\nJOIN public.course_evaluations ce ON ce.enrollment_id = e.id\\nWHERE p.hire_date IS NOT NULL\\n  AND ce.professor_rating BETWEEN 1 AND 5\\nGROUP BY p.id, p.hire_date\\nHAVING COUNT(ce.id) >= 5\\nORDER BY years_since_hire ASC, professor_id ASC;\",\"assumptions\":[\"Join path: course_evaluations.enrollment_id -> enrollments.id -> course_sections.id -> course_sections.professor_id -> professors.id (confirmed).\",\"Use course_evaluations.professor_rating as the metric and filter ratings to the 1-5 range.\",\"Exclude professors with NULL hire_date.\",\"Only include professors with at least 5 evaluations (HAVING COUNT >= 5).\",\"years_since_hire is computed using DATE_PART('year', AGE(current_date, hire_date)) and rounded avg to 2 decimals for clarity.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT p.id AS professor_id,\\n       p.hire_date AS hire_date,\\n       DATE_PART('year', AGE(current_date, p.hire_date))::integer AS years_since_hire,\\n       ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\\n       COUNT(ce.id) AS eval_count\\nFROM public.professors p\\nJOIN public.course_sections cs ON cs.professor_id = p.id\\nJOIN public.enrollments e ON e.course_section_id = cs.id\\nJOIN public.course_evaluations ce ON ce.enrollment_id = e.id\\nWHERE p.hire_date IS NOT NULL\\n  AND ce.professor_rating BETWEEN 1 AND 5\\nGROUP BY p.id, p.hire_date\\nHAVING COUNT(ce.id) >= 5\\nORDER BY years_since_hire ASC, professor_id ASC\",\"metadata\":{\"columns\":[\"hire_date\",\"eval_count\",\"professor_id\",\"years_since_hire\",\"avg_professor_rating\"],\"rowCount\":1,\"sample\":[{\"hire_date\":\"2002-12-11\",\"eval_count\":5,\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"years_since_hire\":23,\"avg_professor_rating\":3.2}]},\"data\":[{\"hire_date\":\"2002-12-11\",\"eval_count\":5,\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"years_since_hire\":23,\"avg_professor_rating\":3.2}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Professor average rating vs. years since hire\",\"width\":700,\"height\":420,\"mark\":{\"type\":\"point\",\"filled\":true,\"opacity\":0.85,\"stroke\":\"gray\"},\"encoding\":{\"x\":{\"field\":\"years_since_hire\",\"type\":\"quantitative\",\"title\":\"Years since hire\",\"axis\":{\"grid\":true}},\"y\":{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"title\":\"Average professor rating\",\"scale\":{\"domain\":[1,5]},\"axis\":{\"grid\":true}},\"color\":{\"field\":\"eval_count\",\"type\":\"quantitative\",\"title\":\"Number of evaluations\",\"scale\":{\"scheme\":\"blues\"}},\"size\":{\"field\":\"eval_count\",\"type\":\"quantitative\",\"title\":\"Number of evaluations\",\"scale\":{\"range\":[40,600]}},\"tooltip\":[{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"},{\"field\":\"hire_date\",\"type\":\"temporal\",\"title\":\"Hire date\"},{\"field\":\"years_since_hire\",\"type\":\"quantitative\",\"title\":\"Years since hire\"},{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"title\":\"Avg rating\"},{\"field\":\"eval_count\",\"type\":\"quantitative\",\"title\":\"Evaluation count\"}]}},\"reasoning\":\"Scatter plot maps years_since_hire (x) to average professor rating (y). Eval_count is encoded as color and size to surface the number of evaluations per professor; tooltip includes all returned fields for inspection. Y domain fixed to 1–5 to match rating scale.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"Color and size both map to eval_count — redundant and may be visually confusing; consider using only one encoding (color or size) for eval_count.\",\"You use years_since_hire (quantitative) rather than hire_date (temporal). This matches the plan, but if you intended a calendar-time analysis, put hire_date on a temporal axis instead.\",\"metadata.rowCount shows a single sample row — verify the full query returns enough professors/points for a meaningful scatter plot.\"]}}},\"startedAt\":1771846950355,\"status\":\"success\",\"output\":{\"sql\":\"SELECT p.id AS professor_id,\\n       p.hire_date AS hire_date,\\n       DATE_PART('year', AGE(current_date, p.hire_date))::integer AS years_since_hire,\\n       ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\\n       COUNT(ce.id) AS eval_count\\nFROM public.professors p\\nJOIN public.course_sections cs ON cs.professor_id = p.id\\nJOIN public.enrollments e ON e.course_section_id = cs.id\\nJOIN public.course_evaluations ce ON ce.enrollment_id = e.id\\nWHERE p.hire_date IS NOT NULL\\n  AND ce.professor_rating BETWEEN 1 AND 5\\nGROUP BY p.id, p.hire_date\\nHAVING COUNT(ce.id) >= 5\\nORDER BY years_since_hire ASC, professor_id ASC;\",\"data\":[{\"hire_date\":\"2002-12-11\",\"eval_count\":5,\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"years_since_hire\":23,\"avg_professor_rating\":3.2}],\"metadata\":{\"columns\":[\"hire_date\",\"eval_count\",\"professor_id\",\"years_since_hire\",\"avg_professor_rating\"],\"rowCount\":1,\"sample\":[{\"hire_date\":\"2002-12-11\",\"eval_count\":5,\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"years_since_hire\":23,\"avg_professor_rating\":3.2}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Professor average rating vs. years since hire\",\"width\":700,\"height\":420,\"mark\":{\"type\":\"point\",\"filled\":true,\"opacity\":0.85,\"stroke\":\"gray\"},\"encoding\":{\"x\":{\"field\":\"years_since_hire\",\"type\":\"quantitative\",\"title\":\"Years since hire\",\"axis\":{\"grid\":true}},\"y\":{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"title\":\"Average professor rating\",\"scale\":{\"domain\":[1,5]},\"axis\":{\"grid\":true}},\"color\":{\"field\":\"eval_count\",\"type\":\"quantitative\",\"title\":\"Number of evaluations\",\"scale\":{\"scheme\":\"blues\"}},\"size\":{\"field\":\"eval_count\",\"type\":\"quantitative\",\"title\":\"Number of evaluations\",\"scale\":{\"range\":[40,600]}},\"tooltip\":[{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"},{\"field\":\"hire_date\",\"type\":\"temporal\",\"title\":\"Hire date\"},{\"field\":\"years_since_hire\",\"type\":\"quantitative\",\"title\":\"Years since hire\"},{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"title\":\"Avg rating\"},{\"field\":\"eval_count\",\"type\":\"quantitative\",\"title\":\"Evaluation count\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"Color and size both map to eval_count — redundant and may be visually confusing; consider using only one encoding (color or size) for eval_count.\",\"You use years_since_hire (quantitative) rather than hire_date (temporal). This matches the plan, but if you intended a calendar-time analysis, put hire_date on a temporal axis instead.\",\"metadata.rowCount shows a single sample row — verify the full query returns enough professors/points for a meaningful scatter plot.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771846950364}},\"input\":{\"question\":\"Is there a relationship between professor hire date and their evaluation rating?\"},\"result\":{\"sql\":\"SELECT p.id AS professor_id,\\n       p.hire_date AS hire_date,\\n       DATE_PART('year', AGE(current_date, p.hire_date))::integer AS years_since_hire,\\n       ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\\n       COUNT(ce.id) AS eval_count\\nFROM public.professors p\\nJOIN public.course_sections cs ON cs.professor_id = p.id\\nJOIN public.enrollments e ON e.course_section_id = cs.id\\nJOIN public.course_evaluations ce ON ce.enrollment_id = e.id\\nWHERE p.hire_date IS NOT NULL\\n  AND ce.professor_rating BETWEEN 1 AND 5\\nGROUP BY p.id, p.hire_date\\nHAVING COUNT(ce.id) >= 5\\nORDER BY years_since_hire ASC, professor_id ASC;\",\"data\":[{\"hire_date\":\"2002-12-11\",\"eval_count\":5,\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"years_since_hire\":23,\"avg_professor_rating\":3.2}],\"metadata\":{\"columns\":[\"hire_date\",\"eval_count\",\"professor_id\",\"years_since_hire\",\"avg_professor_rating\"],\"rowCount\":1,\"sample\":[{\"hire_date\":\"2002-12-11\",\"eval_count\":5,\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"years_since_hire\":23,\"avg_professor_rating\":3.2}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Professor average rating vs. years since hire\",\"width\":700,\"height\":420,\"mark\":{\"type\":\"point\",\"filled\":true,\"opacity\":0.85,\"stroke\":\"gray\"},\"encoding\":{\"x\":{\"field\":\"years_since_hire\",\"type\":\"quantitative\",\"title\":\"Years since hire\",\"axis\":{\"grid\":true}},\"y\":{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"title\":\"Average professor rating\",\"scale\":{\"domain\":[1,5]},\"axis\":{\"grid\":true}},\"color\":{\"field\":\"eval_count\",\"type\":\"quantitative\",\"title\":\"Number of evaluations\",\"scale\":{\"scheme\":\"blues\"}},\"size\":{\"field\":\"eval_count\",\"type\":\"quantitative\",\"title\":\"Number of evaluations\",\"scale\":{\"range\":[40,600]}},\"tooltip\":[{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"},{\"field\":\"hire_date\",\"type\":\"temporal\",\"title\":\"Hire date\"},{\"field\":\"years_since_hire\",\"type\":\"quantitative\",\"title\":\"Years since hire\"},{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"title\":\"Avg rating\"},{\"field\":\"eval_count\",\"type\":\"quantitative\",\"title\":\"Evaluation count\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"Color and size both map to eval_count — redundant and may be visually confusing; consider using only one encoding (color or size) for eval_count.\",\"You use years_since_hire (quantitative) rather than hire_date (temporal). This matches the plan, but if you intended a calendar-time analysis, put hire_date on a temporal axis instead.\",\"metadata.rowCount shows a single sample row — verify the full query returns enough professors/points for a meaningful scatter plot.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"91830196d5ac09ca68d4cf594d7b416c\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/professor-experience-vs-rating/run-0001/run.json",
+    "queryPath": "runs/professor-experience-vs-rating/run-0001/query.sql",
+    "vegaRawPath": "runs/professor-experience-vs-rating/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/professor-experience-vs-rating/run-0001/vega.resolved.json",
+    "imagePath": "runs/professor-experience-vs-rating/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:42:30.847Z",
+  "traceId": "91830196d5ac09ca68d4cf594d7b416c",
+  "success": true,
+  "durationMs": 106777,
+  "resultRaw": {
+    "data": [
+      {
+        "hire_date": "2002-12-11",
+        "eval_count": 5,
+        "professor_id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+        "years_since_hire": 23,
+        "avg_professor_rating": 3.2
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Professor average rating vs. years since hire",
+      "width": 700,
+      "height": 420,
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "opacity": 0.85,
+        "stroke": "gray"
+      },
+      "encoding": {
+        "x": {
+          "field": "years_since_hire",
+          "type": "quantitative",
+          "title": "Years since hire",
+          "axis": {
+            "grid": true
+          }
+        },
+        "y": {
+          "field": "avg_professor_rating",
+          "type": "quantitative",
+          "title": "Average professor rating",
+          "scale": {
+            "domain": [
+              1,
+              5
+            ]
+          },
+          "axis": {
+            "grid": true
+          }
+        },
+        "color": {
+          "field": "eval_count",
+          "type": "quantitative",
+          "title": "Number of evaluations",
+          "scale": {
+            "scheme": "blues"
+          }
+        },
+        "size": {
+          "field": "eval_count",
+          "type": "quantitative",
+          "title": "Number of evaluations",
+          "scale": {
+            "range": [
+              40,
+              600
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "professor_id",
+            "type": "nominal",
+            "title": "Professor ID"
+          },
+          {
+            "field": "hire_date",
+            "type": "temporal",
+            "title": "Hire date"
+          },
+          {
+            "field": "years_since_hire",
+            "type": "quantitative",
+            "title": "Years since hire"
+          },
+          {
+            "field": "avg_professor_rating",
+            "type": "quantitative",
+            "title": "Avg rating"
+          },
+          {
+            "field": "eval_count",
+            "type": "quantitative",
+            "title": "Evaluation count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT p.id AS professor_id,\n       p.hire_date AS hire_date,\n       DATE_PART('year', AGE(current_date, p.hire_date))::integer AS years_since_hire,\n       ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\n       COUNT(ce.id) AS eval_count\nFROM public.professors p\nJOIN public.course_sections cs ON cs.professor_id = p.id\nJOIN public.enrollments e ON e.course_section_id = cs.id\nJOIN public.course_evaluations ce ON ce.enrollment_id = e.id\nWHERE p.hire_date IS NOT NULL\n  AND ce.professor_rating BETWEEN 1 AND 5\nGROUP BY p.id, p.hire_date\nHAVING COUNT(ce.id) >= 5\nORDER BY years_since_hire ASC, professor_id ASC;",
+    "metadata": {
+      "columns": [
+        "hire_date",
+        "eval_count",
+        "professor_id",
+        "years_since_hire",
+        "avg_professor_rating"
+      ],
+      "rowCount": 1,
+      "sample": [
+        {
+          "hire_date": "2002-12-11",
+          "eval_count": 5,
+          "professor_id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+          "years_since_hire": 23,
+          "avg_professor_rating": 3.2
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "Color and size both map to eval_count — redundant and may be visually confusing; consider using only one encoding (color or size) for eval_count.",
+        "You use years_since_hire (quantitative) rather than hire_date (temporal). This matches the plan, but if you intended a calendar-time analysis, put hire_date on a temporal axis instead.",
+        "metadata.rowCount shows a single sample row — verify the full query returns enough professors/points for a meaningful scatter plot."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "hire_date": "2002-12-11",
+        "eval_count": 5,
+        "professor_id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+        "years_since_hire": 23,
+        "avg_professor_rating": 3.2
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Professor average rating vs. years since hire",
+      "width": 700,
+      "height": 420,
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "opacity": 0.85,
+        "stroke": "gray"
+      },
+      "encoding": {
+        "x": {
+          "field": "years_since_hire",
+          "type": "quantitative",
+          "title": "Years since hire",
+          "axis": {
+            "grid": true
+          }
+        },
+        "y": {
+          "field": "avg_professor_rating",
+          "type": "quantitative",
+          "title": "Average professor rating",
+          "scale": {
+            "domain": [
+              1,
+              5
+            ]
+          },
+          "axis": {
+            "grid": true
+          }
+        },
+        "color": {
+          "field": "eval_count",
+          "type": "quantitative",
+          "title": "Number of evaluations",
+          "scale": {
+            "scheme": "blues"
+          }
+        },
+        "size": {
+          "field": "eval_count",
+          "type": "quantitative",
+          "title": "Number of evaluations",
+          "scale": {
+            "range": [
+              40,
+              600
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "professor_id",
+            "type": "nominal",
+            "title": "Professor ID"
+          },
+          {
+            "field": "hire_date",
+            "type": "temporal",
+            "title": "Hire date"
+          },
+          {
+            "field": "years_since_hire",
+            "type": "quantitative",
+            "title": "Years since hire"
+          },
+          {
+            "field": "avg_professor_rating",
+            "type": "quantitative",
+            "title": "Avg rating"
+          },
+          {
+            "field": "eval_count",
+            "type": "quantitative",
+            "title": "Evaluation count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT p.id AS professor_id,\n       p.hire_date AS hire_date,\n       DATE_PART('year', AGE(current_date, p.hire_date))::integer AS years_since_hire,\n       ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\n       COUNT(ce.id) AS eval_count\nFROM public.professors p\nJOIN public.course_sections cs ON cs.professor_id = p.id\nJOIN public.enrollments e ON e.course_section_id = cs.id\nJOIN public.course_evaluations ce ON ce.enrollment_id = e.id\nWHERE p.hire_date IS NOT NULL\n  AND ce.professor_rating BETWEEN 1 AND 5\nGROUP BY p.id, p.hire_date\nHAVING COUNT(ce.id) >= 5\nORDER BY years_since_hire ASC, professor_id ASC;",
+    "metadata": {
+      "columns": [
+        "hire_date",
+        "eval_count",
+        "professor_id",
+        "years_since_hire",
+        "avg_professor_rating"
+      ],
+      "rowCount": 1,
+      "sample": [
+        {
+          "hire_date": "2002-12-11",
+          "eval_count": 5,
+          "professor_id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+          "years_since_hire": 23,
+          "avg_professor_rating": 3.2
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "Color and size both map to eval_count — redundant and may be visually confusing; consider using only one encoding (color or size) for eval_count.",
+        "You use years_since_hire (quantitative) rather than hire_date (temporal). This matches the plan, but if you intended a calendar-time analysis, put hire_date on a temporal axis instead.",
+        "metadata.rowCount shows a single sample row — verify the full query returns enough professors/points for a meaningful scatter plot."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:42:30.847Z",
+    "traceId": "91830196d5ac09ca68d4cf594d7b416c",
+    "attempts": 5,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 38801,
+      "outputTokens": 6702,
+      "totalTokens": 45503,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 4352,
+      "costUsd": 0.02310425
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 38801,
+        "outputTokens": 6702,
+        "totalTokens": 45503,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 4352,
+        "costUsd": 0.02310425
+      }
+    ],
+    "warnings": []
+  }
+}

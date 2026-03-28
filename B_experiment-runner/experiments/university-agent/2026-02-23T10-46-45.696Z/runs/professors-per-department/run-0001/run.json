@@ -1,0 +1,156 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "professors-per-department",
+  "caseDirectory": "professors-per-department",
+  "repeatIndex": 1,
+  "prompt": "How many professors work in each department?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many professors work in each department?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:46:45.718Z",
+    "endedAtUtc": "2026-02-23T10:47:01.368Z",
+    "durationMs": 15650
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2006",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:47:01 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"How many professors work in each department?\"},\"agent\":{\"payload\":{\"question\":\"How many professors work in each department?\"},\"startedAt\":1771843605956,\"status\":\"success\",\"output\":{\"sql\":\"WITH dept_prof_counts AS (\\n  SELECT d.id AS department_id,\\n         d.name AS department_name,\\n         COUNT(p.id) AS professor_count\\n  FROM departments d\\n  LEFT JOIN professors p ON p.department_id = d.id\\n  GROUP BY d.id, d.name\\n)\\nSELECT department_id, department_name, professor_count\\nFROM dept_prof_counts\\nORDER BY professor_count DESC, department_name ASC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Number of professors in each department\",\"data\":{\"name\":\"query_result\"},\"title\":\"Professors per Department\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\",\"sort\":\"-x\"},\"x\":{\"field\":\"professor_count\",\"type\":\"quantitative\",\"title\":\"Number of Professors\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"professor_count\",\"type\":\"quantitative\",\"title\":\"Professors\"}]}}},\"endedAt\":1771843621001},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH dept_prof_counts AS (\\n  SELECT d.id AS department_id,\\n         d.name AS department_name,\\n         COUNT(p.id) AS professor_count\\n  FROM departments d\\n  LEFT JOIN professors p ON p.department_id = d.id\\n  GROUP BY d.id, d.name\\n)\\nSELECT department_id, department_name, professor_count\\nFROM dept_prof_counts\\nORDER BY professor_count DESC, department_name ASC;\"},\"startedAt\":1771843621007,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: Connection attempt failed: the pool 'pool-9' is closed\",\"name\":\"Error\"},\"endedAt\":1771843621361}},\"input\":{\"question\":\"How many professors work in each department?\"},\"error\":{\"message\":\"SQL execution failed: Connection attempt failed: the pool 'pool-9' is closed\",\"name\":\"Error\"},\"traceId\":\"913b281c7b6e5eb089fd81e76aba7a00\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/professors-per-department/run-0001/run.json",
+    "queryPath": "runs/professors-per-department/run-0001/query.sql",
+    "vegaRawPath": "runs/professors-per-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/professors-per-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/professors-per-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:47:01.369Z",
+  "traceId": "913b281c7b6e5eb089fd81e76aba7a00",
+  "success": false,
+  "durationMs": 15651,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "How many professors work in each department?"
+      },
+      "agent": {
+        "payload": {
+          "question": "How many professors work in each department?"
+        },
+        "startedAt": 1771843605956,
+        "status": "success",
+        "output": {
+          "sql": "WITH dept_prof_counts AS (\n  SELECT d.id AS department_id,\n         d.name AS department_name,\n         COUNT(p.id) AS professor_count\n  FROM departments d\n  LEFT JOIN professors p ON p.department_id = d.id\n  GROUP BY d.id, d.name\n)\nSELECT department_id, department_name, professor_count\nFROM dept_prof_counts\nORDER BY professor_count DESC, department_name ASC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Number of professors in each department",
+            "data": {
+              "name": "query_result"
+            },
+            "title": "Professors per Department",
+            "mark": {
+              "type": "bar"
+            },
+            "encoding": {
+              "y": {
+                "field": "department_name",
+                "type": "nominal",
+                "title": "Department",
+                "sort": "-x"
+              },
+              "x": {
+                "field": "professor_count",
+                "type": "quantitative",
+                "title": "Number of Professors"
+              },
+              "tooltip": [
+                {
+                  "field": "department_name",
+                  "type": "nominal",
+                  "title": "Department"
+                },
+                {
+                  "field": "professor_count",
+                  "type": "quantitative",
+                  "title": "Professors"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843621001
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH dept_prof_counts AS (\n  SELECT d.id AS department_id,\n         d.name AS department_name,\n         COUNT(p.id) AS professor_count\n  FROM departments d\n  LEFT JOIN professors p ON p.department_id = d.id\n  GROUP BY d.id, d.name\n)\nSELECT department_id, department_name, professor_count\nFROM dept_prof_counts\nORDER BY professor_count DESC, department_name ASC;"
+        },
+        "startedAt": 1771843621007,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: Connection attempt failed: the pool 'pool-9' is closed",
+          "name": "Error"
+        },
+        "endedAt": 1771843621361
+      }
+    },
+    "input": {
+      "question": "How many professors work in each department?"
+    },
+    "error": {
+      "message": "SQL execution failed: Connection attempt failed: the pool 'pool-9' is closed",
+      "name": "Error"
+    },
+    "traceId": "913b281c7b6e5eb089fd81e76aba7a00"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:47:01.369Z",
+    "traceId": "913b281c7b6e5eb089fd81e76aba7a00",
+    "attempts": 2,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 264,
+      "outputTokens": 1157,
+      "totalTokens": 1421,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 832,
+      "costUsd": 0.00238
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 264,
+        "outputTokens": 1157,
+        "totalTokens": 1421,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 832,
+        "costUsd": 0.00238
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,298 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "department-building-map",
+  "caseDirectory": "department-building-map",
+  "repeatIndex": 1,
+  "prompt": "Which buildings are used by which departments?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which buildings are used by which departments?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:52:34.789Z",
+    "endedAtUtc": "2026-02-22T23:53:28.427Z",
+    "durationMs": 53638
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "7621",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:53:28 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Which buildings are used by which departments?\"},\"sql\":{\"payload\":{\"question\":\"Which buildings are used by which departments?\"},\"startedAt\":1771804354795,\"status\":\"success\",\"output\":{\"reasoning\":\"departments table contains a building column; aggregate department names per building (exclude NULL buildings) and order deterministically by building and department name.\",\"sql\":\"SELECT d.building AS building, array_agg(d.name ORDER BY d.name) AS departments FROM public.departments d WHERE d.building IS NOT NULL GROUP BY d.building ORDER BY d.building;\",\"assumptions\":[\"public.departments.building contains the building name used by the department\",\"There is no separate buildings table to join; mapping is stored on departments.building\"]},\"endedAt\":1771804378887},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT d.building AS building, array_agg(d.name ORDER BY d.name) AS departments FROM public.departments d WHERE d.building IS NOT NULL GROUP BY d.building ORDER BY d.building;\"},\"startedAt\":1771804378894,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT d.building AS building, array_agg(d.name ORDER BY d.name) AS departments FROM public.departments d WHERE d.building IS NOT NULL GROUP BY d.building ORDER BY d.building\",\"metadata\":{\"columns\":[\"building\",\"departments\"],\"rowCount\":5,\"sample\":[{\"building\":\"B1\",\"departments\":[\"Wydział Metalurgii i Inżynierii Materiałowej\"]},{\"building\":\"C\",\"departments\":[\"Wydział Informatyki i Nauki o Materiałach\"]}]},\"data\":[{\"building\":\"B1\",\"departments\":[\"Wydział Metalurgii i Inżynierii Materiałowej\"]},{\"building\":\"C\",\"departments\":[\"Wydział Informatyki i Nauki o Materiałach\"]},{\"building\":\"K5\",\"departments\":[\"Wydział Inżynierii Biomedycznej\"]},{\"building\":\"RB3\",\"departments\":[\"Wydział Automatyki, Elektroniki i Informatyki\",\"Wydział Technologii i Inżynierii Chemicznej\"]},{\"building\":\"RM3\",\"departments\":[\"Wydział Inżynierii Produkcji\"]}]},\"endedAt\":1771804378905},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT d.building AS building, array_agg(d.name ORDER BY d.name) AS departments FROM public.departments d WHERE d.building IS NOT NULL GROUP BY d.building ORDER BY d.building\",\"metadata\":{\"columns\":[\"building\",\"departments\"],\"rowCount\":5,\"sample\":[{\"building\":\"B1\",\"departments\":[\"Wydział Metalurgii i Inżynierii Materiałowej\"]},{\"building\":\"C\",\"departments\":[\"Wydział Informatyki i Nauki o Materiałach\"]}]},\"data\":[{\"building\":\"B1\",\"departments\":[\"Wydział Metalurgii i Inżynierii Materiałowej\"]},{\"building\":\"C\",\"departments\":[\"Wydział Informatyki i Nauki o Materiałach\"]},{\"building\":\"K5\",\"departments\":[\"Wydział Inżynierii Biomedycznej\"]},{\"building\":\"RB3\",\"departments\":[\"Wydział Automatyki, Elektroniki i Informatyki\",\"Wydział Technologii i Inżynierii Chemicznej\"]},{\"building\":\"RM3\",\"departments\":[\"Wydział Inżynierii Produkcji\"]}]},\"startedAt\":1771804378906,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Which buildings are used by which departments?\",\"width\":700,\"height\":{\"step\":40},\"mark\":{\"type\":\"text\",\"dx\":6,\"align\":\"left\",\"baseline\":\"middle\"},\"encoding\":{\"y\":{\"field\":\"building\",\"type\":\"nominal\",\"axis\":{\"title\":\"Building\"}},\"x\":{\"value\":0},\"text\":{\"field\":\"departments\",\"type\":\"nominal\"},\"tooltip\":[{\"field\":\"building\",\"type\":\"nominal\"},{\"field\":\"departments\",\"type\":\"nominal\"}]}},\"reasoning\":\"Show each building on the vertical axis and display its departments as text next to the building; tooltip repeats both fields for easy inspection. Encodings use only the provided columns: building and departments.\"},\"endedAt\":1771804408395},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Which buildings are used by which departments?\",\"width\":700,\"height\":{\"step\":40},\"mark\":{\"type\":\"text\",\"dx\":6,\"align\":\"left\",\"baseline\":\"middle\"},\"encoding\":{\"y\":{\"field\":\"building\",\"type\":\"nominal\",\"axis\":{\"title\":\"Building\"}},\"x\":{\"value\":0},\"text\":{\"field\":\"departments\",\"type\":\"nominal\"},\"tooltip\":[{\"field\":\"building\",\"type\":\"nominal\"},{\"field\":\"departments\",\"type\":\"nominal\"}]}},\"reasoning\":\"Show each building on the vertical axis and display its departments as text next to the building; tooltip repeats both fields for easy inspection. Encodings use only the provided columns: building and departments.\"},\"startedAt\":1771804408406,\"status\":\"success\",\"output\":{\"sql\":\"SELECT d.building AS building, array_agg(d.name ORDER BY d.name) AS departments FROM public.departments d WHERE d.building IS NOT NULL GROUP BY d.building ORDER BY d.building;\",\"data\":[{\"building\":\"B1\",\"departments\":[\"Wydział Metalurgii i Inżynierii Materiałowej\"]},{\"building\":\"C\",\"departments\":[\"Wydział Informatyki i Nauki o Materiałach\"]},{\"building\":\"K5\",\"departments\":[\"Wydział Inżynierii Biomedycznej\"]},{\"building\":\"RB3\",\"departments\":[\"Wydział Automatyki, Elektroniki i Informatyki\",\"Wydział Technologii i Inżynierii Chemicznej\"]},{\"building\":\"RM3\",\"departments\":[\"Wydział Inżynierii Produkcji\"]}],\"metadata\":{\"columns\":[\"building\",\"departments\"],\"rowCount\":5,\"sample\":[{\"building\":\"B1\",\"departments\":[\"Wydział Metalurgii i Inżynierii Materiałowej\"]},{\"building\":\"C\",\"departments\":[\"Wydział Informatyki i Nauki o Materiałach\"]}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Which buildings are used by which departments?\",\"width\":700,\"height\":{\"step\":40},\"mark\":{\"type\":\"text\",\"dx\":6,\"align\":\"left\",\"baseline\":\"middle\"},\"encoding\":{\"y\":{\"field\":\"building\",\"type\":\"nominal\",\"axis\":{\"title\":\"Building\"}},\"x\":{\"value\":0},\"text\":{\"field\":\"departments\",\"type\":\"nominal\"},\"tooltip\":[{\"field\":\"building\",\"type\":\"nominal\"},{\"field\":\"departments\",\"type\":\"nominal\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771804408409}},\"input\":{\"question\":\"Which buildings are used by which departments?\"},\"result\":{\"sql\":\"SELECT d.building AS building, array_agg(d.name ORDER BY d.name) AS departments FROM public.departments d WHERE d.building IS NOT NULL GROUP BY d.building ORDER BY d.building;\",\"data\":[{\"building\":\"B1\",\"departments\":[\"Wydział Metalurgii i Inżynierii Materiałowej\"]},{\"building\":\"C\",\"departments\":[\"Wydział Informatyki i Nauki o Materiałach\"]},{\"building\":\"K5\",\"departments\":[\"Wydział Inżynierii Biomedycznej\"]},{\"building\":\"RB3\",\"departments\":[\"Wydział Automatyki, Elektroniki i Informatyki\",\"Wydział Technologii i Inżynierii Chemicznej\"]},{\"building\":\"RM3\",\"departments\":[\"Wydział Inżynierii Produkcji\"]}],\"metadata\":{\"columns\":[\"building\",\"departments\"],\"rowCount\":5,\"sample\":[{\"building\":\"B1\",\"departments\":[\"Wydział Metalurgii i Inżynierii Materiałowej\"]},{\"building\":\"C\",\"departments\":[\"Wydział Informatyki i Nauki o Materiałach\"]}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Which buildings are used by which departments?\",\"width\":700,\"height\":{\"step\":40},\"mark\":{\"type\":\"text\",\"dx\":6,\"align\":\"left\",\"baseline\":\"middle\"},\"encoding\":{\"y\":{\"field\":\"building\",\"type\":\"nominal\",\"axis\":{\"title\":\"Building\"}},\"x\":{\"value\":0},\"text\":{\"field\":\"departments\",\"type\":\"nominal\"},\"tooltip\":[{\"field\":\"building\",\"type\":\"nominal\"},{\"field\":\"departments\",\"type\":\"nominal\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"775e5624adb966b080901017f02a35ec\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/department-building-map/run-0001/run.json",
+    "queryPath": "runs/department-building-map/run-0001/query.sql",
+    "vegaRawPath": "runs/department-building-map/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/department-building-map/run-0001/vega.resolved.json",
+    "imagePath": "runs/department-building-map/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:53:28.855Z",
+  "traceId": "775e5624adb966b080901017f02a35ec",
+  "success": true,
+  "durationMs": 54066,
+  "resultRaw": {
+    "data": [
+      {
+        "building": "B1",
+        "departments": [
+          "Wydział Metalurgii i Inżynierii Materiałowej"
+        ]
+      },
+      {
+        "building": "C",
+        "departments": [
+          "Wydział Informatyki i Nauki o Materiałach"
+        ]
+      },
+      {
+        "building": "K5",
+        "departments": [
+          "Wydział Inżynierii Biomedycznej"
+        ]
+      },
+      {
+        "building": "RB3",
+        "departments": [
+          "Wydział Automatyki, Elektroniki i Informatyki",
+          "Wydział Technologii i Inżynierii Chemicznej"
+        ]
+      },
+      {
+        "building": "RM3",
+        "departments": [
+          "Wydział Inżynierii Produkcji"
+        ]
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Which buildings are used by which departments?",
+      "width": 700,
+      "height": {
+        "step": 40
+      },
+      "mark": {
+        "type": "text",
+        "dx": 6,
+        "align": "left",
+        "baseline": "middle"
+      },
+      "encoding": {
+        "y": {
+          "field": "building",
+          "type": "nominal",
+          "axis": {
+            "title": "Building"
+          }
+        },
+        "x": {
+          "value": 0
+        },
+        "text": {
+          "field": "departments",
+          "type": "nominal"
+        },
+        "tooltip": [
+          {
+            "field": "building",
+            "type": "nominal"
+          },
+          {
+            "field": "departments",
+            "type": "nominal"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT d.building AS building, array_agg(d.name ORDER BY d.name) AS departments FROM public.departments d WHERE d.building IS NOT NULL GROUP BY d.building ORDER BY d.building;",
+    "metadata": {
+      "columns": [
+        "building",
+        "departments"
+      ],
+      "rowCount": 5,
+      "sample": [
+        {
+          "building": "B1",
+          "departments": [
+            "Wydział Metalurgii i Inżynierii Materiałowej"
+          ]
+        },
+        {
+          "building": "C",
+          "departments": [
+            "Wydział Informatyki i Nauki o Materiałach"
+          ]
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "building": "B1",
+        "departments": [
+          "Wydział Metalurgii i Inżynierii Materiałowej"
+        ]
+      },
+      {
+        "building": "C",
+        "departments": [
+          "Wydział Informatyki i Nauki o Materiałach"
+        ]
+      },
+      {
+        "building": "K5",
+        "departments": [
+          "Wydział Inżynierii Biomedycznej"
+        ]
+      },
+      {
+        "building": "RB3",
+        "departments": [
+          "Wydział Automatyki, Elektroniki i Informatyki",
+          "Wydział Technologii i Inżynierii Chemicznej"
+        ]
+      },
+      {
+        "building": "RM3",
+        "departments": [
+          "Wydział Inżynierii Produkcji"
+        ]
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Which buildings are used by which departments?",
+      "width": 700,
+      "height": {
+        "step": 40
+      },
+      "mark": {
+        "type": "text",
+        "dx": 6,
+        "align": "left",
+        "baseline": "middle"
+      },
+      "encoding": {
+        "y": {
+          "field": "building",
+          "type": "nominal",
+          "axis": {
+            "title": "Building"
+          }
+        },
+        "x": {
+          "value": 0
+        },
+        "text": {
+          "field": "departments",
+          "type": "nominal"
+        },
+        "tooltip": [
+          {
+            "field": "building",
+            "type": "nominal"
+          },
+          {
+            "field": "departments",
+            "type": "nominal"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT d.building AS building, array_agg(d.name ORDER BY d.name) AS departments FROM public.departments d WHERE d.building IS NOT NULL GROUP BY d.building ORDER BY d.building;",
+    "metadata": {
+      "columns": [
+        "building",
+        "departments"
+      ],
+      "rowCount": 5,
+      "sample": [
+        {
+          "building": "B1",
+          "departments": [
+            "Wydział Metalurgii i Inżynierii Materiałowej"
+          ]
+        },
+        {
+          "building": "C",
+          "departments": [
+            "Wydział Informatyki i Nauki o Materiałach"
+          ]
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:53:28.855Z",
+    "traceId": "775e5624adb966b080901017f02a35ec",
+    "attempts": 2,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 5447,
+      "outputTokens": 2821,
+      "totalTokens": 8268,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2176,
+      "costUsd": 0.00700375
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 5447,
+        "outputTokens": 2821,
+        "totalTokens": 8268,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2176,
+        "costUsd": 0.00700375
+      }
+    ],
+    "warnings": []
+  }
+}

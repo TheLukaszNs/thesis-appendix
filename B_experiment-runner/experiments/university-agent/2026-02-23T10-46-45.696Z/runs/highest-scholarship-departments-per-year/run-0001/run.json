@@ -1,0 +1,172 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "highest-scholarship-departments-per-year",
+  "caseDirectory": "highest-scholarship-departments-per-year",
+  "repeatIndex": 1,
+  "prompt": "Which department received the most total scholarship money each academic year?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which department received the most total scholarship money each academic year?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:55:08.015Z",
+    "endedAtUtc": "2026-02-23T10:55:24.988Z",
+    "durationMs": 16973
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2992",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:55:24 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Which department received the most total scholarship money each academic year?\"},\"agent\":{\"payload\":{\"question\":\"Which department received the most total scholarship money each academic year?\"},\"startedAt\":1771844108048,\"status\":\"success\",\"output\":{\"sql\":\"WITH dept_totals AS (\\n  SELECT\\n    s.academic_year AS academic_year,\\n    s.department AS department,\\n    SUM(s.amount) AS total_scholarship\\n  FROM scholarships s\\n  GROUP BY s.academic_year, s.department\\n),\\nranked AS (\\n  SELECT\\n    dt.academic_year AS academic_year,\\n    dt.department AS department,\\n    dt.total_scholarship AS total_scholarship,\\n    ROW_NUMBER() OVER (PARTITION BY dt.academic_year ORDER BY dt.total_scholarship DESC) AS rn\\n  FROM dept_totals dt\\n)\\nSELECT\\n  r.academic_year AS academic_year,\\n  r.department AS department,\\n  r.total_scholarship AS total_scholarship\\nFROM ranked r\\nWHERE r.rn = 1\\nORDER BY r.academic_year ASC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Department with the highest total scholarship per academic year\",\"data\":{\"name\":\"query_result\"},\"title\":\"Top Department by Total Scholarship Each Academic Year\",\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"nominal\",\"axis\":{\"title\":\"Academic Year\"}},\"y\":{\"field\":\"total_scholarship\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Total Scholarship Amount\"}},\"color\":{\"field\":\"department\",\"type\":\"nominal\",\"legend\":{\"title\":\"Department\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"department\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"total_scholarship\",\"type\":\"quantitative\",\"title\":\"Total Scholarship\"}]}}},\"endedAt\":1771844124926},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH dept_totals AS (\\n  SELECT\\n    s.academic_year AS academic_year,\\n    s.department AS department,\\n    SUM(s.amount) AS total_scholarship\\n  FROM scholarships s\\n  GROUP BY s.academic_year, s.department\\n),\\nranked AS (\\n  SELECT\\n    dt.academic_year AS academic_year,\\n    dt.department AS department,\\n    dt.total_scholarship AS total_scholarship,\\n    ROW_NUMBER() OVER (PARTITION BY dt.academic_year ORDER BY dt.total_scholarship DESC) AS rn\\n  FROM dept_totals dt\\n)\\nSELECT\\n  r.academic_year AS academic_year,\\n  r.department AS department,\\n  r.total_scholarship AS total_scholarship\\nFROM ranked r\\nWHERE r.rn = 1\\nORDER BY r.academic_year ASC;\"},\"startedAt\":1771844124933,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column s.department does not exist\\nLINE 5:     s.department AS department,\\n            ^\",\"name\":\"Error\"},\"endedAt\":1771844124984}},\"input\":{\"question\":\"Which department received the most total scholarship money each academic year?\"},\"error\":{\"message\":\"SQL execution failed: column s.department does not exist\\nLINE 5:     s.department AS department,\\n            ^\",\"name\":\"Error\"},\"traceId\":\"321153b437be592d6398b3b5536772bd\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/highest-scholarship-departments-per-year/run-0001/run.json",
+    "queryPath": "runs/highest-scholarship-departments-per-year/run-0001/query.sql",
+    "vegaRawPath": "runs/highest-scholarship-departments-per-year/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/highest-scholarship-departments-per-year/run-0001/vega.resolved.json",
+    "imagePath": "runs/highest-scholarship-departments-per-year/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:55:24.988Z",
+  "traceId": "321153b437be592d6398b3b5536772bd",
+  "success": false,
+  "durationMs": 16973,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Which department received the most total scholarship money each academic year?"
+      },
+      "agent": {
+        "payload": {
+          "question": "Which department received the most total scholarship money each academic year?"
+        },
+        "startedAt": 1771844108048,
+        "status": "success",
+        "output": {
+          "sql": "WITH dept_totals AS (\n  SELECT\n    s.academic_year AS academic_year,\n    s.department AS department,\n    SUM(s.amount) AS total_scholarship\n  FROM scholarships s\n  GROUP BY s.academic_year, s.department\n),\nranked AS (\n  SELECT\n    dt.academic_year AS academic_year,\n    dt.department AS department,\n    dt.total_scholarship AS total_scholarship,\n    ROW_NUMBER() OVER (PARTITION BY dt.academic_year ORDER BY dt.total_scholarship DESC) AS rn\n  FROM dept_totals dt\n)\nSELECT\n  r.academic_year AS academic_year,\n  r.department AS department,\n  r.total_scholarship AS total_scholarship\nFROM ranked r\nWHERE r.rn = 1\nORDER BY r.academic_year ASC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Department with the highest total scholarship per academic year",
+            "data": {
+              "name": "query_result"
+            },
+            "title": "Top Department by Total Scholarship Each Academic Year",
+            "mark": {
+              "type": "bar",
+              "tooltip": true
+            },
+            "encoding": {
+              "x": {
+                "field": "academic_year",
+                "type": "nominal",
+                "axis": {
+                  "title": "Academic Year"
+                }
+              },
+              "y": {
+                "field": "total_scholarship",
+                "type": "quantitative",
+                "axis": {
+                  "title": "Total Scholarship Amount"
+                }
+              },
+              "color": {
+                "field": "department",
+                "type": "nominal",
+                "legend": {
+                  "title": "Department"
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "academic_year",
+                  "type": "nominal",
+                  "title": "Academic Year"
+                },
+                {
+                  "field": "department",
+                  "type": "nominal",
+                  "title": "Department"
+                },
+                {
+                  "field": "total_scholarship",
+                  "type": "quantitative",
+                  "title": "Total Scholarship"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771844124926
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH dept_totals AS (\n  SELECT\n    s.academic_year AS academic_year,\n    s.department AS department,\n    SUM(s.amount) AS total_scholarship\n  FROM scholarships s\n  GROUP BY s.academic_year, s.department\n),\nranked AS (\n  SELECT\n    dt.academic_year AS academic_year,\n    dt.department AS department,\n    dt.total_scholarship AS total_scholarship,\n    ROW_NUMBER() OVER (PARTITION BY dt.academic_year ORDER BY dt.total_scholarship DESC) AS rn\n  FROM dept_totals dt\n)\nSELECT\n  r.academic_year AS academic_year,\n  r.department AS department,\n  r.total_scholarship AS total_scholarship\nFROM ranked r\nWHERE r.rn = 1\nORDER BY r.academic_year ASC;"
+        },
+        "startedAt": 1771844124933,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column s.department does not exist\nLINE 5:     s.department AS department,\n            ^",
+          "name": "Error"
+        },
+        "endedAt": 1771844124984
+      }
+    },
+    "input": {
+      "question": "Which department received the most total scholarship money each academic year?"
+    },
+    "error": {
+      "message": "SQL execution failed: column s.department does not exist\nLINE 5:     s.department AS department,\n            ^",
+      "name": "Error"
+    },
+    "traceId": "321153b437be592d6398b3b5536772bd"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:55:24.988Z",
+    "traceId": "321153b437be592d6398b3b5536772bd",
+    "attempts": 3,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 268,
+      "outputTokens": 1162,
+      "totalTokens": 1430,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 640,
+      "costUsd": 0.002391
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 268,
+        "outputTokens": 1162,
+        "totalTokens": 1430,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 640,
+        "costUsd": 0.002391
+      }
+    ],
+    "warnings": []
+  }
+}

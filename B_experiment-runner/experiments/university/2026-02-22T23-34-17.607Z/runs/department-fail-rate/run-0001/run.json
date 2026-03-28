@@ -1,0 +1,126 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "department-fail-rate",
+  "caseDirectory": "department-fail-rate",
+  "repeatIndex": 1,
+  "prompt": "What is the failure rate per department?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the failure rate per department?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:44:31.264Z",
+    "endedAtUtc": "2026-02-22T23:45:42.992Z",
+    "durationMs": 71728
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "3664",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:45:42 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"What is the failure rate per department?\"},\"sql\":{\"payload\":{\"question\":\"What is the failure rate per department?\"},\"startedAt\":1771803871279,\"status\":\"success\",\"output\":{\"reasoning\":\"Compute failure rate per department by joining grades -> enrollments -> course_sections -> courses -> departments. Treat grades with numeric grade_value; consider a failure when numeric grade_value < 3.0. Include departments with no grades (rate 0). Order deterministically by failure_rate desc then department_name.\",\"sql\":\"SELECT\\n  d.id AS department_id,\\n  d.name AS department_name,\\n  SUM(CASE WHEN g.grade_value ~ '^[0-9]+(\\\\\\\\.[0-9]+)?$' AND g.grade_value::numeric < 3.0 THEN 1 ELSE 0 END) AS failures,\\n  SUM(CASE WHEN g.grade_value ~ '^[0-9]+(\\\\\\\\.[0-9]+)?$' THEN 1 ELSE 0 END) AS total_numeric_grades,\\n  ROUND(\\n    COALESCE(\\n      SUM(CASE WHEN g.grade_value ~ '^[0-9]+(\\\\\\\\.[0-9]+)?$' AND g.grade_value::numeric < 3.0 THEN 1 ELSE 0 END)::numeric\\n      / NULLIF(SUM(CASE WHEN g.grade_value ~ '^[0-9]+(\\\\\\\\.[0-9]+)?$' THEN 1 ELSE 0 END), 0),\\n    0)\\n  , 4) AS failure_rate\\nFROM public.departments d\\nLEFT JOIN public.courses c ON c.department_id = d.id\\nLEFT JOIN public.course_sections cs ON cs.course_id = c.id\\nLEFT JOIN public.enrollments e ON e.course_section_id = cs.id\\nLEFT JOIN public.grades g ON g.enrollment_id = e.id\\nGROUP BY d.id, d.name\\nORDER BY failure_rate DESC, department_name ASC;\",\"assumptions\":[\"Failure is defined as numeric grade_value < 3.0.\",\"Only grades with grade_value matching a numeric pattern are counted in total; non-numeric grade_value entries are excluded from numerator and denominator.\",\"Join path used: grades.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id -> courses.department_id -> departments.id.\"]},\"endedAt\":1771803942955},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  d.id AS department_id,\\n  d.name AS department_name,\\n  SUM(CASE WHEN g.grade_value ~ '^[0-9]+(\\\\\\\\.[0-9]+)?$' AND g.grade_value::numeric < 3.0 THEN 1 ELSE 0 END) AS failures,\\n  SUM(CASE WHEN g.grade_value ~ '^[0-9]+(\\\\\\\\.[0-9]+)?$' THEN 1 ELSE 0 END) AS total_numeric_grades,\\n  ROUND(\\n    COALESCE(\\n      SUM(CASE WHEN g.grade_value ~ '^[0-9]+(\\\\\\\\.[0-9]+)?$' AND g.grade_value::numeric < 3.0 THEN 1 ELSE 0 END)::numeric\\n      / NULLIF(SUM(CASE WHEN g.grade_value ~ '^[0-9]+(\\\\\\\\.[0-9]+)?$' THEN 1 ELSE 0 END), 0),\\n    0)\\n  , 4) AS failure_rate\\nFROM public.departments d\\nLEFT JOIN public.courses c ON c.department_id = d.id\\nLEFT JOIN public.course_sections cs ON cs.course_id = c.id\\nLEFT JOIN public.enrollments e ON e.course_section_id = cs.id\\nLEFT JOIN public.grades g ON g.enrollment_id = e.id\\nGROUP BY d.id, d.name\\nORDER BY failure_rate DESC, department_name ASC;\"},\"startedAt\":1771803942957,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: operator does not exist: grade_value ~ unknown\\nLINE 5:   SUM(CASE WHEN g.grade_value ~ '^[0-9]+(\\\\\\\\.[0-9]+)?$' AND g...\\n                                      ^\\nHINT:  No operator matches the given name and argument types. You might need to add explicit type casts.\",\"name\":\"Error\"},\"endedAt\":1771803942988}},\"input\":{\"question\":\"What is the failure rate per department?\"},\"error\":{\"message\":\"SQL execution failed: operator does not exist: grade_value ~ unknown\\nLINE 5:   SUM(CASE WHEN g.grade_value ~ '^[0-9]+(\\\\\\\\.[0-9]+)?$' AND g...\\n                                      ^\\nHINT:  No operator matches the given name and argument types. You might need to add explicit type casts.\",\"name\":\"Error\"},\"traceId\":\"67bed6b2efdebdfa55cf3bd14b0f35e6\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/department-fail-rate/run-0001/run.json",
+    "queryPath": "runs/department-fail-rate/run-0001/query.sql",
+    "vegaRawPath": "runs/department-fail-rate/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/department-fail-rate/run-0001/vega.resolved.json",
+    "imagePath": "runs/department-fail-rate/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:45:42.992Z",
+  "traceId": "67bed6b2efdebdfa55cf3bd14b0f35e6",
+  "success": false,
+  "durationMs": 71728,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "What is the failure rate per department?"
+      },
+      "sql": {
+        "payload": {
+          "question": "What is the failure rate per department?"
+        },
+        "startedAt": 1771803871279,
+        "status": "success",
+        "output": {
+          "reasoning": "Compute failure rate per department by joining grades -> enrollments -> course_sections -> courses -> departments. Treat grades with numeric grade_value; consider a failure when numeric grade_value < 3.0. Include departments with no grades (rate 0). Order deterministically by failure_rate desc then department_name.",
+          "sql": "SELECT\n  d.id AS department_id,\n  d.name AS department_name,\n  SUM(CASE WHEN g.grade_value ~ '^[0-9]+(\\\\.[0-9]+)?$' AND g.grade_value::numeric < 3.0 THEN 1 ELSE 0 END) AS failures,\n  SUM(CASE WHEN g.grade_value ~ '^[0-9]+(\\\\.[0-9]+)?$' THEN 1 ELSE 0 END) AS total_numeric_grades,\n  ROUND(\n    COALESCE(\n      SUM(CASE WHEN g.grade_value ~ '^[0-9]+(\\\\.[0-9]+)?$' AND g.grade_value::numeric < 3.0 THEN 1 ELSE 0 END)::numeric\n      / NULLIF(SUM(CASE WHEN g.grade_value ~ '^[0-9]+(\\\\.[0-9]+)?$' THEN 1 ELSE 0 END), 0),\n    0)\n  , 4) AS failure_rate\nFROM public.departments d\nLEFT JOIN public.courses c ON c.department_id = d.id\nLEFT JOIN public.course_sections cs ON cs.course_id = c.id\nLEFT JOIN public.enrollments e ON e.course_section_id = cs.id\nLEFT JOIN public.grades g ON g.enrollment_id = e.id\nGROUP BY d.id, d.name\nORDER BY failure_rate DESC, department_name ASC;",
+          "assumptions": [
+            "Failure is defined as numeric grade_value < 3.0.",
+            "Only grades with grade_value matching a numeric pattern are counted in total; non-numeric grade_value entries are excluded from numerator and denominator.",
+            "Join path used: grades.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id -> courses.department_id -> departments.id."
+          ]
+        },
+        "endedAt": 1771803942955
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT\n  d.id AS department_id,\n  d.name AS department_name,\n  SUM(CASE WHEN g.grade_value ~ '^[0-9]+(\\\\.[0-9]+)?$' AND g.grade_value::numeric < 3.0 THEN 1 ELSE 0 END) AS failures,\n  SUM(CASE WHEN g.grade_value ~ '^[0-9]+(\\\\.[0-9]+)?$' THEN 1 ELSE 0 END) AS total_numeric_grades,\n  ROUND(\n    COALESCE(\n      SUM(CASE WHEN g.grade_value ~ '^[0-9]+(\\\\.[0-9]+)?$' AND g.grade_value::numeric < 3.0 THEN 1 ELSE 0 END)::numeric\n      / NULLIF(SUM(CASE WHEN g.grade_value ~ '^[0-9]+(\\\\.[0-9]+)?$' THEN 1 ELSE 0 END), 0),\n    0)\n  , 4) AS failure_rate\nFROM public.departments d\nLEFT JOIN public.courses c ON c.department_id = d.id\nLEFT JOIN public.course_sections cs ON cs.course_id = c.id\nLEFT JOIN public.enrollments e ON e.course_section_id = cs.id\nLEFT JOIN public.grades g ON g.enrollment_id = e.id\nGROUP BY d.id, d.name\nORDER BY failure_rate DESC, department_name ASC;"
+        },
+        "startedAt": 1771803942957,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: operator does not exist: grade_value ~ unknown\nLINE 5:   SUM(CASE WHEN g.grade_value ~ '^[0-9]+(\\\\.[0-9]+)?$' AND g...\n                                      ^\nHINT:  No operator matches the given name and argument types. You might need to add explicit type casts.",
+          "name": "Error"
+        },
+        "endedAt": 1771803942988
+      }
+    },
+    "input": {
+      "question": "What is the failure rate per department?"
+    },
+    "error": {
+      "message": "SQL execution failed: operator does not exist: grade_value ~ unknown\nLINE 5:   SUM(CASE WHEN g.grade_value ~ '^[0-9]+(\\\\.[0-9]+)?$' AND g...\n                                      ^\nHINT:  No operator matches the given name and argument types. You might need to add explicit type casts.",
+      "name": "Error"
+    },
+    "traceId": "67bed6b2efdebdfa55cf3bd14b0f35e6"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:45:42.992Z",
+    "traceId": "67bed6b2efdebdfa55cf3bd14b0f35e6",
+    "attempts": 6,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 25877,
+      "outputTokens": 4100,
+      "totalTokens": 29977,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 3072,
+      "costUsd": 0.01466925
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 25877,
+        "outputTokens": 4100,
+        "totalTokens": 29977,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 3072,
+        "costUsd": 0.01466925
+      }
+    ],
+    "warnings": []
+  }
+}

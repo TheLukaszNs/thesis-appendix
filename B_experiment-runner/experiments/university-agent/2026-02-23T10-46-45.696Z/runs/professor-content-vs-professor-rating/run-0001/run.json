@@ -1,0 +1,187 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "professor-content-vs-professor-rating",
+  "caseDirectory": "professor-content-vs-professor-rating",
+  "repeatIndex": 1,
+  "prompt": "Show average content rating vs professor rating for each professor",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show average content rating vs professor rating for each professor"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:53:06.076Z",
+    "endedAtUtc": "2026-02-23T10:53:22.026Z",
+    "durationMs": 15950
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2501",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:53:22 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Show average content rating vs professor rating for each professor\"},\"agent\":{\"payload\":{\"question\":\"Show average content rating vs professor rating for each professor\"},\"startedAt\":1771843986101,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  professor_name AS professor,\\n  ROUND(AVG(content_rating), 2) AS avg_content_rating,\\n  ROUND(AVG(professor_rating), 2) AS avg_professor_rating,\\n  COUNT(*) AS review_count\\nFROM reviews\\nWHERE content_rating IS NOT NULL AND professor_rating IS NOT NULL\\nGROUP BY professor_name\\nORDER BY professor;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Average content rating vs average professor rating for each professor (dot size = number of reviews).\",\"title\":\"Average Content Rating vs Average Professor Rating by Professor\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":400,\"mark\":{\"type\":\"point\",\"filled\":true,\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"avg_content_rating\",\"type\":\"quantitative\",\"title\":\"Average Content Rating\"},\"y\":{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"title\":\"Average Professor Rating\"},\"size\":{\"field\":\"review_count\",\"type\":\"quantitative\",\"title\":\"Review Count\",\"scale\":{\"range\":[30,400]}},\"color\":{\"field\":\"professor\",\"type\":\"nominal\",\"legend\":{\"title\":\"Professor\"}},\"tooltip\":[{\"field\":\"professor\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"avg_content_rating\",\"type\":\"quantitative\",\"title\":\"Avg Content Rating\"},{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"title\":\"Avg Professor Rating\"},{\"field\":\"review_count\",\"type\":\"quantitative\",\"title\":\"Review Count\"}]}}},\"endedAt\":1771844002007},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  professor_name AS professor,\\n  ROUND(AVG(content_rating), 2) AS avg_content_rating,\\n  ROUND(AVG(professor_rating), 2) AS avg_professor_rating,\\n  COUNT(*) AS review_count\\nFROM reviews\\nWHERE content_rating IS NOT NULL AND professor_rating IS NOT NULL\\nGROUP BY professor_name\\nORDER BY professor;\"},\"startedAt\":1771844002008,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: relation \\\"reviews\\\" does not exist\\nLINE 7: FROM reviews\\n             ^\",\"name\":\"Error\"},\"endedAt\":1771844002023}},\"input\":{\"question\":\"Show average content rating vs professor rating for each professor\"},\"error\":{\"message\":\"SQL execution failed: relation \\\"reviews\\\" does not exist\\nLINE 7: FROM reviews\\n             ^\",\"name\":\"Error\"},\"traceId\":\"6621fb4b9caf6efe91b4bde08ad1980b\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/professor-content-vs-professor-rating/run-0001/run.json",
+    "queryPath": "runs/professor-content-vs-professor-rating/run-0001/query.sql",
+    "vegaRawPath": "runs/professor-content-vs-professor-rating/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/professor-content-vs-professor-rating/run-0001/vega.resolved.json",
+    "imagePath": "runs/professor-content-vs-professor-rating/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:53:22.026Z",
+  "traceId": "6621fb4b9caf6efe91b4bde08ad1980b",
+  "success": false,
+  "durationMs": 15950,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Show average content rating vs professor rating for each professor"
+      },
+      "agent": {
+        "payload": {
+          "question": "Show average content rating vs professor rating for each professor"
+        },
+        "startedAt": 1771843986101,
+        "status": "success",
+        "output": {
+          "sql": "SELECT\n  professor_name AS professor,\n  ROUND(AVG(content_rating), 2) AS avg_content_rating,\n  ROUND(AVG(professor_rating), 2) AS avg_professor_rating,\n  COUNT(*) AS review_count\nFROM reviews\nWHERE content_rating IS NOT NULL AND professor_rating IS NOT NULL\nGROUP BY professor_name\nORDER BY professor;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Average content rating vs average professor rating for each professor (dot size = number of reviews).",
+            "title": "Average Content Rating vs Average Professor Rating by Professor",
+            "data": {
+              "name": "query_result"
+            },
+            "width": 700,
+            "height": 400,
+            "mark": {
+              "type": "point",
+              "filled": true,
+              "tooltip": true
+            },
+            "encoding": {
+              "x": {
+                "field": "avg_content_rating",
+                "type": "quantitative",
+                "title": "Average Content Rating"
+              },
+              "y": {
+                "field": "avg_professor_rating",
+                "type": "quantitative",
+                "title": "Average Professor Rating"
+              },
+              "size": {
+                "field": "review_count",
+                "type": "quantitative",
+                "title": "Review Count",
+                "scale": {
+                  "range": [
+                    30,
+                    400
+                  ]
+                }
+              },
+              "color": {
+                "field": "professor",
+                "type": "nominal",
+                "legend": {
+                  "title": "Professor"
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "professor",
+                  "type": "nominal",
+                  "title": "Professor"
+                },
+                {
+                  "field": "avg_content_rating",
+                  "type": "quantitative",
+                  "title": "Avg Content Rating"
+                },
+                {
+                  "field": "avg_professor_rating",
+                  "type": "quantitative",
+                  "title": "Avg Professor Rating"
+                },
+                {
+                  "field": "review_count",
+                  "type": "quantitative",
+                  "title": "Review Count"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771844002007
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT\n  professor_name AS professor,\n  ROUND(AVG(content_rating), 2) AS avg_content_rating,\n  ROUND(AVG(professor_rating), 2) AS avg_professor_rating,\n  COUNT(*) AS review_count\nFROM reviews\nWHERE content_rating IS NOT NULL AND professor_rating IS NOT NULL\nGROUP BY professor_name\nORDER BY professor;"
+        },
+        "startedAt": 1771844002008,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: relation \"reviews\" does not exist\nLINE 7: FROM reviews\n             ^",
+          "name": "Error"
+        },
+        "endedAt": 1771844002023
+      }
+    },
+    "input": {
+      "question": "Show average content rating vs professor rating for each professor"
+    },
+    "error": {
+      "message": "SQL execution failed: relation \"reviews\" does not exist\nLINE 7: FROM reviews\n             ^",
+      "name": "Error"
+    },
+    "traceId": "6621fb4b9caf6efe91b4bde08ad1980b"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:53:22.026Z",
+    "traceId": "6621fb4b9caf6efe91b4bde08ad1980b",
+    "attempts": 6,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 266,
+      "outputTokens": 1272,
+      "totalTokens": 1538,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 768,
+      "costUsd": 0.0026105
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 266,
+        "outputTokens": 1272,
+        "totalTokens": 1538,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 768,
+        "costUsd": 0.0026105
+      }
+    ],
+    "warnings": []
+  }
+}

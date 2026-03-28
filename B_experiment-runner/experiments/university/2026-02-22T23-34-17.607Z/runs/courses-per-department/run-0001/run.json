@@ -1,0 +1,344 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "courses-per-department",
+  "caseDirectory": "courses-per-department",
+  "repeatIndex": 1,
+  "prompt": "How many courses does each department offer?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many courses does each department offer?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:36:06.255Z",
+    "endedAtUtc": "2026-02-22T23:36:39.900Z",
+    "durationMs": 33645
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "12203",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:36:39 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How many courses does each department offer?\"},\"sql\":{\"payload\":{\"question\":\"How many courses does each department offer?\"},\"startedAt\":1771803366268,\"status\":\"success\",\"output\":{\"reasoning\":\"Count courses per department using departments left-joined to courses so departments with zero courses are included; group by department id/code/name and order deterministically by course_count desc then department_name asc.\",\"sql\":\"SELECT d.id AS department_id, d.code AS department_code, d.name AS department_name, COUNT(c.id) AS course_count\\nFROM public.departments d\\nLEFT JOIN public.courses c ON c.department_id = d.id\\nGROUP BY d.id, d.code, d.name\\nORDER BY course_count DESC, department_name ASC;\",\"assumptions\":[\"The relevant tables are public.departments (id, code, name) and public.courses (id, department_id).\",\"A department with no courses should be reported with course_count = 0.\"]},\"endedAt\":1771803383286},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT d.id AS department_id, d.code AS department_code, d.name AS department_name, COUNT(c.id) AS course_count\\nFROM public.departments d\\nLEFT JOIN public.courses c ON c.department_id = d.id\\nGROUP BY d.id, d.code, d.name\\nORDER BY course_count DESC, department_name ASC;\"},\"startedAt\":1771803383318,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT d.id AS department_id, d.code AS department_code, d.name AS department_name, COUNT(c.id) AS course_count\\nFROM public.departments d\\nLEFT JOIN public.courses c ON c.department_id = d.id\\nGROUP BY d.id, d.code, d.name\\nORDER BY course_count DESC, department_name ASC\",\"metadata\":{\"columns\":[\"course_count\",\"department_id\",\"department_code\",\"department_name\"],\"rowCount\":6,\"sample\":[{\"course_count\":6,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"course_count\":6,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"}]},\"data\":[{\"course_count\":6,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"course_count\":6,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"course_count\":5,\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"course_count\":4,\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"course_count\":3,\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"course_count\":2,\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"}]},\"endedAt\":1771803383369},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT d.id AS department_id, d.code AS department_code, d.name AS department_name, COUNT(c.id) AS course_count\\nFROM public.departments d\\nLEFT JOIN public.courses c ON c.department_id = d.id\\nGROUP BY d.id, d.code, d.name\\nORDER BY course_count DESC, department_name ASC\",\"metadata\":{\"columns\":[\"course_count\",\"department_id\",\"department_code\",\"department_name\"],\"rowCount\":6,\"sample\":[{\"course_count\":6,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"course_count\":6,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"}]},\"data\":[{\"course_count\":6,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"course_count\":6,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"course_count\":5,\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"course_count\":4,\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"course_count\":3,\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"course_count\":2,\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"}]},\"startedAt\":1771803383373,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Number of courses offered by each department.\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":{\"step\":30},\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"course_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of courses\",\"grid\":true}},\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":\"-x\",\"axis\":{\"title\":\"Department\",\"labelLimit\":300}},\"color\":{\"field\":\"department_code\",\"type\":\"nominal\",\"legend\":{\"title\":\"Dept. code\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Courses\"}]},\"title\":\"Courses per Department\"},\"reasoning\":\"Used a horizontal bar chart sorted by course_count to make department comparisons easy; tooltip shows department name, code, and exact course count.\"},\"endedAt\":1771803399864},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Number of courses offered by each department.\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":{\"step\":30},\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"course_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of courses\",\"grid\":true}},\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":\"-x\",\"axis\":{\"title\":\"Department\",\"labelLimit\":300}},\"color\":{\"field\":\"department_code\",\"type\":\"nominal\",\"legend\":{\"title\":\"Dept. code\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Courses\"}]},\"title\":\"Courses per Department\"},\"reasoning\":\"Used a horizontal bar chart sorted by course_count to make department comparisons easy; tooltip shows department name, code, and exact course count.\"},\"startedAt\":1771803399878,\"status\":\"success\",\"output\":{\"sql\":\"SELECT d.id AS department_id, d.code AS department_code, d.name AS department_name, COUNT(c.id) AS course_count\\nFROM public.departments d\\nLEFT JOIN public.courses c ON c.department_id = d.id\\nGROUP BY d.id, d.code, d.name\\nORDER BY course_count DESC, department_name ASC;\",\"data\":[{\"course_count\":6,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"course_count\":6,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"course_count\":5,\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"course_count\":4,\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"course_count\":3,\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"course_count\":2,\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"}],\"metadata\":{\"columns\":[\"course_count\",\"department_id\",\"department_code\",\"department_name\"],\"rowCount\":6,\"sample\":[{\"course_count\":6,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"course_count\":6,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Number of courses offered by each department.\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":{\"step\":30},\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"course_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of courses\",\"grid\":true}},\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":\"-x\",\"axis\":{\"title\":\"Department\",\"labelLimit\":300}},\"color\":{\"field\":\"department_code\",\"type\":\"nominal\",\"legend\":{\"title\":\"Dept. code\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Courses\"}]},\"title\":\"Courses per Department\"},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771803399883}},\"input\":{\"question\":\"How many courses does each department offer?\"},\"result\":{\"sql\":\"SELECT d.id AS department_id, d.code AS department_code, d.name AS department_name, COUNT(c.id) AS course_count\\nFROM public.departments d\\nLEFT JOIN public.courses c ON c.department_id = d.id\\nGROUP BY d.id, d.code, d.name\\nORDER BY course_count DESC, department_name ASC;\",\"data\":[{\"course_count\":6,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"course_count\":6,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"course_count\":5,\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"course_count\":4,\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"course_count\":3,\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"course_count\":2,\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"}],\"metadata\":{\"columns\":[\"course_count\",\"department_id\",\"department_code\",\"department_name\"],\"rowCount\":6,\"sample\":[{\"course_count\":6,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"course_count\":6,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Number of courses offered by each department.\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":{\"step\":30},\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"course_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of courses\",\"grid\":true}},\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":\"-x\",\"axis\":{\"title\":\"Department\",\"labelLimit\":300}},\"color\":{\"field\":\"department_code\",\"type\":\"nominal\",\"legend\":{\"title\":\"Dept. code\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Courses\"}]},\"title\":\"Courses per Department\"},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"3bebb2db5a9de54a0e4a977dcb12dff2\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/courses-per-department/run-0001/run.json",
+    "queryPath": "runs/courses-per-department/run-0001/query.sql",
+    "vegaRawPath": "runs/courses-per-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/courses-per-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/courses-per-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:36:40.319Z",
+  "traceId": "3bebb2db5a9de54a0e4a977dcb12dff2",
+  "success": true,
+  "durationMs": 34064,
+  "resultRaw": {
+    "data": [
+      {
+        "course_count": 6,
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_code": "AEI",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+      },
+      {
+        "course_count": 6,
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+      },
+      {
+        "course_count": 5,
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_code": "WIP",
+        "department_name": "Wydział Inżynierii Produkcji"
+      },
+      {
+        "course_count": 4,
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_code": "IBM",
+        "department_name": "Wydział Inżynierii Biomedycznej"
+      },
+      {
+        "course_count": 3,
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_code": "TCH",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej"
+      },
+      {
+        "course_count": 2,
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_code": "INF",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "description": "Number of courses offered by each department.",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 700,
+      "height": {
+        "step": 30
+      },
+      "mark": {
+        "type": "bar",
+        "cornerRadius": 3
+      },
+      "encoding": {
+        "x": {
+          "field": "course_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Number of courses",
+            "grid": true
+          }
+        },
+        "y": {
+          "field": "department_name",
+          "type": "nominal",
+          "sort": "-x",
+          "axis": {
+            "title": "Department",
+            "labelLimit": 300
+          }
+        },
+        "color": {
+          "field": "department_code",
+          "type": "nominal",
+          "legend": {
+            "title": "Dept. code"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "department_code",
+            "type": "nominal",
+            "title": "Code"
+          },
+          {
+            "field": "course_count",
+            "type": "quantitative",
+            "title": "Courses"
+          }
+        ]
+      },
+      "title": "Courses per Department"
+    },
+    "sql": "SELECT d.id AS department_id, d.code AS department_code, d.name AS department_name, COUNT(c.id) AS course_count\nFROM public.departments d\nLEFT JOIN public.courses c ON c.department_id = d.id\nGROUP BY d.id, d.code, d.name\nORDER BY course_count DESC, department_name ASC;",
+    "metadata": {
+      "columns": [
+        "course_count",
+        "department_id",
+        "department_code",
+        "department_name"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "course_count": 6,
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "department_code": "AEI",
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+        },
+        {
+          "course_count": 6,
+          "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+          "department_code": "MTR",
+          "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "course_count": 6,
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_code": "AEI",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+      },
+      {
+        "course_count": 6,
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+      },
+      {
+        "course_count": 5,
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_code": "WIP",
+        "department_name": "Wydział Inżynierii Produkcji"
+      },
+      {
+        "course_count": 4,
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_code": "IBM",
+        "department_name": "Wydział Inżynierii Biomedycznej"
+      },
+      {
+        "course_count": 3,
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_code": "TCH",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej"
+      },
+      {
+        "course_count": 2,
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_code": "INF",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "description": "Number of courses offered by each department.",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 700,
+      "height": {
+        "step": 30
+      },
+      "mark": {
+        "type": "bar",
+        "cornerRadius": 3
+      },
+      "encoding": {
+        "x": {
+          "field": "course_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Number of courses",
+            "grid": true
+          }
+        },
+        "y": {
+          "field": "department_name",
+          "type": "nominal",
+          "sort": "-x",
+          "axis": {
+            "title": "Department",
+            "labelLimit": 300
+          }
+        },
+        "color": {
+          "field": "department_code",
+          "type": "nominal",
+          "legend": {
+            "title": "Dept. code"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "department_code",
+            "type": "nominal",
+            "title": "Code"
+          },
+          {
+            "field": "course_count",
+            "type": "quantitative",
+            "title": "Courses"
+          }
+        ]
+      },
+      "title": "Courses per Department"
+    },
+    "sql": "SELECT d.id AS department_id, d.code AS department_code, d.name AS department_name, COUNT(c.id) AS course_count\nFROM public.departments d\nLEFT JOIN public.courses c ON c.department_id = d.id\nGROUP BY d.id, d.code, d.name\nORDER BY course_count DESC, department_name ASC;",
+    "metadata": {
+      "columns": [
+        "course_count",
+        "department_id",
+        "department_code",
+        "department_name"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "course_count": 6,
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "department_code": "AEI",
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+        },
+        {
+          "course_count": 6,
+          "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+          "department_code": "MTR",
+          "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:36:40.319Z",
+    "traceId": "3bebb2db5a9de54a0e4a977dcb12dff2",
+    "attempts": 6,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 8149,
+      "outputTokens": 2002,
+      "totalTokens": 10151,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1152,
+      "costUsd": 0.00604125
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 8149,
+        "outputTokens": 2002,
+        "totalTokens": 10151,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1152,
+        "costUsd": 0.00604125
+      }
+    ],
+    "warnings": []
+  }
+}

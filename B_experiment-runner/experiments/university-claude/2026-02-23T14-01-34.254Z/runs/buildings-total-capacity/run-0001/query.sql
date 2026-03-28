@@ -1,0 +1,1 @@
+SELECT building, SUM(capacity) AS total_seating_capacity FROM public.classrooms GROUP BY building ORDER BY building

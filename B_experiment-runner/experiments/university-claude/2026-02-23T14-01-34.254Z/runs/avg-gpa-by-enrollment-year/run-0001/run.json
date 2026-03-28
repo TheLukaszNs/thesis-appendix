@@ -1,0 +1,326 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "avg-gpa-by-enrollment-year",
+  "caseDirectory": "avg-gpa-by-enrollment-year",
+  "repeatIndex": 1,
+  "prompt": "How does average GPA vary by year of enrollment?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How does average GPA vary by year of enrollment?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:11:25.696Z",
+    "endedAtUtc": "2026-02-23T14:12:02.770Z",
+    "durationMs": 37074
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "9847",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:12:02 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How does average GPA vary by year of enrollment?\"},\"sql\":{\"payload\":{\"question\":\"How does average GPA vary by year of enrollment?\"},\"startedAt\":1771855885701,\"status\":\"success\",\"output\":{\"reasoning\":\"The question asks how average GPA varies by year of enrollment. I've confirmed the students table has both enrollment_date and gpa columns. The query extracts the year from enrollment_date, calculates the average GPA for each year, and includes a student count for context. Results are ordered chronologically by enrollment year for clear trend visualization.\",\"sql\":\"SELECT \\n  EXTRACT(YEAR FROM enrollment_date)::INTEGER AS enrollment_year,\\n  ROUND(AVG(gpa)::NUMERIC, 2) AS average_gpa,\\n  COUNT(*) AS student_count\\nFROM students\\nWHERE gpa IS NOT NULL\\nGROUP BY EXTRACT(YEAR FROM enrollment_date)\\nORDER BY enrollment_year ASC\",\"assumptions\":[\"GPA values are stored in the gpa column of the students table\",\"enrollment_date represents the year of enrollment\",\"NULL GPA values should be excluded from the average calculation\"]},\"endedAt\":1771855917827},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT \\n  EXTRACT(YEAR FROM enrollment_date)::INTEGER AS enrollment_year,\\n  ROUND(AVG(gpa)::NUMERIC, 2) AS average_gpa,\\n  COUNT(*) AS student_count\\nFROM students\\nWHERE gpa IS NOT NULL\\nGROUP BY EXTRACT(YEAR FROM enrollment_date)\\nORDER BY enrollment_year ASC\"},\"startedAt\":1771855917830,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  EXTRACT(YEAR FROM enrollment_date)::INTEGER AS enrollment_year,\\n  ROUND(AVG(gpa)::NUMERIC, 2) AS average_gpa,\\n  COUNT(*) AS student_count\\nFROM students\\nWHERE gpa IS NOT NULL\\nGROUP BY EXTRACT(YEAR FROM enrollment_date)\\nORDER BY enrollment_year ASC\",\"metadata\":{\"columns\":[\"enrollment_year\",\"average_gpa\",\"student_count\"],\"rowCount\":8,\"sample\":[{\"enrollment_year\":2019,\"average_gpa\":\"4.12\",\"student_count\":\"12\"},{\"enrollment_year\":2020,\"average_gpa\":\"3.77\",\"student_count\":\"18\"}]},\"data\":[{\"enrollment_year\":2019,\"average_gpa\":\"4.12\",\"student_count\":\"12\"},{\"enrollment_year\":2020,\"average_gpa\":\"3.77\",\"student_count\":\"18\"},{\"enrollment_year\":2021,\"average_gpa\":\"3.91\",\"student_count\":\"19\"},{\"enrollment_year\":2022,\"average_gpa\":\"4.09\",\"student_count\":\"12\"},{\"enrollment_year\":2023,\"average_gpa\":\"4.08\",\"student_count\":\"13\"},{\"enrollment_year\":2024,\"average_gpa\":\"4.13\",\"student_count\":\"17\"},{\"enrollment_year\":2025,\"average_gpa\":\"4.06\",\"student_count\":\"14\"},{\"enrollment_year\":2026,\"average_gpa\":\"3.78\",\"student_count\":\"2\"}]},\"endedAt\":1771855917840},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  EXTRACT(YEAR FROM enrollment_date)::INTEGER AS enrollment_year,\\n  ROUND(AVG(gpa)::NUMERIC, 2) AS average_gpa,\\n  COUNT(*) AS student_count\\nFROM students\\nWHERE gpa IS NOT NULL\\nGROUP BY EXTRACT(YEAR FROM enrollment_date)\\nORDER BY enrollment_year ASC\",\"metadata\":{\"columns\":[\"enrollment_year\",\"average_gpa\",\"student_count\"],\"rowCount\":8,\"sample\":[{\"enrollment_year\":2019,\"average_gpa\":\"4.12\",\"student_count\":\"12\"},{\"enrollment_year\":2020,\"average_gpa\":\"3.77\",\"student_count\":\"18\"}]},\"data\":[{\"enrollment_year\":2019,\"average_gpa\":\"4.12\",\"student_count\":\"12\"},{\"enrollment_year\":2020,\"average_gpa\":\"3.77\",\"student_count\":\"18\"},{\"enrollment_year\":2021,\"average_gpa\":\"3.91\",\"student_count\":\"19\"},{\"enrollment_year\":2022,\"average_gpa\":\"4.09\",\"student_count\":\"12\"},{\"enrollment_year\":2023,\"average_gpa\":\"4.08\",\"student_count\":\"13\"},{\"enrollment_year\":2024,\"average_gpa\":\"4.13\",\"student_count\":\"17\"},{\"enrollment_year\":2025,\"average_gpa\":\"4.06\",\"student_count\":\"14\"},{\"enrollment_year\":2026,\"average_gpa\":\"3.78\",\"student_count\":\"2\"}]},\"startedAt\":1771855917842,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average GPA by Year of Enrollment\",\"description\":\"Trend of average GPA across enrollment years with student count\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"line\",\"point\":true,\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"title\":\"Enrollment Year\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"scale\":{\"zero\":false}},\"tooltip\":[{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"title\":\"Year\"},{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"format\":\".2f\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"reasoning\":\"Line chart with points is ideal for showing trends over time. The enrollment_year is treated as ordinal to preserve chronological order while allowing gaps. Average GPA is the primary metric on the y-axis. The tooltip includes all three fields for context, showing both the GPA trend and the sample size (student_count) for each year.\"},\"endedAt\":1771855922747},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average GPA by Year of Enrollment\",\"description\":\"Trend of average GPA across enrollment years with student count\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"line\",\"point\":true,\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"title\":\"Enrollment Year\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"scale\":{\"zero\":false}},\"tooltip\":[{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"title\":\"Year\"},{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"format\":\".2f\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"reasoning\":\"Line chart with points is ideal for showing trends over time. The enrollment_year is treated as ordinal to preserve chronological order while allowing gaps. Average GPA is the primary metric on the y-axis. The tooltip includes all three fields for context, showing both the GPA trend and the sample size (student_count) for each year.\"},\"startedAt\":1771855922753,\"status\":\"success\",\"output\":{\"sql\":\"SELECT \\n  EXTRACT(YEAR FROM enrollment_date)::INTEGER AS enrollment_year,\\n  ROUND(AVG(gpa)::NUMERIC, 2) AS average_gpa,\\n  COUNT(*) AS student_count\\nFROM students\\nWHERE gpa IS NOT NULL\\nGROUP BY EXTRACT(YEAR FROM enrollment_date)\\nORDER BY enrollment_year ASC\",\"data\":[{\"enrollment_year\":2019,\"average_gpa\":\"4.12\",\"student_count\":\"12\"},{\"enrollment_year\":2020,\"average_gpa\":\"3.77\",\"student_count\":\"18\"},{\"enrollment_year\":2021,\"average_gpa\":\"3.91\",\"student_count\":\"19\"},{\"enrollment_year\":2022,\"average_gpa\":\"4.09\",\"student_count\":\"12\"},{\"enrollment_year\":2023,\"average_gpa\":\"4.08\",\"student_count\":\"13\"},{\"enrollment_year\":2024,\"average_gpa\":\"4.13\",\"student_count\":\"17\"},{\"enrollment_year\":2025,\"average_gpa\":\"4.06\",\"student_count\":\"14\"},{\"enrollment_year\":2026,\"average_gpa\":\"3.78\",\"student_count\":\"2\"}],\"metadata\":{\"columns\":[\"enrollment_year\",\"average_gpa\",\"student_count\"],\"rowCount\":8,\"sample\":[{\"enrollment_year\":2019,\"average_gpa\":\"4.12\",\"student_count\":\"12\"},{\"enrollment_year\":2020,\"average_gpa\":\"3.77\",\"student_count\":\"18\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average GPA by Year of Enrollment\",\"description\":\"Trend of average GPA across enrollment years with student count\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"line\",\"point\":true,\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"title\":\"Enrollment Year\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"scale\":{\"zero\":false}},\"tooltip\":[{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"title\":\"Year\"},{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"format\":\".2f\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855922757}},\"input\":{\"question\":\"How does average GPA vary by year of enrollment?\"},\"result\":{\"sql\":\"SELECT \\n  EXTRACT(YEAR FROM enrollment_date)::INTEGER AS enrollment_year,\\n  ROUND(AVG(gpa)::NUMERIC, 2) AS average_gpa,\\n  COUNT(*) AS student_count\\nFROM students\\nWHERE gpa IS NOT NULL\\nGROUP BY EXTRACT(YEAR FROM enrollment_date)\\nORDER BY enrollment_year ASC\",\"data\":[{\"enrollment_year\":2019,\"average_gpa\":\"4.12\",\"student_count\":\"12\"},{\"enrollment_year\":2020,\"average_gpa\":\"3.77\",\"student_count\":\"18\"},{\"enrollment_year\":2021,\"average_gpa\":\"3.91\",\"student_count\":\"19\"},{\"enrollment_year\":2022,\"average_gpa\":\"4.09\",\"student_count\":\"12\"},{\"enrollment_year\":2023,\"average_gpa\":\"4.08\",\"student_count\":\"13\"},{\"enrollment_year\":2024,\"average_gpa\":\"4.13\",\"student_count\":\"17\"},{\"enrollment_year\":2025,\"average_gpa\":\"4.06\",\"student_count\":\"14\"},{\"enrollment_year\":2026,\"average_gpa\":\"3.78\",\"student_count\":\"2\"}],\"metadata\":{\"columns\":[\"enrollment_year\",\"average_gpa\",\"student_count\"],\"rowCount\":8,\"sample\":[{\"enrollment_year\":2019,\"average_gpa\":\"4.12\",\"student_count\":\"12\"},{\"enrollment_year\":2020,\"average_gpa\":\"3.77\",\"student_count\":\"18\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average GPA by Year of Enrollment\",\"description\":\"Trend of average GPA across enrollment years with student count\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"line\",\"point\":true,\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"title\":\"Enrollment Year\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"scale\":{\"zero\":false}},\"tooltip\":[{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"title\":\"Year\"},{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"format\":\".2f\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"5309b73112fdd3cdff4464c643207283\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-gpa-by-enrollment-year/run-0001/run.json",
+    "queryPath": "runs/avg-gpa-by-enrollment-year/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-gpa-by-enrollment-year/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-gpa-by-enrollment-year/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-gpa-by-enrollment-year/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:12:03.182Z",
+  "traceId": "5309b73112fdd3cdff4464c643207283",
+  "success": true,
+  "durationMs": 37486,
+  "resultRaw": {
+    "data": [
+      {
+        "enrollment_year": 2019,
+        "average_gpa": "4.12",
+        "student_count": "12"
+      },
+      {
+        "enrollment_year": 2020,
+        "average_gpa": "3.77",
+        "student_count": "18"
+      },
+      {
+        "enrollment_year": 2021,
+        "average_gpa": "3.91",
+        "student_count": "19"
+      },
+      {
+        "enrollment_year": 2022,
+        "average_gpa": "4.09",
+        "student_count": "12"
+      },
+      {
+        "enrollment_year": 2023,
+        "average_gpa": "4.08",
+        "student_count": "13"
+      },
+      {
+        "enrollment_year": 2024,
+        "average_gpa": "4.13",
+        "student_count": "17"
+      },
+      {
+        "enrollment_year": 2025,
+        "average_gpa": "4.06",
+        "student_count": "14"
+      },
+      {
+        "enrollment_year": 2026,
+        "average_gpa": "3.78",
+        "student_count": "2"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average GPA by Year of Enrollment",
+      "description": "Trend of average GPA across enrollment years with student count",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": {
+        "type": "line",
+        "point": true,
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "enrollment_year",
+          "type": "ordinal",
+          "title": "Enrollment Year",
+          "axis": {
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "average_gpa",
+          "type": "quantitative",
+          "title": "Average GPA",
+          "scale": {
+            "zero": false
+          }
+        },
+        "tooltip": [
+          {
+            "field": "enrollment_year",
+            "type": "ordinal",
+            "title": "Year"
+          },
+          {
+            "field": "average_gpa",
+            "type": "quantitative",
+            "title": "Average GPA",
+            "format": ".2f"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Student Count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT \n  EXTRACT(YEAR FROM enrollment_date)::INTEGER AS enrollment_year,\n  ROUND(AVG(gpa)::NUMERIC, 2) AS average_gpa,\n  COUNT(*) AS student_count\nFROM students\nWHERE gpa IS NOT NULL\nGROUP BY EXTRACT(YEAR FROM enrollment_date)\nORDER BY enrollment_year ASC",
+    "metadata": {
+      "columns": [
+        "enrollment_year",
+        "average_gpa",
+        "student_count"
+      ],
+      "rowCount": 8,
+      "sample": [
+        {
+          "enrollment_year": 2019,
+          "average_gpa": "4.12",
+          "student_count": "12"
+        },
+        {
+          "enrollment_year": 2020,
+          "average_gpa": "3.77",
+          "student_count": "18"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "enrollment_year": 2019,
+        "average_gpa": "4.12",
+        "student_count": "12"
+      },
+      {
+        "enrollment_year": 2020,
+        "average_gpa": "3.77",
+        "student_count": "18"
+      },
+      {
+        "enrollment_year": 2021,
+        "average_gpa": "3.91",
+        "student_count": "19"
+      },
+      {
+        "enrollment_year": 2022,
+        "average_gpa": "4.09",
+        "student_count": "12"
+      },
+      {
+        "enrollment_year": 2023,
+        "average_gpa": "4.08",
+        "student_count": "13"
+      },
+      {
+        "enrollment_year": 2024,
+        "average_gpa": "4.13",
+        "student_count": "17"
+      },
+      {
+        "enrollment_year": 2025,
+        "average_gpa": "4.06",
+        "student_count": "14"
+      },
+      {
+        "enrollment_year": 2026,
+        "average_gpa": "3.78",
+        "student_count": "2"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average GPA by Year of Enrollment",
+      "description": "Trend of average GPA across enrollment years with student count",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": {
+        "type": "line",
+        "point": true,
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "enrollment_year",
+          "type": "ordinal",
+          "title": "Enrollment Year",
+          "axis": {
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "average_gpa",
+          "type": "quantitative",
+          "title": "Average GPA",
+          "scale": {
+            "zero": false
+          }
+        },
+        "tooltip": [
+          {
+            "field": "enrollment_year",
+            "type": "ordinal",
+            "title": "Year"
+          },
+          {
+            "field": "average_gpa",
+            "type": "quantitative",
+            "title": "Average GPA",
+            "format": ".2f"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Student Count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT \n  EXTRACT(YEAR FROM enrollment_date)::INTEGER AS enrollment_year,\n  ROUND(AVG(gpa)::NUMERIC, 2) AS average_gpa,\n  COUNT(*) AS student_count\nFROM students\nWHERE gpa IS NOT NULL\nGROUP BY EXTRACT(YEAR FROM enrollment_date)\nORDER BY enrollment_year ASC",
+    "metadata": {
+      "columns": [
+        "enrollment_year",
+        "average_gpa",
+        "student_count"
+      ],
+      "rowCount": 8,
+      "sample": [
+        {
+          "enrollment_year": 2019,
+          "average_gpa": "4.12",
+          "student_count": "12"
+        },
+        {
+          "enrollment_year": 2020,
+          "average_gpa": "3.77",
+          "student_count": "18"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.273Z",
+    "traceId": "5309b73112fdd3cdff4464c643207283",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 13887,
+      "outputTokens": 953,
+      "totalTokens": 14840,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.018652
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 13887,
+        "outputTokens": 953,
+        "totalTokens": 14840,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.018652
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "avg-grade-winter-vs-summer",
+  "caseDirectory": "avg-grade-winter-vs-summer",
+  "repeatIndex": 1,
+  "prompt": "Compare average grades between winter and summer semesters",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Compare average grades between winter and summer semesters"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:50:39.860Z",
+    "endedAtUtc": "2026-02-23T10:50:55.418Z",
+    "durationMs": 15558
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2677",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:50:55 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Compare average grades between winter and summer semesters\"},\"agent\":{\"payload\":{\"question\":\"Compare average grades between winter and summer semesters\"},\"startedAt\":1771843839870,\"status\":\"success\",\"output\":{\"sql\":\"WITH season_averages AS (\\n  SELECT\\n    CASE\\n      WHEN lower(semester) LIKE '%winter%' THEN 'Winter'\\n      WHEN lower(semester) LIKE '%summer%' THEN 'Summer'\\n      ELSE NULL\\n    END AS season,\\n    AVG(grade) AS avg_grade,\\n    COUNT(*) AS count_records\\n  FROM enrollments\\n  WHERE lower(semester) LIKE '%winter%' OR lower(semester) LIKE '%summer%'\\n  GROUP BY season\\n)\\nSELECT\\n  season AS season,\\n  avg_grade AS avg_grade,\\n  count_records AS count_records\\nFROM season_averages\\nWHERE season IS NOT NULL\\nORDER BY avg_grade DESC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Compare average grades between Winter and Summer semesters\",\"title\":\"Average Grade: Winter vs Summer Semesters\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"season\",\"type\":\"ordinal\",\"title\":\"Semester (Season)\"},\"y\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},\"color\":{\"field\":\"season\",\"type\":\"nominal\",\"legend\":null},\"tooltip\":[{\"field\":\"season\",\"type\":\"nominal\",\"title\":\"Season\"},{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},{\"field\":\"count_records\",\"type\":\"quantitative\",\"title\":\"Number of Records\"}]}}},\"endedAt\":1771843855370},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH season_averages AS (\\n  SELECT\\n    CASE\\n      WHEN lower(semester) LIKE '%winter%' THEN 'Winter'\\n      WHEN lower(semester) LIKE '%summer%' THEN 'Summer'\\n      ELSE NULL\\n    END AS season,\\n    AVG(grade) AS avg_grade,\\n    COUNT(*) AS count_records\\n  FROM enrollments\\n  WHERE lower(semester) LIKE '%winter%' OR lower(semester) LIKE '%summer%'\\n  GROUP BY season\\n)\\nSELECT\\n  season AS season,\\n  avg_grade AS avg_grade,\\n  count_records AS count_records\\nFROM season_averages\\nWHERE season IS NOT NULL\\nORDER BY avg_grade DESC;\"},\"startedAt\":1771843855377,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column \\\"semester\\\" does not exist\\nLINE 5:       WHEN lower(semester) LIKE '%winter%' THEN 'Winter'\\n                         ^\",\"name\":\"Error\"},\"endedAt\":1771843855413}},\"input\":{\"question\":\"Compare average grades between winter and summer semesters\"},\"error\":{\"message\":\"SQL execution failed: column \\\"semester\\\" does not exist\\nLINE 5:       WHEN lower(semester) LIKE '%winter%' THEN 'Winter'\\n                         ^\",\"name\":\"Error\"},\"traceId\":\"26a78462c4bbcc19ac1dc91f2e3e51fe\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-grade-winter-vs-summer/run-0001/run.json",
+    "queryPath": "runs/avg-grade-winter-vs-summer/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-grade-winter-vs-summer/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-grade-winter-vs-summer/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-grade-winter-vs-summer/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:50:55.418Z",
+  "traceId": "26a78462c4bbcc19ac1dc91f2e3e51fe",
+  "success": false,
+  "durationMs": 15558,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Compare average grades between winter and summer semesters"
+      },
+      "agent": {
+        "payload": {
+          "question": "Compare average grades between winter and summer semesters"
+        },
+        "startedAt": 1771843839870,
+        "status": "success",
+        "output": {
+          "sql": "WITH season_averages AS (\n  SELECT\n    CASE\n      WHEN lower(semester) LIKE '%winter%' THEN 'Winter'\n      WHEN lower(semester) LIKE '%summer%' THEN 'Summer'\n      ELSE NULL\n    END AS season,\n    AVG(grade) AS avg_grade,\n    COUNT(*) AS count_records\n  FROM enrollments\n  WHERE lower(semester) LIKE '%winter%' OR lower(semester) LIKE '%summer%'\n  GROUP BY season\n)\nSELECT\n  season AS season,\n  avg_grade AS avg_grade,\n  count_records AS count_records\nFROM season_averages\nWHERE season IS NOT NULL\nORDER BY avg_grade DESC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Compare average grades between Winter and Summer semesters",
+            "title": "Average Grade: Winter vs Summer Semesters",
+            "data": {
+              "name": "query_result"
+            },
+            "mark": {
+              "type": "bar",
+              "tooltip": true
+            },
+            "encoding": {
+              "x": {
+                "field": "season",
+                "type": "ordinal",
+                "title": "Semester (Season)"
+              },
+              "y": {
+                "field": "avg_grade",
+                "type": "quantitative",
+                "title": "Average Grade"
+              },
+              "color": {
+                "field": "season",
+                "type": "nominal",
+                "legend": null
+              },
+              "tooltip": [
+                {
+                  "field": "season",
+                  "type": "nominal",
+                  "title": "Season"
+                },
+                {
+                  "field": "avg_grade",
+                  "type": "quantitative",
+                  "title": "Average Grade"
+                },
+                {
+                  "field": "count_records",
+                  "type": "quantitative",
+                  "title": "Number of Records"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843855370
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH season_averages AS (\n  SELECT\n    CASE\n      WHEN lower(semester) LIKE '%winter%' THEN 'Winter'\n      WHEN lower(semester) LIKE '%summer%' THEN 'Summer'\n      ELSE NULL\n    END AS season,\n    AVG(grade) AS avg_grade,\n    COUNT(*) AS count_records\n  FROM enrollments\n  WHERE lower(semester) LIKE '%winter%' OR lower(semester) LIKE '%summer%'\n  GROUP BY season\n)\nSELECT\n  season AS season,\n  avg_grade AS avg_grade,\n  count_records AS count_records\nFROM season_averages\nWHERE season IS NOT NULL\nORDER BY avg_grade DESC;"
+        },
+        "startedAt": 1771843855377,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column \"semester\" does not exist\nLINE 5:       WHEN lower(semester) LIKE '%winter%' THEN 'Winter'\n                         ^",
+          "name": "Error"
+        },
+        "endedAt": 1771843855413
+      }
+    },
+    "input": {
+      "question": "Compare average grades between winter and summer semesters"
+    },
+    "error": {
+      "message": "SQL execution failed: column \"semester\" does not exist\nLINE 5:       WHEN lower(semester) LIKE '%winter%' THEN 'Winter'\n                         ^",
+      "name": "Error"
+    },
+    "traceId": "26a78462c4bbcc19ac1dc91f2e3e51fe"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:50:55.418Z",
+    "traceId": "26a78462c4bbcc19ac1dc91f2e3e51fe",
+    "attempts": 4,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 264,
+      "outputTokens": 1362,
+      "totalTokens": 1626,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 896,
+      "costUsd": 0.00279
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 264,
+        "outputTokens": 1362,
+        "totalTokens": 1626,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 896,
+        "costUsd": 0.00279
+      }
+    ],
+    "warnings": []
+  }
+}

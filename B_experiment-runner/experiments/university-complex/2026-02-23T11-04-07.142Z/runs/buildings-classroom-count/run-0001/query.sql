@@ -1,0 +1,1 @@
+SELECT public.classrooms.building AS building, COUNT(*) AS classroom_count FROM public.classrooms GROUP BY public.classrooms.building ORDER BY public.classrooms.building ASC;

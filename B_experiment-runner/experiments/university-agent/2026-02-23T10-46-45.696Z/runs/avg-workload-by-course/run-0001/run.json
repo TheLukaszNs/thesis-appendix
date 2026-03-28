@@ -1,0 +1,169 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "avg-workload-by-course",
+  "caseDirectory": "avg-workload-by-course",
+  "repeatIndex": 1,
+  "prompt": "What is the average reported workload hours for each course?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average reported workload hours for each course?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:47:59.662Z",
+    "endedAtUtc": "2026-02-23T10:48:16.044Z",
+    "durationMs": 16382
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "1914",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:48:16 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"What is the average reported workload hours for each course?\"},\"agent\":{\"payload\":{\"question\":\"What is the average reported workload hours for each course?\"},\"startedAt\":1771843679680,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  course_id AS course_id,\\n  course_name AS course_name,\\n  AVG(reported_workload_hours) AS avg_workload_hours\\nFROM course_reviews\\nGROUP BY course_id, course_name\\nORDER BY avg_workload_hours DESC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Reported Workload Hours by Course\",\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"course_name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelLimit\":200},\"sort\":{\"field\":\"avg_workload_hours\",\"op\":\"sum\",\"order\":\"descending\"}},\"y\":{\"field\":\"avg_workload_hours\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Avg workload hours\"}},\"tooltip\":[{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course\"},{\"field\":\"avg_workload_hours\",\"type\":\"quantitative\",\"title\":\"Avg workload hrs\"},{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"}]},\"width\":800,\"height\":400}},\"endedAt\":1771843696008},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  course_id AS course_id,\\n  course_name AS course_name,\\n  AVG(reported_workload_hours) AS avg_workload_hours\\nFROM course_reviews\\nGROUP BY course_id, course_name\\nORDER BY avg_workload_hours DESC;\"},\"startedAt\":1771843696013,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: relation \\\"course_reviews\\\" does not exist\\nLINE 6: FROM course_reviews\\n             ^\",\"name\":\"Error\"},\"endedAt\":1771843696041}},\"input\":{\"question\":\"What is the average reported workload hours for each course?\"},\"error\":{\"message\":\"SQL execution failed: relation \\\"course_reviews\\\" does not exist\\nLINE 6: FROM course_reviews\\n             ^\",\"name\":\"Error\"},\"traceId\":\"9ed5bdf27e6a618a5cb539c99559da70\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-workload-by-course/run-0001/run.json",
+    "queryPath": "runs/avg-workload-by-course/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-workload-by-course/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-workload-by-course/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-workload-by-course/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:48:16.044Z",
+  "traceId": "9ed5bdf27e6a618a5cb539c99559da70",
+  "success": false,
+  "durationMs": 16382,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "What is the average reported workload hours for each course?"
+      },
+      "agent": {
+        "payload": {
+          "question": "What is the average reported workload hours for each course?"
+        },
+        "startedAt": 1771843679680,
+        "status": "success",
+        "output": {
+          "sql": "SELECT\n  course_id AS course_id,\n  course_name AS course_name,\n  AVG(reported_workload_hours) AS avg_workload_hours\nFROM course_reviews\nGROUP BY course_id, course_name\nORDER BY avg_workload_hours DESC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "data": {
+              "name": "query_result"
+            },
+            "title": "Average Reported Workload Hours by Course",
+            "mark": "bar",
+            "encoding": {
+              "x": {
+                "field": "course_name",
+                "type": "nominal",
+                "axis": {
+                  "labelAngle": -45,
+                  "labelLimit": 200
+                },
+                "sort": {
+                  "field": "avg_workload_hours",
+                  "op": "sum",
+                  "order": "descending"
+                }
+              },
+              "y": {
+                "field": "avg_workload_hours",
+                "type": "quantitative",
+                "axis": {
+                  "title": "Avg workload hours"
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "course_name",
+                  "type": "nominal",
+                  "title": "Course"
+                },
+                {
+                  "field": "avg_workload_hours",
+                  "type": "quantitative",
+                  "title": "Avg workload hrs"
+                },
+                {
+                  "field": "course_id",
+                  "type": "nominal",
+                  "title": "Course ID"
+                }
+              ]
+            },
+            "width": 800,
+            "height": 400
+          }
+        },
+        "endedAt": 1771843696008
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT\n  course_id AS course_id,\n  course_name AS course_name,\n  AVG(reported_workload_hours) AS avg_workload_hours\nFROM course_reviews\nGROUP BY course_id, course_name\nORDER BY avg_workload_hours DESC;"
+        },
+        "startedAt": 1771843696013,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: relation \"course_reviews\" does not exist\nLINE 6: FROM course_reviews\n             ^",
+          "name": "Error"
+        },
+        "endedAt": 1771843696041
+      }
+    },
+    "input": {
+      "question": "What is the average reported workload hours for each course?"
+    },
+    "error": {
+      "message": "SQL execution failed: relation \"course_reviews\" does not exist\nLINE 6: FROM course_reviews\n             ^",
+      "name": "Error"
+    },
+    "traceId": "9ed5bdf27e6a618a5cb539c99559da70"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:48:16.044Z",
+    "traceId": "9ed5bdf27e6a618a5cb539c99559da70",
+    "attempts": 6,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 267,
+      "outputTokens": 1437,
+      "totalTokens": 1704,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1088,
+      "costUsd": 0.00294075
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 267,
+        "outputTokens": 1437,
+        "totalTokens": 1704,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1088,
+        "costUsd": 0.00294075
+      }
+    ],
+    "warnings": []
+  }
+}

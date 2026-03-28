@@ -1,0 +1,1 @@
+SELECT student_id, index_number, first_name, last_name, calculated_gpa FROM student_gpa_summary WHERE calculated_gpa IS NOT NULL ORDER BY calculated_gpa DESC LIMIT 10

@@ -1,0 +1,514 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "recommend-rate-by-course",
+  "caseDirectory": "recommend-rate-by-course",
+  "repeatIndex": 1,
+  "prompt": "What percentage of students would recommend each course?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What percentage of students would recommend each course?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:03:27.782Z",
+    "endedAtUtc": "2026-02-23T14:04:04.300Z",
+    "durationMs": 36518
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "19222",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:04:04 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What percentage of students would recommend each course?\"},\"sql\":{\"payload\":{\"question\":\"What percentage of students would recommend each course?\"},\"startedAt\":1771855407789,\"status\":\"success\",\"output\":{\"reasoning\":\"To calculate the percentage of students who would recommend each course, I need to:\\n1. Join course_evaluations to enrollments to get course information\\n2. Join enrollments to course_sections to get the course_id\\n3. Join course_sections to courses to get course names/codes\\n4. Group by course and calculate the percentage of would_recommend = true\\n5. The would_recommend column is a boolean, so I can use SUM(CASE WHEN would_recommend THEN 1 ELSE 0 END) / COUNT(*) * 100\\n\\nThe schema confirms:\\n- course_evaluations has would_recommend (boolean) and enrollment_id (FK to enrollments)\\n- enrollments has course_section_id (FK to course_sections)\\n- course_sections has course_id (FK to courses)\\n- courses has code and name for identification\\n\\nI'll aggregate by course and calculate the recommendation percentage.\",\"sql\":\"\\nSELECT \\n  c.code,\\n  c.name,\\n  COUNT(ce.id) AS total_evaluations,\\n  SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS recommend_count,\\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / COUNT(ce.id), 2) AS recommend_percentage\\nFROM courses c\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY c.id, c.code, c.name\\nORDER BY recommend_percentage DESC, c.code\\n\",\"assumptions\":[\"Assuming 'would_recommend' boolean field in course_evaluations indicates student recommendation\",\"Assuming all courses with evaluations should be included in the result\",\"Assuming percentage should be calculated as (recommend_count / total_evaluations) * 100\"]},\"endedAt\":1771855440272},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  c.code,\\n  c.name,\\n  COUNT(ce.id) AS total_evaluations,\\n  SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS recommend_count,\\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / COUNT(ce.id), 2) AS recommend_percentage\\nFROM courses c\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY c.id, c.code, c.name\\nORDER BY recommend_percentage DESC, c.code\\n\"},\"startedAt\":1771855440275,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  c.code,\\n  c.name,\\n  COUNT(ce.id) AS total_evaluations,\\n  SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS recommend_count,\\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / COUNT(ce.id), 2) AS recommend_percentage\\nFROM courses c\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY c.id, c.code, c.name\\nORDER BY recommend_percentage DESC, c.code\",\"metadata\":{\"columns\":[\"code\",\"name\",\"total_evaluations\",\"recommend_count\",\"recommend_percentage\"],\"rowCount\":16,\"sample\":[{\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"total_evaluations\":\"1\",\"recommend_count\":\"1\",\"recommend_percentage\":\"100.00\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"total_evaluations\":\"3\",\"recommend_count\":\"3\",\"recommend_percentage\":\"100.00\"}]},\"data\":[{\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"total_evaluations\":\"1\",\"recommend_count\":\"1\",\"recommend_percentage\":\"100.00\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"total_evaluations\":\"3\",\"recommend_count\":\"3\",\"recommend_percentage\":\"100.00\"},{\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"total_evaluations\":\"2\",\"recommend_count\":\"1\",\"recommend_percentage\":\"50.00\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"},{\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"},{\"code\":\"PSC-614\",\"name\":\"Architektura Komputerów\",\"total_evaluations\":\"2\",\"recommend_count\":\"1\",\"recommend_percentage\":\"50.00\"},{\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"total_evaluations\":\"2\",\"recommend_count\":\"1\",\"recommend_percentage\":\"50.00\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"},{\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"},{\"code\":\"ZUQ-127\",\"name\":\"Fizyka\",\"total_evaluations\":\"2\",\"recommend_count\":\"1\",\"recommend_percentage\":\"50.00\"},{\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"total_evaluations\":\"3\",\"recommend_count\":\"1\",\"recommend_percentage\":\"33.33\"},{\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"total_evaluations\":\"1\",\"recommend_count\":\"0\",\"recommend_percentage\":\"0.00\"},{\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"total_evaluations\":\"1\",\"recommend_count\":\"0\",\"recommend_percentage\":\"0.00\"},{\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"total_evaluations\":\"1\",\"recommend_count\":\"0\",\"recommend_percentage\":\"0.00\"},{\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"total_evaluations\":\"5\",\"recommend_count\":\"0\",\"recommend_percentage\":\"0.00\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"total_evaluations\":\"2\",\"recommend_count\":\"0\",\"recommend_percentage\":\"0.00\"}]},\"endedAt\":1771855440290},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  c.code,\\n  c.name,\\n  COUNT(ce.id) AS total_evaluations,\\n  SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS recommend_count,\\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / COUNT(ce.id), 2) AS recommend_percentage\\nFROM courses c\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY c.id, c.code, c.name\\nORDER BY recommend_percentage DESC, c.code\",\"metadata\":{\"columns\":[\"code\",\"name\",\"total_evaluations\",\"recommend_count\",\"recommend_percentage\"],\"rowCount\":16,\"sample\":[{\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"total_evaluations\":\"1\",\"recommend_count\":\"1\",\"recommend_percentage\":\"100.00\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"total_evaluations\":\"3\",\"recommend_count\":\"3\",\"recommend_percentage\":\"100.00\"}]},\"data\":[{\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"total_evaluations\":\"1\",\"recommend_count\":\"1\",\"recommend_percentage\":\"100.00\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"total_evaluations\":\"3\",\"recommend_count\":\"3\",\"recommend_percentage\":\"100.00\"},{\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"total_evaluations\":\"2\",\"recommend_count\":\"1\",\"recommend_percentage\":\"50.00\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"},{\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"},{\"code\":\"PSC-614\",\"name\":\"Architektura Komputerów\",\"total_evaluations\":\"2\",\"recommend_count\":\"1\",\"recommend_percentage\":\"50.00\"},{\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"total_evaluations\":\"2\",\"recommend_count\":\"1\",\"recommend_percentage\":\"50.00\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"},{\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"},{\"code\":\"ZUQ-127\",\"name\":\"Fizyka\",\"total_evaluations\":\"2\",\"recommend_count\":\"1\",\"recommend_percentage\":\"50.00\"},{\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"total_evaluations\":\"3\",\"recommend_count\":\"1\",\"recommend_percentage\":\"33.33\"},{\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"total_evaluations\":\"1\",\"recommend_count\":\"0\",\"recommend_percentage\":\"0.00\"},{\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"total_evaluations\":\"1\",\"recommend_count\":\"0\",\"recommend_percentage\":\"0.00\"},{\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"total_evaluations\":\"1\",\"recommend_count\":\"0\",\"recommend_percentage\":\"0.00\"},{\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"total_evaluations\":\"5\",\"recommend_count\":\"0\",\"recommend_percentage\":\"0.00\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"total_evaluations\":\"2\",\"recommend_count\":\"0\",\"recommend_percentage\":\"0.00\"}]},\"startedAt\":1771855440294,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Percentage of Students Who Would Recommend Each Course\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"name\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Course Name\"},\"x\":{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"title\":\"Recommendation Percentage (%)\",\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"greens\"},\"title\":\"Recommendation %\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"title\":\"Recommendation %\",\"format\":\".2f\"},{\"field\":\"recommend_count\",\"type\":\"quantitative\",\"title\":\"Recommending Students\"},{\"field\":\"total_evaluations\",\"type\":\"quantitative\",\"title\":\"Total Evaluations\"}]},\"width\":600,\"height\":400},\"reasoning\":\"This horizontal bar chart displays the recommendation percentage for each course, sorted in descending order. The color intensity (green scale) reinforces the percentage values, making it easy to identify which courses have the highest recommendation rates. The tooltip provides comprehensive context including course code, total evaluations, and the count of recommending students.\"},\"endedAt\":1771855444276},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Percentage of Students Who Would Recommend Each Course\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"name\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Course Name\"},\"x\":{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"title\":\"Recommendation Percentage (%)\",\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"greens\"},\"title\":\"Recommendation %\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"title\":\"Recommendation %\",\"format\":\".2f\"},{\"field\":\"recommend_count\",\"type\":\"quantitative\",\"title\":\"Recommending Students\"},{\"field\":\"total_evaluations\",\"type\":\"quantitative\",\"title\":\"Total Evaluations\"}]},\"width\":600,\"height\":400},\"reasoning\":\"This horizontal bar chart displays the recommendation percentage for each course, sorted in descending order. The color intensity (green scale) reinforces the percentage values, making it easy to identify which courses have the highest recommendation rates. The tooltip provides comprehensive context including course code, total evaluations, and the count of recommending students.\"},\"startedAt\":1771855444280,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT \\n  c.code,\\n  c.name,\\n  COUNT(ce.id) AS total_evaluations,\\n  SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS recommend_count,\\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / COUNT(ce.id), 2) AS recommend_percentage\\nFROM courses c\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY c.id, c.code, c.name\\nORDER BY recommend_percentage DESC, c.code\\n\",\"data\":[{\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"total_evaluations\":\"1\",\"recommend_count\":\"1\",\"recommend_percentage\":\"100.00\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"total_evaluations\":\"3\",\"recommend_count\":\"3\",\"recommend_percentage\":\"100.00\"},{\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"total_evaluations\":\"2\",\"recommend_count\":\"1\",\"recommend_percentage\":\"50.00\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"},{\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"},{\"code\":\"PSC-614\",\"name\":\"Architektura Komputerów\",\"total_evaluations\":\"2\",\"recommend_count\":\"1\",\"recommend_percentage\":\"50.00\"},{\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"total_evaluations\":\"2\",\"recommend_count\":\"1\",\"recommend_percentage\":\"50.00\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"},{\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"},{\"code\":\"ZUQ-127\",\"name\":\"Fizyka\",\"total_evaluations\":\"2\",\"recommend_count\":\"1\",\"recommend_percentage\":\"50.00\"},{\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"total_evaluations\":\"3\",\"recommend_count\":\"1\",\"recommend_percentage\":\"33.33\"},{\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"total_evaluations\":\"1\",\"recommend_count\":\"0\",\"recommend_percentage\":\"0.00\"},{\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"total_evaluations\":\"1\",\"recommend_count\":\"0\",\"recommend_percentage\":\"0.00\"},{\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"total_evaluations\":\"1\",\"recommend_count\":\"0\",\"recommend_percentage\":\"0.00\"},{\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"total_evaluations\":\"5\",\"recommend_count\":\"0\",\"recommend_percentage\":\"0.00\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"total_evaluations\":\"2\",\"recommend_count\":\"0\",\"recommend_percentage\":\"0.00\"}],\"metadata\":{\"columns\":[\"code\",\"name\",\"total_evaluations\",\"recommend_count\",\"recommend_percentage\"],\"rowCount\":16,\"sample\":[{\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"total_evaluations\":\"1\",\"recommend_count\":\"1\",\"recommend_percentage\":\"100.00\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"total_evaluations\":\"3\",\"recommend_count\":\"3\",\"recommend_percentage\":\"100.00\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Percentage of Students Who Would Recommend Each Course\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"name\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Course Name\"},\"x\":{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"title\":\"Recommendation Percentage (%)\",\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"greens\"},\"title\":\"Recommendation %\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"title\":\"Recommendation %\",\"format\":\".2f\"},{\"field\":\"recommend_count\",\"type\":\"quantitative\",\"title\":\"Recommending Students\"},{\"field\":\"total_evaluations\",\"type\":\"quantitative\",\"title\":\"Total Evaluations\"}]},\"width\":600,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855444285}},\"input\":{\"question\":\"What percentage of students would recommend each course?\"},\"result\":{\"sql\":\"\\nSELECT \\n  c.code,\\n  c.name,\\n  COUNT(ce.id) AS total_evaluations,\\n  SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS recommend_count,\\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / COUNT(ce.id), 2) AS recommend_percentage\\nFROM courses c\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY c.id, c.code, c.name\\nORDER BY recommend_percentage DESC, c.code\\n\",\"data\":[{\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"total_evaluations\":\"1\",\"recommend_count\":\"1\",\"recommend_percentage\":\"100.00\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"total_evaluations\":\"3\",\"recommend_count\":\"3\",\"recommend_percentage\":\"100.00\"},{\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"total_evaluations\":\"2\",\"recommend_count\":\"1\",\"recommend_percentage\":\"50.00\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"},{\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"},{\"code\":\"PSC-614\",\"name\":\"Architektura Komputerów\",\"total_evaluations\":\"2\",\"recommend_count\":\"1\",\"recommend_percentage\":\"50.00\"},{\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"total_evaluations\":\"2\",\"recommend_count\":\"1\",\"recommend_percentage\":\"50.00\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"},{\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"},{\"code\":\"ZUQ-127\",\"name\":\"Fizyka\",\"total_evaluations\":\"2\",\"recommend_count\":\"1\",\"recommend_percentage\":\"50.00\"},{\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"total_evaluations\":\"3\",\"recommend_count\":\"1\",\"recommend_percentage\":\"33.33\"},{\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"total_evaluations\":\"1\",\"recommend_count\":\"0\",\"recommend_percentage\":\"0.00\"},{\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"total_evaluations\":\"1\",\"recommend_count\":\"0\",\"recommend_percentage\":\"0.00\"},{\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"total_evaluations\":\"1\",\"recommend_count\":\"0\",\"recommend_percentage\":\"0.00\"},{\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"total_evaluations\":\"5\",\"recommend_count\":\"0\",\"recommend_percentage\":\"0.00\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"total_evaluations\":\"2\",\"recommend_count\":\"0\",\"recommend_percentage\":\"0.00\"}],\"metadata\":{\"columns\":[\"code\",\"name\",\"total_evaluations\",\"recommend_count\",\"recommend_percentage\"],\"rowCount\":16,\"sample\":[{\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"total_evaluations\":\"1\",\"recommend_count\":\"1\",\"recommend_percentage\":\"100.00\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"total_evaluations\":\"3\",\"recommend_count\":\"3\",\"recommend_percentage\":\"100.00\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Percentage of Students Who Would Recommend Each Course\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"name\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Course Name\"},\"x\":{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"title\":\"Recommendation Percentage (%)\",\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"greens\"},\"title\":\"Recommendation %\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"title\":\"Recommendation %\",\"format\":\".2f\"},{\"field\":\"recommend_count\",\"type\":\"quantitative\",\"title\":\"Recommending Students\"},{\"field\":\"total_evaluations\",\"type\":\"quantitative\",\"title\":\"Total Evaluations\"}]},\"width\":600,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"372388dd0dc170cd7db024657b0007d8\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/recommend-rate-by-course/run-0001/run.json",
+    "queryPath": "runs/recommend-rate-by-course/run-0001/query.sql",
+    "vegaRawPath": "runs/recommend-rate-by-course/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/recommend-rate-by-course/run-0001/vega.resolved.json",
+    "imagePath": "runs/recommend-rate-by-course/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:04:04.701Z",
+  "traceId": "372388dd0dc170cd7db024657b0007d8",
+  "success": true,
+  "durationMs": 36919,
+  "resultRaw": {
+    "data": [
+      {
+        "code": "BEW-951",
+        "name": "Fizyka",
+        "total_evaluations": "1",
+        "recommend_count": "1",
+        "recommend_percentage": "100.00"
+      },
+      {
+        "code": "WZC-570",
+        "name": "Programowanie Obiektowe",
+        "total_evaluations": "3",
+        "recommend_count": "3",
+        "recommend_percentage": "100.00"
+      },
+      {
+        "code": "AAX-989",
+        "name": "Elektronika",
+        "total_evaluations": "2",
+        "recommend_count": "1",
+        "recommend_percentage": "50.00"
+      },
+      {
+        "code": "AFI-682",
+        "name": "Matematyka Dyskretna",
+        "total_evaluations": "4",
+        "recommend_count": "2",
+        "recommend_percentage": "50.00"
+      },
+      {
+        "code": "FCL-532",
+        "name": "Uczenie Maszynowe",
+        "total_evaluations": "4",
+        "recommend_count": "2",
+        "recommend_percentage": "50.00"
+      },
+      {
+        "code": "PSC-614",
+        "name": "Architektura Komputerów",
+        "total_evaluations": "2",
+        "recommend_count": "1",
+        "recommend_percentage": "50.00"
+      },
+      {
+        "code": "TAU-627",
+        "name": "Analiza Matematyczna",
+        "total_evaluations": "2",
+        "recommend_count": "1",
+        "recommend_percentage": "50.00"
+      },
+      {
+        "code": "UQL-274",
+        "name": "Zarządzanie Projektami IT",
+        "total_evaluations": "4",
+        "recommend_count": "2",
+        "recommend_percentage": "50.00"
+      },
+      {
+        "code": "VBC-395",
+        "name": "Sieci Komputerowe",
+        "total_evaluations": "4",
+        "recommend_count": "2",
+        "recommend_percentage": "50.00"
+      },
+      {
+        "code": "ZUQ-127",
+        "name": "Fizyka",
+        "total_evaluations": "2",
+        "recommend_count": "1",
+        "recommend_percentage": "50.00"
+      },
+      {
+        "code": "FEO-908",
+        "name": "Analiza Matematyczna",
+        "total_evaluations": "3",
+        "recommend_count": "1",
+        "recommend_percentage": "33.33"
+      },
+      {
+        "code": "HPF-845",
+        "name": "Systemy Wbudowane",
+        "total_evaluations": "1",
+        "recommend_count": "0",
+        "recommend_percentage": "0.00"
+      },
+      {
+        "code": "RZR-301",
+        "name": "Sieci Komputerowe",
+        "total_evaluations": "1",
+        "recommend_count": "0",
+        "recommend_percentage": "0.00"
+      },
+      {
+        "code": "TJJ-354",
+        "name": "Projektowanie Aplikacji Webowych",
+        "total_evaluations": "1",
+        "recommend_count": "0",
+        "recommend_percentage": "0.00"
+      },
+      {
+        "code": "XQA-597",
+        "name": "Analiza Matematyczna",
+        "total_evaluations": "5",
+        "recommend_count": "0",
+        "recommend_percentage": "0.00"
+      },
+      {
+        "code": "YWI-134",
+        "name": "Metody Numeryczne",
+        "total_evaluations": "2",
+        "recommend_count": "0",
+        "recommend_percentage": "0.00"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Percentage of Students Who Would Recommend Each Course",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "name",
+          "type": "nominal",
+          "sort": "-x",
+          "title": "Course Name"
+        },
+        "x": {
+          "field": "recommend_percentage",
+          "type": "quantitative",
+          "title": "Recommendation Percentage (%)",
+          "scale": {
+            "domain": [
+              0,
+              100
+            ]
+          }
+        },
+        "color": {
+          "field": "recommend_percentage",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "greens"
+          },
+          "title": "Recommendation %"
+        },
+        "tooltip": [
+          {
+            "field": "code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "recommend_percentage",
+            "type": "quantitative",
+            "title": "Recommendation %",
+            "format": ".2f"
+          },
+          {
+            "field": "recommend_count",
+            "type": "quantitative",
+            "title": "Recommending Students"
+          },
+          {
+            "field": "total_evaluations",
+            "type": "quantitative",
+            "title": "Total Evaluations"
+          }
+        ]
+      },
+      "width": 600,
+      "height": 400
+    },
+    "sql": "\nSELECT \n  c.code,\n  c.name,\n  COUNT(ce.id) AS total_evaluations,\n  SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS recommend_count,\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / COUNT(ce.id), 2) AS recommend_percentage\nFROM courses c\nINNER JOIN course_sections cs ON c.id = cs.course_id\nINNER JOIN enrollments e ON cs.id = e.course_section_id\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\nGROUP BY c.id, c.code, c.name\nORDER BY recommend_percentage DESC, c.code\n",
+    "metadata": {
+      "columns": [
+        "code",
+        "name",
+        "total_evaluations",
+        "recommend_count",
+        "recommend_percentage"
+      ],
+      "rowCount": 16,
+      "sample": [
+        {
+          "code": "BEW-951",
+          "name": "Fizyka",
+          "total_evaluations": "1",
+          "recommend_count": "1",
+          "recommend_percentage": "100.00"
+        },
+        {
+          "code": "WZC-570",
+          "name": "Programowanie Obiektowe",
+          "total_evaluations": "3",
+          "recommend_count": "3",
+          "recommend_percentage": "100.00"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "code": "BEW-951",
+        "name": "Fizyka",
+        "total_evaluations": "1",
+        "recommend_count": "1",
+        "recommend_percentage": "100.00"
+      },
+      {
+        "code": "WZC-570",
+        "name": "Programowanie Obiektowe",
+        "total_evaluations": "3",
+        "recommend_count": "3",
+        "recommend_percentage": "100.00"
+      },
+      {
+        "code": "AAX-989",
+        "name": "Elektronika",
+        "total_evaluations": "2",
+        "recommend_count": "1",
+        "recommend_percentage": "50.00"
+      },
+      {
+        "code": "AFI-682",
+        "name": "Matematyka Dyskretna",
+        "total_evaluations": "4",
+        "recommend_count": "2",
+        "recommend_percentage": "50.00"
+      },
+      {
+        "code": "FCL-532",
+        "name": "Uczenie Maszynowe",
+        "total_evaluations": "4",
+        "recommend_count": "2",
+        "recommend_percentage": "50.00"
+      },
+      {
+        "code": "PSC-614",
+        "name": "Architektura Komputerów",
+        "total_evaluations": "2",
+        "recommend_count": "1",
+        "recommend_percentage": "50.00"
+      },
+      {
+        "code": "TAU-627",
+        "name": "Analiza Matematyczna",
+        "total_evaluations": "2",
+        "recommend_count": "1",
+        "recommend_percentage": "50.00"
+      },
+      {
+        "code": "UQL-274",
+        "name": "Zarządzanie Projektami IT",
+        "total_evaluations": "4",
+        "recommend_count": "2",
+        "recommend_percentage": "50.00"
+      },
+      {
+        "code": "VBC-395",
+        "name": "Sieci Komputerowe",
+        "total_evaluations": "4",
+        "recommend_count": "2",
+        "recommend_percentage": "50.00"
+      },
+      {
+        "code": "ZUQ-127",
+        "name": "Fizyka",
+        "total_evaluations": "2",
+        "recommend_count": "1",
+        "recommend_percentage": "50.00"
+      },
+      {
+        "code": "FEO-908",
+        "name": "Analiza Matematyczna",
+        "total_evaluations": "3",
+        "recommend_count": "1",
+        "recommend_percentage": "33.33"
+      },
+      {
+        "code": "HPF-845",
+        "name": "Systemy Wbudowane",
+        "total_evaluations": "1",
+        "recommend_count": "0",
+        "recommend_percentage": "0.00"
+      },
+      {
+        "code": "RZR-301",
+        "name": "Sieci Komputerowe",
+        "total_evaluations": "1",
+        "recommend_count": "0",
+        "recommend_percentage": "0.00"
+      },
+      {
+        "code": "TJJ-354",
+        "name": "Projektowanie Aplikacji Webowych",
+        "total_evaluations": "1",
+        "recommend_count": "0",
+        "recommend_percentage": "0.00"
+      },
+      {
+        "code": "XQA-597",
+        "name": "Analiza Matematyczna",
+        "total_evaluations": "5",
+        "recommend_count": "0",
+        "recommend_percentage": "0.00"
+      },
+      {
+        "code": "YWI-134",
+        "name": "Metody Numeryczne",
+        "total_evaluations": "2",
+        "recommend_count": "0",
+        "recommend_percentage": "0.00"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Percentage of Students Who Would Recommend Each Course",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "name",
+          "type": "nominal",
+          "sort": "-x",
+          "title": "Course Name"
+        },
+        "x": {
+          "field": "recommend_percentage",
+          "type": "quantitative",
+          "title": "Recommendation Percentage (%)",
+          "scale": {
+            "domain": [
+              0,
+              100
+            ]
+          }
+        },
+        "color": {
+          "field": "recommend_percentage",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "greens"
+          },
+          "title": "Recommendation %"
+        },
+        "tooltip": [
+          {
+            "field": "code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "recommend_percentage",
+            "type": "quantitative",
+            "title": "Recommendation %",
+            "format": ".2f"
+          },
+          {
+            "field": "recommend_count",
+            "type": "quantitative",
+            "title": "Recommending Students"
+          },
+          {
+            "field": "total_evaluations",
+            "type": "quantitative",
+            "title": "Total Evaluations"
+          }
+        ]
+      },
+      "width": 600,
+      "height": 400
+    },
+    "sql": "\nSELECT \n  c.code,\n  c.name,\n  COUNT(ce.id) AS total_evaluations,\n  SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS recommend_count,\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / COUNT(ce.id), 2) AS recommend_percentage\nFROM courses c\nINNER JOIN course_sections cs ON c.id = cs.course_id\nINNER JOIN enrollments e ON cs.id = e.course_section_id\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\nGROUP BY c.id, c.code, c.name\nORDER BY recommend_percentage DESC, c.code\n",
+    "metadata": {
+      "columns": [
+        "code",
+        "name",
+        "total_evaluations",
+        "recommend_count",
+        "recommend_percentage"
+      ],
+      "rowCount": 16,
+      "sample": [
+        {
+          "code": "BEW-951",
+          "name": "Fizyka",
+          "total_evaluations": "1",
+          "recommend_count": "1",
+          "recommend_percentage": "100.00"
+        },
+        {
+          "code": "WZC-570",
+          "name": "Programowanie Obiektowe",
+          "total_evaluations": "3",
+          "recommend_count": "3",
+          "recommend_percentage": "100.00"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.385Z",
+    "traceId": "372388dd0dc170cd7db024657b0007d8",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 23486,
+      "outputTokens": 1349,
+      "totalTokens": 24835,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.030231
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 23486,
+        "outputTokens": 1349,
+        "totalTokens": 24835,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.030231
+      }
+    ],
+    "warnings": []
+  }
+}

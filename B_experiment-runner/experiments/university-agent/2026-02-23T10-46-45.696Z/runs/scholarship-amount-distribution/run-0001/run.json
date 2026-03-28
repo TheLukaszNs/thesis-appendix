@@ -1,0 +1,314 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "scholarship-amount-distribution",
+  "caseDirectory": "scholarship-amount-distribution",
+  "repeatIndex": 1,
+  "prompt": "Show the distribution of individual scholarship amounts",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the distribution of individual scholarship amounts"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:52:06.261Z",
+    "endedAtUtc": "2026-02-23T10:52:30.509Z",
+    "durationMs": 24248
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "10412",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:52:30 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show the distribution of individual scholarship amounts\"},\"agent\":{\"payload\":{\"question\":\"Show the distribution of individual scholarship amounts\"},\"startedAt\":1771843926268,\"status\":\"success\",\"output\":{\"sql\":\"WITH stats AS (\\n  SELECT\\n    MIN(amount) AS min_amount,\\n    MAX(amount) AS max_amount,\\n    CASE WHEN MAX(amount)=MIN(amount) THEN 1.0 ELSE (MAX(amount)-MIN(amount))/20.0 END AS bucket_size\\n  FROM scholarships\\n),\\nbuckets AS (\\n  SELECT\\n    CASE\\n      WHEN FLOOR((s.amount - st.min_amount) / st.bucket_size) < 0 THEN 0\\n      WHEN FLOOR((s.amount - st.min_amount) / st.bucket_size) > 19 THEN 19\\n      ELSE FLOOR((s.amount - st.min_amount) / st.bucket_size)\\n    END AS bucket_id,\\n    st.min_amount AS min_amount,\\n    st.bucket_size AS bucket_size,\\n    s.amount AS scholarship_amount\\n  FROM scholarships s\\n  CROSS JOIN stats st\\n)\\nSELECT\\n  (min_amount + bucket_id * bucket_size) AS bucket_start,\\n  (min_amount + (bucket_id + 1) * bucket_size) AS bucket_end,\\n  COUNT(*) AS count\\nFROM buckets\\nGROUP BY bucket_id, min_amount, bucket_size\\nORDER BY bucket_start;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Distribution of individual scholarship amounts\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"bucket_start\",\"type\":\"quantitative\",\"title\":\"Scholarship amount (bucket start)\",\"axis\":{\"format\":\"$,.0f\"}},\"x2\":{\"field\":\"bucket_end\"},\"y\":{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Number of scholarships\"},\"tooltip\":[{\"field\":\"bucket_start\",\"type\":\"quantitative\",\"title\":\"Bucket start\",\"format\":\"$,.2f\"},{\"field\":\"bucket_end\",\"type\":\"quantitative\",\"title\":\"Bucket end\",\"format\":\"$,.2f\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"}]}}},\"endedAt\":1771843950440},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH stats AS (\\n  SELECT\\n    MIN(amount) AS min_amount,\\n    MAX(amount) AS max_amount,\\n    CASE WHEN MAX(amount)=MIN(amount) THEN 1.0 ELSE (MAX(amount)-MIN(amount))/20.0 END AS bucket_size\\n  FROM scholarships\\n),\\nbuckets AS (\\n  SELECT\\n    CASE\\n      WHEN FLOOR((s.amount - st.min_amount) / st.bucket_size) < 0 THEN 0\\n      WHEN FLOOR((s.amount - st.min_amount) / st.bucket_size) > 19 THEN 19\\n      ELSE FLOOR((s.amount - st.min_amount) / st.bucket_size)\\n    END AS bucket_id,\\n    st.min_amount AS min_amount,\\n    st.bucket_size AS bucket_size,\\n    s.amount AS scholarship_amount\\n  FROM scholarships s\\n  CROSS JOIN stats st\\n)\\nSELECT\\n  (min_amount + bucket_id * bucket_size) AS bucket_start,\\n  (min_amount + (bucket_id + 1) * bucket_size) AS bucket_end,\\n  COUNT(*) AS count\\nFROM buckets\\nGROUP BY bucket_id, min_amount, bucket_size\\nORDER BY bucket_start;\"},\"startedAt\":1771843950445,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH stats AS (\\n  SELECT\\n    MIN(amount) AS min_amount,\\n    MAX(amount) AS max_amount,\\n    CASE WHEN MAX(amount)=MIN(amount) THEN 1.0 ELSE (MAX(amount)-MIN(amount))/20.0 END AS bucket_size\\n  FROM scholarships\\n),\\nbuckets AS (\\n  SELECT\\n    CASE\\n      WHEN FLOOR((s.amount - st.min_amount) / st.bucket_size) < 0 THEN 0\\n      WHEN FLOOR((s.amount - st.min_amount) / st.bucket_size) > 19 THEN 19\\n      ELSE FLOOR((s.amount - st.min_amount) / st.bucket_size)\\n    END AS bucket_id,\\n    st.min_amount AS min_amount,\\n    st.bucket_size AS bucket_size,\\n    s.amount AS scholarship_amount\\n  FROM scholarships s\\n  CROSS JOIN stats st\\n)\\nSELECT\\n  (min_amount + bucket_id * bucket_size) AS bucket_start,\\n  (min_amount + (bucket_id + 1) * bucket_size) AS bucket_end,\\n  COUNT(*) AS count\\nFROM buckets\\nGROUP BY bucket_id, min_amount, bucket_size\\nORDER BY bucket_start\",\"metadata\":{\"columns\":[\"count\",\"bucket_end\",\"bucket_start\"],\"rowCount\":7,\"sample\":[{\"count\":1,\"bucket_end\":1200,\"bucket_start\":1000},{\"count\":2,\"bucket_end\":1600,\"bucket_start\":1400}]},\"data\":[{\"count\":1,\"bucket_end\":1200,\"bucket_start\":1000},{\"count\":2,\"bucket_end\":1600,\"bucket_start\":1400},{\"count\":2,\"bucket_end\":2200,\"bucket_start\":2000},{\"count\":1,\"bucket_end\":2600,\"bucket_start\":2400},{\"count\":2,\"bucket_end\":3200,\"bucket_start\":3000},{\"count\":1,\"bucket_end\":4200,\"bucket_start\":4000},{\"count\":1,\"bucket_end\":5000,\"bucket_start\":4800}]},\"endedAt\":1771843950484},\"final-data\":{\"payload\":{\"ok\":true,\"sql\":\"WITH stats AS (\\n  SELECT\\n    MIN(amount) AS min_amount,\\n    MAX(amount) AS max_amount,\\n    CASE WHEN MAX(amount)=MIN(amount) THEN 1.0 ELSE (MAX(amount)-MIN(amount))/20.0 END AS bucket_size\\n  FROM scholarships\\n),\\nbuckets AS (\\n  SELECT\\n    CASE\\n      WHEN FLOOR((s.amount - st.min_amount) / st.bucket_size) < 0 THEN 0\\n      WHEN FLOOR((s.amount - st.min_amount) / st.bucket_size) > 19 THEN 19\\n      ELSE FLOOR((s.amount - st.min_amount) / st.bucket_size)\\n    END AS bucket_id,\\n    st.min_amount AS min_amount,\\n    st.bucket_size AS bucket_size,\\n    s.amount AS scholarship_amount\\n  FROM scholarships s\\n  CROSS JOIN stats st\\n)\\nSELECT\\n  (min_amount + bucket_id * bucket_size) AS bucket_start,\\n  (min_amount + (bucket_id + 1) * bucket_size) AS bucket_end,\\n  COUNT(*) AS count\\nFROM buckets\\nGROUP BY bucket_id, min_amount, bucket_size\\nORDER BY bucket_start\",\"metadata\":{\"columns\":[\"count\",\"bucket_end\",\"bucket_start\"],\"rowCount\":7,\"sample\":[{\"count\":1,\"bucket_end\":1200,\"bucket_start\":1000},{\"count\":2,\"bucket_end\":1600,\"bucket_start\":1400}]},\"data\":[{\"count\":1,\"bucket_end\":1200,\"bucket_start\":1000},{\"count\":2,\"bucket_end\":1600,\"bucket_start\":1400},{\"count\":2,\"bucket_end\":2200,\"bucket_start\":2000},{\"count\":1,\"bucket_end\":2600,\"bucket_start\":2400},{\"count\":2,\"bucket_end\":3200,\"bucket_start\":3000},{\"count\":1,\"bucket_end\":4200,\"bucket_start\":4000},{\"count\":1,\"bucket_end\":5000,\"bucket_start\":4800}]},\"startedAt\":1771843950486,\"status\":\"success\",\"output\":{\"sql\":\"WITH stats AS (\\n  SELECT\\n    MIN(amount) AS min_amount,\\n    MAX(amount) AS max_amount,\\n    CASE WHEN MAX(amount)=MIN(amount) THEN 1.0 ELSE (MAX(amount)-MIN(amount))/20.0 END AS bucket_size\\n  FROM scholarships\\n),\\nbuckets AS (\\n  SELECT\\n    CASE\\n      WHEN FLOOR((s.amount - st.min_amount) / st.bucket_size) < 0 THEN 0\\n      WHEN FLOOR((s.amount - st.min_amount) / st.bucket_size) > 19 THEN 19\\n      ELSE FLOOR((s.amount - st.min_amount) / st.bucket_size)\\n    END AS bucket_id,\\n    st.min_amount AS min_amount,\\n    st.bucket_size AS bucket_size,\\n    s.amount AS scholarship_amount\\n  FROM scholarships s\\n  CROSS JOIN stats st\\n)\\nSELECT\\n  (min_amount + bucket_id * bucket_size) AS bucket_start,\\n  (min_amount + (bucket_id + 1) * bucket_size) AS bucket_end,\\n  COUNT(*) AS count\\nFROM buckets\\nGROUP BY bucket_id, min_amount, bucket_size\\nORDER BY bucket_start;\",\"data\":[{\"count\":1,\"bucket_end\":1200,\"bucket_start\":1000},{\"count\":2,\"bucket_end\":1600,\"bucket_start\":1400},{\"count\":2,\"bucket_end\":2200,\"bucket_start\":2000},{\"count\":1,\"bucket_end\":2600,\"bucket_start\":2400},{\"count\":2,\"bucket_end\":3200,\"bucket_start\":3000},{\"count\":1,\"bucket_end\":4200,\"bucket_start\":4000},{\"count\":1,\"bucket_end\":5000,\"bucket_start\":4800}],\"metadata\":{\"columns\":[\"count\",\"bucket_end\",\"bucket_start\"],\"rowCount\":7,\"sample\":[{\"count\":1,\"bucket_end\":1200,\"bucket_start\":1000},{\"count\":2,\"bucket_end\":1600,\"bucket_start\":1400}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Distribution of individual scholarship amounts\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"bucket_start\",\"type\":\"quantitative\",\"title\":\"Scholarship amount (bucket start)\",\"axis\":{\"format\":\"$,.0f\"}},\"x2\":{\"field\":\"bucket_end\"},\"y\":{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Number of scholarships\"},\"tooltip\":[{\"field\":\"bucket_start\",\"type\":\"quantitative\",\"title\":\"Bucket start\",\"format\":\"$,.2f\"},{\"field\":\"bucket_end\",\"type\":\"quantitative\",\"title\":\"Bucket end\",\"format\":\"$,.2f\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"}]}},\"quality\":{\"workflow\":\"agent-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771843950490}},\"input\":{\"question\":\"Show the distribution of individual scholarship amounts\"},\"result\":{\"sql\":\"WITH stats AS (\\n  SELECT\\n    MIN(amount) AS min_amount,\\n    MAX(amount) AS max_amount,\\n    CASE WHEN MAX(amount)=MIN(amount) THEN 1.0 ELSE (MAX(amount)-MIN(amount))/20.0 END AS bucket_size\\n  FROM scholarships\\n),\\nbuckets AS (\\n  SELECT\\n    CASE\\n      WHEN FLOOR((s.amount - st.min_amount) / st.bucket_size) < 0 THEN 0\\n      WHEN FLOOR((s.amount - st.min_amount) / st.bucket_size) > 19 THEN 19\\n      ELSE FLOOR((s.amount - st.min_amount) / st.bucket_size)\\n    END AS bucket_id,\\n    st.min_amount AS min_amount,\\n    st.bucket_size AS bucket_size,\\n    s.amount AS scholarship_amount\\n  FROM scholarships s\\n  CROSS JOIN stats st\\n)\\nSELECT\\n  (min_amount + bucket_id * bucket_size) AS bucket_start,\\n  (min_amount + (bucket_id + 1) * bucket_size) AS bucket_end,\\n  COUNT(*) AS count\\nFROM buckets\\nGROUP BY bucket_id, min_amount, bucket_size\\nORDER BY bucket_start;\",\"data\":[{\"count\":1,\"bucket_end\":1200,\"bucket_start\":1000},{\"count\":2,\"bucket_end\":1600,\"bucket_start\":1400},{\"count\":2,\"bucket_end\":2200,\"bucket_start\":2000},{\"count\":1,\"bucket_end\":2600,\"bucket_start\":2400},{\"count\":2,\"bucket_end\":3200,\"bucket_start\":3000},{\"count\":1,\"bucket_end\":4200,\"bucket_start\":4000},{\"count\":1,\"bucket_end\":5000,\"bucket_start\":4800}],\"metadata\":{\"columns\":[\"count\",\"bucket_end\",\"bucket_start\"],\"rowCount\":7,\"sample\":[{\"count\":1,\"bucket_end\":1200,\"bucket_start\":1000},{\"count\":2,\"bucket_end\":1600,\"bucket_start\":1400}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Distribution of individual scholarship amounts\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"bucket_start\",\"type\":\"quantitative\",\"title\":\"Scholarship amount (bucket start)\",\"axis\":{\"format\":\"$,.0f\"}},\"x2\":{\"field\":\"bucket_end\"},\"y\":{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Number of scholarships\"},\"tooltip\":[{\"field\":\"bucket_start\",\"type\":\"quantitative\",\"title\":\"Bucket start\",\"format\":\"$,.2f\"},{\"field\":\"bucket_end\",\"type\":\"quantitative\",\"title\":\"Bucket end\",\"format\":\"$,.2f\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"}]}},\"quality\":{\"workflow\":\"agent-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"91062ee03283bfbd8de68f8b372f67b5\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/scholarship-amount-distribution/run-0001/run.json",
+    "queryPath": "runs/scholarship-amount-distribution/run-0001/query.sql",
+    "vegaRawPath": "runs/scholarship-amount-distribution/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/scholarship-amount-distribution/run-0001/vega.resolved.json",
+    "imagePath": "runs/scholarship-amount-distribution/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:52:30.876Z",
+  "traceId": "91062ee03283bfbd8de68f8b372f67b5",
+  "success": true,
+  "durationMs": 24615,
+  "resultRaw": {
+    "data": [
+      {
+        "count": 1,
+        "bucket_end": 1200,
+        "bucket_start": 1000
+      },
+      {
+        "count": 2,
+        "bucket_end": 1600,
+        "bucket_start": 1400
+      },
+      {
+        "count": 2,
+        "bucket_end": 2200,
+        "bucket_start": 2000
+      },
+      {
+        "count": 1,
+        "bucket_end": 2600,
+        "bucket_start": 2400
+      },
+      {
+        "count": 2,
+        "bucket_end": 3200,
+        "bucket_start": 3000
+      },
+      {
+        "count": 1,
+        "bucket_end": 4200,
+        "bucket_start": 4000
+      },
+      {
+        "count": 1,
+        "bucket_end": 5000,
+        "bucket_start": 4800
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Distribution of individual scholarship amounts",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "bucket_start",
+          "type": "quantitative",
+          "title": "Scholarship amount (bucket start)",
+          "axis": {
+            "format": "$,.0f"
+          }
+        },
+        "x2": {
+          "field": "bucket_end"
+        },
+        "y": {
+          "field": "count",
+          "type": "quantitative",
+          "title": "Number of scholarships"
+        },
+        "tooltip": [
+          {
+            "field": "bucket_start",
+            "type": "quantitative",
+            "title": "Bucket start",
+            "format": "$,.2f"
+          },
+          {
+            "field": "bucket_end",
+            "type": "quantitative",
+            "title": "Bucket end",
+            "format": "$,.2f"
+          },
+          {
+            "field": "count",
+            "type": "quantitative",
+            "title": "Count"
+          }
+        ]
+      }
+    },
+    "sql": "WITH stats AS (\n  SELECT\n    MIN(amount) AS min_amount,\n    MAX(amount) AS max_amount,\n    CASE WHEN MAX(amount)=MIN(amount) THEN 1.0 ELSE (MAX(amount)-MIN(amount))/20.0 END AS bucket_size\n  FROM scholarships\n),\nbuckets AS (\n  SELECT\n    CASE\n      WHEN FLOOR((s.amount - st.min_amount) / st.bucket_size) < 0 THEN 0\n      WHEN FLOOR((s.amount - st.min_amount) / st.bucket_size) > 19 THEN 19\n      ELSE FLOOR((s.amount - st.min_amount) / st.bucket_size)\n    END AS bucket_id,\n    st.min_amount AS min_amount,\n    st.bucket_size AS bucket_size,\n    s.amount AS scholarship_amount\n  FROM scholarships s\n  CROSS JOIN stats st\n)\nSELECT\n  (min_amount + bucket_id * bucket_size) AS bucket_start,\n  (min_amount + (bucket_id + 1) * bucket_size) AS bucket_end,\n  COUNT(*) AS count\nFROM buckets\nGROUP BY bucket_id, min_amount, bucket_size\nORDER BY bucket_start;",
+    "metadata": {
+      "columns": [
+        "count",
+        "bucket_end",
+        "bucket_start"
+      ],
+      "rowCount": 7,
+      "sample": [
+        {
+          "count": 1,
+          "bucket_end": 1200,
+          "bucket_start": 1000
+        },
+        {
+          "count": 2,
+          "bucket_end": 1600,
+          "bucket_start": 1400
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "agent-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "count": 1,
+        "bucket_end": 1200,
+        "bucket_start": 1000
+      },
+      {
+        "count": 2,
+        "bucket_end": 1600,
+        "bucket_start": 1400
+      },
+      {
+        "count": 2,
+        "bucket_end": 2200,
+        "bucket_start": 2000
+      },
+      {
+        "count": 1,
+        "bucket_end": 2600,
+        "bucket_start": 2400
+      },
+      {
+        "count": 2,
+        "bucket_end": 3200,
+        "bucket_start": 3000
+      },
+      {
+        "count": 1,
+        "bucket_end": 4200,
+        "bucket_start": 4000
+      },
+      {
+        "count": 1,
+        "bucket_end": 5000,
+        "bucket_start": 4800
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Distribution of individual scholarship amounts",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "bucket_start",
+          "type": "quantitative",
+          "title": "Scholarship amount (bucket start)",
+          "axis": {
+            "format": "$,.0f"
+          }
+        },
+        "x2": {
+          "field": "bucket_end"
+        },
+        "y": {
+          "field": "count",
+          "type": "quantitative",
+          "title": "Number of scholarships"
+        },
+        "tooltip": [
+          {
+            "field": "bucket_start",
+            "type": "quantitative",
+            "title": "Bucket start",
+            "format": "$,.2f"
+          },
+          {
+            "field": "bucket_end",
+            "type": "quantitative",
+            "title": "Bucket end",
+            "format": "$,.2f"
+          },
+          {
+            "field": "count",
+            "type": "quantitative",
+            "title": "Count"
+          }
+        ]
+      }
+    },
+    "sql": "WITH stats AS (\n  SELECT\n    MIN(amount) AS min_amount,\n    MAX(amount) AS max_amount,\n    CASE WHEN MAX(amount)=MIN(amount) THEN 1.0 ELSE (MAX(amount)-MIN(amount))/20.0 END AS bucket_size\n  FROM scholarships\n),\nbuckets AS (\n  SELECT\n    CASE\n      WHEN FLOOR((s.amount - st.min_amount) / st.bucket_size) < 0 THEN 0\n      WHEN FLOOR((s.amount - st.min_amount) / st.bucket_size) > 19 THEN 19\n      ELSE FLOOR((s.amount - st.min_amount) / st.bucket_size)\n    END AS bucket_id,\n    st.min_amount AS min_amount,\n    st.bucket_size AS bucket_size,\n    s.amount AS scholarship_amount\n  FROM scholarships s\n  CROSS JOIN stats st\n)\nSELECT\n  (min_amount + bucket_id * bucket_size) AS bucket_start,\n  (min_amount + (bucket_id + 1) * bucket_size) AS bucket_end,\n  COUNT(*) AS count\nFROM buckets\nGROUP BY bucket_id, min_amount, bucket_size\nORDER BY bucket_start;",
+    "metadata": {
+      "columns": [
+        "count",
+        "bucket_end",
+        "bucket_start"
+      ],
+      "rowCount": 7,
+      "sample": [
+        {
+          "count": 1,
+          "bucket_end": 1200,
+          "bucket_start": 1000
+        },
+        {
+          "count": 2,
+          "bucket_end": 1600,
+          "bucket_start": 1400
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "agent-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:52:30.876Z",
+    "traceId": "91062ee03283bfbd8de68f8b372f67b5",
+    "attempts": 3,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 263,
+      "outputTokens": 2007,
+      "totalTokens": 2270,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1472,
+      "costUsd": 0.00407975
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 263,
+        "outputTokens": 2007,
+        "totalTokens": 2270,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1472,
+        "costUsd": 0.00407975
+      }
+    ],
+    "warnings": []
+  }
+}

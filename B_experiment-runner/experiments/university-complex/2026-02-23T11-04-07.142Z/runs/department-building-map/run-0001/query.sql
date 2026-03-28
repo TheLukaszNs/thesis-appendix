@@ -1,0 +1,1 @@
+SELECT d.building AS building, COUNT(d.id) AS department_count FROM public.departments AS d WHERE d.building IS NOT NULL GROUP BY d.building ORDER BY department_count DESC, building ASC;

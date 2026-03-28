@@ -1,0 +1,568 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "courses-with-prerequisites",
+  "caseDirectory": "courses-with-prerequisites",
+  "repeatIndex": 1,
+  "prompt": "Which courses have the most prerequisites?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which courses have the most prerequisites?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:05:32.614Z",
+    "endedAtUtc": "2026-02-23T14:06:07.009Z",
+    "durationMs": 34395
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "20504",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:06:07 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Which courses have the most prerequisites?\"},\"sql\":{\"payload\":{\"question\":\"Which courses have the most prerequisites?\"},\"startedAt\":1771855532620,\"status\":\"success\",\"output\":{\"reasoning\":\"The question asks for courses with the most prerequisites. I need to join the courses table with the prerequisites table, count the number of prerequisites per course, and order by that count in descending order. The prerequisites table has a course_id column that references the course being taken, and a prerequisite_course_id that references the prerequisite course. I'll group by course and count the prerequisites, then order by count descending to find which courses have the most prerequisites.\",\"sql\":\"\\nSELECT \\n  c.id,\\n  c.code,\\n  c.name,\\n  COUNT(p.id) AS prerequisite_count\\nFROM courses c\\nLEFT JOIN prerequisites p ON c.id = p.course_id\\nGROUP BY c.id, c.code, c.name\\nORDER BY prerequisite_count DESC, c.code ASC\\n\",\"assumptions\":[\"The prerequisites table stores prerequisites where course_id is the course that has prerequisites, and prerequisite_course_id is the course that must be taken first\",\"Courses with no prerequisites will have a count of 0\",\"Results are ordered by prerequisite count descending, then by course code for deterministic ordering\"]},\"endedAt\":1771855562583},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  c.id,\\n  c.code,\\n  c.name,\\n  COUNT(p.id) AS prerequisite_count\\nFROM courses c\\nLEFT JOIN prerequisites p ON c.id = p.course_id\\nGROUP BY c.id, c.code, c.name\\nORDER BY prerequisite_count DESC, c.code ASC\\n\"},\"startedAt\":1771855562588,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  c.id,\\n  c.code,\\n  c.name,\\n  COUNT(p.id) AS prerequisite_count\\nFROM courses c\\nLEFT JOIN prerequisites p ON c.id = p.course_id\\nGROUP BY c.id, c.code, c.name\\nORDER BY prerequisite_count DESC, c.code ASC\",\"metadata\":{\"columns\":[\"id\",\"code\",\"name\",\"prerequisite_count\"],\"rowCount\":26,\"sample\":[{\"id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"prerequisite_count\":\"4\"},{\"id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"code\":\"FPW-573\",\"name\":\"Programowanie Obiektowe\",\"prerequisite_count\":\"3\"}]},\"data\":[{\"id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"prerequisite_count\":\"4\"},{\"id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"code\":\"FPW-573\",\"name\":\"Programowanie Obiektowe\",\"prerequisite_count\":\"3\"},{\"id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"code\":\"JFH-143\",\"name\":\"Architektura Komputerów\",\"prerequisite_count\":\"3\"},{\"id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"prerequisite_count\":\"3\"},{\"id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"prerequisite_count\":\"3\"},{\"id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"prerequisite_count\":\"2\"},{\"id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"prerequisite_count\":\"2\"},{\"id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"code\":\"NWG-686\",\"name\":\"Programowanie Funkcyjne\",\"prerequisite_count\":\"2\"},{\"id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"code\":\"SBW-955\",\"name\":\"Sieci Komputerowe\",\"prerequisite_count\":\"2\"},{\"id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"prerequisite_count\":\"2\"},{\"id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"prerequisite_count\":\"2\"},{\"id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"prerequisite_count\":\"2\"},{\"id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"prerequisite_count\":\"1\"},{\"id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"code\":\"ARH-232\",\"name\":\"Cloud Computing\",\"prerequisite_count\":\"1\"},{\"id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"code\":\"FWJ-758\",\"name\":\"Bezpieczeństwo Systemów Komputerowych\",\"prerequisite_count\":\"1\"},{\"id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"code\":\"HMI-889\",\"name\":\"Elektronika\",\"prerequisite_count\":\"1\"},{\"id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"code\":\"PSC-614\",\"name\":\"Architektura Komputerów\",\"prerequisite_count\":\"1\"},{\"id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"prerequisite_count\":\"1\"},{\"id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"prerequisite_count\":\"1\"},{\"id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"code\":\"ZUQ-127\",\"name\":\"Fizyka\",\"prerequisite_count\":\"1\"},{\"id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"prerequisite_count\":\"0\"},{\"id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"code\":\"BSS-943\",\"name\":\"Algebra Liniowa\",\"prerequisite_count\":\"0\"},{\"id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"prerequisite_count\":\"0\"},{\"id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"code\":\"LUO-736\",\"name\":\"Grafika Komputerowa\",\"prerequisite_count\":\"0\"},{\"id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"code\":\"MKO-885\",\"name\":\"Rachunek Prawdopodobieństwa\",\"prerequisite_count\":\"0\"},{\"id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"prerequisite_count\":\"0\"}]},\"endedAt\":1771855562604},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  c.id,\\n  c.code,\\n  c.name,\\n  COUNT(p.id) AS prerequisite_count\\nFROM courses c\\nLEFT JOIN prerequisites p ON c.id = p.course_id\\nGROUP BY c.id, c.code, c.name\\nORDER BY prerequisite_count DESC, c.code ASC\",\"metadata\":{\"columns\":[\"id\",\"code\",\"name\",\"prerequisite_count\"],\"rowCount\":26,\"sample\":[{\"id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"prerequisite_count\":\"4\"},{\"id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"code\":\"FPW-573\",\"name\":\"Programowanie Obiektowe\",\"prerequisite_count\":\"3\"}]},\"data\":[{\"id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"prerequisite_count\":\"4\"},{\"id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"code\":\"FPW-573\",\"name\":\"Programowanie Obiektowe\",\"prerequisite_count\":\"3\"},{\"id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"code\":\"JFH-143\",\"name\":\"Architektura Komputerów\",\"prerequisite_count\":\"3\"},{\"id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"prerequisite_count\":\"3\"},{\"id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"prerequisite_count\":\"3\"},{\"id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"prerequisite_count\":\"2\"},{\"id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"prerequisite_count\":\"2\"},{\"id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"code\":\"NWG-686\",\"name\":\"Programowanie Funkcyjne\",\"prerequisite_count\":\"2\"},{\"id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"code\":\"SBW-955\",\"name\":\"Sieci Komputerowe\",\"prerequisite_count\":\"2\"},{\"id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"prerequisite_count\":\"2\"},{\"id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"prerequisite_count\":\"2\"},{\"id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"prerequisite_count\":\"2\"},{\"id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"prerequisite_count\":\"1\"},{\"id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"code\":\"ARH-232\",\"name\":\"Cloud Computing\",\"prerequisite_count\":\"1\"},{\"id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"code\":\"FWJ-758\",\"name\":\"Bezpieczeństwo Systemów Komputerowych\",\"prerequisite_count\":\"1\"},{\"id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"code\":\"HMI-889\",\"name\":\"Elektronika\",\"prerequisite_count\":\"1\"},{\"id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"code\":\"PSC-614\",\"name\":\"Architektura Komputerów\",\"prerequisite_count\":\"1\"},{\"id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"prerequisite_count\":\"1\"},{\"id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"prerequisite_count\":\"1\"},{\"id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"code\":\"ZUQ-127\",\"name\":\"Fizyka\",\"prerequisite_count\":\"1\"},{\"id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"prerequisite_count\":\"0\"},{\"id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"code\":\"BSS-943\",\"name\":\"Algebra Liniowa\",\"prerequisite_count\":\"0\"},{\"id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"prerequisite_count\":\"0\"},{\"id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"code\":\"LUO-736\",\"name\":\"Grafika Komputerowa\",\"prerequisite_count\":\"0\"},{\"id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"code\":\"MKO-885\",\"name\":\"Rachunek Prawdopodobieństwa\",\"prerequisite_count\":\"0\"},{\"id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"prerequisite_count\":\"0\"}]},\"startedAt\":1771855562608,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Courses by Number of Prerequisites\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"name\",\"type\":\"nominal\",\"sort\":{\"field\":\"prerequisite_count\",\"order\":\"descending\"},\"title\":\"Course Name\"},\"x\":{\"field\":\"prerequisite_count\",\"type\":\"quantitative\",\"title\":\"Number of Prerequisites\"},\"color\":{\"field\":\"prerequisite_count\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Prerequisites\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"prerequisite_count\",\"type\":\"quantitative\",\"title\":\"Number of Prerequisites\"}]},\"width\":600,\"height\":400},\"reasoning\":\"This horizontal bar chart displays courses ranked by prerequisite count in descending order. The color intensity (blue scale) reinforces the prerequisite count magnitude. The tooltip includes course code, name, and prerequisite count for detailed inspection. The layout prioritizes readability of course names while clearly showing the comparative prerequisite burden across courses.\"},\"endedAt\":1771855566972},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Courses by Number of Prerequisites\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"name\",\"type\":\"nominal\",\"sort\":{\"field\":\"prerequisite_count\",\"order\":\"descending\"},\"title\":\"Course Name\"},\"x\":{\"field\":\"prerequisite_count\",\"type\":\"quantitative\",\"title\":\"Number of Prerequisites\"},\"color\":{\"field\":\"prerequisite_count\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Prerequisites\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"prerequisite_count\",\"type\":\"quantitative\",\"title\":\"Number of Prerequisites\"}]},\"width\":600,\"height\":400},\"reasoning\":\"This horizontal bar chart displays courses ranked by prerequisite count in descending order. The color intensity (blue scale) reinforces the prerequisite count magnitude. The tooltip includes course code, name, and prerequisite count for detailed inspection. The layout prioritizes readability of course names while clearly showing the comparative prerequisite burden across courses.\"},\"startedAt\":1771855566978,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT \\n  c.id,\\n  c.code,\\n  c.name,\\n  COUNT(p.id) AS prerequisite_count\\nFROM courses c\\nLEFT JOIN prerequisites p ON c.id = p.course_id\\nGROUP BY c.id, c.code, c.name\\nORDER BY prerequisite_count DESC, c.code ASC\\n\",\"data\":[{\"id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"prerequisite_count\":\"4\"},{\"id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"code\":\"FPW-573\",\"name\":\"Programowanie Obiektowe\",\"prerequisite_count\":\"3\"},{\"id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"code\":\"JFH-143\",\"name\":\"Architektura Komputerów\",\"prerequisite_count\":\"3\"},{\"id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"prerequisite_count\":\"3\"},{\"id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"prerequisite_count\":\"3\"},{\"id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"prerequisite_count\":\"2\"},{\"id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"prerequisite_count\":\"2\"},{\"id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"code\":\"NWG-686\",\"name\":\"Programowanie Funkcyjne\",\"prerequisite_count\":\"2\"},{\"id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"code\":\"SBW-955\",\"name\":\"Sieci Komputerowe\",\"prerequisite_count\":\"2\"},{\"id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"prerequisite_count\":\"2\"},{\"id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"prerequisite_count\":\"2\"},{\"id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"prerequisite_count\":\"2\"},{\"id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"prerequisite_count\":\"1\"},{\"id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"code\":\"ARH-232\",\"name\":\"Cloud Computing\",\"prerequisite_count\":\"1\"},{\"id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"code\":\"FWJ-758\",\"name\":\"Bezpieczeństwo Systemów Komputerowych\",\"prerequisite_count\":\"1\"},{\"id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"code\":\"HMI-889\",\"name\":\"Elektronika\",\"prerequisite_count\":\"1\"},{\"id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"code\":\"PSC-614\",\"name\":\"Architektura Komputerów\",\"prerequisite_count\":\"1\"},{\"id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"prerequisite_count\":\"1\"},{\"id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"prerequisite_count\":\"1\"},{\"id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"code\":\"ZUQ-127\",\"name\":\"Fizyka\",\"prerequisite_count\":\"1\"},{\"id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"prerequisite_count\":\"0\"},{\"id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"code\":\"BSS-943\",\"name\":\"Algebra Liniowa\",\"prerequisite_count\":\"0\"},{\"id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"prerequisite_count\":\"0\"},{\"id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"code\":\"LUO-736\",\"name\":\"Grafika Komputerowa\",\"prerequisite_count\":\"0\"},{\"id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"code\":\"MKO-885\",\"name\":\"Rachunek Prawdopodobieństwa\",\"prerequisite_count\":\"0\"},{\"id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"prerequisite_count\":\"0\"}],\"metadata\":{\"columns\":[\"id\",\"code\",\"name\",\"prerequisite_count\"],\"rowCount\":26,\"sample\":[{\"id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"prerequisite_count\":\"4\"},{\"id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"code\":\"FPW-573\",\"name\":\"Programowanie Obiektowe\",\"prerequisite_count\":\"3\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Courses by Number of Prerequisites\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"name\",\"type\":\"nominal\",\"sort\":{\"field\":\"prerequisite_count\",\"order\":\"descending\"},\"title\":\"Course Name\"},\"x\":{\"field\":\"prerequisite_count\",\"type\":\"quantitative\",\"title\":\"Number of Prerequisites\"},\"color\":{\"field\":\"prerequisite_count\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Prerequisites\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"prerequisite_count\",\"type\":\"quantitative\",\"title\":\"Number of Prerequisites\"}]},\"width\":600,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855566981}},\"input\":{\"question\":\"Which courses have the most prerequisites?\"},\"result\":{\"sql\":\"\\nSELECT \\n  c.id,\\n  c.code,\\n  c.name,\\n  COUNT(p.id) AS prerequisite_count\\nFROM courses c\\nLEFT JOIN prerequisites p ON c.id = p.course_id\\nGROUP BY c.id, c.code, c.name\\nORDER BY prerequisite_count DESC, c.code ASC\\n\",\"data\":[{\"id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"prerequisite_count\":\"4\"},{\"id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"code\":\"FPW-573\",\"name\":\"Programowanie Obiektowe\",\"prerequisite_count\":\"3\"},{\"id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"code\":\"JFH-143\",\"name\":\"Architektura Komputerów\",\"prerequisite_count\":\"3\"},{\"id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"prerequisite_count\":\"3\"},{\"id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"prerequisite_count\":\"3\"},{\"id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"prerequisite_count\":\"2\"},{\"id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"prerequisite_count\":\"2\"},{\"id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"code\":\"NWG-686\",\"name\":\"Programowanie Funkcyjne\",\"prerequisite_count\":\"2\"},{\"id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"code\":\"SBW-955\",\"name\":\"Sieci Komputerowe\",\"prerequisite_count\":\"2\"},{\"id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"prerequisite_count\":\"2\"},{\"id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"prerequisite_count\":\"2\"},{\"id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"prerequisite_count\":\"2\"},{\"id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"prerequisite_count\":\"1\"},{\"id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"code\":\"ARH-232\",\"name\":\"Cloud Computing\",\"prerequisite_count\":\"1\"},{\"id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"code\":\"FWJ-758\",\"name\":\"Bezpieczeństwo Systemów Komputerowych\",\"prerequisite_count\":\"1\"},{\"id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"code\":\"HMI-889\",\"name\":\"Elektronika\",\"prerequisite_count\":\"1\"},{\"id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"code\":\"PSC-614\",\"name\":\"Architektura Komputerów\",\"prerequisite_count\":\"1\"},{\"id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"prerequisite_count\":\"1\"},{\"id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"prerequisite_count\":\"1\"},{\"id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"code\":\"ZUQ-127\",\"name\":\"Fizyka\",\"prerequisite_count\":\"1\"},{\"id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"prerequisite_count\":\"0\"},{\"id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"code\":\"BSS-943\",\"name\":\"Algebra Liniowa\",\"prerequisite_count\":\"0\"},{\"id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"prerequisite_count\":\"0\"},{\"id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"code\":\"LUO-736\",\"name\":\"Grafika Komputerowa\",\"prerequisite_count\":\"0\"},{\"id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"code\":\"MKO-885\",\"name\":\"Rachunek Prawdopodobieństwa\",\"prerequisite_count\":\"0\"},{\"id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"prerequisite_count\":\"0\"}],\"metadata\":{\"columns\":[\"id\",\"code\",\"name\",\"prerequisite_count\"],\"rowCount\":26,\"sample\":[{\"id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"prerequisite_count\":\"4\"},{\"id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"code\":\"FPW-573\",\"name\":\"Programowanie Obiektowe\",\"prerequisite_count\":\"3\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Courses by Number of Prerequisites\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"name\",\"type\":\"nominal\",\"sort\":{\"field\":\"prerequisite_count\",\"order\":\"descending\"},\"title\":\"Course Name\"},\"x\":{\"field\":\"prerequisite_count\",\"type\":\"quantitative\",\"title\":\"Number of Prerequisites\"},\"color\":{\"field\":\"prerequisite_count\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Prerequisites\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"prerequisite_count\",\"type\":\"quantitative\",\"title\":\"Number of Prerequisites\"}]},\"width\":600,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"2e3e82a1180c0dea6bbe76a5142e9531\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/courses-with-prerequisites/run-0001/run.json",
+    "queryPath": "runs/courses-with-prerequisites/run-0001/query.sql",
+    "vegaRawPath": "runs/courses-with-prerequisites/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/courses-with-prerequisites/run-0001/vega.resolved.json",
+    "imagePath": "runs/courses-with-prerequisites/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:06:07.439Z",
+  "traceId": "2e3e82a1180c0dea6bbe76a5142e9531",
+  "success": true,
+  "durationMs": 34825,
+  "resultRaw": {
+    "data": [
+      {
+        "id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+        "code": "FEO-908",
+        "name": "Analiza Matematyczna",
+        "prerequisite_count": "4"
+      },
+      {
+        "id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+        "code": "FPW-573",
+        "name": "Programowanie Obiektowe",
+        "prerequisite_count": "3"
+      },
+      {
+        "id": "e6b62b9f-429a-423d-84c7-77b28a64b9a3",
+        "code": "JFH-143",
+        "name": "Architektura Komputerów",
+        "prerequisite_count": "3"
+      },
+      {
+        "id": "0b97f1bf-8c86-431a-a583-563354b1e01f",
+        "code": "RZR-301",
+        "name": "Sieci Komputerowe",
+        "prerequisite_count": "3"
+      },
+      {
+        "id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+        "code": "TJJ-354",
+        "name": "Projektowanie Aplikacji Webowych",
+        "prerequisite_count": "3"
+      },
+      {
+        "id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "code": "AFI-682",
+        "name": "Matematyka Dyskretna",
+        "prerequisite_count": "2"
+      },
+      {
+        "id": "d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5",
+        "code": "HPF-845",
+        "name": "Systemy Wbudowane",
+        "prerequisite_count": "2"
+      },
+      {
+        "id": "e89877df-7199-4b1f-a8e8-8e5c0872fe23",
+        "code": "NWG-686",
+        "name": "Programowanie Funkcyjne",
+        "prerequisite_count": "2"
+      },
+      {
+        "id": "32619ee8-5d87-49a4-9ca1-c94668909e2e",
+        "code": "SBW-955",
+        "name": "Sieci Komputerowe",
+        "prerequisite_count": "2"
+      },
+      {
+        "id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "code": "VBC-395",
+        "name": "Sieci Komputerowe",
+        "prerequisite_count": "2"
+      },
+      {
+        "id": "b18a39cf-8a1b-471c-b67a-94aa04eccfae",
+        "code": "WZC-570",
+        "name": "Programowanie Obiektowe",
+        "prerequisite_count": "2"
+      },
+      {
+        "id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "code": "XQA-597",
+        "name": "Analiza Matematyczna",
+        "prerequisite_count": "2"
+      },
+      {
+        "id": "91922683-9cba-47f2-bb00-babfbce3866f",
+        "code": "AAX-989",
+        "name": "Elektronika",
+        "prerequisite_count": "1"
+      },
+      {
+        "id": "3d59b771-6ed9-47a0-b46f-f90c188f7863",
+        "code": "ARH-232",
+        "name": "Cloud Computing",
+        "prerequisite_count": "1"
+      },
+      {
+        "id": "410a9134-116d-41eb-84bc-1b5144736995",
+        "code": "FWJ-758",
+        "name": "Bezpieczeństwo Systemów Komputerowych",
+        "prerequisite_count": "1"
+      },
+      {
+        "id": "47f61e5e-19e7-4b9e-b8d0-153ca7c76090",
+        "code": "HMI-889",
+        "name": "Elektronika",
+        "prerequisite_count": "1"
+      },
+      {
+        "id": "0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca",
+        "code": "PSC-614",
+        "name": "Architektura Komputerów",
+        "prerequisite_count": "1"
+      },
+      {
+        "id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "code": "UQL-274",
+        "name": "Zarządzanie Projektami IT",
+        "prerequisite_count": "1"
+      },
+      {
+        "id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+        "code": "YWI-134",
+        "name": "Metody Numeryczne",
+        "prerequisite_count": "1"
+      },
+      {
+        "id": "c0e00b1c-84d6-4ccd-999d-7c9197625f2e",
+        "code": "ZUQ-127",
+        "name": "Fizyka",
+        "prerequisite_count": "1"
+      },
+      {
+        "id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+        "code": "BEW-951",
+        "name": "Fizyka",
+        "prerequisite_count": "0"
+      },
+      {
+        "id": "7dc872b8-c34e-4061-8f34-8b4c099b6325",
+        "code": "BSS-943",
+        "name": "Algebra Liniowa",
+        "prerequisite_count": "0"
+      },
+      {
+        "id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+        "code": "FCL-532",
+        "name": "Uczenie Maszynowe",
+        "prerequisite_count": "0"
+      },
+      {
+        "id": "6002cfac-f371-4c9b-a048-8aaf1aae450a",
+        "code": "LUO-736",
+        "name": "Grafika Komputerowa",
+        "prerequisite_count": "0"
+      },
+      {
+        "id": "59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23",
+        "code": "MKO-885",
+        "name": "Rachunek Prawdopodobieństwa",
+        "prerequisite_count": "0"
+      },
+      {
+        "id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "code": "TAU-627",
+        "name": "Analiza Matematyczna",
+        "prerequisite_count": "0"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Courses by Number of Prerequisites",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "name",
+          "type": "nominal",
+          "sort": {
+            "field": "prerequisite_count",
+            "order": "descending"
+          },
+          "title": "Course Name"
+        },
+        "x": {
+          "field": "prerequisite_count",
+          "type": "quantitative",
+          "title": "Number of Prerequisites"
+        },
+        "color": {
+          "field": "prerequisite_count",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "blues"
+          },
+          "title": "Prerequisites"
+        },
+        "tooltip": [
+          {
+            "field": "code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "prerequisite_count",
+            "type": "quantitative",
+            "title": "Number of Prerequisites"
+          }
+        ]
+      },
+      "width": 600,
+      "height": 400
+    },
+    "sql": "\nSELECT \n  c.id,\n  c.code,\n  c.name,\n  COUNT(p.id) AS prerequisite_count\nFROM courses c\nLEFT JOIN prerequisites p ON c.id = p.course_id\nGROUP BY c.id, c.code, c.name\nORDER BY prerequisite_count DESC, c.code ASC\n",
+    "metadata": {
+      "columns": [
+        "id",
+        "code",
+        "name",
+        "prerequisite_count"
+      ],
+      "rowCount": 26,
+      "sample": [
+        {
+          "id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+          "code": "FEO-908",
+          "name": "Analiza Matematyczna",
+          "prerequisite_count": "4"
+        },
+        {
+          "id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+          "code": "FPW-573",
+          "name": "Programowanie Obiektowe",
+          "prerequisite_count": "3"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+        "code": "FEO-908",
+        "name": "Analiza Matematyczna",
+        "prerequisite_count": "4"
+      },
+      {
+        "id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+        "code": "FPW-573",
+        "name": "Programowanie Obiektowe",
+        "prerequisite_count": "3"
+      },
+      {
+        "id": "e6b62b9f-429a-423d-84c7-77b28a64b9a3",
+        "code": "JFH-143",
+        "name": "Architektura Komputerów",
+        "prerequisite_count": "3"
+      },
+      {
+        "id": "0b97f1bf-8c86-431a-a583-563354b1e01f",
+        "code": "RZR-301",
+        "name": "Sieci Komputerowe",
+        "prerequisite_count": "3"
+      },
+      {
+        "id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+        "code": "TJJ-354",
+        "name": "Projektowanie Aplikacji Webowych",
+        "prerequisite_count": "3"
+      },
+      {
+        "id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "code": "AFI-682",
+        "name": "Matematyka Dyskretna",
+        "prerequisite_count": "2"
+      },
+      {
+        "id": "d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5",
+        "code": "HPF-845",
+        "name": "Systemy Wbudowane",
+        "prerequisite_count": "2"
+      },
+      {
+        "id": "e89877df-7199-4b1f-a8e8-8e5c0872fe23",
+        "code": "NWG-686",
+        "name": "Programowanie Funkcyjne",
+        "prerequisite_count": "2"
+      },
+      {
+        "id": "32619ee8-5d87-49a4-9ca1-c94668909e2e",
+        "code": "SBW-955",
+        "name": "Sieci Komputerowe",
+        "prerequisite_count": "2"
+      },
+      {
+        "id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "code": "VBC-395",
+        "name": "Sieci Komputerowe",
+        "prerequisite_count": "2"
+      },
+      {
+        "id": "b18a39cf-8a1b-471c-b67a-94aa04eccfae",
+        "code": "WZC-570",
+        "name": "Programowanie Obiektowe",
+        "prerequisite_count": "2"
+      },
+      {
+        "id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "code": "XQA-597",
+        "name": "Analiza Matematyczna",
+        "prerequisite_count": "2"
+      },
+      {
+        "id": "91922683-9cba-47f2-bb00-babfbce3866f",
+        "code": "AAX-989",
+        "name": "Elektronika",
+        "prerequisite_count": "1"
+      },
+      {
+        "id": "3d59b771-6ed9-47a0-b46f-f90c188f7863",
+        "code": "ARH-232",
+        "name": "Cloud Computing",
+        "prerequisite_count": "1"
+      },
+      {
+        "id": "410a9134-116d-41eb-84bc-1b5144736995",
+        "code": "FWJ-758",
+        "name": "Bezpieczeństwo Systemów Komputerowych",
+        "prerequisite_count": "1"
+      },
+      {
+        "id": "47f61e5e-19e7-4b9e-b8d0-153ca7c76090",
+        "code": "HMI-889",
+        "name": "Elektronika",
+        "prerequisite_count": "1"
+      },
+      {
+        "id": "0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca",
+        "code": "PSC-614",
+        "name": "Architektura Komputerów",
+        "prerequisite_count": "1"
+      },
+      {
+        "id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "code": "UQL-274",
+        "name": "Zarządzanie Projektami IT",
+        "prerequisite_count": "1"
+      },
+      {
+        "id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+        "code": "YWI-134",
+        "name": "Metody Numeryczne",
+        "prerequisite_count": "1"
+      },
+      {
+        "id": "c0e00b1c-84d6-4ccd-999d-7c9197625f2e",
+        "code": "ZUQ-127",
+        "name": "Fizyka",
+        "prerequisite_count": "1"
+      },
+      {
+        "id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+        "code": "BEW-951",
+        "name": "Fizyka",
+        "prerequisite_count": "0"
+      },
+      {
+        "id": "7dc872b8-c34e-4061-8f34-8b4c099b6325",
+        "code": "BSS-943",
+        "name": "Algebra Liniowa",
+        "prerequisite_count": "0"
+      },
+      {
+        "id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+        "code": "FCL-532",
+        "name": "Uczenie Maszynowe",
+        "prerequisite_count": "0"
+      },
+      {
+        "id": "6002cfac-f371-4c9b-a048-8aaf1aae450a",
+        "code": "LUO-736",
+        "name": "Grafika Komputerowa",
+        "prerequisite_count": "0"
+      },
+      {
+        "id": "59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23",
+        "code": "MKO-885",
+        "name": "Rachunek Prawdopodobieństwa",
+        "prerequisite_count": "0"
+      },
+      {
+        "id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "code": "TAU-627",
+        "name": "Analiza Matematyczna",
+        "prerequisite_count": "0"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Courses by Number of Prerequisites",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "name",
+          "type": "nominal",
+          "sort": {
+            "field": "prerequisite_count",
+            "order": "descending"
+          },
+          "title": "Course Name"
+        },
+        "x": {
+          "field": "prerequisite_count",
+          "type": "quantitative",
+          "title": "Number of Prerequisites"
+        },
+        "color": {
+          "field": "prerequisite_count",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "blues"
+          },
+          "title": "Prerequisites"
+        },
+        "tooltip": [
+          {
+            "field": "code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "prerequisite_count",
+            "type": "quantitative",
+            "title": "Number of Prerequisites"
+          }
+        ]
+      },
+      "width": 600,
+      "height": 400
+    },
+    "sql": "\nSELECT \n  c.id,\n  c.code,\n  c.name,\n  COUNT(p.id) AS prerequisite_count\nFROM courses c\nLEFT JOIN prerequisites p ON c.id = p.course_id\nGROUP BY c.id, c.code, c.name\nORDER BY prerequisite_count DESC, c.code ASC\n",
+    "metadata": {
+      "columns": [
+        "id",
+        "code",
+        "name",
+        "prerequisite_count"
+      ],
+      "rowCount": 26,
+      "sample": [
+        {
+          "id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+          "code": "FEO-908",
+          "name": "Analiza Matematyczna",
+          "prerequisite_count": "4"
+        },
+        {
+          "id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+          "code": "FPW-573",
+          "name": "Programowanie Obiektowe",
+          "prerequisite_count": "3"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.309Z",
+    "traceId": "2e3e82a1180c0dea6bbe76a5142e9531",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 13477,
+      "outputTokens": 940,
+      "totalTokens": 14417,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.018177
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 13477,
+        "outputTokens": 940,
+        "totalTokens": 14417,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.018177
+      }
+    ],
+    "warnings": []
+  }
+}

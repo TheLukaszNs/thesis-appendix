@@ -1,0 +1,74 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Average Grade Components by Academic Year",
+  "description": "Trend of average exam, project, and attendance scores across academic years",
+  "data": {
+    "name": "query_result"
+  },
+  "width": 700,
+  "height": 400,
+  "mark": "line",
+  "encoding": {
+    "x": {
+      "field": "academic_year",
+      "type": "nominal",
+      "title": "Academic Year",
+      "axis": {
+        "labelAngle": -45
+      }
+    },
+    "y": {
+      "type": "quantitative",
+      "title": "Average Score",
+      "scale": {
+        "domain": [
+          0,
+          100
+        ]
+      }
+    },
+    "color": {
+      "field": "score_type",
+      "type": "nominal",
+      "title": "Score Type",
+      "scale": {
+        "scheme": "category10"
+      }
+    },
+    "tooltip": [
+      {
+        "field": "academic_year",
+        "type": "nominal",
+        "title": "Academic Year"
+      },
+      {
+        "field": "score_type",
+        "type": "nominal",
+        "title": "Score Type"
+      },
+      {
+        "field": "score",
+        "type": "quantitative",
+        "title": "Average Score",
+        "format": ".2f"
+      }
+    ]
+  },
+  "transform": [
+    {
+      "fold": [
+        "avg_exam_score",
+        "avg_project_score",
+        "avg_attendance_score"
+      ],
+      "as": [
+        "score_type",
+        "score"
+      ]
+    },
+    {
+      "calculate": "datum.score_type === 'avg_exam_score' ? 'Exam' : datum.score_type === 'avg_project_score' ? 'Project' : 'Attendance'",
+      "as": "score_type"
+    }
+  ]
+}

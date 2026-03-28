@@ -1,0 +1,434 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "largest-classrooms",
+  "caseDirectory": "largest-classrooms",
+  "repeatIndex": 1,
+  "prompt": "Show the 10 largest classrooms by capacity",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the 10 largest classrooms by capacity"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:20:39.472Z",
+    "endedAtUtc": "2026-02-23T11:21:51.265Z",
+    "durationMs": 71793
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "28242",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:21:51 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show the 10 largest classrooms by capacity\"},\"planner\":{\"payload\":{\"question\":\"Show the 10 largest classrooms by capacity\"},\"startedAt\":1771845639496,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"classrooms.capacity\"],\"dimensions\":[\"classrooms.building\",\"classrooms.room_number\",\"classrooms.id\"],\"filters\":[\"no row-level filters (return all classrooms); apply ORDER BY capacity DESC and LIMIT 10 in SQL\"],\"grain\":\"one row per classroom (classrooms.id)\",\"aliases\":{\"classrooms.capacity\":\"capacity\",\"classrooms.id\":\"classroom_id\",\"classrooms.building || ' ' || classrooms.room_number\":\"classroom_label\",\"classrooms.building\":\"building\",\"classrooms.room_number\":\"room_number\"},\"output_fields\":[\"classroom_label\",\"capacity\",\"classroom_id\",\"building\",\"room_number\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"classroom_label\",\"y_axis\":\"capacity\",\"title\":\"Top 10 Classrooms by Capacity\"},\"assumptions\":[\"Verified table public.classrooms exists with columns id (uuid), building (text), room_number (varchar), and capacity (integer) via schema inspection.\",\"Use building || ' ' || room_number as the human-readable classroom label (alias classroom_label). The concatenation uses a single space between building and room_number.\",\"Capacity is non-null (schema shows capacity NOT NULL).\",\"Result should be the 10 classrooms with highest capacity: SQL will ORDER BY capacity DESC LIMIT 10. If there are ties in capacity, rows will be ordered arbitrarily (or by classroom_id as a deterministic tiebreaker if desired).\",\"No additional filters (e.g., by building or availability) were requested; none applied.\",\"Output_fields are exact SQL aliases the visualization will consume. The SQL should select these aliases in the final query.\"]}},\"endedAt\":1771845664777},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"classrooms.capacity\"],\"dimensions\":[\"classrooms.building\",\"classrooms.room_number\",\"classrooms.id\"],\"filters\":[\"no row-level filters (return all classrooms); apply ORDER BY capacity DESC and LIMIT 10 in SQL\"],\"grain\":\"one row per classroom (classrooms.id)\",\"aliases\":{\"classrooms.capacity\":\"capacity\",\"classrooms.id\":\"classroom_id\",\"classrooms.building || ' ' || classrooms.room_number\":\"classroom_label\",\"classrooms.building\":\"building\",\"classrooms.room_number\":\"room_number\"},\"output_fields\":[\"classroom_label\",\"capacity\",\"classroom_id\",\"building\",\"room_number\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"classroom_label\",\"y_axis\":\"capacity\",\"title\":\"Top 10 Classrooms by Capacity\"},\"assumptions\":[\"Verified table public.classrooms exists with columns id (uuid), building (text), room_number (varchar), and capacity (integer) via schema inspection.\",\"Use building || ' ' || room_number as the human-readable classroom label (alias classroom_label). The concatenation uses a single space between building and room_number.\",\"Capacity is non-null (schema shows capacity NOT NULL).\",\"Result should be the 10 classrooms with highest capacity: SQL will ORDER BY capacity DESC LIMIT 10. If there are ties in capacity, rows will be ordered arbitrarily (or by classroom_id as a deterministic tiebreaker if desired).\",\"No additional filters (e.g., by building or availability) were requested; none applied.\",\"Output_fields are exact SQL aliases the visualization will consume. The SQL should select these aliases in the final query.\"]}},\"startedAt\":1771845664784,\"status\":\"success\",\"output\":{\"question\":\"Show the 10 largest classrooms by capacity\",\"plan\":{\"data_requirements\":{\"metrics\":[\"classrooms.capacity\"],\"dimensions\":[\"classrooms.building\",\"classrooms.room_number\",\"classrooms.id\"],\"filters\":[\"no row-level filters (return all classrooms); apply ORDER BY capacity DESC and LIMIT 10 in SQL\"],\"grain\":\"one row per classroom (classrooms.id)\",\"aliases\":{\"classrooms.capacity\":\"capacity\",\"classrooms.id\":\"classroom_id\",\"classrooms.building || ' ' || classrooms.room_number\":\"classroom_label\",\"classrooms.building\":\"building\",\"classrooms.room_number\":\"room_number\"},\"output_fields\":[\"classroom_label\",\"capacity\",\"classroom_id\",\"building\",\"room_number\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"classroom_label\",\"y_axis\":\"capacity\",\"title\":\"Top 10 Classrooms by Capacity\"},\"assumptions\":[\"Verified table public.classrooms exists with columns id (uuid), building (text), room_number (varchar), and capacity (integer) via schema inspection.\",\"Use building || ' ' || room_number as the human-readable classroom label (alias classroom_label). The concatenation uses a single space between building and room_number.\",\"Capacity is non-null (schema shows capacity NOT NULL).\",\"Result should be the 10 classrooms with highest capacity: SQL will ORDER BY capacity DESC LIMIT 10. If there are ties in capacity, rows will be ordered arbitrarily (or by classroom_id as a deterministic tiebreaker if desired).\",\"No additional filters (e.g., by building or availability) were requested; none applied.\",\"Output_fields are exact SQL aliases the visualization will consume. The SQL should select these aliases in the final query.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771845664786},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"Show the 10 largest classrooms by capacity\",\"plan\":{\"data_requirements\":{\"metrics\":[\"classrooms.capacity\"],\"dimensions\":[\"classrooms.building\",\"classrooms.room_number\",\"classrooms.id\"],\"filters\":[\"no row-level filters (return all classrooms); apply ORDER BY capacity DESC and LIMIT 10 in SQL\"],\"grain\":\"one row per classroom (classrooms.id)\",\"aliases\":{\"classrooms.capacity\":\"capacity\",\"classrooms.id\":\"classroom_id\",\"classrooms.building || ' ' || classrooms.room_number\":\"classroom_label\",\"classrooms.building\":\"building\",\"classrooms.room_number\":\"room_number\"},\"output_fields\":[\"classroom_label\",\"capacity\",\"classroom_id\",\"building\",\"room_number\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"classroom_label\",\"y_axis\":\"capacity\",\"title\":\"Top 10 Classrooms by Capacity\"},\"assumptions\":[\"Verified table public.classrooms exists with columns id (uuid), building (text), room_number (varchar), and capacity (integer) via schema inspection.\",\"Use building || ' ' || room_number as the human-readable classroom label (alias classroom_label). The concatenation uses a single space between building and room_number.\",\"Capacity is non-null (schema shows capacity NOT NULL).\",\"Result should be the 10 classrooms with highest capacity: SQL will ORDER BY capacity DESC LIMIT 10. If there are ties in capacity, rows will be ordered arbitrarily (or by classroom_id as a deterministic tiebreaker if desired).\",\"No additional filters (e.g., by building or availability) were requested; none applied.\",\"Output_fields are exact SQL aliases the visualization will consume. The SQL should select these aliases in the final query.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771845664790,\"status\":\"success\",\"output\":{\"question\":\"Show the 10 largest classrooms by capacity\",\"plan\":{\"data_requirements\":{\"metrics\":[\"classrooms.capacity\"],\"dimensions\":[\"classrooms.building\",\"classrooms.room_number\",\"classrooms.id\"],\"filters\":[\"no row-level filters (return all classrooms); apply ORDER BY capacity DESC and LIMIT 10 in SQL\"],\"grain\":\"one row per classroom (classrooms.id)\",\"aliases\":{\"classrooms.capacity\":\"capacity\",\"classrooms.id\":\"classroom_id\",\"classrooms.building || ' ' || classrooms.room_number\":\"classroom_label\",\"classrooms.building\":\"building\",\"classrooms.room_number\":\"room_number\"},\"output_fields\":[\"classroom_label\",\"capacity\",\"classroom_id\",\"building\",\"room_number\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"classroom_label\",\"y_axis\":\"capacity\",\"title\":\"Top 10 Classrooms by Capacity\"},\"assumptions\":[\"Verified table public.classrooms exists with columns id (uuid), building (text), room_number (varchar), and capacity (integer) via schema inspection.\",\"Use building || ' ' || room_number as the human-readable classroom label (alias classroom_label). The concatenation uses a single space between building and room_number.\",\"Capacity is non-null (schema shows capacity NOT NULL).\",\"Result should be the 10 classrooms with highest capacity: SQL will ORDER BY capacity DESC LIMIT 10. If there are ties in capacity, rows will be ordered arbitrarily (or by classroom_id as a deterministic tiebreaker if desired).\",\"No additional filters (e.g., by building or availability) were requested; none applied.\",\"Output_fields are exact SQL aliases the visualization will consume. The SQL should select these aliases in the final query.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT building || ' ' || room_number AS classroom_label, capacity AS capacity, id AS classroom_id, building AS building, room_number AS room_number\\nFROM public.classrooms\\nORDER BY capacity DESC, id ASC\\nLIMIT 10\",\"validationIssues\":[\"All encoded fields (classroom_label, capacity, building, room_number, classroom_id) exist in metadata.columns — OK.\",\"The Vega-Lite x sort uses an aggregation (\\\"op\\\":\\\"sum\\\") which is unnecessary because the SQL returns one row per classroom; this is a minor mismatch but not breaking.\",\"The SQL orders ties by id (ORDER BY capacity DESC, id ASC) to be deterministic, but the chart's sort only orders by capacity and does not include the id tiebreaker — bars for equal capacities may appear in a different order than the SQL result.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Schema confirmed for public.classrooms with columns id (uuid), building (text), room_number (varchar), capacity (integer). Return one row per classroom with requested aliases, ordered by capacity desc and classroom_id as a deterministic tiebreaker, limit 10.\",\"sql\":\"SELECT building || ' ' || room_number AS classroom_label, capacity AS capacity, id AS classroom_id, building AS building, room_number AS room_number\\nFROM public.classrooms\\nORDER BY capacity DESC, id ASC\\nLIMIT 10\",\"assumptions\":[\"public.classrooms exists with columns id (uuid), building (text), room_number (character varying), capacity (integer) — confirmed via schema inspection.\",\"Use building || ' ' || room_number for human-readable classroom_label (single space between).\",\"Capacity is NOT NULL (confirmed) and used for ordering; id (uuid) is used as a deterministic tiebreaker for equal capacities.\",\"No additional row-level filters were requested; returning all classrooms and limiting to top 10 by capacity.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT building || ' ' || room_number AS classroom_label, capacity AS capacity, id AS classroom_id, building AS building, room_number AS room_number\\nFROM public.classrooms\\nORDER BY capacity DESC, id ASC\\nLIMIT 10\",\"metadata\":{\"columns\":[\"building\",\"capacity\",\"room_number\",\"classroom_id\",\"classroom_label\"],\"rowCount\":10,\"sample\":[{\"building\":\"B1\",\"capacity\":300,\"room_number\":\"625\",\"classroom_id\":\"80dab49e-2f0a-4fbb-9553-8c9569168f77\",\"classroom_label\":\"B1 625\"},{\"building\":\"RN1\",\"capacity\":300,\"room_number\":\"619\",\"classroom_id\":\"d1c8f200-0fda-45b3-aa65-12ebc2087e7b\",\"classroom_label\":\"RN1 619\"}]},\"data\":[{\"building\":\"B1\",\"capacity\":300,\"room_number\":\"625\",\"classroom_id\":\"80dab49e-2f0a-4fbb-9553-8c9569168f77\",\"classroom_label\":\"B1 625\"},{\"building\":\"RN1\",\"capacity\":300,\"room_number\":\"619\",\"classroom_id\":\"d1c8f200-0fda-45b3-aa65-12ebc2087e7b\",\"classroom_label\":\"RN1 619\"},{\"building\":\"RB1\",\"capacity\":300,\"room_number\":\"303\",\"classroom_id\":\"d58f9766-c0d8-41cf-b6f7-f064ab09eb2e\",\"classroom_label\":\"RB1 303\"},{\"building\":\"A2\",\"capacity\":300,\"room_number\":\"093\",\"classroom_id\":\"e70d03aa-bb91-4db0-9f75-bc9a676b049c\",\"classroom_label\":\"A2 093\"},{\"building\":\"K2\",\"capacity\":250,\"room_number\":\"362\",\"classroom_id\":\"3040da31-9963-48bd-8849-efe8dd3eb68b\",\"classroom_label\":\"K2 362\"},{\"building\":\"K1\",\"capacity\":250,\"room_number\":\"700\",\"classroom_id\":\"5920fb35-f40a-421a-accf-c800dd42f50f\",\"classroom_label\":\"K1 700\"},{\"building\":\"K5\",\"capacity\":250,\"room_number\":\"343\",\"classroom_id\":\"6086e01f-8fb9-415f-b58a-3be9951c4018\",\"classroom_label\":\"K5 343\"},{\"building\":\"RN1\",\"capacity\":250,\"room_number\":\"761\",\"classroom_id\":\"6f630054-2aff-4fd1-88e2-806009423e6c\",\"classroom_label\":\"RN1 761\"},{\"building\":\"K1\",\"capacity\":250,\"room_number\":\"880\",\"classroom_id\":\"88fa62eb-2d0b-4d70-a092-0aa0d085e1cc\",\"classroom_label\":\"K1 880\"},{\"building\":\"RM2\",\"capacity\":250,\"room_number\":\"056\",\"classroom_id\":\"f4165f3c-a3f9-48f1-9909-9a48f5cf0589\",\"classroom_label\":\"RM2 056\"}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Top 10 Classrooms by Capacity\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"classroom_label\",\"type\":\"nominal\",\"axis\":{\"title\":\"Classroom\",\"labelAngle\":-40},\"sort\":{\"field\":\"capacity\",\"op\":\"sum\",\"order\":\"descending\"}},\"y\":{\"field\":\"capacity\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Capacity\"}},\"tooltip\":[{\"field\":\"classroom_label\",\"type\":\"nominal\",\"title\":\"Classroom\"},{\"field\":\"capacity\",\"type\":\"quantitative\",\"title\":\"Capacity\"},{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\"},{\"field\":\"room_number\",\"type\":\"nominal\",\"title\":\"Room Number\"},{\"field\":\"classroom_id\",\"type\":\"nominal\",\"title\":\"Classroom ID\"}]}},\"reasoning\":\"Bar chart of the top 10 classrooms by capacity. X is the building+room label (sorted by capacity desc), Y is capacity; tooltip shows all returned fields.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"All encoded fields (classroom_label, capacity, building, room_number, classroom_id) exist in metadata.columns — OK.\",\"The Vega-Lite x sort uses an aggregation (\\\"op\\\":\\\"sum\\\") which is unnecessary because the SQL returns one row per classroom; this is a minor mismatch but not breaking.\",\"The SQL orders ties by id (ORDER BY capacity DESC, id ASC) to be deterministic, but the chart's sort only orders by capacity and does not include the id tiebreaker — bars for equal capacities may appear in a different order than the SQL result.\"]}}},\"endedAt\":1771845711224,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"Show the 10 largest classrooms by capacity\",\"plan\":{\"data_requirements\":{\"metrics\":[\"classrooms.capacity\"],\"dimensions\":[\"classrooms.building\",\"classrooms.room_number\",\"classrooms.id\"],\"filters\":[\"no row-level filters (return all classrooms); apply ORDER BY capacity DESC and LIMIT 10 in SQL\"],\"grain\":\"one row per classroom (classrooms.id)\",\"aliases\":{\"classrooms.capacity\":\"capacity\",\"classrooms.id\":\"classroom_id\",\"classrooms.building || ' ' || classrooms.room_number\":\"classroom_label\",\"classrooms.building\":\"building\",\"classrooms.room_number\":\"room_number\"},\"output_fields\":[\"classroom_label\",\"capacity\",\"classroom_id\",\"building\",\"room_number\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"classroom_label\",\"y_axis\":\"capacity\",\"title\":\"Top 10 Classrooms by Capacity\"},\"assumptions\":[\"Verified table public.classrooms exists with columns id (uuid), building (text), room_number (varchar), and capacity (integer) via schema inspection.\",\"Use building || ' ' || room_number as the human-readable classroom label (alias classroom_label). The concatenation uses a single space between building and room_number.\",\"Capacity is non-null (schema shows capacity NOT NULL).\",\"Result should be the 10 classrooms with highest capacity: SQL will ORDER BY capacity DESC LIMIT 10. If there are ties in capacity, rows will be ordered arbitrarily (or by classroom_id as a deterministic tiebreaker if desired).\",\"No additional filters (e.g., by building or availability) were requested; none applied.\",\"Output_fields are exact SQL aliases the visualization will consume. The SQL should select these aliases in the final query.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT building || ' ' || room_number AS classroom_label, capacity AS capacity, id AS classroom_id, building AS building, room_number AS room_number\\nFROM public.classrooms\\nORDER BY capacity DESC, id ASC\\nLIMIT 10\",\"validationIssues\":[\"All encoded fields (classroom_label, capacity, building, room_number, classroom_id) exist in metadata.columns — OK.\",\"The Vega-Lite x sort uses an aggregation (\\\"op\\\":\\\"sum\\\") which is unnecessary because the SQL returns one row per classroom; this is a minor mismatch but not breaking.\",\"The SQL orders ties by id (ORDER BY capacity DESC, id ASC) to be deterministic, but the chart's sort only orders by capacity and does not include the id tiebreaker — bars for equal capacities may appear in a different order than the SQL result.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Schema confirmed for public.classrooms with columns id (uuid), building (text), room_number (varchar), capacity (integer). Return one row per classroom with requested aliases, ordered by capacity desc and classroom_id as a deterministic tiebreaker, limit 10.\",\"sql\":\"SELECT building || ' ' || room_number AS classroom_label, capacity AS capacity, id AS classroom_id, building AS building, room_number AS room_number\\nFROM public.classrooms\\nORDER BY capacity DESC, id ASC\\nLIMIT 10\",\"assumptions\":[\"public.classrooms exists with columns id (uuid), building (text), room_number (character varying), capacity (integer) — confirmed via schema inspection.\",\"Use building || ' ' || room_number for human-readable classroom_label (single space between).\",\"Capacity is NOT NULL (confirmed) and used for ordering; id (uuid) is used as a deterministic tiebreaker for equal capacities.\",\"No additional row-level filters were requested; returning all classrooms and limiting to top 10 by capacity.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT building || ' ' || room_number AS classroom_label, capacity AS capacity, id AS classroom_id, building AS building, room_number AS room_number\\nFROM public.classrooms\\nORDER BY capacity DESC, id ASC\\nLIMIT 10\",\"metadata\":{\"columns\":[\"building\",\"capacity\",\"room_number\",\"classroom_id\",\"classroom_label\"],\"rowCount\":10,\"sample\":[{\"building\":\"B1\",\"capacity\":300,\"room_number\":\"625\",\"classroom_id\":\"80dab49e-2f0a-4fbb-9553-8c9569168f77\",\"classroom_label\":\"B1 625\"},{\"building\":\"RN1\",\"capacity\":300,\"room_number\":\"619\",\"classroom_id\":\"d1c8f200-0fda-45b3-aa65-12ebc2087e7b\",\"classroom_label\":\"RN1 619\"}]},\"data\":[{\"building\":\"B1\",\"capacity\":300,\"room_number\":\"625\",\"classroom_id\":\"80dab49e-2f0a-4fbb-9553-8c9569168f77\",\"classroom_label\":\"B1 625\"},{\"building\":\"RN1\",\"capacity\":300,\"room_number\":\"619\",\"classroom_id\":\"d1c8f200-0fda-45b3-aa65-12ebc2087e7b\",\"classroom_label\":\"RN1 619\"},{\"building\":\"RB1\",\"capacity\":300,\"room_number\":\"303\",\"classroom_id\":\"d58f9766-c0d8-41cf-b6f7-f064ab09eb2e\",\"classroom_label\":\"RB1 303\"},{\"building\":\"A2\",\"capacity\":300,\"room_number\":\"093\",\"classroom_id\":\"e70d03aa-bb91-4db0-9f75-bc9a676b049c\",\"classroom_label\":\"A2 093\"},{\"building\":\"K2\",\"capacity\":250,\"room_number\":\"362\",\"classroom_id\":\"3040da31-9963-48bd-8849-efe8dd3eb68b\",\"classroom_label\":\"K2 362\"},{\"building\":\"K1\",\"capacity\":250,\"room_number\":\"700\",\"classroom_id\":\"5920fb35-f40a-421a-accf-c800dd42f50f\",\"classroom_label\":\"K1 700\"},{\"building\":\"K5\",\"capacity\":250,\"room_number\":\"343\",\"classroom_id\":\"6086e01f-8fb9-415f-b58a-3be9951c4018\",\"classroom_label\":\"K5 343\"},{\"building\":\"RN1\",\"capacity\":250,\"room_number\":\"761\",\"classroom_id\":\"6f630054-2aff-4fd1-88e2-806009423e6c\",\"classroom_label\":\"RN1 761\"},{\"building\":\"K1\",\"capacity\":250,\"room_number\":\"880\",\"classroom_id\":\"88fa62eb-2d0b-4d70-a092-0aa0d085e1cc\",\"classroom_label\":\"K1 880\"},{\"building\":\"RM2\",\"capacity\":250,\"room_number\":\"056\",\"classroom_id\":\"f4165f3c-a3f9-48f1-9909-9a48f5cf0589\",\"classroom_label\":\"RM2 056\"}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Top 10 Classrooms by Capacity\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"classroom_label\",\"type\":\"nominal\",\"axis\":{\"title\":\"Classroom\",\"labelAngle\":-40},\"sort\":{\"field\":\"capacity\",\"op\":\"sum\",\"order\":\"descending\"}},\"y\":{\"field\":\"capacity\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Capacity\"}},\"tooltip\":[{\"field\":\"classroom_label\",\"type\":\"nominal\",\"title\":\"Classroom\"},{\"field\":\"capacity\",\"type\":\"quantitative\",\"title\":\"Capacity\"},{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\"},{\"field\":\"room_number\",\"type\":\"nominal\",\"title\":\"Room Number\"},{\"field\":\"classroom_id\",\"type\":\"nominal\",\"title\":\"Classroom ID\"}]}},\"reasoning\":\"Bar chart of the top 10 classrooms by capacity. X is the building+room label (sorted by capacity desc), Y is capacity; tooltip shows all returned fields.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"All encoded fields (classroom_label, capacity, building, room_number, classroom_id) exist in metadata.columns — OK.\",\"The Vega-Lite x sort uses an aggregation (\\\"op\\\":\\\"sum\\\") which is unnecessary because the SQL returns one row per classroom; this is a minor mismatch but not breaking.\",\"The SQL orders ties by id (ORDER BY capacity DESC, id ASC) to be deterministic, but the chart's sort only orders by capacity and does not include the id tiebreaker — bars for equal capacities may appear in a different order than the SQL result.\"]}}},\"startedAt\":1771845711231,\"status\":\"success\",\"output\":{\"sql\":\"SELECT building || ' ' || room_number AS classroom_label, capacity AS capacity, id AS classroom_id, building AS building, room_number AS room_number\\nFROM public.classrooms\\nORDER BY capacity DESC, id ASC\\nLIMIT 10\",\"data\":[{\"building\":\"B1\",\"capacity\":300,\"room_number\":\"625\",\"classroom_id\":\"80dab49e-2f0a-4fbb-9553-8c9569168f77\",\"classroom_label\":\"B1 625\"},{\"building\":\"RN1\",\"capacity\":300,\"room_number\":\"619\",\"classroom_id\":\"d1c8f200-0fda-45b3-aa65-12ebc2087e7b\",\"classroom_label\":\"RN1 619\"},{\"building\":\"RB1\",\"capacity\":300,\"room_number\":\"303\",\"classroom_id\":\"d58f9766-c0d8-41cf-b6f7-f064ab09eb2e\",\"classroom_label\":\"RB1 303\"},{\"building\":\"A2\",\"capacity\":300,\"room_number\":\"093\",\"classroom_id\":\"e70d03aa-bb91-4db0-9f75-bc9a676b049c\",\"classroom_label\":\"A2 093\"},{\"building\":\"K2\",\"capacity\":250,\"room_number\":\"362\",\"classroom_id\":\"3040da31-9963-48bd-8849-efe8dd3eb68b\",\"classroom_label\":\"K2 362\"},{\"building\":\"K1\",\"capacity\":250,\"room_number\":\"700\",\"classroom_id\":\"5920fb35-f40a-421a-accf-c800dd42f50f\",\"classroom_label\":\"K1 700\"},{\"building\":\"K5\",\"capacity\":250,\"room_number\":\"343\",\"classroom_id\":\"6086e01f-8fb9-415f-b58a-3be9951c4018\",\"classroom_label\":\"K5 343\"},{\"building\":\"RN1\",\"capacity\":250,\"room_number\":\"761\",\"classroom_id\":\"6f630054-2aff-4fd1-88e2-806009423e6c\",\"classroom_label\":\"RN1 761\"},{\"building\":\"K1\",\"capacity\":250,\"room_number\":\"880\",\"classroom_id\":\"88fa62eb-2d0b-4d70-a092-0aa0d085e1cc\",\"classroom_label\":\"K1 880\"},{\"building\":\"RM2\",\"capacity\":250,\"room_number\":\"056\",\"classroom_id\":\"f4165f3c-a3f9-48f1-9909-9a48f5cf0589\",\"classroom_label\":\"RM2 056\"}],\"metadata\":{\"columns\":[\"building\",\"capacity\",\"room_number\",\"classroom_id\",\"classroom_label\"],\"rowCount\":10,\"sample\":[{\"building\":\"B1\",\"capacity\":300,\"room_number\":\"625\",\"classroom_id\":\"80dab49e-2f0a-4fbb-9553-8c9569168f77\",\"classroom_label\":\"B1 625\"},{\"building\":\"RN1\",\"capacity\":300,\"room_number\":\"619\",\"classroom_id\":\"d1c8f200-0fda-45b3-aa65-12ebc2087e7b\",\"classroom_label\":\"RN1 619\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Top 10 Classrooms by Capacity\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"classroom_label\",\"type\":\"nominal\",\"axis\":{\"title\":\"Classroom\",\"labelAngle\":-40},\"sort\":{\"field\":\"capacity\",\"op\":\"sum\",\"order\":\"descending\"}},\"y\":{\"field\":\"capacity\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Capacity\"}},\"tooltip\":[{\"field\":\"classroom_label\",\"type\":\"nominal\",\"title\":\"Classroom\"},{\"field\":\"capacity\",\"type\":\"quantitative\",\"title\":\"Capacity\"},{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\"},{\"field\":\"room_number\",\"type\":\"nominal\",\"title\":\"Room Number\"},{\"field\":\"classroom_id\",\"type\":\"nominal\",\"title\":\"Classroom ID\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"All encoded fields (classroom_label, capacity, building, room_number, classroom_id) exist in metadata.columns — OK.\",\"The Vega-Lite x sort uses an aggregation (\\\"op\\\":\\\"sum\\\") which is unnecessary because the SQL returns one row per classroom; this is a minor mismatch but not breaking.\",\"The SQL orders ties by id (ORDER BY capacity DESC, id ASC) to be deterministic, but the chart's sort only orders by capacity and does not include the id tiebreaker — bars for equal capacities may appear in a different order than the SQL result.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771845711234}},\"input\":{\"question\":\"Show the 10 largest classrooms by capacity\"},\"result\":{\"sql\":\"SELECT building || ' ' || room_number AS classroom_label, capacity AS capacity, id AS classroom_id, building AS building, room_number AS room_number\\nFROM public.classrooms\\nORDER BY capacity DESC, id ASC\\nLIMIT 10\",\"data\":[{\"building\":\"B1\",\"capacity\":300,\"room_number\":\"625\",\"classroom_id\":\"80dab49e-2f0a-4fbb-9553-8c9569168f77\",\"classroom_label\":\"B1 625\"},{\"building\":\"RN1\",\"capacity\":300,\"room_number\":\"619\",\"classroom_id\":\"d1c8f200-0fda-45b3-aa65-12ebc2087e7b\",\"classroom_label\":\"RN1 619\"},{\"building\":\"RB1\",\"capacity\":300,\"room_number\":\"303\",\"classroom_id\":\"d58f9766-c0d8-41cf-b6f7-f064ab09eb2e\",\"classroom_label\":\"RB1 303\"},{\"building\":\"A2\",\"capacity\":300,\"room_number\":\"093\",\"classroom_id\":\"e70d03aa-bb91-4db0-9f75-bc9a676b049c\",\"classroom_label\":\"A2 093\"},{\"building\":\"K2\",\"capacity\":250,\"room_number\":\"362\",\"classroom_id\":\"3040da31-9963-48bd-8849-efe8dd3eb68b\",\"classroom_label\":\"K2 362\"},{\"building\":\"K1\",\"capacity\":250,\"room_number\":\"700\",\"classroom_id\":\"5920fb35-f40a-421a-accf-c800dd42f50f\",\"classroom_label\":\"K1 700\"},{\"building\":\"K5\",\"capacity\":250,\"room_number\":\"343\",\"classroom_id\":\"6086e01f-8fb9-415f-b58a-3be9951c4018\",\"classroom_label\":\"K5 343\"},{\"building\":\"RN1\",\"capacity\":250,\"room_number\":\"761\",\"classroom_id\":\"6f630054-2aff-4fd1-88e2-806009423e6c\",\"classroom_label\":\"RN1 761\"},{\"building\":\"K1\",\"capacity\":250,\"room_number\":\"880\",\"classroom_id\":\"88fa62eb-2d0b-4d70-a092-0aa0d085e1cc\",\"classroom_label\":\"K1 880\"},{\"building\":\"RM2\",\"capacity\":250,\"room_number\":\"056\",\"classroom_id\":\"f4165f3c-a3f9-48f1-9909-9a48f5cf0589\",\"classroom_label\":\"RM2 056\"}],\"metadata\":{\"columns\":[\"building\",\"capacity\",\"room_number\",\"classroom_id\",\"classroom_label\"],\"rowCount\":10,\"sample\":[{\"building\":\"B1\",\"capacity\":300,\"room_number\":\"625\",\"classroom_id\":\"80dab49e-2f0a-4fbb-9553-8c9569168f77\",\"classroom_label\":\"B1 625\"},{\"building\":\"RN1\",\"capacity\":300,\"room_number\":\"619\",\"classroom_id\":\"d1c8f200-0fda-45b3-aa65-12ebc2087e7b\",\"classroom_label\":\"RN1 619\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Top 10 Classrooms by Capacity\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"classroom_label\",\"type\":\"nominal\",\"axis\":{\"title\":\"Classroom\",\"labelAngle\":-40},\"sort\":{\"field\":\"capacity\",\"op\":\"sum\",\"order\":\"descending\"}},\"y\":{\"field\":\"capacity\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Capacity\"}},\"tooltip\":[{\"field\":\"classroom_label\",\"type\":\"nominal\",\"title\":\"Classroom\"},{\"field\":\"capacity\",\"type\":\"quantitative\",\"title\":\"Capacity\"},{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\"},{\"field\":\"room_number\",\"type\":\"nominal\",\"title\":\"Room Number\"},{\"field\":\"classroom_id\",\"type\":\"nominal\",\"title\":\"Classroom ID\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"All encoded fields (classroom_label, capacity, building, room_number, classroom_id) exist in metadata.columns — OK.\",\"The Vega-Lite x sort uses an aggregation (\\\"op\\\":\\\"sum\\\") which is unnecessary because the SQL returns one row per classroom; this is a minor mismatch but not breaking.\",\"The SQL orders ties by id (ORDER BY capacity DESC, id ASC) to be deterministic, but the chart's sort only orders by capacity and does not include the id tiebreaker — bars for equal capacities may appear in a different order than the SQL result.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"e3f22175f74128316fd5dde4a7f190ca\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/largest-classrooms/run-0001/run.json",
+    "queryPath": "runs/largest-classrooms/run-0001/query.sql",
+    "vegaRawPath": "runs/largest-classrooms/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/largest-classrooms/run-0001/vega.resolved.json",
+    "imagePath": "runs/largest-classrooms/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:21:51.861Z",
+  "traceId": "e3f22175f74128316fd5dde4a7f190ca",
+  "success": true,
+  "durationMs": 72389,
+  "resultRaw": {
+    "data": [
+      {
+        "building": "B1",
+        "capacity": 300,
+        "room_number": "625",
+        "classroom_id": "80dab49e-2f0a-4fbb-9553-8c9569168f77",
+        "classroom_label": "B1 625"
+      },
+      {
+        "building": "RN1",
+        "capacity": 300,
+        "room_number": "619",
+        "classroom_id": "d1c8f200-0fda-45b3-aa65-12ebc2087e7b",
+        "classroom_label": "RN1 619"
+      },
+      {
+        "building": "RB1",
+        "capacity": 300,
+        "room_number": "303",
+        "classroom_id": "d58f9766-c0d8-41cf-b6f7-f064ab09eb2e",
+        "classroom_label": "RB1 303"
+      },
+      {
+        "building": "A2",
+        "capacity": 300,
+        "room_number": "093",
+        "classroom_id": "e70d03aa-bb91-4db0-9f75-bc9a676b049c",
+        "classroom_label": "A2 093"
+      },
+      {
+        "building": "K2",
+        "capacity": 250,
+        "room_number": "362",
+        "classroom_id": "3040da31-9963-48bd-8849-efe8dd3eb68b",
+        "classroom_label": "K2 362"
+      },
+      {
+        "building": "K1",
+        "capacity": 250,
+        "room_number": "700",
+        "classroom_id": "5920fb35-f40a-421a-accf-c800dd42f50f",
+        "classroom_label": "K1 700"
+      },
+      {
+        "building": "K5",
+        "capacity": 250,
+        "room_number": "343",
+        "classroom_id": "6086e01f-8fb9-415f-b58a-3be9951c4018",
+        "classroom_label": "K5 343"
+      },
+      {
+        "building": "RN1",
+        "capacity": 250,
+        "room_number": "761",
+        "classroom_id": "6f630054-2aff-4fd1-88e2-806009423e6c",
+        "classroom_label": "RN1 761"
+      },
+      {
+        "building": "K1",
+        "capacity": 250,
+        "room_number": "880",
+        "classroom_id": "88fa62eb-2d0b-4d70-a092-0aa0d085e1cc",
+        "classroom_label": "K1 880"
+      },
+      {
+        "building": "RM2",
+        "capacity": 250,
+        "room_number": "056",
+        "classroom_id": "f4165f3c-a3f9-48f1-9909-9a48f5cf0589",
+        "classroom_label": "RM2 056"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Top 10 Classrooms by Capacity",
+      "width": 700,
+      "height": 400,
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "classroom_label",
+          "type": "nominal",
+          "axis": {
+            "title": "Classroom",
+            "labelAngle": -40
+          },
+          "sort": {
+            "field": "capacity",
+            "op": "sum",
+            "order": "descending"
+          }
+        },
+        "y": {
+          "field": "capacity",
+          "type": "quantitative",
+          "axis": {
+            "title": "Capacity"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "classroom_label",
+            "type": "nominal",
+            "title": "Classroom"
+          },
+          {
+            "field": "capacity",
+            "type": "quantitative",
+            "title": "Capacity"
+          },
+          {
+            "field": "building",
+            "type": "nominal",
+            "title": "Building"
+          },
+          {
+            "field": "room_number",
+            "type": "nominal",
+            "title": "Room Number"
+          },
+          {
+            "field": "classroom_id",
+            "type": "nominal",
+            "title": "Classroom ID"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT building || ' ' || room_number AS classroom_label, capacity AS capacity, id AS classroom_id, building AS building, room_number AS room_number\nFROM public.classrooms\nORDER BY capacity DESC, id ASC\nLIMIT 10",
+    "metadata": {
+      "columns": [
+        "building",
+        "capacity",
+        "room_number",
+        "classroom_id",
+        "classroom_label"
+      ],
+      "rowCount": 10,
+      "sample": [
+        {
+          "building": "B1",
+          "capacity": 300,
+          "room_number": "625",
+          "classroom_id": "80dab49e-2f0a-4fbb-9553-8c9569168f77",
+          "classroom_label": "B1 625"
+        },
+        {
+          "building": "RN1",
+          "capacity": 300,
+          "room_number": "619",
+          "classroom_id": "d1c8f200-0fda-45b3-aa65-12ebc2087e7b",
+          "classroom_label": "RN1 619"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "All encoded fields (classroom_label, capacity, building, room_number, classroom_id) exist in metadata.columns — OK.",
+        "The Vega-Lite x sort uses an aggregation (\"op\":\"sum\") which is unnecessary because the SQL returns one row per classroom; this is a minor mismatch but not breaking.",
+        "The SQL orders ties by id (ORDER BY capacity DESC, id ASC) to be deterministic, but the chart's sort only orders by capacity and does not include the id tiebreaker — bars for equal capacities may appear in a different order than the SQL result."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "building": "B1",
+        "capacity": 300,
+        "room_number": "625",
+        "classroom_id": "80dab49e-2f0a-4fbb-9553-8c9569168f77",
+        "classroom_label": "B1 625"
+      },
+      {
+        "building": "RN1",
+        "capacity": 300,
+        "room_number": "619",
+        "classroom_id": "d1c8f200-0fda-45b3-aa65-12ebc2087e7b",
+        "classroom_label": "RN1 619"
+      },
+      {
+        "building": "RB1",
+        "capacity": 300,
+        "room_number": "303",
+        "classroom_id": "d58f9766-c0d8-41cf-b6f7-f064ab09eb2e",
+        "classroom_label": "RB1 303"
+      },
+      {
+        "building": "A2",
+        "capacity": 300,
+        "room_number": "093",
+        "classroom_id": "e70d03aa-bb91-4db0-9f75-bc9a676b049c",
+        "classroom_label": "A2 093"
+      },
+      {
+        "building": "K2",
+        "capacity": 250,
+        "room_number": "362",
+        "classroom_id": "3040da31-9963-48bd-8849-efe8dd3eb68b",
+        "classroom_label": "K2 362"
+      },
+      {
+        "building": "K1",
+        "capacity": 250,
+        "room_number": "700",
+        "classroom_id": "5920fb35-f40a-421a-accf-c800dd42f50f",
+        "classroom_label": "K1 700"
+      },
+      {
+        "building": "K5",
+        "capacity": 250,
+        "room_number": "343",
+        "classroom_id": "6086e01f-8fb9-415f-b58a-3be9951c4018",
+        "classroom_label": "K5 343"
+      },
+      {
+        "building": "RN1",
+        "capacity": 250,
+        "room_number": "761",
+        "classroom_id": "6f630054-2aff-4fd1-88e2-806009423e6c",
+        "classroom_label": "RN1 761"
+      },
+      {
+        "building": "K1",
+        "capacity": 250,
+        "room_number": "880",
+        "classroom_id": "88fa62eb-2d0b-4d70-a092-0aa0d085e1cc",
+        "classroom_label": "K1 880"
+      },
+      {
+        "building": "RM2",
+        "capacity": 250,
+        "room_number": "056",
+        "classroom_id": "f4165f3c-a3f9-48f1-9909-9a48f5cf0589",
+        "classroom_label": "RM2 056"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Top 10 Classrooms by Capacity",
+      "width": 700,
+      "height": 400,
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "classroom_label",
+          "type": "nominal",
+          "axis": {
+            "title": "Classroom",
+            "labelAngle": -40
+          },
+          "sort": {
+            "field": "capacity",
+            "op": "sum",
+            "order": "descending"
+          }
+        },
+        "y": {
+          "field": "capacity",
+          "type": "quantitative",
+          "axis": {
+            "title": "Capacity"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "classroom_label",
+            "type": "nominal",
+            "title": "Classroom"
+          },
+          {
+            "field": "capacity",
+            "type": "quantitative",
+            "title": "Capacity"
+          },
+          {
+            "field": "building",
+            "type": "nominal",
+            "title": "Building"
+          },
+          {
+            "field": "room_number",
+            "type": "nominal",
+            "title": "Room Number"
+          },
+          {
+            "field": "classroom_id",
+            "type": "nominal",
+            "title": "Classroom ID"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT building || ' ' || room_number AS classroom_label, capacity AS capacity, id AS classroom_id, building AS building, room_number AS room_number\nFROM public.classrooms\nORDER BY capacity DESC, id ASC\nLIMIT 10",
+    "metadata": {
+      "columns": [
+        "building",
+        "capacity",
+        "room_number",
+        "classroom_id",
+        "classroom_label"
+      ],
+      "rowCount": 10,
+      "sample": [
+        {
+          "building": "B1",
+          "capacity": 300,
+          "room_number": "625",
+          "classroom_id": "80dab49e-2f0a-4fbb-9553-8c9569168f77",
+          "classroom_label": "B1 625"
+        },
+        {
+          "building": "RN1",
+          "capacity": 300,
+          "room_number": "619",
+          "classroom_id": "d1c8f200-0fda-45b3-aa65-12ebc2087e7b",
+          "classroom_label": "RN1 619"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "All encoded fields (classroom_label, capacity, building, room_number, classroom_id) exist in metadata.columns — OK.",
+        "The Vega-Lite x sort uses an aggregation (\"op\":\"sum\") which is unnecessary because the SQL returns one row per classroom; this is a minor mismatch but not breaking.",
+        "The SQL orders ties by id (ORDER BY capacity DESC, id ASC) to be deterministic, but the chart's sort only orders by capacity and does not include the id tiebreaker — bars for equal capacities may appear in a different order than the SQL result."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:21:51.861Z",
+    "traceId": "e3f22175f74128316fd5dde4a7f190ca",
+    "attempts": 6,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 13066,
+      "outputTokens": 4207,
+      "totalTokens": 17273,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2624,
+      "costUsd": 0.0116805
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 13066,
+        "outputTokens": 4207,
+        "totalTokens": 17273,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2624,
+        "costUsd": 0.0116805
+      }
+    ],
+    "warnings": []
+  }
+}

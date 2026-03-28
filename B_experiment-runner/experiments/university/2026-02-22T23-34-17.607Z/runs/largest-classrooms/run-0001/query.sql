@@ -1,0 +1,1 @@
+SELECT id AS id, building AS building, room_number AS room_number, capacity AS capacity, has_projector AS has_projector, has_computers AS has_computers FROM public.classrooms ORDER BY capacity DESC, building ASC, room_number ASC LIMIT 10;

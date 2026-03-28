@@ -1,0 +1,396 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "top-scholarship-students",
+  "caseDirectory": "top-scholarship-students",
+  "repeatIndex": 1,
+  "prompt": "Which students received the highest total scholarship amounts?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which students received the highest total scholarship amounts?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:25:57.163Z",
+    "endedAtUtc": "2026-02-23T11:27:11.828Z",
+    "durationMs": 74665
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "32354",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:27:11 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Which students received the highest total scholarship amounts?\"},\"planner\":{\"payload\":{\"question\":\"Which students received the highest total scholarship amounts?\"},\"startedAt\":1771845957171,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"SUM(scholarships.amount) AS total_scholarship_amount\"],\"dimensions\":[\"students.id\",\"students.first_name\",\"students.last_name\",\"students.index_number\"],\"filters\":[],\"grain\":\"per student (one row per student with scholarships)\",\"aliases\":{\"students.id\":\"student_id\",\"students.first_name || ' ' || students.last_name\":\"student_name\",\"students.index_number\":\"student_index_number\",\"SUM(scholarships.amount)\":\"total_scholarship_amount\"},\"output_fields\":[\"student_id\",\"student_name\",\"student_index_number\",\"total_scholarship_amount\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"student_name\",\"y_axis\":\"total_scholarship_amount\",\"title\":\"Total Scholarship Amount by Student (highest recipients)\"},\"assumptions\":[\"Schemas/tables confirmed in preflight: public.students and public.scholarships.\",\"Join key: scholarships.student_id = students.id (foreign key confirmed in scholarships constraints).\",\"Aggregate across all scholarship records (no time/paid_date/academic_year filtering) unless caller specifies otherwise.\",\"Only students who have at least one scholarship will appear (inner join). If the caller wants students with zero total shown, use a LEFT JOIN and COALESCE(SUM(...), 0).\",\"Amount column is scholarships.amount (numeric, NOT NULL) and is summed directly.\",\"student_name is produced by concatenating students.first_name and students.last_name with a space.\",\"If the caller wants only the top N recipients, apply an ORDER BY total_scholarship_amount DESC LIMIT N after aggregation; ties are returned according to DB sort behavior unless explicitly handled.\"]}},\"endedAt\":1771845985037},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"SUM(scholarships.amount) AS total_scholarship_amount\"],\"dimensions\":[\"students.id\",\"students.first_name\",\"students.last_name\",\"students.index_number\"],\"filters\":[],\"grain\":\"per student (one row per student with scholarships)\",\"aliases\":{\"students.id\":\"student_id\",\"students.first_name || ' ' || students.last_name\":\"student_name\",\"students.index_number\":\"student_index_number\",\"SUM(scholarships.amount)\":\"total_scholarship_amount\"},\"output_fields\":[\"student_id\",\"student_name\",\"student_index_number\",\"total_scholarship_amount\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"student_name\",\"y_axis\":\"total_scholarship_amount\",\"title\":\"Total Scholarship Amount by Student (highest recipients)\"},\"assumptions\":[\"Schemas/tables confirmed in preflight: public.students and public.scholarships.\",\"Join key: scholarships.student_id = students.id (foreign key confirmed in scholarships constraints).\",\"Aggregate across all scholarship records (no time/paid_date/academic_year filtering) unless caller specifies otherwise.\",\"Only students who have at least one scholarship will appear (inner join). If the caller wants students with zero total shown, use a LEFT JOIN and COALESCE(SUM(...), 0).\",\"Amount column is scholarships.amount (numeric, NOT NULL) and is summed directly.\",\"student_name is produced by concatenating students.first_name and students.last_name with a space.\",\"If the caller wants only the top N recipients, apply an ORDER BY total_scholarship_amount DESC LIMIT N after aggregation; ties are returned according to DB sort behavior unless explicitly handled.\"]}},\"startedAt\":1771845985046,\"status\":\"success\",\"output\":{\"question\":\"Which students received the highest total scholarship amounts?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"SUM(scholarships.amount) AS total_scholarship_amount\"],\"dimensions\":[\"students.id\",\"students.first_name\",\"students.last_name\",\"students.index_number\"],\"filters\":[],\"grain\":\"per student (one row per student with scholarships)\",\"aliases\":{\"students.id\":\"student_id\",\"students.first_name || ' ' || students.last_name\":\"student_name\",\"students.index_number\":\"student_index_number\",\"SUM(scholarships.amount)\":\"total_scholarship_amount\"},\"output_fields\":[\"student_id\",\"student_name\",\"student_index_number\",\"total_scholarship_amount\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"student_name\",\"y_axis\":\"total_scholarship_amount\",\"title\":\"Total Scholarship Amount by Student (highest recipients)\"},\"assumptions\":[\"Schemas/tables confirmed in preflight: public.students and public.scholarships.\",\"Join key: scholarships.student_id = students.id (foreign key confirmed in scholarships constraints).\",\"Aggregate across all scholarship records (no time/paid_date/academic_year filtering) unless caller specifies otherwise.\",\"Only students who have at least one scholarship will appear (inner join). If the caller wants students with zero total shown, use a LEFT JOIN and COALESCE(SUM(...), 0).\",\"Amount column is scholarships.amount (numeric, NOT NULL) and is summed directly.\",\"student_name is produced by concatenating students.first_name and students.last_name with a space.\",\"If the caller wants only the top N recipients, apply an ORDER BY total_scholarship_amount DESC LIMIT N after aggregation; ties are returned according to DB sort behavior unless explicitly handled.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771845985049},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"Which students received the highest total scholarship amounts?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"SUM(scholarships.amount) AS total_scholarship_amount\"],\"dimensions\":[\"students.id\",\"students.first_name\",\"students.last_name\",\"students.index_number\"],\"filters\":[],\"grain\":\"per student (one row per student with scholarships)\",\"aliases\":{\"students.id\":\"student_id\",\"students.first_name || ' ' || students.last_name\":\"student_name\",\"students.index_number\":\"student_index_number\",\"SUM(scholarships.amount)\":\"total_scholarship_amount\"},\"output_fields\":[\"student_id\",\"student_name\",\"student_index_number\",\"total_scholarship_amount\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"student_name\",\"y_axis\":\"total_scholarship_amount\",\"title\":\"Total Scholarship Amount by Student (highest recipients)\"},\"assumptions\":[\"Schemas/tables confirmed in preflight: public.students and public.scholarships.\",\"Join key: scholarships.student_id = students.id (foreign key confirmed in scholarships constraints).\",\"Aggregate across all scholarship records (no time/paid_date/academic_year filtering) unless caller specifies otherwise.\",\"Only students who have at least one scholarship will appear (inner join). If the caller wants students with zero total shown, use a LEFT JOIN and COALESCE(SUM(...), 0).\",\"Amount column is scholarships.amount (numeric, NOT NULL) and is summed directly.\",\"student_name is produced by concatenating students.first_name and students.last_name with a space.\",\"If the caller wants only the top N recipients, apply an ORDER BY total_scholarship_amount DESC LIMIT N after aggregation; ties are returned according to DB sort behavior unless explicitly handled.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771845985052,\"status\":\"success\",\"output\":{\"question\":\"Which students received the highest total scholarship amounts?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"SUM(scholarships.amount) AS total_scholarship_amount\"],\"dimensions\":[\"students.id\",\"students.first_name\",\"students.last_name\",\"students.index_number\"],\"filters\":[],\"grain\":\"per student (one row per student with scholarships)\",\"aliases\":{\"students.id\":\"student_id\",\"students.first_name || ' ' || students.last_name\":\"student_name\",\"students.index_number\":\"student_index_number\",\"SUM(scholarships.amount)\":\"total_scholarship_amount\"},\"output_fields\":[\"student_id\",\"student_name\",\"student_index_number\",\"total_scholarship_amount\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"student_name\",\"y_axis\":\"total_scholarship_amount\",\"title\":\"Total Scholarship Amount by Student (highest recipients)\"},\"assumptions\":[\"Schemas/tables confirmed in preflight: public.students and public.scholarships.\",\"Join key: scholarships.student_id = students.id (foreign key confirmed in scholarships constraints).\",\"Aggregate across all scholarship records (no time/paid_date/academic_year filtering) unless caller specifies otherwise.\",\"Only students who have at least one scholarship will appear (inner join). If the caller wants students with zero total shown, use a LEFT JOIN and COALESCE(SUM(...), 0).\",\"Amount column is scholarships.amount (numeric, NOT NULL) and is summed directly.\",\"student_name is produced by concatenating students.first_name and students.last_name with a space.\",\"If the caller wants only the top N recipients, apply an ORDER BY total_scholarship_amount DESC LIMIT N after aggregation; ties are returned according to DB sort behavior unless explicitly handled.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT s.id AS student_id,\\n       s.first_name || ' ' || s.last_name AS student_name,\\n       s.index_number AS student_index_number,\\n       SUM(sc.amount) AS total_scholarship_amount\\nFROM public.students AS s\\nJOIN public.scholarships AS sc\\n  ON sc.student_id = s.id\\nGROUP BY s.id, s.first_name, s.last_name, s.index_number\\nORDER BY total_scholarship_amount DESC, s.id;\",\"validationIssues\":[\"Invalid Vega-Lite color encoding: the spec uses \\\"color\\\": {\\\"datum\\\":\\\"#4C78A8\\\"}. For a constant color use \\\"color\\\": {\\\"value\\\":\\\"#4C78A8\\\"}; the current form will likely cause the chart to fail to render.\",\"Minor/optional: the x-axis sort uses {\\\"field\\\":\\\"total_scholarship_amount\\\",\\\"op\\\":\\\"sum\\\",\\\"order\\\":\\\"descending\\\"} although total_scholarship_amount is already an aggregated field. This is not fatal but redundant; you can sort by the y encoding or use a simple descending sort.\",\"Warning: student_name (first + last) is used as the nominal x field; if names are not unique, bars could be ambiguous. Consider using student_id as a key or ensuring name uniqueness if that matters.\",\"The SQL and chart mapping (aggregated total per student, ranking by total) match the question, but the Vega-Lite spec contains an invalid color encoding that will break rendering.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Aggregates scholarships per confirmed students table, joining on the confirmed foreign key, and returns one row per student who has scholarships. Results are ordered deterministically by total amount descending and student_id as a tiebreaker.\",\"sql\":\"SELECT s.id AS student_id,\\n       s.first_name || ' ' || s.last_name AS student_name,\\n       s.index_number AS student_index_number,\\n       SUM(sc.amount) AS total_scholarship_amount\\nFROM public.students AS s\\nJOIN public.scholarships AS sc\\n  ON sc.student_id = s.id\\nGROUP BY s.id, s.first_name, s.last_name, s.index_number\\nORDER BY total_scholarship_amount DESC, s.id;\",\"assumptions\":[\"public.students and public.scholarships exist (confirmed in preflight).\",\"Join key is scholarships.student_id = students.id (confirmed by foreign key constraint).\",\"scholarships.amount is numeric and NOT NULL (confirmed).\",\"Only students with at least one scholarship are returned (INNER JOIN).\",\"Student name is concatenated as first_name || ' ' || last_name.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT s.id AS student_id,\\n       s.first_name || ' ' || s.last_name AS student_name,\\n       s.index_number AS student_index_number,\\n       SUM(sc.amount) AS total_scholarship_amount\\nFROM public.students AS s\\nJOIN public.scholarships AS sc\\n  ON sc.student_id = s.id\\nGROUP BY s.id, s.first_name, s.last_name, s.index_number\\nORDER BY total_scholarship_amount DESC, s.id\",\"metadata\":{\"columns\":[\"student_id\",\"student_name\",\"student_index_number\",\"total_scholarship_amount\"],\"rowCount\":9,\"sample\":[{\"student_id\":\"4f8e25f6-b563-439b-aa92-6104f284fa5a\",\"student_name\":\"Dariusz Jankowski\",\"student_index_number\":\"350296\",\"total_scholarship_amount\":5000},{\"student_id\":\"84be24b9-23e7-4fe3-9e3e-ba5caa9b9667\",\"student_name\":\"Mariusz Kwiatkowski\",\"student_index_number\":\"923488\",\"total_scholarship_amount\":4000}]},\"data\":[{\"student_id\":\"4f8e25f6-b563-439b-aa92-6104f284fa5a\",\"student_name\":\"Dariusz Jankowski\",\"student_index_number\":\"350296\",\"total_scholarship_amount\":5000},{\"student_id\":\"84be24b9-23e7-4fe3-9e3e-ba5caa9b9667\",\"student_name\":\"Mariusz Kwiatkowski\",\"student_index_number\":\"923488\",\"total_scholarship_amount\":4000},{\"student_id\":\"4499f5ad-1b8d-4c91-a127-b7f4847e2fbe\",\"student_name\":\"Robert Olszewski\",\"student_index_number\":\"074951\",\"total_scholarship_amount\":3000},{\"student_id\":\"6765227f-db5b-4342-8e6b-0827dade91e1\",\"student_name\":\"Natalia Krawczyk\",\"student_index_number\":\"153518\",\"total_scholarship_amount\":3000},{\"student_id\":\"14dc5078-476e-4fd2-98a5-5d7bb89fe6b1\",\"student_name\":\"Dariusz Lewandowski\",\"student_index_number\":\"978980\",\"total_scholarship_amount\":2500},{\"student_id\":\"aecc4d88-c6c5-465f-a821-211d5e514b9a\",\"student_name\":\"Jan Woźniak\",\"student_index_number\":\"696050\",\"total_scholarship_amount\":2500},{\"student_id\":\"5443b5e0-8888-4950-a3f2-b2b2c7db301b\",\"student_name\":\"Paweł Kowalski\",\"student_index_number\":\"400717\",\"total_scholarship_amount\":2000},{\"student_id\":\"608b217c-7c5b-4cf6-9351-508dbcfd70f3\",\"student_name\":\"Marek Piotrowski\",\"student_index_number\":\"732439\",\"total_scholarship_amount\":2000},{\"student_id\":\"82fb7be8-7baf-4685-a689-d45fbc312dd2\",\"student_name\":\"Justyna Kwiatkowski\",\"student_index_number\":\"195326\",\"total_scholarship_amount\":1500}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Total Scholarship Amount by Student (highest recipients)\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true,\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"student_name\",\"type\":\"nominal\",\"title\":\"Student\",\"sort\":{\"field\":\"total_scholarship_amount\",\"op\":\"sum\",\"order\":\"descending\"}},\"y\":{\"field\":\"total_scholarship_amount\",\"type\":\"quantitative\",\"title\":\"Total Scholarship Amount\",\"axis\":{\"format\":\"$,.2f\"}},\"tooltip\":[{\"field\":\"student_name\",\"type\":\"nominal\",\"title\":\"Student\"},{\"field\":\"student_index_number\",\"type\":\"nominal\",\"title\":\"Index Number\"},{\"field\":\"total_scholarship_amount\",\"type\":\"quantitative\",\"title\":\"Total Scholarship\",\"format\":\"$,.2f\"},{\"field\":\"student_id\",\"type\":\"nominal\",\"title\":\"Student ID\"}],\"color\":{\"datum\":\"#4C78A8\"}}},\"reasoning\":\"Bar chart shows each student's total scholarship amount; x sorted descending by total_scholarship_amount. Tooltip includes index and student id for reference.\"},\"validation\":{\"passed\":true,\"score\":0.7,\"issues\":[\"Invalid Vega-Lite color encoding: the spec uses \\\"color\\\": {\\\"datum\\\":\\\"#4C78A8\\\"}. For a constant color use \\\"color\\\": {\\\"value\\\":\\\"#4C78A8\\\"}; the current form will likely cause the chart to fail to render.\",\"Minor/optional: the x-axis sort uses {\\\"field\\\":\\\"total_scholarship_amount\\\",\\\"op\\\":\\\"sum\\\",\\\"order\\\":\\\"descending\\\"} although total_scholarship_amount is already an aggregated field. This is not fatal but redundant; you can sort by the y encoding or use a simple descending sort.\",\"Warning: student_name (first + last) is used as the nominal x field; if names are not unique, bars could be ambiguous. Consider using student_id as a key or ensuring name uniqueness if that matters.\",\"The SQL and chart mapping (aggregated total per student, ranking by total) match the question, but the Vega-Lite spec contains an invalid color encoding that will break rendering.\"]}}},\"endedAt\":1771846031799,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"Which students received the highest total scholarship amounts?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"SUM(scholarships.amount) AS total_scholarship_amount\"],\"dimensions\":[\"students.id\",\"students.first_name\",\"students.last_name\",\"students.index_number\"],\"filters\":[],\"grain\":\"per student (one row per student with scholarships)\",\"aliases\":{\"students.id\":\"student_id\",\"students.first_name || ' ' || students.last_name\":\"student_name\",\"students.index_number\":\"student_index_number\",\"SUM(scholarships.amount)\":\"total_scholarship_amount\"},\"output_fields\":[\"student_id\",\"student_name\",\"student_index_number\",\"total_scholarship_amount\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"student_name\",\"y_axis\":\"total_scholarship_amount\",\"title\":\"Total Scholarship Amount by Student (highest recipients)\"},\"assumptions\":[\"Schemas/tables confirmed in preflight: public.students and public.scholarships.\",\"Join key: scholarships.student_id = students.id (foreign key confirmed in scholarships constraints).\",\"Aggregate across all scholarship records (no time/paid_date/academic_year filtering) unless caller specifies otherwise.\",\"Only students who have at least one scholarship will appear (inner join). If the caller wants students with zero total shown, use a LEFT JOIN and COALESCE(SUM(...), 0).\",\"Amount column is scholarships.amount (numeric, NOT NULL) and is summed directly.\",\"student_name is produced by concatenating students.first_name and students.last_name with a space.\",\"If the caller wants only the top N recipients, apply an ORDER BY total_scholarship_amount DESC LIMIT N after aggregation; ties are returned according to DB sort behavior unless explicitly handled.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT s.id AS student_id,\\n       s.first_name || ' ' || s.last_name AS student_name,\\n       s.index_number AS student_index_number,\\n       SUM(sc.amount) AS total_scholarship_amount\\nFROM public.students AS s\\nJOIN public.scholarships AS sc\\n  ON sc.student_id = s.id\\nGROUP BY s.id, s.first_name, s.last_name, s.index_number\\nORDER BY total_scholarship_amount DESC, s.id;\",\"validationIssues\":[\"Invalid Vega-Lite color encoding: the spec uses \\\"color\\\": {\\\"datum\\\":\\\"#4C78A8\\\"}. For a constant color use \\\"color\\\": {\\\"value\\\":\\\"#4C78A8\\\"}; the current form will likely cause the chart to fail to render.\",\"Minor/optional: the x-axis sort uses {\\\"field\\\":\\\"total_scholarship_amount\\\",\\\"op\\\":\\\"sum\\\",\\\"order\\\":\\\"descending\\\"} although total_scholarship_amount is already an aggregated field. This is not fatal but redundant; you can sort by the y encoding or use a simple descending sort.\",\"Warning: student_name (first + last) is used as the nominal x field; if names are not unique, bars could be ambiguous. Consider using student_id as a key or ensuring name uniqueness if that matters.\",\"The SQL and chart mapping (aggregated total per student, ranking by total) match the question, but the Vega-Lite spec contains an invalid color encoding that will break rendering.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Aggregates scholarships per confirmed students table, joining on the confirmed foreign key, and returns one row per student who has scholarships. Results are ordered deterministically by total amount descending and student_id as a tiebreaker.\",\"sql\":\"SELECT s.id AS student_id,\\n       s.first_name || ' ' || s.last_name AS student_name,\\n       s.index_number AS student_index_number,\\n       SUM(sc.amount) AS total_scholarship_amount\\nFROM public.students AS s\\nJOIN public.scholarships AS sc\\n  ON sc.student_id = s.id\\nGROUP BY s.id, s.first_name, s.last_name, s.index_number\\nORDER BY total_scholarship_amount DESC, s.id;\",\"assumptions\":[\"public.students and public.scholarships exist (confirmed in preflight).\",\"Join key is scholarships.student_id = students.id (confirmed by foreign key constraint).\",\"scholarships.amount is numeric and NOT NULL (confirmed).\",\"Only students with at least one scholarship are returned (INNER JOIN).\",\"Student name is concatenated as first_name || ' ' || last_name.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT s.id AS student_id,\\n       s.first_name || ' ' || s.last_name AS student_name,\\n       s.index_number AS student_index_number,\\n       SUM(sc.amount) AS total_scholarship_amount\\nFROM public.students AS s\\nJOIN public.scholarships AS sc\\n  ON sc.student_id = s.id\\nGROUP BY s.id, s.first_name, s.last_name, s.index_number\\nORDER BY total_scholarship_amount DESC, s.id\",\"metadata\":{\"columns\":[\"student_id\",\"student_name\",\"student_index_number\",\"total_scholarship_amount\"],\"rowCount\":9,\"sample\":[{\"student_id\":\"4f8e25f6-b563-439b-aa92-6104f284fa5a\",\"student_name\":\"Dariusz Jankowski\",\"student_index_number\":\"350296\",\"total_scholarship_amount\":5000},{\"student_id\":\"84be24b9-23e7-4fe3-9e3e-ba5caa9b9667\",\"student_name\":\"Mariusz Kwiatkowski\",\"student_index_number\":\"923488\",\"total_scholarship_amount\":4000}]},\"data\":[{\"student_id\":\"4f8e25f6-b563-439b-aa92-6104f284fa5a\",\"student_name\":\"Dariusz Jankowski\",\"student_index_number\":\"350296\",\"total_scholarship_amount\":5000},{\"student_id\":\"84be24b9-23e7-4fe3-9e3e-ba5caa9b9667\",\"student_name\":\"Mariusz Kwiatkowski\",\"student_index_number\":\"923488\",\"total_scholarship_amount\":4000},{\"student_id\":\"4499f5ad-1b8d-4c91-a127-b7f4847e2fbe\",\"student_name\":\"Robert Olszewski\",\"student_index_number\":\"074951\",\"total_scholarship_amount\":3000},{\"student_id\":\"6765227f-db5b-4342-8e6b-0827dade91e1\",\"student_name\":\"Natalia Krawczyk\",\"student_index_number\":\"153518\",\"total_scholarship_amount\":3000},{\"student_id\":\"14dc5078-476e-4fd2-98a5-5d7bb89fe6b1\",\"student_name\":\"Dariusz Lewandowski\",\"student_index_number\":\"978980\",\"total_scholarship_amount\":2500},{\"student_id\":\"aecc4d88-c6c5-465f-a821-211d5e514b9a\",\"student_name\":\"Jan Woźniak\",\"student_index_number\":\"696050\",\"total_scholarship_amount\":2500},{\"student_id\":\"5443b5e0-8888-4950-a3f2-b2b2c7db301b\",\"student_name\":\"Paweł Kowalski\",\"student_index_number\":\"400717\",\"total_scholarship_amount\":2000},{\"student_id\":\"608b217c-7c5b-4cf6-9351-508dbcfd70f3\",\"student_name\":\"Marek Piotrowski\",\"student_index_number\":\"732439\",\"total_scholarship_amount\":2000},{\"student_id\":\"82fb7be8-7baf-4685-a689-d45fbc312dd2\",\"student_name\":\"Justyna Kwiatkowski\",\"student_index_number\":\"195326\",\"total_scholarship_amount\":1500}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Total Scholarship Amount by Student (highest recipients)\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true,\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"student_name\",\"type\":\"nominal\",\"title\":\"Student\",\"sort\":{\"field\":\"total_scholarship_amount\",\"op\":\"sum\",\"order\":\"descending\"}},\"y\":{\"field\":\"total_scholarship_amount\",\"type\":\"quantitative\",\"title\":\"Total Scholarship Amount\",\"axis\":{\"format\":\"$,.2f\"}},\"tooltip\":[{\"field\":\"student_name\",\"type\":\"nominal\",\"title\":\"Student\"},{\"field\":\"student_index_number\",\"type\":\"nominal\",\"title\":\"Index Number\"},{\"field\":\"total_scholarship_amount\",\"type\":\"quantitative\",\"title\":\"Total Scholarship\",\"format\":\"$,.2f\"},{\"field\":\"student_id\",\"type\":\"nominal\",\"title\":\"Student ID\"}],\"color\":{\"datum\":\"#4C78A8\"}}},\"reasoning\":\"Bar chart shows each student's total scholarship amount; x sorted descending by total_scholarship_amount. Tooltip includes index and student id for reference.\"},\"validation\":{\"passed\":true,\"score\":0.7,\"issues\":[\"Invalid Vega-Lite color encoding: the spec uses \\\"color\\\": {\\\"datum\\\":\\\"#4C78A8\\\"}. For a constant color use \\\"color\\\": {\\\"value\\\":\\\"#4C78A8\\\"}; the current form will likely cause the chart to fail to render.\",\"Minor/optional: the x-axis sort uses {\\\"field\\\":\\\"total_scholarship_amount\\\",\\\"op\\\":\\\"sum\\\",\\\"order\\\":\\\"descending\\\"} although total_scholarship_amount is already an aggregated field. This is not fatal but redundant; you can sort by the y encoding or use a simple descending sort.\",\"Warning: student_name (first + last) is used as the nominal x field; if names are not unique, bars could be ambiguous. Consider using student_id as a key or ensuring name uniqueness if that matters.\",\"The SQL and chart mapping (aggregated total per student, ranking by total) match the question, but the Vega-Lite spec contains an invalid color encoding that will break rendering.\"]}}},\"startedAt\":1771846031803,\"status\":\"success\",\"output\":{\"sql\":\"SELECT s.id AS student_id,\\n       s.first_name || ' ' || s.last_name AS student_name,\\n       s.index_number AS student_index_number,\\n       SUM(sc.amount) AS total_scholarship_amount\\nFROM public.students AS s\\nJOIN public.scholarships AS sc\\n  ON sc.student_id = s.id\\nGROUP BY s.id, s.first_name, s.last_name, s.index_number\\nORDER BY total_scholarship_amount DESC, s.id;\",\"data\":[{\"student_id\":\"4f8e25f6-b563-439b-aa92-6104f284fa5a\",\"student_name\":\"Dariusz Jankowski\",\"student_index_number\":\"350296\",\"total_scholarship_amount\":5000},{\"student_id\":\"84be24b9-23e7-4fe3-9e3e-ba5caa9b9667\",\"student_name\":\"Mariusz Kwiatkowski\",\"student_index_number\":\"923488\",\"total_scholarship_amount\":4000},{\"student_id\":\"4499f5ad-1b8d-4c91-a127-b7f4847e2fbe\",\"student_name\":\"Robert Olszewski\",\"student_index_number\":\"074951\",\"total_scholarship_amount\":3000},{\"student_id\":\"6765227f-db5b-4342-8e6b-0827dade91e1\",\"student_name\":\"Natalia Krawczyk\",\"student_index_number\":\"153518\",\"total_scholarship_amount\":3000},{\"student_id\":\"14dc5078-476e-4fd2-98a5-5d7bb89fe6b1\",\"student_name\":\"Dariusz Lewandowski\",\"student_index_number\":\"978980\",\"total_scholarship_amount\":2500},{\"student_id\":\"aecc4d88-c6c5-465f-a821-211d5e514b9a\",\"student_name\":\"Jan Woźniak\",\"student_index_number\":\"696050\",\"total_scholarship_amount\":2500},{\"student_id\":\"5443b5e0-8888-4950-a3f2-b2b2c7db301b\",\"student_name\":\"Paweł Kowalski\",\"student_index_number\":\"400717\",\"total_scholarship_amount\":2000},{\"student_id\":\"608b217c-7c5b-4cf6-9351-508dbcfd70f3\",\"student_name\":\"Marek Piotrowski\",\"student_index_number\":\"732439\",\"total_scholarship_amount\":2000},{\"student_id\":\"82fb7be8-7baf-4685-a689-d45fbc312dd2\",\"student_name\":\"Justyna Kwiatkowski\",\"student_index_number\":\"195326\",\"total_scholarship_amount\":1500}],\"metadata\":{\"columns\":[\"student_id\",\"student_name\",\"student_index_number\",\"total_scholarship_amount\"],\"rowCount\":9,\"sample\":[{\"student_id\":\"4f8e25f6-b563-439b-aa92-6104f284fa5a\",\"student_name\":\"Dariusz Jankowski\",\"student_index_number\":\"350296\",\"total_scholarship_amount\":5000},{\"student_id\":\"84be24b9-23e7-4fe3-9e3e-ba5caa9b9667\",\"student_name\":\"Mariusz Kwiatkowski\",\"student_index_number\":\"923488\",\"total_scholarship_amount\":4000}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Total Scholarship Amount by Student (highest recipients)\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true,\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"student_name\",\"type\":\"nominal\",\"title\":\"Student\",\"sort\":{\"field\":\"total_scholarship_amount\",\"op\":\"sum\",\"order\":\"descending\"}},\"y\":{\"field\":\"total_scholarship_amount\",\"type\":\"quantitative\",\"title\":\"Total Scholarship Amount\",\"axis\":{\"format\":\"$,.2f\"}},\"tooltip\":[{\"field\":\"student_name\",\"type\":\"nominal\",\"title\":\"Student\"},{\"field\":\"student_index_number\",\"type\":\"nominal\",\"title\":\"Index Number\"},{\"field\":\"total_scholarship_amount\",\"type\":\"quantitative\",\"title\":\"Total Scholarship\",\"format\":\"$,.2f\"},{\"field\":\"student_id\",\"type\":\"nominal\",\"title\":\"Student ID\"}],\"color\":{\"datum\":\"#4C78A8\"}}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.7,\"issues\":[\"Invalid Vega-Lite color encoding: the spec uses \\\"color\\\": {\\\"datum\\\":\\\"#4C78A8\\\"}. For a constant color use \\\"color\\\": {\\\"value\\\":\\\"#4C78A8\\\"}; the current form will likely cause the chart to fail to render.\",\"Minor/optional: the x-axis sort uses {\\\"field\\\":\\\"total_scholarship_amount\\\",\\\"op\\\":\\\"sum\\\",\\\"order\\\":\\\"descending\\\"} although total_scholarship_amount is already an aggregated field. This is not fatal but redundant; you can sort by the y encoding or use a simple descending sort.\",\"Warning: student_name (first + last) is used as the nominal x field; if names are not unique, bars could be ambiguous. Consider using student_id as a key or ensuring name uniqueness if that matters.\",\"The SQL and chart mapping (aggregated total per student, ranking by total) match the question, but the Vega-Lite spec contains an invalid color encoding that will break rendering.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771846031806}},\"input\":{\"question\":\"Which students received the highest total scholarship amounts?\"},\"result\":{\"sql\":\"SELECT s.id AS student_id,\\n       s.first_name || ' ' || s.last_name AS student_name,\\n       s.index_number AS student_index_number,\\n       SUM(sc.amount) AS total_scholarship_amount\\nFROM public.students AS s\\nJOIN public.scholarships AS sc\\n  ON sc.student_id = s.id\\nGROUP BY s.id, s.first_name, s.last_name, s.index_number\\nORDER BY total_scholarship_amount DESC, s.id;\",\"data\":[{\"student_id\":\"4f8e25f6-b563-439b-aa92-6104f284fa5a\",\"student_name\":\"Dariusz Jankowski\",\"student_index_number\":\"350296\",\"total_scholarship_amount\":5000},{\"student_id\":\"84be24b9-23e7-4fe3-9e3e-ba5caa9b9667\",\"student_name\":\"Mariusz Kwiatkowski\",\"student_index_number\":\"923488\",\"total_scholarship_amount\":4000},{\"student_id\":\"4499f5ad-1b8d-4c91-a127-b7f4847e2fbe\",\"student_name\":\"Robert Olszewski\",\"student_index_number\":\"074951\",\"total_scholarship_amount\":3000},{\"student_id\":\"6765227f-db5b-4342-8e6b-0827dade91e1\",\"student_name\":\"Natalia Krawczyk\",\"student_index_number\":\"153518\",\"total_scholarship_amount\":3000},{\"student_id\":\"14dc5078-476e-4fd2-98a5-5d7bb89fe6b1\",\"student_name\":\"Dariusz Lewandowski\",\"student_index_number\":\"978980\",\"total_scholarship_amount\":2500},{\"student_id\":\"aecc4d88-c6c5-465f-a821-211d5e514b9a\",\"student_name\":\"Jan Woźniak\",\"student_index_number\":\"696050\",\"total_scholarship_amount\":2500},{\"student_id\":\"5443b5e0-8888-4950-a3f2-b2b2c7db301b\",\"student_name\":\"Paweł Kowalski\",\"student_index_number\":\"400717\",\"total_scholarship_amount\":2000},{\"student_id\":\"608b217c-7c5b-4cf6-9351-508dbcfd70f3\",\"student_name\":\"Marek Piotrowski\",\"student_index_number\":\"732439\",\"total_scholarship_amount\":2000},{\"student_id\":\"82fb7be8-7baf-4685-a689-d45fbc312dd2\",\"student_name\":\"Justyna Kwiatkowski\",\"student_index_number\":\"195326\",\"total_scholarship_amount\":1500}],\"metadata\":{\"columns\":[\"student_id\",\"student_name\",\"student_index_number\",\"total_scholarship_amount\"],\"rowCount\":9,\"sample\":[{\"student_id\":\"4f8e25f6-b563-439b-aa92-6104f284fa5a\",\"student_name\":\"Dariusz Jankowski\",\"student_index_number\":\"350296\",\"total_scholarship_amount\":5000},{\"student_id\":\"84be24b9-23e7-4fe3-9e3e-ba5caa9b9667\",\"student_name\":\"Mariusz Kwiatkowski\",\"student_index_number\":\"923488\",\"total_scholarship_amount\":4000}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Total Scholarship Amount by Student (highest recipients)\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true,\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"student_name\",\"type\":\"nominal\",\"title\":\"Student\",\"sort\":{\"field\":\"total_scholarship_amount\",\"op\":\"sum\",\"order\":\"descending\"}},\"y\":{\"field\":\"total_scholarship_amount\",\"type\":\"quantitative\",\"title\":\"Total Scholarship Amount\",\"axis\":{\"format\":\"$,.2f\"}},\"tooltip\":[{\"field\":\"student_name\",\"type\":\"nominal\",\"title\":\"Student\"},{\"field\":\"student_index_number\",\"type\":\"nominal\",\"title\":\"Index Number\"},{\"field\":\"total_scholarship_amount\",\"type\":\"quantitative\",\"title\":\"Total Scholarship\",\"format\":\"$,.2f\"},{\"field\":\"student_id\",\"type\":\"nominal\",\"title\":\"Student ID\"}],\"color\":{\"datum\":\"#4C78A8\"}}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.7,\"issues\":[\"Invalid Vega-Lite color encoding: the spec uses \\\"color\\\": {\\\"datum\\\":\\\"#4C78A8\\\"}. For a constant color use \\\"color\\\": {\\\"value\\\":\\\"#4C78A8\\\"}; the current form will likely cause the chart to fail to render.\",\"Minor/optional: the x-axis sort uses {\\\"field\\\":\\\"total_scholarship_amount\\\",\\\"op\\\":\\\"sum\\\",\\\"order\\\":\\\"descending\\\"} although total_scholarship_amount is already an aggregated field. This is not fatal but redundant; you can sort by the y encoding or use a simple descending sort.\",\"Warning: student_name (first + last) is used as the nominal x field; if names are not unique, bars could be ambiguous. Consider using student_id as a key or ensuring name uniqueness if that matters.\",\"The SQL and chart mapping (aggregated total per student, ranking by total) match the question, but the Vega-Lite spec contains an invalid color encoding that will break rendering.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"96543fa6adb565d0d64909eab06f9581\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/top-scholarship-students/run-0001/run.json",
+    "queryPath": "runs/top-scholarship-students/run-0001/query.sql",
+    "vegaRawPath": "runs/top-scholarship-students/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/top-scholarship-students/run-0001/vega.resolved.json",
+    "imagePath": "runs/top-scholarship-students/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:27:12.254Z",
+  "traceId": "96543fa6adb565d0d64909eab06f9581",
+  "success": true,
+  "durationMs": 75091,
+  "resultRaw": {
+    "data": [
+      {
+        "student_id": "4f8e25f6-b563-439b-aa92-6104f284fa5a",
+        "student_name": "Dariusz Jankowski",
+        "student_index_number": "350296",
+        "total_scholarship_amount": 5000
+      },
+      {
+        "student_id": "84be24b9-23e7-4fe3-9e3e-ba5caa9b9667",
+        "student_name": "Mariusz Kwiatkowski",
+        "student_index_number": "923488",
+        "total_scholarship_amount": 4000
+      },
+      {
+        "student_id": "4499f5ad-1b8d-4c91-a127-b7f4847e2fbe",
+        "student_name": "Robert Olszewski",
+        "student_index_number": "074951",
+        "total_scholarship_amount": 3000
+      },
+      {
+        "student_id": "6765227f-db5b-4342-8e6b-0827dade91e1",
+        "student_name": "Natalia Krawczyk",
+        "student_index_number": "153518",
+        "total_scholarship_amount": 3000
+      },
+      {
+        "student_id": "14dc5078-476e-4fd2-98a5-5d7bb89fe6b1",
+        "student_name": "Dariusz Lewandowski",
+        "student_index_number": "978980",
+        "total_scholarship_amount": 2500
+      },
+      {
+        "student_id": "aecc4d88-c6c5-465f-a821-211d5e514b9a",
+        "student_name": "Jan Woźniak",
+        "student_index_number": "696050",
+        "total_scholarship_amount": 2500
+      },
+      {
+        "student_id": "5443b5e0-8888-4950-a3f2-b2b2c7db301b",
+        "student_name": "Paweł Kowalski",
+        "student_index_number": "400717",
+        "total_scholarship_amount": 2000
+      },
+      {
+        "student_id": "608b217c-7c5b-4cf6-9351-508dbcfd70f3",
+        "student_name": "Marek Piotrowski",
+        "student_index_number": "732439",
+        "total_scholarship_amount": 2000
+      },
+      {
+        "student_id": "82fb7be8-7baf-4685-a689-d45fbc312dd2",
+        "student_name": "Justyna Kwiatkowski",
+        "student_index_number": "195326",
+        "total_scholarship_amount": 1500
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Total Scholarship Amount by Student (highest recipients)",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 700,
+      "height": 400,
+      "mark": {
+        "type": "bar",
+        "tooltip": true,
+        "cornerRadius": 3
+      },
+      "encoding": {
+        "x": {
+          "field": "student_name",
+          "type": "nominal",
+          "title": "Student",
+          "sort": {
+            "field": "total_scholarship_amount",
+            "op": "sum",
+            "order": "descending"
+          }
+        },
+        "y": {
+          "field": "total_scholarship_amount",
+          "type": "quantitative",
+          "title": "Total Scholarship Amount",
+          "axis": {
+            "format": "$,.2f"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "student_name",
+            "type": "nominal",
+            "title": "Student"
+          },
+          {
+            "field": "student_index_number",
+            "type": "nominal",
+            "title": "Index Number"
+          },
+          {
+            "field": "total_scholarship_amount",
+            "type": "quantitative",
+            "title": "Total Scholarship",
+            "format": "$,.2f"
+          },
+          {
+            "field": "student_id",
+            "type": "nominal",
+            "title": "Student ID"
+          }
+        ],
+        "color": {
+          "datum": "#4C78A8"
+        }
+      }
+    },
+    "sql": "SELECT s.id AS student_id,\n       s.first_name || ' ' || s.last_name AS student_name,\n       s.index_number AS student_index_number,\n       SUM(sc.amount) AS total_scholarship_amount\nFROM public.students AS s\nJOIN public.scholarships AS sc\n  ON sc.student_id = s.id\nGROUP BY s.id, s.first_name, s.last_name, s.index_number\nORDER BY total_scholarship_amount DESC, s.id;",
+    "metadata": {
+      "columns": [
+        "student_id",
+        "student_name",
+        "student_index_number",
+        "total_scholarship_amount"
+      ],
+      "rowCount": 9,
+      "sample": [
+        {
+          "student_id": "4f8e25f6-b563-439b-aa92-6104f284fa5a",
+          "student_name": "Dariusz Jankowski",
+          "student_index_number": "350296",
+          "total_scholarship_amount": 5000
+        },
+        {
+          "student_id": "84be24b9-23e7-4fe3-9e3e-ba5caa9b9667",
+          "student_name": "Mariusz Kwiatkowski",
+          "student_index_number": "923488",
+          "total_scholarship_amount": 4000
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.7,
+      "issues": [
+        "Invalid Vega-Lite color encoding: the spec uses \"color\": {\"datum\":\"#4C78A8\"}. For a constant color use \"color\": {\"value\":\"#4C78A8\"}; the current form will likely cause the chart to fail to render.",
+        "Minor/optional: the x-axis sort uses {\"field\":\"total_scholarship_amount\",\"op\":\"sum\",\"order\":\"descending\"} although total_scholarship_amount is already an aggregated field. This is not fatal but redundant; you can sort by the y encoding or use a simple descending sort.",
+        "Warning: student_name (first + last) is used as the nominal x field; if names are not unique, bars could be ambiguous. Consider using student_id as a key or ensuring name uniqueness if that matters.",
+        "The SQL and chart mapping (aggregated total per student, ranking by total) match the question, but the Vega-Lite spec contains an invalid color encoding that will break rendering."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "student_id": "4f8e25f6-b563-439b-aa92-6104f284fa5a",
+        "student_name": "Dariusz Jankowski",
+        "student_index_number": "350296",
+        "total_scholarship_amount": 5000
+      },
+      {
+        "student_id": "84be24b9-23e7-4fe3-9e3e-ba5caa9b9667",
+        "student_name": "Mariusz Kwiatkowski",
+        "student_index_number": "923488",
+        "total_scholarship_amount": 4000
+      },
+      {
+        "student_id": "4499f5ad-1b8d-4c91-a127-b7f4847e2fbe",
+        "student_name": "Robert Olszewski",
+        "student_index_number": "074951",
+        "total_scholarship_amount": 3000
+      },
+      {
+        "student_id": "6765227f-db5b-4342-8e6b-0827dade91e1",
+        "student_name": "Natalia Krawczyk",
+        "student_index_number": "153518",
+        "total_scholarship_amount": 3000
+      },
+      {
+        "student_id": "14dc5078-476e-4fd2-98a5-5d7bb89fe6b1",
+        "student_name": "Dariusz Lewandowski",
+        "student_index_number": "978980",
+        "total_scholarship_amount": 2500
+      },
+      {
+        "student_id": "aecc4d88-c6c5-465f-a821-211d5e514b9a",
+        "student_name": "Jan Woźniak",
+        "student_index_number": "696050",
+        "total_scholarship_amount": 2500
+      },
+      {
+        "student_id": "5443b5e0-8888-4950-a3f2-b2b2c7db301b",
+        "student_name": "Paweł Kowalski",
+        "student_index_number": "400717",
+        "total_scholarship_amount": 2000
+      },
+      {
+        "student_id": "608b217c-7c5b-4cf6-9351-508dbcfd70f3",
+        "student_name": "Marek Piotrowski",
+        "student_index_number": "732439",
+        "total_scholarship_amount": 2000
+      },
+      {
+        "student_id": "82fb7be8-7baf-4685-a689-d45fbc312dd2",
+        "student_name": "Justyna Kwiatkowski",
+        "student_index_number": "195326",
+        "total_scholarship_amount": 1500
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Total Scholarship Amount by Student (highest recipients)",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 700,
+      "height": 400,
+      "mark": {
+        "type": "bar",
+        "tooltip": true,
+        "cornerRadius": 3
+      },
+      "encoding": {
+        "x": {
+          "field": "student_name",
+          "type": "nominal",
+          "title": "Student",
+          "sort": {
+            "field": "total_scholarship_amount",
+            "op": "sum",
+            "order": "descending"
+          }
+        },
+        "y": {
+          "field": "total_scholarship_amount",
+          "type": "quantitative",
+          "title": "Total Scholarship Amount",
+          "axis": {
+            "format": "$,.2f"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "student_name",
+            "type": "nominal",
+            "title": "Student"
+          },
+          {
+            "field": "student_index_number",
+            "type": "nominal",
+            "title": "Index Number"
+          },
+          {
+            "field": "total_scholarship_amount",
+            "type": "quantitative",
+            "title": "Total Scholarship",
+            "format": "$,.2f"
+          },
+          {
+            "field": "student_id",
+            "type": "nominal",
+            "title": "Student ID"
+          }
+        ],
+        "color": {
+          "datum": "#4C78A8"
+        }
+      }
+    },
+    "sql": "SELECT s.id AS student_id,\n       s.first_name || ' ' || s.last_name AS student_name,\n       s.index_number AS student_index_number,\n       SUM(sc.amount) AS total_scholarship_amount\nFROM public.students AS s\nJOIN public.scholarships AS sc\n  ON sc.student_id = s.id\nGROUP BY s.id, s.first_name, s.last_name, s.index_number\nORDER BY total_scholarship_amount DESC, s.id;",
+    "metadata": {
+      "columns": [
+        "student_id",
+        "student_name",
+        "student_index_number",
+        "total_scholarship_amount"
+      ],
+      "rowCount": 9,
+      "sample": [
+        {
+          "student_id": "4f8e25f6-b563-439b-aa92-6104f284fa5a",
+          "student_name": "Dariusz Jankowski",
+          "student_index_number": "350296",
+          "total_scholarship_amount": 5000
+        },
+        {
+          "student_id": "84be24b9-23e7-4fe3-9e3e-ba5caa9b9667",
+          "student_name": "Mariusz Kwiatkowski",
+          "student_index_number": "923488",
+          "total_scholarship_amount": 4000
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.7,
+      "issues": [
+        "Invalid Vega-Lite color encoding: the spec uses \"color\": {\"datum\":\"#4C78A8\"}. For a constant color use \"color\": {\"value\":\"#4C78A8\"}; the current form will likely cause the chart to fail to render.",
+        "Minor/optional: the x-axis sort uses {\"field\":\"total_scholarship_amount\",\"op\":\"sum\",\"order\":\"descending\"} although total_scholarship_amount is already an aggregated field. This is not fatal but redundant; you can sort by the y encoding or use a simple descending sort.",
+        "Warning: student_name (first + last) is used as the nominal x field; if names are not unique, bars could be ambiguous. Consider using student_id as a key or ensuring name uniqueness if that matters.",
+        "The SQL and chart mapping (aggregated total per student, ranking by total) match the question, but the Vega-Lite spec contains an invalid color encoding that will break rendering."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:27:12.254Z",
+    "traceId": "96543fa6adb565d0d64909eab06f9581",
+    "attempts": 6,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 20460,
+      "outputTokens": 4741,
+      "totalTokens": 25201,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2880,
+      "costUsd": 0.014597
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 20460,
+        "outputTokens": 4741,
+        "totalTokens": 25201,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2880,
+        "costUsd": 0.014597
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,195 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "department-evaluation-radar",
+  "caseDirectory": "department-evaluation-radar",
+  "repeatIndex": 1,
+  "prompt": "Compare departments across all evaluation dimensions",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Compare departments across all evaluation dimensions"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:52:32.893Z",
+    "endedAtUtc": "2026-02-23T10:53:01.042Z",
+    "durationMs": 28149
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "3667",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:53:01 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Compare departments across all evaluation dimensions\"},\"agent\":{\"payload\":{\"question\":\"Compare departments across all evaluation dimensions\"},\"startedAt\":1771843952900,\"status\":\"success\",\"output\":{\"sql\":\"WITH dept_avgs AS (\\n  SELECT\\n    department AS department,\\n    AVG(communication_score) AS avg_communication,\\n    AVG(technical_score) AS avg_technical,\\n    AVG(teamwork_score) AS avg_teamwork,\\n    AVG(leadership_score) AS avg_leadership,\\n    AVG(problem_solving_score) AS avg_problem_solving\\n  FROM employee_evaluations\\n  GROUP BY department\\n)\\nSELECT department AS department, 'Communication' AS dimension, avg_communication AS avg_score FROM dept_avgs\\nUNION ALL\\nSELECT department AS department, 'Technical' AS dimension, avg_technical AS avg_score FROM dept_avgs\\nUNION ALL\\nSELECT department AS department, 'Teamwork' AS dimension, avg_teamwork AS avg_score FROM dept_avgs\\nUNION ALL\\nSELECT department AS department, 'Leadership' AS dimension, avg_leadership AS avg_score FROM dept_avgs\\nUNION ALL\\nSELECT department AS department, 'Problem Solving' AS dimension, avg_problem_solving AS avg_score FROM dept_avgs\\nORDER BY department, dimension;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average evaluation scores by department across all dimensions\",\"facet\":{\"column\":{\"field\":\"dimension\",\"type\":\"nominal\",\"header\":{\"labelAngle\":-45,\"labelOrient\":\"bottom\"}}},\"spec\":{\"width\":140,\"height\":240,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"department\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"title\":\"Department\"}},\"y\":{\"field\":\"avg_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average score\"},\"scale\":{\"nice\":true}},\"color\":{\"field\":\"department\",\"type\":\"nominal\",\"legend\":{\"title\":\"Department\",\"orient\":\"top\"}},\"tooltip\":[{\"field\":\"department\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"dimension\",\"type\":\"nominal\",\"title\":\"Dimension\"},{\"field\":\"avg_score\",\"type\":\"quantitative\",\"title\":\"Avg score\"}]}},\"resolve\":{\"legend\":{\"direction\":\"horizontal\"}}}},\"endedAt\":1771843980933},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH dept_avgs AS (\\n  SELECT\\n    department AS department,\\n    AVG(communication_score) AS avg_communication,\\n    AVG(technical_score) AS avg_technical,\\n    AVG(teamwork_score) AS avg_teamwork,\\n    AVG(leadership_score) AS avg_leadership,\\n    AVG(problem_solving_score) AS avg_problem_solving\\n  FROM employee_evaluations\\n  GROUP BY department\\n)\\nSELECT department AS department, 'Communication' AS dimension, avg_communication AS avg_score FROM dept_avgs\\nUNION ALL\\nSELECT department AS department, 'Technical' AS dimension, avg_technical AS avg_score FROM dept_avgs\\nUNION ALL\\nSELECT department AS department, 'Teamwork' AS dimension, avg_teamwork AS avg_score FROM dept_avgs\\nUNION ALL\\nSELECT department AS department, 'Leadership' AS dimension, avg_leadership AS avg_score FROM dept_avgs\\nUNION ALL\\nSELECT department AS department, 'Problem Solving' AS dimension, avg_problem_solving AS avg_score FROM dept_avgs\\nORDER BY department, dimension;\"},\"startedAt\":1771843980940,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: relation \\\"employee_evaluations\\\" does not exist\\nLINE 10:   FROM employee_evaluations\\n                ^\",\"name\":\"Error\"},\"endedAt\":1771843981038}},\"input\":{\"question\":\"Compare departments across all evaluation dimensions\"},\"error\":{\"message\":\"SQL execution failed: relation \\\"employee_evaluations\\\" does not exist\\nLINE 10:   FROM employee_evaluations\\n                ^\",\"name\":\"Error\"},\"traceId\":\"9dc180a8c92826d399765d2e2cb4fb25\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/department-evaluation-radar/run-0001/run.json",
+    "queryPath": "runs/department-evaluation-radar/run-0001/query.sql",
+    "vegaRawPath": "runs/department-evaluation-radar/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/department-evaluation-radar/run-0001/vega.resolved.json",
+    "imagePath": "runs/department-evaluation-radar/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:53:01.043Z",
+  "traceId": "9dc180a8c92826d399765d2e2cb4fb25",
+  "success": false,
+  "durationMs": 28150,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Compare departments across all evaluation dimensions"
+      },
+      "agent": {
+        "payload": {
+          "question": "Compare departments across all evaluation dimensions"
+        },
+        "startedAt": 1771843952900,
+        "status": "success",
+        "output": {
+          "sql": "WITH dept_avgs AS (\n  SELECT\n    department AS department,\n    AVG(communication_score) AS avg_communication,\n    AVG(technical_score) AS avg_technical,\n    AVG(teamwork_score) AS avg_teamwork,\n    AVG(leadership_score) AS avg_leadership,\n    AVG(problem_solving_score) AS avg_problem_solving\n  FROM employee_evaluations\n  GROUP BY department\n)\nSELECT department AS department, 'Communication' AS dimension, avg_communication AS avg_score FROM dept_avgs\nUNION ALL\nSELECT department AS department, 'Technical' AS dimension, avg_technical AS avg_score FROM dept_avgs\nUNION ALL\nSELECT department AS department, 'Teamwork' AS dimension, avg_teamwork AS avg_score FROM dept_avgs\nUNION ALL\nSELECT department AS department, 'Leadership' AS dimension, avg_leadership AS avg_score FROM dept_avgs\nUNION ALL\nSELECT department AS department, 'Problem Solving' AS dimension, avg_problem_solving AS avg_score FROM dept_avgs\nORDER BY department, dimension;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "data": {
+              "name": "query_result"
+            },
+            "title": "Average evaluation scores by department across all dimensions",
+            "facet": {
+              "column": {
+                "field": "dimension",
+                "type": "nominal",
+                "header": {
+                  "labelAngle": -45,
+                  "labelOrient": "bottom"
+                }
+              }
+            },
+            "spec": {
+              "width": 140,
+              "height": 240,
+              "mark": {
+                "type": "bar",
+                "tooltip": true
+              },
+              "encoding": {
+                "x": {
+                  "field": "department",
+                  "type": "nominal",
+                  "axis": {
+                    "labelAngle": -45,
+                    "title": "Department"
+                  }
+                },
+                "y": {
+                  "field": "avg_score",
+                  "type": "quantitative",
+                  "axis": {
+                    "title": "Average score"
+                  },
+                  "scale": {
+                    "nice": true
+                  }
+                },
+                "color": {
+                  "field": "department",
+                  "type": "nominal",
+                  "legend": {
+                    "title": "Department",
+                    "orient": "top"
+                  }
+                },
+                "tooltip": [
+                  {
+                    "field": "department",
+                    "type": "nominal",
+                    "title": "Department"
+                  },
+                  {
+                    "field": "dimension",
+                    "type": "nominal",
+                    "title": "Dimension"
+                  },
+                  {
+                    "field": "avg_score",
+                    "type": "quantitative",
+                    "title": "Avg score"
+                  }
+                ]
+              }
+            },
+            "resolve": {
+              "legend": {
+                "direction": "horizontal"
+              }
+            }
+          }
+        },
+        "endedAt": 1771843980933
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH dept_avgs AS (\n  SELECT\n    department AS department,\n    AVG(communication_score) AS avg_communication,\n    AVG(technical_score) AS avg_technical,\n    AVG(teamwork_score) AS avg_teamwork,\n    AVG(leadership_score) AS avg_leadership,\n    AVG(problem_solving_score) AS avg_problem_solving\n  FROM employee_evaluations\n  GROUP BY department\n)\nSELECT department AS department, 'Communication' AS dimension, avg_communication AS avg_score FROM dept_avgs\nUNION ALL\nSELECT department AS department, 'Technical' AS dimension, avg_technical AS avg_score FROM dept_avgs\nUNION ALL\nSELECT department AS department, 'Teamwork' AS dimension, avg_teamwork AS avg_score FROM dept_avgs\nUNION ALL\nSELECT department AS department, 'Leadership' AS dimension, avg_leadership AS avg_score FROM dept_avgs\nUNION ALL\nSELECT department AS department, 'Problem Solving' AS dimension, avg_problem_solving AS avg_score FROM dept_avgs\nORDER BY department, dimension;"
+        },
+        "startedAt": 1771843980940,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: relation \"employee_evaluations\" does not exist\nLINE 10:   FROM employee_evaluations\n                ^",
+          "name": "Error"
+        },
+        "endedAt": 1771843981038
+      }
+    },
+    "input": {
+      "question": "Compare departments across all evaluation dimensions"
+    },
+    "error": {
+      "message": "SQL execution failed: relation \"employee_evaluations\" does not exist\nLINE 10:   FROM employee_evaluations\n                ^",
+      "name": "Error"
+    },
+    "traceId": "9dc180a8c92826d399765d2e2cb4fb25"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:53:01.043Z",
+    "traceId": "9dc180a8c92826d399765d2e2cb4fb25",
+    "attempts": 6,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 262,
+      "outputTokens": 2086,
+      "totalTokens": 2348,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1472,
+      "costUsd": 0.0042375
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 262,
+        "outputTokens": 2086,
+        "totalTokens": 2348,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1472,
+        "costUsd": 0.0042375
+      }
+    ],
+    "warnings": []
+  }
+}

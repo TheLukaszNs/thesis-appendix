@@ -1,0 +1,478 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "professor-grade-strictness",
+  "caseDirectory": "professor-grade-strictness",
+  "repeatIndex": 1,
+  "prompt": "Which professors give the lowest average grades (strictest graders)?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which professors give the lowest average grades (strictest graders)?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:35:17.615Z",
+    "endedAtUtc": "2026-02-23T11:37:00.040Z",
+    "durationMs": 102425
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "39038",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:37:00 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Which professors give the lowest average grades (strictest graders)?\"},\"planner\":{\"payload\":{\"question\":\"Which professors give the lowest average grades (strictest graders)?\"},\"startedAt\":1771846517620,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\",\"COUNT(grades.id)\"],\"dimensions\":[\"professors.id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\"],\"filters\":[\"grades.exam_score IS NOT NULL\",\"course_sections.professor_id IS NOT NULL\"],\"grain\":\"professor-level (one row per professor)\",\"aliases\":{\"AVG(grades.exam_score)\":\"avg_grade\",\"COUNT(grades.id)\":\"num_grades\",\"professors.id\":\"professor_id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\":\"professor_name\"},\"output_fields\":[\"professor_id\",\"professor_name\",\"avg_grade\",\"num_grades\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"professor_name\",\"y_axis\":\"avg_grade\",\"title\":\"Professors ordered by average exam score (lowest = strictest)\"},\"assumptions\":[\"Schema discovery was performed in this run and confirmed the following relevant tables and columns: grades (exam_score, id, enrollment_id), enrollments (id, course_section_id), course_sections (id, professor_id), professors (id, first_name, last_name).\",\"Join path to compute per-professor averages: grades.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.professor_id -> professors.id.\",\"grade_value column exists but its USER-DEFINED type was not interpreted as numeric during discovery. To avoid type ambiguity, avg_grade uses grades.exam_score (numeric) as the metric.\",\"Only rows with a non-null grades.exam_score are included (filter applied). If you prefer to average a different numeric composite (e.g., weighted exam/project/attendance) or to interpret numeric values from grade_value, update the metric expression accordingly and confirm weights or type.\",\"No time/semester filters applied (analysis uses all available historical grades). If you want 'strictness' limited to a particular semester or academic year, add a filter on course_sections.academic_year and/or course_sections.semester_type.\",\"num_grades is provided so downstream consumers can exclude professors with very small sample sizes (e.g., num_grades < N) if desired; this plan does not automatically filter by sample size.\",\"Visual axes reference the exact output field aliases (professor_name, avg_grade) as required.\"]}},\"endedAt\":1771846557821},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\",\"COUNT(grades.id)\"],\"dimensions\":[\"professors.id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\"],\"filters\":[\"grades.exam_score IS NOT NULL\",\"course_sections.professor_id IS NOT NULL\"],\"grain\":\"professor-level (one row per professor)\",\"aliases\":{\"AVG(grades.exam_score)\":\"avg_grade\",\"COUNT(grades.id)\":\"num_grades\",\"professors.id\":\"professor_id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\":\"professor_name\"},\"output_fields\":[\"professor_id\",\"professor_name\",\"avg_grade\",\"num_grades\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"professor_name\",\"y_axis\":\"avg_grade\",\"title\":\"Professors ordered by average exam score (lowest = strictest)\"},\"assumptions\":[\"Schema discovery was performed in this run and confirmed the following relevant tables and columns: grades (exam_score, id, enrollment_id), enrollments (id, course_section_id), course_sections (id, professor_id), professors (id, first_name, last_name).\",\"Join path to compute per-professor averages: grades.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.professor_id -> professors.id.\",\"grade_value column exists but its USER-DEFINED type was not interpreted as numeric during discovery. To avoid type ambiguity, avg_grade uses grades.exam_score (numeric) as the metric.\",\"Only rows with a non-null grades.exam_score are included (filter applied). If you prefer to average a different numeric composite (e.g., weighted exam/project/attendance) or to interpret numeric values from grade_value, update the metric expression accordingly and confirm weights or type.\",\"No time/semester filters applied (analysis uses all available historical grades). If you want 'strictness' limited to a particular semester or academic year, add a filter on course_sections.academic_year and/or course_sections.semester_type.\",\"num_grades is provided so downstream consumers can exclude professors with very small sample sizes (e.g., num_grades < N) if desired; this plan does not automatically filter by sample size.\",\"Visual axes reference the exact output field aliases (professor_name, avg_grade) as required.\"]}},\"startedAt\":1771846557832,\"status\":\"success\",\"output\":{\"question\":\"Which professors give the lowest average grades (strictest graders)?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\",\"COUNT(grades.id)\"],\"dimensions\":[\"professors.id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\"],\"filters\":[\"grades.exam_score IS NOT NULL\",\"course_sections.professor_id IS NOT NULL\"],\"grain\":\"professor-level (one row per professor)\",\"aliases\":{\"AVG(grades.exam_score)\":\"avg_grade\",\"COUNT(grades.id)\":\"num_grades\",\"professors.id\":\"professor_id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\":\"professor_name\"},\"output_fields\":[\"professor_id\",\"professor_name\",\"avg_grade\",\"num_grades\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"professor_name\",\"y_axis\":\"avg_grade\",\"title\":\"Professors ordered by average exam score (lowest = strictest)\"},\"assumptions\":[\"Schema discovery was performed in this run and confirmed the following relevant tables and columns: grades (exam_score, id, enrollment_id), enrollments (id, course_section_id), course_sections (id, professor_id), professors (id, first_name, last_name).\",\"Join path to compute per-professor averages: grades.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.professor_id -> professors.id.\",\"grade_value column exists but its USER-DEFINED type was not interpreted as numeric during discovery. To avoid type ambiguity, avg_grade uses grades.exam_score (numeric) as the metric.\",\"Only rows with a non-null grades.exam_score are included (filter applied). If you prefer to average a different numeric composite (e.g., weighted exam/project/attendance) or to interpret numeric values from grade_value, update the metric expression accordingly and confirm weights or type.\",\"No time/semester filters applied (analysis uses all available historical grades). If you want 'strictness' limited to a particular semester or academic year, add a filter on course_sections.academic_year and/or course_sections.semester_type.\",\"num_grades is provided so downstream consumers can exclude professors with very small sample sizes (e.g., num_grades < N) if desired; this plan does not automatically filter by sample size.\",\"Visual axes reference the exact output field aliases (professor_name, avg_grade) as required.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771846557834},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"Which professors give the lowest average grades (strictest graders)?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\",\"COUNT(grades.id)\"],\"dimensions\":[\"professors.id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\"],\"filters\":[\"grades.exam_score IS NOT NULL\",\"course_sections.professor_id IS NOT NULL\"],\"grain\":\"professor-level (one row per professor)\",\"aliases\":{\"AVG(grades.exam_score)\":\"avg_grade\",\"COUNT(grades.id)\":\"num_grades\",\"professors.id\":\"professor_id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\":\"professor_name\"},\"output_fields\":[\"professor_id\",\"professor_name\",\"avg_grade\",\"num_grades\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"professor_name\",\"y_axis\":\"avg_grade\",\"title\":\"Professors ordered by average exam score (lowest = strictest)\"},\"assumptions\":[\"Schema discovery was performed in this run and confirmed the following relevant tables and columns: grades (exam_score, id, enrollment_id), enrollments (id, course_section_id), course_sections (id, professor_id), professors (id, first_name, last_name).\",\"Join path to compute per-professor averages: grades.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.professor_id -> professors.id.\",\"grade_value column exists but its USER-DEFINED type was not interpreted as numeric during discovery. To avoid type ambiguity, avg_grade uses grades.exam_score (numeric) as the metric.\",\"Only rows with a non-null grades.exam_score are included (filter applied). If you prefer to average a different numeric composite (e.g., weighted exam/project/attendance) or to interpret numeric values from grade_value, update the metric expression accordingly and confirm weights or type.\",\"No time/semester filters applied (analysis uses all available historical grades). If you want 'strictness' limited to a particular semester or academic year, add a filter on course_sections.academic_year and/or course_sections.semester_type.\",\"num_grades is provided so downstream consumers can exclude professors with very small sample sizes (e.g., num_grades < N) if desired; this plan does not automatically filter by sample size.\",\"Visual axes reference the exact output field aliases (professor_name, avg_grade) as required.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771846557836,\"status\":\"success\",\"output\":{\"question\":\"Which professors give the lowest average grades (strictest graders)?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\",\"COUNT(grades.id)\"],\"dimensions\":[\"professors.id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\"],\"filters\":[\"grades.exam_score IS NOT NULL\",\"course_sections.professor_id IS NOT NULL\"],\"grain\":\"professor-level (one row per professor)\",\"aliases\":{\"AVG(grades.exam_score)\":\"avg_grade\",\"COUNT(grades.id)\":\"num_grades\",\"professors.id\":\"professor_id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\":\"professor_name\"},\"output_fields\":[\"professor_id\",\"professor_name\",\"avg_grade\",\"num_grades\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"professor_name\",\"y_axis\":\"avg_grade\",\"title\":\"Professors ordered by average exam score (lowest = strictest)\"},\"assumptions\":[\"Schema discovery was performed in this run and confirmed the following relevant tables and columns: grades (exam_score, id, enrollment_id), enrollments (id, course_section_id), course_sections (id, professor_id), professors (id, first_name, last_name).\",\"Join path to compute per-professor averages: grades.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.professor_id -> professors.id.\",\"grade_value column exists but its USER-DEFINED type was not interpreted as numeric during discovery. To avoid type ambiguity, avg_grade uses grades.exam_score (numeric) as the metric.\",\"Only rows with a non-null grades.exam_score are included (filter applied). If you prefer to average a different numeric composite (e.g., weighted exam/project/attendance) or to interpret numeric values from grade_value, update the metric expression accordingly and confirm weights or type.\",\"No time/semester filters applied (analysis uses all available historical grades). If you want 'strictness' limited to a particular semester or academic year, add a filter on course_sections.academic_year and/or course_sections.semester_type.\",\"num_grades is provided so downstream consumers can exclude professors with very small sample sizes (e.g., num_grades < N) if desired; this plan does not automatically filter by sample size.\",\"Visual axes reference the exact output field aliases (professor_name, avg_grade) as required.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"WITH professor_grades AS (\\n  SELECT\\n    p.id AS professor_id,\\n    CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\\n    AVG(g.exam_score) AS avg_grade,\\n    COUNT(g.id) AS num_grades\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.professors p ON cs.professor_id = p.id\\n  WHERE g.exam_score IS NOT NULL\\n    AND cs.professor_id IS NOT NULL\\n  GROUP BY p.id, p.first_name, p.last_name\\n)\\nSELECT\\n  professor_id,\\n  professor_name,\\n  avg_grade,\\n  num_grades\\nFROM professor_grades\\nORDER BY avg_grade ASC, professor_name ASC;\",\"validationIssues\":[\"No sample-size filtering: the visualization includes professors with very small num_grades (e.g., 1–2), which can make 'strictness' misleading — consider filtering or highlighting low-sample professors (e.g., num_grades >= N).\",\"Ordering is applied both in the SQL (ORDER BY avg_grade ASC) and in Vega-Lite (encoding.x.sort by avg_grade ASC); this is consistent but redundant.\",\"If the professor list grows long, x-axis labels may overlap despite labelAngle:-40 — consider horizontal scrolling, wrapping, or a vertical bar chart as a usability improvement.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Compute per-professor average of numeric exam_score using confirmed join path (grades -> enrollments -> course_sections -> professors); return professor id, full name, average score and count, ordered with lowest averages first so strictest graders appear at top.\",\"sql\":\"WITH professor_grades AS (\\n  SELECT\\n    p.id AS professor_id,\\n    CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\\n    AVG(g.exam_score) AS avg_grade,\\n    COUNT(g.id) AS num_grades\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.professors p ON cs.professor_id = p.id\\n  WHERE g.exam_score IS NOT NULL\\n    AND cs.professor_id IS NOT NULL\\n  GROUP BY p.id, p.first_name, p.last_name\\n)\\nSELECT\\n  professor_id,\\n  professor_name,\\n  avg_grade,\\n  num_grades\\nFROM professor_grades\\nORDER BY avg_grade ASC, professor_name ASC;\",\"assumptions\":[\"Tables and columns confirmed in this run: grades(id, enrollment_id, exam_score), enrollments(id, course_section_id), course_sections(id, professor_id), professors(id, first_name, last_name).\",\"Using grades.exam_score (numeric) as the grade metric; grade_value (USER-DEFINED) is not used to avoid type ambiguity.\",\"No minimum sample-size filter applied; consumers can filter by num_grades afterwards if desired.\",\"No semester/year filter applied; this uses all historical grades.\"]},\"execution\":{\"ok\":true,\"sql\":\"WITH professor_grades AS (\\n  SELECT\\n    p.id AS professor_id,\\n    CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\\n    AVG(g.exam_score) AS avg_grade,\\n    COUNT(g.id) AS num_grades\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.professors p ON cs.professor_id = p.id\\n  WHERE g.exam_score IS NOT NULL\\n    AND cs.professor_id IS NOT NULL\\n  GROUP BY p.id, p.first_name, p.last_name\\n)\\nSELECT\\n  professor_id,\\n  professor_name,\\n  avg_grade,\\n  num_grades\\nFROM professor_grades\\nORDER BY avg_grade ASC, professor_name ASC\",\"metadata\":{\"columns\":[\"avg_grade\",\"num_grades\",\"professor_id\",\"professor_name\"],\"rowCount\":17,\"sample\":[{\"avg_grade\":19.04,\"num_grades\":4,\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"professor_name\":\"Ryszard Woźniak\"},{\"avg_grade\":20.76,\"num_grades\":2,\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"professor_name\":\"Magdalena Michalski\"}]},\"data\":[{\"avg_grade\":19.04,\"num_grades\":4,\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"professor_name\":\"Ryszard Woźniak\"},{\"avg_grade\":20.76,\"num_grades\":2,\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"professor_name\":\"Magdalena Michalski\"},{\"avg_grade\":22.35,\"num_grades\":1,\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"professor_name\":\"Mariusz Nowakowski\"},{\"avg_grade\":35.68,\"num_grades\":2,\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"professor_name\":\"Ewa Krawczyk\"},{\"avg_grade\":35.8,\"num_grades\":1,\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"professor_name\":\"Robert Jaworski\"},{\"avg_grade\":40.145,\"num_grades\":4,\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"professor_name\":\"Marek Woźniak\"},{\"avg_grade\":42.50333333333333,\"num_grades\":3,\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"professor_name\":\"Agnieszka Krawczyk\"},{\"avg_grade\":47.03,\"num_grades\":1,\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"professor_name\":\"Grzegorz Jankowski\"},{\"avg_grade\":48.425,\"num_grades\":2,\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"professor_name\":\"Ryszard Kowalczyk\"},{\"avg_grade\":50.05,\"num_grades\":1,\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"professor_name\":\"Adam Wieczorek\"},{\"avg_grade\":50.1125,\"num_grades\":8,\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"professor_name\":\"Tomasz Majewski\"},{\"avg_grade\":51.42333333333333,\"num_grades\":3,\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"professor_name\":\"Marek Lewandowski\"},{\"avg_grade\":54.505,\"num_grades\":2,\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"professor_name\":\"Joanna Stępień\"},{\"avg_grade\":76.27,\"num_grades\":1,\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"professor_name\":\"Michał Nowak\"},{\"avg_grade\":78.1875,\"num_grades\":4,\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"professor_name\":\"Jacek Wojciechowski\"},{\"avg_grade\":87.68666666666667,\"num_grades\":3,\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"professor_name\":\"Małgorzata Olszewski\"},{\"avg_grade\":88.07,\"num_grades\":1,\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"professor_name\":\"Teresa Woźniak\"}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Professors ordered by average exam score (lowest = strictest)\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Professor\",\"labelAngle\":-40},\"sort\":{\"field\":\"avg_grade\",\"order\":\"ascending\"}},\"y\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average exam score\"}},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Avg grade\",\"format\":\".2f\"},{\"field\":\"num_grades\",\"type\":\"quantitative\",\"title\":\"Num grades\"},{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"}]}},\"reasoning\":\"Bar chart shows professors on the x-axis ordered by their average exam score (ascending) so the lowest averages—i.e., strictest graders—appear first. Tooltip includes sample size (num_grades) so small-sample professors can be identified.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"No sample-size filtering: the visualization includes professors with very small num_grades (e.g., 1–2), which can make 'strictness' misleading — consider filtering or highlighting low-sample professors (e.g., num_grades >= N).\",\"Ordering is applied both in the SQL (ORDER BY avg_grade ASC) and in Vega-Lite (encoding.x.sort by avg_grade ASC); this is consistent but redundant.\",\"If the professor list grows long, x-axis labels may overlap despite labelAngle:-40 — consider horizontal scrolling, wrapping, or a vertical bar chart as a usability improvement.\"]}}},\"endedAt\":1771846619991,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"Which professors give the lowest average grades (strictest graders)?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\",\"COUNT(grades.id)\"],\"dimensions\":[\"professors.id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\"],\"filters\":[\"grades.exam_score IS NOT NULL\",\"course_sections.professor_id IS NOT NULL\"],\"grain\":\"professor-level (one row per professor)\",\"aliases\":{\"AVG(grades.exam_score)\":\"avg_grade\",\"COUNT(grades.id)\":\"num_grades\",\"professors.id\":\"professor_id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\":\"professor_name\"},\"output_fields\":[\"professor_id\",\"professor_name\",\"avg_grade\",\"num_grades\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"professor_name\",\"y_axis\":\"avg_grade\",\"title\":\"Professors ordered by average exam score (lowest = strictest)\"},\"assumptions\":[\"Schema discovery was performed in this run and confirmed the following relevant tables and columns: grades (exam_score, id, enrollment_id), enrollments (id, course_section_id), course_sections (id, professor_id), professors (id, first_name, last_name).\",\"Join path to compute per-professor averages: grades.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.professor_id -> professors.id.\",\"grade_value column exists but its USER-DEFINED type was not interpreted as numeric during discovery. To avoid type ambiguity, avg_grade uses grades.exam_score (numeric) as the metric.\",\"Only rows with a non-null grades.exam_score are included (filter applied). If you prefer to average a different numeric composite (e.g., weighted exam/project/attendance) or to interpret numeric values from grade_value, update the metric expression accordingly and confirm weights or type.\",\"No time/semester filters applied (analysis uses all available historical grades). If you want 'strictness' limited to a particular semester or academic year, add a filter on course_sections.academic_year and/or course_sections.semester_type.\",\"num_grades is provided so downstream consumers can exclude professors with very small sample sizes (e.g., num_grades < N) if desired; this plan does not automatically filter by sample size.\",\"Visual axes reference the exact output field aliases (professor_name, avg_grade) as required.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"WITH professor_grades AS (\\n  SELECT\\n    p.id AS professor_id,\\n    CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\\n    AVG(g.exam_score) AS avg_grade,\\n    COUNT(g.id) AS num_grades\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.professors p ON cs.professor_id = p.id\\n  WHERE g.exam_score IS NOT NULL\\n    AND cs.professor_id IS NOT NULL\\n  GROUP BY p.id, p.first_name, p.last_name\\n)\\nSELECT\\n  professor_id,\\n  professor_name,\\n  avg_grade,\\n  num_grades\\nFROM professor_grades\\nORDER BY avg_grade ASC, professor_name ASC;\",\"validationIssues\":[\"No sample-size filtering: the visualization includes professors with very small num_grades (e.g., 1–2), which can make 'strictness' misleading — consider filtering or highlighting low-sample professors (e.g., num_grades >= N).\",\"Ordering is applied both in the SQL (ORDER BY avg_grade ASC) and in Vega-Lite (encoding.x.sort by avg_grade ASC); this is consistent but redundant.\",\"If the professor list grows long, x-axis labels may overlap despite labelAngle:-40 — consider horizontal scrolling, wrapping, or a vertical bar chart as a usability improvement.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Compute per-professor average of numeric exam_score using confirmed join path (grades -> enrollments -> course_sections -> professors); return professor id, full name, average score and count, ordered with lowest averages first so strictest graders appear at top.\",\"sql\":\"WITH professor_grades AS (\\n  SELECT\\n    p.id AS professor_id,\\n    CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\\n    AVG(g.exam_score) AS avg_grade,\\n    COUNT(g.id) AS num_grades\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.professors p ON cs.professor_id = p.id\\n  WHERE g.exam_score IS NOT NULL\\n    AND cs.professor_id IS NOT NULL\\n  GROUP BY p.id, p.first_name, p.last_name\\n)\\nSELECT\\n  professor_id,\\n  professor_name,\\n  avg_grade,\\n  num_grades\\nFROM professor_grades\\nORDER BY avg_grade ASC, professor_name ASC;\",\"assumptions\":[\"Tables and columns confirmed in this run: grades(id, enrollment_id, exam_score), enrollments(id, course_section_id), course_sections(id, professor_id), professors(id, first_name, last_name).\",\"Using grades.exam_score (numeric) as the grade metric; grade_value (USER-DEFINED) is not used to avoid type ambiguity.\",\"No minimum sample-size filter applied; consumers can filter by num_grades afterwards if desired.\",\"No semester/year filter applied; this uses all historical grades.\"]},\"execution\":{\"ok\":true,\"sql\":\"WITH professor_grades AS (\\n  SELECT\\n    p.id AS professor_id,\\n    CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\\n    AVG(g.exam_score) AS avg_grade,\\n    COUNT(g.id) AS num_grades\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.professors p ON cs.professor_id = p.id\\n  WHERE g.exam_score IS NOT NULL\\n    AND cs.professor_id IS NOT NULL\\n  GROUP BY p.id, p.first_name, p.last_name\\n)\\nSELECT\\n  professor_id,\\n  professor_name,\\n  avg_grade,\\n  num_grades\\nFROM professor_grades\\nORDER BY avg_grade ASC, professor_name ASC\",\"metadata\":{\"columns\":[\"avg_grade\",\"num_grades\",\"professor_id\",\"professor_name\"],\"rowCount\":17,\"sample\":[{\"avg_grade\":19.04,\"num_grades\":4,\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"professor_name\":\"Ryszard Woźniak\"},{\"avg_grade\":20.76,\"num_grades\":2,\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"professor_name\":\"Magdalena Michalski\"}]},\"data\":[{\"avg_grade\":19.04,\"num_grades\":4,\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"professor_name\":\"Ryszard Woźniak\"},{\"avg_grade\":20.76,\"num_grades\":2,\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"professor_name\":\"Magdalena Michalski\"},{\"avg_grade\":22.35,\"num_grades\":1,\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"professor_name\":\"Mariusz Nowakowski\"},{\"avg_grade\":35.68,\"num_grades\":2,\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"professor_name\":\"Ewa Krawczyk\"},{\"avg_grade\":35.8,\"num_grades\":1,\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"professor_name\":\"Robert Jaworski\"},{\"avg_grade\":40.145,\"num_grades\":4,\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"professor_name\":\"Marek Woźniak\"},{\"avg_grade\":42.50333333333333,\"num_grades\":3,\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"professor_name\":\"Agnieszka Krawczyk\"},{\"avg_grade\":47.03,\"num_grades\":1,\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"professor_name\":\"Grzegorz Jankowski\"},{\"avg_grade\":48.425,\"num_grades\":2,\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"professor_name\":\"Ryszard Kowalczyk\"},{\"avg_grade\":50.05,\"num_grades\":1,\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"professor_name\":\"Adam Wieczorek\"},{\"avg_grade\":50.1125,\"num_grades\":8,\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"professor_name\":\"Tomasz Majewski\"},{\"avg_grade\":51.42333333333333,\"num_grades\":3,\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"professor_name\":\"Marek Lewandowski\"},{\"avg_grade\":54.505,\"num_grades\":2,\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"professor_name\":\"Joanna Stępień\"},{\"avg_grade\":76.27,\"num_grades\":1,\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"professor_name\":\"Michał Nowak\"},{\"avg_grade\":78.1875,\"num_grades\":4,\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"professor_name\":\"Jacek Wojciechowski\"},{\"avg_grade\":87.68666666666667,\"num_grades\":3,\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"professor_name\":\"Małgorzata Olszewski\"},{\"avg_grade\":88.07,\"num_grades\":1,\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"professor_name\":\"Teresa Woźniak\"}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Professors ordered by average exam score (lowest = strictest)\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Professor\",\"labelAngle\":-40},\"sort\":{\"field\":\"avg_grade\",\"order\":\"ascending\"}},\"y\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average exam score\"}},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Avg grade\",\"format\":\".2f\"},{\"field\":\"num_grades\",\"type\":\"quantitative\",\"title\":\"Num grades\"},{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"}]}},\"reasoning\":\"Bar chart shows professors on the x-axis ordered by their average exam score (ascending) so the lowest averages—i.e., strictest graders—appear first. Tooltip includes sample size (num_grades) so small-sample professors can be identified.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"No sample-size filtering: the visualization includes professors with very small num_grades (e.g., 1–2), which can make 'strictness' misleading — consider filtering or highlighting low-sample professors (e.g., num_grades >= N).\",\"Ordering is applied both in the SQL (ORDER BY avg_grade ASC) and in Vega-Lite (encoding.x.sort by avg_grade ASC); this is consistent but redundant.\",\"If the professor list grows long, x-axis labels may overlap despite labelAngle:-40 — consider horizontal scrolling, wrapping, or a vertical bar chart as a usability improvement.\"]}}},\"startedAt\":1771846619997,\"status\":\"success\",\"output\":{\"sql\":\"WITH professor_grades AS (\\n  SELECT\\n    p.id AS professor_id,\\n    CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\\n    AVG(g.exam_score) AS avg_grade,\\n    COUNT(g.id) AS num_grades\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.professors p ON cs.professor_id = p.id\\n  WHERE g.exam_score IS NOT NULL\\n    AND cs.professor_id IS NOT NULL\\n  GROUP BY p.id, p.first_name, p.last_name\\n)\\nSELECT\\n  professor_id,\\n  professor_name,\\n  avg_grade,\\n  num_grades\\nFROM professor_grades\\nORDER BY avg_grade ASC, professor_name ASC;\",\"data\":[{\"avg_grade\":19.04,\"num_grades\":4,\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"professor_name\":\"Ryszard Woźniak\"},{\"avg_grade\":20.76,\"num_grades\":2,\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"professor_name\":\"Magdalena Michalski\"},{\"avg_grade\":22.35,\"num_grades\":1,\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"professor_name\":\"Mariusz Nowakowski\"},{\"avg_grade\":35.68,\"num_grades\":2,\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"professor_name\":\"Ewa Krawczyk\"},{\"avg_grade\":35.8,\"num_grades\":1,\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"professor_name\":\"Robert Jaworski\"},{\"avg_grade\":40.145,\"num_grades\":4,\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"professor_name\":\"Marek Woźniak\"},{\"avg_grade\":42.50333333333333,\"num_grades\":3,\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"professor_name\":\"Agnieszka Krawczyk\"},{\"avg_grade\":47.03,\"num_grades\":1,\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"professor_name\":\"Grzegorz Jankowski\"},{\"avg_grade\":48.425,\"num_grades\":2,\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"professor_name\":\"Ryszard Kowalczyk\"},{\"avg_grade\":50.05,\"num_grades\":1,\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"professor_name\":\"Adam Wieczorek\"},{\"avg_grade\":50.1125,\"num_grades\":8,\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"professor_name\":\"Tomasz Majewski\"},{\"avg_grade\":51.42333333333333,\"num_grades\":3,\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"professor_name\":\"Marek Lewandowski\"},{\"avg_grade\":54.505,\"num_grades\":2,\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"professor_name\":\"Joanna Stępień\"},{\"avg_grade\":76.27,\"num_grades\":1,\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"professor_name\":\"Michał Nowak\"},{\"avg_grade\":78.1875,\"num_grades\":4,\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"professor_name\":\"Jacek Wojciechowski\"},{\"avg_grade\":87.68666666666667,\"num_grades\":3,\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"professor_name\":\"Małgorzata Olszewski\"},{\"avg_grade\":88.07,\"num_grades\":1,\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"professor_name\":\"Teresa Woźniak\"}],\"metadata\":{\"columns\":[\"avg_grade\",\"num_grades\",\"professor_id\",\"professor_name\"],\"rowCount\":17,\"sample\":[{\"avg_grade\":19.04,\"num_grades\":4,\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"professor_name\":\"Ryszard Woźniak\"},{\"avg_grade\":20.76,\"num_grades\":2,\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"professor_name\":\"Magdalena Michalski\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Professors ordered by average exam score (lowest = strictest)\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Professor\",\"labelAngle\":-40},\"sort\":{\"field\":\"avg_grade\",\"order\":\"ascending\"}},\"y\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average exam score\"}},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Avg grade\",\"format\":\".2f\"},{\"field\":\"num_grades\",\"type\":\"quantitative\",\"title\":\"Num grades\"},{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"No sample-size filtering: the visualization includes professors with very small num_grades (e.g., 1–2), which can make 'strictness' misleading — consider filtering or highlighting low-sample professors (e.g., num_grades >= N).\",\"Ordering is applied both in the SQL (ORDER BY avg_grade ASC) and in Vega-Lite (encoding.x.sort by avg_grade ASC); this is consistent but redundant.\",\"If the professor list grows long, x-axis labels may overlap despite labelAngle:-40 — consider horizontal scrolling, wrapping, or a vertical bar chart as a usability improvement.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771846620002}},\"input\":{\"question\":\"Which professors give the lowest average grades (strictest graders)?\"},\"result\":{\"sql\":\"WITH professor_grades AS (\\n  SELECT\\n    p.id AS professor_id,\\n    CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\\n    AVG(g.exam_score) AS avg_grade,\\n    COUNT(g.id) AS num_grades\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.professors p ON cs.professor_id = p.id\\n  WHERE g.exam_score IS NOT NULL\\n    AND cs.professor_id IS NOT NULL\\n  GROUP BY p.id, p.first_name, p.last_name\\n)\\nSELECT\\n  professor_id,\\n  professor_name,\\n  avg_grade,\\n  num_grades\\nFROM professor_grades\\nORDER BY avg_grade ASC, professor_name ASC;\",\"data\":[{\"avg_grade\":19.04,\"num_grades\":4,\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"professor_name\":\"Ryszard Woźniak\"},{\"avg_grade\":20.76,\"num_grades\":2,\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"professor_name\":\"Magdalena Michalski\"},{\"avg_grade\":22.35,\"num_grades\":1,\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"professor_name\":\"Mariusz Nowakowski\"},{\"avg_grade\":35.68,\"num_grades\":2,\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"professor_name\":\"Ewa Krawczyk\"},{\"avg_grade\":35.8,\"num_grades\":1,\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"professor_name\":\"Robert Jaworski\"},{\"avg_grade\":40.145,\"num_grades\":4,\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"professor_name\":\"Marek Woźniak\"},{\"avg_grade\":42.50333333333333,\"num_grades\":3,\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"professor_name\":\"Agnieszka Krawczyk\"},{\"avg_grade\":47.03,\"num_grades\":1,\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"professor_name\":\"Grzegorz Jankowski\"},{\"avg_grade\":48.425,\"num_grades\":2,\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"professor_name\":\"Ryszard Kowalczyk\"},{\"avg_grade\":50.05,\"num_grades\":1,\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"professor_name\":\"Adam Wieczorek\"},{\"avg_grade\":50.1125,\"num_grades\":8,\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"professor_name\":\"Tomasz Majewski\"},{\"avg_grade\":51.42333333333333,\"num_grades\":3,\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"professor_name\":\"Marek Lewandowski\"},{\"avg_grade\":54.505,\"num_grades\":2,\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"professor_name\":\"Joanna Stępień\"},{\"avg_grade\":76.27,\"num_grades\":1,\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"professor_name\":\"Michał Nowak\"},{\"avg_grade\":78.1875,\"num_grades\":4,\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"professor_name\":\"Jacek Wojciechowski\"},{\"avg_grade\":87.68666666666667,\"num_grades\":3,\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"professor_name\":\"Małgorzata Olszewski\"},{\"avg_grade\":88.07,\"num_grades\":1,\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"professor_name\":\"Teresa Woźniak\"}],\"metadata\":{\"columns\":[\"avg_grade\",\"num_grades\",\"professor_id\",\"professor_name\"],\"rowCount\":17,\"sample\":[{\"avg_grade\":19.04,\"num_grades\":4,\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"professor_name\":\"Ryszard Woźniak\"},{\"avg_grade\":20.76,\"num_grades\":2,\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"professor_name\":\"Magdalena Michalski\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Professors ordered by average exam score (lowest = strictest)\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Professor\",\"labelAngle\":-40},\"sort\":{\"field\":\"avg_grade\",\"order\":\"ascending\"}},\"y\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average exam score\"}},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Avg grade\",\"format\":\".2f\"},{\"field\":\"num_grades\",\"type\":\"quantitative\",\"title\":\"Num grades\"},{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"No sample-size filtering: the visualization includes professors with very small num_grades (e.g., 1–2), which can make 'strictness' misleading — consider filtering or highlighting low-sample professors (e.g., num_grades >= N).\",\"Ordering is applied both in the SQL (ORDER BY avg_grade ASC) and in Vega-Lite (encoding.x.sort by avg_grade ASC); this is consistent but redundant.\",\"If the professor list grows long, x-axis labels may overlap despite labelAngle:-40 — consider horizontal scrolling, wrapping, or a vertical bar chart as a usability improvement.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"6fd326177d167c5414a0123405dff567\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/professor-grade-strictness/run-0001/run.json",
+    "queryPath": "runs/professor-grade-strictness/run-0001/query.sql",
+    "vegaRawPath": "runs/professor-grade-strictness/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/professor-grade-strictness/run-0001/vega.resolved.json",
+    "imagePath": "runs/professor-grade-strictness/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:37:00.593Z",
+  "traceId": "6fd326177d167c5414a0123405dff567",
+  "success": true,
+  "durationMs": 102978,
+  "resultRaw": {
+    "data": [
+      {
+        "avg_grade": 19.04,
+        "num_grades": 4,
+        "professor_id": "5d70abe8-4f1a-44ec-9816-2ec96a2807cb",
+        "professor_name": "Ryszard Woźniak"
+      },
+      {
+        "avg_grade": 20.76,
+        "num_grades": 2,
+        "professor_id": "5b3ae75e-96e7-4a7b-be0f-7375938dcd62",
+        "professor_name": "Magdalena Michalski"
+      },
+      {
+        "avg_grade": 22.35,
+        "num_grades": 1,
+        "professor_id": "d19adcea-56d6-4557-8f93-95ec58fa5d34",
+        "professor_name": "Mariusz Nowakowski"
+      },
+      {
+        "avg_grade": 35.68,
+        "num_grades": 2,
+        "professor_id": "a82c40da-e7dc-4e49-9e66-386ea4bb7483",
+        "professor_name": "Ewa Krawczyk"
+      },
+      {
+        "avg_grade": 35.8,
+        "num_grades": 1,
+        "professor_id": "8f0ffcad-1af9-4da5-898a-dc47b8717d83",
+        "professor_name": "Robert Jaworski"
+      },
+      {
+        "avg_grade": 40.145,
+        "num_grades": 4,
+        "professor_id": "2b5262b8-932c-4951-9390-c56d4b69d888",
+        "professor_name": "Marek Woźniak"
+      },
+      {
+        "avg_grade": 42.50333333333333,
+        "num_grades": 3,
+        "professor_id": "ff61fe12-d98c-4d43-87db-710f2571c1f2",
+        "professor_name": "Agnieszka Krawczyk"
+      },
+      {
+        "avg_grade": 47.03,
+        "num_grades": 1,
+        "professor_id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+        "professor_name": "Grzegorz Jankowski"
+      },
+      {
+        "avg_grade": 48.425,
+        "num_grades": 2,
+        "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+        "professor_name": "Ryszard Kowalczyk"
+      },
+      {
+        "avg_grade": 50.05,
+        "num_grades": 1,
+        "professor_id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+        "professor_name": "Adam Wieczorek"
+      },
+      {
+        "avg_grade": 50.1125,
+        "num_grades": 8,
+        "professor_id": "f221aafd-0e9c-4345-aff5-7e290e1a7864",
+        "professor_name": "Tomasz Majewski"
+      },
+      {
+        "avg_grade": 51.42333333333333,
+        "num_grades": 3,
+        "professor_id": "037011f2-f3d4-406e-9554-a6ffba701e06",
+        "professor_name": "Marek Lewandowski"
+      },
+      {
+        "avg_grade": 54.505,
+        "num_grades": 2,
+        "professor_id": "007cb07c-c14f-4824-a62d-d42685252c75",
+        "professor_name": "Joanna Stępień"
+      },
+      {
+        "avg_grade": 76.27,
+        "num_grades": 1,
+        "professor_id": "f24d24fc-5446-4d72-bb11-9d9dd1545f97",
+        "professor_name": "Michał Nowak"
+      },
+      {
+        "avg_grade": 78.1875,
+        "num_grades": 4,
+        "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+        "professor_name": "Jacek Wojciechowski"
+      },
+      {
+        "avg_grade": 87.68666666666667,
+        "num_grades": 3,
+        "professor_id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+        "professor_name": "Małgorzata Olszewski"
+      },
+      {
+        "avg_grade": 88.07,
+        "num_grades": 1,
+        "professor_id": "173e49aa-5a27-41e8-b1fa-4d19423bdc0b",
+        "professor_name": "Teresa Woźniak"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Professors ordered by average exam score (lowest = strictest)",
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "professor_name",
+          "type": "nominal",
+          "axis": {
+            "title": "Professor",
+            "labelAngle": -40
+          },
+          "sort": {
+            "field": "avg_grade",
+            "order": "ascending"
+          }
+        },
+        "y": {
+          "field": "avg_grade",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average exam score"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "professor_name",
+            "type": "nominal",
+            "title": "Professor"
+          },
+          {
+            "field": "avg_grade",
+            "type": "quantitative",
+            "title": "Avg grade",
+            "format": ".2f"
+          },
+          {
+            "field": "num_grades",
+            "type": "quantitative",
+            "title": "Num grades"
+          },
+          {
+            "field": "professor_id",
+            "type": "nominal",
+            "title": "Professor ID"
+          }
+        ]
+      }
+    },
+    "sql": "WITH professor_grades AS (\n  SELECT\n    p.id AS professor_id,\n    CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\n    AVG(g.exam_score) AS avg_grade,\n    COUNT(g.id) AS num_grades\n  FROM public.grades g\n  JOIN public.enrollments e ON g.enrollment_id = e.id\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\n  JOIN public.professors p ON cs.professor_id = p.id\n  WHERE g.exam_score IS NOT NULL\n    AND cs.professor_id IS NOT NULL\n  GROUP BY p.id, p.first_name, p.last_name\n)\nSELECT\n  professor_id,\n  professor_name,\n  avg_grade,\n  num_grades\nFROM professor_grades\nORDER BY avg_grade ASC, professor_name ASC;",
+    "metadata": {
+      "columns": [
+        "avg_grade",
+        "num_grades",
+        "professor_id",
+        "professor_name"
+      ],
+      "rowCount": 17,
+      "sample": [
+        {
+          "avg_grade": 19.04,
+          "num_grades": 4,
+          "professor_id": "5d70abe8-4f1a-44ec-9816-2ec96a2807cb",
+          "professor_name": "Ryszard Woźniak"
+        },
+        {
+          "avg_grade": 20.76,
+          "num_grades": 2,
+          "professor_id": "5b3ae75e-96e7-4a7b-be0f-7375938dcd62",
+          "professor_name": "Magdalena Michalski"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "No sample-size filtering: the visualization includes professors with very small num_grades (e.g., 1–2), which can make 'strictness' misleading — consider filtering or highlighting low-sample professors (e.g., num_grades >= N).",
+        "Ordering is applied both in the SQL (ORDER BY avg_grade ASC) and in Vega-Lite (encoding.x.sort by avg_grade ASC); this is consistent but redundant.",
+        "If the professor list grows long, x-axis labels may overlap despite labelAngle:-40 — consider horizontal scrolling, wrapping, or a vertical bar chart as a usability improvement."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "avg_grade": 19.04,
+        "num_grades": 4,
+        "professor_id": "5d70abe8-4f1a-44ec-9816-2ec96a2807cb",
+        "professor_name": "Ryszard Woźniak"
+      },
+      {
+        "avg_grade": 20.76,
+        "num_grades": 2,
+        "professor_id": "5b3ae75e-96e7-4a7b-be0f-7375938dcd62",
+        "professor_name": "Magdalena Michalski"
+      },
+      {
+        "avg_grade": 22.35,
+        "num_grades": 1,
+        "professor_id": "d19adcea-56d6-4557-8f93-95ec58fa5d34",
+        "professor_name": "Mariusz Nowakowski"
+      },
+      {
+        "avg_grade": 35.68,
+        "num_grades": 2,
+        "professor_id": "a82c40da-e7dc-4e49-9e66-386ea4bb7483",
+        "professor_name": "Ewa Krawczyk"
+      },
+      {
+        "avg_grade": 35.8,
+        "num_grades": 1,
+        "professor_id": "8f0ffcad-1af9-4da5-898a-dc47b8717d83",
+        "professor_name": "Robert Jaworski"
+      },
+      {
+        "avg_grade": 40.145,
+        "num_grades": 4,
+        "professor_id": "2b5262b8-932c-4951-9390-c56d4b69d888",
+        "professor_name": "Marek Woźniak"
+      },
+      {
+        "avg_grade": 42.50333333333333,
+        "num_grades": 3,
+        "professor_id": "ff61fe12-d98c-4d43-87db-710f2571c1f2",
+        "professor_name": "Agnieszka Krawczyk"
+      },
+      {
+        "avg_grade": 47.03,
+        "num_grades": 1,
+        "professor_id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+        "professor_name": "Grzegorz Jankowski"
+      },
+      {
+        "avg_grade": 48.425,
+        "num_grades": 2,
+        "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+        "professor_name": "Ryszard Kowalczyk"
+      },
+      {
+        "avg_grade": 50.05,
+        "num_grades": 1,
+        "professor_id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+        "professor_name": "Adam Wieczorek"
+      },
+      {
+        "avg_grade": 50.1125,
+        "num_grades": 8,
+        "professor_id": "f221aafd-0e9c-4345-aff5-7e290e1a7864",
+        "professor_name": "Tomasz Majewski"
+      },
+      {
+        "avg_grade": 51.42333333333333,
+        "num_grades": 3,
+        "professor_id": "037011f2-f3d4-406e-9554-a6ffba701e06",
+        "professor_name": "Marek Lewandowski"
+      },
+      {
+        "avg_grade": 54.505,
+        "num_grades": 2,
+        "professor_id": "007cb07c-c14f-4824-a62d-d42685252c75",
+        "professor_name": "Joanna Stępień"
+      },
+      {
+        "avg_grade": 76.27,
+        "num_grades": 1,
+        "professor_id": "f24d24fc-5446-4d72-bb11-9d9dd1545f97",
+        "professor_name": "Michał Nowak"
+      },
+      {
+        "avg_grade": 78.1875,
+        "num_grades": 4,
+        "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+        "professor_name": "Jacek Wojciechowski"
+      },
+      {
+        "avg_grade": 87.68666666666667,
+        "num_grades": 3,
+        "professor_id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+        "professor_name": "Małgorzata Olszewski"
+      },
+      {
+        "avg_grade": 88.07,
+        "num_grades": 1,
+        "professor_id": "173e49aa-5a27-41e8-b1fa-4d19423bdc0b",
+        "professor_name": "Teresa Woźniak"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Professors ordered by average exam score (lowest = strictest)",
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "professor_name",
+          "type": "nominal",
+          "axis": {
+            "title": "Professor",
+            "labelAngle": -40
+          },
+          "sort": {
+            "field": "avg_grade",
+            "order": "ascending"
+          }
+        },
+        "y": {
+          "field": "avg_grade",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average exam score"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "professor_name",
+            "type": "nominal",
+            "title": "Professor"
+          },
+          {
+            "field": "avg_grade",
+            "type": "quantitative",
+            "title": "Avg grade",
+            "format": ".2f"
+          },
+          {
+            "field": "num_grades",
+            "type": "quantitative",
+            "title": "Num grades"
+          },
+          {
+            "field": "professor_id",
+            "type": "nominal",
+            "title": "Professor ID"
+          }
+        ]
+      }
+    },
+    "sql": "WITH professor_grades AS (\n  SELECT\n    p.id AS professor_id,\n    CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\n    AVG(g.exam_score) AS avg_grade,\n    COUNT(g.id) AS num_grades\n  FROM public.grades g\n  JOIN public.enrollments e ON g.enrollment_id = e.id\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\n  JOIN public.professors p ON cs.professor_id = p.id\n  WHERE g.exam_score IS NOT NULL\n    AND cs.professor_id IS NOT NULL\n  GROUP BY p.id, p.first_name, p.last_name\n)\nSELECT\n  professor_id,\n  professor_name,\n  avg_grade,\n  num_grades\nFROM professor_grades\nORDER BY avg_grade ASC, professor_name ASC;",
+    "metadata": {
+      "columns": [
+        "avg_grade",
+        "num_grades",
+        "professor_id",
+        "professor_name"
+      ],
+      "rowCount": 17,
+      "sample": [
+        {
+          "avg_grade": 19.04,
+          "num_grades": 4,
+          "professor_id": "5d70abe8-4f1a-44ec-9816-2ec96a2807cb",
+          "professor_name": "Ryszard Woźniak"
+        },
+        {
+          "avg_grade": 20.76,
+          "num_grades": 2,
+          "professor_id": "5b3ae75e-96e7-4a7b-be0f-7375938dcd62",
+          "professor_name": "Magdalena Michalski"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "No sample-size filtering: the visualization includes professors with very small num_grades (e.g., 1–2), which can make 'strictness' misleading — consider filtering or highlighting low-sample professors (e.g., num_grades >= N).",
+        "Ordering is applied both in the SQL (ORDER BY avg_grade ASC) and in Vega-Lite (encoding.x.sort by avg_grade ASC); this is consistent but redundant.",
+        "If the professor list grows long, x-axis labels may overlap despite labelAngle:-40 — consider horizontal scrolling, wrapping, or a vertical bar chart as a usability improvement."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:37:00.593Z",
+    "traceId": "6fd326177d167c5414a0123405dff567",
+    "attempts": 2,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 33778,
+      "outputTokens": 6373,
+      "totalTokens": 40151,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 4224,
+      "costUsd": 0.0211905
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 33778,
+        "outputTokens": 6373,
+        "totalTokens": 40151,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 4224,
+        "costUsd": 0.0211905
+      }
+    ],
+    "warnings": []
+  }
+}

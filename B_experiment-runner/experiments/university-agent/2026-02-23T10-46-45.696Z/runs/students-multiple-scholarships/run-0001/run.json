@@ -1,0 +1,154 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "students-multiple-scholarships",
+  "caseDirectory": "students-multiple-scholarships",
+  "repeatIndex": 1,
+  "prompt": "How many students have received more than one scholarship?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many students have received more than one scholarship?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:54:30.217Z",
+    "endedAtUtc": "2026-02-23T10:54:47.472Z",
+    "durationMs": 17255
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "1894",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:54:47 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"How many students have received more than one scholarship?\"},\"agent\":{\"payload\":{\"question\":\"How many students have received more than one scholarship?\"},\"startedAt\":1771844070226,\"status\":\"success\",\"output\":{\"sql\":\"SELECT COUNT(*) AS students_with_multiple_scholarships\\nFROM (\\n  SELECT student_id AS student_id, COUNT(DISTINCT scholarship_id) AS scholarship_count\\n  FROM student_scholarships\\n  GROUP BY student_id\\n  HAVING COUNT(DISTINCT scholarship_id) > 1\\n) AS multi;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of students who received more than one scholarship\",\"width\":300,\"height\":120,\"mark\":{\"type\":\"text\",\"align\":\"center\",\"baseline\":\"middle\",\"fontSize\":48},\"encoding\":{\"x\":{\"value\":150},\"y\":{\"value\":60},\"text\":{\"field\":\"students_with_multiple_scholarships\",\"type\":\"quantitative\"},\"tooltip\":[{\"field\":\"students_with_multiple_scholarships\",\"type\":\"quantitative\",\"title\":\"Students with >1 scholarship\"}]}}},\"endedAt\":1771844087371},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT COUNT(*) AS students_with_multiple_scholarships\\nFROM (\\n  SELECT student_id AS student_id, COUNT(DISTINCT scholarship_id) AS scholarship_count\\n  FROM student_scholarships\\n  GROUP BY student_id\\n  HAVING COUNT(DISTINCT scholarship_id) > 1\\n) AS multi;\"},\"startedAt\":1771844087377,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: relation \\\"student_scholarships\\\" does not exist\\nLINE 5:   FROM student_scholarships\\n               ^\",\"name\":\"Error\"},\"endedAt\":1771844087466}},\"input\":{\"question\":\"How many students have received more than one scholarship?\"},\"error\":{\"message\":\"SQL execution failed: relation \\\"student_scholarships\\\" does not exist\\nLINE 5:   FROM student_scholarships\\n               ^\",\"name\":\"Error\"},\"traceId\":\"db898c77786b2ce3c191ce7375c0103e\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/students-multiple-scholarships/run-0001/run.json",
+    "queryPath": "runs/students-multiple-scholarships/run-0001/query.sql",
+    "vegaRawPath": "runs/students-multiple-scholarships/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/students-multiple-scholarships/run-0001/vega.resolved.json",
+    "imagePath": "runs/students-multiple-scholarships/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:54:47.473Z",
+  "traceId": "db898c77786b2ce3c191ce7375c0103e",
+  "success": false,
+  "durationMs": 17256,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "How many students have received more than one scholarship?"
+      },
+      "agent": {
+        "payload": {
+          "question": "How many students have received more than one scholarship?"
+        },
+        "startedAt": 1771844070226,
+        "status": "success",
+        "output": {
+          "sql": "SELECT COUNT(*) AS students_with_multiple_scholarships\nFROM (\n  SELECT student_id AS student_id, COUNT(DISTINCT scholarship_id) AS scholarship_count\n  FROM student_scholarships\n  GROUP BY student_id\n  HAVING COUNT(DISTINCT scholarship_id) > 1\n) AS multi;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "data": {
+              "name": "query_result"
+            },
+            "title": "Number of students who received more than one scholarship",
+            "width": 300,
+            "height": 120,
+            "mark": {
+              "type": "text",
+              "align": "center",
+              "baseline": "middle",
+              "fontSize": 48
+            },
+            "encoding": {
+              "x": {
+                "value": 150
+              },
+              "y": {
+                "value": 60
+              },
+              "text": {
+                "field": "students_with_multiple_scholarships",
+                "type": "quantitative"
+              },
+              "tooltip": [
+                {
+                  "field": "students_with_multiple_scholarships",
+                  "type": "quantitative",
+                  "title": "Students with >1 scholarship"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771844087371
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT COUNT(*) AS students_with_multiple_scholarships\nFROM (\n  SELECT student_id AS student_id, COUNT(DISTINCT scholarship_id) AS scholarship_count\n  FROM student_scholarships\n  GROUP BY student_id\n  HAVING COUNT(DISTINCT scholarship_id) > 1\n) AS multi;"
+        },
+        "startedAt": 1771844087377,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: relation \"student_scholarships\" does not exist\nLINE 5:   FROM student_scholarships\n               ^",
+          "name": "Error"
+        },
+        "endedAt": 1771844087466
+      }
+    },
+    "input": {
+      "question": "How many students have received more than one scholarship?"
+    },
+    "error": {
+      "message": "SQL execution failed: relation \"student_scholarships\" does not exist\nLINE 5:   FROM student_scholarships\n               ^",
+      "name": "Error"
+    },
+    "traceId": "db898c77786b2ce3c191ce7375c0103e"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:54:47.473Z",
+    "traceId": "db898c77786b2ce3c191ce7375c0103e",
+    "attempts": 6,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 266,
+      "outputTokens": 1095,
+      "totalTokens": 1361,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 768,
+      "costUsd": 0.0022565
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 266,
+        "outputTokens": 1095,
+        "totalTokens": 1361,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 768,
+        "costUsd": 0.0022565
+      }
+    ],
+    "warnings": []
+  }
+}

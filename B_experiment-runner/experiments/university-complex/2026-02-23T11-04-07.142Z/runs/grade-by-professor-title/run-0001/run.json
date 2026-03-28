@@ -1,0 +1,374 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "grade-by-professor-title",
+  "caseDirectory": "grade-by-professor-title",
+  "repeatIndex": 1,
+  "prompt": "Do professors with higher academic titles give different grades?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Do professors with higher academic titles give different grades?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:38:37.733Z",
+    "endedAtUtc": "2026-02-23T11:40:26.241Z",
+    "durationMs": 108508
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "33236",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:40:26 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Do professors with higher academic titles give different grades?\"},\"planner\":{\"payload\":{\"question\":\"Do professors with higher academic titles give different grades?\"},\"startedAt\":1771846717737,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\",\"COUNT(grades.id)\"],\"dimensions\":[\"professors.academic_title\"],\"filters\":[\"professors.academic_title IS NOT NULL\",\"grades.exam_score IS NOT NULL\"],\"grain\":\"category: professors.academic_title\",\"aliases\":{\"professors.academic_title\":\"academic_title\",\"AVG(grades.exam_score)\":\"avg_exam_score\",\"COUNT(grades.id)\":\"grade_count\"},\"output_fields\":[\"academic_title\",\"avg_exam_score\",\"grade_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"academic_title\",\"y_axis\":\"avg_exam_score\",\"title\":\"Average exam score by professor academic title\"},\"assumptions\":[\"Join path (confirmed in schema inspection): grades.enrollment_id -> enrollments.id ; enrollments.course_section_id -> course_sections.id ; course_sections.professor_id -> professors.id. Downstream SQL must JOIN these tables along that chain.\",\"I use grades.exam_score as the primary numeric measure of 'grade' because grades.grade_value is a user-defined type (likely non-numeric/letter); exam_score, project_score, and attendance_score are numeric and available but exam_score is the clearest single numeric metric confirmed in this schema.\",\"Filter excludes rows where professors.academic_title IS NULL and where grades.exam_score IS NULL so averages are computed only where a numeric exam_score exists.\",\"The grain is the professor academic title (category-level aggregation). If you want per-professor results (then aggregated by title) or controls for course/semester, adjust the plan and filters accordingly.\",\"No assumptions were made about weighting of exam/project/attendance scores — if you want an overall numeric grade, provide the weighting scheme or include additional metrics (e.g., average of project_score, attendance_score).\",\"Academic title values are taken as-is; titles with different spellings/capitalization will be treated as separate categories unless cleaned/normalized beforehand.\",\"All referenced tables and columns were confirmed to exist in this run; do not change column names or join keys without re-running schema discovery.\"]}},\"endedAt\":1771846765773},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\",\"COUNT(grades.id)\"],\"dimensions\":[\"professors.academic_title\"],\"filters\":[\"professors.academic_title IS NOT NULL\",\"grades.exam_score IS NOT NULL\"],\"grain\":\"category: professors.academic_title\",\"aliases\":{\"professors.academic_title\":\"academic_title\",\"AVG(grades.exam_score)\":\"avg_exam_score\",\"COUNT(grades.id)\":\"grade_count\"},\"output_fields\":[\"academic_title\",\"avg_exam_score\",\"grade_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"academic_title\",\"y_axis\":\"avg_exam_score\",\"title\":\"Average exam score by professor academic title\"},\"assumptions\":[\"Join path (confirmed in schema inspection): grades.enrollment_id -> enrollments.id ; enrollments.course_section_id -> course_sections.id ; course_sections.professor_id -> professors.id. Downstream SQL must JOIN these tables along that chain.\",\"I use grades.exam_score as the primary numeric measure of 'grade' because grades.grade_value is a user-defined type (likely non-numeric/letter); exam_score, project_score, and attendance_score are numeric and available but exam_score is the clearest single numeric metric confirmed in this schema.\",\"Filter excludes rows where professors.academic_title IS NULL and where grades.exam_score IS NULL so averages are computed only where a numeric exam_score exists.\",\"The grain is the professor academic title (category-level aggregation). If you want per-professor results (then aggregated by title) or controls for course/semester, adjust the plan and filters accordingly.\",\"No assumptions were made about weighting of exam/project/attendance scores — if you want an overall numeric grade, provide the weighting scheme or include additional metrics (e.g., average of project_score, attendance_score).\",\"Academic title values are taken as-is; titles with different spellings/capitalization will be treated as separate categories unless cleaned/normalized beforehand.\",\"All referenced tables and columns were confirmed to exist in this run; do not change column names or join keys without re-running schema discovery.\"]}},\"startedAt\":1771846765783,\"status\":\"success\",\"output\":{\"question\":\"Do professors with higher academic titles give different grades?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\",\"COUNT(grades.id)\"],\"dimensions\":[\"professors.academic_title\"],\"filters\":[\"professors.academic_title IS NOT NULL\",\"grades.exam_score IS NOT NULL\"],\"grain\":\"category: professors.academic_title\",\"aliases\":{\"professors.academic_title\":\"academic_title\",\"AVG(grades.exam_score)\":\"avg_exam_score\",\"COUNT(grades.id)\":\"grade_count\"},\"output_fields\":[\"academic_title\",\"avg_exam_score\",\"grade_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"academic_title\",\"y_axis\":\"avg_exam_score\",\"title\":\"Average exam score by professor academic title\"},\"assumptions\":[\"Join path (confirmed in schema inspection): grades.enrollment_id -> enrollments.id ; enrollments.course_section_id -> course_sections.id ; course_sections.professor_id -> professors.id. Downstream SQL must JOIN these tables along that chain.\",\"I use grades.exam_score as the primary numeric measure of 'grade' because grades.grade_value is a user-defined type (likely non-numeric/letter); exam_score, project_score, and attendance_score are numeric and available but exam_score is the clearest single numeric metric confirmed in this schema.\",\"Filter excludes rows where professors.academic_title IS NULL and where grades.exam_score IS NULL so averages are computed only where a numeric exam_score exists.\",\"The grain is the professor academic title (category-level aggregation). If you want per-professor results (then aggregated by title) or controls for course/semester, adjust the plan and filters accordingly.\",\"No assumptions were made about weighting of exam/project/attendance scores — if you want an overall numeric grade, provide the weighting scheme or include additional metrics (e.g., average of project_score, attendance_score).\",\"Academic title values are taken as-is; titles with different spellings/capitalization will be treated as separate categories unless cleaned/normalized beforehand.\",\"All referenced tables and columns were confirmed to exist in this run; do not change column names or join keys without re-running schema discovery.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771846765785},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"Do professors with higher academic titles give different grades?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\",\"COUNT(grades.id)\"],\"dimensions\":[\"professors.academic_title\"],\"filters\":[\"professors.academic_title IS NOT NULL\",\"grades.exam_score IS NOT NULL\"],\"grain\":\"category: professors.academic_title\",\"aliases\":{\"professors.academic_title\":\"academic_title\",\"AVG(grades.exam_score)\":\"avg_exam_score\",\"COUNT(grades.id)\":\"grade_count\"},\"output_fields\":[\"academic_title\",\"avg_exam_score\",\"grade_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"academic_title\",\"y_axis\":\"avg_exam_score\",\"title\":\"Average exam score by professor academic title\"},\"assumptions\":[\"Join path (confirmed in schema inspection): grades.enrollment_id -> enrollments.id ; enrollments.course_section_id -> course_sections.id ; course_sections.professor_id -> professors.id. Downstream SQL must JOIN these tables along that chain.\",\"I use grades.exam_score as the primary numeric measure of 'grade' because grades.grade_value is a user-defined type (likely non-numeric/letter); exam_score, project_score, and attendance_score are numeric and available but exam_score is the clearest single numeric metric confirmed in this schema.\",\"Filter excludes rows where professors.academic_title IS NULL and where grades.exam_score IS NULL so averages are computed only where a numeric exam_score exists.\",\"The grain is the professor academic title (category-level aggregation). If you want per-professor results (then aggregated by title) or controls for course/semester, adjust the plan and filters accordingly.\",\"No assumptions were made about weighting of exam/project/attendance scores — if you want an overall numeric grade, provide the weighting scheme or include additional metrics (e.g., average of project_score, attendance_score).\",\"Academic title values are taken as-is; titles with different spellings/capitalization will be treated as separate categories unless cleaned/normalized beforehand.\",\"All referenced tables and columns were confirmed to exist in this run; do not change column names or join keys without re-running schema discovery.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771846765788,\"status\":\"success\",\"output\":{\"question\":\"Do professors with higher academic titles give different grades?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\",\"COUNT(grades.id)\"],\"dimensions\":[\"professors.academic_title\"],\"filters\":[\"professors.academic_title IS NOT NULL\",\"grades.exam_score IS NOT NULL\"],\"grain\":\"category: professors.academic_title\",\"aliases\":{\"professors.academic_title\":\"academic_title\",\"AVG(grades.exam_score)\":\"avg_exam_score\",\"COUNT(grades.id)\":\"grade_count\"},\"output_fields\":[\"academic_title\",\"avg_exam_score\",\"grade_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"academic_title\",\"y_axis\":\"avg_exam_score\",\"title\":\"Average exam score by professor academic title\"},\"assumptions\":[\"Join path (confirmed in schema inspection): grades.enrollment_id -> enrollments.id ; enrollments.course_section_id -> course_sections.id ; course_sections.professor_id -> professors.id. Downstream SQL must JOIN these tables along that chain.\",\"I use grades.exam_score as the primary numeric measure of 'grade' because grades.grade_value is a user-defined type (likely non-numeric/letter); exam_score, project_score, and attendance_score are numeric and available but exam_score is the clearest single numeric metric confirmed in this schema.\",\"Filter excludes rows where professors.academic_title IS NULL and where grades.exam_score IS NULL so averages are computed only where a numeric exam_score exists.\",\"The grain is the professor academic title (category-level aggregation). If you want per-professor results (then aggregated by title) or controls for course/semester, adjust the plan and filters accordingly.\",\"No assumptions were made about weighting of exam/project/attendance scores — if you want an overall numeric grade, provide the weighting scheme or include additional metrics (e.g., average of project_score, attendance_score).\",\"Academic title values are taken as-is; titles with different spellings/capitalization will be treated as separate categories unless cleaned/normalized beforehand.\",\"All referenced tables and columns were confirmed to exist in this run; do not change column names or join keys without re-running schema discovery.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT p.academic_title AS academic_title,\\n       AVG(g.exam_score) AS avg_exam_score,\\n       COUNT(g.id) AS grade_count\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.professors p ON cs.professor_id = p.id\\nWHERE p.academic_title IS NOT NULL\\n  AND g.exam_score IS NOT NULL\\nGROUP BY p.academic_title\\nORDER BY avg_exam_score DESC, p.academic_title ASC;\",\"validationIssues\":[\"All encoded fields (academic_title, avg_exam_score, grade_count) exist in metadata.columns and are returned by the SQL query.\",\"The y axis scale domain is fixed to [0,100]; confirm exam_score is bounded to that range or remove/adjust the domain to avoid clipping or misleading scale.\",\"Color encodes avg_exam_score but no legend is shown and it is redundant with bar height; consider removing color or adding a legend if you intend color as a separate channel.\",\"The SQL orders by avg_exam_score DESC then academic_title ASC; the Vega-Lite sort uses avg_exam_score DESC but does not implement the secondary alphabetical tie-breaker, so tie ordering may differ.\",\"Academic titles are treated as raw categories. If the question intends a hierarchical comparison of \\\"higher\\\" titles, consider normalizing titles to a rank/order to reflect seniority rather than relying on string ordering.\",\"Some title categories have small grade_count (sample shows counts as low as 2), so means may be unreliable — consider showing sample sizes prominently or confidence intervals.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Aggregate average exam score and count of grade records by professors' academic_title using the confirmed join path; filter out NULL titles and NULL exam_score and order results deterministically by average score then title.\",\"sql\":\"SELECT p.academic_title AS academic_title,\\n       AVG(g.exam_score) AS avg_exam_score,\\n       COUNT(g.id) AS grade_count\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.professors p ON cs.professor_id = p.id\\nWHERE p.academic_title IS NOT NULL\\n  AND g.exam_score IS NOT NULL\\nGROUP BY p.academic_title\\nORDER BY avg_exam_score DESC, p.academic_title ASC;\",\"assumptions\":[\"Join path confirmed: grades.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.professor_id -> professors.id.\",\"Use grades.exam_score as the numeric grade measure per plan.\",\"Exclude rows with NULL professors.academic_title and NULL grades.exam_score as specified.\",\"Aggregation grain is professors.academic_title (category-level).\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT p.academic_title AS academic_title,\\n       AVG(g.exam_score) AS avg_exam_score,\\n       COUNT(g.id) AS grade_count\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.professors p ON cs.professor_id = p.id\\nWHERE p.academic_title IS NOT NULL\\n  AND g.exam_score IS NOT NULL\\nGROUP BY p.academic_title\\nORDER BY avg_exam_score DESC, p.academic_title ASC\",\"metadata\":{\"columns\":[\"grade_count\",\"academic_title\",\"avg_exam_score\"],\"rowCount\":8,\"sample\":[{\"grade_count\":2,\"academic_title\":\"Dr hab. inż.\",\"avg_exam_score\":67.55},{\"grade_count\":6,\"academic_title\":\"Prof. dr inż.\",\"avg_exam_score\":64.07833333333333}]},\"data\":[{\"grade_count\":2,\"academic_title\":\"Dr hab. inż.\",\"avg_exam_score\":67.55},{\"grade_count\":6,\"academic_title\":\"Prof. dr inż.\",\"avg_exam_score\":64.07833333333333},{\"grade_count\":2,\"academic_title\":\"Dr inż.\",\"avg_exam_score\":54.505},{\"grade_count\":8,\"academic_title\":\"Dr hab.\",\"avg_exam_score\":50.1125},{\"grade_count\":11,\"academic_title\":\"Prof. dr hab. inż.\",\"avg_exam_score\":43.46909090909091},{\"grade_count\":6,\"academic_title\":\"Prof. nadzw. dr hab. inż.\",\"avg_exam_score\":28.835},{\"grade_count\":1,\"academic_title\":\"Inż.\",\"avg_exam_score\":22.35},{\"grade_count\":2,\"academic_title\":\"Mgr inż.\",\"avg_exam_score\":20.76}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average exam score by professor academic title\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_title\",\"type\":\"nominal\",\"axis\":{\"title\":\"Academic title\",\"labelAngle\":-40,\"labelAlign\":\"right\"},\"sort\":{\"field\":\"avg_exam_score\",\"order\":\"descending\"}},\"y\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average exam score\"},\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"academic_title\",\"type\":\"nominal\",\"title\":\"Academic title\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg exam score\",\"format\":\".2f\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Grade count\"}]}},\"reasoning\":\"Bar chart shows average exam_score by professor academic_title (categories sorted by descending average). Tooltip includes sample counts so you can judge reliability of each average.\"},\"validation\":{\"passed\":true,\"score\":0.65,\"issues\":[\"All encoded fields (academic_title, avg_exam_score, grade_count) exist in metadata.columns and are returned by the SQL query.\",\"The y axis scale domain is fixed to [0,100]; confirm exam_score is bounded to that range or remove/adjust the domain to avoid clipping or misleading scale.\",\"Color encodes avg_exam_score but no legend is shown and it is redundant with bar height; consider removing color or adding a legend if you intend color as a separate channel.\",\"The SQL orders by avg_exam_score DESC then academic_title ASC; the Vega-Lite sort uses avg_exam_score DESC but does not implement the secondary alphabetical tie-breaker, so tie ordering may differ.\",\"Academic titles are treated as raw categories. If the question intends a hierarchical comparison of \\\"higher\\\" titles, consider normalizing titles to a rank/order to reflect seniority rather than relying on string ordering.\",\"Some title categories have small grade_count (sample shows counts as low as 2), so means may be unreliable — consider showing sample sizes prominently or confidence intervals.\"]}}},\"endedAt\":1771846826222,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"Do professors with higher academic titles give different grades?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\",\"COUNT(grades.id)\"],\"dimensions\":[\"professors.academic_title\"],\"filters\":[\"professors.academic_title IS NOT NULL\",\"grades.exam_score IS NOT NULL\"],\"grain\":\"category: professors.academic_title\",\"aliases\":{\"professors.academic_title\":\"academic_title\",\"AVG(grades.exam_score)\":\"avg_exam_score\",\"COUNT(grades.id)\":\"grade_count\"},\"output_fields\":[\"academic_title\",\"avg_exam_score\",\"grade_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"academic_title\",\"y_axis\":\"avg_exam_score\",\"title\":\"Average exam score by professor academic title\"},\"assumptions\":[\"Join path (confirmed in schema inspection): grades.enrollment_id -> enrollments.id ; enrollments.course_section_id -> course_sections.id ; course_sections.professor_id -> professors.id. Downstream SQL must JOIN these tables along that chain.\",\"I use grades.exam_score as the primary numeric measure of 'grade' because grades.grade_value is a user-defined type (likely non-numeric/letter); exam_score, project_score, and attendance_score are numeric and available but exam_score is the clearest single numeric metric confirmed in this schema.\",\"Filter excludes rows where professors.academic_title IS NULL and where grades.exam_score IS NULL so averages are computed only where a numeric exam_score exists.\",\"The grain is the professor academic title (category-level aggregation). If you want per-professor results (then aggregated by title) or controls for course/semester, adjust the plan and filters accordingly.\",\"No assumptions were made about weighting of exam/project/attendance scores — if you want an overall numeric grade, provide the weighting scheme or include additional metrics (e.g., average of project_score, attendance_score).\",\"Academic title values are taken as-is; titles with different spellings/capitalization will be treated as separate categories unless cleaned/normalized beforehand.\",\"All referenced tables and columns were confirmed to exist in this run; do not change column names or join keys without re-running schema discovery.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT p.academic_title AS academic_title,\\n       AVG(g.exam_score) AS avg_exam_score,\\n       COUNT(g.id) AS grade_count\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.professors p ON cs.professor_id = p.id\\nWHERE p.academic_title IS NOT NULL\\n  AND g.exam_score IS NOT NULL\\nGROUP BY p.academic_title\\nORDER BY avg_exam_score DESC, p.academic_title ASC;\",\"validationIssues\":[\"All encoded fields (academic_title, avg_exam_score, grade_count) exist in metadata.columns and are returned by the SQL query.\",\"The y axis scale domain is fixed to [0,100]; confirm exam_score is bounded to that range or remove/adjust the domain to avoid clipping or misleading scale.\",\"Color encodes avg_exam_score but no legend is shown and it is redundant with bar height; consider removing color or adding a legend if you intend color as a separate channel.\",\"The SQL orders by avg_exam_score DESC then academic_title ASC; the Vega-Lite sort uses avg_exam_score DESC but does not implement the secondary alphabetical tie-breaker, so tie ordering may differ.\",\"Academic titles are treated as raw categories. If the question intends a hierarchical comparison of \\\"higher\\\" titles, consider normalizing titles to a rank/order to reflect seniority rather than relying on string ordering.\",\"Some title categories have small grade_count (sample shows counts as low as 2), so means may be unreliable — consider showing sample sizes prominently or confidence intervals.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Aggregate average exam score and count of grade records by professors' academic_title using the confirmed join path; filter out NULL titles and NULL exam_score and order results deterministically by average score then title.\",\"sql\":\"SELECT p.academic_title AS academic_title,\\n       AVG(g.exam_score) AS avg_exam_score,\\n       COUNT(g.id) AS grade_count\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.professors p ON cs.professor_id = p.id\\nWHERE p.academic_title IS NOT NULL\\n  AND g.exam_score IS NOT NULL\\nGROUP BY p.academic_title\\nORDER BY avg_exam_score DESC, p.academic_title ASC;\",\"assumptions\":[\"Join path confirmed: grades.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.professor_id -> professors.id.\",\"Use grades.exam_score as the numeric grade measure per plan.\",\"Exclude rows with NULL professors.academic_title and NULL grades.exam_score as specified.\",\"Aggregation grain is professors.academic_title (category-level).\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT p.academic_title AS academic_title,\\n       AVG(g.exam_score) AS avg_exam_score,\\n       COUNT(g.id) AS grade_count\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.professors p ON cs.professor_id = p.id\\nWHERE p.academic_title IS NOT NULL\\n  AND g.exam_score IS NOT NULL\\nGROUP BY p.academic_title\\nORDER BY avg_exam_score DESC, p.academic_title ASC\",\"metadata\":{\"columns\":[\"grade_count\",\"academic_title\",\"avg_exam_score\"],\"rowCount\":8,\"sample\":[{\"grade_count\":2,\"academic_title\":\"Dr hab. inż.\",\"avg_exam_score\":67.55},{\"grade_count\":6,\"academic_title\":\"Prof. dr inż.\",\"avg_exam_score\":64.07833333333333}]},\"data\":[{\"grade_count\":2,\"academic_title\":\"Dr hab. inż.\",\"avg_exam_score\":67.55},{\"grade_count\":6,\"academic_title\":\"Prof. dr inż.\",\"avg_exam_score\":64.07833333333333},{\"grade_count\":2,\"academic_title\":\"Dr inż.\",\"avg_exam_score\":54.505},{\"grade_count\":8,\"academic_title\":\"Dr hab.\",\"avg_exam_score\":50.1125},{\"grade_count\":11,\"academic_title\":\"Prof. dr hab. inż.\",\"avg_exam_score\":43.46909090909091},{\"grade_count\":6,\"academic_title\":\"Prof. nadzw. dr hab. inż.\",\"avg_exam_score\":28.835},{\"grade_count\":1,\"academic_title\":\"Inż.\",\"avg_exam_score\":22.35},{\"grade_count\":2,\"academic_title\":\"Mgr inż.\",\"avg_exam_score\":20.76}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average exam score by professor academic title\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_title\",\"type\":\"nominal\",\"axis\":{\"title\":\"Academic title\",\"labelAngle\":-40,\"labelAlign\":\"right\"},\"sort\":{\"field\":\"avg_exam_score\",\"order\":\"descending\"}},\"y\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average exam score\"},\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"academic_title\",\"type\":\"nominal\",\"title\":\"Academic title\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg exam score\",\"format\":\".2f\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Grade count\"}]}},\"reasoning\":\"Bar chart shows average exam_score by professor academic_title (categories sorted by descending average). Tooltip includes sample counts so you can judge reliability of each average.\"},\"validation\":{\"passed\":true,\"score\":0.65,\"issues\":[\"All encoded fields (academic_title, avg_exam_score, grade_count) exist in metadata.columns and are returned by the SQL query.\",\"The y axis scale domain is fixed to [0,100]; confirm exam_score is bounded to that range or remove/adjust the domain to avoid clipping or misleading scale.\",\"Color encodes avg_exam_score but no legend is shown and it is redundant with bar height; consider removing color or adding a legend if you intend color as a separate channel.\",\"The SQL orders by avg_exam_score DESC then academic_title ASC; the Vega-Lite sort uses avg_exam_score DESC but does not implement the secondary alphabetical tie-breaker, so tie ordering may differ.\",\"Academic titles are treated as raw categories. If the question intends a hierarchical comparison of \\\"higher\\\" titles, consider normalizing titles to a rank/order to reflect seniority rather than relying on string ordering.\",\"Some title categories have small grade_count (sample shows counts as low as 2), so means may be unreliable — consider showing sample sizes prominently or confidence intervals.\"]}}},\"startedAt\":1771846826225,\"status\":\"success\",\"output\":{\"sql\":\"SELECT p.academic_title AS academic_title,\\n       AVG(g.exam_score) AS avg_exam_score,\\n       COUNT(g.id) AS grade_count\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.professors p ON cs.professor_id = p.id\\nWHERE p.academic_title IS NOT NULL\\n  AND g.exam_score IS NOT NULL\\nGROUP BY p.academic_title\\nORDER BY avg_exam_score DESC, p.academic_title ASC;\",\"data\":[{\"grade_count\":2,\"academic_title\":\"Dr hab. inż.\",\"avg_exam_score\":67.55},{\"grade_count\":6,\"academic_title\":\"Prof. dr inż.\",\"avg_exam_score\":64.07833333333333},{\"grade_count\":2,\"academic_title\":\"Dr inż.\",\"avg_exam_score\":54.505},{\"grade_count\":8,\"academic_title\":\"Dr hab.\",\"avg_exam_score\":50.1125},{\"grade_count\":11,\"academic_title\":\"Prof. dr hab. inż.\",\"avg_exam_score\":43.46909090909091},{\"grade_count\":6,\"academic_title\":\"Prof. nadzw. dr hab. inż.\",\"avg_exam_score\":28.835},{\"grade_count\":1,\"academic_title\":\"Inż.\",\"avg_exam_score\":22.35},{\"grade_count\":2,\"academic_title\":\"Mgr inż.\",\"avg_exam_score\":20.76}],\"metadata\":{\"columns\":[\"grade_count\",\"academic_title\",\"avg_exam_score\"],\"rowCount\":8,\"sample\":[{\"grade_count\":2,\"academic_title\":\"Dr hab. inż.\",\"avg_exam_score\":67.55},{\"grade_count\":6,\"academic_title\":\"Prof. dr inż.\",\"avg_exam_score\":64.07833333333333}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average exam score by professor academic title\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_title\",\"type\":\"nominal\",\"axis\":{\"title\":\"Academic title\",\"labelAngle\":-40,\"labelAlign\":\"right\"},\"sort\":{\"field\":\"avg_exam_score\",\"order\":\"descending\"}},\"y\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average exam score\"},\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"academic_title\",\"type\":\"nominal\",\"title\":\"Academic title\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg exam score\",\"format\":\".2f\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Grade count\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.65,\"issues\":[\"All encoded fields (academic_title, avg_exam_score, grade_count) exist in metadata.columns and are returned by the SQL query.\",\"The y axis scale domain is fixed to [0,100]; confirm exam_score is bounded to that range or remove/adjust the domain to avoid clipping or misleading scale.\",\"Color encodes avg_exam_score but no legend is shown and it is redundant with bar height; consider removing color or adding a legend if you intend color as a separate channel.\",\"The SQL orders by avg_exam_score DESC then academic_title ASC; the Vega-Lite sort uses avg_exam_score DESC but does not implement the secondary alphabetical tie-breaker, so tie ordering may differ.\",\"Academic titles are treated as raw categories. If the question intends a hierarchical comparison of \\\"higher\\\" titles, consider normalizing titles to a rank/order to reflect seniority rather than relying on string ordering.\",\"Some title categories have small grade_count (sample shows counts as low as 2), so means may be unreliable — consider showing sample sizes prominently or confidence intervals.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771846826228}},\"input\":{\"question\":\"Do professors with higher academic titles give different grades?\"},\"result\":{\"sql\":\"SELECT p.academic_title AS academic_title,\\n       AVG(g.exam_score) AS avg_exam_score,\\n       COUNT(g.id) AS grade_count\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.professors p ON cs.professor_id = p.id\\nWHERE p.academic_title IS NOT NULL\\n  AND g.exam_score IS NOT NULL\\nGROUP BY p.academic_title\\nORDER BY avg_exam_score DESC, p.academic_title ASC;\",\"data\":[{\"grade_count\":2,\"academic_title\":\"Dr hab. inż.\",\"avg_exam_score\":67.55},{\"grade_count\":6,\"academic_title\":\"Prof. dr inż.\",\"avg_exam_score\":64.07833333333333},{\"grade_count\":2,\"academic_title\":\"Dr inż.\",\"avg_exam_score\":54.505},{\"grade_count\":8,\"academic_title\":\"Dr hab.\",\"avg_exam_score\":50.1125},{\"grade_count\":11,\"academic_title\":\"Prof. dr hab. inż.\",\"avg_exam_score\":43.46909090909091},{\"grade_count\":6,\"academic_title\":\"Prof. nadzw. dr hab. inż.\",\"avg_exam_score\":28.835},{\"grade_count\":1,\"academic_title\":\"Inż.\",\"avg_exam_score\":22.35},{\"grade_count\":2,\"academic_title\":\"Mgr inż.\",\"avg_exam_score\":20.76}],\"metadata\":{\"columns\":[\"grade_count\",\"academic_title\",\"avg_exam_score\"],\"rowCount\":8,\"sample\":[{\"grade_count\":2,\"academic_title\":\"Dr hab. inż.\",\"avg_exam_score\":67.55},{\"grade_count\":6,\"academic_title\":\"Prof. dr inż.\",\"avg_exam_score\":64.07833333333333}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average exam score by professor academic title\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_title\",\"type\":\"nominal\",\"axis\":{\"title\":\"Academic title\",\"labelAngle\":-40,\"labelAlign\":\"right\"},\"sort\":{\"field\":\"avg_exam_score\",\"order\":\"descending\"}},\"y\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average exam score\"},\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"academic_title\",\"type\":\"nominal\",\"title\":\"Academic title\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg exam score\",\"format\":\".2f\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Grade count\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.65,\"issues\":[\"All encoded fields (academic_title, avg_exam_score, grade_count) exist in metadata.columns and are returned by the SQL query.\",\"The y axis scale domain is fixed to [0,100]; confirm exam_score is bounded to that range or remove/adjust the domain to avoid clipping or misleading scale.\",\"Color encodes avg_exam_score but no legend is shown and it is redundant with bar height; consider removing color or adding a legend if you intend color as a separate channel.\",\"The SQL orders by avg_exam_score DESC then academic_title ASC; the Vega-Lite sort uses avg_exam_score DESC but does not implement the secondary alphabetical tie-breaker, so tie ordering may differ.\",\"Academic titles are treated as raw categories. If the question intends a hierarchical comparison of \\\"higher\\\" titles, consider normalizing titles to a rank/order to reflect seniority rather than relying on string ordering.\",\"Some title categories have small grade_count (sample shows counts as low as 2), so means may be unreliable — consider showing sample sizes prominently or confidence intervals.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"d09a9511bfd4e0a1044a47527d39acc5\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/grade-by-professor-title/run-0001/run.json",
+    "queryPath": "runs/grade-by-professor-title/run-0001/query.sql",
+    "vegaRawPath": "runs/grade-by-professor-title/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/grade-by-professor-title/run-0001/vega.resolved.json",
+    "imagePath": "runs/grade-by-professor-title/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:40:26.716Z",
+  "traceId": "d09a9511bfd4e0a1044a47527d39acc5",
+  "success": true,
+  "durationMs": 108983,
+  "resultRaw": {
+    "data": [
+      {
+        "grade_count": 2,
+        "academic_title": "Dr hab. inż.",
+        "avg_exam_score": 67.55
+      },
+      {
+        "grade_count": 6,
+        "academic_title": "Prof. dr inż.",
+        "avg_exam_score": 64.07833333333333
+      },
+      {
+        "grade_count": 2,
+        "academic_title": "Dr inż.",
+        "avg_exam_score": 54.505
+      },
+      {
+        "grade_count": 8,
+        "academic_title": "Dr hab.",
+        "avg_exam_score": 50.1125
+      },
+      {
+        "grade_count": 11,
+        "academic_title": "Prof. dr hab. inż.",
+        "avg_exam_score": 43.46909090909091
+      },
+      {
+        "grade_count": 6,
+        "academic_title": "Prof. nadzw. dr hab. inż.",
+        "avg_exam_score": 28.835
+      },
+      {
+        "grade_count": 1,
+        "academic_title": "Inż.",
+        "avg_exam_score": 22.35
+      },
+      {
+        "grade_count": 2,
+        "academic_title": "Mgr inż.",
+        "avg_exam_score": 20.76
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average exam score by professor academic title",
+      "width": 700,
+      "height": 400,
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "academic_title",
+          "type": "nominal",
+          "axis": {
+            "title": "Academic title",
+            "labelAngle": -40,
+            "labelAlign": "right"
+          },
+          "sort": {
+            "field": "avg_exam_score",
+            "order": "descending"
+          }
+        },
+        "y": {
+          "field": "avg_exam_score",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average exam score"
+          },
+          "scale": {
+            "domain": [
+              0,
+              100
+            ]
+          }
+        },
+        "color": {
+          "field": "avg_exam_score",
+          "type": "quantitative",
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "academic_title",
+            "type": "nominal",
+            "title": "Academic title"
+          },
+          {
+            "field": "avg_exam_score",
+            "type": "quantitative",
+            "title": "Avg exam score",
+            "format": ".2f"
+          },
+          {
+            "field": "grade_count",
+            "type": "quantitative",
+            "title": "Grade count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT p.academic_title AS academic_title,\n       AVG(g.exam_score) AS avg_exam_score,\n       COUNT(g.id) AS grade_count\nFROM public.grades g\nJOIN public.enrollments e ON g.enrollment_id = e.id\nJOIN public.course_sections cs ON e.course_section_id = cs.id\nJOIN public.professors p ON cs.professor_id = p.id\nWHERE p.academic_title IS NOT NULL\n  AND g.exam_score IS NOT NULL\nGROUP BY p.academic_title\nORDER BY avg_exam_score DESC, p.academic_title ASC;",
+    "metadata": {
+      "columns": [
+        "grade_count",
+        "academic_title",
+        "avg_exam_score"
+      ],
+      "rowCount": 8,
+      "sample": [
+        {
+          "grade_count": 2,
+          "academic_title": "Dr hab. inż.",
+          "avg_exam_score": 67.55
+        },
+        {
+          "grade_count": 6,
+          "academic_title": "Prof. dr inż.",
+          "avg_exam_score": 64.07833333333333
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.65,
+      "issues": [
+        "All encoded fields (academic_title, avg_exam_score, grade_count) exist in metadata.columns and are returned by the SQL query.",
+        "The y axis scale domain is fixed to [0,100]; confirm exam_score is bounded to that range or remove/adjust the domain to avoid clipping or misleading scale.",
+        "Color encodes avg_exam_score but no legend is shown and it is redundant with bar height; consider removing color or adding a legend if you intend color as a separate channel.",
+        "The SQL orders by avg_exam_score DESC then academic_title ASC; the Vega-Lite sort uses avg_exam_score DESC but does not implement the secondary alphabetical tie-breaker, so tie ordering may differ.",
+        "Academic titles are treated as raw categories. If the question intends a hierarchical comparison of \"higher\" titles, consider normalizing titles to a rank/order to reflect seniority rather than relying on string ordering.",
+        "Some title categories have small grade_count (sample shows counts as low as 2), so means may be unreliable — consider showing sample sizes prominently or confidence intervals."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "grade_count": 2,
+        "academic_title": "Dr hab. inż.",
+        "avg_exam_score": 67.55
+      },
+      {
+        "grade_count": 6,
+        "academic_title": "Prof. dr inż.",
+        "avg_exam_score": 64.07833333333333
+      },
+      {
+        "grade_count": 2,
+        "academic_title": "Dr inż.",
+        "avg_exam_score": 54.505
+      },
+      {
+        "grade_count": 8,
+        "academic_title": "Dr hab.",
+        "avg_exam_score": 50.1125
+      },
+      {
+        "grade_count": 11,
+        "academic_title": "Prof. dr hab. inż.",
+        "avg_exam_score": 43.46909090909091
+      },
+      {
+        "grade_count": 6,
+        "academic_title": "Prof. nadzw. dr hab. inż.",
+        "avg_exam_score": 28.835
+      },
+      {
+        "grade_count": 1,
+        "academic_title": "Inż.",
+        "avg_exam_score": 22.35
+      },
+      {
+        "grade_count": 2,
+        "academic_title": "Mgr inż.",
+        "avg_exam_score": 20.76
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average exam score by professor academic title",
+      "width": 700,
+      "height": 400,
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "academic_title",
+          "type": "nominal",
+          "axis": {
+            "title": "Academic title",
+            "labelAngle": -40,
+            "labelAlign": "right"
+          },
+          "sort": {
+            "field": "avg_exam_score",
+            "order": "descending"
+          }
+        },
+        "y": {
+          "field": "avg_exam_score",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average exam score"
+          },
+          "scale": {
+            "domain": [
+              0,
+              100
+            ]
+          }
+        },
+        "color": {
+          "field": "avg_exam_score",
+          "type": "quantitative",
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "academic_title",
+            "type": "nominal",
+            "title": "Academic title"
+          },
+          {
+            "field": "avg_exam_score",
+            "type": "quantitative",
+            "title": "Avg exam score",
+            "format": ".2f"
+          },
+          {
+            "field": "grade_count",
+            "type": "quantitative",
+            "title": "Grade count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT p.academic_title AS academic_title,\n       AVG(g.exam_score) AS avg_exam_score,\n       COUNT(g.id) AS grade_count\nFROM public.grades g\nJOIN public.enrollments e ON g.enrollment_id = e.id\nJOIN public.course_sections cs ON e.course_section_id = cs.id\nJOIN public.professors p ON cs.professor_id = p.id\nWHERE p.academic_title IS NOT NULL\n  AND g.exam_score IS NOT NULL\nGROUP BY p.academic_title\nORDER BY avg_exam_score DESC, p.academic_title ASC;",
+    "metadata": {
+      "columns": [
+        "grade_count",
+        "academic_title",
+        "avg_exam_score"
+      ],
+      "rowCount": 8,
+      "sample": [
+        {
+          "grade_count": 2,
+          "academic_title": "Dr hab. inż.",
+          "avg_exam_score": 67.55
+        },
+        {
+          "grade_count": 6,
+          "academic_title": "Prof. dr inż.",
+          "avg_exam_score": 64.07833333333333
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.65,
+      "issues": [
+        "All encoded fields (academic_title, avg_exam_score, grade_count) exist in metadata.columns and are returned by the SQL query.",
+        "The y axis scale domain is fixed to [0,100]; confirm exam_score is bounded to that range or remove/adjust the domain to avoid clipping or misleading scale.",
+        "Color encodes avg_exam_score but no legend is shown and it is redundant with bar height; consider removing color or adding a legend if you intend color as a separate channel.",
+        "The SQL orders by avg_exam_score DESC then academic_title ASC; the Vega-Lite sort uses avg_exam_score DESC but does not implement the secondary alphabetical tie-breaker, so tie ordering may differ.",
+        "Academic titles are treated as raw categories. If the question intends a hierarchical comparison of \"higher\" titles, consider normalizing titles to a rank/order to reflect seniority rather than relying on string ordering.",
+        "Some title categories have small grade_count (sample shows counts as low as 2), so means may be unreliable — consider showing sample sizes prominently or confidence intervals."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:40:26.716Z",
+    "traceId": "d09a9511bfd4e0a1044a47527d39acc5",
+    "attempts": 6,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 36689,
+      "outputTokens": 7147,
+      "totalTokens": 43836,
+      "cachedInputTokens": 5376,
+      "reasoningTokens": 4928,
+      "costUsd": 0.02346625
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 36689,
+        "outputTokens": 7147,
+        "totalTokens": 43836,
+        "cachedInputTokens": 5376,
+        "reasoningTokens": 4928,
+        "costUsd": 0.02346625
+      }
+    ],
+    "warnings": []
+  }
+}

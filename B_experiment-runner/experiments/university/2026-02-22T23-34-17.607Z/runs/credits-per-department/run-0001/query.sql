@@ -1,0 +1,1 @@
+SELECT d.id AS dept_id, d.code AS dept_code, d.name AS dept_name, COALESCE(SUM(c.credits), 0) AS total_credits FROM public.departments d LEFT JOIN public.courses c ON c.department_id = d.id GROUP BY d.id, d.code, d.name ORDER BY total_credits DESC, dept_name ASC;

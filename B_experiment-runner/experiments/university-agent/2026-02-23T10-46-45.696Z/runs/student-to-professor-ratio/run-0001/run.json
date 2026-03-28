@@ -1,0 +1,340 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "student-to-professor-ratio",
+  "caseDirectory": "student-to-professor-ratio",
+  "repeatIndex": 1,
+  "prompt": "What is the student-to-professor ratio per department?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the student-to-professor ratio per department?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:51:41.279Z",
+    "endedAtUtc": "2026-02-23T10:52:09.445Z",
+    "durationMs": 28166
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "14889",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:52:09 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the student-to-professor ratio per department?\"},\"agent\":{\"payload\":{\"question\":\"What is the student-to-professor ratio per department?\"},\"startedAt\":1771843901295,\"status\":\"success\",\"output\":{\"sql\":\"WITH student_counts AS (\\n  SELECT department_id AS department_id, COUNT(*) AS student_count\\n  FROM students\\n  GROUP BY department_id\\n),\\nprofessor_counts AS (\\n  SELECT department_id AS department_id, COUNT(*) AS professor_count\\n  FROM professors\\n  GROUP BY department_id\\n)\\nSELECT\\n  d.id AS department_id,\\n  d.name AS department_name,\\n  COALESCE(s.student_count, 0) AS student_count,\\n  COALESCE(p.professor_count, 0) AS professor_count,\\n  CASE WHEN COALESCE(p.professor_count, 0) = 0 THEN NULL\\n       ELSE CAST(COALESCE(s.student_count, 0) AS FLOAT) / p.professor_count\\n  END AS student_professor_ratio\\nFROM departments d\\nLEFT JOIN student_counts s ON d.id = s.department_id\\nLEFT JOIN professor_counts p ON d.id = p.department_id\\nORDER BY d.name;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Student-to-Professor ratio per department\",\"title\":\"Student-to-Professor Ratio per Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\",\"sort\":{\"field\":\"student_professor_ratio\",\"order\":\"descending\"}},\"x\":{\"field\":\"student_professor_ratio\",\"type\":\"quantitative\",\"title\":\"Students per Professor\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"},{\"field\":\"professor_count\",\"type\":\"quantitative\",\"title\":\"Professor Count\"},{\"field\":\"student_professor_ratio\",\"type\":\"quantitative\",\"title\":\"Students per Professor\",\"format\":\".2f\"}]}}},\"endedAt\":1771843929283},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH student_counts AS (\\n  SELECT department_id AS department_id, COUNT(*) AS student_count\\n  FROM students\\n  GROUP BY department_id\\n),\\nprofessor_counts AS (\\n  SELECT department_id AS department_id, COUNT(*) AS professor_count\\n  FROM professors\\n  GROUP BY department_id\\n)\\nSELECT\\n  d.id AS department_id,\\n  d.name AS department_name,\\n  COALESCE(s.student_count, 0) AS student_count,\\n  COALESCE(p.professor_count, 0) AS professor_count,\\n  CASE WHEN COALESCE(p.professor_count, 0) = 0 THEN NULL\\n       ELSE CAST(COALESCE(s.student_count, 0) AS FLOAT) / p.professor_count\\n  END AS student_professor_ratio\\nFROM departments d\\nLEFT JOIN student_counts s ON d.id = s.department_id\\nLEFT JOIN professor_counts p ON d.id = p.department_id\\nORDER BY d.name;\"},\"startedAt\":1771843929289,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH student_counts AS (\\n  SELECT department_id AS department_id, COUNT(*) AS student_count\\n  FROM students\\n  GROUP BY department_id\\n),\\nprofessor_counts AS (\\n  SELECT department_id AS department_id, COUNT(*) AS professor_count\\n  FROM professors\\n  GROUP BY department_id\\n)\\nSELECT\\n  d.id AS department_id,\\n  d.name AS department_name,\\n  COALESCE(s.student_count, 0) AS student_count,\\n  COALESCE(p.professor_count, 0) AS professor_count,\\n  CASE WHEN COALESCE(p.professor_count, 0) = 0 THEN NULL\\n       ELSE CAST(COALESCE(s.student_count, 0) AS FLOAT) / p.professor_count\\n  END AS student_professor_ratio\\nFROM departments d\\nLEFT JOIN student_counts s ON d.id = s.department_id\\nLEFT JOIN professor_counts p ON d.id = p.department_id\\nORDER BY d.name\",\"metadata\":{\"columns\":[\"department_id\",\"student_count\",\"department_name\",\"professor_count\",\"student_professor_ratio\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"professor_count\":9,\"student_professor_ratio\":2.3333333333333335},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"student_count\":13,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"professor_count\":7,\"student_professor_ratio\":1.8571428571428572}]},\"data\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"professor_count\":9,\"student_professor_ratio\":2.3333333333333335},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"student_count\":13,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"professor_count\":7,\"student_professor_ratio\":1.8571428571428572},{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"student_count\":20,\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"professor_count\":10,\"student_professor_ratio\":2},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"student_count\":19,\"department_name\":\"Wydział Inżynierii Produkcji\",\"professor_count\":5,\"student_professor_ratio\":3.8},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"student_count\":20,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"professor_count\":9,\"student_professor_ratio\":2.2222222222222223},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"student_count\":22,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"professor_count\":10,\"student_professor_ratio\":2.2}]},\"endedAt\":1771843929407},\"final-data\":{\"payload\":{\"ok\":true,\"sql\":\"WITH student_counts AS (\\n  SELECT department_id AS department_id, COUNT(*) AS student_count\\n  FROM students\\n  GROUP BY department_id\\n),\\nprofessor_counts AS (\\n  SELECT department_id AS department_id, COUNT(*) AS professor_count\\n  FROM professors\\n  GROUP BY department_id\\n)\\nSELECT\\n  d.id AS department_id,\\n  d.name AS department_name,\\n  COALESCE(s.student_count, 0) AS student_count,\\n  COALESCE(p.professor_count, 0) AS professor_count,\\n  CASE WHEN COALESCE(p.professor_count, 0) = 0 THEN NULL\\n       ELSE CAST(COALESCE(s.student_count, 0) AS FLOAT) / p.professor_count\\n  END AS student_professor_ratio\\nFROM departments d\\nLEFT JOIN student_counts s ON d.id = s.department_id\\nLEFT JOIN professor_counts p ON d.id = p.department_id\\nORDER BY d.name\",\"metadata\":{\"columns\":[\"department_id\",\"student_count\",\"department_name\",\"professor_count\",\"student_professor_ratio\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"professor_count\":9,\"student_professor_ratio\":2.3333333333333335},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"student_count\":13,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"professor_count\":7,\"student_professor_ratio\":1.8571428571428572}]},\"data\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"professor_count\":9,\"student_professor_ratio\":2.3333333333333335},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"student_count\":13,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"professor_count\":7,\"student_professor_ratio\":1.8571428571428572},{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"student_count\":20,\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"professor_count\":10,\"student_professor_ratio\":2},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"student_count\":19,\"department_name\":\"Wydział Inżynierii Produkcji\",\"professor_count\":5,\"student_professor_ratio\":3.8},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"student_count\":20,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"professor_count\":9,\"student_professor_ratio\":2.2222222222222223},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"student_count\":22,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"professor_count\":10,\"student_professor_ratio\":2.2}]},\"startedAt\":1771843929413,\"status\":\"success\",\"output\":{\"sql\":\"WITH student_counts AS (\\n  SELECT department_id AS department_id, COUNT(*) AS student_count\\n  FROM students\\n  GROUP BY department_id\\n),\\nprofessor_counts AS (\\n  SELECT department_id AS department_id, COUNT(*) AS professor_count\\n  FROM professors\\n  GROUP BY department_id\\n)\\nSELECT\\n  d.id AS department_id,\\n  d.name AS department_name,\\n  COALESCE(s.student_count, 0) AS student_count,\\n  COALESCE(p.professor_count, 0) AS professor_count,\\n  CASE WHEN COALESCE(p.professor_count, 0) = 0 THEN NULL\\n       ELSE CAST(COALESCE(s.student_count, 0) AS FLOAT) / p.professor_count\\n  END AS student_professor_ratio\\nFROM departments d\\nLEFT JOIN student_counts s ON d.id = s.department_id\\nLEFT JOIN professor_counts p ON d.id = p.department_id\\nORDER BY d.name;\",\"data\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"professor_count\":9,\"student_professor_ratio\":2.3333333333333335},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"student_count\":13,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"professor_count\":7,\"student_professor_ratio\":1.8571428571428572},{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"student_count\":20,\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"professor_count\":10,\"student_professor_ratio\":2},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"student_count\":19,\"department_name\":\"Wydział Inżynierii Produkcji\",\"professor_count\":5,\"student_professor_ratio\":3.8},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"student_count\":20,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"professor_count\":9,\"student_professor_ratio\":2.2222222222222223},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"student_count\":22,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"professor_count\":10,\"student_professor_ratio\":2.2}],\"metadata\":{\"columns\":[\"department_id\",\"student_count\",\"department_name\",\"professor_count\",\"student_professor_ratio\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"professor_count\":9,\"student_professor_ratio\":2.3333333333333335},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"student_count\":13,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"professor_count\":7,\"student_professor_ratio\":1.8571428571428572}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Student-to-Professor ratio per department\",\"title\":\"Student-to-Professor Ratio per Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\",\"sort\":{\"field\":\"student_professor_ratio\",\"order\":\"descending\"}},\"x\":{\"field\":\"student_professor_ratio\",\"type\":\"quantitative\",\"title\":\"Students per Professor\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"},{\"field\":\"professor_count\",\"type\":\"quantitative\",\"title\":\"Professor Count\"},{\"field\":\"student_professor_ratio\",\"type\":\"quantitative\",\"title\":\"Students per Professor\",\"format\":\".2f\"}]}},\"quality\":{\"workflow\":\"agent-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771843929418}},\"input\":{\"question\":\"What is the student-to-professor ratio per department?\"},\"result\":{\"sql\":\"WITH student_counts AS (\\n  SELECT department_id AS department_id, COUNT(*) AS student_count\\n  FROM students\\n  GROUP BY department_id\\n),\\nprofessor_counts AS (\\n  SELECT department_id AS department_id, COUNT(*) AS professor_count\\n  FROM professors\\n  GROUP BY department_id\\n)\\nSELECT\\n  d.id AS department_id,\\n  d.name AS department_name,\\n  COALESCE(s.student_count, 0) AS student_count,\\n  COALESCE(p.professor_count, 0) AS professor_count,\\n  CASE WHEN COALESCE(p.professor_count, 0) = 0 THEN NULL\\n       ELSE CAST(COALESCE(s.student_count, 0) AS FLOAT) / p.professor_count\\n  END AS student_professor_ratio\\nFROM departments d\\nLEFT JOIN student_counts s ON d.id = s.department_id\\nLEFT JOIN professor_counts p ON d.id = p.department_id\\nORDER BY d.name;\",\"data\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"professor_count\":9,\"student_professor_ratio\":2.3333333333333335},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"student_count\":13,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"professor_count\":7,\"student_professor_ratio\":1.8571428571428572},{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"student_count\":20,\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"professor_count\":10,\"student_professor_ratio\":2},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"student_count\":19,\"department_name\":\"Wydział Inżynierii Produkcji\",\"professor_count\":5,\"student_professor_ratio\":3.8},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"student_count\":20,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"professor_count\":9,\"student_professor_ratio\":2.2222222222222223},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"student_count\":22,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"professor_count\":10,\"student_professor_ratio\":2.2}],\"metadata\":{\"columns\":[\"department_id\",\"student_count\",\"department_name\",\"professor_count\",\"student_professor_ratio\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"professor_count\":9,\"student_professor_ratio\":2.3333333333333335},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"student_count\":13,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"professor_count\":7,\"student_professor_ratio\":1.8571428571428572}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Student-to-Professor ratio per department\",\"title\":\"Student-to-Professor Ratio per Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\",\"sort\":{\"field\":\"student_professor_ratio\",\"order\":\"descending\"}},\"x\":{\"field\":\"student_professor_ratio\",\"type\":\"quantitative\",\"title\":\"Students per Professor\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"},{\"field\":\"professor_count\",\"type\":\"quantitative\",\"title\":\"Professor Count\"},{\"field\":\"student_professor_ratio\",\"type\":\"quantitative\",\"title\":\"Students per Professor\",\"format\":\".2f\"}]}},\"quality\":{\"workflow\":\"agent-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"725ec5b17be1a79932fd1220f5be04f3\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/student-to-professor-ratio/run-0001/run.json",
+    "queryPath": "runs/student-to-professor-ratio/run-0001/query.sql",
+    "vegaRawPath": "runs/student-to-professor-ratio/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/student-to-professor-ratio/run-0001/vega.resolved.json",
+    "imagePath": "runs/student-to-professor-ratio/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:52:09.821Z",
+  "traceId": "725ec5b17be1a79932fd1220f5be04f3",
+  "success": true,
+  "durationMs": 28542,
+  "resultRaw": {
+    "data": [
+      {
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "student_count": 21,
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "professor_count": 9,
+        "student_professor_ratio": 2.3333333333333335
+      },
+      {
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "student_count": 13,
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "professor_count": 7,
+        "student_professor_ratio": 1.8571428571428572
+      },
+      {
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "student_count": 20,
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "professor_count": 10,
+        "student_professor_ratio": 2
+      },
+      {
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "student_count": 19,
+        "department_name": "Wydział Inżynierii Produkcji",
+        "professor_count": 5,
+        "student_professor_ratio": 3.8
+      },
+      {
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "student_count": 20,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "professor_count": 9,
+        "student_professor_ratio": 2.2222222222222223
+      },
+      {
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "student_count": 22,
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "professor_count": 10,
+        "student_professor_ratio": 2.2
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "description": "Student-to-Professor ratio per department",
+      "title": "Student-to-Professor Ratio per Department",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "department_name",
+          "type": "nominal",
+          "title": "Department",
+          "sort": {
+            "field": "student_professor_ratio",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "student_professor_ratio",
+          "type": "quantitative",
+          "title": "Students per Professor"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Student Count"
+          },
+          {
+            "field": "professor_count",
+            "type": "quantitative",
+            "title": "Professor Count"
+          },
+          {
+            "field": "student_professor_ratio",
+            "type": "quantitative",
+            "title": "Students per Professor",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    "sql": "WITH student_counts AS (\n  SELECT department_id AS department_id, COUNT(*) AS student_count\n  FROM students\n  GROUP BY department_id\n),\nprofessor_counts AS (\n  SELECT department_id AS department_id, COUNT(*) AS professor_count\n  FROM professors\n  GROUP BY department_id\n)\nSELECT\n  d.id AS department_id,\n  d.name AS department_name,\n  COALESCE(s.student_count, 0) AS student_count,\n  COALESCE(p.professor_count, 0) AS professor_count,\n  CASE WHEN COALESCE(p.professor_count, 0) = 0 THEN NULL\n       ELSE CAST(COALESCE(s.student_count, 0) AS FLOAT) / p.professor_count\n  END AS student_professor_ratio\nFROM departments d\nLEFT JOIN student_counts s ON d.id = s.department_id\nLEFT JOIN professor_counts p ON d.id = p.department_id\nORDER BY d.name;",
+    "metadata": {
+      "columns": [
+        "department_id",
+        "student_count",
+        "department_name",
+        "professor_count",
+        "student_professor_ratio"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "student_count": 21,
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "professor_count": 9,
+          "student_professor_ratio": 2.3333333333333335
+        },
+        {
+          "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+          "student_count": 13,
+          "department_name": "Wydział Informatyki i Nauki o Materiałach",
+          "professor_count": 7,
+          "student_professor_ratio": 1.8571428571428572
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "agent-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "student_count": 21,
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "professor_count": 9,
+        "student_professor_ratio": 2.3333333333333335
+      },
+      {
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "student_count": 13,
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "professor_count": 7,
+        "student_professor_ratio": 1.8571428571428572
+      },
+      {
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "student_count": 20,
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "professor_count": 10,
+        "student_professor_ratio": 2
+      },
+      {
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "student_count": 19,
+        "department_name": "Wydział Inżynierii Produkcji",
+        "professor_count": 5,
+        "student_professor_ratio": 3.8
+      },
+      {
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "student_count": 20,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "professor_count": 9,
+        "student_professor_ratio": 2.2222222222222223
+      },
+      {
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "student_count": 22,
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "professor_count": 10,
+        "student_professor_ratio": 2.2
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "description": "Student-to-Professor ratio per department",
+      "title": "Student-to-Professor Ratio per Department",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "department_name",
+          "type": "nominal",
+          "title": "Department",
+          "sort": {
+            "field": "student_professor_ratio",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "student_professor_ratio",
+          "type": "quantitative",
+          "title": "Students per Professor"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Student Count"
+          },
+          {
+            "field": "professor_count",
+            "type": "quantitative",
+            "title": "Professor Count"
+          },
+          {
+            "field": "student_professor_ratio",
+            "type": "quantitative",
+            "title": "Students per Professor",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    "sql": "WITH student_counts AS (\n  SELECT department_id AS department_id, COUNT(*) AS student_count\n  FROM students\n  GROUP BY department_id\n),\nprofessor_counts AS (\n  SELECT department_id AS department_id, COUNT(*) AS professor_count\n  FROM professors\n  GROUP BY department_id\n)\nSELECT\n  d.id AS department_id,\n  d.name AS department_name,\n  COALESCE(s.student_count, 0) AS student_count,\n  COALESCE(p.professor_count, 0) AS professor_count,\n  CASE WHEN COALESCE(p.professor_count, 0) = 0 THEN NULL\n       ELSE CAST(COALESCE(s.student_count, 0) AS FLOAT) / p.professor_count\n  END AS student_professor_ratio\nFROM departments d\nLEFT JOIN student_counts s ON d.id = s.department_id\nLEFT JOIN professor_counts p ON d.id = p.department_id\nORDER BY d.name;",
+    "metadata": {
+      "columns": [
+        "department_id",
+        "student_count",
+        "department_name",
+        "professor_count",
+        "student_professor_ratio"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "student_count": 21,
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "professor_count": 9,
+          "student_professor_ratio": 2.3333333333333335
+        },
+        {
+          "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+          "student_count": 13,
+          "department_name": "Wydział Informatyki i Nauki o Materiałach",
+          "professor_count": 7,
+          "student_professor_ratio": 1.8571428571428572
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "agent-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:52:09.821Z",
+    "traceId": "725ec5b17be1a79932fd1220f5be04f3",
+    "attempts": 2,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 267,
+      "outputTokens": 1560,
+      "totalTokens": 1827,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1024,
+      "costUsd": 0.00318675
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 267,
+        "outputTokens": 1560,
+        "totalTokens": 1827,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1024,
+        "costUsd": 0.00318675
+      }
+    ],
+    "warnings": []
+  }
+}

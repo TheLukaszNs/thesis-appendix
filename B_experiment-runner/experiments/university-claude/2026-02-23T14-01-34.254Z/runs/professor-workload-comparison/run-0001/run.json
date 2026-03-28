@@ -1,0 +1,856 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "professor-workload-comparison",
+  "caseDirectory": "professor-workload-comparison",
+  "repeatIndex": 1,
+  "prompt": "Compare the number of distinct courses taught by each professor",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Compare the number of distinct courses taught by each professor"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:13:38.557Z",
+    "endedAtUtc": "2026-02-23T14:14:10.868Z",
+    "durationMs": 32311
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "35190",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:14:10 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Compare the number of distinct courses taught by each professor\"},\"sql\":{\"payload\":{\"question\":\"Compare the number of distinct courses taught by each professor\"},\"startedAt\":1771856018571,\"status\":\"success\",\"output\":{\"reasoning\":\"The question asks to compare the number of distinct courses taught by each professor. I need to join the professors table with course_sections (which links professors to courses) and count distinct courses per professor. The schema shows: professors (id, first_name, last_name), course_sections (professor_id, course_id), and courses (id, code, name). I'll group by professor and count distinct course_ids, ordering by count descending for easy comparison.\",\"sql\":\"\\nSELECT \\n  p.id AS professor_id,\\n  p.first_name,\\n  p.last_name,\\n  COUNT(DISTINCT cs.course_id) AS distinct_courses_taught\\nFROM professors p\\nLEFT JOIN course_sections cs ON p.id = cs.professor_id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY distinct_courses_taught DESC, p.last_name ASC, p.first_name ASC\\n\",\"assumptions\":[\"Professors with no course sections will appear with 0 distinct courses taught\",\"A distinct course is counted once per professor regardless of how many sections they teach\",\"Results are ordered by number of courses (descending) for easy comparison\"]},\"endedAt\":1771856047573},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  p.id AS professor_id,\\n  p.first_name,\\n  p.last_name,\\n  COUNT(DISTINCT cs.course_id) AS distinct_courses_taught\\nFROM professors p\\nLEFT JOIN course_sections cs ON p.id = cs.professor_id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY distinct_courses_taught DESC, p.last_name ASC, p.first_name ASC\\n\"},\"startedAt\":1771856047576,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  p.id AS professor_id,\\n  p.first_name,\\n  p.last_name,\\n  COUNT(DISTINCT cs.course_id) AS distinct_courses_taught\\nFROM professors p\\nLEFT JOIN course_sections cs ON p.id = cs.professor_id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY distinct_courses_taught DESC, p.last_name ASC, p.first_name ASC\",\"metadata\":{\"columns\":[\"professor_id\",\"first_name\",\"last_name\",\"distinct_courses_taught\"],\"rowCount\":50,\"sample\":[{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"first_name\":\"Jacek\",\"last_name\":\"Wojciechowski\",\"distinct_courses_taught\":\"3\"},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"first_name\":\"Ryszard\",\"last_name\":\"Kowalczyk\",\"distinct_courses_taught\":\"2\"}]},\"data\":[{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"first_name\":\"Jacek\",\"last_name\":\"Wojciechowski\",\"distinct_courses_taught\":\"3\"},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"first_name\":\"Ryszard\",\"last_name\":\"Kowalczyk\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"first_name\":\"Agnieszka\",\"last_name\":\"Krawczyk\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"first_name\":\"Marek\",\"last_name\":\"Lewandowski\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"first_name\":\"Tomasz\",\"last_name\":\"Majewski\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"first_name\":\"Adam\",\"last_name\":\"Wieczorek\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"first_name\":\"Ryszard\",\"last_name\":\"Woźniak\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"first_name\":\"Teresa\",\"last_name\":\"Woźniak\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"first_name\":\"Grzegorz\",\"last_name\":\"Jankowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"first_name\":\"Robert\",\"last_name\":\"Jaworski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"first_name\":\"Agnieszka\",\"last_name\":\"Kozłowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"first_name\":\"Katarzyna\",\"last_name\":\"Kozłowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"first_name\":\"Ewa\",\"last_name\":\"Krawczyk\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"first_name\":\"Zbigniew\",\"last_name\":\"Majewski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"first_name\":\"Ewa\",\"last_name\":\"Michalski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"first_name\":\"Magdalena\",\"last_name\":\"Michalski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"first_name\":\"Michał\",\"last_name\":\"Nowak\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"first_name\":\"Mariusz\",\"last_name\":\"Nowakowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"first_name\":\"Małgorzata\",\"last_name\":\"Olszewski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"first_name\":\"Teresa\",\"last_name\":\"Pawłowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"first_name\":\"Magdalena\",\"last_name\":\"Piotrowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"first_name\":\"Joanna\",\"last_name\":\"Stępień\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"first_name\":\"Katarzyna\",\"last_name\":\"Szymański\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"first_name\":\"Tomasz\",\"last_name\":\"Wieczorek\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"first_name\":\"Marek\",\"last_name\":\"Woźniak\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"0d79d103-ec28-4ebf-831c-98b3fb34e9b0\",\"first_name\":\"Zbigniew\",\"last_name\":\"Górski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"8247a0e4-17f5-4581-a78b-f33a1a2a518b\",\"first_name\":\"Paweł\",\"last_name\":\"Jankowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8\",\"first_name\":\"Michał\",\"last_name\":\"Jaworski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"cd0c2f92-7721-4952-96be-08e390bdeee5\",\"first_name\":\"Ryszard\",\"last_name\":\"Kowalski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"6fbff454-aa38-4740-9c1e-dcaf245581f7\",\"first_name\":\"Andrzej\",\"last_name\":\"Kozłowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"88077860-09c6-401b-961d-48f7a7616705\",\"first_name\":\"Teresa\",\"last_name\":\"Kozłowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"1ef09db2-d2f5-46a4-8805-75af1dc6f856\",\"first_name\":\"Tomasz\",\"last_name\":\"Kozłowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"be6b85ea-af27-41f9-9346-32e567c2b4bc\",\"first_name\":\"Jan\",\"last_name\":\"Krawczyk\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"42b2aaed-9cc2-452d-bd55-ce9c8f222b3d\",\"first_name\":\"Mariusz\",\"last_name\":\"Król\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"b2f3236b-6aea-4ddf-9e72-ca1b944344db\",\"first_name\":\"Jerzy\",\"last_name\":\"Kwiatkowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464\",\"first_name\":\"Piotr\",\"last_name\":\"Lewandowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"bdacd65d-0634-47e8-894e-728fc9221207\",\"first_name\":\"Jerzy\",\"last_name\":\"Mazur\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"b3caef8a-8a8a-49c7-ae98-0fa38441139a\",\"first_name\":\"Dariusz\",\"last_name\":\"Nowak\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef\",\"first_name\":\"Jerzy\",\"last_name\":\"Nowak\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"69dc12ae-95ba-499f-9d04-5eefc2f2d4bf\",\"first_name\":\"Mariusz\",\"last_name\":\"Nowak\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"8711908f-0ab8-4de0-8b45-c2a294d2de1c\",\"first_name\":\"Stanisław\",\"last_name\":\"Nowakowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"b84e485c-28ea-42b7-a13e-a02578274226\",\"first_name\":\"Jan\",\"last_name\":\"Olszewski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"ad35d15d-f7ad-416c-ade2-89853d0729c9\",\"first_name\":\"Paweł\",\"last_name\":\"Piotrowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"9c934df1-9a06-49a7-96f4-351a647012ba\",\"first_name\":\"Stanisław\",\"last_name\":\"Stępień\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"8e54b65b-4864-47d8-b9b3-9b727991a6d2\",\"first_name\":\"Magdalena\",\"last_name\":\"Szymański\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"089c913f-8ec7-4162-9a7a-a67e41b3b935\",\"first_name\":\"Ryszard\",\"last_name\":\"Szymański\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"2adc085d-5924-47a1-9bf3-43472e564355\",\"first_name\":\"Jacek\",\"last_name\":\"Wieczorek\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"bdb7d368-ed33-4dd8-99e9-aedea2c36f60\",\"first_name\":\"Stanisław\",\"last_name\":\"Wójcik\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"2dd66040-0bde-416d-b2dc-9faa4ef4cd44\",\"first_name\":\"Adam\",\"last_name\":\"Woźniak\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"7732eb5b-ba0d-4e3f-9b39-205a0771c02a\",\"first_name\":\"Grzegorz\",\"last_name\":\"Zieliński\",\"distinct_courses_taught\":\"0\"}]},\"endedAt\":1771856047601},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  p.id AS professor_id,\\n  p.first_name,\\n  p.last_name,\\n  COUNT(DISTINCT cs.course_id) AS distinct_courses_taught\\nFROM professors p\\nLEFT JOIN course_sections cs ON p.id = cs.professor_id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY distinct_courses_taught DESC, p.last_name ASC, p.first_name ASC\",\"metadata\":{\"columns\":[\"professor_id\",\"first_name\",\"last_name\",\"distinct_courses_taught\"],\"rowCount\":50,\"sample\":[{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"first_name\":\"Jacek\",\"last_name\":\"Wojciechowski\",\"distinct_courses_taught\":\"3\"},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"first_name\":\"Ryszard\",\"last_name\":\"Kowalczyk\",\"distinct_courses_taught\":\"2\"}]},\"data\":[{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"first_name\":\"Jacek\",\"last_name\":\"Wojciechowski\",\"distinct_courses_taught\":\"3\"},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"first_name\":\"Ryszard\",\"last_name\":\"Kowalczyk\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"first_name\":\"Agnieszka\",\"last_name\":\"Krawczyk\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"first_name\":\"Marek\",\"last_name\":\"Lewandowski\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"first_name\":\"Tomasz\",\"last_name\":\"Majewski\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"first_name\":\"Adam\",\"last_name\":\"Wieczorek\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"first_name\":\"Ryszard\",\"last_name\":\"Woźniak\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"first_name\":\"Teresa\",\"last_name\":\"Woźniak\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"first_name\":\"Grzegorz\",\"last_name\":\"Jankowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"first_name\":\"Robert\",\"last_name\":\"Jaworski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"first_name\":\"Agnieszka\",\"last_name\":\"Kozłowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"first_name\":\"Katarzyna\",\"last_name\":\"Kozłowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"first_name\":\"Ewa\",\"last_name\":\"Krawczyk\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"first_name\":\"Zbigniew\",\"last_name\":\"Majewski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"first_name\":\"Ewa\",\"last_name\":\"Michalski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"first_name\":\"Magdalena\",\"last_name\":\"Michalski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"first_name\":\"Michał\",\"last_name\":\"Nowak\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"first_name\":\"Mariusz\",\"last_name\":\"Nowakowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"first_name\":\"Małgorzata\",\"last_name\":\"Olszewski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"first_name\":\"Teresa\",\"last_name\":\"Pawłowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"first_name\":\"Magdalena\",\"last_name\":\"Piotrowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"first_name\":\"Joanna\",\"last_name\":\"Stępień\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"first_name\":\"Katarzyna\",\"last_name\":\"Szymański\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"first_name\":\"Tomasz\",\"last_name\":\"Wieczorek\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"first_name\":\"Marek\",\"last_name\":\"Woźniak\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"0d79d103-ec28-4ebf-831c-98b3fb34e9b0\",\"first_name\":\"Zbigniew\",\"last_name\":\"Górski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"8247a0e4-17f5-4581-a78b-f33a1a2a518b\",\"first_name\":\"Paweł\",\"last_name\":\"Jankowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8\",\"first_name\":\"Michał\",\"last_name\":\"Jaworski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"cd0c2f92-7721-4952-96be-08e390bdeee5\",\"first_name\":\"Ryszard\",\"last_name\":\"Kowalski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"6fbff454-aa38-4740-9c1e-dcaf245581f7\",\"first_name\":\"Andrzej\",\"last_name\":\"Kozłowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"88077860-09c6-401b-961d-48f7a7616705\",\"first_name\":\"Teresa\",\"last_name\":\"Kozłowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"1ef09db2-d2f5-46a4-8805-75af1dc6f856\",\"first_name\":\"Tomasz\",\"last_name\":\"Kozłowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"be6b85ea-af27-41f9-9346-32e567c2b4bc\",\"first_name\":\"Jan\",\"last_name\":\"Krawczyk\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"42b2aaed-9cc2-452d-bd55-ce9c8f222b3d\",\"first_name\":\"Mariusz\",\"last_name\":\"Król\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"b2f3236b-6aea-4ddf-9e72-ca1b944344db\",\"first_name\":\"Jerzy\",\"last_name\":\"Kwiatkowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464\",\"first_name\":\"Piotr\",\"last_name\":\"Lewandowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"bdacd65d-0634-47e8-894e-728fc9221207\",\"first_name\":\"Jerzy\",\"last_name\":\"Mazur\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"b3caef8a-8a8a-49c7-ae98-0fa38441139a\",\"first_name\":\"Dariusz\",\"last_name\":\"Nowak\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef\",\"first_name\":\"Jerzy\",\"last_name\":\"Nowak\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"69dc12ae-95ba-499f-9d04-5eefc2f2d4bf\",\"first_name\":\"Mariusz\",\"last_name\":\"Nowak\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"8711908f-0ab8-4de0-8b45-c2a294d2de1c\",\"first_name\":\"Stanisław\",\"last_name\":\"Nowakowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"b84e485c-28ea-42b7-a13e-a02578274226\",\"first_name\":\"Jan\",\"last_name\":\"Olszewski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"ad35d15d-f7ad-416c-ade2-89853d0729c9\",\"first_name\":\"Paweł\",\"last_name\":\"Piotrowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"9c934df1-9a06-49a7-96f4-351a647012ba\",\"first_name\":\"Stanisław\",\"last_name\":\"Stępień\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"8e54b65b-4864-47d8-b9b3-9b727991a6d2\",\"first_name\":\"Magdalena\",\"last_name\":\"Szymański\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"089c913f-8ec7-4162-9a7a-a67e41b3b935\",\"first_name\":\"Ryszard\",\"last_name\":\"Szymański\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"2adc085d-5924-47a1-9bf3-43472e564355\",\"first_name\":\"Jacek\",\"last_name\":\"Wieczorek\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"bdb7d368-ed33-4dd8-99e9-aedea2c36f60\",\"first_name\":\"Stanisław\",\"last_name\":\"Wójcik\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"2dd66040-0bde-416d-b2dc-9faa4ef4cd44\",\"first_name\":\"Adam\",\"last_name\":\"Woźniak\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"7732eb5b-ba0d-4e3f-9b39-205a0771c02a\",\"first_name\":\"Grzegorz\",\"last_name\":\"Zieliński\",\"distinct_courses_taught\":\"0\"}]},\"startedAt\":1771856047613,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Number of Distinct Courses Taught by Each Professor\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"first_name\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Professor Name\",\"axis\":{\"labelExpr\":\"datum.value + ' ' + data('query_result')[indexof(data('query_result'), datum)].last_name\"}},\"x\":{\"field\":\"distinct_courses_taught\",\"type\":\"quantitative\",\"title\":\"Number of Distinct Courses\"},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First Name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last Name\"},{\"field\":\"distinct_courses_taught\",\"type\":\"quantitative\",\"title\":\"Distinct Courses Taught\"}],\"color\":{\"field\":\"distinct_courses_taught\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Number of Courses\"}},\"width\":600,\"height\":800}},\"endedAt\":1771856050805},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Number of Distinct Courses Taught by Each Professor\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"first_name\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Professor Name\",\"axis\":{\"labelExpr\":\"datum.value + ' ' + data('query_result')[indexof(data('query_result'), datum)].last_name\"}},\"x\":{\"field\":\"distinct_courses_taught\",\"type\":\"quantitative\",\"title\":\"Number of Distinct Courses\"},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First Name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last Name\"},{\"field\":\"distinct_courses_taught\",\"type\":\"quantitative\",\"title\":\"Distinct Courses Taught\"}],\"color\":{\"field\":\"distinct_courses_taught\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Number of Courses\"}},\"width\":600,\"height\":800}},\"startedAt\":1771856050827,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT \\n  p.id AS professor_id,\\n  p.first_name,\\n  p.last_name,\\n  COUNT(DISTINCT cs.course_id) AS distinct_courses_taught\\nFROM professors p\\nLEFT JOIN course_sections cs ON p.id = cs.professor_id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY distinct_courses_taught DESC, p.last_name ASC, p.first_name ASC\\n\",\"data\":[{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"first_name\":\"Jacek\",\"last_name\":\"Wojciechowski\",\"distinct_courses_taught\":\"3\"},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"first_name\":\"Ryszard\",\"last_name\":\"Kowalczyk\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"first_name\":\"Agnieszka\",\"last_name\":\"Krawczyk\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"first_name\":\"Marek\",\"last_name\":\"Lewandowski\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"first_name\":\"Tomasz\",\"last_name\":\"Majewski\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"first_name\":\"Adam\",\"last_name\":\"Wieczorek\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"first_name\":\"Ryszard\",\"last_name\":\"Woźniak\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"first_name\":\"Teresa\",\"last_name\":\"Woźniak\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"first_name\":\"Grzegorz\",\"last_name\":\"Jankowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"first_name\":\"Robert\",\"last_name\":\"Jaworski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"first_name\":\"Agnieszka\",\"last_name\":\"Kozłowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"first_name\":\"Katarzyna\",\"last_name\":\"Kozłowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"first_name\":\"Ewa\",\"last_name\":\"Krawczyk\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"first_name\":\"Zbigniew\",\"last_name\":\"Majewski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"first_name\":\"Ewa\",\"last_name\":\"Michalski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"first_name\":\"Magdalena\",\"last_name\":\"Michalski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"first_name\":\"Michał\",\"last_name\":\"Nowak\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"first_name\":\"Mariusz\",\"last_name\":\"Nowakowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"first_name\":\"Małgorzata\",\"last_name\":\"Olszewski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"first_name\":\"Teresa\",\"last_name\":\"Pawłowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"first_name\":\"Magdalena\",\"last_name\":\"Piotrowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"first_name\":\"Joanna\",\"last_name\":\"Stępień\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"first_name\":\"Katarzyna\",\"last_name\":\"Szymański\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"first_name\":\"Tomasz\",\"last_name\":\"Wieczorek\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"first_name\":\"Marek\",\"last_name\":\"Woźniak\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"0d79d103-ec28-4ebf-831c-98b3fb34e9b0\",\"first_name\":\"Zbigniew\",\"last_name\":\"Górski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"8247a0e4-17f5-4581-a78b-f33a1a2a518b\",\"first_name\":\"Paweł\",\"last_name\":\"Jankowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8\",\"first_name\":\"Michał\",\"last_name\":\"Jaworski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"cd0c2f92-7721-4952-96be-08e390bdeee5\",\"first_name\":\"Ryszard\",\"last_name\":\"Kowalski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"6fbff454-aa38-4740-9c1e-dcaf245581f7\",\"first_name\":\"Andrzej\",\"last_name\":\"Kozłowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"88077860-09c6-401b-961d-48f7a7616705\",\"first_name\":\"Teresa\",\"last_name\":\"Kozłowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"1ef09db2-d2f5-46a4-8805-75af1dc6f856\",\"first_name\":\"Tomasz\",\"last_name\":\"Kozłowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"be6b85ea-af27-41f9-9346-32e567c2b4bc\",\"first_name\":\"Jan\",\"last_name\":\"Krawczyk\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"42b2aaed-9cc2-452d-bd55-ce9c8f222b3d\",\"first_name\":\"Mariusz\",\"last_name\":\"Król\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"b2f3236b-6aea-4ddf-9e72-ca1b944344db\",\"first_name\":\"Jerzy\",\"last_name\":\"Kwiatkowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464\",\"first_name\":\"Piotr\",\"last_name\":\"Lewandowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"bdacd65d-0634-47e8-894e-728fc9221207\",\"first_name\":\"Jerzy\",\"last_name\":\"Mazur\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"b3caef8a-8a8a-49c7-ae98-0fa38441139a\",\"first_name\":\"Dariusz\",\"last_name\":\"Nowak\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef\",\"first_name\":\"Jerzy\",\"last_name\":\"Nowak\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"69dc12ae-95ba-499f-9d04-5eefc2f2d4bf\",\"first_name\":\"Mariusz\",\"last_name\":\"Nowak\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"8711908f-0ab8-4de0-8b45-c2a294d2de1c\",\"first_name\":\"Stanisław\",\"last_name\":\"Nowakowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"b84e485c-28ea-42b7-a13e-a02578274226\",\"first_name\":\"Jan\",\"last_name\":\"Olszewski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"ad35d15d-f7ad-416c-ade2-89853d0729c9\",\"first_name\":\"Paweł\",\"last_name\":\"Piotrowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"9c934df1-9a06-49a7-96f4-351a647012ba\",\"first_name\":\"Stanisław\",\"last_name\":\"Stępień\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"8e54b65b-4864-47d8-b9b3-9b727991a6d2\",\"first_name\":\"Magdalena\",\"last_name\":\"Szymański\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"089c913f-8ec7-4162-9a7a-a67e41b3b935\",\"first_name\":\"Ryszard\",\"last_name\":\"Szymański\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"2adc085d-5924-47a1-9bf3-43472e564355\",\"first_name\":\"Jacek\",\"last_name\":\"Wieczorek\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"bdb7d368-ed33-4dd8-99e9-aedea2c36f60\",\"first_name\":\"Stanisław\",\"last_name\":\"Wójcik\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"2dd66040-0bde-416d-b2dc-9faa4ef4cd44\",\"first_name\":\"Adam\",\"last_name\":\"Woźniak\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"7732eb5b-ba0d-4e3f-9b39-205a0771c02a\",\"first_name\":\"Grzegorz\",\"last_name\":\"Zieliński\",\"distinct_courses_taught\":\"0\"}],\"metadata\":{\"columns\":[\"professor_id\",\"first_name\",\"last_name\",\"distinct_courses_taught\"],\"rowCount\":50,\"sample\":[{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"first_name\":\"Jacek\",\"last_name\":\"Wojciechowski\",\"distinct_courses_taught\":\"3\"},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"first_name\":\"Ryszard\",\"last_name\":\"Kowalczyk\",\"distinct_courses_taught\":\"2\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Number of Distinct Courses Taught by Each Professor\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"first_name\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Professor Name\",\"axis\":{\"labelExpr\":\"datum.value + ' ' + data('query_result')[indexof(data('query_result'), datum)].last_name\"}},\"x\":{\"field\":\"distinct_courses_taught\",\"type\":\"quantitative\",\"title\":\"Number of Distinct Courses\"},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First Name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last Name\"},{\"field\":\"distinct_courses_taught\",\"type\":\"quantitative\",\"title\":\"Distinct Courses Taught\"}],\"color\":{\"field\":\"distinct_courses_taught\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Number of Courses\"}},\"width\":600,\"height\":800},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771856050839}},\"input\":{\"question\":\"Compare the number of distinct courses taught by each professor\"},\"result\":{\"sql\":\"\\nSELECT \\n  p.id AS professor_id,\\n  p.first_name,\\n  p.last_name,\\n  COUNT(DISTINCT cs.course_id) AS distinct_courses_taught\\nFROM professors p\\nLEFT JOIN course_sections cs ON p.id = cs.professor_id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY distinct_courses_taught DESC, p.last_name ASC, p.first_name ASC\\n\",\"data\":[{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"first_name\":\"Jacek\",\"last_name\":\"Wojciechowski\",\"distinct_courses_taught\":\"3\"},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"first_name\":\"Ryszard\",\"last_name\":\"Kowalczyk\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"first_name\":\"Agnieszka\",\"last_name\":\"Krawczyk\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"first_name\":\"Marek\",\"last_name\":\"Lewandowski\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"first_name\":\"Tomasz\",\"last_name\":\"Majewski\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"first_name\":\"Adam\",\"last_name\":\"Wieczorek\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"first_name\":\"Ryszard\",\"last_name\":\"Woźniak\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"first_name\":\"Teresa\",\"last_name\":\"Woźniak\",\"distinct_courses_taught\":\"2\"},{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"first_name\":\"Grzegorz\",\"last_name\":\"Jankowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"first_name\":\"Robert\",\"last_name\":\"Jaworski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"first_name\":\"Agnieszka\",\"last_name\":\"Kozłowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"first_name\":\"Katarzyna\",\"last_name\":\"Kozłowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"first_name\":\"Ewa\",\"last_name\":\"Krawczyk\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"first_name\":\"Zbigniew\",\"last_name\":\"Majewski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"first_name\":\"Ewa\",\"last_name\":\"Michalski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"first_name\":\"Magdalena\",\"last_name\":\"Michalski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"first_name\":\"Michał\",\"last_name\":\"Nowak\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"first_name\":\"Mariusz\",\"last_name\":\"Nowakowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"first_name\":\"Małgorzata\",\"last_name\":\"Olszewski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"first_name\":\"Teresa\",\"last_name\":\"Pawłowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"first_name\":\"Magdalena\",\"last_name\":\"Piotrowski\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"first_name\":\"Joanna\",\"last_name\":\"Stępień\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"first_name\":\"Katarzyna\",\"last_name\":\"Szymański\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"first_name\":\"Tomasz\",\"last_name\":\"Wieczorek\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"first_name\":\"Marek\",\"last_name\":\"Woźniak\",\"distinct_courses_taught\":\"1\"},{\"professor_id\":\"0d79d103-ec28-4ebf-831c-98b3fb34e9b0\",\"first_name\":\"Zbigniew\",\"last_name\":\"Górski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"8247a0e4-17f5-4581-a78b-f33a1a2a518b\",\"first_name\":\"Paweł\",\"last_name\":\"Jankowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8\",\"first_name\":\"Michał\",\"last_name\":\"Jaworski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"cd0c2f92-7721-4952-96be-08e390bdeee5\",\"first_name\":\"Ryszard\",\"last_name\":\"Kowalski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"6fbff454-aa38-4740-9c1e-dcaf245581f7\",\"first_name\":\"Andrzej\",\"last_name\":\"Kozłowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"88077860-09c6-401b-961d-48f7a7616705\",\"first_name\":\"Teresa\",\"last_name\":\"Kozłowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"1ef09db2-d2f5-46a4-8805-75af1dc6f856\",\"first_name\":\"Tomasz\",\"last_name\":\"Kozłowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"be6b85ea-af27-41f9-9346-32e567c2b4bc\",\"first_name\":\"Jan\",\"last_name\":\"Krawczyk\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"42b2aaed-9cc2-452d-bd55-ce9c8f222b3d\",\"first_name\":\"Mariusz\",\"last_name\":\"Król\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"b2f3236b-6aea-4ddf-9e72-ca1b944344db\",\"first_name\":\"Jerzy\",\"last_name\":\"Kwiatkowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464\",\"first_name\":\"Piotr\",\"last_name\":\"Lewandowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"bdacd65d-0634-47e8-894e-728fc9221207\",\"first_name\":\"Jerzy\",\"last_name\":\"Mazur\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"b3caef8a-8a8a-49c7-ae98-0fa38441139a\",\"first_name\":\"Dariusz\",\"last_name\":\"Nowak\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef\",\"first_name\":\"Jerzy\",\"last_name\":\"Nowak\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"69dc12ae-95ba-499f-9d04-5eefc2f2d4bf\",\"first_name\":\"Mariusz\",\"last_name\":\"Nowak\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"8711908f-0ab8-4de0-8b45-c2a294d2de1c\",\"first_name\":\"Stanisław\",\"last_name\":\"Nowakowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"b84e485c-28ea-42b7-a13e-a02578274226\",\"first_name\":\"Jan\",\"last_name\":\"Olszewski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"ad35d15d-f7ad-416c-ade2-89853d0729c9\",\"first_name\":\"Paweł\",\"last_name\":\"Piotrowski\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"9c934df1-9a06-49a7-96f4-351a647012ba\",\"first_name\":\"Stanisław\",\"last_name\":\"Stępień\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"8e54b65b-4864-47d8-b9b3-9b727991a6d2\",\"first_name\":\"Magdalena\",\"last_name\":\"Szymański\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"089c913f-8ec7-4162-9a7a-a67e41b3b935\",\"first_name\":\"Ryszard\",\"last_name\":\"Szymański\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"2adc085d-5924-47a1-9bf3-43472e564355\",\"first_name\":\"Jacek\",\"last_name\":\"Wieczorek\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"bdb7d368-ed33-4dd8-99e9-aedea2c36f60\",\"first_name\":\"Stanisław\",\"last_name\":\"Wójcik\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"2dd66040-0bde-416d-b2dc-9faa4ef4cd44\",\"first_name\":\"Adam\",\"last_name\":\"Woźniak\",\"distinct_courses_taught\":\"0\"},{\"professor_id\":\"7732eb5b-ba0d-4e3f-9b39-205a0771c02a\",\"first_name\":\"Grzegorz\",\"last_name\":\"Zieliński\",\"distinct_courses_taught\":\"0\"}],\"metadata\":{\"columns\":[\"professor_id\",\"first_name\",\"last_name\",\"distinct_courses_taught\"],\"rowCount\":50,\"sample\":[{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"first_name\":\"Jacek\",\"last_name\":\"Wojciechowski\",\"distinct_courses_taught\":\"3\"},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"first_name\":\"Ryszard\",\"last_name\":\"Kowalczyk\",\"distinct_courses_taught\":\"2\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Number of Distinct Courses Taught by Each Professor\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"first_name\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Professor Name\",\"axis\":{\"labelExpr\":\"datum.value + ' ' + data('query_result')[indexof(data('query_result'), datum)].last_name\"}},\"x\":{\"field\":\"distinct_courses_taught\",\"type\":\"quantitative\",\"title\":\"Number of Distinct Courses\"},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First Name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last Name\"},{\"field\":\"distinct_courses_taught\",\"type\":\"quantitative\",\"title\":\"Distinct Courses Taught\"}],\"color\":{\"field\":\"distinct_courses_taught\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Number of Courses\"}},\"width\":600,\"height\":800},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"b30cad75490f276a70f8caa431302cd7\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/professor-workload-comparison/run-0001/run.json",
+    "queryPath": "runs/professor-workload-comparison/run-0001/query.sql",
+    "vegaRawPath": "runs/professor-workload-comparison/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/professor-workload-comparison/run-0001/vega.resolved.json",
+    "imagePath": "runs/professor-workload-comparison/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:14:11.248Z",
+  "traceId": "b30cad75490f276a70f8caa431302cd7",
+  "success": true,
+  "durationMs": 32691,
+  "resultRaw": {
+    "data": [
+      {
+        "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+        "first_name": "Jacek",
+        "last_name": "Wojciechowski",
+        "distinct_courses_taught": "3"
+      },
+      {
+        "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+        "first_name": "Ryszard",
+        "last_name": "Kowalczyk",
+        "distinct_courses_taught": "2"
+      },
+      {
+        "professor_id": "ff61fe12-d98c-4d43-87db-710f2571c1f2",
+        "first_name": "Agnieszka",
+        "last_name": "Krawczyk",
+        "distinct_courses_taught": "2"
+      },
+      {
+        "professor_id": "037011f2-f3d4-406e-9554-a6ffba701e06",
+        "first_name": "Marek",
+        "last_name": "Lewandowski",
+        "distinct_courses_taught": "2"
+      },
+      {
+        "professor_id": "f221aafd-0e9c-4345-aff5-7e290e1a7864",
+        "first_name": "Tomasz",
+        "last_name": "Majewski",
+        "distinct_courses_taught": "2"
+      },
+      {
+        "professor_id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+        "first_name": "Adam",
+        "last_name": "Wieczorek",
+        "distinct_courses_taught": "2"
+      },
+      {
+        "professor_id": "5d70abe8-4f1a-44ec-9816-2ec96a2807cb",
+        "first_name": "Ryszard",
+        "last_name": "Woźniak",
+        "distinct_courses_taught": "2"
+      },
+      {
+        "professor_id": "173e49aa-5a27-41e8-b1fa-4d19423bdc0b",
+        "first_name": "Teresa",
+        "last_name": "Woźniak",
+        "distinct_courses_taught": "2"
+      },
+      {
+        "professor_id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+        "first_name": "Grzegorz",
+        "last_name": "Jankowski",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "8f0ffcad-1af9-4da5-898a-dc47b8717d83",
+        "first_name": "Robert",
+        "last_name": "Jaworski",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "7fbf0e4c-fd08-4312-bb83-087368f81e46",
+        "first_name": "Agnieszka",
+        "last_name": "Kozłowski",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "bcf3a47c-67cf-438d-93de-07c55ab583e0",
+        "first_name": "Katarzyna",
+        "last_name": "Kozłowski",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "a82c40da-e7dc-4e49-9e66-386ea4bb7483",
+        "first_name": "Ewa",
+        "last_name": "Krawczyk",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4",
+        "first_name": "Zbigniew",
+        "last_name": "Majewski",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "dd993c5f-eb62-491f-a783-5ca9a0132ade",
+        "first_name": "Ewa",
+        "last_name": "Michalski",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "5b3ae75e-96e7-4a7b-be0f-7375938dcd62",
+        "first_name": "Magdalena",
+        "last_name": "Michalski",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "f24d24fc-5446-4d72-bb11-9d9dd1545f97",
+        "first_name": "Michał",
+        "last_name": "Nowak",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "d19adcea-56d6-4557-8f93-95ec58fa5d34",
+        "first_name": "Mariusz",
+        "last_name": "Nowakowski",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+        "first_name": "Małgorzata",
+        "last_name": "Olszewski",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "cee911dc-17c4-4395-b173-2af1418983fe",
+        "first_name": "Teresa",
+        "last_name": "Pawłowski",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+        "first_name": "Magdalena",
+        "last_name": "Piotrowski",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "007cb07c-c14f-4824-a62d-d42685252c75",
+        "first_name": "Joanna",
+        "last_name": "Stępień",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "33ba2086-7c0f-4a57-9451-014db3e74209",
+        "first_name": "Katarzyna",
+        "last_name": "Szymański",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "4050afec-f68c-49bb-9982-4a3c9d1a23d9",
+        "first_name": "Tomasz",
+        "last_name": "Wieczorek",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "2b5262b8-932c-4951-9390-c56d4b69d888",
+        "first_name": "Marek",
+        "last_name": "Woźniak",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "0d79d103-ec28-4ebf-831c-98b3fb34e9b0",
+        "first_name": "Zbigniew",
+        "last_name": "Górski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "8247a0e4-17f5-4581-a78b-f33a1a2a518b",
+        "first_name": "Paweł",
+        "last_name": "Jankowski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8",
+        "first_name": "Michał",
+        "last_name": "Jaworski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "cd0c2f92-7721-4952-96be-08e390bdeee5",
+        "first_name": "Ryszard",
+        "last_name": "Kowalski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "6fbff454-aa38-4740-9c1e-dcaf245581f7",
+        "first_name": "Andrzej",
+        "last_name": "Kozłowski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "88077860-09c6-401b-961d-48f7a7616705",
+        "first_name": "Teresa",
+        "last_name": "Kozłowski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "1ef09db2-d2f5-46a4-8805-75af1dc6f856",
+        "first_name": "Tomasz",
+        "last_name": "Kozłowski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "be6b85ea-af27-41f9-9346-32e567c2b4bc",
+        "first_name": "Jan",
+        "last_name": "Krawczyk",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "42b2aaed-9cc2-452d-bd55-ce9c8f222b3d",
+        "first_name": "Mariusz",
+        "last_name": "Król",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "b2f3236b-6aea-4ddf-9e72-ca1b944344db",
+        "first_name": "Jerzy",
+        "last_name": "Kwiatkowski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464",
+        "first_name": "Piotr",
+        "last_name": "Lewandowski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "bdacd65d-0634-47e8-894e-728fc9221207",
+        "first_name": "Jerzy",
+        "last_name": "Mazur",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "b3caef8a-8a8a-49c7-ae98-0fa38441139a",
+        "first_name": "Dariusz",
+        "last_name": "Nowak",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef",
+        "first_name": "Jerzy",
+        "last_name": "Nowak",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "69dc12ae-95ba-499f-9d04-5eefc2f2d4bf",
+        "first_name": "Mariusz",
+        "last_name": "Nowak",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "8711908f-0ab8-4de0-8b45-c2a294d2de1c",
+        "first_name": "Stanisław",
+        "last_name": "Nowakowski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "b84e485c-28ea-42b7-a13e-a02578274226",
+        "first_name": "Jan",
+        "last_name": "Olszewski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "ad35d15d-f7ad-416c-ade2-89853d0729c9",
+        "first_name": "Paweł",
+        "last_name": "Piotrowski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "9c934df1-9a06-49a7-96f4-351a647012ba",
+        "first_name": "Stanisław",
+        "last_name": "Stępień",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "8e54b65b-4864-47d8-b9b3-9b727991a6d2",
+        "first_name": "Magdalena",
+        "last_name": "Szymański",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "089c913f-8ec7-4162-9a7a-a67e41b3b935",
+        "first_name": "Ryszard",
+        "last_name": "Szymański",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "2adc085d-5924-47a1-9bf3-43472e564355",
+        "first_name": "Jacek",
+        "last_name": "Wieczorek",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "bdb7d368-ed33-4dd8-99e9-aedea2c36f60",
+        "first_name": "Stanisław",
+        "last_name": "Wójcik",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "2dd66040-0bde-416d-b2dc-9faa4ef4cd44",
+        "first_name": "Adam",
+        "last_name": "Woźniak",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "7732eb5b-ba0d-4e3f-9b39-205a0771c02a",
+        "first_name": "Grzegorz",
+        "last_name": "Zieliński",
+        "distinct_courses_taught": "0"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Number of Distinct Courses Taught by Each Professor",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "first_name",
+          "type": "nominal",
+          "sort": "-x",
+          "title": "Professor Name",
+          "axis": {
+            "labelExpr": "datum.value + ' ' + data('query_result')[indexof(data('query_result'), datum)].last_name"
+          }
+        },
+        "x": {
+          "field": "distinct_courses_taught",
+          "type": "quantitative",
+          "title": "Number of Distinct Courses"
+        },
+        "tooltip": [
+          {
+            "field": "first_name",
+            "type": "nominal",
+            "title": "First Name"
+          },
+          {
+            "field": "last_name",
+            "type": "nominal",
+            "title": "Last Name"
+          },
+          {
+            "field": "distinct_courses_taught",
+            "type": "quantitative",
+            "title": "Distinct Courses Taught"
+          }
+        ],
+        "color": {
+          "field": "distinct_courses_taught",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "blues"
+          },
+          "title": "Number of Courses"
+        }
+      },
+      "width": 600,
+      "height": 800
+    },
+    "sql": "\nSELECT \n  p.id AS professor_id,\n  p.first_name,\n  p.last_name,\n  COUNT(DISTINCT cs.course_id) AS distinct_courses_taught\nFROM professors p\nLEFT JOIN course_sections cs ON p.id = cs.professor_id\nGROUP BY p.id, p.first_name, p.last_name\nORDER BY distinct_courses_taught DESC, p.last_name ASC, p.first_name ASC\n",
+    "metadata": {
+      "columns": [
+        "professor_id",
+        "first_name",
+        "last_name",
+        "distinct_courses_taught"
+      ],
+      "rowCount": 50,
+      "sample": [
+        {
+          "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+          "first_name": "Jacek",
+          "last_name": "Wojciechowski",
+          "distinct_courses_taught": "3"
+        },
+        {
+          "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+          "first_name": "Ryszard",
+          "last_name": "Kowalczyk",
+          "distinct_courses_taught": "2"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+        "first_name": "Jacek",
+        "last_name": "Wojciechowski",
+        "distinct_courses_taught": "3"
+      },
+      {
+        "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+        "first_name": "Ryszard",
+        "last_name": "Kowalczyk",
+        "distinct_courses_taught": "2"
+      },
+      {
+        "professor_id": "ff61fe12-d98c-4d43-87db-710f2571c1f2",
+        "first_name": "Agnieszka",
+        "last_name": "Krawczyk",
+        "distinct_courses_taught": "2"
+      },
+      {
+        "professor_id": "037011f2-f3d4-406e-9554-a6ffba701e06",
+        "first_name": "Marek",
+        "last_name": "Lewandowski",
+        "distinct_courses_taught": "2"
+      },
+      {
+        "professor_id": "f221aafd-0e9c-4345-aff5-7e290e1a7864",
+        "first_name": "Tomasz",
+        "last_name": "Majewski",
+        "distinct_courses_taught": "2"
+      },
+      {
+        "professor_id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+        "first_name": "Adam",
+        "last_name": "Wieczorek",
+        "distinct_courses_taught": "2"
+      },
+      {
+        "professor_id": "5d70abe8-4f1a-44ec-9816-2ec96a2807cb",
+        "first_name": "Ryszard",
+        "last_name": "Woźniak",
+        "distinct_courses_taught": "2"
+      },
+      {
+        "professor_id": "173e49aa-5a27-41e8-b1fa-4d19423bdc0b",
+        "first_name": "Teresa",
+        "last_name": "Woźniak",
+        "distinct_courses_taught": "2"
+      },
+      {
+        "professor_id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+        "first_name": "Grzegorz",
+        "last_name": "Jankowski",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "8f0ffcad-1af9-4da5-898a-dc47b8717d83",
+        "first_name": "Robert",
+        "last_name": "Jaworski",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "7fbf0e4c-fd08-4312-bb83-087368f81e46",
+        "first_name": "Agnieszka",
+        "last_name": "Kozłowski",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "bcf3a47c-67cf-438d-93de-07c55ab583e0",
+        "first_name": "Katarzyna",
+        "last_name": "Kozłowski",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "a82c40da-e7dc-4e49-9e66-386ea4bb7483",
+        "first_name": "Ewa",
+        "last_name": "Krawczyk",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4",
+        "first_name": "Zbigniew",
+        "last_name": "Majewski",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "dd993c5f-eb62-491f-a783-5ca9a0132ade",
+        "first_name": "Ewa",
+        "last_name": "Michalski",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "5b3ae75e-96e7-4a7b-be0f-7375938dcd62",
+        "first_name": "Magdalena",
+        "last_name": "Michalski",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "f24d24fc-5446-4d72-bb11-9d9dd1545f97",
+        "first_name": "Michał",
+        "last_name": "Nowak",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "d19adcea-56d6-4557-8f93-95ec58fa5d34",
+        "first_name": "Mariusz",
+        "last_name": "Nowakowski",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+        "first_name": "Małgorzata",
+        "last_name": "Olszewski",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "cee911dc-17c4-4395-b173-2af1418983fe",
+        "first_name": "Teresa",
+        "last_name": "Pawłowski",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+        "first_name": "Magdalena",
+        "last_name": "Piotrowski",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "007cb07c-c14f-4824-a62d-d42685252c75",
+        "first_name": "Joanna",
+        "last_name": "Stępień",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "33ba2086-7c0f-4a57-9451-014db3e74209",
+        "first_name": "Katarzyna",
+        "last_name": "Szymański",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "4050afec-f68c-49bb-9982-4a3c9d1a23d9",
+        "first_name": "Tomasz",
+        "last_name": "Wieczorek",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "2b5262b8-932c-4951-9390-c56d4b69d888",
+        "first_name": "Marek",
+        "last_name": "Woźniak",
+        "distinct_courses_taught": "1"
+      },
+      {
+        "professor_id": "0d79d103-ec28-4ebf-831c-98b3fb34e9b0",
+        "first_name": "Zbigniew",
+        "last_name": "Górski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "8247a0e4-17f5-4581-a78b-f33a1a2a518b",
+        "first_name": "Paweł",
+        "last_name": "Jankowski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8",
+        "first_name": "Michał",
+        "last_name": "Jaworski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "cd0c2f92-7721-4952-96be-08e390bdeee5",
+        "first_name": "Ryszard",
+        "last_name": "Kowalski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "6fbff454-aa38-4740-9c1e-dcaf245581f7",
+        "first_name": "Andrzej",
+        "last_name": "Kozłowski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "88077860-09c6-401b-961d-48f7a7616705",
+        "first_name": "Teresa",
+        "last_name": "Kozłowski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "1ef09db2-d2f5-46a4-8805-75af1dc6f856",
+        "first_name": "Tomasz",
+        "last_name": "Kozłowski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "be6b85ea-af27-41f9-9346-32e567c2b4bc",
+        "first_name": "Jan",
+        "last_name": "Krawczyk",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "42b2aaed-9cc2-452d-bd55-ce9c8f222b3d",
+        "first_name": "Mariusz",
+        "last_name": "Król",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "b2f3236b-6aea-4ddf-9e72-ca1b944344db",
+        "first_name": "Jerzy",
+        "last_name": "Kwiatkowski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464",
+        "first_name": "Piotr",
+        "last_name": "Lewandowski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "bdacd65d-0634-47e8-894e-728fc9221207",
+        "first_name": "Jerzy",
+        "last_name": "Mazur",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "b3caef8a-8a8a-49c7-ae98-0fa38441139a",
+        "first_name": "Dariusz",
+        "last_name": "Nowak",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef",
+        "first_name": "Jerzy",
+        "last_name": "Nowak",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "69dc12ae-95ba-499f-9d04-5eefc2f2d4bf",
+        "first_name": "Mariusz",
+        "last_name": "Nowak",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "8711908f-0ab8-4de0-8b45-c2a294d2de1c",
+        "first_name": "Stanisław",
+        "last_name": "Nowakowski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "b84e485c-28ea-42b7-a13e-a02578274226",
+        "first_name": "Jan",
+        "last_name": "Olszewski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "ad35d15d-f7ad-416c-ade2-89853d0729c9",
+        "first_name": "Paweł",
+        "last_name": "Piotrowski",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "9c934df1-9a06-49a7-96f4-351a647012ba",
+        "first_name": "Stanisław",
+        "last_name": "Stępień",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "8e54b65b-4864-47d8-b9b3-9b727991a6d2",
+        "first_name": "Magdalena",
+        "last_name": "Szymański",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "089c913f-8ec7-4162-9a7a-a67e41b3b935",
+        "first_name": "Ryszard",
+        "last_name": "Szymański",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "2adc085d-5924-47a1-9bf3-43472e564355",
+        "first_name": "Jacek",
+        "last_name": "Wieczorek",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "bdb7d368-ed33-4dd8-99e9-aedea2c36f60",
+        "first_name": "Stanisław",
+        "last_name": "Wójcik",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "2dd66040-0bde-416d-b2dc-9faa4ef4cd44",
+        "first_name": "Adam",
+        "last_name": "Woźniak",
+        "distinct_courses_taught": "0"
+      },
+      {
+        "professor_id": "7732eb5b-ba0d-4e3f-9b39-205a0771c02a",
+        "first_name": "Grzegorz",
+        "last_name": "Zieliński",
+        "distinct_courses_taught": "0"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Number of Distinct Courses Taught by Each Professor",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "first_name",
+          "type": "nominal",
+          "sort": "-x",
+          "title": "Professor Name",
+          "axis": {
+            "labelExpr": "datum.value + ' ' + data('query_result')[indexof(data('query_result'), datum)].last_name"
+          }
+        },
+        "x": {
+          "field": "distinct_courses_taught",
+          "type": "quantitative",
+          "title": "Number of Distinct Courses"
+        },
+        "tooltip": [
+          {
+            "field": "first_name",
+            "type": "nominal",
+            "title": "First Name"
+          },
+          {
+            "field": "last_name",
+            "type": "nominal",
+            "title": "Last Name"
+          },
+          {
+            "field": "distinct_courses_taught",
+            "type": "quantitative",
+            "title": "Distinct Courses Taught"
+          }
+        ],
+        "color": {
+          "field": "distinct_courses_taught",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "blues"
+          },
+          "title": "Number of Courses"
+        }
+      },
+      "width": 600,
+      "height": 800
+    },
+    "sql": "\nSELECT \n  p.id AS professor_id,\n  p.first_name,\n  p.last_name,\n  COUNT(DISTINCT cs.course_id) AS distinct_courses_taught\nFROM professors p\nLEFT JOIN course_sections cs ON p.id = cs.professor_id\nGROUP BY p.id, p.first_name, p.last_name\nORDER BY distinct_courses_taught DESC, p.last_name ASC, p.first_name ASC\n",
+    "metadata": {
+      "columns": [
+        "professor_id",
+        "first_name",
+        "last_name",
+        "distinct_courses_taught"
+      ],
+      "rowCount": 50,
+      "sample": [
+        {
+          "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+          "first_name": "Jacek",
+          "last_name": "Wojciechowski",
+          "distinct_courses_taught": "3"
+        },
+        {
+          "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+          "first_name": "Ryszard",
+          "last_name": "Kowalczyk",
+          "distinct_courses_taught": "2"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.380Z",
+    "traceId": "b30cad75490f276a70f8caa431302cd7",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 18445,
+      "outputTokens": 977,
+      "totalTokens": 19422,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.02333
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 18445,
+        "outputTokens": 977,
+        "totalTokens": 19422,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.02333
+      }
+    ],
+    "warnings": []
+  }
+}

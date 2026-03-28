@@ -1,0 +1,346 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "students-per-department",
+  "caseDirectory": "students-per-department",
+  "repeatIndex": 1,
+  "prompt": "Show the number of students in each department",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the number of students in each department"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:34:17.616Z",
+    "endedAtUtc": "2026-02-22T23:34:47.618Z",
+    "durationMs": 30002
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "12496",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:34:47 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show the number of students in each department\"},\"sql\":{\"payload\":{\"question\":\"Show the number of students in each department\"},\"startedAt\":1771803257695,\"status\":\"success\",\"output\":{\"reasoning\":\"Include all departments (even those with zero students) by left-joining students to departments, group by department id/code/name, and order deterministically by student count descending then department name ascending.\",\"sql\":\"SELECT d.id AS department_id,\\n       d.code AS department_code,\\n       d.name AS department_name,\\n       COUNT(s.id) AS student_count\\nFROM public.departments AS d\\nLEFT JOIN public.students AS s\\n  ON s.department_id = d.id\\nGROUP BY d.id, d.code, d.name\\nORDER BY student_count DESC, department_name ASC;\",\"assumptions\":[\"Tables public.departments and public.students exist (confirmed via schema inspection).\",\"students.department_id is the FK linking a student to departments.id (confirmed).\",\"Count should treat each students.id as one student; departments with no students should appear with count 0.\"]},\"endedAt\":1771803274994},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT d.id AS department_id,\\n       d.code AS department_code,\\n       d.name AS department_name,\\n       COUNT(s.id) AS student_count\\nFROM public.departments AS d\\nLEFT JOIN public.students AS s\\n  ON s.department_id = d.id\\nGROUP BY d.id, d.code, d.name\\nORDER BY student_count DESC, department_name ASC;\"},\"startedAt\":1771803274999,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT d.id AS department_id,\\n       d.code AS department_code,\\n       d.name AS department_name,\\n       COUNT(s.id) AS student_count\\nFROM public.departments AS d\\nLEFT JOIN public.students AS s\\n  ON s.department_id = d.id\\nGROUP BY d.id, d.code, d.name\\nORDER BY student_count DESC, department_name ASC\",\"metadata\":{\"columns\":[\"department_id\",\"student_count\",\"department_code\",\"department_name\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"student_count\":22,\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"}]},\"data\":[{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"student_count\":22,\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"student_count\":20,\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"student_count\":20,\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"student_count\":19,\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"student_count\":13,\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"}]},\"endedAt\":1771803275047},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT d.id AS department_id,\\n       d.code AS department_code,\\n       d.name AS department_name,\\n       COUNT(s.id) AS student_count\\nFROM public.departments AS d\\nLEFT JOIN public.students AS s\\n  ON s.department_id = d.id\\nGROUP BY d.id, d.code, d.name\\nORDER BY student_count DESC, department_name ASC\",\"metadata\":{\"columns\":[\"department_id\",\"student_count\",\"department_code\",\"department_name\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"student_count\":22,\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"}]},\"data\":[{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"student_count\":22,\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"student_count\":20,\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"student_count\":20,\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"student_count\":19,\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"student_count\":13,\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"}]},\"startedAt\":1771803275052,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of students by department\",\"width\":700,\"height\":{\"step\":28},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\"},\"sort\":{\"field\":\"student_count\",\"op\":\"sum\",\"order\":\"descending\"}},\"x\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of students\"}},\"color\":{\"value\":\"#4C78A8\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Students\"},{\"field\":\"department_id\",\"type\":\"nominal\",\"title\":\"Department ID\"}]}},\"reasoning\":\"Horizontal bar chart shows each department (y) and its student count (x), sorted by student_count descending. Tooltip includes department code and id for reference.\"},\"endedAt\":1771803287590},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of students by department\",\"width\":700,\"height\":{\"step\":28},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\"},\"sort\":{\"field\":\"student_count\",\"op\":\"sum\",\"order\":\"descending\"}},\"x\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of students\"}},\"color\":{\"value\":\"#4C78A8\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Students\"},{\"field\":\"department_id\",\"type\":\"nominal\",\"title\":\"Department ID\"}]}},\"reasoning\":\"Horizontal bar chart shows each department (y) and its student count (x), sorted by student_count descending. Tooltip includes department code and id for reference.\"},\"startedAt\":1771803287594,\"status\":\"success\",\"output\":{\"sql\":\"SELECT d.id AS department_id,\\n       d.code AS department_code,\\n       d.name AS department_name,\\n       COUNT(s.id) AS student_count\\nFROM public.departments AS d\\nLEFT JOIN public.students AS s\\n  ON s.department_id = d.id\\nGROUP BY d.id, d.code, d.name\\nORDER BY student_count DESC, department_name ASC;\",\"data\":[{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"student_count\":22,\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"student_count\":20,\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"student_count\":20,\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"student_count\":19,\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"student_count\":13,\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"}],\"metadata\":{\"columns\":[\"department_id\",\"student_count\",\"department_code\",\"department_name\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"student_count\":22,\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of students by department\",\"width\":700,\"height\":{\"step\":28},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\"},\"sort\":{\"field\":\"student_count\",\"op\":\"sum\",\"order\":\"descending\"}},\"x\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of students\"}},\"color\":{\"value\":\"#4C78A8\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Students\"},{\"field\":\"department_id\",\"type\":\"nominal\",\"title\":\"Department ID\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771803287596}},\"input\":{\"question\":\"Show the number of students in each department\"},\"result\":{\"sql\":\"SELECT d.id AS department_id,\\n       d.code AS department_code,\\n       d.name AS department_name,\\n       COUNT(s.id) AS student_count\\nFROM public.departments AS d\\nLEFT JOIN public.students AS s\\n  ON s.department_id = d.id\\nGROUP BY d.id, d.code, d.name\\nORDER BY student_count DESC, department_name ASC;\",\"data\":[{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"student_count\":22,\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"student_count\":20,\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"student_count\":20,\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"student_count\":19,\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"student_count\":13,\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"}],\"metadata\":{\"columns\":[\"department_id\",\"student_count\",\"department_code\",\"department_name\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"student_count\":22,\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"student_count\":21,\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of students by department\",\"width\":700,\"height\":{\"step\":28},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\"},\"sort\":{\"field\":\"student_count\",\"op\":\"sum\",\"order\":\"descending\"}},\"x\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of students\"}},\"color\":{\"value\":\"#4C78A8\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Students\"},{\"field\":\"department_id\",\"type\":\"nominal\",\"title\":\"Department ID\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"20357ba6b6855484588f21e2e860c290\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/students-per-department/run-0001/run.json",
+    "queryPath": "runs/students-per-department/run-0001/query.sql",
+    "vegaRawPath": "runs/students-per-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/students-per-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/students-per-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:34:47.981Z",
+  "traceId": "20357ba6b6855484588f21e2e860c290",
+  "success": true,
+  "durationMs": 30366,
+  "resultRaw": {
+    "data": [
+      {
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "student_count": 22,
+        "department_code": "TCH",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej"
+      },
+      {
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "student_count": 21,
+        "department_code": "AEI",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+      },
+      {
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "student_count": 20,
+        "department_code": "IBM",
+        "department_name": "Wydział Inżynierii Biomedycznej"
+      },
+      {
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "student_count": 20,
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+      },
+      {
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "student_count": 19,
+        "department_code": "WIP",
+        "department_name": "Wydział Inżynierii Produkcji"
+      },
+      {
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "student_count": 13,
+        "department_code": "INF",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Number of students by department",
+      "width": 700,
+      "height": {
+        "step": 28
+      },
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "y": {
+          "field": "department_name",
+          "type": "nominal",
+          "axis": {
+            "title": "Department"
+          },
+          "sort": {
+            "field": "student_count",
+            "op": "sum",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "student_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Number of students"
+          }
+        },
+        "color": {
+          "value": "#4C78A8"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "department_code",
+            "type": "nominal",
+            "title": "Code"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Students"
+          },
+          {
+            "field": "department_id",
+            "type": "nominal",
+            "title": "Department ID"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT d.id AS department_id,\n       d.code AS department_code,\n       d.name AS department_name,\n       COUNT(s.id) AS student_count\nFROM public.departments AS d\nLEFT JOIN public.students AS s\n  ON s.department_id = d.id\nGROUP BY d.id, d.code, d.name\nORDER BY student_count DESC, department_name ASC;",
+    "metadata": {
+      "columns": [
+        "department_id",
+        "student_count",
+        "department_code",
+        "department_name"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+          "student_count": 22,
+          "department_code": "TCH",
+          "department_name": "Wydział Technologii i Inżynierii Chemicznej"
+        },
+        {
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "student_count": 21,
+          "department_code": "AEI",
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "student_count": 22,
+        "department_code": "TCH",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej"
+      },
+      {
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "student_count": 21,
+        "department_code": "AEI",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+      },
+      {
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "student_count": 20,
+        "department_code": "IBM",
+        "department_name": "Wydział Inżynierii Biomedycznej"
+      },
+      {
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "student_count": 20,
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+      },
+      {
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "student_count": 19,
+        "department_code": "WIP",
+        "department_name": "Wydział Inżynierii Produkcji"
+      },
+      {
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "student_count": 13,
+        "department_code": "INF",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Number of students by department",
+      "width": 700,
+      "height": {
+        "step": 28
+      },
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "y": {
+          "field": "department_name",
+          "type": "nominal",
+          "axis": {
+            "title": "Department"
+          },
+          "sort": {
+            "field": "student_count",
+            "op": "sum",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "student_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Number of students"
+          }
+        },
+        "color": {
+          "value": "#4C78A8"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "department_code",
+            "type": "nominal",
+            "title": "Code"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Students"
+          },
+          {
+            "field": "department_id",
+            "type": "nominal",
+            "title": "Department ID"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT d.id AS department_id,\n       d.code AS department_code,\n       d.name AS department_name,\n       COUNT(s.id) AS student_count\nFROM public.departments AS d\nLEFT JOIN public.students AS s\n  ON s.department_id = d.id\nGROUP BY d.id, d.code, d.name\nORDER BY student_count DESC, department_name ASC;",
+    "metadata": {
+      "columns": [
+        "department_id",
+        "student_count",
+        "department_code",
+        "department_name"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+          "student_count": 22,
+          "department_code": "TCH",
+          "department_name": "Wydział Technologii i Inżynierii Chemicznej"
+        },
+        {
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "student_count": 21,
+          "department_code": "AEI",
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:34:47.981Z",
+    "traceId": "20357ba6b6855484588f21e2e860c290",
+    "attempts": 2,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 8424,
+      "outputTokens": 2207,
+      "totalTokens": 10631,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1408,
+      "costUsd": 0.00652
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 8424,
+        "outputTokens": 2207,
+        "totalTokens": 10631,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1408,
+        "costUsd": 0.00652
+      }
+    ],
+    "warnings": []
+  }
+}

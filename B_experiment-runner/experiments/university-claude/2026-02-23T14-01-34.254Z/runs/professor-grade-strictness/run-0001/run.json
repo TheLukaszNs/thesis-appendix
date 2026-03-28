@@ -1,0 +1,728 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "professor-grade-strictness",
+  "caseDirectory": "professor-grade-strictness",
+  "repeatIndex": 1,
+  "prompt": "Which professors give the lowest average grades (strictest graders)?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which professors give the lowest average grades (strictest graders)?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:13:17.018Z",
+    "endedAtUtc": "2026-02-23T14:14:04.964Z",
+    "durationMs": 47946
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "32029",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:14:04 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Which professors give the lowest average grades (strictest graders)?\"},\"sql\":{\"payload\":{\"question\":\"Which professors give the lowest average grades (strictest graders)?\"},\"startedAt\":1771855997023,\"status\":\"success\",\"output\":{\"reasoning\":\"The user wants to identify professors who give the lowest average grades (strictest graders). I've confirmed the schema structure: professors are linked to course_sections, which have enrollments, which have grades. The grades table contains exam_score, project_score, and attendance_score. To find the strictest graders, I'll calculate the average of all grade components (exam, project, attendance) for each professor and order by lowest average. This gives a comprehensive view of grading strictness across all assessment types.\",\"sql\":\"\\nSELECT \\n  p.id,\\n  p.first_name,\\n  p.last_name,\\n  COUNT(DISTINCT g.id) as total_grades,\\n  ROUND(AVG(g.exam_score)::numeric, 2) as avg_exam_score,\\n  ROUND(AVG(g.project_score)::numeric, 2) as avg_project_score,\\n  ROUND(AVG(g.attendance_score)::numeric, 2) as avg_attendance_score,\\n  ROUND(AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / 3)::numeric, 2) as avg_overall_grade\\nFROM professors p\\nJOIN course_sections cs ON p.id = cs.professor_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nGROUP BY p.id, p.first_name, p.last_name\\nHAVING COUNT(DISTINCT g.id) > 0\\nORDER BY avg_overall_grade ASC\\n\",\"assumptions\":[\"Strictest graders are identified by lowest average grades across exam, project, and attendance scores\",\"Only professors with at least one grade record are included\",\"Average overall grade is calculated as the mean of exam, project, and attendance scores\",\"NULL scores are treated as 0 in the overall calculation\"]},\"endedAt\":1771856040097},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  p.id,\\n  p.first_name,\\n  p.last_name,\\n  COUNT(DISTINCT g.id) as total_grades,\\n  ROUND(AVG(g.exam_score)::numeric, 2) as avg_exam_score,\\n  ROUND(AVG(g.project_score)::numeric, 2) as avg_project_score,\\n  ROUND(AVG(g.attendance_score)::numeric, 2) as avg_attendance_score,\\n  ROUND(AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / 3)::numeric, 2) as avg_overall_grade\\nFROM professors p\\nJOIN course_sections cs ON p.id = cs.professor_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nGROUP BY p.id, p.first_name, p.last_name\\nHAVING COUNT(DISTINCT g.id) > 0\\nORDER BY avg_overall_grade ASC\\n\"},\"startedAt\":1771856040110,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  p.id,\\n  p.first_name,\\n  p.last_name,\\n  COUNT(DISTINCT g.id) as total_grades,\\n  ROUND(AVG(g.exam_score)::numeric, 2) as avg_exam_score,\\n  ROUND(AVG(g.project_score)::numeric, 2) as avg_project_score,\\n  ROUND(AVG(g.attendance_score)::numeric, 2) as avg_attendance_score,\\n  ROUND(AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / 3)::numeric, 2) as avg_overall_grade\\nFROM professors p\\nJOIN course_sections cs ON p.id = cs.professor_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nGROUP BY p.id, p.first_name, p.last_name\\nHAVING COUNT(DISTINCT g.id) > 0\\nORDER BY avg_overall_grade ASC\",\"metadata\":{\"columns\":[\"id\",\"first_name\",\"last_name\",\"total_grades\",\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\",\"avg_overall_grade\"],\"rowCount\":20,\"sample\":[{\"id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"first_name\":\"Magdalena\",\"last_name\":\"Piotrowski\",\"total_grades\":\"1\",\"avg_exam_score\":null,\"avg_project_score\":null,\"avg_attendance_score\":\"33.59\",\"avg_overall_grade\":\"11.20\"},{\"id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"first_name\":\"Adam\",\"last_name\":\"Wieczorek\",\"total_grades\":\"1\",\"avg_exam_score\":\"50.05\",\"avg_project_score\":null,\"avg_attendance_score\":\"12.10\",\"avg_overall_grade\":\"20.72\"}]},\"data\":[{\"id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"first_name\":\"Magdalena\",\"last_name\":\"Piotrowski\",\"total_grades\":\"1\",\"avg_exam_score\":null,\"avg_project_score\":null,\"avg_attendance_score\":\"33.59\",\"avg_overall_grade\":\"11.20\"},{\"id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"first_name\":\"Adam\",\"last_name\":\"Wieczorek\",\"total_grades\":\"1\",\"avg_exam_score\":\"50.05\",\"avg_project_score\":null,\"avg_attendance_score\":\"12.10\",\"avg_overall_grade\":\"20.72\"},{\"id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"first_name\":\"Grzegorz\",\"last_name\":\"Jankowski\",\"total_grades\":\"1\",\"avg_exam_score\":\"47.03\",\"avg_project_score\":\"19.22\",\"avg_attendance_score\":null,\"avg_overall_grade\":\"22.08\"},{\"id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"first_name\":\"Zbigniew\",\"last_name\":\"Majewski\",\"total_grades\":\"1\",\"avg_exam_score\":null,\"avg_project_score\":\"16.90\",\"avg_attendance_score\":\"61.19\",\"avg_overall_grade\":\"26.03\"},{\"id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"first_name\":\"Ewa\",\"last_name\":\"Krawczyk\",\"total_grades\":\"2\",\"avg_exam_score\":\"35.68\",\"avg_project_score\":\"22.02\",\"avg_attendance_score\":\"79.35\",\"avg_overall_grade\":\"28.79\"},{\"id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"first_name\":\"Marek\",\"last_name\":\"Lewandowski\",\"total_grades\":\"3\",\"avg_exam_score\":\"51.42\",\"avg_project_score\":\"27.23\",\"avg_attendance_score\":\"69.35\",\"avg_overall_grade\":\"33.92\"},{\"id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"first_name\":\"Marek\",\"last_name\":\"Woźniak\",\"total_grades\":\"5\",\"avg_exam_score\":\"40.15\",\"avg_project_score\":\"36.33\",\"avg_attendance_score\":\"65.03\",\"avg_overall_grade\":\"37.74\"},{\"id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"first_name\":\"Tomasz\",\"last_name\":\"Wieczorek\",\"total_grades\":\"1\",\"avg_exam_score\":null,\"avg_project_score\":\"67.58\",\"avg_attendance_score\":\"47.11\",\"avg_overall_grade\":\"38.23\"},{\"id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"first_name\":\"Ryszard\",\"last_name\":\"Woźniak\",\"total_grades\":\"4\",\"avg_exam_score\":\"19.04\",\"avg_project_score\":\"40.13\",\"avg_attendance_score\":\"88.43\",\"avg_overall_grade\":\"38.49\"},{\"id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"first_name\":\"Joanna\",\"last_name\":\"Stępień\",\"total_grades\":\"2\",\"avg_exam_score\":\"54.51\",\"avg_project_score\":\"50.15\",\"avg_attendance_score\":\"19.06\",\"avg_overall_grade\":\"41.24\"},{\"id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"first_name\":\"Mariusz\",\"last_name\":\"Nowakowski\",\"total_grades\":\"4\",\"avg_exam_score\":\"22.35\",\"avg_project_score\":\"61.60\",\"avg_attendance_score\":\"59.32\",\"avg_overall_grade\":\"42.17\"},{\"id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"first_name\":\"Magdalena\",\"last_name\":\"Michalski\",\"total_grades\":\"3\",\"avg_exam_score\":\"20.76\",\"avg_project_score\":\"82.25\",\"avg_attendance_score\":\"59.90\",\"avg_overall_grade\":\"42.86\"},{\"id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"first_name\":\"Małgorzata\",\"last_name\":\"Olszewski\",\"total_grades\":\"4\",\"avg_exam_score\":\"87.69\",\"avg_project_score\":\"39.27\",\"avg_attendance_score\":\"40.19\",\"avg_overall_grade\":\"45.06\"},{\"id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"first_name\":\"Agnieszka\",\"last_name\":\"Krawczyk\",\"total_grades\":\"3\",\"avg_exam_score\":\"42.50\",\"avg_project_score\":\"36.08\",\"avg_attendance_score\":\"56.80\",\"avg_overall_grade\":\"45.13\"},{\"id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"first_name\":\"Tomasz\",\"last_name\":\"Majewski\",\"total_grades\":\"8\",\"avg_exam_score\":\"50.11\",\"avg_project_score\":\"48.43\",\"avg_attendance_score\":\"56.59\",\"avg_overall_grade\":\"51.71\"},{\"id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"first_name\":\"Teresa\",\"last_name\":\"Woźniak\",\"total_grades\":\"1\",\"avg_exam_score\":\"88.07\",\"avg_project_score\":\"21.41\",\"avg_attendance_score\":\"52.07\",\"avg_overall_grade\":\"53.85\"},{\"id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"first_name\":\"Robert\",\"last_name\":\"Jaworski\",\"total_grades\":\"1\",\"avg_exam_score\":\"35.80\",\"avg_project_score\":\"42.30\",\"avg_attendance_score\":\"84.56\",\"avg_overall_grade\":\"54.22\"},{\"id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"first_name\":\"Michał\",\"last_name\":\"Nowak\",\"total_grades\":\"1\",\"avg_exam_score\":\"76.27\",\"avg_project_score\":\"85.72\",\"avg_attendance_score\":\"9.09\",\"avg_overall_grade\":\"57.03\"},{\"id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"first_name\":\"Ryszard\",\"last_name\":\"Kowalczyk\",\"total_grades\":\"2\",\"avg_exam_score\":\"48.43\",\"avg_project_score\":\"82.29\",\"avg_attendance_score\":\"54.77\",\"avg_overall_grade\":\"61.83\"},{\"id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"first_name\":\"Jacek\",\"last_name\":\"Wojciechowski\",\"total_grades\":\"4\",\"avg_exam_score\":\"78.19\",\"avg_project_score\":\"61.94\",\"avg_attendance_score\":\"67.97\",\"avg_overall_grade\":\"69.36\"}]},\"endedAt\":1771856040128},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  p.id,\\n  p.first_name,\\n  p.last_name,\\n  COUNT(DISTINCT g.id) as total_grades,\\n  ROUND(AVG(g.exam_score)::numeric, 2) as avg_exam_score,\\n  ROUND(AVG(g.project_score)::numeric, 2) as avg_project_score,\\n  ROUND(AVG(g.attendance_score)::numeric, 2) as avg_attendance_score,\\n  ROUND(AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / 3)::numeric, 2) as avg_overall_grade\\nFROM professors p\\nJOIN course_sections cs ON p.id = cs.professor_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nGROUP BY p.id, p.first_name, p.last_name\\nHAVING COUNT(DISTINCT g.id) > 0\\nORDER BY avg_overall_grade ASC\",\"metadata\":{\"columns\":[\"id\",\"first_name\",\"last_name\",\"total_grades\",\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\",\"avg_overall_grade\"],\"rowCount\":20,\"sample\":[{\"id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"first_name\":\"Magdalena\",\"last_name\":\"Piotrowski\",\"total_grades\":\"1\",\"avg_exam_score\":null,\"avg_project_score\":null,\"avg_attendance_score\":\"33.59\",\"avg_overall_grade\":\"11.20\"},{\"id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"first_name\":\"Adam\",\"last_name\":\"Wieczorek\",\"total_grades\":\"1\",\"avg_exam_score\":\"50.05\",\"avg_project_score\":null,\"avg_attendance_score\":\"12.10\",\"avg_overall_grade\":\"20.72\"}]},\"data\":[{\"id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"first_name\":\"Magdalena\",\"last_name\":\"Piotrowski\",\"total_grades\":\"1\",\"avg_exam_score\":null,\"avg_project_score\":null,\"avg_attendance_score\":\"33.59\",\"avg_overall_grade\":\"11.20\"},{\"id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"first_name\":\"Adam\",\"last_name\":\"Wieczorek\",\"total_grades\":\"1\",\"avg_exam_score\":\"50.05\",\"avg_project_score\":null,\"avg_attendance_score\":\"12.10\",\"avg_overall_grade\":\"20.72\"},{\"id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"first_name\":\"Grzegorz\",\"last_name\":\"Jankowski\",\"total_grades\":\"1\",\"avg_exam_score\":\"47.03\",\"avg_project_score\":\"19.22\",\"avg_attendance_score\":null,\"avg_overall_grade\":\"22.08\"},{\"id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"first_name\":\"Zbigniew\",\"last_name\":\"Majewski\",\"total_grades\":\"1\",\"avg_exam_score\":null,\"avg_project_score\":\"16.90\",\"avg_attendance_score\":\"61.19\",\"avg_overall_grade\":\"26.03\"},{\"id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"first_name\":\"Ewa\",\"last_name\":\"Krawczyk\",\"total_grades\":\"2\",\"avg_exam_score\":\"35.68\",\"avg_project_score\":\"22.02\",\"avg_attendance_score\":\"79.35\",\"avg_overall_grade\":\"28.79\"},{\"id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"first_name\":\"Marek\",\"last_name\":\"Lewandowski\",\"total_grades\":\"3\",\"avg_exam_score\":\"51.42\",\"avg_project_score\":\"27.23\",\"avg_attendance_score\":\"69.35\",\"avg_overall_grade\":\"33.92\"},{\"id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"first_name\":\"Marek\",\"last_name\":\"Woźniak\",\"total_grades\":\"5\",\"avg_exam_score\":\"40.15\",\"avg_project_score\":\"36.33\",\"avg_attendance_score\":\"65.03\",\"avg_overall_grade\":\"37.74\"},{\"id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"first_name\":\"Tomasz\",\"last_name\":\"Wieczorek\",\"total_grades\":\"1\",\"avg_exam_score\":null,\"avg_project_score\":\"67.58\",\"avg_attendance_score\":\"47.11\",\"avg_overall_grade\":\"38.23\"},{\"id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"first_name\":\"Ryszard\",\"last_name\":\"Woźniak\",\"total_grades\":\"4\",\"avg_exam_score\":\"19.04\",\"avg_project_score\":\"40.13\",\"avg_attendance_score\":\"88.43\",\"avg_overall_grade\":\"38.49\"},{\"id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"first_name\":\"Joanna\",\"last_name\":\"Stępień\",\"total_grades\":\"2\",\"avg_exam_score\":\"54.51\",\"avg_project_score\":\"50.15\",\"avg_attendance_score\":\"19.06\",\"avg_overall_grade\":\"41.24\"},{\"id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"first_name\":\"Mariusz\",\"last_name\":\"Nowakowski\",\"total_grades\":\"4\",\"avg_exam_score\":\"22.35\",\"avg_project_score\":\"61.60\",\"avg_attendance_score\":\"59.32\",\"avg_overall_grade\":\"42.17\"},{\"id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"first_name\":\"Magdalena\",\"last_name\":\"Michalski\",\"total_grades\":\"3\",\"avg_exam_score\":\"20.76\",\"avg_project_score\":\"82.25\",\"avg_attendance_score\":\"59.90\",\"avg_overall_grade\":\"42.86\"},{\"id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"first_name\":\"Małgorzata\",\"last_name\":\"Olszewski\",\"total_grades\":\"4\",\"avg_exam_score\":\"87.69\",\"avg_project_score\":\"39.27\",\"avg_attendance_score\":\"40.19\",\"avg_overall_grade\":\"45.06\"},{\"id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"first_name\":\"Agnieszka\",\"last_name\":\"Krawczyk\",\"total_grades\":\"3\",\"avg_exam_score\":\"42.50\",\"avg_project_score\":\"36.08\",\"avg_attendance_score\":\"56.80\",\"avg_overall_grade\":\"45.13\"},{\"id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"first_name\":\"Tomasz\",\"last_name\":\"Majewski\",\"total_grades\":\"8\",\"avg_exam_score\":\"50.11\",\"avg_project_score\":\"48.43\",\"avg_attendance_score\":\"56.59\",\"avg_overall_grade\":\"51.71\"},{\"id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"first_name\":\"Teresa\",\"last_name\":\"Woźniak\",\"total_grades\":\"1\",\"avg_exam_score\":\"88.07\",\"avg_project_score\":\"21.41\",\"avg_attendance_score\":\"52.07\",\"avg_overall_grade\":\"53.85\"},{\"id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"first_name\":\"Robert\",\"last_name\":\"Jaworski\",\"total_grades\":\"1\",\"avg_exam_score\":\"35.80\",\"avg_project_score\":\"42.30\",\"avg_attendance_score\":\"84.56\",\"avg_overall_grade\":\"54.22\"},{\"id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"first_name\":\"Michał\",\"last_name\":\"Nowak\",\"total_grades\":\"1\",\"avg_exam_score\":\"76.27\",\"avg_project_score\":\"85.72\",\"avg_attendance_score\":\"9.09\",\"avg_overall_grade\":\"57.03\"},{\"id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"first_name\":\"Ryszard\",\"last_name\":\"Kowalczyk\",\"total_grades\":\"2\",\"avg_exam_score\":\"48.43\",\"avg_project_score\":\"82.29\",\"avg_attendance_score\":\"54.77\",\"avg_overall_grade\":\"61.83\"},{\"id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"first_name\":\"Jacek\",\"last_name\":\"Wojciechowski\",\"total_grades\":\"4\",\"avg_exam_score\":\"78.19\",\"avg_project_score\":\"61.94\",\"avg_attendance_score\":\"67.97\",\"avg_overall_grade\":\"69.36\"}]},\"startedAt\":1771856040139,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Professors Ranked by Average Overall Grade (Strictest Graders First)\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"first_name\",\"type\":\"nominal\",\"sort\":{\"field\":\"avg_overall_grade\",\"order\":\"ascending\"},\"title\":\"Professor\"},\"x\":{\"field\":\"avg_overall_grade\",\"type\":\"quantitative\",\"title\":\"Average Overall Grade\"},\"color\":{\"field\":\"avg_overall_grade\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"reds\"},\"title\":\"Avg Grade\"},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First Name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last Name\"},{\"field\":\"total_grades\",\"type\":\"quantitative\",\"title\":\"Total Grades Given\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\",\"format\":\".2f\"},{\"field\":\"avg_project_score\",\"type\":\"quantitative\",\"title\":\"Avg Project Score\",\"format\":\".2f\"},{\"field\":\"avg_attendance_score\",\"type\":\"quantitative\",\"title\":\"Avg Attendance Score\",\"format\":\".2f\"},{\"field\":\"avg_overall_grade\",\"type\":\"quantitative\",\"title\":\"Avg Overall Grade\",\"format\":\".2f\"}]},\"width\":600,\"height\":500},\"reasoning\":\"This horizontal bar chart displays professors ranked by their average overall grade in ascending order, making it easy to identify the strictest graders at the top. The color intensity (red scale) reinforces the grading severity. The tooltip provides comprehensive details including exam, project, and attendance score breakdowns, plus the total number of grades given for context. The chart directly answers the question by showing which professors give the lowest average grades.\"},\"endedAt\":1771856044942},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Professors Ranked by Average Overall Grade (Strictest Graders First)\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"first_name\",\"type\":\"nominal\",\"sort\":{\"field\":\"avg_overall_grade\",\"order\":\"ascending\"},\"title\":\"Professor\"},\"x\":{\"field\":\"avg_overall_grade\",\"type\":\"quantitative\",\"title\":\"Average Overall Grade\"},\"color\":{\"field\":\"avg_overall_grade\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"reds\"},\"title\":\"Avg Grade\"},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First Name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last Name\"},{\"field\":\"total_grades\",\"type\":\"quantitative\",\"title\":\"Total Grades Given\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\",\"format\":\".2f\"},{\"field\":\"avg_project_score\",\"type\":\"quantitative\",\"title\":\"Avg Project Score\",\"format\":\".2f\"},{\"field\":\"avg_attendance_score\",\"type\":\"quantitative\",\"title\":\"Avg Attendance Score\",\"format\":\".2f\"},{\"field\":\"avg_overall_grade\",\"type\":\"quantitative\",\"title\":\"Avg Overall Grade\",\"format\":\".2f\"}]},\"width\":600,\"height\":500},\"reasoning\":\"This horizontal bar chart displays professors ranked by their average overall grade in ascending order, making it easy to identify the strictest graders at the top. The color intensity (red scale) reinforces the grading severity. The tooltip provides comprehensive details including exam, project, and attendance score breakdowns, plus the total number of grades given for context. The chart directly answers the question by showing which professors give the lowest average grades.\"},\"startedAt\":1771856044949,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT \\n  p.id,\\n  p.first_name,\\n  p.last_name,\\n  COUNT(DISTINCT g.id) as total_grades,\\n  ROUND(AVG(g.exam_score)::numeric, 2) as avg_exam_score,\\n  ROUND(AVG(g.project_score)::numeric, 2) as avg_project_score,\\n  ROUND(AVG(g.attendance_score)::numeric, 2) as avg_attendance_score,\\n  ROUND(AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / 3)::numeric, 2) as avg_overall_grade\\nFROM professors p\\nJOIN course_sections cs ON p.id = cs.professor_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nGROUP BY p.id, p.first_name, p.last_name\\nHAVING COUNT(DISTINCT g.id) > 0\\nORDER BY avg_overall_grade ASC\\n\",\"data\":[{\"id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"first_name\":\"Magdalena\",\"last_name\":\"Piotrowski\",\"total_grades\":\"1\",\"avg_exam_score\":null,\"avg_project_score\":null,\"avg_attendance_score\":\"33.59\",\"avg_overall_grade\":\"11.20\"},{\"id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"first_name\":\"Adam\",\"last_name\":\"Wieczorek\",\"total_grades\":\"1\",\"avg_exam_score\":\"50.05\",\"avg_project_score\":null,\"avg_attendance_score\":\"12.10\",\"avg_overall_grade\":\"20.72\"},{\"id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"first_name\":\"Grzegorz\",\"last_name\":\"Jankowski\",\"total_grades\":\"1\",\"avg_exam_score\":\"47.03\",\"avg_project_score\":\"19.22\",\"avg_attendance_score\":null,\"avg_overall_grade\":\"22.08\"},{\"id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"first_name\":\"Zbigniew\",\"last_name\":\"Majewski\",\"total_grades\":\"1\",\"avg_exam_score\":null,\"avg_project_score\":\"16.90\",\"avg_attendance_score\":\"61.19\",\"avg_overall_grade\":\"26.03\"},{\"id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"first_name\":\"Ewa\",\"last_name\":\"Krawczyk\",\"total_grades\":\"2\",\"avg_exam_score\":\"35.68\",\"avg_project_score\":\"22.02\",\"avg_attendance_score\":\"79.35\",\"avg_overall_grade\":\"28.79\"},{\"id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"first_name\":\"Marek\",\"last_name\":\"Lewandowski\",\"total_grades\":\"3\",\"avg_exam_score\":\"51.42\",\"avg_project_score\":\"27.23\",\"avg_attendance_score\":\"69.35\",\"avg_overall_grade\":\"33.92\"},{\"id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"first_name\":\"Marek\",\"last_name\":\"Woźniak\",\"total_grades\":\"5\",\"avg_exam_score\":\"40.15\",\"avg_project_score\":\"36.33\",\"avg_attendance_score\":\"65.03\",\"avg_overall_grade\":\"37.74\"},{\"id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"first_name\":\"Tomasz\",\"last_name\":\"Wieczorek\",\"total_grades\":\"1\",\"avg_exam_score\":null,\"avg_project_score\":\"67.58\",\"avg_attendance_score\":\"47.11\",\"avg_overall_grade\":\"38.23\"},{\"id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"first_name\":\"Ryszard\",\"last_name\":\"Woźniak\",\"total_grades\":\"4\",\"avg_exam_score\":\"19.04\",\"avg_project_score\":\"40.13\",\"avg_attendance_score\":\"88.43\",\"avg_overall_grade\":\"38.49\"},{\"id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"first_name\":\"Joanna\",\"last_name\":\"Stępień\",\"total_grades\":\"2\",\"avg_exam_score\":\"54.51\",\"avg_project_score\":\"50.15\",\"avg_attendance_score\":\"19.06\",\"avg_overall_grade\":\"41.24\"},{\"id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"first_name\":\"Mariusz\",\"last_name\":\"Nowakowski\",\"total_grades\":\"4\",\"avg_exam_score\":\"22.35\",\"avg_project_score\":\"61.60\",\"avg_attendance_score\":\"59.32\",\"avg_overall_grade\":\"42.17\"},{\"id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"first_name\":\"Magdalena\",\"last_name\":\"Michalski\",\"total_grades\":\"3\",\"avg_exam_score\":\"20.76\",\"avg_project_score\":\"82.25\",\"avg_attendance_score\":\"59.90\",\"avg_overall_grade\":\"42.86\"},{\"id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"first_name\":\"Małgorzata\",\"last_name\":\"Olszewski\",\"total_grades\":\"4\",\"avg_exam_score\":\"87.69\",\"avg_project_score\":\"39.27\",\"avg_attendance_score\":\"40.19\",\"avg_overall_grade\":\"45.06\"},{\"id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"first_name\":\"Agnieszka\",\"last_name\":\"Krawczyk\",\"total_grades\":\"3\",\"avg_exam_score\":\"42.50\",\"avg_project_score\":\"36.08\",\"avg_attendance_score\":\"56.80\",\"avg_overall_grade\":\"45.13\"},{\"id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"first_name\":\"Tomasz\",\"last_name\":\"Majewski\",\"total_grades\":\"8\",\"avg_exam_score\":\"50.11\",\"avg_project_score\":\"48.43\",\"avg_attendance_score\":\"56.59\",\"avg_overall_grade\":\"51.71\"},{\"id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"first_name\":\"Teresa\",\"last_name\":\"Woźniak\",\"total_grades\":\"1\",\"avg_exam_score\":\"88.07\",\"avg_project_score\":\"21.41\",\"avg_attendance_score\":\"52.07\",\"avg_overall_grade\":\"53.85\"},{\"id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"first_name\":\"Robert\",\"last_name\":\"Jaworski\",\"total_grades\":\"1\",\"avg_exam_score\":\"35.80\",\"avg_project_score\":\"42.30\",\"avg_attendance_score\":\"84.56\",\"avg_overall_grade\":\"54.22\"},{\"id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"first_name\":\"Michał\",\"last_name\":\"Nowak\",\"total_grades\":\"1\",\"avg_exam_score\":\"76.27\",\"avg_project_score\":\"85.72\",\"avg_attendance_score\":\"9.09\",\"avg_overall_grade\":\"57.03\"},{\"id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"first_name\":\"Ryszard\",\"last_name\":\"Kowalczyk\",\"total_grades\":\"2\",\"avg_exam_score\":\"48.43\",\"avg_project_score\":\"82.29\",\"avg_attendance_score\":\"54.77\",\"avg_overall_grade\":\"61.83\"},{\"id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"first_name\":\"Jacek\",\"last_name\":\"Wojciechowski\",\"total_grades\":\"4\",\"avg_exam_score\":\"78.19\",\"avg_project_score\":\"61.94\",\"avg_attendance_score\":\"67.97\",\"avg_overall_grade\":\"69.36\"}],\"metadata\":{\"columns\":[\"id\",\"first_name\",\"last_name\",\"total_grades\",\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\",\"avg_overall_grade\"],\"rowCount\":20,\"sample\":[{\"id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"first_name\":\"Magdalena\",\"last_name\":\"Piotrowski\",\"total_grades\":\"1\",\"avg_exam_score\":null,\"avg_project_score\":null,\"avg_attendance_score\":\"33.59\",\"avg_overall_grade\":\"11.20\"},{\"id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"first_name\":\"Adam\",\"last_name\":\"Wieczorek\",\"total_grades\":\"1\",\"avg_exam_score\":\"50.05\",\"avg_project_score\":null,\"avg_attendance_score\":\"12.10\",\"avg_overall_grade\":\"20.72\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Professors Ranked by Average Overall Grade (Strictest Graders First)\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"first_name\",\"type\":\"nominal\",\"sort\":{\"field\":\"avg_overall_grade\",\"order\":\"ascending\"},\"title\":\"Professor\"},\"x\":{\"field\":\"avg_overall_grade\",\"type\":\"quantitative\",\"title\":\"Average Overall Grade\"},\"color\":{\"field\":\"avg_overall_grade\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"reds\"},\"title\":\"Avg Grade\"},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First Name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last Name\"},{\"field\":\"total_grades\",\"type\":\"quantitative\",\"title\":\"Total Grades Given\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\",\"format\":\".2f\"},{\"field\":\"avg_project_score\",\"type\":\"quantitative\",\"title\":\"Avg Project Score\",\"format\":\".2f\"},{\"field\":\"avg_attendance_score\",\"type\":\"quantitative\",\"title\":\"Avg Attendance Score\",\"format\":\".2f\"},{\"field\":\"avg_overall_grade\",\"type\":\"quantitative\",\"title\":\"Avg Overall Grade\",\"format\":\".2f\"}]},\"width\":600,\"height\":500},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771856044953}},\"input\":{\"question\":\"Which professors give the lowest average grades (strictest graders)?\"},\"result\":{\"sql\":\"\\nSELECT \\n  p.id,\\n  p.first_name,\\n  p.last_name,\\n  COUNT(DISTINCT g.id) as total_grades,\\n  ROUND(AVG(g.exam_score)::numeric, 2) as avg_exam_score,\\n  ROUND(AVG(g.project_score)::numeric, 2) as avg_project_score,\\n  ROUND(AVG(g.attendance_score)::numeric, 2) as avg_attendance_score,\\n  ROUND(AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / 3)::numeric, 2) as avg_overall_grade\\nFROM professors p\\nJOIN course_sections cs ON p.id = cs.professor_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nGROUP BY p.id, p.first_name, p.last_name\\nHAVING COUNT(DISTINCT g.id) > 0\\nORDER BY avg_overall_grade ASC\\n\",\"data\":[{\"id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"first_name\":\"Magdalena\",\"last_name\":\"Piotrowski\",\"total_grades\":\"1\",\"avg_exam_score\":null,\"avg_project_score\":null,\"avg_attendance_score\":\"33.59\",\"avg_overall_grade\":\"11.20\"},{\"id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"first_name\":\"Adam\",\"last_name\":\"Wieczorek\",\"total_grades\":\"1\",\"avg_exam_score\":\"50.05\",\"avg_project_score\":null,\"avg_attendance_score\":\"12.10\",\"avg_overall_grade\":\"20.72\"},{\"id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"first_name\":\"Grzegorz\",\"last_name\":\"Jankowski\",\"total_grades\":\"1\",\"avg_exam_score\":\"47.03\",\"avg_project_score\":\"19.22\",\"avg_attendance_score\":null,\"avg_overall_grade\":\"22.08\"},{\"id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"first_name\":\"Zbigniew\",\"last_name\":\"Majewski\",\"total_grades\":\"1\",\"avg_exam_score\":null,\"avg_project_score\":\"16.90\",\"avg_attendance_score\":\"61.19\",\"avg_overall_grade\":\"26.03\"},{\"id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"first_name\":\"Ewa\",\"last_name\":\"Krawczyk\",\"total_grades\":\"2\",\"avg_exam_score\":\"35.68\",\"avg_project_score\":\"22.02\",\"avg_attendance_score\":\"79.35\",\"avg_overall_grade\":\"28.79\"},{\"id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"first_name\":\"Marek\",\"last_name\":\"Lewandowski\",\"total_grades\":\"3\",\"avg_exam_score\":\"51.42\",\"avg_project_score\":\"27.23\",\"avg_attendance_score\":\"69.35\",\"avg_overall_grade\":\"33.92\"},{\"id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"first_name\":\"Marek\",\"last_name\":\"Woźniak\",\"total_grades\":\"5\",\"avg_exam_score\":\"40.15\",\"avg_project_score\":\"36.33\",\"avg_attendance_score\":\"65.03\",\"avg_overall_grade\":\"37.74\"},{\"id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"first_name\":\"Tomasz\",\"last_name\":\"Wieczorek\",\"total_grades\":\"1\",\"avg_exam_score\":null,\"avg_project_score\":\"67.58\",\"avg_attendance_score\":\"47.11\",\"avg_overall_grade\":\"38.23\"},{\"id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"first_name\":\"Ryszard\",\"last_name\":\"Woźniak\",\"total_grades\":\"4\",\"avg_exam_score\":\"19.04\",\"avg_project_score\":\"40.13\",\"avg_attendance_score\":\"88.43\",\"avg_overall_grade\":\"38.49\"},{\"id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"first_name\":\"Joanna\",\"last_name\":\"Stępień\",\"total_grades\":\"2\",\"avg_exam_score\":\"54.51\",\"avg_project_score\":\"50.15\",\"avg_attendance_score\":\"19.06\",\"avg_overall_grade\":\"41.24\"},{\"id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"first_name\":\"Mariusz\",\"last_name\":\"Nowakowski\",\"total_grades\":\"4\",\"avg_exam_score\":\"22.35\",\"avg_project_score\":\"61.60\",\"avg_attendance_score\":\"59.32\",\"avg_overall_grade\":\"42.17\"},{\"id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"first_name\":\"Magdalena\",\"last_name\":\"Michalski\",\"total_grades\":\"3\",\"avg_exam_score\":\"20.76\",\"avg_project_score\":\"82.25\",\"avg_attendance_score\":\"59.90\",\"avg_overall_grade\":\"42.86\"},{\"id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"first_name\":\"Małgorzata\",\"last_name\":\"Olszewski\",\"total_grades\":\"4\",\"avg_exam_score\":\"87.69\",\"avg_project_score\":\"39.27\",\"avg_attendance_score\":\"40.19\",\"avg_overall_grade\":\"45.06\"},{\"id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"first_name\":\"Agnieszka\",\"last_name\":\"Krawczyk\",\"total_grades\":\"3\",\"avg_exam_score\":\"42.50\",\"avg_project_score\":\"36.08\",\"avg_attendance_score\":\"56.80\",\"avg_overall_grade\":\"45.13\"},{\"id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"first_name\":\"Tomasz\",\"last_name\":\"Majewski\",\"total_grades\":\"8\",\"avg_exam_score\":\"50.11\",\"avg_project_score\":\"48.43\",\"avg_attendance_score\":\"56.59\",\"avg_overall_grade\":\"51.71\"},{\"id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"first_name\":\"Teresa\",\"last_name\":\"Woźniak\",\"total_grades\":\"1\",\"avg_exam_score\":\"88.07\",\"avg_project_score\":\"21.41\",\"avg_attendance_score\":\"52.07\",\"avg_overall_grade\":\"53.85\"},{\"id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"first_name\":\"Robert\",\"last_name\":\"Jaworski\",\"total_grades\":\"1\",\"avg_exam_score\":\"35.80\",\"avg_project_score\":\"42.30\",\"avg_attendance_score\":\"84.56\",\"avg_overall_grade\":\"54.22\"},{\"id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"first_name\":\"Michał\",\"last_name\":\"Nowak\",\"total_grades\":\"1\",\"avg_exam_score\":\"76.27\",\"avg_project_score\":\"85.72\",\"avg_attendance_score\":\"9.09\",\"avg_overall_grade\":\"57.03\"},{\"id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"first_name\":\"Ryszard\",\"last_name\":\"Kowalczyk\",\"total_grades\":\"2\",\"avg_exam_score\":\"48.43\",\"avg_project_score\":\"82.29\",\"avg_attendance_score\":\"54.77\",\"avg_overall_grade\":\"61.83\"},{\"id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"first_name\":\"Jacek\",\"last_name\":\"Wojciechowski\",\"total_grades\":\"4\",\"avg_exam_score\":\"78.19\",\"avg_project_score\":\"61.94\",\"avg_attendance_score\":\"67.97\",\"avg_overall_grade\":\"69.36\"}],\"metadata\":{\"columns\":[\"id\",\"first_name\",\"last_name\",\"total_grades\",\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\",\"avg_overall_grade\"],\"rowCount\":20,\"sample\":[{\"id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"first_name\":\"Magdalena\",\"last_name\":\"Piotrowski\",\"total_grades\":\"1\",\"avg_exam_score\":null,\"avg_project_score\":null,\"avg_attendance_score\":\"33.59\",\"avg_overall_grade\":\"11.20\"},{\"id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"first_name\":\"Adam\",\"last_name\":\"Wieczorek\",\"total_grades\":\"1\",\"avg_exam_score\":\"50.05\",\"avg_project_score\":null,\"avg_attendance_score\":\"12.10\",\"avg_overall_grade\":\"20.72\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Professors Ranked by Average Overall Grade (Strictest Graders First)\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"first_name\",\"type\":\"nominal\",\"sort\":{\"field\":\"avg_overall_grade\",\"order\":\"ascending\"},\"title\":\"Professor\"},\"x\":{\"field\":\"avg_overall_grade\",\"type\":\"quantitative\",\"title\":\"Average Overall Grade\"},\"color\":{\"field\":\"avg_overall_grade\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"reds\"},\"title\":\"Avg Grade\"},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First Name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last Name\"},{\"field\":\"total_grades\",\"type\":\"quantitative\",\"title\":\"Total Grades Given\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\",\"format\":\".2f\"},{\"field\":\"avg_project_score\",\"type\":\"quantitative\",\"title\":\"Avg Project Score\",\"format\":\".2f\"},{\"field\":\"avg_attendance_score\",\"type\":\"quantitative\",\"title\":\"Avg Attendance Score\",\"format\":\".2f\"},{\"field\":\"avg_overall_grade\",\"type\":\"quantitative\",\"title\":\"Avg Overall Grade\",\"format\":\".2f\"}]},\"width\":600,\"height\":500},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"138ebb27f6a94c2f1ac4201d27a7a68f\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/professor-grade-strictness/run-0001/run.json",
+    "queryPath": "runs/professor-grade-strictness/run-0001/query.sql",
+    "vegaRawPath": "runs/professor-grade-strictness/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/professor-grade-strictness/run-0001/vega.resolved.json",
+    "imagePath": "runs/professor-grade-strictness/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:14:05.324Z",
+  "traceId": "138ebb27f6a94c2f1ac4201d27a7a68f",
+  "success": true,
+  "durationMs": 48306,
+  "resultRaw": {
+    "data": [
+      {
+        "id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+        "first_name": "Magdalena",
+        "last_name": "Piotrowski",
+        "total_grades": "1",
+        "avg_exam_score": null,
+        "avg_project_score": null,
+        "avg_attendance_score": "33.59",
+        "avg_overall_grade": "11.20"
+      },
+      {
+        "id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+        "first_name": "Adam",
+        "last_name": "Wieczorek",
+        "total_grades": "1",
+        "avg_exam_score": "50.05",
+        "avg_project_score": null,
+        "avg_attendance_score": "12.10",
+        "avg_overall_grade": "20.72"
+      },
+      {
+        "id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+        "first_name": "Grzegorz",
+        "last_name": "Jankowski",
+        "total_grades": "1",
+        "avg_exam_score": "47.03",
+        "avg_project_score": "19.22",
+        "avg_attendance_score": null,
+        "avg_overall_grade": "22.08"
+      },
+      {
+        "id": "b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4",
+        "first_name": "Zbigniew",
+        "last_name": "Majewski",
+        "total_grades": "1",
+        "avg_exam_score": null,
+        "avg_project_score": "16.90",
+        "avg_attendance_score": "61.19",
+        "avg_overall_grade": "26.03"
+      },
+      {
+        "id": "a82c40da-e7dc-4e49-9e66-386ea4bb7483",
+        "first_name": "Ewa",
+        "last_name": "Krawczyk",
+        "total_grades": "2",
+        "avg_exam_score": "35.68",
+        "avg_project_score": "22.02",
+        "avg_attendance_score": "79.35",
+        "avg_overall_grade": "28.79"
+      },
+      {
+        "id": "037011f2-f3d4-406e-9554-a6ffba701e06",
+        "first_name": "Marek",
+        "last_name": "Lewandowski",
+        "total_grades": "3",
+        "avg_exam_score": "51.42",
+        "avg_project_score": "27.23",
+        "avg_attendance_score": "69.35",
+        "avg_overall_grade": "33.92"
+      },
+      {
+        "id": "2b5262b8-932c-4951-9390-c56d4b69d888",
+        "first_name": "Marek",
+        "last_name": "Woźniak",
+        "total_grades": "5",
+        "avg_exam_score": "40.15",
+        "avg_project_score": "36.33",
+        "avg_attendance_score": "65.03",
+        "avg_overall_grade": "37.74"
+      },
+      {
+        "id": "4050afec-f68c-49bb-9982-4a3c9d1a23d9",
+        "first_name": "Tomasz",
+        "last_name": "Wieczorek",
+        "total_grades": "1",
+        "avg_exam_score": null,
+        "avg_project_score": "67.58",
+        "avg_attendance_score": "47.11",
+        "avg_overall_grade": "38.23"
+      },
+      {
+        "id": "5d70abe8-4f1a-44ec-9816-2ec96a2807cb",
+        "first_name": "Ryszard",
+        "last_name": "Woźniak",
+        "total_grades": "4",
+        "avg_exam_score": "19.04",
+        "avg_project_score": "40.13",
+        "avg_attendance_score": "88.43",
+        "avg_overall_grade": "38.49"
+      },
+      {
+        "id": "007cb07c-c14f-4824-a62d-d42685252c75",
+        "first_name": "Joanna",
+        "last_name": "Stępień",
+        "total_grades": "2",
+        "avg_exam_score": "54.51",
+        "avg_project_score": "50.15",
+        "avg_attendance_score": "19.06",
+        "avg_overall_grade": "41.24"
+      },
+      {
+        "id": "d19adcea-56d6-4557-8f93-95ec58fa5d34",
+        "first_name": "Mariusz",
+        "last_name": "Nowakowski",
+        "total_grades": "4",
+        "avg_exam_score": "22.35",
+        "avg_project_score": "61.60",
+        "avg_attendance_score": "59.32",
+        "avg_overall_grade": "42.17"
+      },
+      {
+        "id": "5b3ae75e-96e7-4a7b-be0f-7375938dcd62",
+        "first_name": "Magdalena",
+        "last_name": "Michalski",
+        "total_grades": "3",
+        "avg_exam_score": "20.76",
+        "avg_project_score": "82.25",
+        "avg_attendance_score": "59.90",
+        "avg_overall_grade": "42.86"
+      },
+      {
+        "id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+        "first_name": "Małgorzata",
+        "last_name": "Olszewski",
+        "total_grades": "4",
+        "avg_exam_score": "87.69",
+        "avg_project_score": "39.27",
+        "avg_attendance_score": "40.19",
+        "avg_overall_grade": "45.06"
+      },
+      {
+        "id": "ff61fe12-d98c-4d43-87db-710f2571c1f2",
+        "first_name": "Agnieszka",
+        "last_name": "Krawczyk",
+        "total_grades": "3",
+        "avg_exam_score": "42.50",
+        "avg_project_score": "36.08",
+        "avg_attendance_score": "56.80",
+        "avg_overall_grade": "45.13"
+      },
+      {
+        "id": "f221aafd-0e9c-4345-aff5-7e290e1a7864",
+        "first_name": "Tomasz",
+        "last_name": "Majewski",
+        "total_grades": "8",
+        "avg_exam_score": "50.11",
+        "avg_project_score": "48.43",
+        "avg_attendance_score": "56.59",
+        "avg_overall_grade": "51.71"
+      },
+      {
+        "id": "173e49aa-5a27-41e8-b1fa-4d19423bdc0b",
+        "first_name": "Teresa",
+        "last_name": "Woźniak",
+        "total_grades": "1",
+        "avg_exam_score": "88.07",
+        "avg_project_score": "21.41",
+        "avg_attendance_score": "52.07",
+        "avg_overall_grade": "53.85"
+      },
+      {
+        "id": "8f0ffcad-1af9-4da5-898a-dc47b8717d83",
+        "first_name": "Robert",
+        "last_name": "Jaworski",
+        "total_grades": "1",
+        "avg_exam_score": "35.80",
+        "avg_project_score": "42.30",
+        "avg_attendance_score": "84.56",
+        "avg_overall_grade": "54.22"
+      },
+      {
+        "id": "f24d24fc-5446-4d72-bb11-9d9dd1545f97",
+        "first_name": "Michał",
+        "last_name": "Nowak",
+        "total_grades": "1",
+        "avg_exam_score": "76.27",
+        "avg_project_score": "85.72",
+        "avg_attendance_score": "9.09",
+        "avg_overall_grade": "57.03"
+      },
+      {
+        "id": "089bea41-7aee-4467-b7ad-36bf22181040",
+        "first_name": "Ryszard",
+        "last_name": "Kowalczyk",
+        "total_grades": "2",
+        "avg_exam_score": "48.43",
+        "avg_project_score": "82.29",
+        "avg_attendance_score": "54.77",
+        "avg_overall_grade": "61.83"
+      },
+      {
+        "id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+        "first_name": "Jacek",
+        "last_name": "Wojciechowski",
+        "total_grades": "4",
+        "avg_exam_score": "78.19",
+        "avg_project_score": "61.94",
+        "avg_attendance_score": "67.97",
+        "avg_overall_grade": "69.36"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Professors Ranked by Average Overall Grade (Strictest Graders First)",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "first_name",
+          "type": "nominal",
+          "sort": {
+            "field": "avg_overall_grade",
+            "order": "ascending"
+          },
+          "title": "Professor"
+        },
+        "x": {
+          "field": "avg_overall_grade",
+          "type": "quantitative",
+          "title": "Average Overall Grade"
+        },
+        "color": {
+          "field": "avg_overall_grade",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "reds"
+          },
+          "title": "Avg Grade"
+        },
+        "tooltip": [
+          {
+            "field": "first_name",
+            "type": "nominal",
+            "title": "First Name"
+          },
+          {
+            "field": "last_name",
+            "type": "nominal",
+            "title": "Last Name"
+          },
+          {
+            "field": "total_grades",
+            "type": "quantitative",
+            "title": "Total Grades Given"
+          },
+          {
+            "field": "avg_exam_score",
+            "type": "quantitative",
+            "title": "Avg Exam Score",
+            "format": ".2f"
+          },
+          {
+            "field": "avg_project_score",
+            "type": "quantitative",
+            "title": "Avg Project Score",
+            "format": ".2f"
+          },
+          {
+            "field": "avg_attendance_score",
+            "type": "quantitative",
+            "title": "Avg Attendance Score",
+            "format": ".2f"
+          },
+          {
+            "field": "avg_overall_grade",
+            "type": "quantitative",
+            "title": "Avg Overall Grade",
+            "format": ".2f"
+          }
+        ]
+      },
+      "width": 600,
+      "height": 500
+    },
+    "sql": "\nSELECT \n  p.id,\n  p.first_name,\n  p.last_name,\n  COUNT(DISTINCT g.id) as total_grades,\n  ROUND(AVG(g.exam_score)::numeric, 2) as avg_exam_score,\n  ROUND(AVG(g.project_score)::numeric, 2) as avg_project_score,\n  ROUND(AVG(g.attendance_score)::numeric, 2) as avg_attendance_score,\n  ROUND(AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / 3)::numeric, 2) as avg_overall_grade\nFROM professors p\nJOIN course_sections cs ON p.id = cs.professor_id\nJOIN enrollments e ON cs.id = e.course_section_id\nJOIN grades g ON e.id = g.enrollment_id\nGROUP BY p.id, p.first_name, p.last_name\nHAVING COUNT(DISTINCT g.id) > 0\nORDER BY avg_overall_grade ASC\n",
+    "metadata": {
+      "columns": [
+        "id",
+        "first_name",
+        "last_name",
+        "total_grades",
+        "avg_exam_score",
+        "avg_project_score",
+        "avg_attendance_score",
+        "avg_overall_grade"
+      ],
+      "rowCount": 20,
+      "sample": [
+        {
+          "id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+          "first_name": "Magdalena",
+          "last_name": "Piotrowski",
+          "total_grades": "1",
+          "avg_exam_score": null,
+          "avg_project_score": null,
+          "avg_attendance_score": "33.59",
+          "avg_overall_grade": "11.20"
+        },
+        {
+          "id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+          "first_name": "Adam",
+          "last_name": "Wieczorek",
+          "total_grades": "1",
+          "avg_exam_score": "50.05",
+          "avg_project_score": null,
+          "avg_attendance_score": "12.10",
+          "avg_overall_grade": "20.72"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+        "first_name": "Magdalena",
+        "last_name": "Piotrowski",
+        "total_grades": "1",
+        "avg_exam_score": null,
+        "avg_project_score": null,
+        "avg_attendance_score": "33.59",
+        "avg_overall_grade": "11.20"
+      },
+      {
+        "id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+        "first_name": "Adam",
+        "last_name": "Wieczorek",
+        "total_grades": "1",
+        "avg_exam_score": "50.05",
+        "avg_project_score": null,
+        "avg_attendance_score": "12.10",
+        "avg_overall_grade": "20.72"
+      },
+      {
+        "id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+        "first_name": "Grzegorz",
+        "last_name": "Jankowski",
+        "total_grades": "1",
+        "avg_exam_score": "47.03",
+        "avg_project_score": "19.22",
+        "avg_attendance_score": null,
+        "avg_overall_grade": "22.08"
+      },
+      {
+        "id": "b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4",
+        "first_name": "Zbigniew",
+        "last_name": "Majewski",
+        "total_grades": "1",
+        "avg_exam_score": null,
+        "avg_project_score": "16.90",
+        "avg_attendance_score": "61.19",
+        "avg_overall_grade": "26.03"
+      },
+      {
+        "id": "a82c40da-e7dc-4e49-9e66-386ea4bb7483",
+        "first_name": "Ewa",
+        "last_name": "Krawczyk",
+        "total_grades": "2",
+        "avg_exam_score": "35.68",
+        "avg_project_score": "22.02",
+        "avg_attendance_score": "79.35",
+        "avg_overall_grade": "28.79"
+      },
+      {
+        "id": "037011f2-f3d4-406e-9554-a6ffba701e06",
+        "first_name": "Marek",
+        "last_name": "Lewandowski",
+        "total_grades": "3",
+        "avg_exam_score": "51.42",
+        "avg_project_score": "27.23",
+        "avg_attendance_score": "69.35",
+        "avg_overall_grade": "33.92"
+      },
+      {
+        "id": "2b5262b8-932c-4951-9390-c56d4b69d888",
+        "first_name": "Marek",
+        "last_name": "Woźniak",
+        "total_grades": "5",
+        "avg_exam_score": "40.15",
+        "avg_project_score": "36.33",
+        "avg_attendance_score": "65.03",
+        "avg_overall_grade": "37.74"
+      },
+      {
+        "id": "4050afec-f68c-49bb-9982-4a3c9d1a23d9",
+        "first_name": "Tomasz",
+        "last_name": "Wieczorek",
+        "total_grades": "1",
+        "avg_exam_score": null,
+        "avg_project_score": "67.58",
+        "avg_attendance_score": "47.11",
+        "avg_overall_grade": "38.23"
+      },
+      {
+        "id": "5d70abe8-4f1a-44ec-9816-2ec96a2807cb",
+        "first_name": "Ryszard",
+        "last_name": "Woźniak",
+        "total_grades": "4",
+        "avg_exam_score": "19.04",
+        "avg_project_score": "40.13",
+        "avg_attendance_score": "88.43",
+        "avg_overall_grade": "38.49"
+      },
+      {
+        "id": "007cb07c-c14f-4824-a62d-d42685252c75",
+        "first_name": "Joanna",
+        "last_name": "Stępień",
+        "total_grades": "2",
+        "avg_exam_score": "54.51",
+        "avg_project_score": "50.15",
+        "avg_attendance_score": "19.06",
+        "avg_overall_grade": "41.24"
+      },
+      {
+        "id": "d19adcea-56d6-4557-8f93-95ec58fa5d34",
+        "first_name": "Mariusz",
+        "last_name": "Nowakowski",
+        "total_grades": "4",
+        "avg_exam_score": "22.35",
+        "avg_project_score": "61.60",
+        "avg_attendance_score": "59.32",
+        "avg_overall_grade": "42.17"
+      },
+      {
+        "id": "5b3ae75e-96e7-4a7b-be0f-7375938dcd62",
+        "first_name": "Magdalena",
+        "last_name": "Michalski",
+        "total_grades": "3",
+        "avg_exam_score": "20.76",
+        "avg_project_score": "82.25",
+        "avg_attendance_score": "59.90",
+        "avg_overall_grade": "42.86"
+      },
+      {
+        "id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+        "first_name": "Małgorzata",
+        "last_name": "Olszewski",
+        "total_grades": "4",
+        "avg_exam_score": "87.69",
+        "avg_project_score": "39.27",
+        "avg_attendance_score": "40.19",
+        "avg_overall_grade": "45.06"
+      },
+      {
+        "id": "ff61fe12-d98c-4d43-87db-710f2571c1f2",
+        "first_name": "Agnieszka",
+        "last_name": "Krawczyk",
+        "total_grades": "3",
+        "avg_exam_score": "42.50",
+        "avg_project_score": "36.08",
+        "avg_attendance_score": "56.80",
+        "avg_overall_grade": "45.13"
+      },
+      {
+        "id": "f221aafd-0e9c-4345-aff5-7e290e1a7864",
+        "first_name": "Tomasz",
+        "last_name": "Majewski",
+        "total_grades": "8",
+        "avg_exam_score": "50.11",
+        "avg_project_score": "48.43",
+        "avg_attendance_score": "56.59",
+        "avg_overall_grade": "51.71"
+      },
+      {
+        "id": "173e49aa-5a27-41e8-b1fa-4d19423bdc0b",
+        "first_name": "Teresa",
+        "last_name": "Woźniak",
+        "total_grades": "1",
+        "avg_exam_score": "88.07",
+        "avg_project_score": "21.41",
+        "avg_attendance_score": "52.07",
+        "avg_overall_grade": "53.85"
+      },
+      {
+        "id": "8f0ffcad-1af9-4da5-898a-dc47b8717d83",
+        "first_name": "Robert",
+        "last_name": "Jaworski",
+        "total_grades": "1",
+        "avg_exam_score": "35.80",
+        "avg_project_score": "42.30",
+        "avg_attendance_score": "84.56",
+        "avg_overall_grade": "54.22"
+      },
+      {
+        "id": "f24d24fc-5446-4d72-bb11-9d9dd1545f97",
+        "first_name": "Michał",
+        "last_name": "Nowak",
+        "total_grades": "1",
+        "avg_exam_score": "76.27",
+        "avg_project_score": "85.72",
+        "avg_attendance_score": "9.09",
+        "avg_overall_grade": "57.03"
+      },
+      {
+        "id": "089bea41-7aee-4467-b7ad-36bf22181040",
+        "first_name": "Ryszard",
+        "last_name": "Kowalczyk",
+        "total_grades": "2",
+        "avg_exam_score": "48.43",
+        "avg_project_score": "82.29",
+        "avg_attendance_score": "54.77",
+        "avg_overall_grade": "61.83"
+      },
+      {
+        "id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+        "first_name": "Jacek",
+        "last_name": "Wojciechowski",
+        "total_grades": "4",
+        "avg_exam_score": "78.19",
+        "avg_project_score": "61.94",
+        "avg_attendance_score": "67.97",
+        "avg_overall_grade": "69.36"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Professors Ranked by Average Overall Grade (Strictest Graders First)",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "first_name",
+          "type": "nominal",
+          "sort": {
+            "field": "avg_overall_grade",
+            "order": "ascending"
+          },
+          "title": "Professor"
+        },
+        "x": {
+          "field": "avg_overall_grade",
+          "type": "quantitative",
+          "title": "Average Overall Grade"
+        },
+        "color": {
+          "field": "avg_overall_grade",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "reds"
+          },
+          "title": "Avg Grade"
+        },
+        "tooltip": [
+          {
+            "field": "first_name",
+            "type": "nominal",
+            "title": "First Name"
+          },
+          {
+            "field": "last_name",
+            "type": "nominal",
+            "title": "Last Name"
+          },
+          {
+            "field": "total_grades",
+            "type": "quantitative",
+            "title": "Total Grades Given"
+          },
+          {
+            "field": "avg_exam_score",
+            "type": "quantitative",
+            "title": "Avg Exam Score",
+            "format": ".2f"
+          },
+          {
+            "field": "avg_project_score",
+            "type": "quantitative",
+            "title": "Avg Project Score",
+            "format": ".2f"
+          },
+          {
+            "field": "avg_attendance_score",
+            "type": "quantitative",
+            "title": "Avg Attendance Score",
+            "format": ".2f"
+          },
+          {
+            "field": "avg_overall_grade",
+            "type": "quantitative",
+            "title": "Avg Overall Grade",
+            "format": ".2f"
+          }
+        ]
+      },
+      "width": 600,
+      "height": 500
+    },
+    "sql": "\nSELECT \n  p.id,\n  p.first_name,\n  p.last_name,\n  COUNT(DISTINCT g.id) as total_grades,\n  ROUND(AVG(g.exam_score)::numeric, 2) as avg_exam_score,\n  ROUND(AVG(g.project_score)::numeric, 2) as avg_project_score,\n  ROUND(AVG(g.attendance_score)::numeric, 2) as avg_attendance_score,\n  ROUND(AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / 3)::numeric, 2) as avg_overall_grade\nFROM professors p\nJOIN course_sections cs ON p.id = cs.professor_id\nJOIN enrollments e ON cs.id = e.course_section_id\nJOIN grades g ON e.id = g.enrollment_id\nGROUP BY p.id, p.first_name, p.last_name\nHAVING COUNT(DISTINCT g.id) > 0\nORDER BY avg_overall_grade ASC\n",
+    "metadata": {
+      "columns": [
+        "id",
+        "first_name",
+        "last_name",
+        "total_grades",
+        "avg_exam_score",
+        "avg_project_score",
+        "avg_attendance_score",
+        "avg_overall_grade"
+      ],
+      "rowCount": 20,
+      "sample": [
+        {
+          "id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+          "first_name": "Magdalena",
+          "last_name": "Piotrowski",
+          "total_grades": "1",
+          "avg_exam_score": null,
+          "avg_project_score": null,
+          "avg_attendance_score": "33.59",
+          "avg_overall_grade": "11.20"
+        },
+        {
+          "id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+          "first_name": "Adam",
+          "last_name": "Wieczorek",
+          "total_grades": "1",
+          "avg_exam_score": "50.05",
+          "avg_project_score": null,
+          "avg_attendance_score": "12.10",
+          "avg_overall_grade": "20.72"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.370Z",
+    "traceId": "138ebb27f6a94c2f1ac4201d27a7a68f",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 29587,
+      "outputTokens": 1696,
+      "totalTokens": 31283,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.038067
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 29587,
+        "outputTokens": 1696,
+        "totalTokens": 31283,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.038067
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,862 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "avg-overall-rating-by-professor",
+  "caseDirectory": "avg-overall-rating-by-professor",
+  "repeatIndex": 1,
+  "prompt": "Show the average overall course evaluation rating for each professor",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the average overall course evaluation rating for each professor"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:35:55.832Z",
+    "endedAtUtc": "2026-02-22T23:37:16.486Z",
+    "durationMs": 80654
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "39378",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:37:16 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show the average overall course evaluation rating for each professor\"},\"sql\":{\"payload\":{\"question\":\"Show the average overall course evaluation rating for each professor\"},\"startedAt\":1771803355841,\"status\":\"success\",\"output\":{\"reasoning\":\"Join course_evaluations -> enrollments -> course_sections -> professors and compute AVG(overall_rating) per professor. I use LEFT JOINs so professors without evaluations appear with NULL average and order deterministically by average desc, then last/first name.\",\"sql\":\"SELECT\\n  p.id AS professor_id,\\n  p.first_name AS professor_first_name,\\n  p.last_name AS professor_last_name,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM public.professors p\\nLEFT JOIN public.course_sections cs ON cs.professor_id = p.id\\nLEFT JOIN public.enrollments e ON e.course_section_id = cs.id\\nLEFT JOIN public.course_evaluations ce ON ce.enrollment_id = e.id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY avg_overall_rating DESC NULLS LAST, p.last_name, p.first_name;\",\"assumptions\":[\"course_evaluations.enrollment_id -> enrollments.id, enrollments.course_section_id -> course_sections.id, course_sections.professor_id -> professors.id (confirmed via schema inspection)\",\"overall_rating is numeric/integer and not null for stored evaluations (schema shows NOT NULL)\",\"Include all professors; those without evaluations will have avg_overall_rating = NULL\"]},\"endedAt\":1771803389409},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  p.id AS professor_id,\\n  p.first_name AS professor_first_name,\\n  p.last_name AS professor_last_name,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM public.professors p\\nLEFT JOIN public.course_sections cs ON cs.professor_id = p.id\\nLEFT JOIN public.enrollments e ON e.course_section_id = cs.id\\nLEFT JOIN public.course_evaluations ce ON ce.enrollment_id = e.id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY avg_overall_rating DESC NULLS LAST, p.last_name, p.first_name;\"},\"startedAt\":1771803389418,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT\\n  p.id AS professor_id,\\n  p.first_name AS professor_first_name,\\n  p.last_name AS professor_last_name,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM public.professors p\\nLEFT JOIN public.course_sections cs ON cs.professor_id = p.id\\nLEFT JOIN public.enrollments e ON e.course_section_id = cs.id\\nLEFT JOIN public.course_evaluations ce ON ce.enrollment_id = e.id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY avg_overall_rating DESC NULLS LAST, p.last_name, p.first_name\",\"metadata\":{\"columns\":[\"professor_id\",\"avg_overall_rating\",\"professor_last_name\",\"professor_first_name\"],\"rowCount\":50,\"sample\":[{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"avg_overall_rating\":5,\"professor_last_name\":\"Piotrowski\",\"professor_first_name\":\"Magdalena\"},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"avg_overall_rating\":5,\"professor_last_name\":\"Szymański\",\"professor_first_name\":\"Katarzyna\"}]},\"data\":[{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"avg_overall_rating\":5,\"professor_last_name\":\"Piotrowski\",\"professor_first_name\":\"Magdalena\"},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"avg_overall_rating\":5,\"professor_last_name\":\"Szymański\",\"professor_first_name\":\"Katarzyna\"},{\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"avg_overall_rating\":4.5,\"professor_last_name\":\"Kozłowski\",\"professor_first_name\":\"Agnieszka\"},{\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"avg_overall_rating\":4,\"professor_last_name\":\"Wieczorek\",\"professor_first_name\":\"Tomasz\"},{\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"avg_overall_rating\":3.75,\"professor_last_name\":\"Woźniak\",\"professor_first_name\":\"Ryszard\"},{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"avg_overall_rating\":3.67,\"professor_last_name\":\"Wojciechowski\",\"professor_first_name\":\"Jacek\"},{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"avg_overall_rating\":3,\"professor_last_name\":\"Jankowski\",\"professor_first_name\":\"Grzegorz\"},{\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"avg_overall_rating\":3,\"professor_last_name\":\"Kozłowski\",\"professor_first_name\":\"Katarzyna\"},{\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"avg_overall_rating\":3,\"professor_last_name\":\"Krawczyk\",\"professor_first_name\":\"Ewa\"},{\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"avg_overall_rating\":3,\"professor_last_name\":\"Nowakowski\",\"professor_first_name\":\"Mariusz\"},{\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"avg_overall_rating\":3,\"professor_last_name\":\"Olszewski\",\"professor_first_name\":\"Małgorzata\"},{\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"avg_overall_rating\":3,\"professor_last_name\":\"Pawłowski\",\"professor_first_name\":\"Teresa\"},{\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"avg_overall_rating\":2.5,\"professor_last_name\":\"Michalski\",\"professor_first_name\":\"Ewa\"},{\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"avg_overall_rating\":2.5,\"professor_last_name\":\"Woźniak\",\"professor_first_name\":\"Marek\"},{\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"avg_overall_rating\":2.5,\"professor_last_name\":\"Woźniak\",\"professor_first_name\":\"Teresa\"},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"avg_overall_rating\":2,\"professor_last_name\":\"Kowalczyk\",\"professor_first_name\":\"Ryszard\"},{\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"avg_overall_rating\":2,\"professor_last_name\":\"Lewandowski\",\"professor_first_name\":\"Marek\"},{\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"avg_overall_rating\":2,\"professor_last_name\":\"Majewski\",\"professor_first_name\":\"Tomasz\"},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"avg_overall_rating\":1.5,\"professor_last_name\":\"Wieczorek\",\"professor_first_name\":\"Adam\"},{\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"avg_overall_rating\":1,\"professor_last_name\":\"Nowak\",\"professor_first_name\":\"Michał\"},{\"professor_id\":\"0d79d103-ec28-4ebf-831c-98b3fb34e9b0\",\"avg_overall_rating\":null,\"professor_last_name\":\"Górski\",\"professor_first_name\":\"Zbigniew\"},{\"professor_id\":\"8247a0e4-17f5-4581-a78b-f33a1a2a518b\",\"avg_overall_rating\":null,\"professor_last_name\":\"Jankowski\",\"professor_first_name\":\"Paweł\"},{\"professor_id\":\"3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8\",\"avg_overall_rating\":null,\"professor_last_name\":\"Jaworski\",\"professor_first_name\":\"Michał\"},{\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"avg_overall_rating\":null,\"professor_last_name\":\"Jaworski\",\"professor_first_name\":\"Robert\"},{\"professor_id\":\"cd0c2f92-7721-4952-96be-08e390bdeee5\",\"avg_overall_rating\":null,\"professor_last_name\":\"Kowalski\",\"professor_first_name\":\"Ryszard\"},{\"professor_id\":\"6fbff454-aa38-4740-9c1e-dcaf245581f7\",\"avg_overall_rating\":null,\"professor_last_name\":\"Kozłowski\",\"professor_first_name\":\"Andrzej\"},{\"professor_id\":\"88077860-09c6-401b-961d-48f7a7616705\",\"avg_overall_rating\":null,\"professor_last_name\":\"Kozłowski\",\"professor_first_name\":\"Teresa\"},{\"professor_id\":\"1ef09db2-d2f5-46a4-8805-75af1dc6f856\",\"avg_overall_rating\":null,\"professor_last_name\":\"Kozłowski\",\"professor_first_name\":\"Tomasz\"},{\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"avg_overall_rating\":null,\"professor_last_name\":\"Krawczyk\",\"professor_first_name\":\"Agnieszka\"},{\"professor_id\":\"be6b85ea-af27-41f9-9346-32e567c2b4bc\",\"avg_overall_rating\":null,\"professor_last_name\":\"Krawczyk\",\"professor_first_name\":\"Jan\"},{\"professor_id\":\"42b2aaed-9cc2-452d-bd55-ce9c8f222b3d\",\"avg_overall_rating\":null,\"professor_last_name\":\"Król\",\"professor_first_name\":\"Mariusz\"},{\"professor_id\":\"b2f3236b-6aea-4ddf-9e72-ca1b944344db\",\"avg_overall_rating\":null,\"professor_last_name\":\"Kwiatkowski\",\"professor_first_name\":\"Jerzy\"},{\"professor_id\":\"fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464\",\"avg_overall_rating\":null,\"professor_last_name\":\"Lewandowski\",\"professor_first_name\":\"Piotr\"},{\"professor_id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"avg_overall_rating\":null,\"professor_last_name\":\"Majewski\",\"professor_first_name\":\"Zbigniew\"},{\"professor_id\":\"bdacd65d-0634-47e8-894e-728fc9221207\",\"avg_overall_rating\":null,\"professor_last_name\":\"Mazur\",\"professor_first_name\":\"Jerzy\"},{\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"avg_overall_rating\":null,\"professor_last_name\":\"Michalski\",\"professor_first_name\":\"Magdalena\"},{\"professor_id\":\"b3caef8a-8a8a-49c7-ae98-0fa38441139a\",\"avg_overall_rating\":null,\"professor_last_name\":\"Nowak\",\"professor_first_name\":\"Dariusz\"},{\"professor_id\":\"ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef\",\"avg_overall_rating\":null,\"professor_last_name\":\"Nowak\",\"professor_first_name\":\"Jerzy\"},{\"professor_id\":\"69dc12ae-95ba-499f-9d04-5eefc2f2d4bf\",\"avg_overall_rating\":null,\"professor_last_name\":\"Nowak\",\"professor_first_name\":\"Mariusz\"},{\"professor_id\":\"8711908f-0ab8-4de0-8b45-c2a294d2de1c\",\"avg_overall_rating\":null,\"professor_last_name\":\"Nowakowski\",\"professor_first_name\":\"Stanisław\"},{\"professor_id\":\"b84e485c-28ea-42b7-a13e-a02578274226\",\"avg_overall_rating\":null,\"professor_last_name\":\"Olszewski\",\"professor_first_name\":\"Jan\"},{\"professor_id\":\"ad35d15d-f7ad-416c-ade2-89853d0729c9\",\"avg_overall_rating\":null,\"professor_last_name\":\"Piotrowski\",\"professor_first_name\":\"Paweł\"},{\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"avg_overall_rating\":null,\"professor_last_name\":\"Stępień\",\"professor_first_name\":\"Joanna\"},{\"professor_id\":\"9c934df1-9a06-49a7-96f4-351a647012ba\",\"avg_overall_rating\":null,\"professor_last_name\":\"Stępień\",\"professor_first_name\":\"Stanisław\"},{\"professor_id\":\"8e54b65b-4864-47d8-b9b3-9b727991a6d2\",\"avg_overall_rating\":null,\"professor_last_name\":\"Szymański\",\"professor_first_name\":\"Magdalena\"},{\"professor_id\":\"089c913f-8ec7-4162-9a7a-a67e41b3b935\",\"avg_overall_rating\":null,\"professor_last_name\":\"Szymański\",\"professor_first_name\":\"Ryszard\"},{\"professor_id\":\"2adc085d-5924-47a1-9bf3-43472e564355\",\"avg_overall_rating\":null,\"professor_last_name\":\"Wieczorek\",\"professor_first_name\":\"Jacek\"},{\"professor_id\":\"bdb7d368-ed33-4dd8-99e9-aedea2c36f60\",\"avg_overall_rating\":null,\"professor_last_name\":\"Wójcik\",\"professor_first_name\":\"Stanisław\"},{\"professor_id\":\"2dd66040-0bde-416d-b2dc-9faa4ef4cd44\",\"avg_overall_rating\":null,\"professor_last_name\":\"Woźniak\",\"professor_first_name\":\"Adam\"},{\"professor_id\":\"7732eb5b-ba0d-4e3f-9b39-205a0771c02a\",\"avg_overall_rating\":null,\"professor_last_name\":\"Zieliński\",\"professor_first_name\":\"Grzegorz\"}]},\"endedAt\":1771803389444},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT\\n  p.id AS professor_id,\\n  p.first_name AS professor_first_name,\\n  p.last_name AS professor_last_name,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM public.professors p\\nLEFT JOIN public.course_sections cs ON cs.professor_id = p.id\\nLEFT JOIN public.enrollments e ON e.course_section_id = cs.id\\nLEFT JOIN public.course_evaluations ce ON ce.enrollment_id = e.id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY avg_overall_rating DESC NULLS LAST, p.last_name, p.first_name\",\"metadata\":{\"columns\":[\"professor_id\",\"avg_overall_rating\",\"professor_last_name\",\"professor_first_name\"],\"rowCount\":50,\"sample\":[{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"avg_overall_rating\":5,\"professor_last_name\":\"Piotrowski\",\"professor_first_name\":\"Magdalena\"},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"avg_overall_rating\":5,\"professor_last_name\":\"Szymański\",\"professor_first_name\":\"Katarzyna\"}]},\"data\":[{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"avg_overall_rating\":5,\"professor_last_name\":\"Piotrowski\",\"professor_first_name\":\"Magdalena\"},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"avg_overall_rating\":5,\"professor_last_name\":\"Szymański\",\"professor_first_name\":\"Katarzyna\"},{\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"avg_overall_rating\":4.5,\"professor_last_name\":\"Kozłowski\",\"professor_first_name\":\"Agnieszka\"},{\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"avg_overall_rating\":4,\"professor_last_name\":\"Wieczorek\",\"professor_first_name\":\"Tomasz\"},{\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"avg_overall_rating\":3.75,\"professor_last_name\":\"Woźniak\",\"professor_first_name\":\"Ryszard\"},{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"avg_overall_rating\":3.67,\"professor_last_name\":\"Wojciechowski\",\"professor_first_name\":\"Jacek\"},{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"avg_overall_rating\":3,\"professor_last_name\":\"Jankowski\",\"professor_first_name\":\"Grzegorz\"},{\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"avg_overall_rating\":3,\"professor_last_name\":\"Kozłowski\",\"professor_first_name\":\"Katarzyna\"},{\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"avg_overall_rating\":3,\"professor_last_name\":\"Krawczyk\",\"professor_first_name\":\"Ewa\"},{\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"avg_overall_rating\":3,\"professor_last_name\":\"Nowakowski\",\"professor_first_name\":\"Mariusz\"},{\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"avg_overall_rating\":3,\"professor_last_name\":\"Olszewski\",\"professor_first_name\":\"Małgorzata\"},{\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"avg_overall_rating\":3,\"professor_last_name\":\"Pawłowski\",\"professor_first_name\":\"Teresa\"},{\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"avg_overall_rating\":2.5,\"professor_last_name\":\"Michalski\",\"professor_first_name\":\"Ewa\"},{\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"avg_overall_rating\":2.5,\"professor_last_name\":\"Woźniak\",\"professor_first_name\":\"Marek\"},{\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"avg_overall_rating\":2.5,\"professor_last_name\":\"Woźniak\",\"professor_first_name\":\"Teresa\"},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"avg_overall_rating\":2,\"professor_last_name\":\"Kowalczyk\",\"professor_first_name\":\"Ryszard\"},{\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"avg_overall_rating\":2,\"professor_last_name\":\"Lewandowski\",\"professor_first_name\":\"Marek\"},{\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"avg_overall_rating\":2,\"professor_last_name\":\"Majewski\",\"professor_first_name\":\"Tomasz\"},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"avg_overall_rating\":1.5,\"professor_last_name\":\"Wieczorek\",\"professor_first_name\":\"Adam\"},{\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"avg_overall_rating\":1,\"professor_last_name\":\"Nowak\",\"professor_first_name\":\"Michał\"},{\"professor_id\":\"0d79d103-ec28-4ebf-831c-98b3fb34e9b0\",\"avg_overall_rating\":null,\"professor_last_name\":\"Górski\",\"professor_first_name\":\"Zbigniew\"},{\"professor_id\":\"8247a0e4-17f5-4581-a78b-f33a1a2a518b\",\"avg_overall_rating\":null,\"professor_last_name\":\"Jankowski\",\"professor_first_name\":\"Paweł\"},{\"professor_id\":\"3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8\",\"avg_overall_rating\":null,\"professor_last_name\":\"Jaworski\",\"professor_first_name\":\"Michał\"},{\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"avg_overall_rating\":null,\"professor_last_name\":\"Jaworski\",\"professor_first_name\":\"Robert\"},{\"professor_id\":\"cd0c2f92-7721-4952-96be-08e390bdeee5\",\"avg_overall_rating\":null,\"professor_last_name\":\"Kowalski\",\"professor_first_name\":\"Ryszard\"},{\"professor_id\":\"6fbff454-aa38-4740-9c1e-dcaf245581f7\",\"avg_overall_rating\":null,\"professor_last_name\":\"Kozłowski\",\"professor_first_name\":\"Andrzej\"},{\"professor_id\":\"88077860-09c6-401b-961d-48f7a7616705\",\"avg_overall_rating\":null,\"professor_last_name\":\"Kozłowski\",\"professor_first_name\":\"Teresa\"},{\"professor_id\":\"1ef09db2-d2f5-46a4-8805-75af1dc6f856\",\"avg_overall_rating\":null,\"professor_last_name\":\"Kozłowski\",\"professor_first_name\":\"Tomasz\"},{\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"avg_overall_rating\":null,\"professor_last_name\":\"Krawczyk\",\"professor_first_name\":\"Agnieszka\"},{\"professor_id\":\"be6b85ea-af27-41f9-9346-32e567c2b4bc\",\"avg_overall_rating\":null,\"professor_last_name\":\"Krawczyk\",\"professor_first_name\":\"Jan\"},{\"professor_id\":\"42b2aaed-9cc2-452d-bd55-ce9c8f222b3d\",\"avg_overall_rating\":null,\"professor_last_name\":\"Król\",\"professor_first_name\":\"Mariusz\"},{\"professor_id\":\"b2f3236b-6aea-4ddf-9e72-ca1b944344db\",\"avg_overall_rating\":null,\"professor_last_name\":\"Kwiatkowski\",\"professor_first_name\":\"Jerzy\"},{\"professor_id\":\"fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464\",\"avg_overall_rating\":null,\"professor_last_name\":\"Lewandowski\",\"professor_first_name\":\"Piotr\"},{\"professor_id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"avg_overall_rating\":null,\"professor_last_name\":\"Majewski\",\"professor_first_name\":\"Zbigniew\"},{\"professor_id\":\"bdacd65d-0634-47e8-894e-728fc9221207\",\"avg_overall_rating\":null,\"professor_last_name\":\"Mazur\",\"professor_first_name\":\"Jerzy\"},{\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"avg_overall_rating\":null,\"professor_last_name\":\"Michalski\",\"professor_first_name\":\"Magdalena\"},{\"professor_id\":\"b3caef8a-8a8a-49c7-ae98-0fa38441139a\",\"avg_overall_rating\":null,\"professor_last_name\":\"Nowak\",\"professor_first_name\":\"Dariusz\"},{\"professor_id\":\"ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef\",\"avg_overall_rating\":null,\"professor_last_name\":\"Nowak\",\"professor_first_name\":\"Jerzy\"},{\"professor_id\":\"69dc12ae-95ba-499f-9d04-5eefc2f2d4bf\",\"avg_overall_rating\":null,\"professor_last_name\":\"Nowak\",\"professor_first_name\":\"Mariusz\"},{\"professor_id\":\"8711908f-0ab8-4de0-8b45-c2a294d2de1c\",\"avg_overall_rating\":null,\"professor_last_name\":\"Nowakowski\",\"professor_first_name\":\"Stanisław\"},{\"professor_id\":\"b84e485c-28ea-42b7-a13e-a02578274226\",\"avg_overall_rating\":null,\"professor_last_name\":\"Olszewski\",\"professor_first_name\":\"Jan\"},{\"professor_id\":\"ad35d15d-f7ad-416c-ade2-89853d0729c9\",\"avg_overall_rating\":null,\"professor_last_name\":\"Piotrowski\",\"professor_first_name\":\"Paweł\"},{\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"avg_overall_rating\":null,\"professor_last_name\":\"Stępień\",\"professor_first_name\":\"Joanna\"},{\"professor_id\":\"9c934df1-9a06-49a7-96f4-351a647012ba\",\"avg_overall_rating\":null,\"professor_last_name\":\"Stępień\",\"professor_first_name\":\"Stanisław\"},{\"professor_id\":\"8e54b65b-4864-47d8-b9b3-9b727991a6d2\",\"avg_overall_rating\":null,\"professor_last_name\":\"Szymański\",\"professor_first_name\":\"Magdalena\"},{\"professor_id\":\"089c913f-8ec7-4162-9a7a-a67e41b3b935\",\"avg_overall_rating\":null,\"professor_last_name\":\"Szymański\",\"professor_first_name\":\"Ryszard\"},{\"professor_id\":\"2adc085d-5924-47a1-9bf3-43472e564355\",\"avg_overall_rating\":null,\"professor_last_name\":\"Wieczorek\",\"professor_first_name\":\"Jacek\"},{\"professor_id\":\"bdb7d368-ed33-4dd8-99e9-aedea2c36f60\",\"avg_overall_rating\":null,\"professor_last_name\":\"Wójcik\",\"professor_first_name\":\"Stanisław\"},{\"professor_id\":\"2dd66040-0bde-416d-b2dc-9faa4ef4cd44\",\"avg_overall_rating\":null,\"professor_last_name\":\"Woźniak\",\"professor_first_name\":\"Adam\"},{\"professor_id\":\"7732eb5b-ba0d-4e3f-9b39-205a0771c02a\",\"avg_overall_rating\":null,\"professor_last_name\":\"Zieliński\",\"professor_first_name\":\"Grzegorz\"}]},\"startedAt\":1771803389449,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Overall Course Evaluation by Professor\",\"width\":700,\"height\":{\"step\":20},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"scale\":{\"domain\":[0,5]}},\"y\":{\"field\":\"professor_last_name\",\"type\":\"nominal\",\"title\":\"Professor (last name)\",\"sort\":{\"field\":\"avg_overall_rating\",\"order\":\"descending\"}},\"tooltip\":[{\"field\":\"professor_first_name\",\"type\":\"nominal\",\"title\":\"First name\"},{\"field\":\"professor_last_name\",\"type\":\"nominal\",\"title\":\"Last name\"},{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Avg Rating\",\"format\":\".2f\"}]}},\"reasoning\":\"Horizontal bar chart shows average overall rating (x) by professor last name (y), sorted descending by rating. Tooltip includes first and last names plus the numeric average.\"},\"endedAt\":1771803436454},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Overall Course Evaluation by Professor\",\"width\":700,\"height\":{\"step\":20},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"scale\":{\"domain\":[0,5]}},\"y\":{\"field\":\"professor_last_name\",\"type\":\"nominal\",\"title\":\"Professor (last name)\",\"sort\":{\"field\":\"avg_overall_rating\",\"order\":\"descending\"}},\"tooltip\":[{\"field\":\"professor_first_name\",\"type\":\"nominal\",\"title\":\"First name\"},{\"field\":\"professor_last_name\",\"type\":\"nominal\",\"title\":\"Last name\"},{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Avg Rating\",\"format\":\".2f\"}]}},\"reasoning\":\"Horizontal bar chart shows average overall rating (x) by professor last name (y), sorted descending by rating. Tooltip includes first and last names plus the numeric average.\"},\"startedAt\":1771803436464,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  p.id AS professor_id,\\n  p.first_name AS professor_first_name,\\n  p.last_name AS professor_last_name,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM public.professors p\\nLEFT JOIN public.course_sections cs ON cs.professor_id = p.id\\nLEFT JOIN public.enrollments e ON e.course_section_id = cs.id\\nLEFT JOIN public.course_evaluations ce ON ce.enrollment_id = e.id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY avg_overall_rating DESC NULLS LAST, p.last_name, p.first_name;\",\"data\":[{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"avg_overall_rating\":5,\"professor_last_name\":\"Piotrowski\",\"professor_first_name\":\"Magdalena\"},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"avg_overall_rating\":5,\"professor_last_name\":\"Szymański\",\"professor_first_name\":\"Katarzyna\"},{\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"avg_overall_rating\":4.5,\"professor_last_name\":\"Kozłowski\",\"professor_first_name\":\"Agnieszka\"},{\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"avg_overall_rating\":4,\"professor_last_name\":\"Wieczorek\",\"professor_first_name\":\"Tomasz\"},{\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"avg_overall_rating\":3.75,\"professor_last_name\":\"Woźniak\",\"professor_first_name\":\"Ryszard\"},{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"avg_overall_rating\":3.67,\"professor_last_name\":\"Wojciechowski\",\"professor_first_name\":\"Jacek\"},{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"avg_overall_rating\":3,\"professor_last_name\":\"Jankowski\",\"professor_first_name\":\"Grzegorz\"},{\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"avg_overall_rating\":3,\"professor_last_name\":\"Kozłowski\",\"professor_first_name\":\"Katarzyna\"},{\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"avg_overall_rating\":3,\"professor_last_name\":\"Krawczyk\",\"professor_first_name\":\"Ewa\"},{\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"avg_overall_rating\":3,\"professor_last_name\":\"Nowakowski\",\"professor_first_name\":\"Mariusz\"},{\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"avg_overall_rating\":3,\"professor_last_name\":\"Olszewski\",\"professor_first_name\":\"Małgorzata\"},{\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"avg_overall_rating\":3,\"professor_last_name\":\"Pawłowski\",\"professor_first_name\":\"Teresa\"},{\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"avg_overall_rating\":2.5,\"professor_last_name\":\"Michalski\",\"professor_first_name\":\"Ewa\"},{\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"avg_overall_rating\":2.5,\"professor_last_name\":\"Woźniak\",\"professor_first_name\":\"Marek\"},{\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"avg_overall_rating\":2.5,\"professor_last_name\":\"Woźniak\",\"professor_first_name\":\"Teresa\"},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"avg_overall_rating\":2,\"professor_last_name\":\"Kowalczyk\",\"professor_first_name\":\"Ryszard\"},{\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"avg_overall_rating\":2,\"professor_last_name\":\"Lewandowski\",\"professor_first_name\":\"Marek\"},{\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"avg_overall_rating\":2,\"professor_last_name\":\"Majewski\",\"professor_first_name\":\"Tomasz\"},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"avg_overall_rating\":1.5,\"professor_last_name\":\"Wieczorek\",\"professor_first_name\":\"Adam\"},{\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"avg_overall_rating\":1,\"professor_last_name\":\"Nowak\",\"professor_first_name\":\"Michał\"},{\"professor_id\":\"0d79d103-ec28-4ebf-831c-98b3fb34e9b0\",\"avg_overall_rating\":null,\"professor_last_name\":\"Górski\",\"professor_first_name\":\"Zbigniew\"},{\"professor_id\":\"8247a0e4-17f5-4581-a78b-f33a1a2a518b\",\"avg_overall_rating\":null,\"professor_last_name\":\"Jankowski\",\"professor_first_name\":\"Paweł\"},{\"professor_id\":\"3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8\",\"avg_overall_rating\":null,\"professor_last_name\":\"Jaworski\",\"professor_first_name\":\"Michał\"},{\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"avg_overall_rating\":null,\"professor_last_name\":\"Jaworski\",\"professor_first_name\":\"Robert\"},{\"professor_id\":\"cd0c2f92-7721-4952-96be-08e390bdeee5\",\"avg_overall_rating\":null,\"professor_last_name\":\"Kowalski\",\"professor_first_name\":\"Ryszard\"},{\"professor_id\":\"6fbff454-aa38-4740-9c1e-dcaf245581f7\",\"avg_overall_rating\":null,\"professor_last_name\":\"Kozłowski\",\"professor_first_name\":\"Andrzej\"},{\"professor_id\":\"88077860-09c6-401b-961d-48f7a7616705\",\"avg_overall_rating\":null,\"professor_last_name\":\"Kozłowski\",\"professor_first_name\":\"Teresa\"},{\"professor_id\":\"1ef09db2-d2f5-46a4-8805-75af1dc6f856\",\"avg_overall_rating\":null,\"professor_last_name\":\"Kozłowski\",\"professor_first_name\":\"Tomasz\"},{\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"avg_overall_rating\":null,\"professor_last_name\":\"Krawczyk\",\"professor_first_name\":\"Agnieszka\"},{\"professor_id\":\"be6b85ea-af27-41f9-9346-32e567c2b4bc\",\"avg_overall_rating\":null,\"professor_last_name\":\"Krawczyk\",\"professor_first_name\":\"Jan\"},{\"professor_id\":\"42b2aaed-9cc2-452d-bd55-ce9c8f222b3d\",\"avg_overall_rating\":null,\"professor_last_name\":\"Król\",\"professor_first_name\":\"Mariusz\"},{\"professor_id\":\"b2f3236b-6aea-4ddf-9e72-ca1b944344db\",\"avg_overall_rating\":null,\"professor_last_name\":\"Kwiatkowski\",\"professor_first_name\":\"Jerzy\"},{\"professor_id\":\"fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464\",\"avg_overall_rating\":null,\"professor_last_name\":\"Lewandowski\",\"professor_first_name\":\"Piotr\"},{\"professor_id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"avg_overall_rating\":null,\"professor_last_name\":\"Majewski\",\"professor_first_name\":\"Zbigniew\"},{\"professor_id\":\"bdacd65d-0634-47e8-894e-728fc9221207\",\"avg_overall_rating\":null,\"professor_last_name\":\"Mazur\",\"professor_first_name\":\"Jerzy\"},{\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"avg_overall_rating\":null,\"professor_last_name\":\"Michalski\",\"professor_first_name\":\"Magdalena\"},{\"professor_id\":\"b3caef8a-8a8a-49c7-ae98-0fa38441139a\",\"avg_overall_rating\":null,\"professor_last_name\":\"Nowak\",\"professor_first_name\":\"Dariusz\"},{\"professor_id\":\"ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef\",\"avg_overall_rating\":null,\"professor_last_name\":\"Nowak\",\"professor_first_name\":\"Jerzy\"},{\"professor_id\":\"69dc12ae-95ba-499f-9d04-5eefc2f2d4bf\",\"avg_overall_rating\":null,\"professor_last_name\":\"Nowak\",\"professor_first_name\":\"Mariusz\"},{\"professor_id\":\"8711908f-0ab8-4de0-8b45-c2a294d2de1c\",\"avg_overall_rating\":null,\"professor_last_name\":\"Nowakowski\",\"professor_first_name\":\"Stanisław\"},{\"professor_id\":\"b84e485c-28ea-42b7-a13e-a02578274226\",\"avg_overall_rating\":null,\"professor_last_name\":\"Olszewski\",\"professor_first_name\":\"Jan\"},{\"professor_id\":\"ad35d15d-f7ad-416c-ade2-89853d0729c9\",\"avg_overall_rating\":null,\"professor_last_name\":\"Piotrowski\",\"professor_first_name\":\"Paweł\"},{\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"avg_overall_rating\":null,\"professor_last_name\":\"Stępień\",\"professor_first_name\":\"Joanna\"},{\"professor_id\":\"9c934df1-9a06-49a7-96f4-351a647012ba\",\"avg_overall_rating\":null,\"professor_last_name\":\"Stępień\",\"professor_first_name\":\"Stanisław\"},{\"professor_id\":\"8e54b65b-4864-47d8-b9b3-9b727991a6d2\",\"avg_overall_rating\":null,\"professor_last_name\":\"Szymański\",\"professor_first_name\":\"Magdalena\"},{\"professor_id\":\"089c913f-8ec7-4162-9a7a-a67e41b3b935\",\"avg_overall_rating\":null,\"professor_last_name\":\"Szymański\",\"professor_first_name\":\"Ryszard\"},{\"professor_id\":\"2adc085d-5924-47a1-9bf3-43472e564355\",\"avg_overall_rating\":null,\"professor_last_name\":\"Wieczorek\",\"professor_first_name\":\"Jacek\"},{\"professor_id\":\"bdb7d368-ed33-4dd8-99e9-aedea2c36f60\",\"avg_overall_rating\":null,\"professor_last_name\":\"Wójcik\",\"professor_first_name\":\"Stanisław\"},{\"professor_id\":\"2dd66040-0bde-416d-b2dc-9faa4ef4cd44\",\"avg_overall_rating\":null,\"professor_last_name\":\"Woźniak\",\"professor_first_name\":\"Adam\"},{\"professor_id\":\"7732eb5b-ba0d-4e3f-9b39-205a0771c02a\",\"avg_overall_rating\":null,\"professor_last_name\":\"Zieliński\",\"professor_first_name\":\"Grzegorz\"}],\"metadata\":{\"columns\":[\"professor_id\",\"avg_overall_rating\",\"professor_last_name\",\"professor_first_name\"],\"rowCount\":50,\"sample\":[{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"avg_overall_rating\":5,\"professor_last_name\":\"Piotrowski\",\"professor_first_name\":\"Magdalena\"},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"avg_overall_rating\":5,\"professor_last_name\":\"Szymański\",\"professor_first_name\":\"Katarzyna\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Overall Course Evaluation by Professor\",\"width\":700,\"height\":{\"step\":20},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"scale\":{\"domain\":[0,5]}},\"y\":{\"field\":\"professor_last_name\",\"type\":\"nominal\",\"title\":\"Professor (last name)\",\"sort\":{\"field\":\"avg_overall_rating\",\"order\":\"descending\"}},\"tooltip\":[{\"field\":\"professor_first_name\",\"type\":\"nominal\",\"title\":\"First name\"},{\"field\":\"professor_last_name\",\"type\":\"nominal\",\"title\":\"Last name\"},{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Avg Rating\",\"format\":\".2f\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771803436468}},\"input\":{\"question\":\"Show the average overall course evaluation rating for each professor\"},\"result\":{\"sql\":\"SELECT\\n  p.id AS professor_id,\\n  p.first_name AS professor_first_name,\\n  p.last_name AS professor_last_name,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM public.professors p\\nLEFT JOIN public.course_sections cs ON cs.professor_id = p.id\\nLEFT JOIN public.enrollments e ON e.course_section_id = cs.id\\nLEFT JOIN public.course_evaluations ce ON ce.enrollment_id = e.id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY avg_overall_rating DESC NULLS LAST, p.last_name, p.first_name;\",\"data\":[{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"avg_overall_rating\":5,\"professor_last_name\":\"Piotrowski\",\"professor_first_name\":\"Magdalena\"},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"avg_overall_rating\":5,\"professor_last_name\":\"Szymański\",\"professor_first_name\":\"Katarzyna\"},{\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"avg_overall_rating\":4.5,\"professor_last_name\":\"Kozłowski\",\"professor_first_name\":\"Agnieszka\"},{\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"avg_overall_rating\":4,\"professor_last_name\":\"Wieczorek\",\"professor_first_name\":\"Tomasz\"},{\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"avg_overall_rating\":3.75,\"professor_last_name\":\"Woźniak\",\"professor_first_name\":\"Ryszard\"},{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"avg_overall_rating\":3.67,\"professor_last_name\":\"Wojciechowski\",\"professor_first_name\":\"Jacek\"},{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"avg_overall_rating\":3,\"professor_last_name\":\"Jankowski\",\"professor_first_name\":\"Grzegorz\"},{\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"avg_overall_rating\":3,\"professor_last_name\":\"Kozłowski\",\"professor_first_name\":\"Katarzyna\"},{\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"avg_overall_rating\":3,\"professor_last_name\":\"Krawczyk\",\"professor_first_name\":\"Ewa\"},{\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"avg_overall_rating\":3,\"professor_last_name\":\"Nowakowski\",\"professor_first_name\":\"Mariusz\"},{\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"avg_overall_rating\":3,\"professor_last_name\":\"Olszewski\",\"professor_first_name\":\"Małgorzata\"},{\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"avg_overall_rating\":3,\"professor_last_name\":\"Pawłowski\",\"professor_first_name\":\"Teresa\"},{\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"avg_overall_rating\":2.5,\"professor_last_name\":\"Michalski\",\"professor_first_name\":\"Ewa\"},{\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"avg_overall_rating\":2.5,\"professor_last_name\":\"Woźniak\",\"professor_first_name\":\"Marek\"},{\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"avg_overall_rating\":2.5,\"professor_last_name\":\"Woźniak\",\"professor_first_name\":\"Teresa\"},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"avg_overall_rating\":2,\"professor_last_name\":\"Kowalczyk\",\"professor_first_name\":\"Ryszard\"},{\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"avg_overall_rating\":2,\"professor_last_name\":\"Lewandowski\",\"professor_first_name\":\"Marek\"},{\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"avg_overall_rating\":2,\"professor_last_name\":\"Majewski\",\"professor_first_name\":\"Tomasz\"},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"avg_overall_rating\":1.5,\"professor_last_name\":\"Wieczorek\",\"professor_first_name\":\"Adam\"},{\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"avg_overall_rating\":1,\"professor_last_name\":\"Nowak\",\"professor_first_name\":\"Michał\"},{\"professor_id\":\"0d79d103-ec28-4ebf-831c-98b3fb34e9b0\",\"avg_overall_rating\":null,\"professor_last_name\":\"Górski\",\"professor_first_name\":\"Zbigniew\"},{\"professor_id\":\"8247a0e4-17f5-4581-a78b-f33a1a2a518b\",\"avg_overall_rating\":null,\"professor_last_name\":\"Jankowski\",\"professor_first_name\":\"Paweł\"},{\"professor_id\":\"3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8\",\"avg_overall_rating\":null,\"professor_last_name\":\"Jaworski\",\"professor_first_name\":\"Michał\"},{\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"avg_overall_rating\":null,\"professor_last_name\":\"Jaworski\",\"professor_first_name\":\"Robert\"},{\"professor_id\":\"cd0c2f92-7721-4952-96be-08e390bdeee5\",\"avg_overall_rating\":null,\"professor_last_name\":\"Kowalski\",\"professor_first_name\":\"Ryszard\"},{\"professor_id\":\"6fbff454-aa38-4740-9c1e-dcaf245581f7\",\"avg_overall_rating\":null,\"professor_last_name\":\"Kozłowski\",\"professor_first_name\":\"Andrzej\"},{\"professor_id\":\"88077860-09c6-401b-961d-48f7a7616705\",\"avg_overall_rating\":null,\"professor_last_name\":\"Kozłowski\",\"professor_first_name\":\"Teresa\"},{\"professor_id\":\"1ef09db2-d2f5-46a4-8805-75af1dc6f856\",\"avg_overall_rating\":null,\"professor_last_name\":\"Kozłowski\",\"professor_first_name\":\"Tomasz\"},{\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"avg_overall_rating\":null,\"professor_last_name\":\"Krawczyk\",\"professor_first_name\":\"Agnieszka\"},{\"professor_id\":\"be6b85ea-af27-41f9-9346-32e567c2b4bc\",\"avg_overall_rating\":null,\"professor_last_name\":\"Krawczyk\",\"professor_first_name\":\"Jan\"},{\"professor_id\":\"42b2aaed-9cc2-452d-bd55-ce9c8f222b3d\",\"avg_overall_rating\":null,\"professor_last_name\":\"Król\",\"professor_first_name\":\"Mariusz\"},{\"professor_id\":\"b2f3236b-6aea-4ddf-9e72-ca1b944344db\",\"avg_overall_rating\":null,\"professor_last_name\":\"Kwiatkowski\",\"professor_first_name\":\"Jerzy\"},{\"professor_id\":\"fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464\",\"avg_overall_rating\":null,\"professor_last_name\":\"Lewandowski\",\"professor_first_name\":\"Piotr\"},{\"professor_id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"avg_overall_rating\":null,\"professor_last_name\":\"Majewski\",\"professor_first_name\":\"Zbigniew\"},{\"professor_id\":\"bdacd65d-0634-47e8-894e-728fc9221207\",\"avg_overall_rating\":null,\"professor_last_name\":\"Mazur\",\"professor_first_name\":\"Jerzy\"},{\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"avg_overall_rating\":null,\"professor_last_name\":\"Michalski\",\"professor_first_name\":\"Magdalena\"},{\"professor_id\":\"b3caef8a-8a8a-49c7-ae98-0fa38441139a\",\"avg_overall_rating\":null,\"professor_last_name\":\"Nowak\",\"professor_first_name\":\"Dariusz\"},{\"professor_id\":\"ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef\",\"avg_overall_rating\":null,\"professor_last_name\":\"Nowak\",\"professor_first_name\":\"Jerzy\"},{\"professor_id\":\"69dc12ae-95ba-499f-9d04-5eefc2f2d4bf\",\"avg_overall_rating\":null,\"professor_last_name\":\"Nowak\",\"professor_first_name\":\"Mariusz\"},{\"professor_id\":\"8711908f-0ab8-4de0-8b45-c2a294d2de1c\",\"avg_overall_rating\":null,\"professor_last_name\":\"Nowakowski\",\"professor_first_name\":\"Stanisław\"},{\"professor_id\":\"b84e485c-28ea-42b7-a13e-a02578274226\",\"avg_overall_rating\":null,\"professor_last_name\":\"Olszewski\",\"professor_first_name\":\"Jan\"},{\"professor_id\":\"ad35d15d-f7ad-416c-ade2-89853d0729c9\",\"avg_overall_rating\":null,\"professor_last_name\":\"Piotrowski\",\"professor_first_name\":\"Paweł\"},{\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"avg_overall_rating\":null,\"professor_last_name\":\"Stępień\",\"professor_first_name\":\"Joanna\"},{\"professor_id\":\"9c934df1-9a06-49a7-96f4-351a647012ba\",\"avg_overall_rating\":null,\"professor_last_name\":\"Stępień\",\"professor_first_name\":\"Stanisław\"},{\"professor_id\":\"8e54b65b-4864-47d8-b9b3-9b727991a6d2\",\"avg_overall_rating\":null,\"professor_last_name\":\"Szymański\",\"professor_first_name\":\"Magdalena\"},{\"professor_id\":\"089c913f-8ec7-4162-9a7a-a67e41b3b935\",\"avg_overall_rating\":null,\"professor_last_name\":\"Szymański\",\"professor_first_name\":\"Ryszard\"},{\"professor_id\":\"2adc085d-5924-47a1-9bf3-43472e564355\",\"avg_overall_rating\":null,\"professor_last_name\":\"Wieczorek\",\"professor_first_name\":\"Jacek\"},{\"professor_id\":\"bdb7d368-ed33-4dd8-99e9-aedea2c36f60\",\"avg_overall_rating\":null,\"professor_last_name\":\"Wójcik\",\"professor_first_name\":\"Stanisław\"},{\"professor_id\":\"2dd66040-0bde-416d-b2dc-9faa4ef4cd44\",\"avg_overall_rating\":null,\"professor_last_name\":\"Woźniak\",\"professor_first_name\":\"Adam\"},{\"professor_id\":\"7732eb5b-ba0d-4e3f-9b39-205a0771c02a\",\"avg_overall_rating\":null,\"professor_last_name\":\"Zieliński\",\"professor_first_name\":\"Grzegorz\"}],\"metadata\":{\"columns\":[\"professor_id\",\"avg_overall_rating\",\"professor_last_name\",\"professor_first_name\"],\"rowCount\":50,\"sample\":[{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"avg_overall_rating\":5,\"professor_last_name\":\"Piotrowski\",\"professor_first_name\":\"Magdalena\"},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"avg_overall_rating\":5,\"professor_last_name\":\"Szymański\",\"professor_first_name\":\"Katarzyna\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Overall Course Evaluation by Professor\",\"width\":700,\"height\":{\"step\":20},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"scale\":{\"domain\":[0,5]}},\"y\":{\"field\":\"professor_last_name\",\"type\":\"nominal\",\"title\":\"Professor (last name)\",\"sort\":{\"field\":\"avg_overall_rating\",\"order\":\"descending\"}},\"tooltip\":[{\"field\":\"professor_first_name\",\"type\":\"nominal\",\"title\":\"First name\"},{\"field\":\"professor_last_name\",\"type\":\"nominal\",\"title\":\"Last name\"},{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Avg Rating\",\"format\":\".2f\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"d8e288357a2bfb128941834667ba2d18\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-overall-rating-by-professor/run-0001/run.json",
+    "queryPath": "runs/avg-overall-rating-by-professor/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-overall-rating-by-professor/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-overall-rating-by-professor/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-overall-rating-by-professor/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:37:16.926Z",
+  "traceId": "d8e288357a2bfb128941834667ba2d18",
+  "success": true,
+  "durationMs": 81094,
+  "resultRaw": {
+    "data": [
+      {
+        "professor_id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+        "avg_overall_rating": 5,
+        "professor_last_name": "Piotrowski",
+        "professor_first_name": "Magdalena"
+      },
+      {
+        "professor_id": "33ba2086-7c0f-4a57-9451-014db3e74209",
+        "avg_overall_rating": 5,
+        "professor_last_name": "Szymański",
+        "professor_first_name": "Katarzyna"
+      },
+      {
+        "professor_id": "7fbf0e4c-fd08-4312-bb83-087368f81e46",
+        "avg_overall_rating": 4.5,
+        "professor_last_name": "Kozłowski",
+        "professor_first_name": "Agnieszka"
+      },
+      {
+        "professor_id": "4050afec-f68c-49bb-9982-4a3c9d1a23d9",
+        "avg_overall_rating": 4,
+        "professor_last_name": "Wieczorek",
+        "professor_first_name": "Tomasz"
+      },
+      {
+        "professor_id": "5d70abe8-4f1a-44ec-9816-2ec96a2807cb",
+        "avg_overall_rating": 3.75,
+        "professor_last_name": "Woźniak",
+        "professor_first_name": "Ryszard"
+      },
+      {
+        "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+        "avg_overall_rating": 3.67,
+        "professor_last_name": "Wojciechowski",
+        "professor_first_name": "Jacek"
+      },
+      {
+        "professor_id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+        "avg_overall_rating": 3,
+        "professor_last_name": "Jankowski",
+        "professor_first_name": "Grzegorz"
+      },
+      {
+        "professor_id": "bcf3a47c-67cf-438d-93de-07c55ab583e0",
+        "avg_overall_rating": 3,
+        "professor_last_name": "Kozłowski",
+        "professor_first_name": "Katarzyna"
+      },
+      {
+        "professor_id": "a82c40da-e7dc-4e49-9e66-386ea4bb7483",
+        "avg_overall_rating": 3,
+        "professor_last_name": "Krawczyk",
+        "professor_first_name": "Ewa"
+      },
+      {
+        "professor_id": "d19adcea-56d6-4557-8f93-95ec58fa5d34",
+        "avg_overall_rating": 3,
+        "professor_last_name": "Nowakowski",
+        "professor_first_name": "Mariusz"
+      },
+      {
+        "professor_id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+        "avg_overall_rating": 3,
+        "professor_last_name": "Olszewski",
+        "professor_first_name": "Małgorzata"
+      },
+      {
+        "professor_id": "cee911dc-17c4-4395-b173-2af1418983fe",
+        "avg_overall_rating": 3,
+        "professor_last_name": "Pawłowski",
+        "professor_first_name": "Teresa"
+      },
+      {
+        "professor_id": "dd993c5f-eb62-491f-a783-5ca9a0132ade",
+        "avg_overall_rating": 2.5,
+        "professor_last_name": "Michalski",
+        "professor_first_name": "Ewa"
+      },
+      {
+        "professor_id": "2b5262b8-932c-4951-9390-c56d4b69d888",
+        "avg_overall_rating": 2.5,
+        "professor_last_name": "Woźniak",
+        "professor_first_name": "Marek"
+      },
+      {
+        "professor_id": "173e49aa-5a27-41e8-b1fa-4d19423bdc0b",
+        "avg_overall_rating": 2.5,
+        "professor_last_name": "Woźniak",
+        "professor_first_name": "Teresa"
+      },
+      {
+        "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+        "avg_overall_rating": 2,
+        "professor_last_name": "Kowalczyk",
+        "professor_first_name": "Ryszard"
+      },
+      {
+        "professor_id": "037011f2-f3d4-406e-9554-a6ffba701e06",
+        "avg_overall_rating": 2,
+        "professor_last_name": "Lewandowski",
+        "professor_first_name": "Marek"
+      },
+      {
+        "professor_id": "f221aafd-0e9c-4345-aff5-7e290e1a7864",
+        "avg_overall_rating": 2,
+        "professor_last_name": "Majewski",
+        "professor_first_name": "Tomasz"
+      },
+      {
+        "professor_id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+        "avg_overall_rating": 1.5,
+        "professor_last_name": "Wieczorek",
+        "professor_first_name": "Adam"
+      },
+      {
+        "professor_id": "f24d24fc-5446-4d72-bb11-9d9dd1545f97",
+        "avg_overall_rating": 1,
+        "professor_last_name": "Nowak",
+        "professor_first_name": "Michał"
+      },
+      {
+        "professor_id": "0d79d103-ec28-4ebf-831c-98b3fb34e9b0",
+        "avg_overall_rating": null,
+        "professor_last_name": "Górski",
+        "professor_first_name": "Zbigniew"
+      },
+      {
+        "professor_id": "8247a0e4-17f5-4581-a78b-f33a1a2a518b",
+        "avg_overall_rating": null,
+        "professor_last_name": "Jankowski",
+        "professor_first_name": "Paweł"
+      },
+      {
+        "professor_id": "3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8",
+        "avg_overall_rating": null,
+        "professor_last_name": "Jaworski",
+        "professor_first_name": "Michał"
+      },
+      {
+        "professor_id": "8f0ffcad-1af9-4da5-898a-dc47b8717d83",
+        "avg_overall_rating": null,
+        "professor_last_name": "Jaworski",
+        "professor_first_name": "Robert"
+      },
+      {
+        "professor_id": "cd0c2f92-7721-4952-96be-08e390bdeee5",
+        "avg_overall_rating": null,
+        "professor_last_name": "Kowalski",
+        "professor_first_name": "Ryszard"
+      },
+      {
+        "professor_id": "6fbff454-aa38-4740-9c1e-dcaf245581f7",
+        "avg_overall_rating": null,
+        "professor_last_name": "Kozłowski",
+        "professor_first_name": "Andrzej"
+      },
+      {
+        "professor_id": "88077860-09c6-401b-961d-48f7a7616705",
+        "avg_overall_rating": null,
+        "professor_last_name": "Kozłowski",
+        "professor_first_name": "Teresa"
+      },
+      {
+        "professor_id": "1ef09db2-d2f5-46a4-8805-75af1dc6f856",
+        "avg_overall_rating": null,
+        "professor_last_name": "Kozłowski",
+        "professor_first_name": "Tomasz"
+      },
+      {
+        "professor_id": "ff61fe12-d98c-4d43-87db-710f2571c1f2",
+        "avg_overall_rating": null,
+        "professor_last_name": "Krawczyk",
+        "professor_first_name": "Agnieszka"
+      },
+      {
+        "professor_id": "be6b85ea-af27-41f9-9346-32e567c2b4bc",
+        "avg_overall_rating": null,
+        "professor_last_name": "Krawczyk",
+        "professor_first_name": "Jan"
+      },
+      {
+        "professor_id": "42b2aaed-9cc2-452d-bd55-ce9c8f222b3d",
+        "avg_overall_rating": null,
+        "professor_last_name": "Król",
+        "professor_first_name": "Mariusz"
+      },
+      {
+        "professor_id": "b2f3236b-6aea-4ddf-9e72-ca1b944344db",
+        "avg_overall_rating": null,
+        "professor_last_name": "Kwiatkowski",
+        "professor_first_name": "Jerzy"
+      },
+      {
+        "professor_id": "fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464",
+        "avg_overall_rating": null,
+        "professor_last_name": "Lewandowski",
+        "professor_first_name": "Piotr"
+      },
+      {
+        "professor_id": "b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4",
+        "avg_overall_rating": null,
+        "professor_last_name": "Majewski",
+        "professor_first_name": "Zbigniew"
+      },
+      {
+        "professor_id": "bdacd65d-0634-47e8-894e-728fc9221207",
+        "avg_overall_rating": null,
+        "professor_last_name": "Mazur",
+        "professor_first_name": "Jerzy"
+      },
+      {
+        "professor_id": "5b3ae75e-96e7-4a7b-be0f-7375938dcd62",
+        "avg_overall_rating": null,
+        "professor_last_name": "Michalski",
+        "professor_first_name": "Magdalena"
+      },
+      {
+        "professor_id": "b3caef8a-8a8a-49c7-ae98-0fa38441139a",
+        "avg_overall_rating": null,
+        "professor_last_name": "Nowak",
+        "professor_first_name": "Dariusz"
+      },
+      {
+        "professor_id": "ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef",
+        "avg_overall_rating": null,
+        "professor_last_name": "Nowak",
+        "professor_first_name": "Jerzy"
+      },
+      {
+        "professor_id": "69dc12ae-95ba-499f-9d04-5eefc2f2d4bf",
+        "avg_overall_rating": null,
+        "professor_last_name": "Nowak",
+        "professor_first_name": "Mariusz"
+      },
+      {
+        "professor_id": "8711908f-0ab8-4de0-8b45-c2a294d2de1c",
+        "avg_overall_rating": null,
+        "professor_last_name": "Nowakowski",
+        "professor_first_name": "Stanisław"
+      },
+      {
+        "professor_id": "b84e485c-28ea-42b7-a13e-a02578274226",
+        "avg_overall_rating": null,
+        "professor_last_name": "Olszewski",
+        "professor_first_name": "Jan"
+      },
+      {
+        "professor_id": "ad35d15d-f7ad-416c-ade2-89853d0729c9",
+        "avg_overall_rating": null,
+        "professor_last_name": "Piotrowski",
+        "professor_first_name": "Paweł"
+      },
+      {
+        "professor_id": "007cb07c-c14f-4824-a62d-d42685252c75",
+        "avg_overall_rating": null,
+        "professor_last_name": "Stępień",
+        "professor_first_name": "Joanna"
+      },
+      {
+        "professor_id": "9c934df1-9a06-49a7-96f4-351a647012ba",
+        "avg_overall_rating": null,
+        "professor_last_name": "Stępień",
+        "professor_first_name": "Stanisław"
+      },
+      {
+        "professor_id": "8e54b65b-4864-47d8-b9b3-9b727991a6d2",
+        "avg_overall_rating": null,
+        "professor_last_name": "Szymański",
+        "professor_first_name": "Magdalena"
+      },
+      {
+        "professor_id": "089c913f-8ec7-4162-9a7a-a67e41b3b935",
+        "avg_overall_rating": null,
+        "professor_last_name": "Szymański",
+        "professor_first_name": "Ryszard"
+      },
+      {
+        "professor_id": "2adc085d-5924-47a1-9bf3-43472e564355",
+        "avg_overall_rating": null,
+        "professor_last_name": "Wieczorek",
+        "professor_first_name": "Jacek"
+      },
+      {
+        "professor_id": "bdb7d368-ed33-4dd8-99e9-aedea2c36f60",
+        "avg_overall_rating": null,
+        "professor_last_name": "Wójcik",
+        "professor_first_name": "Stanisław"
+      },
+      {
+        "professor_id": "2dd66040-0bde-416d-b2dc-9faa4ef4cd44",
+        "avg_overall_rating": null,
+        "professor_last_name": "Woźniak",
+        "professor_first_name": "Adam"
+      },
+      {
+        "professor_id": "7732eb5b-ba0d-4e3f-9b39-205a0771c02a",
+        "avg_overall_rating": null,
+        "professor_last_name": "Zieliński",
+        "professor_first_name": "Grzegorz"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Overall Course Evaluation by Professor",
+      "width": 700,
+      "height": {
+        "step": 20
+      },
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "avg_overall_rating",
+          "type": "quantitative",
+          "title": "Average Overall Rating",
+          "scale": {
+            "domain": [
+              0,
+              5
+            ]
+          }
+        },
+        "y": {
+          "field": "professor_last_name",
+          "type": "nominal",
+          "title": "Professor (last name)",
+          "sort": {
+            "field": "avg_overall_rating",
+            "order": "descending"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "professor_first_name",
+            "type": "nominal",
+            "title": "First name"
+          },
+          {
+            "field": "professor_last_name",
+            "type": "nominal",
+            "title": "Last name"
+          },
+          {
+            "field": "avg_overall_rating",
+            "type": "quantitative",
+            "title": "Avg Rating",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT\n  p.id AS professor_id,\n  p.first_name AS professor_first_name,\n  p.last_name AS professor_last_name,\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\nFROM public.professors p\nLEFT JOIN public.course_sections cs ON cs.professor_id = p.id\nLEFT JOIN public.enrollments e ON e.course_section_id = cs.id\nLEFT JOIN public.course_evaluations ce ON ce.enrollment_id = e.id\nGROUP BY p.id, p.first_name, p.last_name\nORDER BY avg_overall_rating DESC NULLS LAST, p.last_name, p.first_name;",
+    "metadata": {
+      "columns": [
+        "professor_id",
+        "avg_overall_rating",
+        "professor_last_name",
+        "professor_first_name"
+      ],
+      "rowCount": 50,
+      "sample": [
+        {
+          "professor_id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+          "avg_overall_rating": 5,
+          "professor_last_name": "Piotrowski",
+          "professor_first_name": "Magdalena"
+        },
+        {
+          "professor_id": "33ba2086-7c0f-4a57-9451-014db3e74209",
+          "avg_overall_rating": 5,
+          "professor_last_name": "Szymański",
+          "professor_first_name": "Katarzyna"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "professor_id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+        "avg_overall_rating": 5,
+        "professor_last_name": "Piotrowski",
+        "professor_first_name": "Magdalena"
+      },
+      {
+        "professor_id": "33ba2086-7c0f-4a57-9451-014db3e74209",
+        "avg_overall_rating": 5,
+        "professor_last_name": "Szymański",
+        "professor_first_name": "Katarzyna"
+      },
+      {
+        "professor_id": "7fbf0e4c-fd08-4312-bb83-087368f81e46",
+        "avg_overall_rating": 4.5,
+        "professor_last_name": "Kozłowski",
+        "professor_first_name": "Agnieszka"
+      },
+      {
+        "professor_id": "4050afec-f68c-49bb-9982-4a3c9d1a23d9",
+        "avg_overall_rating": 4,
+        "professor_last_name": "Wieczorek",
+        "professor_first_name": "Tomasz"
+      },
+      {
+        "professor_id": "5d70abe8-4f1a-44ec-9816-2ec96a2807cb",
+        "avg_overall_rating": 3.75,
+        "professor_last_name": "Woźniak",
+        "professor_first_name": "Ryszard"
+      },
+      {
+        "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+        "avg_overall_rating": 3.67,
+        "professor_last_name": "Wojciechowski",
+        "professor_first_name": "Jacek"
+      },
+      {
+        "professor_id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+        "avg_overall_rating": 3,
+        "professor_last_name": "Jankowski",
+        "professor_first_name": "Grzegorz"
+      },
+      {
+        "professor_id": "bcf3a47c-67cf-438d-93de-07c55ab583e0",
+        "avg_overall_rating": 3,
+        "professor_last_name": "Kozłowski",
+        "professor_first_name": "Katarzyna"
+      },
+      {
+        "professor_id": "a82c40da-e7dc-4e49-9e66-386ea4bb7483",
+        "avg_overall_rating": 3,
+        "professor_last_name": "Krawczyk",
+        "professor_first_name": "Ewa"
+      },
+      {
+        "professor_id": "d19adcea-56d6-4557-8f93-95ec58fa5d34",
+        "avg_overall_rating": 3,
+        "professor_last_name": "Nowakowski",
+        "professor_first_name": "Mariusz"
+      },
+      {
+        "professor_id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+        "avg_overall_rating": 3,
+        "professor_last_name": "Olszewski",
+        "professor_first_name": "Małgorzata"
+      },
+      {
+        "professor_id": "cee911dc-17c4-4395-b173-2af1418983fe",
+        "avg_overall_rating": 3,
+        "professor_last_name": "Pawłowski",
+        "professor_first_name": "Teresa"
+      },
+      {
+        "professor_id": "dd993c5f-eb62-491f-a783-5ca9a0132ade",
+        "avg_overall_rating": 2.5,
+        "professor_last_name": "Michalski",
+        "professor_first_name": "Ewa"
+      },
+      {
+        "professor_id": "2b5262b8-932c-4951-9390-c56d4b69d888",
+        "avg_overall_rating": 2.5,
+        "professor_last_name": "Woźniak",
+        "professor_first_name": "Marek"
+      },
+      {
+        "professor_id": "173e49aa-5a27-41e8-b1fa-4d19423bdc0b",
+        "avg_overall_rating": 2.5,
+        "professor_last_name": "Woźniak",
+        "professor_first_name": "Teresa"
+      },
+      {
+        "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+        "avg_overall_rating": 2,
+        "professor_last_name": "Kowalczyk",
+        "professor_first_name": "Ryszard"
+      },
+      {
+        "professor_id": "037011f2-f3d4-406e-9554-a6ffba701e06",
+        "avg_overall_rating": 2,
+        "professor_last_name": "Lewandowski",
+        "professor_first_name": "Marek"
+      },
+      {
+        "professor_id": "f221aafd-0e9c-4345-aff5-7e290e1a7864",
+        "avg_overall_rating": 2,
+        "professor_last_name": "Majewski",
+        "professor_first_name": "Tomasz"
+      },
+      {
+        "professor_id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+        "avg_overall_rating": 1.5,
+        "professor_last_name": "Wieczorek",
+        "professor_first_name": "Adam"
+      },
+      {
+        "professor_id": "f24d24fc-5446-4d72-bb11-9d9dd1545f97",
+        "avg_overall_rating": 1,
+        "professor_last_name": "Nowak",
+        "professor_first_name": "Michał"
+      },
+      {
+        "professor_id": "0d79d103-ec28-4ebf-831c-98b3fb34e9b0",
+        "avg_overall_rating": null,
+        "professor_last_name": "Górski",
+        "professor_first_name": "Zbigniew"
+      },
+      {
+        "professor_id": "8247a0e4-17f5-4581-a78b-f33a1a2a518b",
+        "avg_overall_rating": null,
+        "professor_last_name": "Jankowski",
+        "professor_first_name": "Paweł"
+      },
+      {
+        "professor_id": "3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8",
+        "avg_overall_rating": null,
+        "professor_last_name": "Jaworski",
+        "professor_first_name": "Michał"
+      },
+      {
+        "professor_id": "8f0ffcad-1af9-4da5-898a-dc47b8717d83",
+        "avg_overall_rating": null,
+        "professor_last_name": "Jaworski",
+        "professor_first_name": "Robert"
+      },
+      {
+        "professor_id": "cd0c2f92-7721-4952-96be-08e390bdeee5",
+        "avg_overall_rating": null,
+        "professor_last_name": "Kowalski",
+        "professor_first_name": "Ryszard"
+      },
+      {
+        "professor_id": "6fbff454-aa38-4740-9c1e-dcaf245581f7",
+        "avg_overall_rating": null,
+        "professor_last_name": "Kozłowski",
+        "professor_first_name": "Andrzej"
+      },
+      {
+        "professor_id": "88077860-09c6-401b-961d-48f7a7616705",
+        "avg_overall_rating": null,
+        "professor_last_name": "Kozłowski",
+        "professor_first_name": "Teresa"
+      },
+      {
+        "professor_id": "1ef09db2-d2f5-46a4-8805-75af1dc6f856",
+        "avg_overall_rating": null,
+        "professor_last_name": "Kozłowski",
+        "professor_first_name": "Tomasz"
+      },
+      {
+        "professor_id": "ff61fe12-d98c-4d43-87db-710f2571c1f2",
+        "avg_overall_rating": null,
+        "professor_last_name": "Krawczyk",
+        "professor_first_name": "Agnieszka"
+      },
+      {
+        "professor_id": "be6b85ea-af27-41f9-9346-32e567c2b4bc",
+        "avg_overall_rating": null,
+        "professor_last_name": "Krawczyk",
+        "professor_first_name": "Jan"
+      },
+      {
+        "professor_id": "42b2aaed-9cc2-452d-bd55-ce9c8f222b3d",
+        "avg_overall_rating": null,
+        "professor_last_name": "Król",
+        "professor_first_name": "Mariusz"
+      },
+      {
+        "professor_id": "b2f3236b-6aea-4ddf-9e72-ca1b944344db",
+        "avg_overall_rating": null,
+        "professor_last_name": "Kwiatkowski",
+        "professor_first_name": "Jerzy"
+      },
+      {
+        "professor_id": "fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464",
+        "avg_overall_rating": null,
+        "professor_last_name": "Lewandowski",
+        "professor_first_name": "Piotr"
+      },
+      {
+        "professor_id": "b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4",
+        "avg_overall_rating": null,
+        "professor_last_name": "Majewski",
+        "professor_first_name": "Zbigniew"
+      },
+      {
+        "professor_id": "bdacd65d-0634-47e8-894e-728fc9221207",
+        "avg_overall_rating": null,
+        "professor_last_name": "Mazur",
+        "professor_first_name": "Jerzy"
+      },
+      {
+        "professor_id": "5b3ae75e-96e7-4a7b-be0f-7375938dcd62",
+        "avg_overall_rating": null,
+        "professor_last_name": "Michalski",
+        "professor_first_name": "Magdalena"
+      },
+      {
+        "professor_id": "b3caef8a-8a8a-49c7-ae98-0fa38441139a",
+        "avg_overall_rating": null,
+        "professor_last_name": "Nowak",
+        "professor_first_name": "Dariusz"
+      },
+      {
+        "professor_id": "ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef",
+        "avg_overall_rating": null,
+        "professor_last_name": "Nowak",
+        "professor_first_name": "Jerzy"
+      },
+      {
+        "professor_id": "69dc12ae-95ba-499f-9d04-5eefc2f2d4bf",
+        "avg_overall_rating": null,
+        "professor_last_name": "Nowak",
+        "professor_first_name": "Mariusz"
+      },
+      {
+        "professor_id": "8711908f-0ab8-4de0-8b45-c2a294d2de1c",
+        "avg_overall_rating": null,
+        "professor_last_name": "Nowakowski",
+        "professor_first_name": "Stanisław"
+      },
+      {
+        "professor_id": "b84e485c-28ea-42b7-a13e-a02578274226",
+        "avg_overall_rating": null,
+        "professor_last_name": "Olszewski",
+        "professor_first_name": "Jan"
+      },
+      {
+        "professor_id": "ad35d15d-f7ad-416c-ade2-89853d0729c9",
+        "avg_overall_rating": null,
+        "professor_last_name": "Piotrowski",
+        "professor_first_name": "Paweł"
+      },
+      {
+        "professor_id": "007cb07c-c14f-4824-a62d-d42685252c75",
+        "avg_overall_rating": null,
+        "professor_last_name": "Stępień",
+        "professor_first_name": "Joanna"
+      },
+      {
+        "professor_id": "9c934df1-9a06-49a7-96f4-351a647012ba",
+        "avg_overall_rating": null,
+        "professor_last_name": "Stępień",
+        "professor_first_name": "Stanisław"
+      },
+      {
+        "professor_id": "8e54b65b-4864-47d8-b9b3-9b727991a6d2",
+        "avg_overall_rating": null,
+        "professor_last_name": "Szymański",
+        "professor_first_name": "Magdalena"
+      },
+      {
+        "professor_id": "089c913f-8ec7-4162-9a7a-a67e41b3b935",
+        "avg_overall_rating": null,
+        "professor_last_name": "Szymański",
+        "professor_first_name": "Ryszard"
+      },
+      {
+        "professor_id": "2adc085d-5924-47a1-9bf3-43472e564355",
+        "avg_overall_rating": null,
+        "professor_last_name": "Wieczorek",
+        "professor_first_name": "Jacek"
+      },
+      {
+        "professor_id": "bdb7d368-ed33-4dd8-99e9-aedea2c36f60",
+        "avg_overall_rating": null,
+        "professor_last_name": "Wójcik",
+        "professor_first_name": "Stanisław"
+      },
+      {
+        "professor_id": "2dd66040-0bde-416d-b2dc-9faa4ef4cd44",
+        "avg_overall_rating": null,
+        "professor_last_name": "Woźniak",
+        "professor_first_name": "Adam"
+      },
+      {
+        "professor_id": "7732eb5b-ba0d-4e3f-9b39-205a0771c02a",
+        "avg_overall_rating": null,
+        "professor_last_name": "Zieliński",
+        "professor_first_name": "Grzegorz"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Overall Course Evaluation by Professor",
+      "width": 700,
+      "height": {
+        "step": 20
+      },
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "avg_overall_rating",
+          "type": "quantitative",
+          "title": "Average Overall Rating",
+          "scale": {
+            "domain": [
+              0,
+              5
+            ]
+          }
+        },
+        "y": {
+          "field": "professor_last_name",
+          "type": "nominal",
+          "title": "Professor (last name)",
+          "sort": {
+            "field": "avg_overall_rating",
+            "order": "descending"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "professor_first_name",
+            "type": "nominal",
+            "title": "First name"
+          },
+          {
+            "field": "professor_last_name",
+            "type": "nominal",
+            "title": "Last name"
+          },
+          {
+            "field": "avg_overall_rating",
+            "type": "quantitative",
+            "title": "Avg Rating",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT\n  p.id AS professor_id,\n  p.first_name AS professor_first_name,\n  p.last_name AS professor_last_name,\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\nFROM public.professors p\nLEFT JOIN public.course_sections cs ON cs.professor_id = p.id\nLEFT JOIN public.enrollments e ON e.course_section_id = cs.id\nLEFT JOIN public.course_evaluations ce ON ce.enrollment_id = e.id\nGROUP BY p.id, p.first_name, p.last_name\nORDER BY avg_overall_rating DESC NULLS LAST, p.last_name, p.first_name;",
+    "metadata": {
+      "columns": [
+        "professor_id",
+        "avg_overall_rating",
+        "professor_last_name",
+        "professor_first_name"
+      ],
+      "rowCount": 50,
+      "sample": [
+        {
+          "professor_id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+          "avg_overall_rating": 5,
+          "professor_last_name": "Piotrowski",
+          "professor_first_name": "Magdalena"
+        },
+        {
+          "professor_id": "33ba2086-7c0f-4a57-9451-014db3e74209",
+          "avg_overall_rating": 5,
+          "professor_last_name": "Szymański",
+          "professor_first_name": "Katarzyna"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:37:16.926Z",
+    "traceId": "d8e288357a2bfb128941834667ba2d18",
+    "attempts": 5,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 17155,
+      "outputTokens": 3529,
+      "totalTokens": 20684,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2496,
+      "costUsd": 0.01134675
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 17155,
+        "outputTokens": 3529,
+        "totalTokens": 20684,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2496,
+        "costUsd": 0.01134675
+      }
+    ],
+    "warnings": []
+  }
+}

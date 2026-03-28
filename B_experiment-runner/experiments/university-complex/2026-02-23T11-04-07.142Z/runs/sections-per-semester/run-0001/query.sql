@@ -1,0 +1,1 @@
+SELECT academic_year AS academic_year, semester_type::text AS semester_type, COUNT(id) AS section_count FROM public.course_sections GROUP BY academic_year, semester_type ORDER BY academic_year ASC, semester_type ASC;

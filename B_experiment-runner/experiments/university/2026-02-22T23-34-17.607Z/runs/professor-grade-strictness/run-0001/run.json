@@ -1,0 +1,518 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "professor-grade-strictness",
+  "caseDirectory": "professor-grade-strictness",
+  "repeatIndex": 1,
+  "prompt": "Which professors give the lowest average grades (strictest graders)?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which professors give the lowest average grades (strictest graders)?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:50:33.729Z",
+    "endedAtUtc": "2026-02-22T23:52:25.136Z",
+    "durationMs": 111407
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "22186",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:52:25 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Which professors give the lowest average grades (strictest graders)?\"},\"sql\":{\"payload\":{\"question\":\"Which professors give the lowest average grades (strictest graders)?\"},\"startedAt\":1771804233735,\"status\":\"success\",\"output\":{\"reasoning\":\"Compute each professor's average numeric grade by joining grades → enrollments → course_sections → professors, ignoring non-numeric grade_value entries, then list professors ordered by lowest average (strictest).\",\"sql\":\"WITH numeric_grades AS (\\n  SELECT\\n    g.id AS grade_id,\\n    e.course_section_id AS course_section_id,\\n    CAST(g.grade_value::text AS numeric) AS numeric_grade\\n  FROM public.grades g\\n  JOIN public.enrollments e ON e.id = g.enrollment_id\\n  WHERE g.grade_value IS NOT NULL\\n    AND g.grade_value::text ~ '^[0-9]+(\\\\.[0-9]+)?$'\\n)\\nSELECT\\n  p.id AS professor_id,\\n  (p.last_name || ', ' || p.first_name) AS professor_name,\\n  ROUND(AVG(ng.numeric_grade)::numeric, 2) AS average_grade,\\n  COUNT(ng.numeric_grade) AS num_grades\\nFROM numeric_grades ng\\nJOIN public.course_sections cs ON cs.id = ng.course_section_id\\nJOIN public.professors p ON p.id = cs.professor_id\\nGROUP BY p.id, p.first_name, p.last_name\\nHAVING COUNT(ng.numeric_grade) > 0\\nORDER BY average_grade ASC, num_grades DESC, p.last_name, p.first_name;\",\"assumptions\":[\"grade_value holds numeric grades as text/enum convertible to numeric (non-numeric entries are excluded)\",\"Strictness = lower average numeric grade across all numeric-grade enrollments\",\"Return all professors with at least one numeric grade, ordered by strictness (ties broken by more grades then name)\"]},\"endedAt\":1771804310118},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH numeric_grades AS (\\n  SELECT\\n    g.id AS grade_id,\\n    e.course_section_id AS course_section_id,\\n    CAST(g.grade_value::text AS numeric) AS numeric_grade\\n  FROM public.grades g\\n  JOIN public.enrollments e ON e.id = g.enrollment_id\\n  WHERE g.grade_value IS NOT NULL\\n    AND g.grade_value::text ~ '^[0-9]+(\\\\.[0-9]+)?$'\\n)\\nSELECT\\n  p.id AS professor_id,\\n  (p.last_name || ', ' || p.first_name) AS professor_name,\\n  ROUND(AVG(ng.numeric_grade)::numeric, 2) AS average_grade,\\n  COUNT(ng.numeric_grade) AS num_grades\\nFROM numeric_grades ng\\nJOIN public.course_sections cs ON cs.id = ng.course_section_id\\nJOIN public.professors p ON p.id = cs.professor_id\\nGROUP BY p.id, p.first_name, p.last_name\\nHAVING COUNT(ng.numeric_grade) > 0\\nORDER BY average_grade ASC, num_grades DESC, p.last_name, p.first_name;\"},\"startedAt\":1771804310123,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH numeric_grades AS (\\n  SELECT\\n    g.id AS grade_id,\\n    e.course_section_id AS course_section_id,\\n    CAST(g.grade_value::text AS numeric) AS numeric_grade\\n  FROM public.grades g\\n  JOIN public.enrollments e ON e.id = g.enrollment_id\\n  WHERE g.grade_value IS NOT NULL\\n    AND g.grade_value::text ~ '^[0-9]+(\\\\.[0-9]+)?$'\\n)\\nSELECT\\n  p.id AS professor_id,\\n  (p.last_name || ', ' || p.first_name) AS professor_name,\\n  ROUND(AVG(ng.numeric_grade)::numeric, 2) AS average_grade,\\n  COUNT(ng.numeric_grade) AS num_grades\\nFROM numeric_grades ng\\nJOIN public.course_sections cs ON cs.id = ng.course_section_id\\nJOIN public.professors p ON p.id = cs.professor_id\\nGROUP BY p.id, p.first_name, p.last_name\\nHAVING COUNT(ng.numeric_grade) > 0\\nORDER BY average_grade ASC, num_grades DESC, p.last_name, p.first_name\",\"metadata\":{\"columns\":[\"num_grades\",\"professor_id\",\"average_grade\",\"professor_name\"],\"rowCount\":20,\"sample\":[{\"num_grades\":1,\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"average_grade\":2,\"professor_name\":\"Piotrowski, Magdalena\"},{\"num_grades\":1,\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"average_grade\":2,\"professor_name\":\"Wieczorek, Tomasz\"}]},\"data\":[{\"num_grades\":1,\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"average_grade\":2,\"professor_name\":\"Piotrowski, Magdalena\"},{\"num_grades\":1,\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"average_grade\":2,\"professor_name\":\"Wieczorek, Tomasz\"},{\"num_grades\":2,\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"average_grade\":3,\"professor_name\":\"Kowalczyk, Ryszard\"},{\"num_grades\":4,\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"average_grade\":3.38,\"professor_name\":\"Olszewski, Małgorzata\"},{\"num_grades\":4,\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"average_grade\":3.38,\"professor_name\":\"Wojciechowski, Jacek\"},{\"num_grades\":3,\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"average_grade\":3.5,\"professor_name\":\"Krawczyk, Agnieszka\"},{\"num_grades\":1,\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"average_grade\":3.5,\"professor_name\":\"Jankowski, Grzegorz\"},{\"num_grades\":1,\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"average_grade\":3.5,\"professor_name\":\"Jaworski, Robert\"},{\"num_grades\":4,\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"average_grade\":3.63,\"professor_name\":\"Woźniak, Ryszard\"},{\"num_grades\":3,\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"average_grade\":3.67,\"professor_name\":\"Michalski, Magdalena\"},{\"num_grades\":5,\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"average_grade\":3.7,\"professor_name\":\"Woźniak, Marek\"},{\"num_grades\":2,\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"average_grade\":3.75,\"professor_name\":\"Stępień, Joanna\"},{\"num_grades\":8,\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"average_grade\":3.94,\"professor_name\":\"Majewski, Tomasz\"},{\"num_grades\":3,\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"average_grade\":4,\"professor_name\":\"Lewandowski, Marek\"},{\"num_grades\":2,\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"average_grade\":4,\"professor_name\":\"Krawczyk, Ewa\"},{\"num_grades\":4,\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"average_grade\":4.38,\"professor_name\":\"Nowakowski, Mariusz\"},{\"num_grades\":1,\"professor_id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"average_grade\":4.5,\"professor_name\":\"Majewski, Zbigniew\"},{\"num_grades\":1,\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"average_grade\":4.5,\"professor_name\":\"Nowak, Michał\"},{\"num_grades\":1,\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"average_grade\":4.5,\"professor_name\":\"Wieczorek, Adam\"},{\"num_grades\":1,\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"average_grade\":4.5,\"professor_name\":\"Woźniak, Teresa\"}]},\"endedAt\":1771804310143},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"WITH numeric_grades AS (\\n  SELECT\\n    g.id AS grade_id,\\n    e.course_section_id AS course_section_id,\\n    CAST(g.grade_value::text AS numeric) AS numeric_grade\\n  FROM public.grades g\\n  JOIN public.enrollments e ON e.id = g.enrollment_id\\n  WHERE g.grade_value IS NOT NULL\\n    AND g.grade_value::text ~ '^[0-9]+(\\\\.[0-9]+)?$'\\n)\\nSELECT\\n  p.id AS professor_id,\\n  (p.last_name || ', ' || p.first_name) AS professor_name,\\n  ROUND(AVG(ng.numeric_grade)::numeric, 2) AS average_grade,\\n  COUNT(ng.numeric_grade) AS num_grades\\nFROM numeric_grades ng\\nJOIN public.course_sections cs ON cs.id = ng.course_section_id\\nJOIN public.professors p ON p.id = cs.professor_id\\nGROUP BY p.id, p.first_name, p.last_name\\nHAVING COUNT(ng.numeric_grade) > 0\\nORDER BY average_grade ASC, num_grades DESC, p.last_name, p.first_name\",\"metadata\":{\"columns\":[\"num_grades\",\"professor_id\",\"average_grade\",\"professor_name\"],\"rowCount\":20,\"sample\":[{\"num_grades\":1,\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"average_grade\":2,\"professor_name\":\"Piotrowski, Magdalena\"},{\"num_grades\":1,\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"average_grade\":2,\"professor_name\":\"Wieczorek, Tomasz\"}]},\"data\":[{\"num_grades\":1,\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"average_grade\":2,\"professor_name\":\"Piotrowski, Magdalena\"},{\"num_grades\":1,\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"average_grade\":2,\"professor_name\":\"Wieczorek, Tomasz\"},{\"num_grades\":2,\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"average_grade\":3,\"professor_name\":\"Kowalczyk, Ryszard\"},{\"num_grades\":4,\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"average_grade\":3.38,\"professor_name\":\"Olszewski, Małgorzata\"},{\"num_grades\":4,\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"average_grade\":3.38,\"professor_name\":\"Wojciechowski, Jacek\"},{\"num_grades\":3,\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"average_grade\":3.5,\"professor_name\":\"Krawczyk, Agnieszka\"},{\"num_grades\":1,\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"average_grade\":3.5,\"professor_name\":\"Jankowski, Grzegorz\"},{\"num_grades\":1,\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"average_grade\":3.5,\"professor_name\":\"Jaworski, Robert\"},{\"num_grades\":4,\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"average_grade\":3.63,\"professor_name\":\"Woźniak, Ryszard\"},{\"num_grades\":3,\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"average_grade\":3.67,\"professor_name\":\"Michalski, Magdalena\"},{\"num_grades\":5,\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"average_grade\":3.7,\"professor_name\":\"Woźniak, Marek\"},{\"num_grades\":2,\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"average_grade\":3.75,\"professor_name\":\"Stępień, Joanna\"},{\"num_grades\":8,\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"average_grade\":3.94,\"professor_name\":\"Majewski, Tomasz\"},{\"num_grades\":3,\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"average_grade\":4,\"professor_name\":\"Lewandowski, Marek\"},{\"num_grades\":2,\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"average_grade\":4,\"professor_name\":\"Krawczyk, Ewa\"},{\"num_grades\":4,\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"average_grade\":4.38,\"professor_name\":\"Nowakowski, Mariusz\"},{\"num_grades\":1,\"professor_id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"average_grade\":4.5,\"professor_name\":\"Majewski, Zbigniew\"},{\"num_grades\":1,\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"average_grade\":4.5,\"professor_name\":\"Nowak, Michał\"},{\"num_grades\":1,\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"average_grade\":4.5,\"professor_name\":\"Wieczorek, Adam\"},{\"num_grades\":1,\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"average_grade\":4.5,\"professor_name\":\"Woźniak, Teresa\"}]},\"startedAt\":1771804310148,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Professors with Lowest Average Grades (Strictest Graders)\",\"width\":700,\"height\":500,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Professor\"},\"sort\":{\"field\":\"average_grade\",\"order\":\"ascending\"}},\"x\":{\"field\":\"average_grade\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Grade\"}},\"color\":{\"field\":\"num_grades\",\"type\":\"quantitative\",\"legend\":{\"title\":\"Number of Grades\"}},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},{\"field\":\"num_grades\",\"type\":\"quantitative\",\"title\":\"Number of Grades\"},{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"}]}},\"reasoning\":\"A horizontal bar chart sorted by average_grade ascending makes it easy to identify the strictest graders. Color encodes the count of grades to indicate sample size per professor; tooltip shows details including professor ID.\"},\"endedAt\":1771804345118},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Professors with Lowest Average Grades (Strictest Graders)\",\"width\":700,\"height\":500,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Professor\"},\"sort\":{\"field\":\"average_grade\",\"order\":\"ascending\"}},\"x\":{\"field\":\"average_grade\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Grade\"}},\"color\":{\"field\":\"num_grades\",\"type\":\"quantitative\",\"legend\":{\"title\":\"Number of Grades\"}},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},{\"field\":\"num_grades\",\"type\":\"quantitative\",\"title\":\"Number of Grades\"},{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"}]}},\"reasoning\":\"A horizontal bar chart sorted by average_grade ascending makes it easy to identify the strictest graders. Color encodes the count of grades to indicate sample size per professor; tooltip shows details including professor ID.\"},\"startedAt\":1771804345122,\"status\":\"success\",\"output\":{\"sql\":\"WITH numeric_grades AS (\\n  SELECT\\n    g.id AS grade_id,\\n    e.course_section_id AS course_section_id,\\n    CAST(g.grade_value::text AS numeric) AS numeric_grade\\n  FROM public.grades g\\n  JOIN public.enrollments e ON e.id = g.enrollment_id\\n  WHERE g.grade_value IS NOT NULL\\n    AND g.grade_value::text ~ '^[0-9]+(\\\\.[0-9]+)?$'\\n)\\nSELECT\\n  p.id AS professor_id,\\n  (p.last_name || ', ' || p.first_name) AS professor_name,\\n  ROUND(AVG(ng.numeric_grade)::numeric, 2) AS average_grade,\\n  COUNT(ng.numeric_grade) AS num_grades\\nFROM numeric_grades ng\\nJOIN public.course_sections cs ON cs.id = ng.course_section_id\\nJOIN public.professors p ON p.id = cs.professor_id\\nGROUP BY p.id, p.first_name, p.last_name\\nHAVING COUNT(ng.numeric_grade) > 0\\nORDER BY average_grade ASC, num_grades DESC, p.last_name, p.first_name;\",\"data\":[{\"num_grades\":1,\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"average_grade\":2,\"professor_name\":\"Piotrowski, Magdalena\"},{\"num_grades\":1,\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"average_grade\":2,\"professor_name\":\"Wieczorek, Tomasz\"},{\"num_grades\":2,\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"average_grade\":3,\"professor_name\":\"Kowalczyk, Ryszard\"},{\"num_grades\":4,\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"average_grade\":3.38,\"professor_name\":\"Olszewski, Małgorzata\"},{\"num_grades\":4,\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"average_grade\":3.38,\"professor_name\":\"Wojciechowski, Jacek\"},{\"num_grades\":3,\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"average_grade\":3.5,\"professor_name\":\"Krawczyk, Agnieszka\"},{\"num_grades\":1,\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"average_grade\":3.5,\"professor_name\":\"Jankowski, Grzegorz\"},{\"num_grades\":1,\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"average_grade\":3.5,\"professor_name\":\"Jaworski, Robert\"},{\"num_grades\":4,\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"average_grade\":3.63,\"professor_name\":\"Woźniak, Ryszard\"},{\"num_grades\":3,\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"average_grade\":3.67,\"professor_name\":\"Michalski, Magdalena\"},{\"num_grades\":5,\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"average_grade\":3.7,\"professor_name\":\"Woźniak, Marek\"},{\"num_grades\":2,\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"average_grade\":3.75,\"professor_name\":\"Stępień, Joanna\"},{\"num_grades\":8,\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"average_grade\":3.94,\"professor_name\":\"Majewski, Tomasz\"},{\"num_grades\":3,\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"average_grade\":4,\"professor_name\":\"Lewandowski, Marek\"},{\"num_grades\":2,\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"average_grade\":4,\"professor_name\":\"Krawczyk, Ewa\"},{\"num_grades\":4,\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"average_grade\":4.38,\"professor_name\":\"Nowakowski, Mariusz\"},{\"num_grades\":1,\"professor_id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"average_grade\":4.5,\"professor_name\":\"Majewski, Zbigniew\"},{\"num_grades\":1,\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"average_grade\":4.5,\"professor_name\":\"Nowak, Michał\"},{\"num_grades\":1,\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"average_grade\":4.5,\"professor_name\":\"Wieczorek, Adam\"},{\"num_grades\":1,\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"average_grade\":4.5,\"professor_name\":\"Woźniak, Teresa\"}],\"metadata\":{\"columns\":[\"num_grades\",\"professor_id\",\"average_grade\",\"professor_name\"],\"rowCount\":20,\"sample\":[{\"num_grades\":1,\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"average_grade\":2,\"professor_name\":\"Piotrowski, Magdalena\"},{\"num_grades\":1,\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"average_grade\":2,\"professor_name\":\"Wieczorek, Tomasz\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Professors with Lowest Average Grades (Strictest Graders)\",\"width\":700,\"height\":500,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Professor\"},\"sort\":{\"field\":\"average_grade\",\"order\":\"ascending\"}},\"x\":{\"field\":\"average_grade\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Grade\"}},\"color\":{\"field\":\"num_grades\",\"type\":\"quantitative\",\"legend\":{\"title\":\"Number of Grades\"}},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},{\"field\":\"num_grades\",\"type\":\"quantitative\",\"title\":\"Number of Grades\"},{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771804345125}},\"input\":{\"question\":\"Which professors give the lowest average grades (strictest graders)?\"},\"result\":{\"sql\":\"WITH numeric_grades AS (\\n  SELECT\\n    g.id AS grade_id,\\n    e.course_section_id AS course_section_id,\\n    CAST(g.grade_value::text AS numeric) AS numeric_grade\\n  FROM public.grades g\\n  JOIN public.enrollments e ON e.id = g.enrollment_id\\n  WHERE g.grade_value IS NOT NULL\\n    AND g.grade_value::text ~ '^[0-9]+(\\\\.[0-9]+)?$'\\n)\\nSELECT\\n  p.id AS professor_id,\\n  (p.last_name || ', ' || p.first_name) AS professor_name,\\n  ROUND(AVG(ng.numeric_grade)::numeric, 2) AS average_grade,\\n  COUNT(ng.numeric_grade) AS num_grades\\nFROM numeric_grades ng\\nJOIN public.course_sections cs ON cs.id = ng.course_section_id\\nJOIN public.professors p ON p.id = cs.professor_id\\nGROUP BY p.id, p.first_name, p.last_name\\nHAVING COUNT(ng.numeric_grade) > 0\\nORDER BY average_grade ASC, num_grades DESC, p.last_name, p.first_name;\",\"data\":[{\"num_grades\":1,\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"average_grade\":2,\"professor_name\":\"Piotrowski, Magdalena\"},{\"num_grades\":1,\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"average_grade\":2,\"professor_name\":\"Wieczorek, Tomasz\"},{\"num_grades\":2,\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"average_grade\":3,\"professor_name\":\"Kowalczyk, Ryszard\"},{\"num_grades\":4,\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"average_grade\":3.38,\"professor_name\":\"Olszewski, Małgorzata\"},{\"num_grades\":4,\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"average_grade\":3.38,\"professor_name\":\"Wojciechowski, Jacek\"},{\"num_grades\":3,\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"average_grade\":3.5,\"professor_name\":\"Krawczyk, Agnieszka\"},{\"num_grades\":1,\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"average_grade\":3.5,\"professor_name\":\"Jankowski, Grzegorz\"},{\"num_grades\":1,\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"average_grade\":3.5,\"professor_name\":\"Jaworski, Robert\"},{\"num_grades\":4,\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"average_grade\":3.63,\"professor_name\":\"Woźniak, Ryszard\"},{\"num_grades\":3,\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"average_grade\":3.67,\"professor_name\":\"Michalski, Magdalena\"},{\"num_grades\":5,\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"average_grade\":3.7,\"professor_name\":\"Woźniak, Marek\"},{\"num_grades\":2,\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"average_grade\":3.75,\"professor_name\":\"Stępień, Joanna\"},{\"num_grades\":8,\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"average_grade\":3.94,\"professor_name\":\"Majewski, Tomasz\"},{\"num_grades\":3,\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"average_grade\":4,\"professor_name\":\"Lewandowski, Marek\"},{\"num_grades\":2,\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"average_grade\":4,\"professor_name\":\"Krawczyk, Ewa\"},{\"num_grades\":4,\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"average_grade\":4.38,\"professor_name\":\"Nowakowski, Mariusz\"},{\"num_grades\":1,\"professor_id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"average_grade\":4.5,\"professor_name\":\"Majewski, Zbigniew\"},{\"num_grades\":1,\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"average_grade\":4.5,\"professor_name\":\"Nowak, Michał\"},{\"num_grades\":1,\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"average_grade\":4.5,\"professor_name\":\"Wieczorek, Adam\"},{\"num_grades\":1,\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"average_grade\":4.5,\"professor_name\":\"Woźniak, Teresa\"}],\"metadata\":{\"columns\":[\"num_grades\",\"professor_id\",\"average_grade\",\"professor_name\"],\"rowCount\":20,\"sample\":[{\"num_grades\":1,\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"average_grade\":2,\"professor_name\":\"Piotrowski, Magdalena\"},{\"num_grades\":1,\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"average_grade\":2,\"professor_name\":\"Wieczorek, Tomasz\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Professors with Lowest Average Grades (Strictest Graders)\",\"width\":700,\"height\":500,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Professor\"},\"sort\":{\"field\":\"average_grade\",\"order\":\"ascending\"}},\"x\":{\"field\":\"average_grade\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Grade\"}},\"color\":{\"field\":\"num_grades\",\"type\":\"quantitative\",\"legend\":{\"title\":\"Number of Grades\"}},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},{\"field\":\"num_grades\",\"type\":\"quantitative\",\"title\":\"Number of Grades\"},{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"074b29713555ee5bb843610e087aca66\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/professor-grade-strictness/run-0001/run.json",
+    "queryPath": "runs/professor-grade-strictness/run-0001/query.sql",
+    "vegaRawPath": "runs/professor-grade-strictness/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/professor-grade-strictness/run-0001/vega.resolved.json",
+    "imagePath": "runs/professor-grade-strictness/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:52:25.505Z",
+  "traceId": "074b29713555ee5bb843610e087aca66",
+  "success": true,
+  "durationMs": 111776,
+  "resultRaw": {
+    "data": [
+      {
+        "num_grades": 1,
+        "professor_id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+        "average_grade": 2,
+        "professor_name": "Piotrowski, Magdalena"
+      },
+      {
+        "num_grades": 1,
+        "professor_id": "4050afec-f68c-49bb-9982-4a3c9d1a23d9",
+        "average_grade": 2,
+        "professor_name": "Wieczorek, Tomasz"
+      },
+      {
+        "num_grades": 2,
+        "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+        "average_grade": 3,
+        "professor_name": "Kowalczyk, Ryszard"
+      },
+      {
+        "num_grades": 4,
+        "professor_id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+        "average_grade": 3.38,
+        "professor_name": "Olszewski, Małgorzata"
+      },
+      {
+        "num_grades": 4,
+        "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+        "average_grade": 3.38,
+        "professor_name": "Wojciechowski, Jacek"
+      },
+      {
+        "num_grades": 3,
+        "professor_id": "ff61fe12-d98c-4d43-87db-710f2571c1f2",
+        "average_grade": 3.5,
+        "professor_name": "Krawczyk, Agnieszka"
+      },
+      {
+        "num_grades": 1,
+        "professor_id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+        "average_grade": 3.5,
+        "professor_name": "Jankowski, Grzegorz"
+      },
+      {
+        "num_grades": 1,
+        "professor_id": "8f0ffcad-1af9-4da5-898a-dc47b8717d83",
+        "average_grade": 3.5,
+        "professor_name": "Jaworski, Robert"
+      },
+      {
+        "num_grades": 4,
+        "professor_id": "5d70abe8-4f1a-44ec-9816-2ec96a2807cb",
+        "average_grade": 3.63,
+        "professor_name": "Woźniak, Ryszard"
+      },
+      {
+        "num_grades": 3,
+        "professor_id": "5b3ae75e-96e7-4a7b-be0f-7375938dcd62",
+        "average_grade": 3.67,
+        "professor_name": "Michalski, Magdalena"
+      },
+      {
+        "num_grades": 5,
+        "professor_id": "2b5262b8-932c-4951-9390-c56d4b69d888",
+        "average_grade": 3.7,
+        "professor_name": "Woźniak, Marek"
+      },
+      {
+        "num_grades": 2,
+        "professor_id": "007cb07c-c14f-4824-a62d-d42685252c75",
+        "average_grade": 3.75,
+        "professor_name": "Stępień, Joanna"
+      },
+      {
+        "num_grades": 8,
+        "professor_id": "f221aafd-0e9c-4345-aff5-7e290e1a7864",
+        "average_grade": 3.94,
+        "professor_name": "Majewski, Tomasz"
+      },
+      {
+        "num_grades": 3,
+        "professor_id": "037011f2-f3d4-406e-9554-a6ffba701e06",
+        "average_grade": 4,
+        "professor_name": "Lewandowski, Marek"
+      },
+      {
+        "num_grades": 2,
+        "professor_id": "a82c40da-e7dc-4e49-9e66-386ea4bb7483",
+        "average_grade": 4,
+        "professor_name": "Krawczyk, Ewa"
+      },
+      {
+        "num_grades": 4,
+        "professor_id": "d19adcea-56d6-4557-8f93-95ec58fa5d34",
+        "average_grade": 4.38,
+        "professor_name": "Nowakowski, Mariusz"
+      },
+      {
+        "num_grades": 1,
+        "professor_id": "b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4",
+        "average_grade": 4.5,
+        "professor_name": "Majewski, Zbigniew"
+      },
+      {
+        "num_grades": 1,
+        "professor_id": "f24d24fc-5446-4d72-bb11-9d9dd1545f97",
+        "average_grade": 4.5,
+        "professor_name": "Nowak, Michał"
+      },
+      {
+        "num_grades": 1,
+        "professor_id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+        "average_grade": 4.5,
+        "professor_name": "Wieczorek, Adam"
+      },
+      {
+        "num_grades": 1,
+        "professor_id": "173e49aa-5a27-41e8-b1fa-4d19423bdc0b",
+        "average_grade": 4.5,
+        "professor_name": "Woźniak, Teresa"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Professors with Lowest Average Grades (Strictest Graders)",
+      "width": 700,
+      "height": 500,
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "y": {
+          "field": "professor_name",
+          "type": "nominal",
+          "axis": {
+            "title": "Professor"
+          },
+          "sort": {
+            "field": "average_grade",
+            "order": "ascending"
+          }
+        },
+        "x": {
+          "field": "average_grade",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average Grade"
+          }
+        },
+        "color": {
+          "field": "num_grades",
+          "type": "quantitative",
+          "legend": {
+            "title": "Number of Grades"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "professor_name",
+            "type": "nominal",
+            "title": "Professor"
+          },
+          {
+            "field": "average_grade",
+            "type": "quantitative",
+            "title": "Average Grade"
+          },
+          {
+            "field": "num_grades",
+            "type": "quantitative",
+            "title": "Number of Grades"
+          },
+          {
+            "field": "professor_id",
+            "type": "nominal",
+            "title": "Professor ID"
+          }
+        ]
+      }
+    },
+    "sql": "WITH numeric_grades AS (\n  SELECT\n    g.id AS grade_id,\n    e.course_section_id AS course_section_id,\n    CAST(g.grade_value::text AS numeric) AS numeric_grade\n  FROM public.grades g\n  JOIN public.enrollments e ON e.id = g.enrollment_id\n  WHERE g.grade_value IS NOT NULL\n    AND g.grade_value::text ~ '^[0-9]+(\\.[0-9]+)?$'\n)\nSELECT\n  p.id AS professor_id,\n  (p.last_name || ', ' || p.first_name) AS professor_name,\n  ROUND(AVG(ng.numeric_grade)::numeric, 2) AS average_grade,\n  COUNT(ng.numeric_grade) AS num_grades\nFROM numeric_grades ng\nJOIN public.course_sections cs ON cs.id = ng.course_section_id\nJOIN public.professors p ON p.id = cs.professor_id\nGROUP BY p.id, p.first_name, p.last_name\nHAVING COUNT(ng.numeric_grade) > 0\nORDER BY average_grade ASC, num_grades DESC, p.last_name, p.first_name;",
+    "metadata": {
+      "columns": [
+        "num_grades",
+        "professor_id",
+        "average_grade",
+        "professor_name"
+      ],
+      "rowCount": 20,
+      "sample": [
+        {
+          "num_grades": 1,
+          "professor_id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+          "average_grade": 2,
+          "professor_name": "Piotrowski, Magdalena"
+        },
+        {
+          "num_grades": 1,
+          "professor_id": "4050afec-f68c-49bb-9982-4a3c9d1a23d9",
+          "average_grade": 2,
+          "professor_name": "Wieczorek, Tomasz"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "num_grades": 1,
+        "professor_id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+        "average_grade": 2,
+        "professor_name": "Piotrowski, Magdalena"
+      },
+      {
+        "num_grades": 1,
+        "professor_id": "4050afec-f68c-49bb-9982-4a3c9d1a23d9",
+        "average_grade": 2,
+        "professor_name": "Wieczorek, Tomasz"
+      },
+      {
+        "num_grades": 2,
+        "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+        "average_grade": 3,
+        "professor_name": "Kowalczyk, Ryszard"
+      },
+      {
+        "num_grades": 4,
+        "professor_id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+        "average_grade": 3.38,
+        "professor_name": "Olszewski, Małgorzata"
+      },
+      {
+        "num_grades": 4,
+        "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+        "average_grade": 3.38,
+        "professor_name": "Wojciechowski, Jacek"
+      },
+      {
+        "num_grades": 3,
+        "professor_id": "ff61fe12-d98c-4d43-87db-710f2571c1f2",
+        "average_grade": 3.5,
+        "professor_name": "Krawczyk, Agnieszka"
+      },
+      {
+        "num_grades": 1,
+        "professor_id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+        "average_grade": 3.5,
+        "professor_name": "Jankowski, Grzegorz"
+      },
+      {
+        "num_grades": 1,
+        "professor_id": "8f0ffcad-1af9-4da5-898a-dc47b8717d83",
+        "average_grade": 3.5,
+        "professor_name": "Jaworski, Robert"
+      },
+      {
+        "num_grades": 4,
+        "professor_id": "5d70abe8-4f1a-44ec-9816-2ec96a2807cb",
+        "average_grade": 3.63,
+        "professor_name": "Woźniak, Ryszard"
+      },
+      {
+        "num_grades": 3,
+        "professor_id": "5b3ae75e-96e7-4a7b-be0f-7375938dcd62",
+        "average_grade": 3.67,
+        "professor_name": "Michalski, Magdalena"
+      },
+      {
+        "num_grades": 5,
+        "professor_id": "2b5262b8-932c-4951-9390-c56d4b69d888",
+        "average_grade": 3.7,
+        "professor_name": "Woźniak, Marek"
+      },
+      {
+        "num_grades": 2,
+        "professor_id": "007cb07c-c14f-4824-a62d-d42685252c75",
+        "average_grade": 3.75,
+        "professor_name": "Stępień, Joanna"
+      },
+      {
+        "num_grades": 8,
+        "professor_id": "f221aafd-0e9c-4345-aff5-7e290e1a7864",
+        "average_grade": 3.94,
+        "professor_name": "Majewski, Tomasz"
+      },
+      {
+        "num_grades": 3,
+        "professor_id": "037011f2-f3d4-406e-9554-a6ffba701e06",
+        "average_grade": 4,
+        "professor_name": "Lewandowski, Marek"
+      },
+      {
+        "num_grades": 2,
+        "professor_id": "a82c40da-e7dc-4e49-9e66-386ea4bb7483",
+        "average_grade": 4,
+        "professor_name": "Krawczyk, Ewa"
+      },
+      {
+        "num_grades": 4,
+        "professor_id": "d19adcea-56d6-4557-8f93-95ec58fa5d34",
+        "average_grade": 4.38,
+        "professor_name": "Nowakowski, Mariusz"
+      },
+      {
+        "num_grades": 1,
+        "professor_id": "b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4",
+        "average_grade": 4.5,
+        "professor_name": "Majewski, Zbigniew"
+      },
+      {
+        "num_grades": 1,
+        "professor_id": "f24d24fc-5446-4d72-bb11-9d9dd1545f97",
+        "average_grade": 4.5,
+        "professor_name": "Nowak, Michał"
+      },
+      {
+        "num_grades": 1,
+        "professor_id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+        "average_grade": 4.5,
+        "professor_name": "Wieczorek, Adam"
+      },
+      {
+        "num_grades": 1,
+        "professor_id": "173e49aa-5a27-41e8-b1fa-4d19423bdc0b",
+        "average_grade": 4.5,
+        "professor_name": "Woźniak, Teresa"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Professors with Lowest Average Grades (Strictest Graders)",
+      "width": 700,
+      "height": 500,
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "y": {
+          "field": "professor_name",
+          "type": "nominal",
+          "axis": {
+            "title": "Professor"
+          },
+          "sort": {
+            "field": "average_grade",
+            "order": "ascending"
+          }
+        },
+        "x": {
+          "field": "average_grade",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average Grade"
+          }
+        },
+        "color": {
+          "field": "num_grades",
+          "type": "quantitative",
+          "legend": {
+            "title": "Number of Grades"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "professor_name",
+            "type": "nominal",
+            "title": "Professor"
+          },
+          {
+            "field": "average_grade",
+            "type": "quantitative",
+            "title": "Average Grade"
+          },
+          {
+            "field": "num_grades",
+            "type": "quantitative",
+            "title": "Number of Grades"
+          },
+          {
+            "field": "professor_id",
+            "type": "nominal",
+            "title": "Professor ID"
+          }
+        ]
+      }
+    },
+    "sql": "WITH numeric_grades AS (\n  SELECT\n    g.id AS grade_id,\n    e.course_section_id AS course_section_id,\n    CAST(g.grade_value::text AS numeric) AS numeric_grade\n  FROM public.grades g\n  JOIN public.enrollments e ON e.id = g.enrollment_id\n  WHERE g.grade_value IS NOT NULL\n    AND g.grade_value::text ~ '^[0-9]+(\\.[0-9]+)?$'\n)\nSELECT\n  p.id AS professor_id,\n  (p.last_name || ', ' || p.first_name) AS professor_name,\n  ROUND(AVG(ng.numeric_grade)::numeric, 2) AS average_grade,\n  COUNT(ng.numeric_grade) AS num_grades\nFROM numeric_grades ng\nJOIN public.course_sections cs ON cs.id = ng.course_section_id\nJOIN public.professors p ON p.id = cs.professor_id\nGROUP BY p.id, p.first_name, p.last_name\nHAVING COUNT(ng.numeric_grade) > 0\nORDER BY average_grade ASC, num_grades DESC, p.last_name, p.first_name;",
+    "metadata": {
+      "columns": [
+        "num_grades",
+        "professor_id",
+        "average_grade",
+        "professor_name"
+      ],
+      "rowCount": 20,
+      "sample": [
+        {
+          "num_grades": 1,
+          "professor_id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+          "average_grade": 2,
+          "professor_name": "Piotrowski, Magdalena"
+        },
+        {
+          "num_grades": 1,
+          "professor_id": "4050afec-f68c-49bb-9982-4a3c9d1a23d9",
+          "average_grade": 2,
+          "professor_name": "Wieczorek, Tomasz"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:52:25.505Z",
+    "traceId": "074b29713555ee5bb843610e087aca66",
+    "attempts": 5,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 21509,
+      "outputTokens": 4639,
+      "totalTokens": 26148,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 3392,
+      "costUsd": 0.01465525
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 21509,
+        "outputTokens": 4639,
+        "totalTokens": 26148,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 3392,
+        "costUsd": 0.01465525
+      }
+    ],
+    "warnings": []
+  }
+}

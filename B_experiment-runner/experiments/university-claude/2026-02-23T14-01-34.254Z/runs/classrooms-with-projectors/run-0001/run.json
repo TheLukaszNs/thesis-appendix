@@ -1,0 +1,514 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "classrooms-with-projectors",
+  "caseDirectory": "classrooms-with-projectors",
+  "repeatIndex": 1,
+  "prompt": "What percentage of classrooms have projectors, grouped by building?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What percentage of classrooms have projectors, grouped by building?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:03:59.332Z",
+    "endedAtUtc": "2026-02-23T14:04:27.789Z",
+    "durationMs": 28457
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "17335",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:04:27 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What percentage of classrooms have projectors, grouped by building?\"},\"sql\":{\"payload\":{\"question\":\"What percentage of classrooms have projectors, grouped by building?\"},\"startedAt\":1771855439370,\"status\":\"success\",\"output\":{\"reasoning\":\"The classrooms table has a 'building' column and a 'has_projector' boolean column. To calculate the percentage of classrooms with projectors grouped by building, I need to count total classrooms per building and count those with has_projector = true, then calculate the percentage. Results should be ordered by building for deterministic output.\",\"sql\":\"\\nSELECT\\n  building,\\n  COUNT(*) AS total_classrooms,\\n  SUM(CASE WHEN has_projector THEN 1 ELSE 0 END) AS classrooms_with_projector,\\n  ROUND(100.0 * SUM(CASE WHEN has_projector THEN 1 ELSE 0 END) / COUNT(*), 2) AS projector_percentage\\nFROM public.classrooms\\nGROUP BY building\\nORDER BY building\\n\",\"assumptions\":[\"The 'has_projector' column accurately indicates whether a classroom has a projector\",\"All classrooms in the table are active and should be included in the calculation\"]},\"endedAt\":1771855463488},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT\\n  building,\\n  COUNT(*) AS total_classrooms,\\n  SUM(CASE WHEN has_projector THEN 1 ELSE 0 END) AS classrooms_with_projector,\\n  ROUND(100.0 * SUM(CASE WHEN has_projector THEN 1 ELSE 0 END) / COUNT(*), 2) AS projector_percentage\\nFROM public.classrooms\\nGROUP BY building\\nORDER BY building\\n\"},\"startedAt\":1771855463500,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT\\n  building,\\n  COUNT(*) AS total_classrooms,\\n  SUM(CASE WHEN has_projector THEN 1 ELSE 0 END) AS classrooms_with_projector,\\n  ROUND(100.0 * SUM(CASE WHEN has_projector THEN 1 ELSE 0 END) / COUNT(*), 2) AS projector_percentage\\nFROM public.classrooms\\nGROUP BY building\\nORDER BY building\",\"metadata\":{\"columns\":[\"building\",\"total_classrooms\",\"classrooms_with_projector\",\"projector_percentage\"],\"rowCount\":20,\"sample\":[{\"building\":\"A\",\"total_classrooms\":\"4\",\"classrooms_with_projector\":\"3\",\"projector_percentage\":\"75.00\"},{\"building\":\"A1\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"66.67\"}]},\"data\":[{\"building\":\"A\",\"total_classrooms\":\"4\",\"classrooms_with_projector\":\"3\",\"projector_percentage\":\"75.00\"},{\"building\":\"A1\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"66.67\"},{\"building\":\"A2\",\"total_classrooms\":\"4\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"50.00\"},{\"building\":\"B\",\"total_classrooms\":\"1\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"100.00\"},{\"building\":\"B1\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"50.00\"},{\"building\":\"C\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"66.67\"},{\"building\":\"D\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"3\",\"projector_percentage\":\"100.00\"},{\"building\":\"K1\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"66.67\"},{\"building\":\"K2\",\"total_classrooms\":\"5\",\"classrooms_with_projector\":\"3\",\"projector_percentage\":\"60.00\"},{\"building\":\"K3\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"50.00\"},{\"building\":\"K4\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"100.00\"},{\"building\":\"K5\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"50.00\"},{\"building\":\"RB1\",\"total_classrooms\":\"7\",\"classrooms_with_projector\":\"4\",\"projector_percentage\":\"57.14\"},{\"building\":\"RB2\",\"total_classrooms\":\"1\",\"classrooms_with_projector\":\"0\",\"projector_percentage\":\"0.00\"},{\"building\":\"RB3\",\"total_classrooms\":\"6\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"33.33\"},{\"building\":\"RM1\",\"total_classrooms\":\"1\",\"classrooms_with_projector\":\"0\",\"projector_percentage\":\"0.00\"},{\"building\":\"RM2\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"66.67\"},{\"building\":\"RM3\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"50.00\"},{\"building\":\"RN1\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"50.00\"},{\"building\":\"RN2\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"3\",\"projector_percentage\":\"100.00\"}]},\"endedAt\":1771855463509},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT\\n  building,\\n  COUNT(*) AS total_classrooms,\\n  SUM(CASE WHEN has_projector THEN 1 ELSE 0 END) AS classrooms_with_projector,\\n  ROUND(100.0 * SUM(CASE WHEN has_projector THEN 1 ELSE 0 END) / COUNT(*), 2) AS projector_percentage\\nFROM public.classrooms\\nGROUP BY building\\nORDER BY building\",\"metadata\":{\"columns\":[\"building\",\"total_classrooms\",\"classrooms_with_projector\",\"projector_percentage\"],\"rowCount\":20,\"sample\":[{\"building\":\"A\",\"total_classrooms\":\"4\",\"classrooms_with_projector\":\"3\",\"projector_percentage\":\"75.00\"},{\"building\":\"A1\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"66.67\"}]},\"data\":[{\"building\":\"A\",\"total_classrooms\":\"4\",\"classrooms_with_projector\":\"3\",\"projector_percentage\":\"75.00\"},{\"building\":\"A1\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"66.67\"},{\"building\":\"A2\",\"total_classrooms\":\"4\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"50.00\"},{\"building\":\"B\",\"total_classrooms\":\"1\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"100.00\"},{\"building\":\"B1\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"50.00\"},{\"building\":\"C\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"66.67\"},{\"building\":\"D\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"3\",\"projector_percentage\":\"100.00\"},{\"building\":\"K1\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"66.67\"},{\"building\":\"K2\",\"total_classrooms\":\"5\",\"classrooms_with_projector\":\"3\",\"projector_percentage\":\"60.00\"},{\"building\":\"K3\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"50.00\"},{\"building\":\"K4\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"100.00\"},{\"building\":\"K5\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"50.00\"},{\"building\":\"RB1\",\"total_classrooms\":\"7\",\"classrooms_with_projector\":\"4\",\"projector_percentage\":\"57.14\"},{\"building\":\"RB2\",\"total_classrooms\":\"1\",\"classrooms_with_projector\":\"0\",\"projector_percentage\":\"0.00\"},{\"building\":\"RB3\",\"total_classrooms\":\"6\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"33.33\"},{\"building\":\"RM1\",\"total_classrooms\":\"1\",\"classrooms_with_projector\":\"0\",\"projector_percentage\":\"0.00\"},{\"building\":\"RM2\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"66.67\"},{\"building\":\"RM3\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"50.00\"},{\"building\":\"RN1\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"50.00\"},{\"building\":\"RN2\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"3\",\"projector_percentage\":\"100.00\"}]},\"startedAt\":1771855463512,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Percentage of Classrooms with Projectors by Building\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\",\"sort\":\"ascending\"},\"y\":{\"field\":\"projector_percentage\",\"type\":\"quantitative\",\"title\":\"Projector Percentage (%)\",\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"projector_percentage\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"viridis\"},\"title\":\"Percentage (%)\"},\"tooltip\":[{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\"},{\"field\":\"total_classrooms\",\"type\":\"quantitative\",\"title\":\"Total Classrooms\"},{\"field\":\"classrooms_with_projector\",\"type\":\"quantitative\",\"title\":\"Classrooms with Projector\"},{\"field\":\"projector_percentage\",\"type\":\"quantitative\",\"title\":\"Percentage (%)\",\"format\":\".2f\"}]},\"width\":800,\"height\":400},\"reasoning\":\"Bar chart showing projector availability percentage by building. Color encoding provides visual emphasis on higher percentages. Tooltip includes all relevant metrics (total classrooms, count with projectors, and percentage) for comprehensive context. Y-axis scaled to 0-100% for intuitive percentage interpretation.\"},\"endedAt\":1771855467771},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Percentage of Classrooms with Projectors by Building\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\",\"sort\":\"ascending\"},\"y\":{\"field\":\"projector_percentage\",\"type\":\"quantitative\",\"title\":\"Projector Percentage (%)\",\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"projector_percentage\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"viridis\"},\"title\":\"Percentage (%)\"},\"tooltip\":[{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\"},{\"field\":\"total_classrooms\",\"type\":\"quantitative\",\"title\":\"Total Classrooms\"},{\"field\":\"classrooms_with_projector\",\"type\":\"quantitative\",\"title\":\"Classrooms with Projector\"},{\"field\":\"projector_percentage\",\"type\":\"quantitative\",\"title\":\"Percentage (%)\",\"format\":\".2f\"}]},\"width\":800,\"height\":400},\"reasoning\":\"Bar chart showing projector availability percentage by building. Color encoding provides visual emphasis on higher percentages. Tooltip includes all relevant metrics (total classrooms, count with projectors, and percentage) for comprehensive context. Y-axis scaled to 0-100% for intuitive percentage interpretation.\"},\"startedAt\":1771855467773,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT\\n  building,\\n  COUNT(*) AS total_classrooms,\\n  SUM(CASE WHEN has_projector THEN 1 ELSE 0 END) AS classrooms_with_projector,\\n  ROUND(100.0 * SUM(CASE WHEN has_projector THEN 1 ELSE 0 END) / COUNT(*), 2) AS projector_percentage\\nFROM public.classrooms\\nGROUP BY building\\nORDER BY building\\n\",\"data\":[{\"building\":\"A\",\"total_classrooms\":\"4\",\"classrooms_with_projector\":\"3\",\"projector_percentage\":\"75.00\"},{\"building\":\"A1\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"66.67\"},{\"building\":\"A2\",\"total_classrooms\":\"4\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"50.00\"},{\"building\":\"B\",\"total_classrooms\":\"1\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"100.00\"},{\"building\":\"B1\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"50.00\"},{\"building\":\"C\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"66.67\"},{\"building\":\"D\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"3\",\"projector_percentage\":\"100.00\"},{\"building\":\"K1\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"66.67\"},{\"building\":\"K2\",\"total_classrooms\":\"5\",\"classrooms_with_projector\":\"3\",\"projector_percentage\":\"60.00\"},{\"building\":\"K3\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"50.00\"},{\"building\":\"K4\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"100.00\"},{\"building\":\"K5\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"50.00\"},{\"building\":\"RB1\",\"total_classrooms\":\"7\",\"classrooms_with_projector\":\"4\",\"projector_percentage\":\"57.14\"},{\"building\":\"RB2\",\"total_classrooms\":\"1\",\"classrooms_with_projector\":\"0\",\"projector_percentage\":\"0.00\"},{\"building\":\"RB3\",\"total_classrooms\":\"6\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"33.33\"},{\"building\":\"RM1\",\"total_classrooms\":\"1\",\"classrooms_with_projector\":\"0\",\"projector_percentage\":\"0.00\"},{\"building\":\"RM2\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"66.67\"},{\"building\":\"RM3\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"50.00\"},{\"building\":\"RN1\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"50.00\"},{\"building\":\"RN2\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"3\",\"projector_percentage\":\"100.00\"}],\"metadata\":{\"columns\":[\"building\",\"total_classrooms\",\"classrooms_with_projector\",\"projector_percentage\"],\"rowCount\":20,\"sample\":[{\"building\":\"A\",\"total_classrooms\":\"4\",\"classrooms_with_projector\":\"3\",\"projector_percentage\":\"75.00\"},{\"building\":\"A1\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"66.67\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Percentage of Classrooms with Projectors by Building\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\",\"sort\":\"ascending\"},\"y\":{\"field\":\"projector_percentage\",\"type\":\"quantitative\",\"title\":\"Projector Percentage (%)\",\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"projector_percentage\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"viridis\"},\"title\":\"Percentage (%)\"},\"tooltip\":[{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\"},{\"field\":\"total_classrooms\",\"type\":\"quantitative\",\"title\":\"Total Classrooms\"},{\"field\":\"classrooms_with_projector\",\"type\":\"quantitative\",\"title\":\"Classrooms with Projector\"},{\"field\":\"projector_percentage\",\"type\":\"quantitative\",\"title\":\"Percentage (%)\",\"format\":\".2f\"}]},\"width\":800,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855467775}},\"input\":{\"question\":\"What percentage of classrooms have projectors, grouped by building?\"},\"result\":{\"sql\":\"\\nSELECT\\n  building,\\n  COUNT(*) AS total_classrooms,\\n  SUM(CASE WHEN has_projector THEN 1 ELSE 0 END) AS classrooms_with_projector,\\n  ROUND(100.0 * SUM(CASE WHEN has_projector THEN 1 ELSE 0 END) / COUNT(*), 2) AS projector_percentage\\nFROM public.classrooms\\nGROUP BY building\\nORDER BY building\\n\",\"data\":[{\"building\":\"A\",\"total_classrooms\":\"4\",\"classrooms_with_projector\":\"3\",\"projector_percentage\":\"75.00\"},{\"building\":\"A1\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"66.67\"},{\"building\":\"A2\",\"total_classrooms\":\"4\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"50.00\"},{\"building\":\"B\",\"total_classrooms\":\"1\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"100.00\"},{\"building\":\"B1\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"50.00\"},{\"building\":\"C\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"66.67\"},{\"building\":\"D\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"3\",\"projector_percentage\":\"100.00\"},{\"building\":\"K1\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"66.67\"},{\"building\":\"K2\",\"total_classrooms\":\"5\",\"classrooms_with_projector\":\"3\",\"projector_percentage\":\"60.00\"},{\"building\":\"K3\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"50.00\"},{\"building\":\"K4\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"100.00\"},{\"building\":\"K5\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"50.00\"},{\"building\":\"RB1\",\"total_classrooms\":\"7\",\"classrooms_with_projector\":\"4\",\"projector_percentage\":\"57.14\"},{\"building\":\"RB2\",\"total_classrooms\":\"1\",\"classrooms_with_projector\":\"0\",\"projector_percentage\":\"0.00\"},{\"building\":\"RB3\",\"total_classrooms\":\"6\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"33.33\"},{\"building\":\"RM1\",\"total_classrooms\":\"1\",\"classrooms_with_projector\":\"0\",\"projector_percentage\":\"0.00\"},{\"building\":\"RM2\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"66.67\"},{\"building\":\"RM3\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"50.00\"},{\"building\":\"RN1\",\"total_classrooms\":\"2\",\"classrooms_with_projector\":\"1\",\"projector_percentage\":\"50.00\"},{\"building\":\"RN2\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"3\",\"projector_percentage\":\"100.00\"}],\"metadata\":{\"columns\":[\"building\",\"total_classrooms\",\"classrooms_with_projector\",\"projector_percentage\"],\"rowCount\":20,\"sample\":[{\"building\":\"A\",\"total_classrooms\":\"4\",\"classrooms_with_projector\":\"3\",\"projector_percentage\":\"75.00\"},{\"building\":\"A1\",\"total_classrooms\":\"3\",\"classrooms_with_projector\":\"2\",\"projector_percentage\":\"66.67\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Percentage of Classrooms with Projectors by Building\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\",\"sort\":\"ascending\"},\"y\":{\"field\":\"projector_percentage\",\"type\":\"quantitative\",\"title\":\"Projector Percentage (%)\",\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"projector_percentage\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"viridis\"},\"title\":\"Percentage (%)\"},\"tooltip\":[{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\"},{\"field\":\"total_classrooms\",\"type\":\"quantitative\",\"title\":\"Total Classrooms\"},{\"field\":\"classrooms_with_projector\",\"type\":\"quantitative\",\"title\":\"Classrooms with Projector\"},{\"field\":\"projector_percentage\",\"type\":\"quantitative\",\"title\":\"Percentage (%)\",\"format\":\".2f\"}]},\"width\":800,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"b8727d6403cabec9813d6a00673be6ed\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/classrooms-with-projectors/run-0001/run.json",
+    "queryPath": "runs/classrooms-with-projectors/run-0001/query.sql",
+    "vegaRawPath": "runs/classrooms-with-projectors/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/classrooms-with-projectors/run-0001/vega.resolved.json",
+    "imagePath": "runs/classrooms-with-projectors/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:04:28.234Z",
+  "traceId": "b8727d6403cabec9813d6a00673be6ed",
+  "success": true,
+  "durationMs": 28902,
+  "resultRaw": {
+    "data": [
+      {
+        "building": "A",
+        "total_classrooms": "4",
+        "classrooms_with_projector": "3",
+        "projector_percentage": "75.00"
+      },
+      {
+        "building": "A1",
+        "total_classrooms": "3",
+        "classrooms_with_projector": "2",
+        "projector_percentage": "66.67"
+      },
+      {
+        "building": "A2",
+        "total_classrooms": "4",
+        "classrooms_with_projector": "2",
+        "projector_percentage": "50.00"
+      },
+      {
+        "building": "B",
+        "total_classrooms": "1",
+        "classrooms_with_projector": "1",
+        "projector_percentage": "100.00"
+      },
+      {
+        "building": "B1",
+        "total_classrooms": "2",
+        "classrooms_with_projector": "1",
+        "projector_percentage": "50.00"
+      },
+      {
+        "building": "C",
+        "total_classrooms": "3",
+        "classrooms_with_projector": "2",
+        "projector_percentage": "66.67"
+      },
+      {
+        "building": "D",
+        "total_classrooms": "3",
+        "classrooms_with_projector": "3",
+        "projector_percentage": "100.00"
+      },
+      {
+        "building": "K1",
+        "total_classrooms": "3",
+        "classrooms_with_projector": "2",
+        "projector_percentage": "66.67"
+      },
+      {
+        "building": "K2",
+        "total_classrooms": "5",
+        "classrooms_with_projector": "3",
+        "projector_percentage": "60.00"
+      },
+      {
+        "building": "K3",
+        "total_classrooms": "2",
+        "classrooms_with_projector": "1",
+        "projector_percentage": "50.00"
+      },
+      {
+        "building": "K4",
+        "total_classrooms": "2",
+        "classrooms_with_projector": "2",
+        "projector_percentage": "100.00"
+      },
+      {
+        "building": "K5",
+        "total_classrooms": "2",
+        "classrooms_with_projector": "1",
+        "projector_percentage": "50.00"
+      },
+      {
+        "building": "RB1",
+        "total_classrooms": "7",
+        "classrooms_with_projector": "4",
+        "projector_percentage": "57.14"
+      },
+      {
+        "building": "RB2",
+        "total_classrooms": "1",
+        "classrooms_with_projector": "0",
+        "projector_percentage": "0.00"
+      },
+      {
+        "building": "RB3",
+        "total_classrooms": "6",
+        "classrooms_with_projector": "2",
+        "projector_percentage": "33.33"
+      },
+      {
+        "building": "RM1",
+        "total_classrooms": "1",
+        "classrooms_with_projector": "0",
+        "projector_percentage": "0.00"
+      },
+      {
+        "building": "RM2",
+        "total_classrooms": "3",
+        "classrooms_with_projector": "2",
+        "projector_percentage": "66.67"
+      },
+      {
+        "building": "RM3",
+        "total_classrooms": "2",
+        "classrooms_with_projector": "1",
+        "projector_percentage": "50.00"
+      },
+      {
+        "building": "RN1",
+        "total_classrooms": "2",
+        "classrooms_with_projector": "1",
+        "projector_percentage": "50.00"
+      },
+      {
+        "building": "RN2",
+        "total_classrooms": "3",
+        "classrooms_with_projector": "3",
+        "projector_percentage": "100.00"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Percentage of Classrooms with Projectors by Building",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "building",
+          "type": "nominal",
+          "title": "Building",
+          "sort": "ascending"
+        },
+        "y": {
+          "field": "projector_percentage",
+          "type": "quantitative",
+          "title": "Projector Percentage (%)",
+          "scale": {
+            "domain": [
+              0,
+              100
+            ]
+          }
+        },
+        "color": {
+          "field": "projector_percentage",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "viridis"
+          },
+          "title": "Percentage (%)"
+        },
+        "tooltip": [
+          {
+            "field": "building",
+            "type": "nominal",
+            "title": "Building"
+          },
+          {
+            "field": "total_classrooms",
+            "type": "quantitative",
+            "title": "Total Classrooms"
+          },
+          {
+            "field": "classrooms_with_projector",
+            "type": "quantitative",
+            "title": "Classrooms with Projector"
+          },
+          {
+            "field": "projector_percentage",
+            "type": "quantitative",
+            "title": "Percentage (%)",
+            "format": ".2f"
+          }
+        ]
+      },
+      "width": 800,
+      "height": 400
+    },
+    "sql": "\nSELECT\n  building,\n  COUNT(*) AS total_classrooms,\n  SUM(CASE WHEN has_projector THEN 1 ELSE 0 END) AS classrooms_with_projector,\n  ROUND(100.0 * SUM(CASE WHEN has_projector THEN 1 ELSE 0 END) / COUNT(*), 2) AS projector_percentage\nFROM public.classrooms\nGROUP BY building\nORDER BY building\n",
+    "metadata": {
+      "columns": [
+        "building",
+        "total_classrooms",
+        "classrooms_with_projector",
+        "projector_percentage"
+      ],
+      "rowCount": 20,
+      "sample": [
+        {
+          "building": "A",
+          "total_classrooms": "4",
+          "classrooms_with_projector": "3",
+          "projector_percentage": "75.00"
+        },
+        {
+          "building": "A1",
+          "total_classrooms": "3",
+          "classrooms_with_projector": "2",
+          "projector_percentage": "66.67"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "building": "A",
+        "total_classrooms": "4",
+        "classrooms_with_projector": "3",
+        "projector_percentage": "75.00"
+      },
+      {
+        "building": "A1",
+        "total_classrooms": "3",
+        "classrooms_with_projector": "2",
+        "projector_percentage": "66.67"
+      },
+      {
+        "building": "A2",
+        "total_classrooms": "4",
+        "classrooms_with_projector": "2",
+        "projector_percentage": "50.00"
+      },
+      {
+        "building": "B",
+        "total_classrooms": "1",
+        "classrooms_with_projector": "1",
+        "projector_percentage": "100.00"
+      },
+      {
+        "building": "B1",
+        "total_classrooms": "2",
+        "classrooms_with_projector": "1",
+        "projector_percentage": "50.00"
+      },
+      {
+        "building": "C",
+        "total_classrooms": "3",
+        "classrooms_with_projector": "2",
+        "projector_percentage": "66.67"
+      },
+      {
+        "building": "D",
+        "total_classrooms": "3",
+        "classrooms_with_projector": "3",
+        "projector_percentage": "100.00"
+      },
+      {
+        "building": "K1",
+        "total_classrooms": "3",
+        "classrooms_with_projector": "2",
+        "projector_percentage": "66.67"
+      },
+      {
+        "building": "K2",
+        "total_classrooms": "5",
+        "classrooms_with_projector": "3",
+        "projector_percentage": "60.00"
+      },
+      {
+        "building": "K3",
+        "total_classrooms": "2",
+        "classrooms_with_projector": "1",
+        "projector_percentage": "50.00"
+      },
+      {
+        "building": "K4",
+        "total_classrooms": "2",
+        "classrooms_with_projector": "2",
+        "projector_percentage": "100.00"
+      },
+      {
+        "building": "K5",
+        "total_classrooms": "2",
+        "classrooms_with_projector": "1",
+        "projector_percentage": "50.00"
+      },
+      {
+        "building": "RB1",
+        "total_classrooms": "7",
+        "classrooms_with_projector": "4",
+        "projector_percentage": "57.14"
+      },
+      {
+        "building": "RB2",
+        "total_classrooms": "1",
+        "classrooms_with_projector": "0",
+        "projector_percentage": "0.00"
+      },
+      {
+        "building": "RB3",
+        "total_classrooms": "6",
+        "classrooms_with_projector": "2",
+        "projector_percentage": "33.33"
+      },
+      {
+        "building": "RM1",
+        "total_classrooms": "1",
+        "classrooms_with_projector": "0",
+        "projector_percentage": "0.00"
+      },
+      {
+        "building": "RM2",
+        "total_classrooms": "3",
+        "classrooms_with_projector": "2",
+        "projector_percentage": "66.67"
+      },
+      {
+        "building": "RM3",
+        "total_classrooms": "2",
+        "classrooms_with_projector": "1",
+        "projector_percentage": "50.00"
+      },
+      {
+        "building": "RN1",
+        "total_classrooms": "2",
+        "classrooms_with_projector": "1",
+        "projector_percentage": "50.00"
+      },
+      {
+        "building": "RN2",
+        "total_classrooms": "3",
+        "classrooms_with_projector": "3",
+        "projector_percentage": "100.00"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Percentage of Classrooms with Projectors by Building",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "building",
+          "type": "nominal",
+          "title": "Building",
+          "sort": "ascending"
+        },
+        "y": {
+          "field": "projector_percentage",
+          "type": "quantitative",
+          "title": "Projector Percentage (%)",
+          "scale": {
+            "domain": [
+              0,
+              100
+            ]
+          }
+        },
+        "color": {
+          "field": "projector_percentage",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "viridis"
+          },
+          "title": "Percentage (%)"
+        },
+        "tooltip": [
+          {
+            "field": "building",
+            "type": "nominal",
+            "title": "Building"
+          },
+          {
+            "field": "total_classrooms",
+            "type": "quantitative",
+            "title": "Total Classrooms"
+          },
+          {
+            "field": "classrooms_with_projector",
+            "type": "quantitative",
+            "title": "Classrooms with Projector"
+          },
+          {
+            "field": "projector_percentage",
+            "type": "quantitative",
+            "title": "Percentage (%)",
+            "format": ".2f"
+          }
+        ]
+      },
+      "width": 800,
+      "height": 400
+    },
+    "sql": "\nSELECT\n  building,\n  COUNT(*) AS total_classrooms,\n  SUM(CASE WHEN has_projector THEN 1 ELSE 0 END) AS classrooms_with_projector,\n  ROUND(100.0 * SUM(CASE WHEN has_projector THEN 1 ELSE 0 END) / COUNT(*), 2) AS projector_percentage\nFROM public.classrooms\nGROUP BY building\nORDER BY building\n",
+    "metadata": {
+      "columns": [
+        "building",
+        "total_classrooms",
+        "classrooms_with_projector",
+        "projector_percentage"
+      ],
+      "rowCount": 20,
+      "sample": [
+        {
+          "building": "A",
+          "total_classrooms": "4",
+          "classrooms_with_projector": "3",
+          "projector_percentage": "75.00"
+        },
+        {
+          "building": "A1",
+          "total_classrooms": "3",
+          "classrooms_with_projector": "2",
+          "projector_percentage": "66.67"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.295Z",
+    "traceId": "b8727d6403cabec9813d6a00673be6ed",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 10068,
+      "outputTokens": 926,
+      "totalTokens": 10994,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.014698
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 10068,
+        "outputTokens": 926,
+        "totalTokens": 10994,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.014698
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,356 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "professor-title-distribution",
+  "caseDirectory": "professor-title-distribution",
+  "repeatIndex": 1,
+  "prompt": "Show the distribution of academic titles among professors",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the distribution of academic titles among professors"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:50:57.679Z",
+    "endedAtUtc": "2026-02-23T10:51:22.727Z",
+    "durationMs": 25048
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "8729",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:51:22 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show the distribution of academic titles among professors\"},\"agent\":{\"payload\":{\"question\":\"Show the distribution of academic titles among professors\"},\"startedAt\":1771843857685,\"status\":\"success\",\"output\":{\"sql\":\"WITH title_counts AS (\\n  SELECT\\n    COALESCE(academic_title, 'Unknown') AS academic_title,\\n    COUNT(*) AS count\\n  FROM professors\\n  GROUP BY COALESCE(academic_title, 'Unknown')\\n)\\nSELECT\\n  academic_title AS academic_title,\\n  count AS count,\\n  ROUND(100.0 * count / SUM(count) OVER (), 1) AS percentage\\nFROM title_counts\\nORDER BY count DESC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Distribution of Academic Titles among Professors\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"academic_title\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Academic Title\"},\"x\":{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Number of Professors\"},\"color\":{\"field\":\"academic_title\",\"type\":\"nominal\",\"legend\":null},\"tooltip\":[{\"field\":\"academic_title\",\"type\":\"nominal\",\"title\":\"Academic Title\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"percentage\",\"type\":\"quantitative\",\"title\":\"Share (%)\",\"format\":\".1f\"}]}}},\"endedAt\":1771843882630},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH title_counts AS (\\n  SELECT\\n    COALESCE(academic_title, 'Unknown') AS academic_title,\\n    COUNT(*) AS count\\n  FROM professors\\n  GROUP BY COALESCE(academic_title, 'Unknown')\\n)\\nSELECT\\n  academic_title AS academic_title,\\n  count AS count,\\n  ROUND(100.0 * count / SUM(count) OVER (), 1) AS percentage\\nFROM title_counts\\nORDER BY count DESC;\"},\"startedAt\":1771843882636,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH title_counts AS (\\n  SELECT\\n    COALESCE(academic_title, 'Unknown') AS academic_title,\\n    COUNT(*) AS count\\n  FROM professors\\n  GROUP BY COALESCE(academic_title, 'Unknown')\\n)\\nSELECT\\n  academic_title AS academic_title,\\n  count AS count,\\n  ROUND(100.0 * count / SUM(count) OVER (), 1) AS percentage\\nFROM title_counts\\nORDER BY count DESC\",\"metadata\":{\"columns\":[\"count\",\"percentage\",\"academic_title\"],\"rowCount\":12,\"sample\":[{\"count\":9,\"percentage\":18,\"academic_title\":\"Unknown\"},{\"count\":7,\"percentage\":14,\"academic_title\":\"Prof. nadzw. dr hab. inż.\"}]},\"data\":[{\"count\":9,\"percentage\":18,\"academic_title\":\"Unknown\"},{\"count\":7,\"percentage\":14,\"academic_title\":\"Prof. nadzw. dr hab. inż.\"},{\"count\":7,\"percentage\":14,\"academic_title\":\"Prof. dr hab. inż.\"},{\"count\":5,\"percentage\":10,\"academic_title\":\"Dr inż.\"},{\"count\":4,\"percentage\":8,\"academic_title\":\"Prof. zw. dr hab. inż.\"},{\"count\":4,\"percentage\":8,\"academic_title\":\"Dr hab. inż.\"},{\"count\":4,\"percentage\":8,\"academic_title\":\"Inż.\"},{\"count\":3,\"percentage\":6,\"academic_title\":\"Mgr inż.\"},{\"count\":3,\"percentage\":6,\"academic_title\":\"Prof. dr inż.\"},{\"count\":2,\"percentage\":4,\"academic_title\":\"Dr hab.\"},{\"count\":1,\"percentage\":2,\"academic_title\":\"Dr\"},{\"count\":1,\"percentage\":2,\"academic_title\":\"Prof. dr hab.\"}]},\"endedAt\":1771843882688},\"final-data\":{\"payload\":{\"ok\":true,\"sql\":\"WITH title_counts AS (\\n  SELECT\\n    COALESCE(academic_title, 'Unknown') AS academic_title,\\n    COUNT(*) AS count\\n  FROM professors\\n  GROUP BY COALESCE(academic_title, 'Unknown')\\n)\\nSELECT\\n  academic_title AS academic_title,\\n  count AS count,\\n  ROUND(100.0 * count / SUM(count) OVER (), 1) AS percentage\\nFROM title_counts\\nORDER BY count DESC\",\"metadata\":{\"columns\":[\"count\",\"percentage\",\"academic_title\"],\"rowCount\":12,\"sample\":[{\"count\":9,\"percentage\":18,\"academic_title\":\"Unknown\"},{\"count\":7,\"percentage\":14,\"academic_title\":\"Prof. nadzw. dr hab. inż.\"}]},\"data\":[{\"count\":9,\"percentage\":18,\"academic_title\":\"Unknown\"},{\"count\":7,\"percentage\":14,\"academic_title\":\"Prof. nadzw. dr hab. inż.\"},{\"count\":7,\"percentage\":14,\"academic_title\":\"Prof. dr hab. inż.\"},{\"count\":5,\"percentage\":10,\"academic_title\":\"Dr inż.\"},{\"count\":4,\"percentage\":8,\"academic_title\":\"Prof. zw. dr hab. inż.\"},{\"count\":4,\"percentage\":8,\"academic_title\":\"Dr hab. inż.\"},{\"count\":4,\"percentage\":8,\"academic_title\":\"Inż.\"},{\"count\":3,\"percentage\":6,\"academic_title\":\"Mgr inż.\"},{\"count\":3,\"percentage\":6,\"academic_title\":\"Prof. dr inż.\"},{\"count\":2,\"percentage\":4,\"academic_title\":\"Dr hab.\"},{\"count\":1,\"percentage\":2,\"academic_title\":\"Dr\"},{\"count\":1,\"percentage\":2,\"academic_title\":\"Prof. dr hab.\"}]},\"startedAt\":1771843882691,\"status\":\"success\",\"output\":{\"sql\":\"WITH title_counts AS (\\n  SELECT\\n    COALESCE(academic_title, 'Unknown') AS academic_title,\\n    COUNT(*) AS count\\n  FROM professors\\n  GROUP BY COALESCE(academic_title, 'Unknown')\\n)\\nSELECT\\n  academic_title AS academic_title,\\n  count AS count,\\n  ROUND(100.0 * count / SUM(count) OVER (), 1) AS percentage\\nFROM title_counts\\nORDER BY count DESC;\",\"data\":[{\"count\":9,\"percentage\":18,\"academic_title\":\"Unknown\"},{\"count\":7,\"percentage\":14,\"academic_title\":\"Prof. nadzw. dr hab. inż.\"},{\"count\":7,\"percentage\":14,\"academic_title\":\"Prof. dr hab. inż.\"},{\"count\":5,\"percentage\":10,\"academic_title\":\"Dr inż.\"},{\"count\":4,\"percentage\":8,\"academic_title\":\"Prof. zw. dr hab. inż.\"},{\"count\":4,\"percentage\":8,\"academic_title\":\"Dr hab. inż.\"},{\"count\":4,\"percentage\":8,\"academic_title\":\"Inż.\"},{\"count\":3,\"percentage\":6,\"academic_title\":\"Mgr inż.\"},{\"count\":3,\"percentage\":6,\"academic_title\":\"Prof. dr inż.\"},{\"count\":2,\"percentage\":4,\"academic_title\":\"Dr hab.\"},{\"count\":1,\"percentage\":2,\"academic_title\":\"Dr\"},{\"count\":1,\"percentage\":2,\"academic_title\":\"Prof. dr hab.\"}],\"metadata\":{\"columns\":[\"count\",\"percentage\",\"academic_title\"],\"rowCount\":12,\"sample\":[{\"count\":9,\"percentage\":18,\"academic_title\":\"Unknown\"},{\"count\":7,\"percentage\":14,\"academic_title\":\"Prof. nadzw. dr hab. inż.\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Distribution of Academic Titles among Professors\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"academic_title\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Academic Title\"},\"x\":{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Number of Professors\"},\"color\":{\"field\":\"academic_title\",\"type\":\"nominal\",\"legend\":null},\"tooltip\":[{\"field\":\"academic_title\",\"type\":\"nominal\",\"title\":\"Academic Title\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"percentage\",\"type\":\"quantitative\",\"title\":\"Share (%)\",\"format\":\".1f\"}]}},\"quality\":{\"workflow\":\"agent-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771843882696}},\"input\":{\"question\":\"Show the distribution of academic titles among professors\"},\"result\":{\"sql\":\"WITH title_counts AS (\\n  SELECT\\n    COALESCE(academic_title, 'Unknown') AS academic_title,\\n    COUNT(*) AS count\\n  FROM professors\\n  GROUP BY COALESCE(academic_title, 'Unknown')\\n)\\nSELECT\\n  academic_title AS academic_title,\\n  count AS count,\\n  ROUND(100.0 * count / SUM(count) OVER (), 1) AS percentage\\nFROM title_counts\\nORDER BY count DESC;\",\"data\":[{\"count\":9,\"percentage\":18,\"academic_title\":\"Unknown\"},{\"count\":7,\"percentage\":14,\"academic_title\":\"Prof. nadzw. dr hab. inż.\"},{\"count\":7,\"percentage\":14,\"academic_title\":\"Prof. dr hab. inż.\"},{\"count\":5,\"percentage\":10,\"academic_title\":\"Dr inż.\"},{\"count\":4,\"percentage\":8,\"academic_title\":\"Prof. zw. dr hab. inż.\"},{\"count\":4,\"percentage\":8,\"academic_title\":\"Dr hab. inż.\"},{\"count\":4,\"percentage\":8,\"academic_title\":\"Inż.\"},{\"count\":3,\"percentage\":6,\"academic_title\":\"Mgr inż.\"},{\"count\":3,\"percentage\":6,\"academic_title\":\"Prof. dr inż.\"},{\"count\":2,\"percentage\":4,\"academic_title\":\"Dr hab.\"},{\"count\":1,\"percentage\":2,\"academic_title\":\"Dr\"},{\"count\":1,\"percentage\":2,\"academic_title\":\"Prof. dr hab.\"}],\"metadata\":{\"columns\":[\"count\",\"percentage\",\"academic_title\"],\"rowCount\":12,\"sample\":[{\"count\":9,\"percentage\":18,\"academic_title\":\"Unknown\"},{\"count\":7,\"percentage\":14,\"academic_title\":\"Prof. nadzw. dr hab. inż.\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Distribution of Academic Titles among Professors\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"academic_title\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Academic Title\"},\"x\":{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Number of Professors\"},\"color\":{\"field\":\"academic_title\",\"type\":\"nominal\",\"legend\":null},\"tooltip\":[{\"field\":\"academic_title\",\"type\":\"nominal\",\"title\":\"Academic Title\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"percentage\",\"type\":\"quantitative\",\"title\":\"Share (%)\",\"format\":\".1f\"}]}},\"quality\":{\"workflow\":\"agent-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"eea713d9461c645bebd26f1f99d7ca60\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/professor-title-distribution/run-0001/run.json",
+    "queryPath": "runs/professor-title-distribution/run-0001/query.sql",
+    "vegaRawPath": "runs/professor-title-distribution/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/professor-title-distribution/run-0001/vega.resolved.json",
+    "imagePath": "runs/professor-title-distribution/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:51:23.239Z",
+  "traceId": "eea713d9461c645bebd26f1f99d7ca60",
+  "success": true,
+  "durationMs": 25560,
+  "resultRaw": {
+    "data": [
+      {
+        "count": 9,
+        "percentage": 18,
+        "academic_title": "Unknown"
+      },
+      {
+        "count": 7,
+        "percentage": 14,
+        "academic_title": "Prof. nadzw. dr hab. inż."
+      },
+      {
+        "count": 7,
+        "percentage": 14,
+        "academic_title": "Prof. dr hab. inż."
+      },
+      {
+        "count": 5,
+        "percentage": 10,
+        "academic_title": "Dr inż."
+      },
+      {
+        "count": 4,
+        "percentage": 8,
+        "academic_title": "Prof. zw. dr hab. inż."
+      },
+      {
+        "count": 4,
+        "percentage": 8,
+        "academic_title": "Dr hab. inż."
+      },
+      {
+        "count": 4,
+        "percentage": 8,
+        "academic_title": "Inż."
+      },
+      {
+        "count": 3,
+        "percentage": 6,
+        "academic_title": "Mgr inż."
+      },
+      {
+        "count": 3,
+        "percentage": 6,
+        "academic_title": "Prof. dr inż."
+      },
+      {
+        "count": 2,
+        "percentage": 4,
+        "academic_title": "Dr hab."
+      },
+      {
+        "count": 1,
+        "percentage": 2,
+        "academic_title": "Dr"
+      },
+      {
+        "count": 1,
+        "percentage": 2,
+        "academic_title": "Prof. dr hab."
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Distribution of Academic Titles among Professors",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "academic_title",
+          "type": "nominal",
+          "sort": "-x",
+          "title": "Academic Title"
+        },
+        "x": {
+          "field": "count",
+          "type": "quantitative",
+          "title": "Number of Professors"
+        },
+        "color": {
+          "field": "academic_title",
+          "type": "nominal",
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "academic_title",
+            "type": "nominal",
+            "title": "Academic Title"
+          },
+          {
+            "field": "count",
+            "type": "quantitative",
+            "title": "Count"
+          },
+          {
+            "field": "percentage",
+            "type": "quantitative",
+            "title": "Share (%)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    "sql": "WITH title_counts AS (\n  SELECT\n    COALESCE(academic_title, 'Unknown') AS academic_title,\n    COUNT(*) AS count\n  FROM professors\n  GROUP BY COALESCE(academic_title, 'Unknown')\n)\nSELECT\n  academic_title AS academic_title,\n  count AS count,\n  ROUND(100.0 * count / SUM(count) OVER (), 1) AS percentage\nFROM title_counts\nORDER BY count DESC;",
+    "metadata": {
+      "columns": [
+        "count",
+        "percentage",
+        "academic_title"
+      ],
+      "rowCount": 12,
+      "sample": [
+        {
+          "count": 9,
+          "percentage": 18,
+          "academic_title": "Unknown"
+        },
+        {
+          "count": 7,
+          "percentage": 14,
+          "academic_title": "Prof. nadzw. dr hab. inż."
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "agent-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "count": 9,
+        "percentage": 18,
+        "academic_title": "Unknown"
+      },
+      {
+        "count": 7,
+        "percentage": 14,
+        "academic_title": "Prof. nadzw. dr hab. inż."
+      },
+      {
+        "count": 7,
+        "percentage": 14,
+        "academic_title": "Prof. dr hab. inż."
+      },
+      {
+        "count": 5,
+        "percentage": 10,
+        "academic_title": "Dr inż."
+      },
+      {
+        "count": 4,
+        "percentage": 8,
+        "academic_title": "Prof. zw. dr hab. inż."
+      },
+      {
+        "count": 4,
+        "percentage": 8,
+        "academic_title": "Dr hab. inż."
+      },
+      {
+        "count": 4,
+        "percentage": 8,
+        "academic_title": "Inż."
+      },
+      {
+        "count": 3,
+        "percentage": 6,
+        "academic_title": "Mgr inż."
+      },
+      {
+        "count": 3,
+        "percentage": 6,
+        "academic_title": "Prof. dr inż."
+      },
+      {
+        "count": 2,
+        "percentage": 4,
+        "academic_title": "Dr hab."
+      },
+      {
+        "count": 1,
+        "percentage": 2,
+        "academic_title": "Dr"
+      },
+      {
+        "count": 1,
+        "percentage": 2,
+        "academic_title": "Prof. dr hab."
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Distribution of Academic Titles among Professors",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "academic_title",
+          "type": "nominal",
+          "sort": "-x",
+          "title": "Academic Title"
+        },
+        "x": {
+          "field": "count",
+          "type": "quantitative",
+          "title": "Number of Professors"
+        },
+        "color": {
+          "field": "academic_title",
+          "type": "nominal",
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "academic_title",
+            "type": "nominal",
+            "title": "Academic Title"
+          },
+          {
+            "field": "count",
+            "type": "quantitative",
+            "title": "Count"
+          },
+          {
+            "field": "percentage",
+            "type": "quantitative",
+            "title": "Share (%)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    "sql": "WITH title_counts AS (\n  SELECT\n    COALESCE(academic_title, 'Unknown') AS academic_title,\n    COUNT(*) AS count\n  FROM professors\n  GROUP BY COALESCE(academic_title, 'Unknown')\n)\nSELECT\n  academic_title AS academic_title,\n  count AS count,\n  ROUND(100.0 * count / SUM(count) OVER (), 1) AS percentage\nFROM title_counts\nORDER BY count DESC;",
+    "metadata": {
+      "columns": [
+        "count",
+        "percentage",
+        "academic_title"
+      ],
+      "rowCount": 12,
+      "sample": [
+        {
+          "count": 9,
+          "percentage": 18,
+          "academic_title": "Unknown"
+        },
+        {
+          "count": 7,
+          "percentage": 14,
+          "academic_title": "Prof. nadzw. dr hab. inż."
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "agent-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:51:23.239Z",
+    "traceId": "eea713d9461c645bebd26f1f99d7ca60",
+    "attempts": 4,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 264,
+      "outputTokens": 1646,
+      "totalTokens": 1910,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1280,
+      "costUsd": 0.003358
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 264,
+        "outputTokens": 1646,
+        "totalTokens": 1910,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1280,
+        "costUsd": 0.003358
+      }
+    ],
+    "warnings": []
+  }
+}

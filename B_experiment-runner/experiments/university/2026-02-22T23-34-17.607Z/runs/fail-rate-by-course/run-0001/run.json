@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "fail-rate-by-course",
+  "caseDirectory": "fail-rate-by-course",
+  "repeatIndex": 1,
+  "prompt": "Which courses have the highest failure rate?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which courses have the highest failure rate?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:41:10.783Z",
+    "endedAtUtc": "2026-02-22T23:42:07.871Z",
+    "durationMs": 57088
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "3917",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:42:07 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Which courses have the highest failure rate?\"},\"sql\":{\"payload\":{\"question\":\"Which courses have the highest failure rate?\"},\"startedAt\":1771803670791,\"status\":\"success\",\"output\":{\"reasoning\":\"Discovered relevant tables (courses, course_sections, enrollments, grades) and computed per-course failure counts and rates. I define failure as a numeric grade < 3.0 or common failing letter codes, and compute rate among enrollments that have a recorded grade. Results ordered deterministically by failure_rate desc then course_code.\",\"sql\":\"WITH course_stats AS (\\n  SELECT\\n    c.id AS course_id,\\n    c.code AS course_code,\\n    c.name AS course_name,\\n    COUNT(g.id) FILTER (WHERE g.id IS NOT NULL) AS total_graded,\\n    SUM(\\n      CASE\\n        WHEN (\\n               g.grade_value ~ '^[0-9]+(\\\\\\\\.[0-9]+)?$'\\n               AND g.grade_value::numeric < 3.0\\n             )\\n             OR upper(g.grade_value) IN ('F','FAIL','NP','U')\\n        THEN 1 ELSE 0 END\\n    ) AS failures\\n  FROM public.courses c\\n  JOIN public.course_sections cs ON cs.course_id = c.id\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  LEFT JOIN public.grades g ON g.enrollment_id = e.id\\n  GROUP BY c.id, c.code, c.name\\n)\\nSELECT\\n  course_id,\\n  course_code,\\n  course_name,\\n  failures,\\n  total_graded AS total_enrollments,\\n  CASE WHEN total_graded = 0 THEN 0 ELSE ROUND(failures::numeric / total_graded, 4) END AS failure_rate\\nFROM course_stats\\nORDER BY failure_rate DESC, course_code ASC;\",\"assumptions\":[\"Failure is defined as numeric grade_value < 3.0 on the scale present in grades.grade_value, or letter-like failing values (F, FAIL, NP, U).\",\"Failure rate denominator is the count of enrollments with a recorded grade (grades.id present); enrollments without a grade are excluded.\",\"All course sections and academic years are included (no additional semester/year filtering).\",\"grades.grade_value stores either numeric strings (e.g., '4.5') or letter codes; the query detects numeric strings with a regex before casting.\"]},\"endedAt\":1771803727802},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH course_stats AS (\\n  SELECT\\n    c.id AS course_id,\\n    c.code AS course_code,\\n    c.name AS course_name,\\n    COUNT(g.id) FILTER (WHERE g.id IS NOT NULL) AS total_graded,\\n    SUM(\\n      CASE\\n        WHEN (\\n               g.grade_value ~ '^[0-9]+(\\\\\\\\.[0-9]+)?$'\\n               AND g.grade_value::numeric < 3.0\\n             )\\n             OR upper(g.grade_value) IN ('F','FAIL','NP','U')\\n        THEN 1 ELSE 0 END\\n    ) AS failures\\n  FROM public.courses c\\n  JOIN public.course_sections cs ON cs.course_id = c.id\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  LEFT JOIN public.grades g ON g.enrollment_id = e.id\\n  GROUP BY c.id, c.code, c.name\\n)\\nSELECT\\n  course_id,\\n  course_code,\\n  course_name,\\n  failures,\\n  total_graded AS total_enrollments,\\n  CASE WHEN total_graded = 0 THEN 0 ELSE ROUND(failures::numeric / total_graded, 4) END AS failure_rate\\nFROM course_stats\\nORDER BY failure_rate DESC, course_code ASC;\"},\"startedAt\":1771803727809,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: operator does not exist: grade_value ~ unknown\\nLINE 11:                g.grade_value ~ '^[0-9]+(\\\\\\\\.[0-9]+)?$'\\n                                      ^\\nHINT:  No operator matches the given name and argument types. You might need to add explicit type casts.\",\"name\":\"Error\"},\"endedAt\":1771803727864}},\"input\":{\"question\":\"Which courses have the highest failure rate?\"},\"error\":{\"message\":\"SQL execution failed: operator does not exist: grade_value ~ unknown\\nLINE 11:                g.grade_value ~ '^[0-9]+(\\\\\\\\.[0-9]+)?$'\\n                                      ^\\nHINT:  No operator matches the given name and argument types. You might need to add explicit type casts.\",\"name\":\"Error\"},\"traceId\":\"b6c4d65f6bc1ddcdae5fb5f029849924\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/fail-rate-by-course/run-0001/run.json",
+    "queryPath": "runs/fail-rate-by-course/run-0001/query.sql",
+    "vegaRawPath": "runs/fail-rate-by-course/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/fail-rate-by-course/run-0001/vega.resolved.json",
+    "imagePath": "runs/fail-rate-by-course/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:42:07.875Z",
+  "traceId": "b6c4d65f6bc1ddcdae5fb5f029849924",
+  "success": false,
+  "durationMs": 57092,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Which courses have the highest failure rate?"
+      },
+      "sql": {
+        "payload": {
+          "question": "Which courses have the highest failure rate?"
+        },
+        "startedAt": 1771803670791,
+        "status": "success",
+        "output": {
+          "reasoning": "Discovered relevant tables (courses, course_sections, enrollments, grades) and computed per-course failure counts and rates. I define failure as a numeric grade < 3.0 or common failing letter codes, and compute rate among enrollments that have a recorded grade. Results ordered deterministically by failure_rate desc then course_code.",
+          "sql": "WITH course_stats AS (\n  SELECT\n    c.id AS course_id,\n    c.code AS course_code,\n    c.name AS course_name,\n    COUNT(g.id) FILTER (WHERE g.id IS NOT NULL) AS total_graded,\n    SUM(\n      CASE\n        WHEN (\n               g.grade_value ~ '^[0-9]+(\\\\.[0-9]+)?$'\n               AND g.grade_value::numeric < 3.0\n             )\n             OR upper(g.grade_value) IN ('F','FAIL','NP','U')\n        THEN 1 ELSE 0 END\n    ) AS failures\n  FROM public.courses c\n  JOIN public.course_sections cs ON cs.course_id = c.id\n  JOIN public.enrollments e ON e.course_section_id = cs.id\n  LEFT JOIN public.grades g ON g.enrollment_id = e.id\n  GROUP BY c.id, c.code, c.name\n)\nSELECT\n  course_id,\n  course_code,\n  course_name,\n  failures,\n  total_graded AS total_enrollments,\n  CASE WHEN total_graded = 0 THEN 0 ELSE ROUND(failures::numeric / total_graded, 4) END AS failure_rate\nFROM course_stats\nORDER BY failure_rate DESC, course_code ASC;",
+          "assumptions": [
+            "Failure is defined as numeric grade_value < 3.0 on the scale present in grades.grade_value, or letter-like failing values (F, FAIL, NP, U).",
+            "Failure rate denominator is the count of enrollments with a recorded grade (grades.id present); enrollments without a grade are excluded.",
+            "All course sections and academic years are included (no additional semester/year filtering).",
+            "grades.grade_value stores either numeric strings (e.g., '4.5') or letter codes; the query detects numeric strings with a regex before casting."
+          ]
+        },
+        "endedAt": 1771803727802
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH course_stats AS (\n  SELECT\n    c.id AS course_id,\n    c.code AS course_code,\n    c.name AS course_name,\n    COUNT(g.id) FILTER (WHERE g.id IS NOT NULL) AS total_graded,\n    SUM(\n      CASE\n        WHEN (\n               g.grade_value ~ '^[0-9]+(\\\\.[0-9]+)?$'\n               AND g.grade_value::numeric < 3.0\n             )\n             OR upper(g.grade_value) IN ('F','FAIL','NP','U')\n        THEN 1 ELSE 0 END\n    ) AS failures\n  FROM public.courses c\n  JOIN public.course_sections cs ON cs.course_id = c.id\n  JOIN public.enrollments e ON e.course_section_id = cs.id\n  LEFT JOIN public.grades g ON g.enrollment_id = e.id\n  GROUP BY c.id, c.code, c.name\n)\nSELECT\n  course_id,\n  course_code,\n  course_name,\n  failures,\n  total_graded AS total_enrollments,\n  CASE WHEN total_graded = 0 THEN 0 ELSE ROUND(failures::numeric / total_graded, 4) END AS failure_rate\nFROM course_stats\nORDER BY failure_rate DESC, course_code ASC;"
+        },
+        "startedAt": 1771803727809,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: operator does not exist: grade_value ~ unknown\nLINE 11:                g.grade_value ~ '^[0-9]+(\\\\.[0-9]+)?$'\n                                      ^\nHINT:  No operator matches the given name and argument types. You might need to add explicit type casts.",
+          "name": "Error"
+        },
+        "endedAt": 1771803727864
+      }
+    },
+    "input": {
+      "question": "Which courses have the highest failure rate?"
+    },
+    "error": {
+      "message": "SQL execution failed: operator does not exist: grade_value ~ unknown\nLINE 11:                g.grade_value ~ '^[0-9]+(\\\\.[0-9]+)?$'\n                                      ^\nHINT:  No operator matches the given name and argument types. You might need to add explicit type casts.",
+      "name": "Error"
+    },
+    "traceId": "b6c4d65f6bc1ddcdae5fb5f029849924"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:42:07.876Z",
+    "traceId": "b6c4d65f6bc1ddcdae5fb5f029849924",
+    "attempts": 5,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 20619,
+      "outputTokens": 3541,
+      "totalTokens": 24160,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2624,
+      "costUsd": 0.01223675
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 20619,
+        "outputTokens": 3541,
+        "totalTokens": 24160,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2624,
+        "costUsd": 0.01223675
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,8 @@
+
+SELECT 
+  EXTRACT(YEAR FROM AGE(CURRENT_DATE, date_of_birth))::INTEGER AS age,
+  COUNT(*) AS student_count
+FROM students
+WHERE date_of_birth IS NOT NULL
+GROUP BY EXTRACT(YEAR FROM AGE(CURRENT_DATE, date_of_birth))::INTEGER
+ORDER BY age ASC

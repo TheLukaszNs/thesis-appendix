@@ -1,0 +1,161 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "computer-rooms-by-building",
+  "caseDirectory": "computer-rooms-by-building",
+  "repeatIndex": 1,
+  "prompt": "How many computer labs are in each building?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many computer labs are in each building?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:49:37.736Z",
+    "endedAtUtc": "2026-02-23T10:49:58.384Z",
+    "durationMs": 20648
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2089",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:49:58 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"How many computer labs are in each building?\"},\"agent\":{\"payload\":{\"question\":\"How many computer labs are in each building?\"},\"startedAt\":1771843777785,\"status\":\"success\",\"output\":{\"sql\":\"SELECT b.building_name AS building, COALESCE(SUM(CASE WHEN r.room_type = 'Computer Lab' THEN 1 ELSE 0 END), 0) AS computer_lab_count FROM buildings b LEFT JOIN rooms r ON b.building_id = r.building_id GROUP BY b.building_name ORDER BY computer_lab_count DESC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Count of computer labs in each building\",\"title\":\"Number of Computer Labs per Building\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"building\",\"type\":\"nominal\",\"sort\":{\"field\":\"computer_lab_count\",\"order\":\"descending\"},\"axis\":{\"title\":\"Building\"}},\"x\":{\"field\":\"computer_lab_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of Computer Labs\"}},\"tooltip\":[{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\"},{\"field\":\"computer_lab_count\",\"type\":\"quantitative\",\"title\":\"Computer labs\"}]}}},\"endedAt\":1771843798363},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT b.building_name AS building, COALESCE(SUM(CASE WHEN r.room_type = 'Computer Lab' THEN 1 ELSE 0 END), 0) AS computer_lab_count FROM buildings b LEFT JOIN rooms r ON b.building_id = r.building_id GROUP BY b.building_name ORDER BY computer_lab_count DESC;\"},\"startedAt\":1771843798366,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: relation \\\"buildings\\\" does not exist\\nLINE 2: ...THEN 1 ELSE 0 END), 0) AS computer_lab_count FROM buildings ...\\n                                                             ^\",\"name\":\"Error\"},\"endedAt\":1771843798381}},\"input\":{\"question\":\"How many computer labs are in each building?\"},\"error\":{\"message\":\"SQL execution failed: relation \\\"buildings\\\" does not exist\\nLINE 2: ...THEN 1 ELSE 0 END), 0) AS computer_lab_count FROM buildings ...\\n                                                             ^\",\"name\":\"Error\"},\"traceId\":\"c1236fee5979ed8d68e60554fb863001\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/computer-rooms-by-building/run-0001/run.json",
+    "queryPath": "runs/computer-rooms-by-building/run-0001/query.sql",
+    "vegaRawPath": "runs/computer-rooms-by-building/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/computer-rooms-by-building/run-0001/vega.resolved.json",
+    "imagePath": "runs/computer-rooms-by-building/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:49:58.384Z",
+  "traceId": "c1236fee5979ed8d68e60554fb863001",
+  "success": false,
+  "durationMs": 20648,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "How many computer labs are in each building?"
+      },
+      "agent": {
+        "payload": {
+          "question": "How many computer labs are in each building?"
+        },
+        "startedAt": 1771843777785,
+        "status": "success",
+        "output": {
+          "sql": "SELECT b.building_name AS building, COALESCE(SUM(CASE WHEN r.room_type = 'Computer Lab' THEN 1 ELSE 0 END), 0) AS computer_lab_count FROM buildings b LEFT JOIN rooms r ON b.building_id = r.building_id GROUP BY b.building_name ORDER BY computer_lab_count DESC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Count of computer labs in each building",
+            "title": "Number of Computer Labs per Building",
+            "data": {
+              "name": "query_result"
+            },
+            "mark": "bar",
+            "encoding": {
+              "y": {
+                "field": "building",
+                "type": "nominal",
+                "sort": {
+                  "field": "computer_lab_count",
+                  "order": "descending"
+                },
+                "axis": {
+                  "title": "Building"
+                }
+              },
+              "x": {
+                "field": "computer_lab_count",
+                "type": "quantitative",
+                "axis": {
+                  "title": "Number of Computer Labs"
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "building",
+                  "type": "nominal",
+                  "title": "Building"
+                },
+                {
+                  "field": "computer_lab_count",
+                  "type": "quantitative",
+                  "title": "Computer labs"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843798363
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT b.building_name AS building, COALESCE(SUM(CASE WHEN r.room_type = 'Computer Lab' THEN 1 ELSE 0 END), 0) AS computer_lab_count FROM buildings b LEFT JOIN rooms r ON b.building_id = r.building_id GROUP BY b.building_name ORDER BY computer_lab_count DESC;"
+        },
+        "startedAt": 1771843798366,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: relation \"buildings\" does not exist\nLINE 2: ...THEN 1 ELSE 0 END), 0) AS computer_lab_count FROM buildings ...\n                                                             ^",
+          "name": "Error"
+        },
+        "endedAt": 1771843798381
+      }
+    },
+    "input": {
+      "question": "How many computer labs are in each building?"
+    },
+    "error": {
+      "message": "SQL execution failed: relation \"buildings\" does not exist\nLINE 2: ...THEN 1 ELSE 0 END), 0) AS computer_lab_count FROM buildings ...\n                                                             ^",
+      "name": "Error"
+    },
+    "traceId": "c1236fee5979ed8d68e60554fb863001"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:49:58.384Z",
+    "traceId": "c1236fee5979ed8d68e60554fb863001",
+    "attempts": 3,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 265,
+      "outputTokens": 1175,
+      "totalTokens": 1440,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 832,
+      "costUsd": 0.00241625
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 265,
+        "outputTokens": 1175,
+        "totalTokens": 1440,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 832,
+        "costUsd": 0.00241625
+      }
+    ],
+    "warnings": []
+  }
+}

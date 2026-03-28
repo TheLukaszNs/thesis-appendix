@@ -1,0 +1,550 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "fail-rate-by-course",
+  "caseDirectory": "fail-rate-by-course",
+  "repeatIndex": 1,
+  "prompt": "Which courses have the highest failure rate?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which courses have the highest failure rate?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:06:15.010Z",
+    "endedAtUtc": "2026-02-23T14:07:32.413Z",
+    "durationMs": 77403
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "19024",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:07:32 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Which courses have the highest failure rate?\"},\"sql\":{\"payload\":{\"question\":\"Which courses have the highest failure rate?\"},\"startedAt\":1771855575018,\"status\":\"success\",\"output\":{\"reasoning\":\"The user wants to identify courses with the highest failure rates. Based on the schema exploration, I found that:\\n- grade_value is a custom enum type that needs to be cast to text then numeric for comparison\\n- A failure is defined as a grade below 3.0 (based on the grade values found: 2.0, 3.0, 3.5, 4.0, 4.5, 5.0)\\n- The query joins courses → course_sections → enrollments → grades\\n- Failure rate is calculated as: count of grades < 3.0 / total grades per course\\n- Results should be ordered by failure_rate DESC to show highest first\\n\\nThe successful test query confirmed the casting approach works: (g.grade_value)::text::NUMERIC\\n\",\"sql\":\"\\nSELECT \\n  c.code,\\n  c.name,\\n  ROUND((COUNT(CASE WHEN (g.grade_value)::text::NUMERIC < 3.0 THEN 1 END)::NUMERIC / COUNT(g.id)::NUMERIC)::NUMERIC, 4) AS failure_rate,\\n  COUNT(g.id) AS total_grades,\\n  COUNT(CASE WHEN (g.grade_value)::text::NUMERIC < 3.0 THEN 1 END) AS failed_count\\nFROM courses c\\nJOIN course_sections cs ON c.id = cs.course_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY failure_rate DESC, c.code ASC\\n\",\"assumptions\":[\"Failure is defined as a grade value below 3.0\",\"grade_value is a custom enum type requiring text-to-numeric casting\",\"Only grades with non-null values are considered\",\"Results are ordered by failure rate descending, then by course code for deterministic ordering\"]},\"endedAt\":1771855647272},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  c.code,\\n  c.name,\\n  ROUND((COUNT(CASE WHEN (g.grade_value)::text::NUMERIC < 3.0 THEN 1 END)::NUMERIC / COUNT(g.id)::NUMERIC)::NUMERIC, 4) AS failure_rate,\\n  COUNT(g.id) AS total_grades,\\n  COUNT(CASE WHEN (g.grade_value)::text::NUMERIC < 3.0 THEN 1 END) AS failed_count\\nFROM courses c\\nJOIN course_sections cs ON c.id = cs.course_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY failure_rate DESC, c.code ASC\\n\"},\"startedAt\":1771855647276,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  c.code,\\n  c.name,\\n  ROUND((COUNT(CASE WHEN (g.grade_value)::text::NUMERIC < 3.0 THEN 1 END)::NUMERIC / COUNT(g.id)::NUMERIC)::NUMERIC, 4) AS failure_rate,\\n  COUNT(g.id) AS total_grades,\\n  COUNT(CASE WHEN (g.grade_value)::text::NUMERIC < 3.0 THEN 1 END) AS failed_count\\nFROM courses c\\nJOIN course_sections cs ON c.id = cs.course_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY failure_rate DESC, c.code ASC\",\"metadata\":{\"columns\":[\"code\",\"name\",\"failure_rate\",\"total_grades\",\"failed_count\"],\"rowCount\":19,\"sample\":[{\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"failure_rate\":\"1.0000\",\"total_grades\":\"1\",\"failed_count\":\"1\"},{\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"failure_rate\":\"1.0000\",\"total_grades\":\"1\",\"failed_count\":\"1\"}]},\"data\":[{\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"failure_rate\":\"1.0000\",\"total_grades\":\"1\",\"failed_count\":\"1\"},{\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"failure_rate\":\"1.0000\",\"total_grades\":\"1\",\"failed_count\":\"1\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"failure_rate\":\"0.5000\",\"total_grades\":\"2\",\"failed_count\":\"1\"},{\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"failure_rate\":\"0.5000\",\"total_grades\":\"2\",\"failed_count\":\"1\"},{\"code\":\"JFH-143\",\"name\":\"Architektura Komputerów\",\"failure_rate\":\"0.3333\",\"total_grades\":\"3\",\"failed_count\":\"1\"},{\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"failure_rate\":\"0.2500\",\"total_grades\":\"8\",\"failed_count\":\"2\"},{\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"failure_rate\":\"0.2500\",\"total_grades\":\"4\",\"failed_count\":\"1\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"failure_rate\":\"0.1667\",\"total_grades\":\"6\",\"failed_count\":\"1\"},{\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"failure_rate\":\"0.0000\",\"total_grades\":\"1\",\"failed_count\":\"0\"},{\"code\":\"ARH-232\",\"name\":\"Cloud Computing\",\"failure_rate\":\"0.0000\",\"total_grades\":\"1\",\"failed_count\":\"0\"},{\"code\":\"BSS-943\",\"name\":\"Algebra Liniowa\",\"failure_rate\":\"0.0000\",\"total_grades\":\"2\",\"failed_count\":\"0\"},{\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"failure_rate\":\"0.0000\",\"total_grades\":\"2\",\"failed_count\":\"0\"},{\"code\":\"MKO-885\",\"name\":\"Rachunek Prawdopodobieństwa\",\"failure_rate\":\"0.0000\",\"total_grades\":\"3\",\"failed_count\":\"0\"},{\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"failure_rate\":\"0.0000\",\"total_grades\":\"3\",\"failed_count\":\"0\"},{\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"failure_rate\":\"0.0000\",\"total_grades\":\"1\",\"failed_count\":\"0\"},{\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"failure_rate\":\"0.0000\",\"total_grades\":\"5\",\"failed_count\":\"0\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"failure_rate\":\"0.0000\",\"total_grades\":\"5\",\"failed_count\":\"0\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"failure_rate\":\"0.0000\",\"total_grades\":\"1\",\"failed_count\":\"0\"},{\"code\":\"ZUQ-127\",\"name\":\"Fizyka\",\"failure_rate\":\"0.0000\",\"total_grades\":\"1\",\"failed_count\":\"0\"}]},\"endedAt\":1771855647287},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  c.code,\\n  c.name,\\n  ROUND((COUNT(CASE WHEN (g.grade_value)::text::NUMERIC < 3.0 THEN 1 END)::NUMERIC / COUNT(g.id)::NUMERIC)::NUMERIC, 4) AS failure_rate,\\n  COUNT(g.id) AS total_grades,\\n  COUNT(CASE WHEN (g.grade_value)::text::NUMERIC < 3.0 THEN 1 END) AS failed_count\\nFROM courses c\\nJOIN course_sections cs ON c.id = cs.course_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY failure_rate DESC, c.code ASC\",\"metadata\":{\"columns\":[\"code\",\"name\",\"failure_rate\",\"total_grades\",\"failed_count\"],\"rowCount\":19,\"sample\":[{\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"failure_rate\":\"1.0000\",\"total_grades\":\"1\",\"failed_count\":\"1\"},{\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"failure_rate\":\"1.0000\",\"total_grades\":\"1\",\"failed_count\":\"1\"}]},\"data\":[{\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"failure_rate\":\"1.0000\",\"total_grades\":\"1\",\"failed_count\":\"1\"},{\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"failure_rate\":\"1.0000\",\"total_grades\":\"1\",\"failed_count\":\"1\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"failure_rate\":\"0.5000\",\"total_grades\":\"2\",\"failed_count\":\"1\"},{\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"failure_rate\":\"0.5000\",\"total_grades\":\"2\",\"failed_count\":\"1\"},{\"code\":\"JFH-143\",\"name\":\"Architektura Komputerów\",\"failure_rate\":\"0.3333\",\"total_grades\":\"3\",\"failed_count\":\"1\"},{\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"failure_rate\":\"0.2500\",\"total_grades\":\"8\",\"failed_count\":\"2\"},{\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"failure_rate\":\"0.2500\",\"total_grades\":\"4\",\"failed_count\":\"1\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"failure_rate\":\"0.1667\",\"total_grades\":\"6\",\"failed_count\":\"1\"},{\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"failure_rate\":\"0.0000\",\"total_grades\":\"1\",\"failed_count\":\"0\"},{\"code\":\"ARH-232\",\"name\":\"Cloud Computing\",\"failure_rate\":\"0.0000\",\"total_grades\":\"1\",\"failed_count\":\"0\"},{\"code\":\"BSS-943\",\"name\":\"Algebra Liniowa\",\"failure_rate\":\"0.0000\",\"total_grades\":\"2\",\"failed_count\":\"0\"},{\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"failure_rate\":\"0.0000\",\"total_grades\":\"2\",\"failed_count\":\"0\"},{\"code\":\"MKO-885\",\"name\":\"Rachunek Prawdopodobieństwa\",\"failure_rate\":\"0.0000\",\"total_grades\":\"3\",\"failed_count\":\"0\"},{\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"failure_rate\":\"0.0000\",\"total_grades\":\"3\",\"failed_count\":\"0\"},{\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"failure_rate\":\"0.0000\",\"total_grades\":\"1\",\"failed_count\":\"0\"},{\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"failure_rate\":\"0.0000\",\"total_grades\":\"5\",\"failed_count\":\"0\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"failure_rate\":\"0.0000\",\"total_grades\":\"5\",\"failed_count\":\"0\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"failure_rate\":\"0.0000\",\"total_grades\":\"1\",\"failed_count\":\"0\"},{\"code\":\"ZUQ-127\",\"name\":\"Fizyka\",\"failure_rate\":\"0.0000\",\"total_grades\":\"1\",\"failed_count\":\"0\"}]},\"startedAt\":1771855647291,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Courses by Failure Rate\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"code\",\"type\":\"nominal\",\"sort\":{\"field\":\"failure_rate\",\"order\":\"descending\"},\"title\":\"Course Code\"},\"x\":{\"field\":\"failure_rate\",\"type\":\"quantitative\",\"title\":\"Failure Rate\"},\"color\":{\"field\":\"failure_rate\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"reds\"},\"title\":\"Failure Rate\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"failure_rate\",\"type\":\"quantitative\",\"title\":\"Failure Rate\",\"format\":\".2%\"},{\"field\":\"failed_count\",\"type\":\"quantitative\",\"title\":\"Failed Students\"},{\"field\":\"total_grades\",\"type\":\"quantitative\",\"title\":\"Total Grades\"}]},\"height\":400,\"width\":600},\"reasoning\":\"This horizontal bar chart displays courses ranked by failure rate in descending order. The color intensity (red scale) reinforces the failure rate magnitude, making high-failure courses visually prominent. The tooltip includes course code, name, failure rate as percentage, count of failed students, and total grades for comprehensive context. The layout accommodates 19 courses with clear readability.\"},\"endedAt\":1771855652380},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Courses by Failure Rate\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"code\",\"type\":\"nominal\",\"sort\":{\"field\":\"failure_rate\",\"order\":\"descending\"},\"title\":\"Course Code\"},\"x\":{\"field\":\"failure_rate\",\"type\":\"quantitative\",\"title\":\"Failure Rate\"},\"color\":{\"field\":\"failure_rate\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"reds\"},\"title\":\"Failure Rate\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"failure_rate\",\"type\":\"quantitative\",\"title\":\"Failure Rate\",\"format\":\".2%\"},{\"field\":\"failed_count\",\"type\":\"quantitative\",\"title\":\"Failed Students\"},{\"field\":\"total_grades\",\"type\":\"quantitative\",\"title\":\"Total Grades\"}]},\"height\":400,\"width\":600},\"reasoning\":\"This horizontal bar chart displays courses ranked by failure rate in descending order. The color intensity (red scale) reinforces the failure rate magnitude, making high-failure courses visually prominent. The tooltip includes course code, name, failure rate as percentage, count of failed students, and total grades for comprehensive context. The layout accommodates 19 courses with clear readability.\"},\"startedAt\":1771855652387,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT \\n  c.code,\\n  c.name,\\n  ROUND((COUNT(CASE WHEN (g.grade_value)::text::NUMERIC < 3.0 THEN 1 END)::NUMERIC / COUNT(g.id)::NUMERIC)::NUMERIC, 4) AS failure_rate,\\n  COUNT(g.id) AS total_grades,\\n  COUNT(CASE WHEN (g.grade_value)::text::NUMERIC < 3.0 THEN 1 END) AS failed_count\\nFROM courses c\\nJOIN course_sections cs ON c.id = cs.course_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY failure_rate DESC, c.code ASC\\n\",\"data\":[{\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"failure_rate\":\"1.0000\",\"total_grades\":\"1\",\"failed_count\":\"1\"},{\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"failure_rate\":\"1.0000\",\"total_grades\":\"1\",\"failed_count\":\"1\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"failure_rate\":\"0.5000\",\"total_grades\":\"2\",\"failed_count\":\"1\"},{\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"failure_rate\":\"0.5000\",\"total_grades\":\"2\",\"failed_count\":\"1\"},{\"code\":\"JFH-143\",\"name\":\"Architektura Komputerów\",\"failure_rate\":\"0.3333\",\"total_grades\":\"3\",\"failed_count\":\"1\"},{\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"failure_rate\":\"0.2500\",\"total_grades\":\"8\",\"failed_count\":\"2\"},{\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"failure_rate\":\"0.2500\",\"total_grades\":\"4\",\"failed_count\":\"1\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"failure_rate\":\"0.1667\",\"total_grades\":\"6\",\"failed_count\":\"1\"},{\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"failure_rate\":\"0.0000\",\"total_grades\":\"1\",\"failed_count\":\"0\"},{\"code\":\"ARH-232\",\"name\":\"Cloud Computing\",\"failure_rate\":\"0.0000\",\"total_grades\":\"1\",\"failed_count\":\"0\"},{\"code\":\"BSS-943\",\"name\":\"Algebra Liniowa\",\"failure_rate\":\"0.0000\",\"total_grades\":\"2\",\"failed_count\":\"0\"},{\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"failure_rate\":\"0.0000\",\"total_grades\":\"2\",\"failed_count\":\"0\"},{\"code\":\"MKO-885\",\"name\":\"Rachunek Prawdopodobieństwa\",\"failure_rate\":\"0.0000\",\"total_grades\":\"3\",\"failed_count\":\"0\"},{\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"failure_rate\":\"0.0000\",\"total_grades\":\"3\",\"failed_count\":\"0\"},{\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"failure_rate\":\"0.0000\",\"total_grades\":\"1\",\"failed_count\":\"0\"},{\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"failure_rate\":\"0.0000\",\"total_grades\":\"5\",\"failed_count\":\"0\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"failure_rate\":\"0.0000\",\"total_grades\":\"5\",\"failed_count\":\"0\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"failure_rate\":\"0.0000\",\"total_grades\":\"1\",\"failed_count\":\"0\"},{\"code\":\"ZUQ-127\",\"name\":\"Fizyka\",\"failure_rate\":\"0.0000\",\"total_grades\":\"1\",\"failed_count\":\"0\"}],\"metadata\":{\"columns\":[\"code\",\"name\",\"failure_rate\",\"total_grades\",\"failed_count\"],\"rowCount\":19,\"sample\":[{\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"failure_rate\":\"1.0000\",\"total_grades\":\"1\",\"failed_count\":\"1\"},{\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"failure_rate\":\"1.0000\",\"total_grades\":\"1\",\"failed_count\":\"1\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Courses by Failure Rate\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"code\",\"type\":\"nominal\",\"sort\":{\"field\":\"failure_rate\",\"order\":\"descending\"},\"title\":\"Course Code\"},\"x\":{\"field\":\"failure_rate\",\"type\":\"quantitative\",\"title\":\"Failure Rate\"},\"color\":{\"field\":\"failure_rate\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"reds\"},\"title\":\"Failure Rate\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"failure_rate\",\"type\":\"quantitative\",\"title\":\"Failure Rate\",\"format\":\".2%\"},{\"field\":\"failed_count\",\"type\":\"quantitative\",\"title\":\"Failed Students\"},{\"field\":\"total_grades\",\"type\":\"quantitative\",\"title\":\"Total Grades\"}]},\"height\":400,\"width\":600},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855652392}},\"input\":{\"question\":\"Which courses have the highest failure rate?\"},\"result\":{\"sql\":\"\\nSELECT \\n  c.code,\\n  c.name,\\n  ROUND((COUNT(CASE WHEN (g.grade_value)::text::NUMERIC < 3.0 THEN 1 END)::NUMERIC / COUNT(g.id)::NUMERIC)::NUMERIC, 4) AS failure_rate,\\n  COUNT(g.id) AS total_grades,\\n  COUNT(CASE WHEN (g.grade_value)::text::NUMERIC < 3.0 THEN 1 END) AS failed_count\\nFROM courses c\\nJOIN course_sections cs ON c.id = cs.course_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY failure_rate DESC, c.code ASC\\n\",\"data\":[{\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"failure_rate\":\"1.0000\",\"total_grades\":\"1\",\"failed_count\":\"1\"},{\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"failure_rate\":\"1.0000\",\"total_grades\":\"1\",\"failed_count\":\"1\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"failure_rate\":\"0.5000\",\"total_grades\":\"2\",\"failed_count\":\"1\"},{\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"failure_rate\":\"0.5000\",\"total_grades\":\"2\",\"failed_count\":\"1\"},{\"code\":\"JFH-143\",\"name\":\"Architektura Komputerów\",\"failure_rate\":\"0.3333\",\"total_grades\":\"3\",\"failed_count\":\"1\"},{\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"failure_rate\":\"0.2500\",\"total_grades\":\"8\",\"failed_count\":\"2\"},{\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"failure_rate\":\"0.2500\",\"total_grades\":\"4\",\"failed_count\":\"1\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"failure_rate\":\"0.1667\",\"total_grades\":\"6\",\"failed_count\":\"1\"},{\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"failure_rate\":\"0.0000\",\"total_grades\":\"1\",\"failed_count\":\"0\"},{\"code\":\"ARH-232\",\"name\":\"Cloud Computing\",\"failure_rate\":\"0.0000\",\"total_grades\":\"1\",\"failed_count\":\"0\"},{\"code\":\"BSS-943\",\"name\":\"Algebra Liniowa\",\"failure_rate\":\"0.0000\",\"total_grades\":\"2\",\"failed_count\":\"0\"},{\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"failure_rate\":\"0.0000\",\"total_grades\":\"2\",\"failed_count\":\"0\"},{\"code\":\"MKO-885\",\"name\":\"Rachunek Prawdopodobieństwa\",\"failure_rate\":\"0.0000\",\"total_grades\":\"3\",\"failed_count\":\"0\"},{\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"failure_rate\":\"0.0000\",\"total_grades\":\"3\",\"failed_count\":\"0\"},{\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"failure_rate\":\"0.0000\",\"total_grades\":\"1\",\"failed_count\":\"0\"},{\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"failure_rate\":\"0.0000\",\"total_grades\":\"5\",\"failed_count\":\"0\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"failure_rate\":\"0.0000\",\"total_grades\":\"5\",\"failed_count\":\"0\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"failure_rate\":\"0.0000\",\"total_grades\":\"1\",\"failed_count\":\"0\"},{\"code\":\"ZUQ-127\",\"name\":\"Fizyka\",\"failure_rate\":\"0.0000\",\"total_grades\":\"1\",\"failed_count\":\"0\"}],\"metadata\":{\"columns\":[\"code\",\"name\",\"failure_rate\",\"total_grades\",\"failed_count\"],\"rowCount\":19,\"sample\":[{\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"failure_rate\":\"1.0000\",\"total_grades\":\"1\",\"failed_count\":\"1\"},{\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"failure_rate\":\"1.0000\",\"total_grades\":\"1\",\"failed_count\":\"1\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Courses by Failure Rate\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"code\",\"type\":\"nominal\",\"sort\":{\"field\":\"failure_rate\",\"order\":\"descending\"},\"title\":\"Course Code\"},\"x\":{\"field\":\"failure_rate\",\"type\":\"quantitative\",\"title\":\"Failure Rate\"},\"color\":{\"field\":\"failure_rate\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"reds\"},\"title\":\"Failure Rate\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"failure_rate\",\"type\":\"quantitative\",\"title\":\"Failure Rate\",\"format\":\".2%\"},{\"field\":\"failed_count\",\"type\":\"quantitative\",\"title\":\"Failed Students\"},{\"field\":\"total_grades\",\"type\":\"quantitative\",\"title\":\"Total Grades\"}]},\"height\":400,\"width\":600},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"f1b49762f90f5a6bc1b1cd66d89d9ef9\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/fail-rate-by-course/run-0001/run.json",
+    "queryPath": "runs/fail-rate-by-course/run-0001/query.sql",
+    "vegaRawPath": "runs/fail-rate-by-course/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/fail-rate-by-course/run-0001/vega.resolved.json",
+    "imagePath": "runs/fail-rate-by-course/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:07:32.812Z",
+  "traceId": "f1b49762f90f5a6bc1b1cd66d89d9ef9",
+  "success": true,
+  "durationMs": 77802,
+  "resultRaw": {
+    "data": [
+      {
+        "code": "BEW-951",
+        "name": "Fizyka",
+        "failure_rate": "1.0000",
+        "total_grades": "1",
+        "failed_count": "1"
+      },
+      {
+        "code": "HPF-845",
+        "name": "Systemy Wbudowane",
+        "failure_rate": "1.0000",
+        "total_grades": "1",
+        "failed_count": "1"
+      },
+      {
+        "code": "AFI-682",
+        "name": "Matematyka Dyskretna",
+        "failure_rate": "0.5000",
+        "total_grades": "2",
+        "failed_count": "1"
+      },
+      {
+        "code": "FCL-532",
+        "name": "Uczenie Maszynowe",
+        "failure_rate": "0.5000",
+        "total_grades": "2",
+        "failed_count": "1"
+      },
+      {
+        "code": "JFH-143",
+        "name": "Architektura Komputerów",
+        "failure_rate": "0.3333",
+        "total_grades": "3",
+        "failed_count": "1"
+      },
+      {
+        "code": "VBC-395",
+        "name": "Sieci Komputerowe",
+        "failure_rate": "0.2500",
+        "total_grades": "8",
+        "failed_count": "2"
+      },
+      {
+        "code": "XQA-597",
+        "name": "Analiza Matematyczna",
+        "failure_rate": "0.2500",
+        "total_grades": "4",
+        "failed_count": "1"
+      },
+      {
+        "code": "YWI-134",
+        "name": "Metody Numeryczne",
+        "failure_rate": "0.1667",
+        "total_grades": "6",
+        "failed_count": "1"
+      },
+      {
+        "code": "AAX-989",
+        "name": "Elektronika",
+        "failure_rate": "0.0000",
+        "total_grades": "1",
+        "failed_count": "0"
+      },
+      {
+        "code": "ARH-232",
+        "name": "Cloud Computing",
+        "failure_rate": "0.0000",
+        "total_grades": "1",
+        "failed_count": "0"
+      },
+      {
+        "code": "BSS-943",
+        "name": "Algebra Liniowa",
+        "failure_rate": "0.0000",
+        "total_grades": "2",
+        "failed_count": "0"
+      },
+      {
+        "code": "FEO-908",
+        "name": "Analiza Matematyczna",
+        "failure_rate": "0.0000",
+        "total_grades": "2",
+        "failed_count": "0"
+      },
+      {
+        "code": "MKO-885",
+        "name": "Rachunek Prawdopodobieństwa",
+        "failure_rate": "0.0000",
+        "total_grades": "3",
+        "failed_count": "0"
+      },
+      {
+        "code": "RZR-301",
+        "name": "Sieci Komputerowe",
+        "failure_rate": "0.0000",
+        "total_grades": "3",
+        "failed_count": "0"
+      },
+      {
+        "code": "TAU-627",
+        "name": "Analiza Matematyczna",
+        "failure_rate": "0.0000",
+        "total_grades": "1",
+        "failed_count": "0"
+      },
+      {
+        "code": "TJJ-354",
+        "name": "Projektowanie Aplikacji Webowych",
+        "failure_rate": "0.0000",
+        "total_grades": "5",
+        "failed_count": "0"
+      },
+      {
+        "code": "UQL-274",
+        "name": "Zarządzanie Projektami IT",
+        "failure_rate": "0.0000",
+        "total_grades": "5",
+        "failed_count": "0"
+      },
+      {
+        "code": "WZC-570",
+        "name": "Programowanie Obiektowe",
+        "failure_rate": "0.0000",
+        "total_grades": "1",
+        "failed_count": "0"
+      },
+      {
+        "code": "ZUQ-127",
+        "name": "Fizyka",
+        "failure_rate": "0.0000",
+        "total_grades": "1",
+        "failed_count": "0"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Courses by Failure Rate",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "code",
+          "type": "nominal",
+          "sort": {
+            "field": "failure_rate",
+            "order": "descending"
+          },
+          "title": "Course Code"
+        },
+        "x": {
+          "field": "failure_rate",
+          "type": "quantitative",
+          "title": "Failure Rate"
+        },
+        "color": {
+          "field": "failure_rate",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "reds"
+          },
+          "title": "Failure Rate"
+        },
+        "tooltip": [
+          {
+            "field": "code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "failure_rate",
+            "type": "quantitative",
+            "title": "Failure Rate",
+            "format": ".2%"
+          },
+          {
+            "field": "failed_count",
+            "type": "quantitative",
+            "title": "Failed Students"
+          },
+          {
+            "field": "total_grades",
+            "type": "quantitative",
+            "title": "Total Grades"
+          }
+        ]
+      },
+      "height": 400,
+      "width": 600
+    },
+    "sql": "\nSELECT \n  c.code,\n  c.name,\n  ROUND((COUNT(CASE WHEN (g.grade_value)::text::NUMERIC < 3.0 THEN 1 END)::NUMERIC / COUNT(g.id)::NUMERIC)::NUMERIC, 4) AS failure_rate,\n  COUNT(g.id) AS total_grades,\n  COUNT(CASE WHEN (g.grade_value)::text::NUMERIC < 3.0 THEN 1 END) AS failed_count\nFROM courses c\nJOIN course_sections cs ON c.id = cs.course_id\nJOIN enrollments e ON cs.id = e.course_section_id\nJOIN grades g ON e.id = g.enrollment_id\nWHERE g.grade_value IS NOT NULL\nGROUP BY c.id, c.code, c.name\nORDER BY failure_rate DESC, c.code ASC\n",
+    "metadata": {
+      "columns": [
+        "code",
+        "name",
+        "failure_rate",
+        "total_grades",
+        "failed_count"
+      ],
+      "rowCount": 19,
+      "sample": [
+        {
+          "code": "BEW-951",
+          "name": "Fizyka",
+          "failure_rate": "1.0000",
+          "total_grades": "1",
+          "failed_count": "1"
+        },
+        {
+          "code": "HPF-845",
+          "name": "Systemy Wbudowane",
+          "failure_rate": "1.0000",
+          "total_grades": "1",
+          "failed_count": "1"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "code": "BEW-951",
+        "name": "Fizyka",
+        "failure_rate": "1.0000",
+        "total_grades": "1",
+        "failed_count": "1"
+      },
+      {
+        "code": "HPF-845",
+        "name": "Systemy Wbudowane",
+        "failure_rate": "1.0000",
+        "total_grades": "1",
+        "failed_count": "1"
+      },
+      {
+        "code": "AFI-682",
+        "name": "Matematyka Dyskretna",
+        "failure_rate": "0.5000",
+        "total_grades": "2",
+        "failed_count": "1"
+      },
+      {
+        "code": "FCL-532",
+        "name": "Uczenie Maszynowe",
+        "failure_rate": "0.5000",
+        "total_grades": "2",
+        "failed_count": "1"
+      },
+      {
+        "code": "JFH-143",
+        "name": "Architektura Komputerów",
+        "failure_rate": "0.3333",
+        "total_grades": "3",
+        "failed_count": "1"
+      },
+      {
+        "code": "VBC-395",
+        "name": "Sieci Komputerowe",
+        "failure_rate": "0.2500",
+        "total_grades": "8",
+        "failed_count": "2"
+      },
+      {
+        "code": "XQA-597",
+        "name": "Analiza Matematyczna",
+        "failure_rate": "0.2500",
+        "total_grades": "4",
+        "failed_count": "1"
+      },
+      {
+        "code": "YWI-134",
+        "name": "Metody Numeryczne",
+        "failure_rate": "0.1667",
+        "total_grades": "6",
+        "failed_count": "1"
+      },
+      {
+        "code": "AAX-989",
+        "name": "Elektronika",
+        "failure_rate": "0.0000",
+        "total_grades": "1",
+        "failed_count": "0"
+      },
+      {
+        "code": "ARH-232",
+        "name": "Cloud Computing",
+        "failure_rate": "0.0000",
+        "total_grades": "1",
+        "failed_count": "0"
+      },
+      {
+        "code": "BSS-943",
+        "name": "Algebra Liniowa",
+        "failure_rate": "0.0000",
+        "total_grades": "2",
+        "failed_count": "0"
+      },
+      {
+        "code": "FEO-908",
+        "name": "Analiza Matematyczna",
+        "failure_rate": "0.0000",
+        "total_grades": "2",
+        "failed_count": "0"
+      },
+      {
+        "code": "MKO-885",
+        "name": "Rachunek Prawdopodobieństwa",
+        "failure_rate": "0.0000",
+        "total_grades": "3",
+        "failed_count": "0"
+      },
+      {
+        "code": "RZR-301",
+        "name": "Sieci Komputerowe",
+        "failure_rate": "0.0000",
+        "total_grades": "3",
+        "failed_count": "0"
+      },
+      {
+        "code": "TAU-627",
+        "name": "Analiza Matematyczna",
+        "failure_rate": "0.0000",
+        "total_grades": "1",
+        "failed_count": "0"
+      },
+      {
+        "code": "TJJ-354",
+        "name": "Projektowanie Aplikacji Webowych",
+        "failure_rate": "0.0000",
+        "total_grades": "5",
+        "failed_count": "0"
+      },
+      {
+        "code": "UQL-274",
+        "name": "Zarządzanie Projektami IT",
+        "failure_rate": "0.0000",
+        "total_grades": "5",
+        "failed_count": "0"
+      },
+      {
+        "code": "WZC-570",
+        "name": "Programowanie Obiektowe",
+        "failure_rate": "0.0000",
+        "total_grades": "1",
+        "failed_count": "0"
+      },
+      {
+        "code": "ZUQ-127",
+        "name": "Fizyka",
+        "failure_rate": "0.0000",
+        "total_grades": "1",
+        "failed_count": "0"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Courses by Failure Rate",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "code",
+          "type": "nominal",
+          "sort": {
+            "field": "failure_rate",
+            "order": "descending"
+          },
+          "title": "Course Code"
+        },
+        "x": {
+          "field": "failure_rate",
+          "type": "quantitative",
+          "title": "Failure Rate"
+        },
+        "color": {
+          "field": "failure_rate",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "reds"
+          },
+          "title": "Failure Rate"
+        },
+        "tooltip": [
+          {
+            "field": "code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "failure_rate",
+            "type": "quantitative",
+            "title": "Failure Rate",
+            "format": ".2%"
+          },
+          {
+            "field": "failed_count",
+            "type": "quantitative",
+            "title": "Failed Students"
+          },
+          {
+            "field": "total_grades",
+            "type": "quantitative",
+            "title": "Total Grades"
+          }
+        ]
+      },
+      "height": 400,
+      "width": 600
+    },
+    "sql": "\nSELECT \n  c.code,\n  c.name,\n  ROUND((COUNT(CASE WHEN (g.grade_value)::text::NUMERIC < 3.0 THEN 1 END)::NUMERIC / COUNT(g.id)::NUMERIC)::NUMERIC, 4) AS failure_rate,\n  COUNT(g.id) AS total_grades,\n  COUNT(CASE WHEN (g.grade_value)::text::NUMERIC < 3.0 THEN 1 END) AS failed_count\nFROM courses c\nJOIN course_sections cs ON c.id = cs.course_id\nJOIN enrollments e ON cs.id = e.course_section_id\nJOIN grades g ON e.id = g.enrollment_id\nWHERE g.grade_value IS NOT NULL\nGROUP BY c.id, c.code, c.name\nORDER BY failure_rate DESC, c.code ASC\n",
+    "metadata": {
+      "columns": [
+        "code",
+        "name",
+        "failure_rate",
+        "total_grades",
+        "failed_count"
+      ],
+      "rowCount": 19,
+      "sample": [
+        {
+          "code": "BEW-951",
+          "name": "Fizyka",
+          "failure_rate": "1.0000",
+          "total_grades": "1",
+          "failed_count": "1"
+        },
+        {
+          "code": "HPF-845",
+          "name": "Systemy Wbudowane",
+          "failure_rate": "1.0000",
+          "total_grades": "1",
+          "failed_count": "1"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.341Z",
+    "traceId": "f1b49762f90f5a6bc1b1cd66d89d9ef9",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 60341,
+      "outputTokens": 2181,
+      "totalTokens": 62522,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.071246
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 60341,
+        "outputTokens": 2181,
+        "totalTokens": 62522,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.071246
+      }
+    ],
+    "warnings": []
+  }
+}

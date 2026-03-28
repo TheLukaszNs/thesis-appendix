@@ -1,0 +1,76 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Department Comparison Across All Evaluation Dimensions",
+  "data": {
+    "name": "query_result"
+  },
+  "width": 1000,
+  "height": 500,
+  "transform": [
+    {
+      "fold": [
+        "avg_overall_rating",
+        "avg_professor_rating",
+        "avg_content_rating",
+        "avg_difficulty_rating",
+        "avg_workload_hours",
+        "recommend_percentage"
+      ],
+      "as": [
+        "dimension",
+        "value"
+      ]
+    }
+  ],
+  "mark": "bar",
+  "encoding": {
+    "x": {
+      "field": "dimension",
+      "type": "nominal",
+      "title": "Evaluation Dimension",
+      "axis": {
+        "labelAngle": -45,
+        "labelExpr": "datum.label === 'avg_overall_rating' ? 'Overall Rating' : datum.label === 'avg_professor_rating' ? 'Professor Rating' : datum.label === 'avg_content_rating' ? 'Content Rating' : datum.label === 'avg_difficulty_rating' ? 'Difficulty Rating' : datum.label === 'avg_workload_hours' ? 'Avg Workload (hrs)' : 'Recommend %'"
+      }
+    },
+    "y": {
+      "field": "value",
+      "type": "quantitative",
+      "title": "Score / Percentage"
+    },
+    "color": {
+      "field": "department_code",
+      "type": "nominal",
+      "title": "Department",
+      "scale": {
+        "scheme": "category10"
+      }
+    },
+    "xOffset": {
+      "field": "department_code"
+    },
+    "tooltip": [
+      {
+        "field": "department_name",
+        "type": "nominal",
+        "title": "Department"
+      },
+      {
+        "field": "department_code",
+        "type": "nominal",
+        "title": "Code"
+      },
+      {
+        "field": "dimension",
+        "type": "nominal",
+        "title": "Dimension"
+      },
+      {
+        "field": "value",
+        "type": "quantitative",
+        "title": "Value",
+        "format": ".2f"
+      }
+    ]
+  }
+}

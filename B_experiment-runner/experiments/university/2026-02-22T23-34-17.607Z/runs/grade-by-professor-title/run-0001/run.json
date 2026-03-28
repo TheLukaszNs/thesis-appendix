@@ -1,0 +1,488 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "grade-by-professor-title",
+  "caseDirectory": "grade-by-professor-title",
+  "repeatIndex": 1,
+  "prompt": "Do professors with higher academic titles give different grades?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Do professors with higher academic titles give different grades?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:53:06.455Z",
+    "endedAtUtc": "2026-02-22T23:54:09.425Z",
+    "durationMs": 62970
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "22729",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:54:09 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Do professors with higher academic titles give different grades?\"},\"sql\":{\"payload\":{\"question\":\"Do professors with higher academic titles give different grades?\"},\"startedAt\":1771804386462,\"status\":\"success\",\"output\":{\"reasoning\":\"Compute and compare numeric grade components by professor academic_title using joins confirmed in the schema. I aggregate exam/project/attendance scores and a per-grade composite (average of available numeric components) per academic title, ordering by composite score to show differences.\",\"sql\":\"SELECT\\n  COALESCE(p.academic_title, 'Unknown') AS academic_title,\\n  COUNT(g.id) AS grade_count,\\n  ROUND(AVG(g.exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(g.project_score)::numeric, 2) AS avg_project_score,\\n  ROUND(AVG(g.attendance_score)::numeric, 2) AS avg_attendance_score,\\n  ROUND(\\n    AVG(\\n      CASE\\n        WHEN (\\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\\n        ) > 0\\n        THEN (\\n          COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)\\n        )::numeric / NULLIF(\\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0\\n        )\\n        ELSE NULL\\n      END\\n    )::numeric, 2\\n  ) AS avg_overall_score\\nFROM public.professors p\\nJOIN public.course_sections cs ON cs.professor_id = p.id\\nJOIN public.enrollments e ON e.course_section_id = cs.id\\nJOIN public.grades g ON g.enrollment_id = e.id\\nGROUP BY COALESCE(p.academic_title, 'Unknown')\\nORDER BY avg_overall_score DESC NULLS LAST\",\"assumptions\":[\"grade numeric components (exam_score, project_score, attendance_score) are meaningful proxies for final grade when grade_value is not numeric\",\"academic_title text values are the intended grouping (NULLs labeled 'Unknown')\",\"no minimum sample-size filter applied (small groups will appear)\"]},\"endedAt\":1771804427836},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  COALESCE(p.academic_title, 'Unknown') AS academic_title,\\n  COUNT(g.id) AS grade_count,\\n  ROUND(AVG(g.exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(g.project_score)::numeric, 2) AS avg_project_score,\\n  ROUND(AVG(g.attendance_score)::numeric, 2) AS avg_attendance_score,\\n  ROUND(\\n    AVG(\\n      CASE\\n        WHEN (\\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\\n        ) > 0\\n        THEN (\\n          COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)\\n        )::numeric / NULLIF(\\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0\\n        )\\n        ELSE NULL\\n      END\\n    )::numeric, 2\\n  ) AS avg_overall_score\\nFROM public.professors p\\nJOIN public.course_sections cs ON cs.professor_id = p.id\\nJOIN public.enrollments e ON e.course_section_id = cs.id\\nJOIN public.grades g ON g.enrollment_id = e.id\\nGROUP BY COALESCE(p.academic_title, 'Unknown')\\nORDER BY avg_overall_score DESC NULLS LAST\"},\"startedAt\":1771804427841,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT\\n  COALESCE(p.academic_title, 'Unknown') AS academic_title,\\n  COUNT(g.id) AS grade_count,\\n  ROUND(AVG(g.exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(g.project_score)::numeric, 2) AS avg_project_score,\\n  ROUND(AVG(g.attendance_score)::numeric, 2) AS avg_attendance_score,\\n  ROUND(\\n    AVG(\\n      CASE\\n        WHEN (\\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\\n        ) > 0\\n        THEN (\\n          COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)\\n        )::numeric / NULLIF(\\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0\\n        )\\n        ELSE NULL\\n      END\\n    )::numeric, 2\\n  ) AS avg_overall_score\\nFROM public.professors p\\nJOIN public.course_sections cs ON cs.professor_id = p.id\\nJOIN public.enrollments e ON e.course_section_id = cs.id\\nJOIN public.grades g ON g.enrollment_id = e.id\\nGROUP BY COALESCE(p.academic_title, 'Unknown')\\nORDER BY avg_overall_score DESC NULLS LAST\",\"metadata\":{\"columns\":[\"grade_count\",\"academic_title\",\"avg_exam_score\",\"avg_overall_score\",\"avg_project_score\",\"avg_attendance_score\"],\"rowCount\":10,\"sample\":[{\"grade_count\":6,\"academic_title\":\"Unknown\",\"avg_exam_score\":77.8,\"avg_overall_score\":62.25,\"avg_project_score\":58.4,\"avg_attendance_score\":57.02},{\"grade_count\":3,\"academic_title\":\"Mgr inż.\",\"avg_exam_score\":20.76,\"avg_overall_score\":55.75,\"avg_project_score\":82.25,\"avg_attendance_score\":59.9}]},\"data\":[{\"grade_count\":6,\"academic_title\":\"Unknown\",\"avg_exam_score\":77.8,\"avg_overall_score\":62.25,\"avg_project_score\":58.4,\"avg_attendance_score\":57.02},{\"grade_count\":3,\"academic_title\":\"Mgr inż.\",\"avg_exam_score\":20.76,\"avg_overall_score\":55.75,\"avg_project_score\":82.25,\"avg_attendance_score\":59.9},{\"grade_count\":4,\"academic_title\":\"Inż.\",\"avg_exam_score\":22.35,\"avg_overall_score\":54.19,\"avg_project_score\":61.6,\"avg_attendance_score\":59.32},{\"grade_count\":8,\"academic_title\":\"Dr hab.\",\"avg_exam_score\":50.11,\"avg_overall_score\":51.71,\"avg_project_score\":48.43,\"avg_attendance_score\":56.59},{\"grade_count\":6,\"academic_title\":\"Prof. nadzw. dr hab. inż.\",\"avg_exam_score\":28.84,\"avg_overall_score\":50.6,\"avg_project_score\":56.99,\"avg_attendance_score\":74.97},{\"grade_count\":7,\"academic_title\":\"Prof. dr inż.\",\"avg_exam_score\":64.08,\"avg_overall_score\":48.14,\"avg_project_score\":35.82,\"avg_attendance_score\":42.41},{\"grade_count\":3,\"academic_title\":\"Dr inż.\",\"avg_exam_score\":54.51,\"avg_overall_score\":46.61,\"avg_project_score\":55.96,\"avg_attendance_score\":28.41},{\"grade_count\":12,\"academic_title\":\"Prof. dr hab. inż.\",\"avg_exam_score\":43.47,\"avg_overall_score\":45.03,\"avg_project_score\":34.32,\"avg_attendance_score\":64.94},{\"grade_count\":2,\"academic_title\":\"Dr hab. inż.\",\"avg_exam_score\":67.55,\"avg_overall_score\":43.49,\"avg_project_score\":20.32,\"avg_attendance_score\":52.07},{\"grade_count\":1,\"academic_title\":\"Prof. zw. dr hab. inż.\",\"avg_exam_score\":null,\"avg_overall_score\":33.59,\"avg_project_score\":null,\"avg_attendance_score\":33.59}]},\"endedAt\":1771804427858},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT\\n  COALESCE(p.academic_title, 'Unknown') AS academic_title,\\n  COUNT(g.id) AS grade_count,\\n  ROUND(AVG(g.exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(g.project_score)::numeric, 2) AS avg_project_score,\\n  ROUND(AVG(g.attendance_score)::numeric, 2) AS avg_attendance_score,\\n  ROUND(\\n    AVG(\\n      CASE\\n        WHEN (\\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\\n        ) > 0\\n        THEN (\\n          COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)\\n        )::numeric / NULLIF(\\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0\\n        )\\n        ELSE NULL\\n      END\\n    )::numeric, 2\\n  ) AS avg_overall_score\\nFROM public.professors p\\nJOIN public.course_sections cs ON cs.professor_id = p.id\\nJOIN public.enrollments e ON e.course_section_id = cs.id\\nJOIN public.grades g ON g.enrollment_id = e.id\\nGROUP BY COALESCE(p.academic_title, 'Unknown')\\nORDER BY avg_overall_score DESC NULLS LAST\",\"metadata\":{\"columns\":[\"grade_count\",\"academic_title\",\"avg_exam_score\",\"avg_overall_score\",\"avg_project_score\",\"avg_attendance_score\"],\"rowCount\":10,\"sample\":[{\"grade_count\":6,\"academic_title\":\"Unknown\",\"avg_exam_score\":77.8,\"avg_overall_score\":62.25,\"avg_project_score\":58.4,\"avg_attendance_score\":57.02},{\"grade_count\":3,\"academic_title\":\"Mgr inż.\",\"avg_exam_score\":20.76,\"avg_overall_score\":55.75,\"avg_project_score\":82.25,\"avg_attendance_score\":59.9}]},\"data\":[{\"grade_count\":6,\"academic_title\":\"Unknown\",\"avg_exam_score\":77.8,\"avg_overall_score\":62.25,\"avg_project_score\":58.4,\"avg_attendance_score\":57.02},{\"grade_count\":3,\"academic_title\":\"Mgr inż.\",\"avg_exam_score\":20.76,\"avg_overall_score\":55.75,\"avg_project_score\":82.25,\"avg_attendance_score\":59.9},{\"grade_count\":4,\"academic_title\":\"Inż.\",\"avg_exam_score\":22.35,\"avg_overall_score\":54.19,\"avg_project_score\":61.6,\"avg_attendance_score\":59.32},{\"grade_count\":8,\"academic_title\":\"Dr hab.\",\"avg_exam_score\":50.11,\"avg_overall_score\":51.71,\"avg_project_score\":48.43,\"avg_attendance_score\":56.59},{\"grade_count\":6,\"academic_title\":\"Prof. nadzw. dr hab. inż.\",\"avg_exam_score\":28.84,\"avg_overall_score\":50.6,\"avg_project_score\":56.99,\"avg_attendance_score\":74.97},{\"grade_count\":7,\"academic_title\":\"Prof. dr inż.\",\"avg_exam_score\":64.08,\"avg_overall_score\":48.14,\"avg_project_score\":35.82,\"avg_attendance_score\":42.41},{\"grade_count\":3,\"academic_title\":\"Dr inż.\",\"avg_exam_score\":54.51,\"avg_overall_score\":46.61,\"avg_project_score\":55.96,\"avg_attendance_score\":28.41},{\"grade_count\":12,\"academic_title\":\"Prof. dr hab. inż.\",\"avg_exam_score\":43.47,\"avg_overall_score\":45.03,\"avg_project_score\":34.32,\"avg_attendance_score\":64.94},{\"grade_count\":2,\"academic_title\":\"Dr hab. inż.\",\"avg_exam_score\":67.55,\"avg_overall_score\":43.49,\"avg_project_score\":20.32,\"avg_attendance_score\":52.07},{\"grade_count\":1,\"academic_title\":\"Prof. zw. dr hab. inż.\",\"avg_exam_score\":null,\"avg_overall_score\":33.59,\"avg_project_score\":null,\"avg_attendance_score\":33.59}]},\"startedAt\":1771804427861,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":{\"step\":30},\"title\":{\"text\":\"Average overall score by professors' academic title\",\"subtitle\":\"Bar length = avg overall score. Color = avg exam score. Hover for counts and component averages.\"},\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"academic_title\",\"type\":\"nominal\",\"axis\":{\"title\":\"Academic Title\"},\"sort\":{\"field\":\"avg_overall_score\",\"op\":\"mean\",\"order\":\"descending\"}},\"x\":{\"field\":\"avg_overall_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Overall Score\"}},\"color\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"legend\":{\"title\":\"Avg Exam Score\"}},\"tooltip\":[{\"field\":\"academic_title\",\"type\":\"nominal\",\"title\":\"Academic Title\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Grade Count\"},{\"field\":\"avg_overall_score\",\"type\":\"quantitative\",\"title\":\"Avg Overall Score\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\"},{\"field\":\"avg_project_score\",\"type\":\"quantitative\",\"title\":\"Avg Project Score\"},{\"field\":\"avg_attendance_score\",\"type\":\"quantitative\",\"title\":\"Avg Attendance Score\"}]}},\"reasoning\":\"Horizontal bars compare avg overall score by academic title; color adds exam-score context and tooltip surfaces counts and component averages to assess grading differences.\"},\"endedAt\":1771804449410},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":{\"step\":30},\"title\":{\"text\":\"Average overall score by professors' academic title\",\"subtitle\":\"Bar length = avg overall score. Color = avg exam score. Hover for counts and component averages.\"},\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"academic_title\",\"type\":\"nominal\",\"axis\":{\"title\":\"Academic Title\"},\"sort\":{\"field\":\"avg_overall_score\",\"op\":\"mean\",\"order\":\"descending\"}},\"x\":{\"field\":\"avg_overall_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Overall Score\"}},\"color\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"legend\":{\"title\":\"Avg Exam Score\"}},\"tooltip\":[{\"field\":\"academic_title\",\"type\":\"nominal\",\"title\":\"Academic Title\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Grade Count\"},{\"field\":\"avg_overall_score\",\"type\":\"quantitative\",\"title\":\"Avg Overall Score\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\"},{\"field\":\"avg_project_score\",\"type\":\"quantitative\",\"title\":\"Avg Project Score\"},{\"field\":\"avg_attendance_score\",\"type\":\"quantitative\",\"title\":\"Avg Attendance Score\"}]}},\"reasoning\":\"Horizontal bars compare avg overall score by academic title; color adds exam-score context and tooltip surfaces counts and component averages to assess grading differences.\"},\"startedAt\":1771804449412,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  COALESCE(p.academic_title, 'Unknown') AS academic_title,\\n  COUNT(g.id) AS grade_count,\\n  ROUND(AVG(g.exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(g.project_score)::numeric, 2) AS avg_project_score,\\n  ROUND(AVG(g.attendance_score)::numeric, 2) AS avg_attendance_score,\\n  ROUND(\\n    AVG(\\n      CASE\\n        WHEN (\\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\\n        ) > 0\\n        THEN (\\n          COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)\\n        )::numeric / NULLIF(\\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0\\n        )\\n        ELSE NULL\\n      END\\n    )::numeric, 2\\n  ) AS avg_overall_score\\nFROM public.professors p\\nJOIN public.course_sections cs ON cs.professor_id = p.id\\nJOIN public.enrollments e ON e.course_section_id = cs.id\\nJOIN public.grades g ON g.enrollment_id = e.id\\nGROUP BY COALESCE(p.academic_title, 'Unknown')\\nORDER BY avg_overall_score DESC NULLS LAST\",\"data\":[{\"grade_count\":6,\"academic_title\":\"Unknown\",\"avg_exam_score\":77.8,\"avg_overall_score\":62.25,\"avg_project_score\":58.4,\"avg_attendance_score\":57.02},{\"grade_count\":3,\"academic_title\":\"Mgr inż.\",\"avg_exam_score\":20.76,\"avg_overall_score\":55.75,\"avg_project_score\":82.25,\"avg_attendance_score\":59.9},{\"grade_count\":4,\"academic_title\":\"Inż.\",\"avg_exam_score\":22.35,\"avg_overall_score\":54.19,\"avg_project_score\":61.6,\"avg_attendance_score\":59.32},{\"grade_count\":8,\"academic_title\":\"Dr hab.\",\"avg_exam_score\":50.11,\"avg_overall_score\":51.71,\"avg_project_score\":48.43,\"avg_attendance_score\":56.59},{\"grade_count\":6,\"academic_title\":\"Prof. nadzw. dr hab. inż.\",\"avg_exam_score\":28.84,\"avg_overall_score\":50.6,\"avg_project_score\":56.99,\"avg_attendance_score\":74.97},{\"grade_count\":7,\"academic_title\":\"Prof. dr inż.\",\"avg_exam_score\":64.08,\"avg_overall_score\":48.14,\"avg_project_score\":35.82,\"avg_attendance_score\":42.41},{\"grade_count\":3,\"academic_title\":\"Dr inż.\",\"avg_exam_score\":54.51,\"avg_overall_score\":46.61,\"avg_project_score\":55.96,\"avg_attendance_score\":28.41},{\"grade_count\":12,\"academic_title\":\"Prof. dr hab. inż.\",\"avg_exam_score\":43.47,\"avg_overall_score\":45.03,\"avg_project_score\":34.32,\"avg_attendance_score\":64.94},{\"grade_count\":2,\"academic_title\":\"Dr hab. inż.\",\"avg_exam_score\":67.55,\"avg_overall_score\":43.49,\"avg_project_score\":20.32,\"avg_attendance_score\":52.07},{\"grade_count\":1,\"academic_title\":\"Prof. zw. dr hab. inż.\",\"avg_exam_score\":null,\"avg_overall_score\":33.59,\"avg_project_score\":null,\"avg_attendance_score\":33.59}],\"metadata\":{\"columns\":[\"grade_count\",\"academic_title\",\"avg_exam_score\",\"avg_overall_score\",\"avg_project_score\",\"avg_attendance_score\"],\"rowCount\":10,\"sample\":[{\"grade_count\":6,\"academic_title\":\"Unknown\",\"avg_exam_score\":77.8,\"avg_overall_score\":62.25,\"avg_project_score\":58.4,\"avg_attendance_score\":57.02},{\"grade_count\":3,\"academic_title\":\"Mgr inż.\",\"avg_exam_score\":20.76,\"avg_overall_score\":55.75,\"avg_project_score\":82.25,\"avg_attendance_score\":59.9}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":{\"step\":30},\"title\":{\"text\":\"Average overall score by professors' academic title\",\"subtitle\":\"Bar length = avg overall score. Color = avg exam score. Hover for counts and component averages.\"},\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"academic_title\",\"type\":\"nominal\",\"axis\":{\"title\":\"Academic Title\"},\"sort\":{\"field\":\"avg_overall_score\",\"op\":\"mean\",\"order\":\"descending\"}},\"x\":{\"field\":\"avg_overall_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Overall Score\"}},\"color\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"legend\":{\"title\":\"Avg Exam Score\"}},\"tooltip\":[{\"field\":\"academic_title\",\"type\":\"nominal\",\"title\":\"Academic Title\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Grade Count\"},{\"field\":\"avg_overall_score\",\"type\":\"quantitative\",\"title\":\"Avg Overall Score\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\"},{\"field\":\"avg_project_score\",\"type\":\"quantitative\",\"title\":\"Avg Project Score\"},{\"field\":\"avg_attendance_score\",\"type\":\"quantitative\",\"title\":\"Avg Attendance Score\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771804449415}},\"input\":{\"question\":\"Do professors with higher academic titles give different grades?\"},\"result\":{\"sql\":\"SELECT\\n  COALESCE(p.academic_title, 'Unknown') AS academic_title,\\n  COUNT(g.id) AS grade_count,\\n  ROUND(AVG(g.exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(g.project_score)::numeric, 2) AS avg_project_score,\\n  ROUND(AVG(g.attendance_score)::numeric, 2) AS avg_attendance_score,\\n  ROUND(\\n    AVG(\\n      CASE\\n        WHEN (\\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\\n        ) > 0\\n        THEN (\\n          COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)\\n        )::numeric / NULLIF(\\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\\n          (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0\\n        )\\n        ELSE NULL\\n      END\\n    )::numeric, 2\\n  ) AS avg_overall_score\\nFROM public.professors p\\nJOIN public.course_sections cs ON cs.professor_id = p.id\\nJOIN public.enrollments e ON e.course_section_id = cs.id\\nJOIN public.grades g ON g.enrollment_id = e.id\\nGROUP BY COALESCE(p.academic_title, 'Unknown')\\nORDER BY avg_overall_score DESC NULLS LAST\",\"data\":[{\"grade_count\":6,\"academic_title\":\"Unknown\",\"avg_exam_score\":77.8,\"avg_overall_score\":62.25,\"avg_project_score\":58.4,\"avg_attendance_score\":57.02},{\"grade_count\":3,\"academic_title\":\"Mgr inż.\",\"avg_exam_score\":20.76,\"avg_overall_score\":55.75,\"avg_project_score\":82.25,\"avg_attendance_score\":59.9},{\"grade_count\":4,\"academic_title\":\"Inż.\",\"avg_exam_score\":22.35,\"avg_overall_score\":54.19,\"avg_project_score\":61.6,\"avg_attendance_score\":59.32},{\"grade_count\":8,\"academic_title\":\"Dr hab.\",\"avg_exam_score\":50.11,\"avg_overall_score\":51.71,\"avg_project_score\":48.43,\"avg_attendance_score\":56.59},{\"grade_count\":6,\"academic_title\":\"Prof. nadzw. dr hab. inż.\",\"avg_exam_score\":28.84,\"avg_overall_score\":50.6,\"avg_project_score\":56.99,\"avg_attendance_score\":74.97},{\"grade_count\":7,\"academic_title\":\"Prof. dr inż.\",\"avg_exam_score\":64.08,\"avg_overall_score\":48.14,\"avg_project_score\":35.82,\"avg_attendance_score\":42.41},{\"grade_count\":3,\"academic_title\":\"Dr inż.\",\"avg_exam_score\":54.51,\"avg_overall_score\":46.61,\"avg_project_score\":55.96,\"avg_attendance_score\":28.41},{\"grade_count\":12,\"academic_title\":\"Prof. dr hab. inż.\",\"avg_exam_score\":43.47,\"avg_overall_score\":45.03,\"avg_project_score\":34.32,\"avg_attendance_score\":64.94},{\"grade_count\":2,\"academic_title\":\"Dr hab. inż.\",\"avg_exam_score\":67.55,\"avg_overall_score\":43.49,\"avg_project_score\":20.32,\"avg_attendance_score\":52.07},{\"grade_count\":1,\"academic_title\":\"Prof. zw. dr hab. inż.\",\"avg_exam_score\":null,\"avg_overall_score\":33.59,\"avg_project_score\":null,\"avg_attendance_score\":33.59}],\"metadata\":{\"columns\":[\"grade_count\",\"academic_title\",\"avg_exam_score\",\"avg_overall_score\",\"avg_project_score\",\"avg_attendance_score\"],\"rowCount\":10,\"sample\":[{\"grade_count\":6,\"academic_title\":\"Unknown\",\"avg_exam_score\":77.8,\"avg_overall_score\":62.25,\"avg_project_score\":58.4,\"avg_attendance_score\":57.02},{\"grade_count\":3,\"academic_title\":\"Mgr inż.\",\"avg_exam_score\":20.76,\"avg_overall_score\":55.75,\"avg_project_score\":82.25,\"avg_attendance_score\":59.9}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":{\"step\":30},\"title\":{\"text\":\"Average overall score by professors' academic title\",\"subtitle\":\"Bar length = avg overall score. Color = avg exam score. Hover for counts and component averages.\"},\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"academic_title\",\"type\":\"nominal\",\"axis\":{\"title\":\"Academic Title\"},\"sort\":{\"field\":\"avg_overall_score\",\"op\":\"mean\",\"order\":\"descending\"}},\"x\":{\"field\":\"avg_overall_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Overall Score\"}},\"color\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"legend\":{\"title\":\"Avg Exam Score\"}},\"tooltip\":[{\"field\":\"academic_title\",\"type\":\"nominal\",\"title\":\"Academic Title\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Grade Count\"},{\"field\":\"avg_overall_score\",\"type\":\"quantitative\",\"title\":\"Avg Overall Score\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\"},{\"field\":\"avg_project_score\",\"type\":\"quantitative\",\"title\":\"Avg Project Score\"},{\"field\":\"avg_attendance_score\",\"type\":\"quantitative\",\"title\":\"Avg Attendance Score\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"429c0c807de0638176b3eced630c7dfc\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/grade-by-professor-title/run-0001/run.json",
+    "queryPath": "runs/grade-by-professor-title/run-0001/query.sql",
+    "vegaRawPath": "runs/grade-by-professor-title/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/grade-by-professor-title/run-0001/vega.resolved.json",
+    "imagePath": "runs/grade-by-professor-title/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:54:09.794Z",
+  "traceId": "429c0c807de0638176b3eced630c7dfc",
+  "success": true,
+  "durationMs": 63339,
+  "resultRaw": {
+    "data": [
+      {
+        "grade_count": 6,
+        "academic_title": "Unknown",
+        "avg_exam_score": 77.8,
+        "avg_overall_score": 62.25,
+        "avg_project_score": 58.4,
+        "avg_attendance_score": 57.02
+      },
+      {
+        "grade_count": 3,
+        "academic_title": "Mgr inż.",
+        "avg_exam_score": 20.76,
+        "avg_overall_score": 55.75,
+        "avg_project_score": 82.25,
+        "avg_attendance_score": 59.9
+      },
+      {
+        "grade_count": 4,
+        "academic_title": "Inż.",
+        "avg_exam_score": 22.35,
+        "avg_overall_score": 54.19,
+        "avg_project_score": 61.6,
+        "avg_attendance_score": 59.32
+      },
+      {
+        "grade_count": 8,
+        "academic_title": "Dr hab.",
+        "avg_exam_score": 50.11,
+        "avg_overall_score": 51.71,
+        "avg_project_score": 48.43,
+        "avg_attendance_score": 56.59
+      },
+      {
+        "grade_count": 6,
+        "academic_title": "Prof. nadzw. dr hab. inż.",
+        "avg_exam_score": 28.84,
+        "avg_overall_score": 50.6,
+        "avg_project_score": 56.99,
+        "avg_attendance_score": 74.97
+      },
+      {
+        "grade_count": 7,
+        "academic_title": "Prof. dr inż.",
+        "avg_exam_score": 64.08,
+        "avg_overall_score": 48.14,
+        "avg_project_score": 35.82,
+        "avg_attendance_score": 42.41
+      },
+      {
+        "grade_count": 3,
+        "academic_title": "Dr inż.",
+        "avg_exam_score": 54.51,
+        "avg_overall_score": 46.61,
+        "avg_project_score": 55.96,
+        "avg_attendance_score": 28.41
+      },
+      {
+        "grade_count": 12,
+        "academic_title": "Prof. dr hab. inż.",
+        "avg_exam_score": 43.47,
+        "avg_overall_score": 45.03,
+        "avg_project_score": 34.32,
+        "avg_attendance_score": 64.94
+      },
+      {
+        "grade_count": 2,
+        "academic_title": "Dr hab. inż.",
+        "avg_exam_score": 67.55,
+        "avg_overall_score": 43.49,
+        "avg_project_score": 20.32,
+        "avg_attendance_score": 52.07
+      },
+      {
+        "grade_count": 1,
+        "academic_title": "Prof. zw. dr hab. inż.",
+        "avg_exam_score": null,
+        "avg_overall_score": 33.59,
+        "avg_project_score": null,
+        "avg_attendance_score": 33.59
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 700,
+      "height": {
+        "step": 30
+      },
+      "title": {
+        "text": "Average overall score by professors' academic title",
+        "subtitle": "Bar length = avg overall score. Color = avg exam score. Hover for counts and component averages."
+      },
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "y": {
+          "field": "academic_title",
+          "type": "nominal",
+          "axis": {
+            "title": "Academic Title"
+          },
+          "sort": {
+            "field": "avg_overall_score",
+            "op": "mean",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "avg_overall_score",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average Overall Score"
+          }
+        },
+        "color": {
+          "field": "avg_exam_score",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "blues"
+          },
+          "legend": {
+            "title": "Avg Exam Score"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "academic_title",
+            "type": "nominal",
+            "title": "Academic Title"
+          },
+          {
+            "field": "grade_count",
+            "type": "quantitative",
+            "title": "Grade Count"
+          },
+          {
+            "field": "avg_overall_score",
+            "type": "quantitative",
+            "title": "Avg Overall Score"
+          },
+          {
+            "field": "avg_exam_score",
+            "type": "quantitative",
+            "title": "Avg Exam Score"
+          },
+          {
+            "field": "avg_project_score",
+            "type": "quantitative",
+            "title": "Avg Project Score"
+          },
+          {
+            "field": "avg_attendance_score",
+            "type": "quantitative",
+            "title": "Avg Attendance Score"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT\n  COALESCE(p.academic_title, 'Unknown') AS academic_title,\n  COUNT(g.id) AS grade_count,\n  ROUND(AVG(g.exam_score)::numeric, 2) AS avg_exam_score,\n  ROUND(AVG(g.project_score)::numeric, 2) AS avg_project_score,\n  ROUND(AVG(g.attendance_score)::numeric, 2) AS avg_attendance_score,\n  ROUND(\n    AVG(\n      CASE\n        WHEN (\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\n          (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\n          (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\n        ) > 0\n        THEN (\n          COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)\n        )::numeric / NULLIF(\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\n          (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\n          (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0\n        )\n        ELSE NULL\n      END\n    )::numeric, 2\n  ) AS avg_overall_score\nFROM public.professors p\nJOIN public.course_sections cs ON cs.professor_id = p.id\nJOIN public.enrollments e ON e.course_section_id = cs.id\nJOIN public.grades g ON g.enrollment_id = e.id\nGROUP BY COALESCE(p.academic_title, 'Unknown')\nORDER BY avg_overall_score DESC NULLS LAST",
+    "metadata": {
+      "columns": [
+        "grade_count",
+        "academic_title",
+        "avg_exam_score",
+        "avg_overall_score",
+        "avg_project_score",
+        "avg_attendance_score"
+      ],
+      "rowCount": 10,
+      "sample": [
+        {
+          "grade_count": 6,
+          "academic_title": "Unknown",
+          "avg_exam_score": 77.8,
+          "avg_overall_score": 62.25,
+          "avg_project_score": 58.4,
+          "avg_attendance_score": 57.02
+        },
+        {
+          "grade_count": 3,
+          "academic_title": "Mgr inż.",
+          "avg_exam_score": 20.76,
+          "avg_overall_score": 55.75,
+          "avg_project_score": 82.25,
+          "avg_attendance_score": 59.9
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "grade_count": 6,
+        "academic_title": "Unknown",
+        "avg_exam_score": 77.8,
+        "avg_overall_score": 62.25,
+        "avg_project_score": 58.4,
+        "avg_attendance_score": 57.02
+      },
+      {
+        "grade_count": 3,
+        "academic_title": "Mgr inż.",
+        "avg_exam_score": 20.76,
+        "avg_overall_score": 55.75,
+        "avg_project_score": 82.25,
+        "avg_attendance_score": 59.9
+      },
+      {
+        "grade_count": 4,
+        "academic_title": "Inż.",
+        "avg_exam_score": 22.35,
+        "avg_overall_score": 54.19,
+        "avg_project_score": 61.6,
+        "avg_attendance_score": 59.32
+      },
+      {
+        "grade_count": 8,
+        "academic_title": "Dr hab.",
+        "avg_exam_score": 50.11,
+        "avg_overall_score": 51.71,
+        "avg_project_score": 48.43,
+        "avg_attendance_score": 56.59
+      },
+      {
+        "grade_count": 6,
+        "academic_title": "Prof. nadzw. dr hab. inż.",
+        "avg_exam_score": 28.84,
+        "avg_overall_score": 50.6,
+        "avg_project_score": 56.99,
+        "avg_attendance_score": 74.97
+      },
+      {
+        "grade_count": 7,
+        "academic_title": "Prof. dr inż.",
+        "avg_exam_score": 64.08,
+        "avg_overall_score": 48.14,
+        "avg_project_score": 35.82,
+        "avg_attendance_score": 42.41
+      },
+      {
+        "grade_count": 3,
+        "academic_title": "Dr inż.",
+        "avg_exam_score": 54.51,
+        "avg_overall_score": 46.61,
+        "avg_project_score": 55.96,
+        "avg_attendance_score": 28.41
+      },
+      {
+        "grade_count": 12,
+        "academic_title": "Prof. dr hab. inż.",
+        "avg_exam_score": 43.47,
+        "avg_overall_score": 45.03,
+        "avg_project_score": 34.32,
+        "avg_attendance_score": 64.94
+      },
+      {
+        "grade_count": 2,
+        "academic_title": "Dr hab. inż.",
+        "avg_exam_score": 67.55,
+        "avg_overall_score": 43.49,
+        "avg_project_score": 20.32,
+        "avg_attendance_score": 52.07
+      },
+      {
+        "grade_count": 1,
+        "academic_title": "Prof. zw. dr hab. inż.",
+        "avg_exam_score": null,
+        "avg_overall_score": 33.59,
+        "avg_project_score": null,
+        "avg_attendance_score": 33.59
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 700,
+      "height": {
+        "step": 30
+      },
+      "title": {
+        "text": "Average overall score by professors' academic title",
+        "subtitle": "Bar length = avg overall score. Color = avg exam score. Hover for counts and component averages."
+      },
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "y": {
+          "field": "academic_title",
+          "type": "nominal",
+          "axis": {
+            "title": "Academic Title"
+          },
+          "sort": {
+            "field": "avg_overall_score",
+            "op": "mean",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "avg_overall_score",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average Overall Score"
+          }
+        },
+        "color": {
+          "field": "avg_exam_score",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "blues"
+          },
+          "legend": {
+            "title": "Avg Exam Score"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "academic_title",
+            "type": "nominal",
+            "title": "Academic Title"
+          },
+          {
+            "field": "grade_count",
+            "type": "quantitative",
+            "title": "Grade Count"
+          },
+          {
+            "field": "avg_overall_score",
+            "type": "quantitative",
+            "title": "Avg Overall Score"
+          },
+          {
+            "field": "avg_exam_score",
+            "type": "quantitative",
+            "title": "Avg Exam Score"
+          },
+          {
+            "field": "avg_project_score",
+            "type": "quantitative",
+            "title": "Avg Project Score"
+          },
+          {
+            "field": "avg_attendance_score",
+            "type": "quantitative",
+            "title": "Avg Attendance Score"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT\n  COALESCE(p.academic_title, 'Unknown') AS academic_title,\n  COUNT(g.id) AS grade_count,\n  ROUND(AVG(g.exam_score)::numeric, 2) AS avg_exam_score,\n  ROUND(AVG(g.project_score)::numeric, 2) AS avg_project_score,\n  ROUND(AVG(g.attendance_score)::numeric, 2) AS avg_attendance_score,\n  ROUND(\n    AVG(\n      CASE\n        WHEN (\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\n          (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\n          (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\n        ) > 0\n        THEN (\n          COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)\n        )::numeric / NULLIF(\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\n          (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\n          (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0\n        )\n        ELSE NULL\n      END\n    )::numeric, 2\n  ) AS avg_overall_score\nFROM public.professors p\nJOIN public.course_sections cs ON cs.professor_id = p.id\nJOIN public.enrollments e ON e.course_section_id = cs.id\nJOIN public.grades g ON g.enrollment_id = e.id\nGROUP BY COALESCE(p.academic_title, 'Unknown')\nORDER BY avg_overall_score DESC NULLS LAST",
+    "metadata": {
+      "columns": [
+        "grade_count",
+        "academic_title",
+        "avg_exam_score",
+        "avg_overall_score",
+        "avg_project_score",
+        "avg_attendance_score"
+      ],
+      "rowCount": 10,
+      "sample": [
+        {
+          "grade_count": 6,
+          "academic_title": "Unknown",
+          "avg_exam_score": 77.8,
+          "avg_overall_score": 62.25,
+          "avg_project_score": 58.4,
+          "avg_attendance_score": 57.02
+        },
+        {
+          "grade_count": 3,
+          "academic_title": "Mgr inż.",
+          "avg_exam_score": 20.76,
+          "avg_overall_score": 55.75,
+          "avg_project_score": 82.25,
+          "avg_attendance_score": 59.9
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:54:09.794Z",
+    "traceId": "429c0c807de0638176b3eced630c7dfc",
+    "attempts": 5,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 17010,
+      "outputTokens": 4376,
+      "totalTokens": 21386,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2880,
+      "costUsd": 0.0130045
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 17010,
+        "outputTokens": 4376,
+        "totalTokens": 21386,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2880,
+        "costUsd": 0.0130045
+      }
+    ],
+    "warnings": []
+  }
+}

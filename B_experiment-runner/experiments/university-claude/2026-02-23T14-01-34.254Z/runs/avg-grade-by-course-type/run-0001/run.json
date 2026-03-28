@@ -1,0 +1,248 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "avg-grade-by-course-type",
+  "caseDirectory": "avg-grade-by-course-type",
+  "repeatIndex": 1,
+  "prompt": "What is the average grade for each course type?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average grade for each course type?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:04:08.729Z",
+    "endedAtUtc": "2026-02-23T14:04:46.026Z",
+    "durationMs": 37297
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "8159",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:04:46 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the average grade for each course type?\"},\"sql\":{\"payload\":{\"question\":\"What is the average grade for each course type?\"},\"startedAt\":1771855448735,\"status\":\"success\",\"output\":{\"reasoning\":\"The user wants the average grade for each course type. I've confirmed the schema structure: courses table has course_type, grades table has exam_score, and they're connected through course_sections and enrollments. The query joins these tables, filters for non-null exam scores, groups by course_type, and calculates the average. Results are ordered by course_type for deterministic output.\",\"sql\":\"SELECT \\n  c.course_type,\\n  AVG(CAST(g.exam_score AS NUMERIC)) AS average_grade\\nFROM courses c\\nJOIN course_sections cs ON c.id = cs.course_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nWHERE g.exam_score IS NOT NULL\\nGROUP BY c.course_type\\nORDER BY c.course_type\",\"assumptions\":[\"Grade is measured by exam_score in the grades table\",\"Only non-null exam scores are included in the average\",\"Course type is a categorical field in the courses table\"]},\"endedAt\":1771855483038},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT \\n  c.course_type,\\n  AVG(CAST(g.exam_score AS NUMERIC)) AS average_grade\\nFROM courses c\\nJOIN course_sections cs ON c.id = cs.course_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nWHERE g.exam_score IS NOT NULL\\nGROUP BY c.course_type\\nORDER BY c.course_type\"},\"startedAt\":1771855483043,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  c.course_type,\\n  AVG(CAST(g.exam_score AS NUMERIC)) AS average_grade\\nFROM courses c\\nJOIN course_sections cs ON c.id = cs.course_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nWHERE g.exam_score IS NOT NULL\\nGROUP BY c.course_type\\nORDER BY c.course_type\",\"metadata\":{\"columns\":[\"course_type\",\"average_grade\"],\"rowCount\":5,\"sample\":[{\"course_type\":\"LECTURE\",\"average_grade\":\"66.7633333333333333\"},{\"course_type\":\"LABORATORY\",\"average_grade\":\"30.2822222222222222\"}]},\"data\":[{\"course_type\":\"LECTURE\",\"average_grade\":\"66.7633333333333333\"},{\"course_type\":\"LABORATORY\",\"average_grade\":\"30.2822222222222222\"},{\"course_type\":\"PROJECT\",\"average_grade\":\"49.9188888888888889\"},{\"course_type\":\"SEMINAR\",\"average_grade\":\"64.5650000000000000\"},{\"course_type\":\"EXERCISE\",\"average_grade\":\"46.4920000000000000\"}]},\"endedAt\":1771855483051},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  c.course_type,\\n  AVG(CAST(g.exam_score AS NUMERIC)) AS average_grade\\nFROM courses c\\nJOIN course_sections cs ON c.id = cs.course_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nWHERE g.exam_score IS NOT NULL\\nGROUP BY c.course_type\\nORDER BY c.course_type\",\"metadata\":{\"columns\":[\"course_type\",\"average_grade\"],\"rowCount\":5,\"sample\":[{\"course_type\":\"LECTURE\",\"average_grade\":\"66.7633333333333333\"},{\"course_type\":\"LABORATORY\",\"average_grade\":\"30.2822222222222222\"}]},\"data\":[{\"course_type\":\"LECTURE\",\"average_grade\":\"66.7633333333333333\"},{\"course_type\":\"LABORATORY\",\"average_grade\":\"30.2822222222222222\"},{\"course_type\":\"PROJECT\",\"average_grade\":\"49.9188888888888889\"},{\"course_type\":\"SEMINAR\",\"average_grade\":\"64.5650000000000000\"},{\"course_type\":\"EXERCISE\",\"average_grade\":\"46.4920000000000000\"}]},\"startedAt\":1771855483052,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Grade by Course Type\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},\"y\":{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},\"tooltip\":[{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"format\":\".2f\"}]}},\"reasoning\":\"Bar chart is ideal for comparing average grades across discrete course types. The x-axis shows course types (LECTURE, LABORATORY, etc.), and the y-axis displays the average exam scores. Tooltips provide precise grade values formatted to 2 decimal places for clarity.\"},\"endedAt\":1771855486008},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Grade by Course Type\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},\"y\":{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},\"tooltip\":[{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"format\":\".2f\"}]}},\"reasoning\":\"Bar chart is ideal for comparing average grades across discrete course types. The x-axis shows course types (LECTURE, LABORATORY, etc.), and the y-axis displays the average exam scores. Tooltips provide precise grade values formatted to 2 decimal places for clarity.\"},\"startedAt\":1771855486012,\"status\":\"success\",\"output\":{\"sql\":\"SELECT \\n  c.course_type,\\n  AVG(CAST(g.exam_score AS NUMERIC)) AS average_grade\\nFROM courses c\\nJOIN course_sections cs ON c.id = cs.course_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nWHERE g.exam_score IS NOT NULL\\nGROUP BY c.course_type\\nORDER BY c.course_type\",\"data\":[{\"course_type\":\"LECTURE\",\"average_grade\":\"66.7633333333333333\"},{\"course_type\":\"LABORATORY\",\"average_grade\":\"30.2822222222222222\"},{\"course_type\":\"PROJECT\",\"average_grade\":\"49.9188888888888889\"},{\"course_type\":\"SEMINAR\",\"average_grade\":\"64.5650000000000000\"},{\"course_type\":\"EXERCISE\",\"average_grade\":\"46.4920000000000000\"}],\"metadata\":{\"columns\":[\"course_type\",\"average_grade\"],\"rowCount\":5,\"sample\":[{\"course_type\":\"LECTURE\",\"average_grade\":\"66.7633333333333333\"},{\"course_type\":\"LABORATORY\",\"average_grade\":\"30.2822222222222222\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Grade by Course Type\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},\"y\":{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},\"tooltip\":[{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"format\":\".2f\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855486016}},\"input\":{\"question\":\"What is the average grade for each course type?\"},\"result\":{\"sql\":\"SELECT \\n  c.course_type,\\n  AVG(CAST(g.exam_score AS NUMERIC)) AS average_grade\\nFROM courses c\\nJOIN course_sections cs ON c.id = cs.course_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nWHERE g.exam_score IS NOT NULL\\nGROUP BY c.course_type\\nORDER BY c.course_type\",\"data\":[{\"course_type\":\"LECTURE\",\"average_grade\":\"66.7633333333333333\"},{\"course_type\":\"LABORATORY\",\"average_grade\":\"30.2822222222222222\"},{\"course_type\":\"PROJECT\",\"average_grade\":\"49.9188888888888889\"},{\"course_type\":\"SEMINAR\",\"average_grade\":\"64.5650000000000000\"},{\"course_type\":\"EXERCISE\",\"average_grade\":\"46.4920000000000000\"}],\"metadata\":{\"columns\":[\"course_type\",\"average_grade\"],\"rowCount\":5,\"sample\":[{\"course_type\":\"LECTURE\",\"average_grade\":\"66.7633333333333333\"},{\"course_type\":\"LABORATORY\",\"average_grade\":\"30.2822222222222222\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Grade by Course Type\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},\"y\":{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},\"tooltip\":[{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"format\":\".2f\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"67ea8df8df9212d7231a25879cfe08c3\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-grade-by-course-type/run-0001/run.json",
+    "queryPath": "runs/avg-grade-by-course-type/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-grade-by-course-type/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-grade-by-course-type/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-grade-by-course-type/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:04:46.442Z",
+  "traceId": "67ea8df8df9212d7231a25879cfe08c3",
+  "success": true,
+  "durationMs": 37713,
+  "resultRaw": {
+    "data": [
+      {
+        "course_type": "LECTURE",
+        "average_grade": "66.7633333333333333"
+      },
+      {
+        "course_type": "LABORATORY",
+        "average_grade": "30.2822222222222222"
+      },
+      {
+        "course_type": "PROJECT",
+        "average_grade": "49.9188888888888889"
+      },
+      {
+        "course_type": "SEMINAR",
+        "average_grade": "64.5650000000000000"
+      },
+      {
+        "course_type": "EXERCISE",
+        "average_grade": "46.4920000000000000"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Grade by Course Type",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "course_type",
+          "type": "nominal",
+          "title": "Course Type"
+        },
+        "y": {
+          "field": "average_grade",
+          "type": "quantitative",
+          "title": "Average Grade"
+        },
+        "tooltip": [
+          {
+            "field": "course_type",
+            "type": "nominal",
+            "title": "Course Type"
+          },
+          {
+            "field": "average_grade",
+            "type": "quantitative",
+            "title": "Average Grade",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT \n  c.course_type,\n  AVG(CAST(g.exam_score AS NUMERIC)) AS average_grade\nFROM courses c\nJOIN course_sections cs ON c.id = cs.course_id\nJOIN enrollments e ON cs.id = e.course_section_id\nJOIN grades g ON e.id = g.enrollment_id\nWHERE g.exam_score IS NOT NULL\nGROUP BY c.course_type\nORDER BY c.course_type",
+    "metadata": {
+      "columns": [
+        "course_type",
+        "average_grade"
+      ],
+      "rowCount": 5,
+      "sample": [
+        {
+          "course_type": "LECTURE",
+          "average_grade": "66.7633333333333333"
+        },
+        {
+          "course_type": "LABORATORY",
+          "average_grade": "30.2822222222222222"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "course_type": "LECTURE",
+        "average_grade": "66.7633333333333333"
+      },
+      {
+        "course_type": "LABORATORY",
+        "average_grade": "30.2822222222222222"
+      },
+      {
+        "course_type": "PROJECT",
+        "average_grade": "49.9188888888888889"
+      },
+      {
+        "course_type": "SEMINAR",
+        "average_grade": "64.5650000000000000"
+      },
+      {
+        "course_type": "EXERCISE",
+        "average_grade": "46.4920000000000000"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Grade by Course Type",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "course_type",
+          "type": "nominal",
+          "title": "Course Type"
+        },
+        "y": {
+          "field": "average_grade",
+          "type": "quantitative",
+          "title": "Average Grade"
+        },
+        "tooltip": [
+          {
+            "field": "course_type",
+            "type": "nominal",
+            "title": "Course Type"
+          },
+          {
+            "field": "average_grade",
+            "type": "quantitative",
+            "title": "Average Grade",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT \n  c.course_type,\n  AVG(CAST(g.exam_score AS NUMERIC)) AS average_grade\nFROM courses c\nJOIN course_sections cs ON c.id = cs.course_id\nJOIN enrollments e ON cs.id = e.course_section_id\nJOIN grades g ON e.id = g.enrollment_id\nWHERE g.exam_score IS NOT NULL\nGROUP BY c.course_type\nORDER BY c.course_type",
+    "metadata": {
+      "columns": [
+        "course_type",
+        "average_grade"
+      ],
+      "rowCount": 5,
+      "sample": [
+        {
+          "course_type": "LECTURE",
+          "average_grade": "66.7633333333333333"
+        },
+        {
+          "course_type": "LABORATORY",
+          "average_grade": "30.2822222222222222"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.276Z",
+    "traceId": "67ea8df8df9212d7231a25879cfe08c3",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 33668,
+      "outputTokens": 1083,
+      "totalTokens": 34751,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.039083
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 33668,
+        "outputTokens": 1083,
+        "totalTokens": 34751,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.039083
+      }
+    ],
+    "warnings": []
+  }
+}

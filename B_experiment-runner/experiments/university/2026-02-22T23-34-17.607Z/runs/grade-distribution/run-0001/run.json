@@ -1,0 +1,324 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "grade-distribution",
+  "caseDirectory": "grade-distribution",
+  "repeatIndex": 1,
+  "prompt": "Show the distribution of final grades across all courses",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the distribution of final grades across all courses"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:34:17.618Z",
+    "endedAtUtc": "2026-02-22T23:34:58.009Z",
+    "durationMs": 40391
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "9505",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:34:58 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show the distribution of final grades across all courses\"},\"sql\":{\"payload\":{\"question\":\"Show the distribution of final grades across all courses\"},\"startedAt\":1771803257652,\"status\":\"success\",\"output\":{\"reasoning\":\"Count final (non-null) grade_value entries linked to enrollments and compute percent of total; deterministic ordering by count desc then grade.\",\"sql\":\"WITH total AS (\\n  SELECT COUNT(*)::bigint AS total_count\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  WHERE g.grade_value IS NOT NULL\\n)\\nSELECT\\n  g.grade_value::text AS grade,\\n  COUNT(*)::bigint AS count,\\n  ROUND(100.0 * COUNT(*) / t.total_count, 2) AS percent\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN total t ON true\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY g.grade_value::text, t.total_count\\nORDER BY COUNT(*) DESC, g.grade_value::text ASC;\",\"assumptions\":[\"grade_value represents the final grade category (e.g., letter or enum)\",\"Only non-null grade_value rows should be counted as final grades\",\"Include all courses by counting grades linked to enrollments (one grade per enrollment enforced by unique constraint)\"]},\"endedAt\":1771803283208},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH total AS (\\n  SELECT COUNT(*)::bigint AS total_count\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  WHERE g.grade_value IS NOT NULL\\n)\\nSELECT\\n  g.grade_value::text AS grade,\\n  COUNT(*)::bigint AS count,\\n  ROUND(100.0 * COUNT(*) / t.total_count, 2) AS percent\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN total t ON true\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY g.grade_value::text, t.total_count\\nORDER BY COUNT(*) DESC, g.grade_value::text ASC;\"},\"startedAt\":1771803283212,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH total AS (\\n  SELECT COUNT(*)::bigint AS total_count\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  WHERE g.grade_value IS NOT NULL\\n)\\nSELECT\\n  g.grade_value::text AS grade,\\n  COUNT(*)::bigint AS count,\\n  ROUND(100.0 * COUNT(*) / t.total_count, 2) AS percent\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN total t ON true\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY g.grade_value::text, t.total_count\\nORDER BY COUNT(*) DESC, g.grade_value::text ASC\",\"metadata\":{\"columns\":[\"count\",\"grade\",\"percent\"],\"rowCount\":6,\"sample\":[{\"count\":13,\"grade\":\"4.5\",\"percent\":25},{\"count\":9,\"grade\":\"2.0\",\"percent\":17.31}]},\"data\":[{\"count\":13,\"grade\":\"4.5\",\"percent\":25},{\"count\":9,\"grade\":\"2.0\",\"percent\":17.31},{\"count\":9,\"grade\":\"3.5\",\"percent\":17.31},{\"count\":8,\"grade\":\"5.0\",\"percent\":15.38},{\"count\":7,\"grade\":\"3.0\",\"percent\":13.46},{\"count\":6,\"grade\":\"4.0\",\"percent\":11.54}]},\"endedAt\":1771803283241},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"WITH total AS (\\n  SELECT COUNT(*)::bigint AS total_count\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  WHERE g.grade_value IS NOT NULL\\n)\\nSELECT\\n  g.grade_value::text AS grade,\\n  COUNT(*)::bigint AS count,\\n  ROUND(100.0 * COUNT(*) / t.total_count, 2) AS percent\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN total t ON true\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY g.grade_value::text, t.total_count\\nORDER BY COUNT(*) DESC, g.grade_value::text ASC\",\"metadata\":{\"columns\":[\"count\",\"grade\",\"percent\"],\"rowCount\":6,\"sample\":[{\"count\":13,\"grade\":\"4.5\",\"percent\":25},{\"count\":9,\"grade\":\"2.0\",\"percent\":17.31}]},\"data\":[{\"count\":13,\"grade\":\"4.5\",\"percent\":25},{\"count\":9,\"grade\":\"2.0\",\"percent\":17.31},{\"count\":9,\"grade\":\"3.5\",\"percent\":17.31},{\"count\":8,\"grade\":\"5.0\",\"percent\":15.38},{\"count\":7,\"grade\":\"3.0\",\"percent\":13.46},{\"count\":6,\"grade\":\"4.0\",\"percent\":11.54}]},\"startedAt\":1771803283244,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Distribution of Final Grades Across All Courses\",\"mark\":{\"type\":\"bar\",\"cornerRadius\":2},\"encoding\":{\"x\":{\"field\":\"grade\",\"type\":\"nominal\",\"axis\":{\"title\":\"Final Grade\"},\"sort\":{\"field\":\"count\",\"order\":\"descending\"}},\"y\":{\"field\":\"count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of Records\"}},\"color\":{\"field\":\"percent\",\"type\":\"quantitative\",\"legend\":{\"title\":\"Percent (%)\"},\"scale\":{\"scheme\":\"blues\"}},\"tooltip\":[{\"field\":\"grade\",\"type\":\"nominal\",\"title\":\"Grade\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"percent\",\"type\":\"quantitative\",\"title\":\"Percent (%)\"}]}},\"reasoning\":\"Used a bar chart to show counts of each final grade, sorted by count descending. Color encodes the percent share and tooltip provides exact count and percent values.\"},\"endedAt\":1771803297973},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Distribution of Final Grades Across All Courses\",\"mark\":{\"type\":\"bar\",\"cornerRadius\":2},\"encoding\":{\"x\":{\"field\":\"grade\",\"type\":\"nominal\",\"axis\":{\"title\":\"Final Grade\"},\"sort\":{\"field\":\"count\",\"order\":\"descending\"}},\"y\":{\"field\":\"count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of Records\"}},\"color\":{\"field\":\"percent\",\"type\":\"quantitative\",\"legend\":{\"title\":\"Percent (%)\"},\"scale\":{\"scheme\":\"blues\"}},\"tooltip\":[{\"field\":\"grade\",\"type\":\"nominal\",\"title\":\"Grade\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"percent\",\"type\":\"quantitative\",\"title\":\"Percent (%)\"}]}},\"reasoning\":\"Used a bar chart to show counts of each final grade, sorted by count descending. Color encodes the percent share and tooltip provides exact count and percent values.\"},\"startedAt\":1771803297980,\"status\":\"success\",\"output\":{\"sql\":\"WITH total AS (\\n  SELECT COUNT(*)::bigint AS total_count\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  WHERE g.grade_value IS NOT NULL\\n)\\nSELECT\\n  g.grade_value::text AS grade,\\n  COUNT(*)::bigint AS count,\\n  ROUND(100.0 * COUNT(*) / t.total_count, 2) AS percent\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN total t ON true\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY g.grade_value::text, t.total_count\\nORDER BY COUNT(*) DESC, g.grade_value::text ASC;\",\"data\":[{\"count\":13,\"grade\":\"4.5\",\"percent\":25},{\"count\":9,\"grade\":\"2.0\",\"percent\":17.31},{\"count\":9,\"grade\":\"3.5\",\"percent\":17.31},{\"count\":8,\"grade\":\"5.0\",\"percent\":15.38},{\"count\":7,\"grade\":\"3.0\",\"percent\":13.46},{\"count\":6,\"grade\":\"4.0\",\"percent\":11.54}],\"metadata\":{\"columns\":[\"count\",\"grade\",\"percent\"],\"rowCount\":6,\"sample\":[{\"count\":13,\"grade\":\"4.5\",\"percent\":25},{\"count\":9,\"grade\":\"2.0\",\"percent\":17.31}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Distribution of Final Grades Across All Courses\",\"mark\":{\"type\":\"bar\",\"cornerRadius\":2},\"encoding\":{\"x\":{\"field\":\"grade\",\"type\":\"nominal\",\"axis\":{\"title\":\"Final Grade\"},\"sort\":{\"field\":\"count\",\"order\":\"descending\"}},\"y\":{\"field\":\"count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of Records\"}},\"color\":{\"field\":\"percent\",\"type\":\"quantitative\",\"legend\":{\"title\":\"Percent (%)\"},\"scale\":{\"scheme\":\"blues\"}},\"tooltip\":[{\"field\":\"grade\",\"type\":\"nominal\",\"title\":\"Grade\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"percent\",\"type\":\"quantitative\",\"title\":\"Percent (%)\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771803297987}},\"input\":{\"question\":\"Show the distribution of final grades across all courses\"},\"result\":{\"sql\":\"WITH total AS (\\n  SELECT COUNT(*)::bigint AS total_count\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  WHERE g.grade_value IS NOT NULL\\n)\\nSELECT\\n  g.grade_value::text AS grade,\\n  COUNT(*)::bigint AS count,\\n  ROUND(100.0 * COUNT(*) / t.total_count, 2) AS percent\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN total t ON true\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY g.grade_value::text, t.total_count\\nORDER BY COUNT(*) DESC, g.grade_value::text ASC;\",\"data\":[{\"count\":13,\"grade\":\"4.5\",\"percent\":25},{\"count\":9,\"grade\":\"2.0\",\"percent\":17.31},{\"count\":9,\"grade\":\"3.5\",\"percent\":17.31},{\"count\":8,\"grade\":\"5.0\",\"percent\":15.38},{\"count\":7,\"grade\":\"3.0\",\"percent\":13.46},{\"count\":6,\"grade\":\"4.0\",\"percent\":11.54}],\"metadata\":{\"columns\":[\"count\",\"grade\",\"percent\"],\"rowCount\":6,\"sample\":[{\"count\":13,\"grade\":\"4.5\",\"percent\":25},{\"count\":9,\"grade\":\"2.0\",\"percent\":17.31}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Distribution of Final Grades Across All Courses\",\"mark\":{\"type\":\"bar\",\"cornerRadius\":2},\"encoding\":{\"x\":{\"field\":\"grade\",\"type\":\"nominal\",\"axis\":{\"title\":\"Final Grade\"},\"sort\":{\"field\":\"count\",\"order\":\"descending\"}},\"y\":{\"field\":\"count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of Records\"}},\"color\":{\"field\":\"percent\",\"type\":\"quantitative\",\"legend\":{\"title\":\"Percent (%)\"},\"scale\":{\"scheme\":\"blues\"}},\"tooltip\":[{\"field\":\"grade\",\"type\":\"nominal\",\"title\":\"Grade\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"percent\",\"type\":\"quantitative\",\"title\":\"Percent (%)\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"2d26bfb56fc4ab752c51fff45174b7ec\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/grade-distribution/run-0001/run.json",
+    "queryPath": "runs/grade-distribution/run-0001/query.sql",
+    "vegaRawPath": "runs/grade-distribution/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/grade-distribution/run-0001/vega.resolved.json",
+    "imagePath": "runs/grade-distribution/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:34:58.440Z",
+  "traceId": "2d26bfb56fc4ab752c51fff45174b7ec",
+  "success": true,
+  "durationMs": 40822,
+  "resultRaw": {
+    "data": [
+      {
+        "count": 13,
+        "grade": "4.5",
+        "percent": 25
+      },
+      {
+        "count": 9,
+        "grade": "2.0",
+        "percent": 17.31
+      },
+      {
+        "count": 9,
+        "grade": "3.5",
+        "percent": 17.31
+      },
+      {
+        "count": 8,
+        "grade": "5.0",
+        "percent": 15.38
+      },
+      {
+        "count": 7,
+        "grade": "3.0",
+        "percent": 13.46
+      },
+      {
+        "count": 6,
+        "grade": "4.0",
+        "percent": 11.54
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Distribution of Final Grades Across All Courses",
+      "mark": {
+        "type": "bar",
+        "cornerRadius": 2
+      },
+      "encoding": {
+        "x": {
+          "field": "grade",
+          "type": "nominal",
+          "axis": {
+            "title": "Final Grade"
+          },
+          "sort": {
+            "field": "count",
+            "order": "descending"
+          }
+        },
+        "y": {
+          "field": "count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Number of Records"
+          }
+        },
+        "color": {
+          "field": "percent",
+          "type": "quantitative",
+          "legend": {
+            "title": "Percent (%)"
+          },
+          "scale": {
+            "scheme": "blues"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "grade",
+            "type": "nominal",
+            "title": "Grade"
+          },
+          {
+            "field": "count",
+            "type": "quantitative",
+            "title": "Count"
+          },
+          {
+            "field": "percent",
+            "type": "quantitative",
+            "title": "Percent (%)"
+          }
+        ]
+      }
+    },
+    "sql": "WITH total AS (\n  SELECT COUNT(*)::bigint AS total_count\n  FROM public.grades g\n  JOIN public.enrollments e ON g.enrollment_id = e.id\n  WHERE g.grade_value IS NOT NULL\n)\nSELECT\n  g.grade_value::text AS grade,\n  COUNT(*)::bigint AS count,\n  ROUND(100.0 * COUNT(*) / t.total_count, 2) AS percent\nFROM public.grades g\nJOIN public.enrollments e ON g.enrollment_id = e.id\nJOIN total t ON true\nWHERE g.grade_value IS NOT NULL\nGROUP BY g.grade_value::text, t.total_count\nORDER BY COUNT(*) DESC, g.grade_value::text ASC;",
+    "metadata": {
+      "columns": [
+        "count",
+        "grade",
+        "percent"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "count": 13,
+          "grade": "4.5",
+          "percent": 25
+        },
+        {
+          "count": 9,
+          "grade": "2.0",
+          "percent": 17.31
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "count": 13,
+        "grade": "4.5",
+        "percent": 25
+      },
+      {
+        "count": 9,
+        "grade": "2.0",
+        "percent": 17.31
+      },
+      {
+        "count": 9,
+        "grade": "3.5",
+        "percent": 17.31
+      },
+      {
+        "count": 8,
+        "grade": "5.0",
+        "percent": 15.38
+      },
+      {
+        "count": 7,
+        "grade": "3.0",
+        "percent": 13.46
+      },
+      {
+        "count": 6,
+        "grade": "4.0",
+        "percent": 11.54
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Distribution of Final Grades Across All Courses",
+      "mark": {
+        "type": "bar",
+        "cornerRadius": 2
+      },
+      "encoding": {
+        "x": {
+          "field": "grade",
+          "type": "nominal",
+          "axis": {
+            "title": "Final Grade"
+          },
+          "sort": {
+            "field": "count",
+            "order": "descending"
+          }
+        },
+        "y": {
+          "field": "count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Number of Records"
+          }
+        },
+        "color": {
+          "field": "percent",
+          "type": "quantitative",
+          "legend": {
+            "title": "Percent (%)"
+          },
+          "scale": {
+            "scheme": "blues"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "grade",
+            "type": "nominal",
+            "title": "Grade"
+          },
+          {
+            "field": "count",
+            "type": "quantitative",
+            "title": "Count"
+          },
+          {
+            "field": "percent",
+            "type": "quantitative",
+            "title": "Percent (%)"
+          }
+        ]
+      }
+    },
+    "sql": "WITH total AS (\n  SELECT COUNT(*)::bigint AS total_count\n  FROM public.grades g\n  JOIN public.enrollments e ON g.enrollment_id = e.id\n  WHERE g.grade_value IS NOT NULL\n)\nSELECT\n  g.grade_value::text AS grade,\n  COUNT(*)::bigint AS count,\n  ROUND(100.0 * COUNT(*) / t.total_count, 2) AS percent\nFROM public.grades g\nJOIN public.enrollments e ON g.enrollment_id = e.id\nJOIN total t ON true\nWHERE g.grade_value IS NOT NULL\nGROUP BY g.grade_value::text, t.total_count\nORDER BY COUNT(*) DESC, g.grade_value::text ASC;",
+    "metadata": {
+      "columns": [
+        "count",
+        "grade",
+        "percent"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "count": 13,
+          "grade": "4.5",
+          "percent": 25
+        },
+        {
+          "count": 9,
+          "grade": "2.0",
+          "percent": 17.31
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:34:58.440Z",
+    "traceId": "2d26bfb56fc4ab752c51fff45174b7ec",
+    "attempts": 2,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 8420,
+      "outputTokens": 3042,
+      "totalTokens": 11462,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2112,
+      "costUsd": 0.008189
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 8420,
+        "outputTokens": 3042,
+        "totalTokens": 11462,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2112,
+        "costUsd": 0.008189
+      }
+    ],
+    "warnings": []
+  }
+}

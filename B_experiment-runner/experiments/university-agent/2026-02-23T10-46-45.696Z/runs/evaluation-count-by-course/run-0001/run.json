@@ -1,0 +1,162 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "evaluation-count-by-course",
+  "caseDirectory": "evaluation-count-by-course",
+  "repeatIndex": 1,
+  "prompt": "How many evaluations were submitted for each course?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many evaluations were submitted for each course?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:51:03.324Z",
+    "endedAtUtc": "2026-02-23T10:51:18.136Z",
+    "durationMs": 14812
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "1874",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:51:18 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"How many evaluations were submitted for each course?\"},\"agent\":{\"payload\":{\"question\":\"How many evaluations were submitted for each course?\"},\"startedAt\":1771843863335,\"status\":\"success\",\"output\":{\"sql\":\"SELECT c.id AS course_id, c.name AS course_name, COUNT(e.id) AS evaluation_count\\nFROM courses c\\nLEFT JOIN evaluations e ON e.course_id = c.id\\nGROUP BY c.id, c.name\\nORDER BY evaluation_count DESC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Number of evaluations submitted per course\",\"title\":\"Evaluations Submitted per Course\",\"data\":{\"name\":\"query_result\"},\"width\":800,\"height\":400,\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course\",\"axis\":{\"labelAngle\":-40},\"sort\":\"-y\"},\"y\":{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Number of Evaluations\"},\"tooltip\":[{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course\"},{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Evaluations\"}]}}},\"endedAt\":1771843878091},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT c.id AS course_id, c.name AS course_name, COUNT(e.id) AS evaluation_count\\nFROM courses c\\nLEFT JOIN evaluations e ON e.course_id = c.id\\nGROUP BY c.id, c.name\\nORDER BY evaluation_count DESC;\"},\"startedAt\":1771843878093,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: relation \\\"evaluations\\\" does not exist\\nLINE 4: LEFT JOIN evaluations e ON e.course_id = c.id\\n                  ^\",\"name\":\"Error\"},\"endedAt\":1771843878132}},\"input\":{\"question\":\"How many evaluations were submitted for each course?\"},\"error\":{\"message\":\"SQL execution failed: relation \\\"evaluations\\\" does not exist\\nLINE 4: LEFT JOIN evaluations e ON e.course_id = c.id\\n                  ^\",\"name\":\"Error\"},\"traceId\":\"284cb32b5d2d3f085f6186b287cf16ec\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/evaluation-count-by-course/run-0001/run.json",
+    "queryPath": "runs/evaluation-count-by-course/run-0001/query.sql",
+    "vegaRawPath": "runs/evaluation-count-by-course/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/evaluation-count-by-course/run-0001/vega.resolved.json",
+    "imagePath": "runs/evaluation-count-by-course/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:51:18.136Z",
+  "traceId": "284cb32b5d2d3f085f6186b287cf16ec",
+  "success": false,
+  "durationMs": 14812,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "How many evaluations were submitted for each course?"
+      },
+      "agent": {
+        "payload": {
+          "question": "How many evaluations were submitted for each course?"
+        },
+        "startedAt": 1771843863335,
+        "status": "success",
+        "output": {
+          "sql": "SELECT c.id AS course_id, c.name AS course_name, COUNT(e.id) AS evaluation_count\nFROM courses c\nLEFT JOIN evaluations e ON e.course_id = c.id\nGROUP BY c.id, c.name\nORDER BY evaluation_count DESC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Number of evaluations submitted per course",
+            "title": "Evaluations Submitted per Course",
+            "data": {
+              "name": "query_result"
+            },
+            "width": 800,
+            "height": 400,
+            "mark": {
+              "type": "bar",
+              "cornerRadius": 3
+            },
+            "encoding": {
+              "x": {
+                "field": "course_name",
+                "type": "nominal",
+                "title": "Course",
+                "axis": {
+                  "labelAngle": -40
+                },
+                "sort": "-y"
+              },
+              "y": {
+                "field": "evaluation_count",
+                "type": "quantitative",
+                "title": "Number of Evaluations"
+              },
+              "tooltip": [
+                {
+                  "field": "course_name",
+                  "type": "nominal",
+                  "title": "Course"
+                },
+                {
+                  "field": "evaluation_count",
+                  "type": "quantitative",
+                  "title": "Evaluations"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843878091
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT c.id AS course_id, c.name AS course_name, COUNT(e.id) AS evaluation_count\nFROM courses c\nLEFT JOIN evaluations e ON e.course_id = c.id\nGROUP BY c.id, c.name\nORDER BY evaluation_count DESC;"
+        },
+        "startedAt": 1771843878093,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: relation \"evaluations\" does not exist\nLINE 4: LEFT JOIN evaluations e ON e.course_id = c.id\n                  ^",
+          "name": "Error"
+        },
+        "endedAt": 1771843878132
+      }
+    },
+    "input": {
+      "question": "How many evaluations were submitted for each course?"
+    },
+    "error": {
+      "message": "SQL execution failed: relation \"evaluations\" does not exist\nLINE 4: LEFT JOIN evaluations e ON e.course_id = c.id\n                  ^",
+      "name": "Error"
+    },
+    "traceId": "284cb32b5d2d3f085f6186b287cf16ec"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:51:18.136Z",
+    "traceId": "284cb32b5d2d3f085f6186b287cf16ec",
+    "attempts": 4,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 265,
+      "outputTokens": 1050,
+      "totalTokens": 1315,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 704,
+      "costUsd": 0.00216625
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 265,
+        "outputTokens": 1050,
+        "totalTokens": 1315,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 704,
+        "costUsd": 0.00216625
+      }
+    ],
+    "warnings": []
+  }
+}

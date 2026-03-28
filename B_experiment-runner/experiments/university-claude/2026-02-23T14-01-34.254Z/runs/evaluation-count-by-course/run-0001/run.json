@@ -1,0 +1,390 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "evaluation-count-by-course",
+  "caseDirectory": "evaluation-count-by-course",
+  "repeatIndex": 1,
+  "prompt": "How many evaluations were submitted for each course?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many evaluations were submitted for each course?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:08:49.189Z",
+    "endedAtUtc": "2026-02-23T14:09:36.224Z",
+    "durationMs": 47035
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "13661",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:09:36 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How many evaluations were submitted for each course?\"},\"sql\":{\"payload\":{\"question\":\"How many evaluations were submitted for each course?\"},\"startedAt\":1771855729196,\"status\":\"success\",\"output\":{\"reasoning\":\"The question asks for the count of evaluations submitted for each course. I need to join course_evaluations → enrollments → course_sections → courses to group by course and count evaluations. The path is: course_evaluations.enrollment_id → enrollments.id, enrollments.course_section_id → course_sections.id, course_sections.course_id → courses.id. I'll count distinct evaluation IDs per course and order by course code for deterministic output.\",\"sql\":\"\\nSELECT \\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(ce.id) AS evaluation_count\\nFROM courses c\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY c.id, c.code, c.name\\nORDER BY c.code\\n\",\"assumptions\":[\"Evaluations are linked to courses through the enrollment → course_section → course chain\",\"Each course_evaluation record represents one submitted evaluation\",\"We count all evaluations regardless of submission date or rating values\"]},\"endedAt\":1771855772354},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(ce.id) AS evaluation_count\\nFROM courses c\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY c.id, c.code, c.name\\nORDER BY c.code\\n\"},\"startedAt\":1771855772359,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(ce.id) AS evaluation_count\\nFROM courses c\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY c.id, c.code, c.name\\nORDER BY c.code\",\"metadata\":{\"columns\":[\"course_code\",\"course_name\",\"evaluation_count\"],\"rowCount\":16,\"sample\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"evaluation_count\":\"2\"},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"evaluation_count\":\"4\"}]},\"data\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"evaluation_count\":\"2\"},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"evaluation_count\":\"4\"},{\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"evaluation_count\":\"1\"},{\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"evaluation_count\":\"4\"},{\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"evaluation_count\":\"3\"},{\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"evaluation_count\":\"1\"},{\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"evaluation_count\":\"2\"},{\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"evaluation_count\":\"1\"},{\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"evaluation_count\":\"2\"},{\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"evaluation_count\":\"1\"},{\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"evaluation_count\":\"4\"},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"evaluation_count\":\"4\"},{\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"evaluation_count\":\"3\"},{\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"evaluation_count\":\"5\"},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"evaluation_count\":\"2\"},{\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"evaluation_count\":\"2\"}]},\"endedAt\":1771855772377},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(ce.id) AS evaluation_count\\nFROM courses c\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY c.id, c.code, c.name\\nORDER BY c.code\",\"metadata\":{\"columns\":[\"course_code\",\"course_name\",\"evaluation_count\"],\"rowCount\":16,\"sample\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"evaluation_count\":\"2\"},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"evaluation_count\":\"4\"}]},\"data\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"evaluation_count\":\"2\"},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"evaluation_count\":\"4\"},{\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"evaluation_count\":\"1\"},{\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"evaluation_count\":\"4\"},{\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"evaluation_count\":\"3\"},{\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"evaluation_count\":\"1\"},{\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"evaluation_count\":\"2\"},{\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"evaluation_count\":\"1\"},{\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"evaluation_count\":\"2\"},{\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"evaluation_count\":\"1\"},{\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"evaluation_count\":\"4\"},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"evaluation_count\":\"4\"},{\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"evaluation_count\":\"3\"},{\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"evaluation_count\":\"5\"},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"evaluation_count\":\"2\"},{\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"evaluation_count\":\"2\"}]},\"startedAt\":1771855772381,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Evaluations Submitted per Course\",\"description\":\"Bar chart showing the number of course evaluations submitted for each course\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\",\"sort\":\"-y\"},\"y\":{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Number of Evaluations\"},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Evaluations Submitted\"}]},\"width\":900,\"height\":400},\"reasoning\":\"A bar chart is ideal for comparing evaluation counts across courses. The x-axis displays course codes sorted by evaluation count (descending) for easy identification of high and low performers. The tooltip includes the full course name for context. With 16 courses, the wider canvas (900px) ensures readability of all course codes.\"},\"endedAt\":1771855776185},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Evaluations Submitted per Course\",\"description\":\"Bar chart showing the number of course evaluations submitted for each course\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\",\"sort\":\"-y\"},\"y\":{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Number of Evaluations\"},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Evaluations Submitted\"}]},\"width\":900,\"height\":400},\"reasoning\":\"A bar chart is ideal for comparing evaluation counts across courses. The x-axis displays course codes sorted by evaluation count (descending) for easy identification of high and low performers. The tooltip includes the full course name for context. With 16 courses, the wider canvas (900px) ensures readability of all course codes.\"},\"startedAt\":1771855776195,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT \\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(ce.id) AS evaluation_count\\nFROM courses c\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY c.id, c.code, c.name\\nORDER BY c.code\\n\",\"data\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"evaluation_count\":\"2\"},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"evaluation_count\":\"4\"},{\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"evaluation_count\":\"1\"},{\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"evaluation_count\":\"4\"},{\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"evaluation_count\":\"3\"},{\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"evaluation_count\":\"1\"},{\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"evaluation_count\":\"2\"},{\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"evaluation_count\":\"1\"},{\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"evaluation_count\":\"2\"},{\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"evaluation_count\":\"1\"},{\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"evaluation_count\":\"4\"},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"evaluation_count\":\"4\"},{\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"evaluation_count\":\"3\"},{\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"evaluation_count\":\"5\"},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"evaluation_count\":\"2\"},{\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"evaluation_count\":\"2\"}],\"metadata\":{\"columns\":[\"course_code\",\"course_name\",\"evaluation_count\"],\"rowCount\":16,\"sample\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"evaluation_count\":\"2\"},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"evaluation_count\":\"4\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Evaluations Submitted per Course\",\"description\":\"Bar chart showing the number of course evaluations submitted for each course\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\",\"sort\":\"-y\"},\"y\":{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Number of Evaluations\"},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Evaluations Submitted\"}]},\"width\":900,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855776200}},\"input\":{\"question\":\"How many evaluations were submitted for each course?\"},\"result\":{\"sql\":\"\\nSELECT \\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(ce.id) AS evaluation_count\\nFROM courses c\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY c.id, c.code, c.name\\nORDER BY c.code\\n\",\"data\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"evaluation_count\":\"2\"},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"evaluation_count\":\"4\"},{\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"evaluation_count\":\"1\"},{\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"evaluation_count\":\"4\"},{\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"evaluation_count\":\"3\"},{\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"evaluation_count\":\"1\"},{\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"evaluation_count\":\"2\"},{\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"evaluation_count\":\"1\"},{\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"evaluation_count\":\"2\"},{\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"evaluation_count\":\"1\"},{\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"evaluation_count\":\"4\"},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"evaluation_count\":\"4\"},{\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"evaluation_count\":\"3\"},{\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"evaluation_count\":\"5\"},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"evaluation_count\":\"2\"},{\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"evaluation_count\":\"2\"}],\"metadata\":{\"columns\":[\"course_code\",\"course_name\",\"evaluation_count\"],\"rowCount\":16,\"sample\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"evaluation_count\":\"2\"},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"evaluation_count\":\"4\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Evaluations Submitted per Course\",\"description\":\"Bar chart showing the number of course evaluations submitted for each course\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\",\"sort\":\"-y\"},\"y\":{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Number of Evaluations\"},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Evaluations Submitted\"}]},\"width\":900,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"4f542fdf1fefc4ff9d3326987eb5fd18\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/evaluation-count-by-course/run-0001/run.json",
+    "queryPath": "runs/evaluation-count-by-course/run-0001/query.sql",
+    "vegaRawPath": "runs/evaluation-count-by-course/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/evaluation-count-by-course/run-0001/vega.resolved.json",
+    "imagePath": "runs/evaluation-count-by-course/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:09:36.722Z",
+  "traceId": "4f542fdf1fefc4ff9d3326987eb5fd18",
+  "success": true,
+  "durationMs": 47533,
+  "resultRaw": {
+    "data": [
+      {
+        "course_code": "AAX-989",
+        "course_name": "Elektronika",
+        "evaluation_count": "2"
+      },
+      {
+        "course_code": "AFI-682",
+        "course_name": "Matematyka Dyskretna",
+        "evaluation_count": "4"
+      },
+      {
+        "course_code": "BEW-951",
+        "course_name": "Fizyka",
+        "evaluation_count": "1"
+      },
+      {
+        "course_code": "FCL-532",
+        "course_name": "Uczenie Maszynowe",
+        "evaluation_count": "4"
+      },
+      {
+        "course_code": "FEO-908",
+        "course_name": "Analiza Matematyczna",
+        "evaluation_count": "3"
+      },
+      {
+        "course_code": "HPF-845",
+        "course_name": "Systemy Wbudowane",
+        "evaluation_count": "1"
+      },
+      {
+        "course_code": "PSC-614",
+        "course_name": "Architektura Komputerów",
+        "evaluation_count": "2"
+      },
+      {
+        "course_code": "RZR-301",
+        "course_name": "Sieci Komputerowe",
+        "evaluation_count": "1"
+      },
+      {
+        "course_code": "TAU-627",
+        "course_name": "Analiza Matematyczna",
+        "evaluation_count": "2"
+      },
+      {
+        "course_code": "TJJ-354",
+        "course_name": "Projektowanie Aplikacji Webowych",
+        "evaluation_count": "1"
+      },
+      {
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "evaluation_count": "4"
+      },
+      {
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "evaluation_count": "4"
+      },
+      {
+        "course_code": "WZC-570",
+        "course_name": "Programowanie Obiektowe",
+        "evaluation_count": "3"
+      },
+      {
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "evaluation_count": "5"
+      },
+      {
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "evaluation_count": "2"
+      },
+      {
+        "course_code": "ZUQ-127",
+        "course_name": "Fizyka",
+        "evaluation_count": "2"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Evaluations Submitted per Course",
+      "description": "Bar chart showing the number of course evaluations submitted for each course",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "course_code",
+          "type": "nominal",
+          "title": "Course Code",
+          "sort": "-y"
+        },
+        "y": {
+          "field": "evaluation_count",
+          "type": "quantitative",
+          "title": "Number of Evaluations"
+        },
+        "tooltip": [
+          {
+            "field": "course_code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "course_name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "evaluation_count",
+            "type": "quantitative",
+            "title": "Evaluations Submitted"
+          }
+        ]
+      },
+      "width": 900,
+      "height": 400
+    },
+    "sql": "\nSELECT \n  c.code AS course_code,\n  c.name AS course_name,\n  COUNT(ce.id) AS evaluation_count\nFROM courses c\nINNER JOIN course_sections cs ON c.id = cs.course_id\nINNER JOIN enrollments e ON cs.id = e.course_section_id\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\nGROUP BY c.id, c.code, c.name\nORDER BY c.code\n",
+    "metadata": {
+      "columns": [
+        "course_code",
+        "course_name",
+        "evaluation_count"
+      ],
+      "rowCount": 16,
+      "sample": [
+        {
+          "course_code": "AAX-989",
+          "course_name": "Elektronika",
+          "evaluation_count": "2"
+        },
+        {
+          "course_code": "AFI-682",
+          "course_name": "Matematyka Dyskretna",
+          "evaluation_count": "4"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "course_code": "AAX-989",
+        "course_name": "Elektronika",
+        "evaluation_count": "2"
+      },
+      {
+        "course_code": "AFI-682",
+        "course_name": "Matematyka Dyskretna",
+        "evaluation_count": "4"
+      },
+      {
+        "course_code": "BEW-951",
+        "course_name": "Fizyka",
+        "evaluation_count": "1"
+      },
+      {
+        "course_code": "FCL-532",
+        "course_name": "Uczenie Maszynowe",
+        "evaluation_count": "4"
+      },
+      {
+        "course_code": "FEO-908",
+        "course_name": "Analiza Matematyczna",
+        "evaluation_count": "3"
+      },
+      {
+        "course_code": "HPF-845",
+        "course_name": "Systemy Wbudowane",
+        "evaluation_count": "1"
+      },
+      {
+        "course_code": "PSC-614",
+        "course_name": "Architektura Komputerów",
+        "evaluation_count": "2"
+      },
+      {
+        "course_code": "RZR-301",
+        "course_name": "Sieci Komputerowe",
+        "evaluation_count": "1"
+      },
+      {
+        "course_code": "TAU-627",
+        "course_name": "Analiza Matematyczna",
+        "evaluation_count": "2"
+      },
+      {
+        "course_code": "TJJ-354",
+        "course_name": "Projektowanie Aplikacji Webowych",
+        "evaluation_count": "1"
+      },
+      {
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "evaluation_count": "4"
+      },
+      {
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "evaluation_count": "4"
+      },
+      {
+        "course_code": "WZC-570",
+        "course_name": "Programowanie Obiektowe",
+        "evaluation_count": "3"
+      },
+      {
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "evaluation_count": "5"
+      },
+      {
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "evaluation_count": "2"
+      },
+      {
+        "course_code": "ZUQ-127",
+        "course_name": "Fizyka",
+        "evaluation_count": "2"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Evaluations Submitted per Course",
+      "description": "Bar chart showing the number of course evaluations submitted for each course",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "course_code",
+          "type": "nominal",
+          "title": "Course Code",
+          "sort": "-y"
+        },
+        "y": {
+          "field": "evaluation_count",
+          "type": "quantitative",
+          "title": "Number of Evaluations"
+        },
+        "tooltip": [
+          {
+            "field": "course_code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "course_name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "evaluation_count",
+            "type": "quantitative",
+            "title": "Evaluations Submitted"
+          }
+        ]
+      },
+      "width": 900,
+      "height": 400
+    },
+    "sql": "\nSELECT \n  c.code AS course_code,\n  c.name AS course_name,\n  COUNT(ce.id) AS evaluation_count\nFROM courses c\nINNER JOIN course_sections cs ON c.id = cs.course_id\nINNER JOIN enrollments e ON cs.id = e.course_section_id\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\nGROUP BY c.id, c.code, c.name\nORDER BY c.code\n",
+    "metadata": {
+      "columns": [
+        "course_code",
+        "course_name",
+        "evaluation_count"
+      ],
+      "rowCount": 16,
+      "sample": [
+        {
+          "course_code": "AAX-989",
+          "course_name": "Elektronika",
+          "evaluation_count": "2"
+        },
+        {
+          "course_code": "AFI-682",
+          "course_name": "Matematyka Dyskretna",
+          "evaluation_count": "4"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.329Z",
+    "traceId": "4f542fdf1fefc4ff9d3326987eb5fd18",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 23386,
+      "outputTokens": 1027,
+      "totalTokens": 24413,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.028521
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 23386,
+        "outputTokens": 1027,
+        "totalTokens": 24413,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.028521
+      }
+    ],
+    "warnings": []
+  }
+}

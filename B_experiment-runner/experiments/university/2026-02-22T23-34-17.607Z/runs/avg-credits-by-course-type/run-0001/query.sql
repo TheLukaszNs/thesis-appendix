@@ -1,0 +1,1 @@
+SELECT course_type AS course_type, ROUND(AVG(credits)::numeric, 2) AS avg_credits FROM public.courses GROUP BY course_type ORDER BY course_type ASC;

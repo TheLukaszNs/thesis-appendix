@@ -1,0 +1,164 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "course-evaluation-over-time",
+  "caseDirectory": "course-evaluation-over-time",
+  "repeatIndex": 1,
+  "prompt": "How has the average overall evaluation rating changed per academic year?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How has the average overall evaluation rating changed per academic year?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:54:52.502Z",
+    "endedAtUtc": "2026-02-23T10:55:06.003Z",
+    "durationMs": 13501
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2063",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:55:06 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"How has the average overall evaluation rating changed per academic year?\"},\"agent\":{\"payload\":{\"question\":\"How has the average overall evaluation rating changed per academic year?\"},\"startedAt\":1771844092507,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  academic_year AS academic_year,\\n  AVG(overall_evaluation_rating) AS avg_overall_rating,\\n  COUNT(*) AS response_count\\nFROM evaluations\\nWHERE overall_evaluation_rating IS NOT NULL\\nGROUP BY academic_year\\nORDER BY academic_year ASC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Average overall evaluation rating by academic year\",\"title\":\"Average Overall Evaluation Rating — Per Academic Year\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":300,\"mark\":{\"type\":\"line\",\"point\":true,\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic Year\"},\"y\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Evaluation Rating\"},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic Year\"},{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Avg Rating\"},{\"field\":\"response_count\",\"type\":\"quantitative\",\"title\":\"Responses\"}]}}},\"endedAt\":1771844105959},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  academic_year AS academic_year,\\n  AVG(overall_evaluation_rating) AS avg_overall_rating,\\n  COUNT(*) AS response_count\\nFROM evaluations\\nWHERE overall_evaluation_rating IS NOT NULL\\nGROUP BY academic_year\\nORDER BY academic_year ASC;\"},\"startedAt\":1771844105965,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: relation \\\"evaluations\\\" does not exist\\nLINE 6: FROM evaluations\\n             ^\",\"name\":\"Error\"},\"endedAt\":1771844106000}},\"input\":{\"question\":\"How has the average overall evaluation rating changed per academic year?\"},\"error\":{\"message\":\"SQL execution failed: relation \\\"evaluations\\\" does not exist\\nLINE 6: FROM evaluations\\n             ^\",\"name\":\"Error\"},\"traceId\":\"fe96ddccf7152ed7bfe051e2e17f8ff6\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/course-evaluation-over-time/run-0001/run.json",
+    "queryPath": "runs/course-evaluation-over-time/run-0001/query.sql",
+    "vegaRawPath": "runs/course-evaluation-over-time/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/course-evaluation-over-time/run-0001/vega.resolved.json",
+    "imagePath": "runs/course-evaluation-over-time/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:55:06.004Z",
+  "traceId": "fe96ddccf7152ed7bfe051e2e17f8ff6",
+  "success": false,
+  "durationMs": 13502,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "How has the average overall evaluation rating changed per academic year?"
+      },
+      "agent": {
+        "payload": {
+          "question": "How has the average overall evaluation rating changed per academic year?"
+        },
+        "startedAt": 1771844092507,
+        "status": "success",
+        "output": {
+          "sql": "SELECT\n  academic_year AS academic_year,\n  AVG(overall_evaluation_rating) AS avg_overall_rating,\n  COUNT(*) AS response_count\nFROM evaluations\nWHERE overall_evaluation_rating IS NOT NULL\nGROUP BY academic_year\nORDER BY academic_year ASC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Average overall evaluation rating by academic year",
+            "title": "Average Overall Evaluation Rating — Per Academic Year",
+            "data": {
+              "name": "query_result"
+            },
+            "width": 700,
+            "height": 300,
+            "mark": {
+              "type": "line",
+              "point": true,
+              "tooltip": true
+            },
+            "encoding": {
+              "x": {
+                "field": "academic_year",
+                "type": "ordinal",
+                "title": "Academic Year"
+              },
+              "y": {
+                "field": "avg_overall_rating",
+                "type": "quantitative",
+                "title": "Average Overall Evaluation Rating"
+              },
+              "tooltip": [
+                {
+                  "field": "academic_year",
+                  "type": "ordinal",
+                  "title": "Academic Year"
+                },
+                {
+                  "field": "avg_overall_rating",
+                  "type": "quantitative",
+                  "title": "Avg Rating"
+                },
+                {
+                  "field": "response_count",
+                  "type": "quantitative",
+                  "title": "Responses"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771844105959
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT\n  academic_year AS academic_year,\n  AVG(overall_evaluation_rating) AS avg_overall_rating,\n  COUNT(*) AS response_count\nFROM evaluations\nWHERE overall_evaluation_rating IS NOT NULL\nGROUP BY academic_year\nORDER BY academic_year ASC;"
+        },
+        "startedAt": 1771844105965,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: relation \"evaluations\" does not exist\nLINE 6: FROM evaluations\n             ^",
+          "name": "Error"
+        },
+        "endedAt": 1771844106000
+      }
+    },
+    "input": {
+      "question": "How has the average overall evaluation rating changed per academic year?"
+    },
+    "error": {
+      "message": "SQL execution failed: relation \"evaluations\" does not exist\nLINE 6: FROM evaluations\n             ^",
+      "name": "Error"
+    },
+    "traceId": "fe96ddccf7152ed7bfe051e2e17f8ff6"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:55:06.004Z",
+    "traceId": "fe96ddccf7152ed7bfe051e2e17f8ff6",
+    "attempts": 3,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 268,
+      "outputTokens": 1135,
+      "totalTokens": 1403,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 768,
+      "costUsd": 0.002337
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 268,
+        "outputTokens": 1135,
+        "totalTokens": 1403,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 768,
+        "costUsd": 0.002337
+      }
+    ],
+    "warnings": []
+  }
+}

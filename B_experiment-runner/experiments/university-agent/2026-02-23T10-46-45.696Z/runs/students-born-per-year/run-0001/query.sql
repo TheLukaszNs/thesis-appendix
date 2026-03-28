@@ -1,0 +1,1 @@
+SELECT EXTRACT(YEAR FROM date_of_birth) AS birth_year, COUNT(*) AS student_count FROM students GROUP BY birth_year ORDER BY birth_year ASC;

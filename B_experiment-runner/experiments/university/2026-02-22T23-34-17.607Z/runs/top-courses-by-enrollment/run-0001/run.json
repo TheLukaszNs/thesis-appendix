@@ -1,0 +1,488 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "top-courses-by-enrollment",
+  "caseDirectory": "top-courses-by-enrollment",
+  "repeatIndex": 1,
+  "prompt": "Which are the 15 most popular courses by total enrollment?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which are the 15 most popular courses by total enrollment?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:48:17.666Z",
+    "endedAtUtc": "2026-02-22T23:49:18.988Z",
+    "durationMs": 61322
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "18740",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:49:18 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Which are the 15 most popular courses by total enrollment?\"},\"sql\":{\"payload\":{\"question\":\"Which are the 15 most popular courses by total enrollment?\"},\"startedAt\":1771804097679,\"status\":\"success\",\"output\":{\"reasoning\":\"Count active enrollments per course (distinct students) by joining courses -> course_sections -> enrollments, then return the top 15 by total_enrollments with deterministic tie-breaker ordering.\",\"sql\":\"WITH course_enroll_counts AS (\\n  SELECT\\n    c.id AS course_id,\\n    c.code AS course_code,\\n    c.name AS course_name,\\n    COUNT(DISTINCT e.student_id) AS total_enrollments\\n  FROM public.courses AS c\\n  JOIN public.course_sections AS cs ON cs.course_id = c.id\\n  JOIN public.enrollments AS e ON e.course_section_id = cs.id\\n  WHERE e.is_active = true\\n  GROUP BY c.id, c.code, c.name\\n)\\nSELECT\\n  course_id,\\n  course_code,\\n  course_name,\\n  total_enrollments\\nFROM course_enroll_counts\\nORDER BY total_enrollments DESC, course_code ASC\\nLIMIT 15;\",\"assumptions\":[\"Total enrollment counts active enrollments only (enrollments.is_active = true).\",\"Popularity is measured as distinct students per course (COUNT(DISTINCT student_id)).\",\"Tie-breaker ordering uses course_code ascending for deterministic results.\"]},\"endedAt\":1771804131651},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH course_enroll_counts AS (\\n  SELECT\\n    c.id AS course_id,\\n    c.code AS course_code,\\n    c.name AS course_name,\\n    COUNT(DISTINCT e.student_id) AS total_enrollments\\n  FROM public.courses AS c\\n  JOIN public.course_sections AS cs ON cs.course_id = c.id\\n  JOIN public.enrollments AS e ON e.course_section_id = cs.id\\n  WHERE e.is_active = true\\n  GROUP BY c.id, c.code, c.name\\n)\\nSELECT\\n  course_id,\\n  course_code,\\n  course_name,\\n  total_enrollments\\nFROM course_enroll_counts\\nORDER BY total_enrollments DESC, course_code ASC\\nLIMIT 15;\"},\"startedAt\":1771804131656,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH course_enroll_counts AS (\\n  SELECT\\n    c.id AS course_id,\\n    c.code AS course_code,\\n    c.name AS course_name,\\n    COUNT(DISTINCT e.student_id) AS total_enrollments\\n  FROM public.courses AS c\\n  JOIN public.course_sections AS cs ON cs.course_id = c.id\\n  JOIN public.enrollments AS e ON e.course_section_id = cs.id\\n  WHERE e.is_active = true\\n  GROUP BY c.id, c.code, c.name\\n)\\nSELECT\\n  course_id,\\n  course_code,\\n  course_name,\\n  total_enrollments\\nFROM course_enroll_counts\\nORDER BY total_enrollments DESC, course_code ASC\\nLIMIT 15\",\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"total_enrollments\"],\"rowCount\":15,\"sample\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"total_enrollments\":7},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"total_enrollments\":5}]},\"data\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"total_enrollments\":7},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"total_enrollments\":5},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"total_enrollments\":5},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"total_enrollments\":4},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"total_enrollments\":4},{\"course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"total_enrollments\":4},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"total_enrollments\":4},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"total_enrollments\":3},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"total_enrollments\":3},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"total_enrollments\":3},{\"course_id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"total_enrollments\":2},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"total_enrollments\":2},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"total_enrollments\":2},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"total_enrollments\":2},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"total_enrollments\":2}]},\"endedAt\":1771804131714},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"WITH course_enroll_counts AS (\\n  SELECT\\n    c.id AS course_id,\\n    c.code AS course_code,\\n    c.name AS course_name,\\n    COUNT(DISTINCT e.student_id) AS total_enrollments\\n  FROM public.courses AS c\\n  JOIN public.course_sections AS cs ON cs.course_id = c.id\\n  JOIN public.enrollments AS e ON e.course_section_id = cs.id\\n  WHERE e.is_active = true\\n  GROUP BY c.id, c.code, c.name\\n)\\nSELECT\\n  course_id,\\n  course_code,\\n  course_name,\\n  total_enrollments\\nFROM course_enroll_counts\\nORDER BY total_enrollments DESC, course_code ASC\\nLIMIT 15\",\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"total_enrollments\"],\"rowCount\":15,\"sample\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"total_enrollments\":7},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"total_enrollments\":5}]},\"data\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"total_enrollments\":7},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"total_enrollments\":5},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"total_enrollments\":5},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"total_enrollments\":4},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"total_enrollments\":4},{\"course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"total_enrollments\":4},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"total_enrollments\":4},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"total_enrollments\":3},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"total_enrollments\":3},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"total_enrollments\":3},{\"course_id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"total_enrollments\":2},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"total_enrollments\":2},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"total_enrollments\":2},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"total_enrollments\":2},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"total_enrollments\":2}]},\"startedAt\":1771804131725,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Top 15 Courses by Total Enrollments\",\"width\":700,\"height\":420,\"encoding\":{\"y\":{\"field\":\"course_name\",\"type\":\"nominal\",\"sort\":{\"encoding\":\"x\",\"order\":\"descending\"},\"axis\":{\"title\":\"Course\"}},\"x\":{\"field\":\"total_enrollments\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Total Enrollments\"}},\"color\":{\"field\":\"course_code\",\"type\":\"nominal\",\"legend\":null},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"total_enrollments\",\"type\":\"quantitative\",\"title\":\"Total Enrollments\"},{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"}]},\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":4}},{\"mark\":{\"type\":\"text\",\"align\":\"left\",\"dx\":6},\"encoding\":{\"text\":{\"field\":\"total_enrollments\",\"type\":\"quantitative\"}}}]},\"reasoning\":\"Horizontal bar chart ranked by total_enrollments (descending). Course name on the y-axis, enrollments on the x-axis, with a small text label showing the enrollment count and tooltip including course code and id for context.\"},\"endedAt\":1771804158962},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Top 15 Courses by Total Enrollments\",\"width\":700,\"height\":420,\"encoding\":{\"y\":{\"field\":\"course_name\",\"type\":\"nominal\",\"sort\":{\"encoding\":\"x\",\"order\":\"descending\"},\"axis\":{\"title\":\"Course\"}},\"x\":{\"field\":\"total_enrollments\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Total Enrollments\"}},\"color\":{\"field\":\"course_code\",\"type\":\"nominal\",\"legend\":null},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"total_enrollments\",\"type\":\"quantitative\",\"title\":\"Total Enrollments\"},{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"}]},\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":4}},{\"mark\":{\"type\":\"text\",\"align\":\"left\",\"dx\":6},\"encoding\":{\"text\":{\"field\":\"total_enrollments\",\"type\":\"quantitative\"}}}]},\"reasoning\":\"Horizontal bar chart ranked by total_enrollments (descending). Course name on the y-axis, enrollments on the x-axis, with a small text label showing the enrollment count and tooltip including course code and id for context.\"},\"startedAt\":1771804158969,\"status\":\"success\",\"output\":{\"sql\":\"WITH course_enroll_counts AS (\\n  SELECT\\n    c.id AS course_id,\\n    c.code AS course_code,\\n    c.name AS course_name,\\n    COUNT(DISTINCT e.student_id) AS total_enrollments\\n  FROM public.courses AS c\\n  JOIN public.course_sections AS cs ON cs.course_id = c.id\\n  JOIN public.enrollments AS e ON e.course_section_id = cs.id\\n  WHERE e.is_active = true\\n  GROUP BY c.id, c.code, c.name\\n)\\nSELECT\\n  course_id,\\n  course_code,\\n  course_name,\\n  total_enrollments\\nFROM course_enroll_counts\\nORDER BY total_enrollments DESC, course_code ASC\\nLIMIT 15;\",\"data\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"total_enrollments\":7},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"total_enrollments\":5},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"total_enrollments\":5},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"total_enrollments\":4},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"total_enrollments\":4},{\"course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"total_enrollments\":4},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"total_enrollments\":4},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"total_enrollments\":3},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"total_enrollments\":3},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"total_enrollments\":3},{\"course_id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"total_enrollments\":2},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"total_enrollments\":2},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"total_enrollments\":2},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"total_enrollments\":2},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"total_enrollments\":2}],\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"total_enrollments\"],\"rowCount\":15,\"sample\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"total_enrollments\":7},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"total_enrollments\":5}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Top 15 Courses by Total Enrollments\",\"width\":700,\"height\":420,\"encoding\":{\"y\":{\"field\":\"course_name\",\"type\":\"nominal\",\"sort\":{\"encoding\":\"x\",\"order\":\"descending\"},\"axis\":{\"title\":\"Course\"}},\"x\":{\"field\":\"total_enrollments\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Total Enrollments\"}},\"color\":{\"field\":\"course_code\",\"type\":\"nominal\",\"legend\":null},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"total_enrollments\",\"type\":\"quantitative\",\"title\":\"Total Enrollments\"},{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"}]},\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":4}},{\"mark\":{\"type\":\"text\",\"align\":\"left\",\"dx\":6},\"encoding\":{\"text\":{\"field\":\"total_enrollments\",\"type\":\"quantitative\"}}}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771804158973}},\"input\":{\"question\":\"Which are the 15 most popular courses by total enrollment?\"},\"result\":{\"sql\":\"WITH course_enroll_counts AS (\\n  SELECT\\n    c.id AS course_id,\\n    c.code AS course_code,\\n    c.name AS course_name,\\n    COUNT(DISTINCT e.student_id) AS total_enrollments\\n  FROM public.courses AS c\\n  JOIN public.course_sections AS cs ON cs.course_id = c.id\\n  JOIN public.enrollments AS e ON e.course_section_id = cs.id\\n  WHERE e.is_active = true\\n  GROUP BY c.id, c.code, c.name\\n)\\nSELECT\\n  course_id,\\n  course_code,\\n  course_name,\\n  total_enrollments\\nFROM course_enroll_counts\\nORDER BY total_enrollments DESC, course_code ASC\\nLIMIT 15;\",\"data\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"total_enrollments\":7},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"total_enrollments\":5},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"total_enrollments\":5},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"total_enrollments\":4},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"total_enrollments\":4},{\"course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"total_enrollments\":4},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"total_enrollments\":4},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"total_enrollments\":3},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"total_enrollments\":3},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"total_enrollments\":3},{\"course_id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"total_enrollments\":2},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"total_enrollments\":2},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"total_enrollments\":2},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"total_enrollments\":2},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"total_enrollments\":2}],\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"total_enrollments\"],\"rowCount\":15,\"sample\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"total_enrollments\":7},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"total_enrollments\":5}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Top 15 Courses by Total Enrollments\",\"width\":700,\"height\":420,\"encoding\":{\"y\":{\"field\":\"course_name\",\"type\":\"nominal\",\"sort\":{\"encoding\":\"x\",\"order\":\"descending\"},\"axis\":{\"title\":\"Course\"}},\"x\":{\"field\":\"total_enrollments\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Total Enrollments\"}},\"color\":{\"field\":\"course_code\",\"type\":\"nominal\",\"legend\":null},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"total_enrollments\",\"type\":\"quantitative\",\"title\":\"Total Enrollments\"},{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"}]},\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":4}},{\"mark\":{\"type\":\"text\",\"align\":\"left\",\"dx\":6},\"encoding\":{\"text\":{\"field\":\"total_enrollments\",\"type\":\"quantitative\"}}}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"a0d4556d4f3937b36fd7c462a2a47ce8\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/top-courses-by-enrollment/run-0001/run.json",
+    "queryPath": "runs/top-courses-by-enrollment/run-0001/query.sql",
+    "vegaRawPath": "runs/top-courses-by-enrollment/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/top-courses-by-enrollment/run-0001/vega.resolved.json",
+    "imagePath": "runs/top-courses-by-enrollment/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:49:19.609Z",
+  "traceId": "a0d4556d4f3937b36fd7c462a2a47ce8",
+  "success": true,
+  "durationMs": 61943,
+  "resultRaw": {
+    "data": [
+      {
+        "course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+        "course_code": "TJJ-354",
+        "course_name": "Projektowanie Aplikacji Webowych",
+        "total_enrollments": 7
+      },
+      {
+        "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "total_enrollments": 5
+      },
+      {
+        "course_id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "total_enrollments": 5
+      },
+      {
+        "course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "course_code": "AFI-682",
+        "course_name": "Matematyka Dyskretna",
+        "total_enrollments": 4
+      },
+      {
+        "course_id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+        "course_code": "FEO-908",
+        "course_name": "Analiza Matematyczna",
+        "total_enrollments": 4
+      },
+      {
+        "course_id": "59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23",
+        "course_code": "MKO-885",
+        "course_name": "Rachunek Prawdopodobieństwa",
+        "total_enrollments": 4
+      },
+      {
+        "course_id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "total_enrollments": 4
+      },
+      {
+        "course_id": "0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca",
+        "course_code": "PSC-614",
+        "course_name": "Architektura Komputerów",
+        "total_enrollments": 3
+      },
+      {
+        "course_id": "0b97f1bf-8c86-431a-a583-563354b1e01f",
+        "course_code": "RZR-301",
+        "course_name": "Sieci Komputerowe",
+        "total_enrollments": 3
+      },
+      {
+        "course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "course_code": "TAU-627",
+        "course_name": "Analiza Matematyczna",
+        "total_enrollments": 3
+      },
+      {
+        "course_id": "3d59b771-6ed9-47a0-b46f-f90c188f7863",
+        "course_code": "ARH-232",
+        "course_name": "Cloud Computing",
+        "total_enrollments": 2
+      },
+      {
+        "course_id": "7dc872b8-c34e-4061-8f34-8b4c099b6325",
+        "course_code": "BSS-943",
+        "course_name": "Algebra Liniowa",
+        "total_enrollments": 2
+      },
+      {
+        "course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+        "course_code": "FCL-532",
+        "course_name": "Uczenie Maszynowe",
+        "total_enrollments": 2
+      },
+      {
+        "course_id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "total_enrollments": 2
+      },
+      {
+        "course_id": "c0e00b1c-84d6-4ccd-999d-7c9197625f2e",
+        "course_code": "ZUQ-127",
+        "course_name": "Fizyka",
+        "total_enrollments": 2
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Top 15 Courses by Total Enrollments",
+      "width": 700,
+      "height": 420,
+      "encoding": {
+        "y": {
+          "field": "course_name",
+          "type": "nominal",
+          "sort": {
+            "encoding": "x",
+            "order": "descending"
+          },
+          "axis": {
+            "title": "Course"
+          }
+        },
+        "x": {
+          "field": "total_enrollments",
+          "type": "quantitative",
+          "axis": {
+            "title": "Total Enrollments"
+          }
+        },
+        "color": {
+          "field": "course_code",
+          "type": "nominal",
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "course_code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "course_name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "total_enrollments",
+            "type": "quantitative",
+            "title": "Total Enrollments"
+          },
+          {
+            "field": "course_id",
+            "type": "nominal",
+            "title": "Course ID"
+          }
+        ]
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "bar",
+            "cornerRadius": 4
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dx": 6
+          },
+          "encoding": {
+            "text": {
+              "field": "total_enrollments",
+              "type": "quantitative"
+            }
+          }
+        }
+      ]
+    },
+    "sql": "WITH course_enroll_counts AS (\n  SELECT\n    c.id AS course_id,\n    c.code AS course_code,\n    c.name AS course_name,\n    COUNT(DISTINCT e.student_id) AS total_enrollments\n  FROM public.courses AS c\n  JOIN public.course_sections AS cs ON cs.course_id = c.id\n  JOIN public.enrollments AS e ON e.course_section_id = cs.id\n  WHERE e.is_active = true\n  GROUP BY c.id, c.code, c.name\n)\nSELECT\n  course_id,\n  course_code,\n  course_name,\n  total_enrollments\nFROM course_enroll_counts\nORDER BY total_enrollments DESC, course_code ASC\nLIMIT 15;",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "course_code",
+        "course_name",
+        "total_enrollments"
+      ],
+      "rowCount": 15,
+      "sample": [
+        {
+          "course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+          "course_code": "TJJ-354",
+          "course_name": "Projektowanie Aplikacji Webowych",
+          "total_enrollments": 7
+        },
+        {
+          "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+          "course_code": "UQL-274",
+          "course_name": "Zarządzanie Projektami IT",
+          "total_enrollments": 5
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+        "course_code": "TJJ-354",
+        "course_name": "Projektowanie Aplikacji Webowych",
+        "total_enrollments": 7
+      },
+      {
+        "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "total_enrollments": 5
+      },
+      {
+        "course_id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "total_enrollments": 5
+      },
+      {
+        "course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "course_code": "AFI-682",
+        "course_name": "Matematyka Dyskretna",
+        "total_enrollments": 4
+      },
+      {
+        "course_id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+        "course_code": "FEO-908",
+        "course_name": "Analiza Matematyczna",
+        "total_enrollments": 4
+      },
+      {
+        "course_id": "59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23",
+        "course_code": "MKO-885",
+        "course_name": "Rachunek Prawdopodobieństwa",
+        "total_enrollments": 4
+      },
+      {
+        "course_id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "total_enrollments": 4
+      },
+      {
+        "course_id": "0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca",
+        "course_code": "PSC-614",
+        "course_name": "Architektura Komputerów",
+        "total_enrollments": 3
+      },
+      {
+        "course_id": "0b97f1bf-8c86-431a-a583-563354b1e01f",
+        "course_code": "RZR-301",
+        "course_name": "Sieci Komputerowe",
+        "total_enrollments": 3
+      },
+      {
+        "course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "course_code": "TAU-627",
+        "course_name": "Analiza Matematyczna",
+        "total_enrollments": 3
+      },
+      {
+        "course_id": "3d59b771-6ed9-47a0-b46f-f90c188f7863",
+        "course_code": "ARH-232",
+        "course_name": "Cloud Computing",
+        "total_enrollments": 2
+      },
+      {
+        "course_id": "7dc872b8-c34e-4061-8f34-8b4c099b6325",
+        "course_code": "BSS-943",
+        "course_name": "Algebra Liniowa",
+        "total_enrollments": 2
+      },
+      {
+        "course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+        "course_code": "FCL-532",
+        "course_name": "Uczenie Maszynowe",
+        "total_enrollments": 2
+      },
+      {
+        "course_id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "total_enrollments": 2
+      },
+      {
+        "course_id": "c0e00b1c-84d6-4ccd-999d-7c9197625f2e",
+        "course_code": "ZUQ-127",
+        "course_name": "Fizyka",
+        "total_enrollments": 2
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Top 15 Courses by Total Enrollments",
+      "width": 700,
+      "height": 420,
+      "encoding": {
+        "y": {
+          "field": "course_name",
+          "type": "nominal",
+          "sort": {
+            "encoding": "x",
+            "order": "descending"
+          },
+          "axis": {
+            "title": "Course"
+          }
+        },
+        "x": {
+          "field": "total_enrollments",
+          "type": "quantitative",
+          "axis": {
+            "title": "Total Enrollments"
+          }
+        },
+        "color": {
+          "field": "course_code",
+          "type": "nominal",
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "course_code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "course_name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "total_enrollments",
+            "type": "quantitative",
+            "title": "Total Enrollments"
+          },
+          {
+            "field": "course_id",
+            "type": "nominal",
+            "title": "Course ID"
+          }
+        ]
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "bar",
+            "cornerRadius": 4
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dx": 6
+          },
+          "encoding": {
+            "text": {
+              "field": "total_enrollments",
+              "type": "quantitative"
+            }
+          }
+        }
+      ]
+    },
+    "sql": "WITH course_enroll_counts AS (\n  SELECT\n    c.id AS course_id,\n    c.code AS course_code,\n    c.name AS course_name,\n    COUNT(DISTINCT e.student_id) AS total_enrollments\n  FROM public.courses AS c\n  JOIN public.course_sections AS cs ON cs.course_id = c.id\n  JOIN public.enrollments AS e ON e.course_section_id = cs.id\n  WHERE e.is_active = true\n  GROUP BY c.id, c.code, c.name\n)\nSELECT\n  course_id,\n  course_code,\n  course_name,\n  total_enrollments\nFROM course_enroll_counts\nORDER BY total_enrollments DESC, course_code ASC\nLIMIT 15;",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "course_code",
+        "course_name",
+        "total_enrollments"
+      ],
+      "rowCount": 15,
+      "sample": [
+        {
+          "course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+          "course_code": "TJJ-354",
+          "course_name": "Projektowanie Aplikacji Webowych",
+          "total_enrollments": 7
+        },
+        {
+          "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+          "course_code": "UQL-274",
+          "course_name": "Zarządzanie Projektami IT",
+          "total_enrollments": 5
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:49:19.609Z",
+    "traceId": "a0d4556d4f3937b36fd7c462a2a47ce8",
+    "attempts": 3,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 12265,
+      "outputTokens": 3685,
+      "totalTokens": 15950,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2624,
+      "costUsd": 0.01043625
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 12265,
+        "outputTokens": 3685,
+        "totalTokens": 15950,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2624,
+        "costUsd": 0.01043625
+      }
+    ],
+    "warnings": []
+  }
+}

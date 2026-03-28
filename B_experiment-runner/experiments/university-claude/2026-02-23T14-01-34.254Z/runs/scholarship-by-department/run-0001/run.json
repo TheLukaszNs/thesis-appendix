@@ -1,0 +1,324 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "scholarship-by-department",
+  "caseDirectory": "scholarship-by-department",
+  "repeatIndex": 1,
+  "prompt": "Which departments have students receiving the most scholarship money?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which departments have students receiving the most scholarship money?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:06:57.123Z",
+    "endedAtUtc": "2026-02-23T14:07:47.470Z",
+    "durationMs": 50347
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "12956",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:07:47 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Which departments have students receiving the most scholarship money?\"},\"sql\":{\"payload\":{\"question\":\"Which departments have students receiving the most scholarship money?\"},\"startedAt\":1771855617128,\"status\":\"success\",\"output\":{\"reasoning\":\"The question asks which departments have students receiving the most scholarship money. I need to:\\n1. Join scholarships to students (via student_id)\\n2. Join students to departments (via department_id)\\n3. Group by department and sum the scholarship amounts\\n4. Order by total scholarship amount descending to identify departments with the most scholarship money\\n\\nThe schema confirms:\\n- scholarships.student_id → students.id\\n- students.department_id → departments.id\\n- scholarships.amount contains the monetary values\\n- departments.name identifies the department\\n\\nI'll aggregate scholarship amounts by department and order by total descending.\",\"sql\":\"\\nSELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  SUM(s.amount) AS total_scholarship_money,\\n  COUNT(DISTINCT s.student_id) AS student_count\\nFROM scholarships s\\nINNER JOIN students st ON s.student_id = st.id\\nINNER JOIN departments d ON st.department_id = d.id\\nGROUP BY d.id, d.name, d.code\\nORDER BY total_scholarship_money DESC\\n\",\"assumptions\":[\"Scholarship amounts are in a single currency and should be summed directly\",\"All scholarships in the table are active/valid awards\",\"The question seeks total scholarship money per department regardless of academic year or semester\"]},\"endedAt\":1771855663482},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  SUM(s.amount) AS total_scholarship_money,\\n  COUNT(DISTINCT s.student_id) AS student_count\\nFROM scholarships s\\nINNER JOIN students st ON s.student_id = st.id\\nINNER JOIN departments d ON st.department_id = d.id\\nGROUP BY d.id, d.name, d.code\\nORDER BY total_scholarship_money DESC\\n\"},\"startedAt\":1771855663485,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  SUM(s.amount) AS total_scholarship_money,\\n  COUNT(DISTINCT s.student_id) AS student_count\\nFROM scholarships s\\nINNER JOIN students st ON s.student_id = st.id\\nINNER JOIN departments d ON st.department_id = d.id\\nGROUP BY d.id, d.name, d.code\\nORDER BY total_scholarship_money DESC\",\"metadata\":{\"columns\":[\"department_name\",\"department_code\",\"total_scholarship_money\",\"student_count\"],\"rowCount\":5,\"sample\":[{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"total_scholarship_money\":\"12000.00\",\"student_count\":\"3\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"department_code\":\"WIP\",\"total_scholarship_money\":\"6000.00\",\"student_count\":\"3\"}]},\"data\":[{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"total_scholarship_money\":\"12000.00\",\"student_count\":\"3\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"department_code\":\"WIP\",\"total_scholarship_money\":\"6000.00\",\"student_count\":\"3\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"department_code\":\"TCH\",\"total_scholarship_money\":\"3000.00\",\"student_count\":\"1\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"department_code\":\"AEI\",\"total_scholarship_money\":\"2500.00\",\"student_count\":\"1\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"department_code\":\"IBM\",\"total_scholarship_money\":\"2000.00\",\"student_count\":\"1\"}]},\"endedAt\":1771855663496},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  SUM(s.amount) AS total_scholarship_money,\\n  COUNT(DISTINCT s.student_id) AS student_count\\nFROM scholarships s\\nINNER JOIN students st ON s.student_id = st.id\\nINNER JOIN departments d ON st.department_id = d.id\\nGROUP BY d.id, d.name, d.code\\nORDER BY total_scholarship_money DESC\",\"metadata\":{\"columns\":[\"department_name\",\"department_code\",\"total_scholarship_money\",\"student_count\"],\"rowCount\":5,\"sample\":[{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"total_scholarship_money\":\"12000.00\",\"student_count\":\"3\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"department_code\":\"WIP\",\"total_scholarship_money\":\"6000.00\",\"student_count\":\"3\"}]},\"data\":[{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"total_scholarship_money\":\"12000.00\",\"student_count\":\"3\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"department_code\":\"WIP\",\"total_scholarship_money\":\"6000.00\",\"student_count\":\"3\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"department_code\":\"TCH\",\"total_scholarship_money\":\"3000.00\",\"student_count\":\"1\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"department_code\":\"AEI\",\"total_scholarship_money\":\"2500.00\",\"student_count\":\"1\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"department_code\":\"IBM\",\"total_scholarship_money\":\"2000.00\",\"student_count\":\"1\"}]},\"startedAt\":1771855663499,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Departments by Total Scholarship Money\",\"description\":\"Ranking of departments by total scholarship funding awarded to students\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Department\"},\"x\":{\"field\":\"total_scholarship_money\",\"type\":\"quantitative\",\"title\":\"Total Scholarship Money\"},\"color\":{\"field\":\"total_scholarship_money\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Total Scholarship ($)\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"total_scholarship_money\",\"type\":\"quantitative\",\"title\":\"Total Scholarship\",\"format\":\"$,.2f\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]},\"width\":600,\"height\":300},\"reasoning\":\"This horizontal bar chart directly answers the question by ranking departments by total scholarship money in descending order. The color gradient reinforces the magnitude of funding, and the tooltip provides additional context including department code and student count for deeper insights.\"},\"endedAt\":1771855667441},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Departments by Total Scholarship Money\",\"description\":\"Ranking of departments by total scholarship funding awarded to students\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Department\"},\"x\":{\"field\":\"total_scholarship_money\",\"type\":\"quantitative\",\"title\":\"Total Scholarship Money\"},\"color\":{\"field\":\"total_scholarship_money\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Total Scholarship ($)\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"total_scholarship_money\",\"type\":\"quantitative\",\"title\":\"Total Scholarship\",\"format\":\"$,.2f\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]},\"width\":600,\"height\":300},\"reasoning\":\"This horizontal bar chart directly answers the question by ranking departments by total scholarship money in descending order. The color gradient reinforces the magnitude of funding, and the tooltip provides additional context including department code and student count for deeper insights.\"},\"startedAt\":1771855667448,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  SUM(s.amount) AS total_scholarship_money,\\n  COUNT(DISTINCT s.student_id) AS student_count\\nFROM scholarships s\\nINNER JOIN students st ON s.student_id = st.id\\nINNER JOIN departments d ON st.department_id = d.id\\nGROUP BY d.id, d.name, d.code\\nORDER BY total_scholarship_money DESC\\n\",\"data\":[{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"total_scholarship_money\":\"12000.00\",\"student_count\":\"3\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"department_code\":\"WIP\",\"total_scholarship_money\":\"6000.00\",\"student_count\":\"3\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"department_code\":\"TCH\",\"total_scholarship_money\":\"3000.00\",\"student_count\":\"1\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"department_code\":\"AEI\",\"total_scholarship_money\":\"2500.00\",\"student_count\":\"1\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"department_code\":\"IBM\",\"total_scholarship_money\":\"2000.00\",\"student_count\":\"1\"}],\"metadata\":{\"columns\":[\"department_name\",\"department_code\",\"total_scholarship_money\",\"student_count\"],\"rowCount\":5,\"sample\":[{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"total_scholarship_money\":\"12000.00\",\"student_count\":\"3\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"department_code\":\"WIP\",\"total_scholarship_money\":\"6000.00\",\"student_count\":\"3\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Departments by Total Scholarship Money\",\"description\":\"Ranking of departments by total scholarship funding awarded to students\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Department\"},\"x\":{\"field\":\"total_scholarship_money\",\"type\":\"quantitative\",\"title\":\"Total Scholarship Money\"},\"color\":{\"field\":\"total_scholarship_money\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Total Scholarship ($)\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"total_scholarship_money\",\"type\":\"quantitative\",\"title\":\"Total Scholarship\",\"format\":\"$,.2f\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]},\"width\":600,\"height\":300},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855667452}},\"input\":{\"question\":\"Which departments have students receiving the most scholarship money?\"},\"result\":{\"sql\":\"\\nSELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  SUM(s.amount) AS total_scholarship_money,\\n  COUNT(DISTINCT s.student_id) AS student_count\\nFROM scholarships s\\nINNER JOIN students st ON s.student_id = st.id\\nINNER JOIN departments d ON st.department_id = d.id\\nGROUP BY d.id, d.name, d.code\\nORDER BY total_scholarship_money DESC\\n\",\"data\":[{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"total_scholarship_money\":\"12000.00\",\"student_count\":\"3\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"department_code\":\"WIP\",\"total_scholarship_money\":\"6000.00\",\"student_count\":\"3\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"department_code\":\"TCH\",\"total_scholarship_money\":\"3000.00\",\"student_count\":\"1\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"department_code\":\"AEI\",\"total_scholarship_money\":\"2500.00\",\"student_count\":\"1\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"department_code\":\"IBM\",\"total_scholarship_money\":\"2000.00\",\"student_count\":\"1\"}],\"metadata\":{\"columns\":[\"department_name\",\"department_code\",\"total_scholarship_money\",\"student_count\"],\"rowCount\":5,\"sample\":[{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"total_scholarship_money\":\"12000.00\",\"student_count\":\"3\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"department_code\":\"WIP\",\"total_scholarship_money\":\"6000.00\",\"student_count\":\"3\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Departments by Total Scholarship Money\",\"description\":\"Ranking of departments by total scholarship funding awarded to students\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Department\"},\"x\":{\"field\":\"total_scholarship_money\",\"type\":\"quantitative\",\"title\":\"Total Scholarship Money\"},\"color\":{\"field\":\"total_scholarship_money\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Total Scholarship ($)\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"total_scholarship_money\",\"type\":\"quantitative\",\"title\":\"Total Scholarship\",\"format\":\"$,.2f\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]},\"width\":600,\"height\":300},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"66d410979c134c538112abd854d5e99a\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/scholarship-by-department/run-0001/run.json",
+    "queryPath": "runs/scholarship-by-department/run-0001/query.sql",
+    "vegaRawPath": "runs/scholarship-by-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/scholarship-by-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/scholarship-by-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:07:47.935Z",
+  "traceId": "66d410979c134c538112abd854d5e99a",
+  "success": true,
+  "durationMs": 50812,
+  "resultRaw": {
+    "data": [
+      {
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "department_code": "MTR",
+        "total_scholarship_money": "12000.00",
+        "student_count": "3"
+      },
+      {
+        "department_name": "Wydział Inżynierii Produkcji",
+        "department_code": "WIP",
+        "total_scholarship_money": "6000.00",
+        "student_count": "3"
+      },
+      {
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "department_code": "TCH",
+        "total_scholarship_money": "3000.00",
+        "student_count": "1"
+      },
+      {
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "department_code": "AEI",
+        "total_scholarship_money": "2500.00",
+        "student_count": "1"
+      },
+      {
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "department_code": "IBM",
+        "total_scholarship_money": "2000.00",
+        "student_count": "1"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Departments by Total Scholarship Money",
+      "description": "Ranking of departments by total scholarship funding awarded to students",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "department_name",
+          "type": "nominal",
+          "sort": "-x",
+          "title": "Department"
+        },
+        "x": {
+          "field": "total_scholarship_money",
+          "type": "quantitative",
+          "title": "Total Scholarship Money"
+        },
+        "color": {
+          "field": "total_scholarship_money",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "blues"
+          },
+          "title": "Total Scholarship ($)"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "department_code",
+            "type": "nominal",
+            "title": "Code"
+          },
+          {
+            "field": "total_scholarship_money",
+            "type": "quantitative",
+            "title": "Total Scholarship",
+            "format": "$,.2f"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Student Count"
+          }
+        ]
+      },
+      "width": 600,
+      "height": 300
+    },
+    "sql": "\nSELECT \n  d.name AS department_name,\n  d.code AS department_code,\n  SUM(s.amount) AS total_scholarship_money,\n  COUNT(DISTINCT s.student_id) AS student_count\nFROM scholarships s\nINNER JOIN students st ON s.student_id = st.id\nINNER JOIN departments d ON st.department_id = d.id\nGROUP BY d.id, d.name, d.code\nORDER BY total_scholarship_money DESC\n",
+    "metadata": {
+      "columns": [
+        "department_name",
+        "department_code",
+        "total_scholarship_money",
+        "student_count"
+      ],
+      "rowCount": 5,
+      "sample": [
+        {
+          "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+          "department_code": "MTR",
+          "total_scholarship_money": "12000.00",
+          "student_count": "3"
+        },
+        {
+          "department_name": "Wydział Inżynierii Produkcji",
+          "department_code": "WIP",
+          "total_scholarship_money": "6000.00",
+          "student_count": "3"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "department_code": "MTR",
+        "total_scholarship_money": "12000.00",
+        "student_count": "3"
+      },
+      {
+        "department_name": "Wydział Inżynierii Produkcji",
+        "department_code": "WIP",
+        "total_scholarship_money": "6000.00",
+        "student_count": "3"
+      },
+      {
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "department_code": "TCH",
+        "total_scholarship_money": "3000.00",
+        "student_count": "1"
+      },
+      {
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "department_code": "AEI",
+        "total_scholarship_money": "2500.00",
+        "student_count": "1"
+      },
+      {
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "department_code": "IBM",
+        "total_scholarship_money": "2000.00",
+        "student_count": "1"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Departments by Total Scholarship Money",
+      "description": "Ranking of departments by total scholarship funding awarded to students",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "department_name",
+          "type": "nominal",
+          "sort": "-x",
+          "title": "Department"
+        },
+        "x": {
+          "field": "total_scholarship_money",
+          "type": "quantitative",
+          "title": "Total Scholarship Money"
+        },
+        "color": {
+          "field": "total_scholarship_money",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "blues"
+          },
+          "title": "Total Scholarship ($)"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "department_code",
+            "type": "nominal",
+            "title": "Code"
+          },
+          {
+            "field": "total_scholarship_money",
+            "type": "quantitative",
+            "title": "Total Scholarship",
+            "format": "$,.2f"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Student Count"
+          }
+        ]
+      },
+      "width": 600,
+      "height": 300
+    },
+    "sql": "\nSELECT \n  d.name AS department_name,\n  d.code AS department_code,\n  SUM(s.amount) AS total_scholarship_money,\n  COUNT(DISTINCT s.student_id) AS student_count\nFROM scholarships s\nINNER JOIN students st ON s.student_id = st.id\nINNER JOIN departments d ON st.department_id = d.id\nGROUP BY d.id, d.name, d.code\nORDER BY total_scholarship_money DESC\n",
+    "metadata": {
+      "columns": [
+        "department_name",
+        "department_code",
+        "total_scholarship_money",
+        "student_count"
+      ],
+      "rowCount": 5,
+      "sample": [
+        {
+          "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+          "department_code": "MTR",
+          "total_scholarship_money": "12000.00",
+          "student_count": "3"
+        },
+        {
+          "department_name": "Wydział Inżynierii Produkcji",
+          "department_code": "WIP",
+          "total_scholarship_money": "6000.00",
+          "student_count": "3"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.390Z",
+    "traceId": "66d410979c134c538112abd854d5e99a",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 18392,
+      "outputTokens": 1028,
+      "totalTokens": 19420,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.023532
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 18392,
+        "outputTokens": 1028,
+        "totalTokens": 19420,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.023532
+      }
+    ],
+    "warnings": []
+  }
+}

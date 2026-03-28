@@ -1,0 +1,708 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "grade-distribution",
+  "caseDirectory": "grade-distribution",
+  "repeatIndex": 1,
+  "prompt": "Show the distribution of final grades across all courses",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the distribution of final grades across all courses"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:01:34.268Z",
+    "endedAtUtc": "2026-02-23T14:01:50.169Z",
+    "durationMs": 15901
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "24560",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:01:50 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show the distribution of final grades across all courses\"},\"sql\":{\"payload\":{\"question\":\"Show the distribution of final grades across all courses\"},\"startedAt\":1771855294322,\"status\":\"success\",\"output\":{\"reasoning\":\"The user wants to see the distribution of final grades across all courses. The grades table contains grade_value (a custom enum type) and is linked to enrollments, which link to course_sections, which link to courses. To show the distribution, I need to count how many students received each grade value for each course, or overall. I'll group by course and grade_value to show the distribution across courses.\",\"sql\":\"SELECT c.code AS course_code, c.name AS course_name, g.grade_value AS final_grade, COUNT(*) AS student_count FROM grades g JOIN enrollments e ON g.enrollment_id = e.id JOIN course_sections cs ON e.course_section_id = cs.id JOIN courses c ON cs.course_id = c.id WHERE g.grade_value IS NOT NULL GROUP BY c.id, c.code, c.name, g.grade_value ORDER BY c.code, g.grade_value\",\"assumptions\":[\"grade_value represents the final grade for a course\",\"Each enrollment has at most one grade record (enforced by unique index on enrollment_id)\",\"Only grades with non-null grade_value are included in the distribution\"]},\"endedAt\":1771855305988},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT c.code AS course_code, c.name AS course_name, g.grade_value AS final_grade, COUNT(*) AS student_count FROM grades g JOIN enrollments e ON g.enrollment_id = e.id JOIN course_sections cs ON e.course_section_id = cs.id JOIN courses c ON cs.course_id = c.id WHERE g.grade_value IS NOT NULL GROUP BY c.id, c.code, c.name, g.grade_value ORDER BY c.code, g.grade_value\"},\"startedAt\":1771855305990,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT c.code AS course_code, c.name AS course_name, g.grade_value AS final_grade, COUNT(*) AS student_count FROM grades g JOIN enrollments e ON g.enrollment_id = e.id JOIN course_sections cs ON e.course_section_id = cs.id JOIN courses c ON cs.course_id = c.id WHERE g.grade_value IS NOT NULL GROUP BY c.id, c.code, c.name, g.grade_value ORDER BY c.code, g.grade_value\",\"metadata\":{\"columns\":[\"course_code\",\"course_name\",\"final_grade\",\"student_count\"],\"rowCount\":39,\"sample\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"final_grade\":\"4.5\",\"student_count\":\"1\"},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"final_grade\":\"2.0\",\"student_count\":\"1\"}]},\"data\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"final_grade\":\"4.5\",\"student_count\":\"1\"},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"final_grade\":\"4.5\",\"student_count\":\"1\"},{\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"final_grade\":\"4.0\",\"student_count\":\"1\"},{\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"5.0\",\"student_count\":\"1\"},{\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"final_grade\":\"4.0\",\"student_count\":\"1\"},{\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"final_grade\":\"4.5\",\"student_count\":\"1\"},{\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"final_grade\":\"3.5\",\"student_count\":\"2\"},{\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"final_grade\":\"4.0\",\"student_count\":\"1\"},{\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"4.5\",\"student_count\":\"2\"},{\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"final_grade\":\"4.0\",\"student_count\":\"1\"},{\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"final_grade\":\"4.5\",\"student_count\":\"3\"},{\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"final_grade\":\"4.5\",\"student_count\":\"3\"},{\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"final_grade\":\"5.0\",\"student_count\":\"1\"},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"2.0\",\"student_count\":\"2\"},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"4.5\",\"student_count\":\"2\"},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"5.0\",\"student_count\":\"3\"},{\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"4.0\",\"student_count\":\"2\"},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"final_grade\":\"5.0\",\"student_count\":\"3\"},{\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"final_grade\":\"3.0\",\"student_count\":\"1\"}]},\"endedAt\":1771855305998},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT c.code AS course_code, c.name AS course_name, g.grade_value AS final_grade, COUNT(*) AS student_count FROM grades g JOIN enrollments e ON g.enrollment_id = e.id JOIN course_sections cs ON e.course_section_id = cs.id JOIN courses c ON cs.course_id = c.id WHERE g.grade_value IS NOT NULL GROUP BY c.id, c.code, c.name, g.grade_value ORDER BY c.code, g.grade_value\",\"metadata\":{\"columns\":[\"course_code\",\"course_name\",\"final_grade\",\"student_count\"],\"rowCount\":39,\"sample\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"final_grade\":\"4.5\",\"student_count\":\"1\"},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"final_grade\":\"2.0\",\"student_count\":\"1\"}]},\"data\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"final_grade\":\"4.5\",\"student_count\":\"1\"},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"final_grade\":\"4.5\",\"student_count\":\"1\"},{\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"final_grade\":\"4.0\",\"student_count\":\"1\"},{\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"5.0\",\"student_count\":\"1\"},{\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"final_grade\":\"4.0\",\"student_count\":\"1\"},{\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"final_grade\":\"4.5\",\"student_count\":\"1\"},{\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"final_grade\":\"3.5\",\"student_count\":\"2\"},{\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"final_grade\":\"4.0\",\"student_count\":\"1\"},{\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"4.5\",\"student_count\":\"2\"},{\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"final_grade\":\"4.0\",\"student_count\":\"1\"},{\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"final_grade\":\"4.5\",\"student_count\":\"3\"},{\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"final_grade\":\"4.5\",\"student_count\":\"3\"},{\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"final_grade\":\"5.0\",\"student_count\":\"1\"},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"2.0\",\"student_count\":\"2\"},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"4.5\",\"student_count\":\"2\"},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"5.0\",\"student_count\":\"3\"},{\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"4.0\",\"student_count\":\"2\"},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"final_grade\":\"5.0\",\"student_count\":\"3\"},{\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"final_grade\":\"3.0\",\"student_count\":\"1\"}]},\"startedAt\":1771855306002,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Distribution of Final Grades Across All Courses\",\"data\":{\"name\":\"query_result\"},\"width\":900,\"height\":500,\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"final_grade\",\"type\":\"ordinal\",\"title\":\"Final Grade\",\"sort\":\"ascending\"},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Number of Students\"},\"color\":{\"field\":\"final_grade\",\"type\":\"ordinal\",\"scale\":{\"scheme\":\"viridis\"},\"legend\":false},\"tooltip\":[{\"field\":\"final_grade\",\"type\":\"ordinal\",\"title\":\"Grade\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"reasoning\":\"This bar chart aggregates student counts across all courses by final grade value, showing the overall distribution of grades in the system. The x-axis displays grade values (ordinal), the y-axis shows the count of students receiving each grade, and color encoding helps distinguish between different grades. This visualization answers the question by showing which grades are most common across the entire institution.\"},\"endedAt\":1771855310135},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Distribution of Final Grades Across All Courses\",\"data\":{\"name\":\"query_result\"},\"width\":900,\"height\":500,\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"final_grade\",\"type\":\"ordinal\",\"title\":\"Final Grade\",\"sort\":\"ascending\"},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Number of Students\"},\"color\":{\"field\":\"final_grade\",\"type\":\"ordinal\",\"scale\":{\"scheme\":\"viridis\"},\"legend\":false},\"tooltip\":[{\"field\":\"final_grade\",\"type\":\"ordinal\",\"title\":\"Grade\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"reasoning\":\"This bar chart aggregates student counts across all courses by final grade value, showing the overall distribution of grades in the system. The x-axis displays grade values (ordinal), the y-axis shows the count of students receiving each grade, and color encoding helps distinguish between different grades. This visualization answers the question by showing which grades are most common across the entire institution.\"},\"startedAt\":1771855310145,\"status\":\"success\",\"output\":{\"sql\":\"SELECT c.code AS course_code, c.name AS course_name, g.grade_value AS final_grade, COUNT(*) AS student_count FROM grades g JOIN enrollments e ON g.enrollment_id = e.id JOIN course_sections cs ON e.course_section_id = cs.id JOIN courses c ON cs.course_id = c.id WHERE g.grade_value IS NOT NULL GROUP BY c.id, c.code, c.name, g.grade_value ORDER BY c.code, g.grade_value\",\"data\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"final_grade\":\"4.5\",\"student_count\":\"1\"},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"final_grade\":\"4.5\",\"student_count\":\"1\"},{\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"final_grade\":\"4.0\",\"student_count\":\"1\"},{\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"5.0\",\"student_count\":\"1\"},{\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"final_grade\":\"4.0\",\"student_count\":\"1\"},{\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"final_grade\":\"4.5\",\"student_count\":\"1\"},{\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"final_grade\":\"3.5\",\"student_count\":\"2\"},{\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"final_grade\":\"4.0\",\"student_count\":\"1\"},{\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"4.5\",\"student_count\":\"2\"},{\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"final_grade\":\"4.0\",\"student_count\":\"1\"},{\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"final_grade\":\"4.5\",\"student_count\":\"3\"},{\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"final_grade\":\"4.5\",\"student_count\":\"3\"},{\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"final_grade\":\"5.0\",\"student_count\":\"1\"},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"2.0\",\"student_count\":\"2\"},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"4.5\",\"student_count\":\"2\"},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"5.0\",\"student_count\":\"3\"},{\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"4.0\",\"student_count\":\"2\"},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"final_grade\":\"5.0\",\"student_count\":\"3\"},{\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"final_grade\":\"3.0\",\"student_count\":\"1\"}],\"metadata\":{\"columns\":[\"course_code\",\"course_name\",\"final_grade\",\"student_count\"],\"rowCount\":39,\"sample\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"final_grade\":\"4.5\",\"student_count\":\"1\"},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"final_grade\":\"2.0\",\"student_count\":\"1\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Distribution of Final Grades Across All Courses\",\"data\":{\"name\":\"query_result\"},\"width\":900,\"height\":500,\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"final_grade\",\"type\":\"ordinal\",\"title\":\"Final Grade\",\"sort\":\"ascending\"},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Number of Students\"},\"color\":{\"field\":\"final_grade\",\"type\":\"ordinal\",\"scale\":{\"scheme\":\"viridis\"},\"legend\":false},\"tooltip\":[{\"field\":\"final_grade\",\"type\":\"ordinal\",\"title\":\"Grade\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855310153}},\"input\":{\"question\":\"Show the distribution of final grades across all courses\"},\"result\":{\"sql\":\"SELECT c.code AS course_code, c.name AS course_name, g.grade_value AS final_grade, COUNT(*) AS student_count FROM grades g JOIN enrollments e ON g.enrollment_id = e.id JOIN course_sections cs ON e.course_section_id = cs.id JOIN courses c ON cs.course_id = c.id WHERE g.grade_value IS NOT NULL GROUP BY c.id, c.code, c.name, g.grade_value ORDER BY c.code, g.grade_value\",\"data\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"final_grade\":\"4.5\",\"student_count\":\"1\"},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"final_grade\":\"4.5\",\"student_count\":\"1\"},{\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"final_grade\":\"4.0\",\"student_count\":\"1\"},{\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"5.0\",\"student_count\":\"1\"},{\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"final_grade\":\"4.0\",\"student_count\":\"1\"},{\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"final_grade\":\"4.5\",\"student_count\":\"1\"},{\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"final_grade\":\"3.5\",\"student_count\":\"2\"},{\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"final_grade\":\"4.0\",\"student_count\":\"1\"},{\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"4.5\",\"student_count\":\"2\"},{\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"final_grade\":\"4.0\",\"student_count\":\"1\"},{\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"final_grade\":\"4.5\",\"student_count\":\"3\"},{\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"final_grade\":\"4.5\",\"student_count\":\"3\"},{\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"final_grade\":\"5.0\",\"student_count\":\"1\"},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"2.0\",\"student_count\":\"2\"},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"4.5\",\"student_count\":\"2\"},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"final_grade\":\"5.0\",\"student_count\":\"3\"},{\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"final_grade\":\"4.0\",\"student_count\":\"2\"},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"final_grade\":\"2.0\",\"student_count\":\"1\"},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"final_grade\":\"3.0\",\"student_count\":\"1\"},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"final_grade\":\"3.5\",\"student_count\":\"1\"},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"final_grade\":\"5.0\",\"student_count\":\"3\"},{\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"final_grade\":\"3.0\",\"student_count\":\"1\"}],\"metadata\":{\"columns\":[\"course_code\",\"course_name\",\"final_grade\",\"student_count\"],\"rowCount\":39,\"sample\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"final_grade\":\"4.5\",\"student_count\":\"1\"},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"final_grade\":\"2.0\",\"student_count\":\"1\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Distribution of Final Grades Across All Courses\",\"data\":{\"name\":\"query_result\"},\"width\":900,\"height\":500,\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"final_grade\",\"type\":\"ordinal\",\"title\":\"Final Grade\",\"sort\":\"ascending\"},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Number of Students\"},\"color\":{\"field\":\"final_grade\",\"type\":\"ordinal\",\"scale\":{\"scheme\":\"viridis\"},\"legend\":false},\"tooltip\":[{\"field\":\"final_grade\",\"type\":\"ordinal\",\"title\":\"Grade\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"408d8fd077071a6d203af22237bc2eda\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/grade-distribution/run-0001/run.json",
+    "queryPath": "runs/grade-distribution/run-0001/query.sql",
+    "vegaRawPath": "runs/grade-distribution/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/grade-distribution/run-0001/vega.resolved.json",
+    "imagePath": "runs/grade-distribution/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:01:50.604Z",
+  "traceId": "408d8fd077071a6d203af22237bc2eda",
+  "success": true,
+  "durationMs": 16336,
+  "resultRaw": {
+    "data": [
+      {
+        "course_code": "AAX-989",
+        "course_name": "Elektronika",
+        "final_grade": "4.5",
+        "student_count": "1"
+      },
+      {
+        "course_code": "AFI-682",
+        "course_name": "Matematyka Dyskretna",
+        "final_grade": "2.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "AFI-682",
+        "course_name": "Matematyka Dyskretna",
+        "final_grade": "3.5",
+        "student_count": "1"
+      },
+      {
+        "course_code": "ARH-232",
+        "course_name": "Cloud Computing",
+        "final_grade": "4.5",
+        "student_count": "1"
+      },
+      {
+        "course_code": "BEW-951",
+        "course_name": "Fizyka",
+        "final_grade": "2.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "BSS-943",
+        "course_name": "Algebra Liniowa",
+        "final_grade": "3.5",
+        "student_count": "1"
+      },
+      {
+        "course_code": "BSS-943",
+        "course_name": "Algebra Liniowa",
+        "final_grade": "4.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "FCL-532",
+        "course_name": "Uczenie Maszynowe",
+        "final_grade": "2.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "FCL-532",
+        "course_name": "Uczenie Maszynowe",
+        "final_grade": "3.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "FEO-908",
+        "course_name": "Analiza Matematyczna",
+        "final_grade": "3.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "FEO-908",
+        "course_name": "Analiza Matematyczna",
+        "final_grade": "5.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "HPF-845",
+        "course_name": "Systemy Wbudowane",
+        "final_grade": "2.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "JFH-143",
+        "course_name": "Architektura Komputerów",
+        "final_grade": "2.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "JFH-143",
+        "course_name": "Architektura Komputerów",
+        "final_grade": "4.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "JFH-143",
+        "course_name": "Architektura Komputerów",
+        "final_grade": "4.5",
+        "student_count": "1"
+      },
+      {
+        "course_code": "MKO-885",
+        "course_name": "Rachunek Prawdopodobieństwa",
+        "final_grade": "3.5",
+        "student_count": "2"
+      },
+      {
+        "course_code": "MKO-885",
+        "course_name": "Rachunek Prawdopodobieństwa",
+        "final_grade": "4.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "RZR-301",
+        "course_name": "Sieci Komputerowe",
+        "final_grade": "3.5",
+        "student_count": "1"
+      },
+      {
+        "course_code": "RZR-301",
+        "course_name": "Sieci Komputerowe",
+        "final_grade": "4.5",
+        "student_count": "2"
+      },
+      {
+        "course_code": "TAU-627",
+        "course_name": "Analiza Matematyczna",
+        "final_grade": "3.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "TJJ-354",
+        "course_name": "Projektowanie Aplikacji Webowych",
+        "final_grade": "3.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "TJJ-354",
+        "course_name": "Projektowanie Aplikacji Webowych",
+        "final_grade": "4.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "TJJ-354",
+        "course_name": "Projektowanie Aplikacji Webowych",
+        "final_grade": "4.5",
+        "student_count": "3"
+      },
+      {
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "final_grade": "3.5",
+        "student_count": "1"
+      },
+      {
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "final_grade": "4.5",
+        "student_count": "3"
+      },
+      {
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "final_grade": "5.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "final_grade": "2.0",
+        "student_count": "2"
+      },
+      {
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "final_grade": "3.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "final_grade": "4.5",
+        "student_count": "2"
+      },
+      {
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "final_grade": "5.0",
+        "student_count": "3"
+      },
+      {
+        "course_code": "WZC-570",
+        "course_name": "Programowanie Obiektowe",
+        "final_grade": "3.5",
+        "student_count": "1"
+      },
+      {
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "final_grade": "2.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "final_grade": "3.5",
+        "student_count": "1"
+      },
+      {
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "final_grade": "4.0",
+        "student_count": "2"
+      },
+      {
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "final_grade": "2.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "final_grade": "3.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "final_grade": "3.5",
+        "student_count": "1"
+      },
+      {
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "final_grade": "5.0",
+        "student_count": "3"
+      },
+      {
+        "course_code": "ZUQ-127",
+        "course_name": "Fizyka",
+        "final_grade": "3.0",
+        "student_count": "1"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Distribution of Final Grades Across All Courses",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 900,
+      "height": 500,
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "final_grade",
+          "type": "ordinal",
+          "title": "Final Grade",
+          "sort": "ascending"
+        },
+        "y": {
+          "field": "student_count",
+          "type": "quantitative",
+          "title": "Number of Students"
+        },
+        "color": {
+          "field": "final_grade",
+          "type": "ordinal",
+          "scale": {
+            "scheme": "viridis"
+          },
+          "legend": false
+        },
+        "tooltip": [
+          {
+            "field": "final_grade",
+            "type": "ordinal",
+            "title": "Grade"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Student Count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT c.code AS course_code, c.name AS course_name, g.grade_value AS final_grade, COUNT(*) AS student_count FROM grades g JOIN enrollments e ON g.enrollment_id = e.id JOIN course_sections cs ON e.course_section_id = cs.id JOIN courses c ON cs.course_id = c.id WHERE g.grade_value IS NOT NULL GROUP BY c.id, c.code, c.name, g.grade_value ORDER BY c.code, g.grade_value",
+    "metadata": {
+      "columns": [
+        "course_code",
+        "course_name",
+        "final_grade",
+        "student_count"
+      ],
+      "rowCount": 39,
+      "sample": [
+        {
+          "course_code": "AAX-989",
+          "course_name": "Elektronika",
+          "final_grade": "4.5",
+          "student_count": "1"
+        },
+        {
+          "course_code": "AFI-682",
+          "course_name": "Matematyka Dyskretna",
+          "final_grade": "2.0",
+          "student_count": "1"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "course_code": "AAX-989",
+        "course_name": "Elektronika",
+        "final_grade": "4.5",
+        "student_count": "1"
+      },
+      {
+        "course_code": "AFI-682",
+        "course_name": "Matematyka Dyskretna",
+        "final_grade": "2.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "AFI-682",
+        "course_name": "Matematyka Dyskretna",
+        "final_grade": "3.5",
+        "student_count": "1"
+      },
+      {
+        "course_code": "ARH-232",
+        "course_name": "Cloud Computing",
+        "final_grade": "4.5",
+        "student_count": "1"
+      },
+      {
+        "course_code": "BEW-951",
+        "course_name": "Fizyka",
+        "final_grade": "2.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "BSS-943",
+        "course_name": "Algebra Liniowa",
+        "final_grade": "3.5",
+        "student_count": "1"
+      },
+      {
+        "course_code": "BSS-943",
+        "course_name": "Algebra Liniowa",
+        "final_grade": "4.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "FCL-532",
+        "course_name": "Uczenie Maszynowe",
+        "final_grade": "2.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "FCL-532",
+        "course_name": "Uczenie Maszynowe",
+        "final_grade": "3.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "FEO-908",
+        "course_name": "Analiza Matematyczna",
+        "final_grade": "3.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "FEO-908",
+        "course_name": "Analiza Matematyczna",
+        "final_grade": "5.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "HPF-845",
+        "course_name": "Systemy Wbudowane",
+        "final_grade": "2.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "JFH-143",
+        "course_name": "Architektura Komputerów",
+        "final_grade": "2.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "JFH-143",
+        "course_name": "Architektura Komputerów",
+        "final_grade": "4.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "JFH-143",
+        "course_name": "Architektura Komputerów",
+        "final_grade": "4.5",
+        "student_count": "1"
+      },
+      {
+        "course_code": "MKO-885",
+        "course_name": "Rachunek Prawdopodobieństwa",
+        "final_grade": "3.5",
+        "student_count": "2"
+      },
+      {
+        "course_code": "MKO-885",
+        "course_name": "Rachunek Prawdopodobieństwa",
+        "final_grade": "4.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "RZR-301",
+        "course_name": "Sieci Komputerowe",
+        "final_grade": "3.5",
+        "student_count": "1"
+      },
+      {
+        "course_code": "RZR-301",
+        "course_name": "Sieci Komputerowe",
+        "final_grade": "4.5",
+        "student_count": "2"
+      },
+      {
+        "course_code": "TAU-627",
+        "course_name": "Analiza Matematyczna",
+        "final_grade": "3.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "TJJ-354",
+        "course_name": "Projektowanie Aplikacji Webowych",
+        "final_grade": "3.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "TJJ-354",
+        "course_name": "Projektowanie Aplikacji Webowych",
+        "final_grade": "4.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "TJJ-354",
+        "course_name": "Projektowanie Aplikacji Webowych",
+        "final_grade": "4.5",
+        "student_count": "3"
+      },
+      {
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "final_grade": "3.5",
+        "student_count": "1"
+      },
+      {
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "final_grade": "4.5",
+        "student_count": "3"
+      },
+      {
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "final_grade": "5.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "final_grade": "2.0",
+        "student_count": "2"
+      },
+      {
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "final_grade": "3.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "final_grade": "4.5",
+        "student_count": "2"
+      },
+      {
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "final_grade": "5.0",
+        "student_count": "3"
+      },
+      {
+        "course_code": "WZC-570",
+        "course_name": "Programowanie Obiektowe",
+        "final_grade": "3.5",
+        "student_count": "1"
+      },
+      {
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "final_grade": "2.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "final_grade": "3.5",
+        "student_count": "1"
+      },
+      {
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "final_grade": "4.0",
+        "student_count": "2"
+      },
+      {
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "final_grade": "2.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "final_grade": "3.0",
+        "student_count": "1"
+      },
+      {
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "final_grade": "3.5",
+        "student_count": "1"
+      },
+      {
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "final_grade": "5.0",
+        "student_count": "3"
+      },
+      {
+        "course_code": "ZUQ-127",
+        "course_name": "Fizyka",
+        "final_grade": "3.0",
+        "student_count": "1"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Distribution of Final Grades Across All Courses",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 900,
+      "height": 500,
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "final_grade",
+          "type": "ordinal",
+          "title": "Final Grade",
+          "sort": "ascending"
+        },
+        "y": {
+          "field": "student_count",
+          "type": "quantitative",
+          "title": "Number of Students"
+        },
+        "color": {
+          "field": "final_grade",
+          "type": "ordinal",
+          "scale": {
+            "scheme": "viridis"
+          },
+          "legend": false
+        },
+        "tooltip": [
+          {
+            "field": "final_grade",
+            "type": "ordinal",
+            "title": "Grade"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Student Count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT c.code AS course_code, c.name AS course_name, g.grade_value AS final_grade, COUNT(*) AS student_count FROM grades g JOIN enrollments e ON g.enrollment_id = e.id JOIN course_sections cs ON e.course_section_id = cs.id JOIN courses c ON cs.course_id = c.id WHERE g.grade_value IS NOT NULL GROUP BY c.id, c.code, c.name, g.grade_value ORDER BY c.code, g.grade_value",
+    "metadata": {
+      "columns": [
+        "course_code",
+        "course_name",
+        "final_grade",
+        "student_count"
+      ],
+      "rowCount": 39,
+      "sample": [
+        {
+          "course_code": "AAX-989",
+          "course_name": "Elektronika",
+          "final_grade": "4.5",
+          "student_count": "1"
+        },
+        {
+          "course_code": "AFI-682",
+          "course_name": "Matematyka Dyskretna",
+          "final_grade": "2.0",
+          "student_count": "1"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.350Z",
+    "traceId": "408d8fd077071a6d203af22237bc2eda",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 16540,
+      "outputTokens": 1090,
+      "totalTokens": 17630,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.02199
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 16540,
+        "outputTokens": 1090,
+        "totalTokens": 17630,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.02199
+      }
+    ],
+    "warnings": []
+  }
+}

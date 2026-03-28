@@ -1,0 +1,268 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "avg-project-score-by-department",
+  "caseDirectory": "avg-project-score-by-department",
+  "repeatIndex": 1,
+  "prompt": "What is the average project score per department?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average project score per department?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:04:45.901Z",
+    "endedAtUtc": "2026-02-23T14:05:29.146Z",
+    "durationMs": 43245
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "11235",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:05:29 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the average project score per department?\"},\"sql\":{\"payload\":{\"question\":\"What is the average project score per department?\"},\"startedAt\":1771855485907,\"status\":\"success\",\"output\":{\"reasoning\":\"The user asks for the average project score per department. I've confirmed the schema structure:\\n- departments table has id and name\\n- courses table has department_id linking to departments\\n- course_sections table has course_id linking to courses\\n- enrollments table has course_section_id linking to course_sections\\n- grades table has enrollment_id linking to enrollments and contains project_score\\n\\nThe query needs to:\\n1. Join departments → courses → course_sections → enrollments → grades\\n2. Group by department\\n3. Calculate AVG(project_score) for each department\\n4. Filter out NULL project_score values\\n5. Order by department name for deterministic output\",\"sql\":\"SELECT \\n  d.name AS department_name,\\n  AVG(g.project_score) AS average_project_score\\nFROM departments d\\nINNER JOIN courses c ON d.id = c.department_id\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN grades g ON e.id = g.enrollment_id\\nWHERE g.project_score IS NOT NULL\\nGROUP BY d.id, d.name\\nORDER BY d.name\",\"assumptions\":[\"project_score in the grades table represents the project score for each enrollment\",\"NULL project_score values should be excluded from the average calculation\",\"Results are grouped by department and ordered alphabetically by department name for deterministic output\"]},\"endedAt\":1771855525930},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT \\n  d.name AS department_name,\\n  AVG(g.project_score) AS average_project_score\\nFROM departments d\\nINNER JOIN courses c ON d.id = c.department_id\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN grades g ON e.id = g.enrollment_id\\nWHERE g.project_score IS NOT NULL\\nGROUP BY d.id, d.name\\nORDER BY d.name\"},\"startedAt\":1771855525935,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  d.name AS department_name,\\n  AVG(g.project_score) AS average_project_score\\nFROM departments d\\nINNER JOIN courses c ON d.id = c.department_id\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN grades g ON e.id = g.enrollment_id\\nWHERE g.project_score IS NOT NULL\\nGROUP BY d.id, d.name\\nORDER BY d.name\",\"metadata\":{\"columns\":[\"department_name\",\"average_project_score\"],\"rowCount\":6,\"sample\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"average_project_score\":\"60.5916666666666667\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"average_project_score\":\"29.6000000000000000\"}]},\"data\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"average_project_score\":\"60.5916666666666667\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"average_project_score\":\"29.6000000000000000\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"average_project_score\":\"47.9662500000000000\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"average_project_score\":\"44.9577777777777778\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"average_project_score\":\"41.7746666666666667\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"average_project_score\":\"60.1766666666666667\"}]},\"endedAt\":1771855525945},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  d.name AS department_name,\\n  AVG(g.project_score) AS average_project_score\\nFROM departments d\\nINNER JOIN courses c ON d.id = c.department_id\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN grades g ON e.id = g.enrollment_id\\nWHERE g.project_score IS NOT NULL\\nGROUP BY d.id, d.name\\nORDER BY d.name\",\"metadata\":{\"columns\":[\"department_name\",\"average_project_score\"],\"rowCount\":6,\"sample\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"average_project_score\":\"60.5916666666666667\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"average_project_score\":\"29.6000000000000000\"}]},\"data\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"average_project_score\":\"60.5916666666666667\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"average_project_score\":\"29.6000000000000000\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"average_project_score\":\"47.9662500000000000\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"average_project_score\":\"44.9577777777777778\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"average_project_score\":\"41.7746666666666667\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"average_project_score\":\"60.1766666666666667\"}]},\"startedAt\":1771855525947,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Project Score per Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Department\"},\"y\":{\"field\":\"average_project_score\",\"type\":\"quantitative\",\"title\":\"Average Project Score\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"average_project_score\",\"type\":\"quantitative\",\"title\":\"Average Project Score\",\"format\":\".2f\"}]},\"width\":600,\"height\":400},\"reasoning\":\"Bar chart is ideal for comparing average project scores across departments. The x-axis displays department names (rotated for readability), while the y-axis shows the average project score. Tooltips provide precise values on hover, formatted to 2 decimal places for clarity.\"},\"endedAt\":1771855529117},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Project Score per Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Department\"},\"y\":{\"field\":\"average_project_score\",\"type\":\"quantitative\",\"title\":\"Average Project Score\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"average_project_score\",\"type\":\"quantitative\",\"title\":\"Average Project Score\",\"format\":\".2f\"}]},\"width\":600,\"height\":400},\"reasoning\":\"Bar chart is ideal for comparing average project scores across departments. The x-axis displays department names (rotated for readability), while the y-axis shows the average project score. Tooltips provide precise values on hover, formatted to 2 decimal places for clarity.\"},\"startedAt\":1771855529125,\"status\":\"success\",\"output\":{\"sql\":\"SELECT \\n  d.name AS department_name,\\n  AVG(g.project_score) AS average_project_score\\nFROM departments d\\nINNER JOIN courses c ON d.id = c.department_id\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN grades g ON e.id = g.enrollment_id\\nWHERE g.project_score IS NOT NULL\\nGROUP BY d.id, d.name\\nORDER BY d.name\",\"data\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"average_project_score\":\"60.5916666666666667\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"average_project_score\":\"29.6000000000000000\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"average_project_score\":\"47.9662500000000000\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"average_project_score\":\"44.9577777777777778\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"average_project_score\":\"41.7746666666666667\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"average_project_score\":\"60.1766666666666667\"}],\"metadata\":{\"columns\":[\"department_name\",\"average_project_score\"],\"rowCount\":6,\"sample\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"average_project_score\":\"60.5916666666666667\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"average_project_score\":\"29.6000000000000000\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Project Score per Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Department\"},\"y\":{\"field\":\"average_project_score\",\"type\":\"quantitative\",\"title\":\"Average Project Score\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"average_project_score\",\"type\":\"quantitative\",\"title\":\"Average Project Score\",\"format\":\".2f\"}]},\"width\":600,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855529130}},\"input\":{\"question\":\"What is the average project score per department?\"},\"result\":{\"sql\":\"SELECT \\n  d.name AS department_name,\\n  AVG(g.project_score) AS average_project_score\\nFROM departments d\\nINNER JOIN courses c ON d.id = c.department_id\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN grades g ON e.id = g.enrollment_id\\nWHERE g.project_score IS NOT NULL\\nGROUP BY d.id, d.name\\nORDER BY d.name\",\"data\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"average_project_score\":\"60.5916666666666667\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"average_project_score\":\"29.6000000000000000\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"average_project_score\":\"47.9662500000000000\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"average_project_score\":\"44.9577777777777778\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"average_project_score\":\"41.7746666666666667\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"average_project_score\":\"60.1766666666666667\"}],\"metadata\":{\"columns\":[\"department_name\",\"average_project_score\"],\"rowCount\":6,\"sample\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"average_project_score\":\"60.5916666666666667\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"average_project_score\":\"29.6000000000000000\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Project Score per Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Department\"},\"y\":{\"field\":\"average_project_score\",\"type\":\"quantitative\",\"title\":\"Average Project Score\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"average_project_score\",\"type\":\"quantitative\",\"title\":\"Average Project Score\",\"format\":\".2f\"}]},\"width\":600,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"d3ca0b9fea7a5a2eb720c2d0d2d853a5\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-project-score-by-department/run-0001/run.json",
+    "queryPath": "runs/avg-project-score-by-department/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-project-score-by-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-project-score-by-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-project-score-by-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:05:29.591Z",
+  "traceId": "d3ca0b9fea7a5a2eb720c2d0d2d853a5",
+  "success": true,
+  "durationMs": 43690,
+  "resultRaw": {
+    "data": [
+      {
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "average_project_score": "60.5916666666666667"
+      },
+      {
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "average_project_score": "29.6000000000000000"
+      },
+      {
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "average_project_score": "47.9662500000000000"
+      },
+      {
+        "department_name": "Wydział Inżynierii Produkcji",
+        "average_project_score": "44.9577777777777778"
+      },
+      {
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "average_project_score": "41.7746666666666667"
+      },
+      {
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "average_project_score": "60.1766666666666667"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Project Score per Department",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "department_name",
+          "type": "nominal",
+          "axis": {
+            "labelAngle": -45,
+            "labelAlign": "right"
+          },
+          "title": "Department"
+        },
+        "y": {
+          "field": "average_project_score",
+          "type": "quantitative",
+          "title": "Average Project Score"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "average_project_score",
+            "type": "quantitative",
+            "title": "Average Project Score",
+            "format": ".2f"
+          }
+        ]
+      },
+      "width": 600,
+      "height": 400
+    },
+    "sql": "SELECT \n  d.name AS department_name,\n  AVG(g.project_score) AS average_project_score\nFROM departments d\nINNER JOIN courses c ON d.id = c.department_id\nINNER JOIN course_sections cs ON c.id = cs.course_id\nINNER JOIN enrollments e ON cs.id = e.course_section_id\nINNER JOIN grades g ON e.id = g.enrollment_id\nWHERE g.project_score IS NOT NULL\nGROUP BY d.id, d.name\nORDER BY d.name",
+    "metadata": {
+      "columns": [
+        "department_name",
+        "average_project_score"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "average_project_score": "60.5916666666666667"
+        },
+        {
+          "department_name": "Wydział Informatyki i Nauki o Materiałach",
+          "average_project_score": "29.6000000000000000"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "average_project_score": "60.5916666666666667"
+      },
+      {
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "average_project_score": "29.6000000000000000"
+      },
+      {
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "average_project_score": "47.9662500000000000"
+      },
+      {
+        "department_name": "Wydział Inżynierii Produkcji",
+        "average_project_score": "44.9577777777777778"
+      },
+      {
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "average_project_score": "41.7746666666666667"
+      },
+      {
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "average_project_score": "60.1766666666666667"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Project Score per Department",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "department_name",
+          "type": "nominal",
+          "axis": {
+            "labelAngle": -45,
+            "labelAlign": "right"
+          },
+          "title": "Department"
+        },
+        "y": {
+          "field": "average_project_score",
+          "type": "quantitative",
+          "title": "Average Project Score"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "average_project_score",
+            "type": "quantitative",
+            "title": "Average Project Score",
+            "format": ".2f"
+          }
+        ]
+      },
+      "width": 600,
+      "height": 400
+    },
+    "sql": "SELECT \n  d.name AS department_name,\n  AVG(g.project_score) AS average_project_score\nFROM departments d\nINNER JOIN courses c ON d.id = c.department_id\nINNER JOIN course_sections cs ON c.id = cs.course_id\nINNER JOIN enrollments e ON cs.id = e.course_section_id\nINNER JOIN grades g ON e.id = g.enrollment_id\nWHERE g.project_score IS NOT NULL\nGROUP BY d.id, d.name\nORDER BY d.name",
+    "metadata": {
+      "columns": [
+        "department_name",
+        "average_project_score"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "average_project_score": "60.5916666666666667"
+        },
+        {
+          "department_name": "Wydział Informatyki i Nauki o Materiałach",
+          "average_project_score": "29.6000000000000000"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.283Z",
+    "traceId": "d3ca0b9fea7a5a2eb720c2d0d2d853a5",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 33752,
+      "outputTokens": 1155,
+      "totalTokens": 34907,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.039527
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 33752,
+        "outputTokens": 1155,
+        "totalTokens": 34907,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.039527
+      }
+    ],
+    "warnings": []
+  }
+}

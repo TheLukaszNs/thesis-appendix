@@ -1,0 +1,1 @@
+SELECT building AS building, SUM(capacity) AS total_capacity FROM public.classrooms GROUP BY building ORDER BY building ASC;

@@ -1,0 +1,450 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "avg-difficulty-by-course",
+  "caseDirectory": "avg-difficulty-by-course",
+  "repeatIndex": 1,
+  "prompt": "What is the average difficulty rating for each course?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average difficulty rating for each course?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:09:25.850Z",
+    "endedAtUtc": "2026-02-23T11:11:08.240Z",
+    "durationMs": 102390
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "32294",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:11:08 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the average difficulty rating for each course?\"},\"planner\":{\"payload\":{\"question\":\"What is the average difficulty rating for each course?\"},\"startedAt\":1771844965865,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.difficulty_rating)\"],\"dimensions\":[\"courses.id\",\"courses.code\",\"courses.name\"],\"filters\":[\"course_evaluations.difficulty_rating IS NOT NULL\"],\"grain\":\"course (aggregate across all sections and terms)\",\"aliases\":{\"courses.id\":\"course_id\",\"courses.code\":\"course_code\",\"courses.name\":\"course_name\",\"AVG(course_evaluations.difficulty_rating)\":\"avg_difficulty\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"avg_difficulty\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_code\",\"y_axis\":\"avg_difficulty\",\"title\":\"Average Difficulty Rating by Course\"},\"assumptions\":[\"Joins required and confirmed from schema in this run: course_evaluations.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.course_id -> courses.id.\",\"We aggregate difficulty across all sections/semesters/years for each course (no time or section breakdown) because the question asks 'for each course' without specifying term.\",\"Exclude evaluations with NULL difficulty_rating (filter applied).\",\"Average is computed as a numeric mean of integer difficulty_rating; alias 'avg_difficulty' is numeric.\",\"Course label on the x-axis uses courses.code (course_code). courses.name is also returned as course_name for display or tooltip. If you prefer course_name as the primary x-axis label, replace x_axis with 'course_name'.\",\"Only courses that have at least one linked evaluation will appear in the result (INNER JOIN behavior implied). If you want to include courses with no evaluations (showing NULL or 0), a LEFT JOIN and explicit handling must be requested.\"]}},\"endedAt\":1771845010986},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.difficulty_rating)\"],\"dimensions\":[\"courses.id\",\"courses.code\",\"courses.name\"],\"filters\":[\"course_evaluations.difficulty_rating IS NOT NULL\"],\"grain\":\"course (aggregate across all sections and terms)\",\"aliases\":{\"courses.id\":\"course_id\",\"courses.code\":\"course_code\",\"courses.name\":\"course_name\",\"AVG(course_evaluations.difficulty_rating)\":\"avg_difficulty\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"avg_difficulty\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_code\",\"y_axis\":\"avg_difficulty\",\"title\":\"Average Difficulty Rating by Course\"},\"assumptions\":[\"Joins required and confirmed from schema in this run: course_evaluations.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.course_id -> courses.id.\",\"We aggregate difficulty across all sections/semesters/years for each course (no time or section breakdown) because the question asks 'for each course' without specifying term.\",\"Exclude evaluations with NULL difficulty_rating (filter applied).\",\"Average is computed as a numeric mean of integer difficulty_rating; alias 'avg_difficulty' is numeric.\",\"Course label on the x-axis uses courses.code (course_code). courses.name is also returned as course_name for display or tooltip. If you prefer course_name as the primary x-axis label, replace x_axis with 'course_name'.\",\"Only courses that have at least one linked evaluation will appear in the result (INNER JOIN behavior implied). If you want to include courses with no evaluations (showing NULL or 0), a LEFT JOIN and explicit handling must be requested.\"]}},\"startedAt\":1771845011000,\"status\":\"success\",\"output\":{\"question\":\"What is the average difficulty rating for each course?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.difficulty_rating)\"],\"dimensions\":[\"courses.id\",\"courses.code\",\"courses.name\"],\"filters\":[\"course_evaluations.difficulty_rating IS NOT NULL\"],\"grain\":\"course (aggregate across all sections and terms)\",\"aliases\":{\"courses.id\":\"course_id\",\"courses.code\":\"course_code\",\"courses.name\":\"course_name\",\"AVG(course_evaluations.difficulty_rating)\":\"avg_difficulty\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"avg_difficulty\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_code\",\"y_axis\":\"avg_difficulty\",\"title\":\"Average Difficulty Rating by Course\"},\"assumptions\":[\"Joins required and confirmed from schema in this run: course_evaluations.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.course_id -> courses.id.\",\"We aggregate difficulty across all sections/semesters/years for each course (no time or section breakdown) because the question asks 'for each course' without specifying term.\",\"Exclude evaluations with NULL difficulty_rating (filter applied).\",\"Average is computed as a numeric mean of integer difficulty_rating; alias 'avg_difficulty' is numeric.\",\"Course label on the x-axis uses courses.code (course_code). courses.name is also returned as course_name for display or tooltip. If you prefer course_name as the primary x-axis label, replace x_axis with 'course_name'.\",\"Only courses that have at least one linked evaluation will appear in the result (INNER JOIN behavior implied). If you want to include courses with no evaluations (showing NULL or 0), a LEFT JOIN and explicit handling must be requested.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771845011003},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"What is the average difficulty rating for each course?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.difficulty_rating)\"],\"dimensions\":[\"courses.id\",\"courses.code\",\"courses.name\"],\"filters\":[\"course_evaluations.difficulty_rating IS NOT NULL\"],\"grain\":\"course (aggregate across all sections and terms)\",\"aliases\":{\"courses.id\":\"course_id\",\"courses.code\":\"course_code\",\"courses.name\":\"course_name\",\"AVG(course_evaluations.difficulty_rating)\":\"avg_difficulty\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"avg_difficulty\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_code\",\"y_axis\":\"avg_difficulty\",\"title\":\"Average Difficulty Rating by Course\"},\"assumptions\":[\"Joins required and confirmed from schema in this run: course_evaluations.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.course_id -> courses.id.\",\"We aggregate difficulty across all sections/semesters/years for each course (no time or section breakdown) because the question asks 'for each course' without specifying term.\",\"Exclude evaluations with NULL difficulty_rating (filter applied).\",\"Average is computed as a numeric mean of integer difficulty_rating; alias 'avg_difficulty' is numeric.\",\"Course label on the x-axis uses courses.code (course_code). courses.name is also returned as course_name for display or tooltip. If you prefer course_name as the primary x-axis label, replace x_axis with 'course_name'.\",\"Only courses that have at least one linked evaluation will appear in the result (INNER JOIN behavior implied). If you want to include courses with no evaluations (showing NULL or 0), a LEFT JOIN and explicit handling must be requested.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771845011009,\"status\":\"success\",\"output\":{\"question\":\"What is the average difficulty rating for each course?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.difficulty_rating)\"],\"dimensions\":[\"courses.id\",\"courses.code\",\"courses.name\"],\"filters\":[\"course_evaluations.difficulty_rating IS NOT NULL\"],\"grain\":\"course (aggregate across all sections and terms)\",\"aliases\":{\"courses.id\":\"course_id\",\"courses.code\":\"course_code\",\"courses.name\":\"course_name\",\"AVG(course_evaluations.difficulty_rating)\":\"avg_difficulty\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"avg_difficulty\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_code\",\"y_axis\":\"avg_difficulty\",\"title\":\"Average Difficulty Rating by Course\"},\"assumptions\":[\"Joins required and confirmed from schema in this run: course_evaluations.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.course_id -> courses.id.\",\"We aggregate difficulty across all sections/semesters/years for each course (no time or section breakdown) because the question asks 'for each course' without specifying term.\",\"Exclude evaluations with NULL difficulty_rating (filter applied).\",\"Average is computed as a numeric mean of integer difficulty_rating; alias 'avg_difficulty' is numeric.\",\"Course label on the x-axis uses courses.code (course_code). courses.name is also returned as course_name for display or tooltip. If you prefer course_name as the primary x-axis label, replace x_axis with 'course_name'.\",\"Only courses that have at least one linked evaluation will appear in the result (INNER JOIN behavior implied). If you want to include courses with no evaluations (showing NULL or 0), a LEFT JOIN and explicit handling must be requested.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT c.id AS course_id,\\n       c.code AS course_code,\\n       c.name AS course_name,\\n       ROUND(AVG(ce.difficulty_rating)::numeric, 2) AS avg_difficulty\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nWHERE ce.difficulty_rating IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY c.code;\",\"validationIssues\":[\"Courses with no evaluations will be excluded because the query uses inner joins; include courses with NULL/0 by switching to LEFT JOIN if desired.\",\"X-axis uses course_code (nominal) which matches the plan, but if human-readable labels are preferred consider using course_name instead.\",\"The visualization sorts x nominally ascending; this generally matches ORDER BY c.code in the SQL but could differ for complex alphanumeric codes or locale-specific ordering.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Join confirmed tables and aggregate difficulty per course; exclude NULL ratings and order by course_code for deterministic output.\",\"sql\":\"SELECT c.id AS course_id,\\n       c.code AS course_code,\\n       c.name AS course_name,\\n       ROUND(AVG(ce.difficulty_rating)::numeric, 2) AS avg_difficulty\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nWHERE ce.difficulty_rating IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY c.code;\",\"assumptions\":[\"Joins confirmed in this run: course_evaluations.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.course_id -> courses.id.\",\"Aggregate is across all sections/terms for each course (no term/section breakdown).\",\"Only courses with at least one evaluation appear (INNER JOIN behavior).\",\"difficulty_rating is numeric integer; result rounded to two decimal places as avg_difficulty.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT c.id AS course_id,\\n       c.code AS course_code,\\n       c.name AS course_name,\\n       ROUND(AVG(ce.difficulty_rating)::numeric, 2) AS avg_difficulty\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nWHERE ce.difficulty_rating IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY c.code\",\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"avg_difficulty\"],\"rowCount\":16,\"sample\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"avg_difficulty\":4.5},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"avg_difficulty\":2.75}]},\"data\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"avg_difficulty\":4.5},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"avg_difficulty\":2.75},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"avg_difficulty\":1},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"avg_difficulty\":4.5},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"avg_difficulty\":4},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"avg_difficulty\":4},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"avg_difficulty\":3.5},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"avg_difficulty\":2},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"avg_difficulty\":2.5},{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"avg_difficulty\":2},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"avg_difficulty\":2.25},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"avg_difficulty\":4.25},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"avg_difficulty\":4},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"avg_difficulty\":3},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"avg_difficulty\":1.5},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"avg_difficulty\":1.5}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Difficulty Rating by Course\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"course_code\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course Code\"},\"sort\":\"ascending\"},\"y\":{\"field\":\"avg_difficulty\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Difficulty\"}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"avg_difficulty\",\"type\":\"quantitative\",\"title\":\"Avg Difficulty\"}]},\"width\":700,\"height\":400},\"reasoning\":\"Bar chart maps each course (course_code) on the x-axis to its average difficulty (avg_difficulty) on the y-axis; tooltip shows course name and exact average for clarity.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"Courses with no evaluations will be excluded because the query uses inner joins; include courses with NULL/0 by switching to LEFT JOIN if desired.\",\"X-axis uses course_code (nominal) which matches the plan, but if human-readable labels are preferred consider using course_name instead.\",\"The visualization sorts x nominally ascending; this generally matches ORDER BY c.code in the SQL but could differ for complex alphanumeric codes or locale-specific ordering.\"]}}},\"endedAt\":1771845068171,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"What is the average difficulty rating for each course?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.difficulty_rating)\"],\"dimensions\":[\"courses.id\",\"courses.code\",\"courses.name\"],\"filters\":[\"course_evaluations.difficulty_rating IS NOT NULL\"],\"grain\":\"course (aggregate across all sections and terms)\",\"aliases\":{\"courses.id\":\"course_id\",\"courses.code\":\"course_code\",\"courses.name\":\"course_name\",\"AVG(course_evaluations.difficulty_rating)\":\"avg_difficulty\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"avg_difficulty\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_code\",\"y_axis\":\"avg_difficulty\",\"title\":\"Average Difficulty Rating by Course\"},\"assumptions\":[\"Joins required and confirmed from schema in this run: course_evaluations.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.course_id -> courses.id.\",\"We aggregate difficulty across all sections/semesters/years for each course (no time or section breakdown) because the question asks 'for each course' without specifying term.\",\"Exclude evaluations with NULL difficulty_rating (filter applied).\",\"Average is computed as a numeric mean of integer difficulty_rating; alias 'avg_difficulty' is numeric.\",\"Course label on the x-axis uses courses.code (course_code). courses.name is also returned as course_name for display or tooltip. If you prefer course_name as the primary x-axis label, replace x_axis with 'course_name'.\",\"Only courses that have at least one linked evaluation will appear in the result (INNER JOIN behavior implied). If you want to include courses with no evaluations (showing NULL or 0), a LEFT JOIN and explicit handling must be requested.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT c.id AS course_id,\\n       c.code AS course_code,\\n       c.name AS course_name,\\n       ROUND(AVG(ce.difficulty_rating)::numeric, 2) AS avg_difficulty\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nWHERE ce.difficulty_rating IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY c.code;\",\"validationIssues\":[\"Courses with no evaluations will be excluded because the query uses inner joins; include courses with NULL/0 by switching to LEFT JOIN if desired.\",\"X-axis uses course_code (nominal) which matches the plan, but if human-readable labels are preferred consider using course_name instead.\",\"The visualization sorts x nominally ascending; this generally matches ORDER BY c.code in the SQL but could differ for complex alphanumeric codes or locale-specific ordering.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Join confirmed tables and aggregate difficulty per course; exclude NULL ratings and order by course_code for deterministic output.\",\"sql\":\"SELECT c.id AS course_id,\\n       c.code AS course_code,\\n       c.name AS course_name,\\n       ROUND(AVG(ce.difficulty_rating)::numeric, 2) AS avg_difficulty\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nWHERE ce.difficulty_rating IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY c.code;\",\"assumptions\":[\"Joins confirmed in this run: course_evaluations.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.course_id -> courses.id.\",\"Aggregate is across all sections/terms for each course (no term/section breakdown).\",\"Only courses with at least one evaluation appear (INNER JOIN behavior).\",\"difficulty_rating is numeric integer; result rounded to two decimal places as avg_difficulty.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT c.id AS course_id,\\n       c.code AS course_code,\\n       c.name AS course_name,\\n       ROUND(AVG(ce.difficulty_rating)::numeric, 2) AS avg_difficulty\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nWHERE ce.difficulty_rating IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY c.code\",\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"avg_difficulty\"],\"rowCount\":16,\"sample\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"avg_difficulty\":4.5},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"avg_difficulty\":2.75}]},\"data\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"avg_difficulty\":4.5},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"avg_difficulty\":2.75},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"avg_difficulty\":1},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"avg_difficulty\":4.5},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"avg_difficulty\":4},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"avg_difficulty\":4},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"avg_difficulty\":3.5},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"avg_difficulty\":2},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"avg_difficulty\":2.5},{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"avg_difficulty\":2},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"avg_difficulty\":2.25},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"avg_difficulty\":4.25},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"avg_difficulty\":4},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"avg_difficulty\":3},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"avg_difficulty\":1.5},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"avg_difficulty\":1.5}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Difficulty Rating by Course\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"course_code\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course Code\"},\"sort\":\"ascending\"},\"y\":{\"field\":\"avg_difficulty\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Difficulty\"}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"avg_difficulty\",\"type\":\"quantitative\",\"title\":\"Avg Difficulty\"}]},\"width\":700,\"height\":400},\"reasoning\":\"Bar chart maps each course (course_code) on the x-axis to its average difficulty (avg_difficulty) on the y-axis; tooltip shows course name and exact average for clarity.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"Courses with no evaluations will be excluded because the query uses inner joins; include courses with NULL/0 by switching to LEFT JOIN if desired.\",\"X-axis uses course_code (nominal) which matches the plan, but if human-readable labels are preferred consider using course_name instead.\",\"The visualization sorts x nominally ascending; this generally matches ORDER BY c.code in the SQL but could differ for complex alphanumeric codes or locale-specific ordering.\"]}}},\"startedAt\":1771845068178,\"status\":\"success\",\"output\":{\"sql\":\"SELECT c.id AS course_id,\\n       c.code AS course_code,\\n       c.name AS course_name,\\n       ROUND(AVG(ce.difficulty_rating)::numeric, 2) AS avg_difficulty\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nWHERE ce.difficulty_rating IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY c.code;\",\"data\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"avg_difficulty\":4.5},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"avg_difficulty\":2.75},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"avg_difficulty\":1},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"avg_difficulty\":4.5},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"avg_difficulty\":4},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"avg_difficulty\":4},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"avg_difficulty\":3.5},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"avg_difficulty\":2},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"avg_difficulty\":2.5},{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"avg_difficulty\":2},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"avg_difficulty\":2.25},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"avg_difficulty\":4.25},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"avg_difficulty\":4},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"avg_difficulty\":3},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"avg_difficulty\":1.5},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"avg_difficulty\":1.5}],\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"avg_difficulty\"],\"rowCount\":16,\"sample\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"avg_difficulty\":4.5},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"avg_difficulty\":2.75}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Difficulty Rating by Course\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"course_code\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course Code\"},\"sort\":\"ascending\"},\"y\":{\"field\":\"avg_difficulty\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Difficulty\"}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"avg_difficulty\",\"type\":\"quantitative\",\"title\":\"Avg Difficulty\"}]},\"width\":700,\"height\":400},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"Courses with no evaluations will be excluded because the query uses inner joins; include courses with NULL/0 by switching to LEFT JOIN if desired.\",\"X-axis uses course_code (nominal) which matches the plan, but if human-readable labels are preferred consider using course_name instead.\",\"The visualization sorts x nominally ascending; this generally matches ORDER BY c.code in the SQL but could differ for complex alphanumeric codes or locale-specific ordering.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771845068181}},\"input\":{\"question\":\"What is the average difficulty rating for each course?\"},\"result\":{\"sql\":\"SELECT c.id AS course_id,\\n       c.code AS course_code,\\n       c.name AS course_name,\\n       ROUND(AVG(ce.difficulty_rating)::numeric, 2) AS avg_difficulty\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nWHERE ce.difficulty_rating IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY c.code;\",\"data\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"avg_difficulty\":4.5},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"avg_difficulty\":2.75},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"avg_difficulty\":1},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"avg_difficulty\":4.5},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"avg_difficulty\":4},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"avg_difficulty\":4},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"avg_difficulty\":3.5},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"avg_difficulty\":2},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"avg_difficulty\":2.5},{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"avg_difficulty\":2},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"avg_difficulty\":2.25},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"avg_difficulty\":4.25},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"avg_difficulty\":4},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"avg_difficulty\":3},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"avg_difficulty\":1.5},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"avg_difficulty\":1.5}],\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"avg_difficulty\"],\"rowCount\":16,\"sample\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"avg_difficulty\":4.5},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"avg_difficulty\":2.75}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Difficulty Rating by Course\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"course_code\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course Code\"},\"sort\":\"ascending\"},\"y\":{\"field\":\"avg_difficulty\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Difficulty\"}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"avg_difficulty\",\"type\":\"quantitative\",\"title\":\"Avg Difficulty\"}]},\"width\":700,\"height\":400},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"Courses with no evaluations will be excluded because the query uses inner joins; include courses with NULL/0 by switching to LEFT JOIN if desired.\",\"X-axis uses course_code (nominal) which matches the plan, but if human-readable labels are preferred consider using course_name instead.\",\"The visualization sorts x nominally ascending; this generally matches ORDER BY c.code in the SQL but could differ for complex alphanumeric codes or locale-specific ordering.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"7db2b6fdef59cd3935637609c4d99c15\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-difficulty-by-course/run-0001/run.json",
+    "queryPath": "runs/avg-difficulty-by-course/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-difficulty-by-course/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-difficulty-by-course/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-difficulty-by-course/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:11:08.685Z",
+  "traceId": "7db2b6fdef59cd3935637609c4d99c15",
+  "success": true,
+  "durationMs": 102835,
+  "resultRaw": {
+    "data": [
+      {
+        "course_id": "91922683-9cba-47f2-bb00-babfbce3866f",
+        "course_code": "AAX-989",
+        "course_name": "Elektronika",
+        "avg_difficulty": 4.5
+      },
+      {
+        "course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "course_code": "AFI-682",
+        "course_name": "Matematyka Dyskretna",
+        "avg_difficulty": 2.75
+      },
+      {
+        "course_id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+        "course_code": "BEW-951",
+        "course_name": "Fizyka",
+        "avg_difficulty": 1
+      },
+      {
+        "course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+        "course_code": "FCL-532",
+        "course_name": "Uczenie Maszynowe",
+        "avg_difficulty": 4.5
+      },
+      {
+        "course_id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+        "course_code": "FEO-908",
+        "course_name": "Analiza Matematyczna",
+        "avg_difficulty": 4
+      },
+      {
+        "course_id": "d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5",
+        "course_code": "HPF-845",
+        "course_name": "Systemy Wbudowane",
+        "avg_difficulty": 4
+      },
+      {
+        "course_id": "0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca",
+        "course_code": "PSC-614",
+        "course_name": "Architektura Komputerów",
+        "avg_difficulty": 3.5
+      },
+      {
+        "course_id": "0b97f1bf-8c86-431a-a583-563354b1e01f",
+        "course_code": "RZR-301",
+        "course_name": "Sieci Komputerowe",
+        "avg_difficulty": 2
+      },
+      {
+        "course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "course_code": "TAU-627",
+        "course_name": "Analiza Matematyczna",
+        "avg_difficulty": 2.5
+      },
+      {
+        "course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+        "course_code": "TJJ-354",
+        "course_name": "Projektowanie Aplikacji Webowych",
+        "avg_difficulty": 2
+      },
+      {
+        "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "avg_difficulty": 2.25
+      },
+      {
+        "course_id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "avg_difficulty": 4.25
+      },
+      {
+        "course_id": "b18a39cf-8a1b-471c-b67a-94aa04eccfae",
+        "course_code": "WZC-570",
+        "course_name": "Programowanie Obiektowe",
+        "avg_difficulty": 4
+      },
+      {
+        "course_id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "avg_difficulty": 3
+      },
+      {
+        "course_id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "avg_difficulty": 1.5
+      },
+      {
+        "course_id": "c0e00b1c-84d6-4ccd-999d-7c9197625f2e",
+        "course_code": "ZUQ-127",
+        "course_name": "Fizyka",
+        "avg_difficulty": 1.5
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Difficulty Rating by Course",
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "course_code",
+          "type": "nominal",
+          "axis": {
+            "title": "Course Code"
+          },
+          "sort": "ascending"
+        },
+        "y": {
+          "field": "avg_difficulty",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average Difficulty"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "course_code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "course_name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "avg_difficulty",
+            "type": "quantitative",
+            "title": "Avg Difficulty"
+          }
+        ]
+      },
+      "width": 700,
+      "height": 400
+    },
+    "sql": "SELECT c.id AS course_id,\n       c.code AS course_code,\n       c.name AS course_name,\n       ROUND(AVG(ce.difficulty_rating)::numeric, 2) AS avg_difficulty\nFROM public.course_evaluations ce\nJOIN public.enrollments e ON ce.enrollment_id = e.id\nJOIN public.course_sections cs ON e.course_section_id = cs.id\nJOIN public.courses c ON cs.course_id = c.id\nWHERE ce.difficulty_rating IS NOT NULL\nGROUP BY c.id, c.code, c.name\nORDER BY c.code;",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "course_code",
+        "course_name",
+        "avg_difficulty"
+      ],
+      "rowCount": 16,
+      "sample": [
+        {
+          "course_id": "91922683-9cba-47f2-bb00-babfbce3866f",
+          "course_code": "AAX-989",
+          "course_name": "Elektronika",
+          "avg_difficulty": 4.5
+        },
+        {
+          "course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+          "course_code": "AFI-682",
+          "course_name": "Matematyka Dyskretna",
+          "avg_difficulty": 2.75
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "Courses with no evaluations will be excluded because the query uses inner joins; include courses with NULL/0 by switching to LEFT JOIN if desired.",
+        "X-axis uses course_code (nominal) which matches the plan, but if human-readable labels are preferred consider using course_name instead.",
+        "The visualization sorts x nominally ascending; this generally matches ORDER BY c.code in the SQL but could differ for complex alphanumeric codes or locale-specific ordering."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "course_id": "91922683-9cba-47f2-bb00-babfbce3866f",
+        "course_code": "AAX-989",
+        "course_name": "Elektronika",
+        "avg_difficulty": 4.5
+      },
+      {
+        "course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "course_code": "AFI-682",
+        "course_name": "Matematyka Dyskretna",
+        "avg_difficulty": 2.75
+      },
+      {
+        "course_id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+        "course_code": "BEW-951",
+        "course_name": "Fizyka",
+        "avg_difficulty": 1
+      },
+      {
+        "course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+        "course_code": "FCL-532",
+        "course_name": "Uczenie Maszynowe",
+        "avg_difficulty": 4.5
+      },
+      {
+        "course_id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+        "course_code": "FEO-908",
+        "course_name": "Analiza Matematyczna",
+        "avg_difficulty": 4
+      },
+      {
+        "course_id": "d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5",
+        "course_code": "HPF-845",
+        "course_name": "Systemy Wbudowane",
+        "avg_difficulty": 4
+      },
+      {
+        "course_id": "0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca",
+        "course_code": "PSC-614",
+        "course_name": "Architektura Komputerów",
+        "avg_difficulty": 3.5
+      },
+      {
+        "course_id": "0b97f1bf-8c86-431a-a583-563354b1e01f",
+        "course_code": "RZR-301",
+        "course_name": "Sieci Komputerowe",
+        "avg_difficulty": 2
+      },
+      {
+        "course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "course_code": "TAU-627",
+        "course_name": "Analiza Matematyczna",
+        "avg_difficulty": 2.5
+      },
+      {
+        "course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+        "course_code": "TJJ-354",
+        "course_name": "Projektowanie Aplikacji Webowych",
+        "avg_difficulty": 2
+      },
+      {
+        "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "avg_difficulty": 2.25
+      },
+      {
+        "course_id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "avg_difficulty": 4.25
+      },
+      {
+        "course_id": "b18a39cf-8a1b-471c-b67a-94aa04eccfae",
+        "course_code": "WZC-570",
+        "course_name": "Programowanie Obiektowe",
+        "avg_difficulty": 4
+      },
+      {
+        "course_id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "avg_difficulty": 3
+      },
+      {
+        "course_id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "avg_difficulty": 1.5
+      },
+      {
+        "course_id": "c0e00b1c-84d6-4ccd-999d-7c9197625f2e",
+        "course_code": "ZUQ-127",
+        "course_name": "Fizyka",
+        "avg_difficulty": 1.5
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Difficulty Rating by Course",
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "course_code",
+          "type": "nominal",
+          "axis": {
+            "title": "Course Code"
+          },
+          "sort": "ascending"
+        },
+        "y": {
+          "field": "avg_difficulty",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average Difficulty"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "course_code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "course_name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "avg_difficulty",
+            "type": "quantitative",
+            "title": "Avg Difficulty"
+          }
+        ]
+      },
+      "width": 700,
+      "height": 400
+    },
+    "sql": "SELECT c.id AS course_id,\n       c.code AS course_code,\n       c.name AS course_name,\n       ROUND(AVG(ce.difficulty_rating)::numeric, 2) AS avg_difficulty\nFROM public.course_evaluations ce\nJOIN public.enrollments e ON ce.enrollment_id = e.id\nJOIN public.course_sections cs ON e.course_section_id = cs.id\nJOIN public.courses c ON cs.course_id = c.id\nWHERE ce.difficulty_rating IS NOT NULL\nGROUP BY c.id, c.code, c.name\nORDER BY c.code;",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "course_code",
+        "course_name",
+        "avg_difficulty"
+      ],
+      "rowCount": 16,
+      "sample": [
+        {
+          "course_id": "91922683-9cba-47f2-bb00-babfbce3866f",
+          "course_code": "AAX-989",
+          "course_name": "Elektronika",
+          "avg_difficulty": 4.5
+        },
+        {
+          "course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+          "course_code": "AFI-682",
+          "course_name": "Matematyka Dyskretna",
+          "avg_difficulty": 2.75
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "Courses with no evaluations will be excluded because the query uses inner joins; include courses with NULL/0 by switching to LEFT JOIN if desired.",
+        "X-axis uses course_code (nominal) which matches the plan, but if human-readable labels are preferred consider using course_name instead.",
+        "The visualization sorts x nominally ascending; this generally matches ORDER BY c.code in the SQL but could differ for complex alphanumeric codes or locale-specific ordering."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:11:08.685Z",
+    "traceId": "7db2b6fdef59cd3935637609c4d99c15",
+    "attempts": 4,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 36809,
+      "outputTokens": 5133,
+      "totalTokens": 41942,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 3456,
+      "costUsd": 0.01946825
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 36809,
+        "outputTokens": 5133,
+        "totalTokens": 41942,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 3456,
+        "costUsd": 0.01946825
+      }
+    ],
+    "warnings": []
+  }
+}

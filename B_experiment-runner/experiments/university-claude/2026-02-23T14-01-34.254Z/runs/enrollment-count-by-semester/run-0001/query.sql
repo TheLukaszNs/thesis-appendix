@@ -1,0 +1,1 @@
+SELECT cs.academic_year, cs.semester_type, COUNT(e.id) AS enrollment_count FROM enrollments e JOIN course_sections cs ON e.course_section_id = cs.id GROUP BY cs.academic_year, cs.semester_type ORDER BY cs.academic_year, cs.semester_type

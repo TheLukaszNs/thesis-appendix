@@ -1,0 +1,478 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "avg-scores-by-grade-value",
+  "caseDirectory": "avg-scores-by-grade-value",
+  "repeatIndex": 1,
+  "prompt": "Show the average exam, project, and attendance scores for each grade value",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the average exam, project, and attendance scores for each grade value"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:53:29.871Z",
+    "endedAtUtc": "2026-02-22T23:54:08.793Z",
+    "durationMs": 38922
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "13525",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:54:08 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show the average exam, project, and attendance scores for each grade value\"},\"sql\":{\"payload\":{\"question\":\"Show the average exam, project, and attendance scores for each grade value\"},\"startedAt\":1771804409878,\"status\":\"success\",\"output\":{\"reasoning\":\"Group grades by confirmed column grades.grade_value and compute averages of the three numeric score columns; round to 2 decimals for readability and order by grade_value for deterministic output.\",\"sql\":\"SELECT\\n  grade_value AS grade_value,\\n  ROUND(AVG(exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(project_score)::numeric, 2) AS avg_project_score,\\n  ROUND(AVG(attendance_score)::numeric, 2) AS avg_attendance_score\\nFROM public.grades\\nGROUP BY grade_value\\nORDER BY grade_value\",\"assumptions\":[\"Table public.grades and columns grade_value, exam_score, project_score, attendance_score exist (verified).\",\"AVG should ignore NULLs (default behavior).\",\"Rounding to 2 decimal places is acceptable for presentation.\"]},\"endedAt\":1771804422958},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  grade_value AS grade_value,\\n  ROUND(AVG(exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(project_score)::numeric, 2) AS avg_project_score,\\n  ROUND(AVG(attendance_score)::numeric, 2) AS avg_attendance_score\\nFROM public.grades\\nGROUP BY grade_value\\nORDER BY grade_value\"},\"startedAt\":1771804422961,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT\\n  grade_value AS grade_value,\\n  ROUND(AVG(exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(project_score)::numeric, 2) AS avg_project_score,\\n  ROUND(AVG(attendance_score)::numeric, 2) AS avg_attendance_score\\nFROM public.grades\\nGROUP BY grade_value\\nORDER BY grade_value\",\"metadata\":{\"columns\":[\"grade_value\",\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\"],\"rowCount\":6,\"sample\":[{\"grade_value\":\"2.0\",\"avg_exam_score\":54.07,\"avg_project_score\":49.03,\"avg_attendance_score\":63.1},{\"grade_value\":\"3.0\",\"avg_exam_score\":44.03,\"avg_project_score\":46.09,\"avg_attendance_score\":69.21}]},\"data\":[{\"grade_value\":\"2.0\",\"avg_exam_score\":54.07,\"avg_project_score\":49.03,\"avg_attendance_score\":63.1},{\"grade_value\":\"3.0\",\"avg_exam_score\":44.03,\"avg_project_score\":46.09,\"avg_attendance_score\":69.21},{\"grade_value\":\"3.5\",\"avg_exam_score\":37.96,\"avg_project_score\":39.15,\"avg_attendance_score\":60.75},{\"grade_value\":\"4.0\",\"avg_exam_score\":59.27,\"avg_project_score\":74.82,\"avg_attendance_score\":49.63},{\"grade_value\":\"4.5\",\"avg_exam_score\":52.05,\"avg_project_score\":46.75,\"avg_attendance_score\":45.29},{\"grade_value\":\"5.0\",\"avg_exam_score\":51.28,\"avg_project_score\":34.97,\"avg_attendance_score\":56.5}]},\"endedAt\":1771804422978},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT\\n  grade_value AS grade_value,\\n  ROUND(AVG(exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(project_score)::numeric, 2) AS avg_project_score,\\n  ROUND(AVG(attendance_score)::numeric, 2) AS avg_attendance_score\\nFROM public.grades\\nGROUP BY grade_value\\nORDER BY grade_value\",\"metadata\":{\"columns\":[\"grade_value\",\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\"],\"rowCount\":6,\"sample\":[{\"grade_value\":\"2.0\",\"avg_exam_score\":54.07,\"avg_project_score\":49.03,\"avg_attendance_score\":63.1},{\"grade_value\":\"3.0\",\"avg_exam_score\":44.03,\"avg_project_score\":46.09,\"avg_attendance_score\":69.21}]},\"data\":[{\"grade_value\":\"2.0\",\"avg_exam_score\":54.07,\"avg_project_score\":49.03,\"avg_attendance_score\":63.1},{\"grade_value\":\"3.0\",\"avg_exam_score\":44.03,\"avg_project_score\":46.09,\"avg_attendance_score\":69.21},{\"grade_value\":\"3.5\",\"avg_exam_score\":37.96,\"avg_project_score\":39.15,\"avg_attendance_score\":60.75},{\"grade_value\":\"4.0\",\"avg_exam_score\":59.27,\"avg_project_score\":74.82,\"avg_attendance_score\":49.63},{\"grade_value\":\"4.5\",\"avg_exam_score\":52.05,\"avg_project_score\":46.75,\"avg_attendance_score\":45.29},{\"grade_value\":\"5.0\",\"avg_exam_score\":51.28,\"avg_project_score\":34.97,\"avg_attendance_score\":56.5}]},\"startedAt\":1771804422981,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average exam, project, and attendance scores by grade value\",\"width\":640,\"height\":400,\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"grade_value\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Grade value\"}},\"y\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average score\"}},\"xOffset\":{\"value\":-14},\"color\":{\"value\":\"#1f77b4\"},\"tooltip\":[{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade value\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg exam score\"}]}},{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"grade_value\",\"type\":\"ordinal\"},\"y\":{\"field\":\"avg_project_score\",\"type\":\"quantitative\"},\"xOffset\":{\"value\":0},\"color\":{\"value\":\"#ff7f0e\"},\"tooltip\":[{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade value\"},{\"field\":\"avg_project_score\",\"type\":\"quantitative\",\"title\":\"Avg project score\"}]}},{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"grade_value\",\"type\":\"ordinal\"},\"y\":{\"field\":\"avg_attendance_score\",\"type\":\"quantitative\"},\"xOffset\":{\"value\":14},\"color\":{\"value\":\"#2ca02c\"},\"tooltip\":[{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade value\"},{\"field\":\"avg_attendance_score\",\"type\":\"quantitative\",\"title\":\"Avg attendance score\"}]}}]},\"reasoning\":\"Layered bars show the three average score measures per grade value. Each layer encodes only fields from the query (grade_value and the three avg_* columns). Tooltips present the grade and the corresponding average for each bar.\"},\"endedAt\":1771804448774},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average exam, project, and attendance scores by grade value\",\"width\":640,\"height\":400,\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"grade_value\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Grade value\"}},\"y\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average score\"}},\"xOffset\":{\"value\":-14},\"color\":{\"value\":\"#1f77b4\"},\"tooltip\":[{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade value\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg exam score\"}]}},{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"grade_value\",\"type\":\"ordinal\"},\"y\":{\"field\":\"avg_project_score\",\"type\":\"quantitative\"},\"xOffset\":{\"value\":0},\"color\":{\"value\":\"#ff7f0e\"},\"tooltip\":[{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade value\"},{\"field\":\"avg_project_score\",\"type\":\"quantitative\",\"title\":\"Avg project score\"}]}},{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"grade_value\",\"type\":\"ordinal\"},\"y\":{\"field\":\"avg_attendance_score\",\"type\":\"quantitative\"},\"xOffset\":{\"value\":14},\"color\":{\"value\":\"#2ca02c\"},\"tooltip\":[{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade value\"},{\"field\":\"avg_attendance_score\",\"type\":\"quantitative\",\"title\":\"Avg attendance score\"}]}}]},\"reasoning\":\"Layered bars show the three average score measures per grade value. Each layer encodes only fields from the query (grade_value and the three avg_* columns). Tooltips present the grade and the corresponding average for each bar.\"},\"startedAt\":1771804448778,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  grade_value AS grade_value,\\n  ROUND(AVG(exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(project_score)::numeric, 2) AS avg_project_score,\\n  ROUND(AVG(attendance_score)::numeric, 2) AS avg_attendance_score\\nFROM public.grades\\nGROUP BY grade_value\\nORDER BY grade_value\",\"data\":[{\"grade_value\":\"2.0\",\"avg_exam_score\":54.07,\"avg_project_score\":49.03,\"avg_attendance_score\":63.1},{\"grade_value\":\"3.0\",\"avg_exam_score\":44.03,\"avg_project_score\":46.09,\"avg_attendance_score\":69.21},{\"grade_value\":\"3.5\",\"avg_exam_score\":37.96,\"avg_project_score\":39.15,\"avg_attendance_score\":60.75},{\"grade_value\":\"4.0\",\"avg_exam_score\":59.27,\"avg_project_score\":74.82,\"avg_attendance_score\":49.63},{\"grade_value\":\"4.5\",\"avg_exam_score\":52.05,\"avg_project_score\":46.75,\"avg_attendance_score\":45.29},{\"grade_value\":\"5.0\",\"avg_exam_score\":51.28,\"avg_project_score\":34.97,\"avg_attendance_score\":56.5}],\"metadata\":{\"columns\":[\"grade_value\",\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\"],\"rowCount\":6,\"sample\":[{\"grade_value\":\"2.0\",\"avg_exam_score\":54.07,\"avg_project_score\":49.03,\"avg_attendance_score\":63.1},{\"grade_value\":\"3.0\",\"avg_exam_score\":44.03,\"avg_project_score\":46.09,\"avg_attendance_score\":69.21}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average exam, project, and attendance scores by grade value\",\"width\":640,\"height\":400,\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"grade_value\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Grade value\"}},\"y\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average score\"}},\"xOffset\":{\"value\":-14},\"color\":{\"value\":\"#1f77b4\"},\"tooltip\":[{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade value\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg exam score\"}]}},{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"grade_value\",\"type\":\"ordinal\"},\"y\":{\"field\":\"avg_project_score\",\"type\":\"quantitative\"},\"xOffset\":{\"value\":0},\"color\":{\"value\":\"#ff7f0e\"},\"tooltip\":[{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade value\"},{\"field\":\"avg_project_score\",\"type\":\"quantitative\",\"title\":\"Avg project score\"}]}},{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"grade_value\",\"type\":\"ordinal\"},\"y\":{\"field\":\"avg_attendance_score\",\"type\":\"quantitative\"},\"xOffset\":{\"value\":14},\"color\":{\"value\":\"#2ca02c\"},\"tooltip\":[{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade value\"},{\"field\":\"avg_attendance_score\",\"type\":\"quantitative\",\"title\":\"Avg attendance score\"}]}}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"]}},\"endedAt\":1771804448780}},\"input\":{\"question\":\"Show the average exam, project, and attendance scores for each grade value\"},\"result\":{\"sql\":\"SELECT\\n  grade_value AS grade_value,\\n  ROUND(AVG(exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(project_score)::numeric, 2) AS avg_project_score,\\n  ROUND(AVG(attendance_score)::numeric, 2) AS avg_attendance_score\\nFROM public.grades\\nGROUP BY grade_value\\nORDER BY grade_value\",\"data\":[{\"grade_value\":\"2.0\",\"avg_exam_score\":54.07,\"avg_project_score\":49.03,\"avg_attendance_score\":63.1},{\"grade_value\":\"3.0\",\"avg_exam_score\":44.03,\"avg_project_score\":46.09,\"avg_attendance_score\":69.21},{\"grade_value\":\"3.5\",\"avg_exam_score\":37.96,\"avg_project_score\":39.15,\"avg_attendance_score\":60.75},{\"grade_value\":\"4.0\",\"avg_exam_score\":59.27,\"avg_project_score\":74.82,\"avg_attendance_score\":49.63},{\"grade_value\":\"4.5\",\"avg_exam_score\":52.05,\"avg_project_score\":46.75,\"avg_attendance_score\":45.29},{\"grade_value\":\"5.0\",\"avg_exam_score\":51.28,\"avg_project_score\":34.97,\"avg_attendance_score\":56.5}],\"metadata\":{\"columns\":[\"grade_value\",\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\"],\"rowCount\":6,\"sample\":[{\"grade_value\":\"2.0\",\"avg_exam_score\":54.07,\"avg_project_score\":49.03,\"avg_attendance_score\":63.1},{\"grade_value\":\"3.0\",\"avg_exam_score\":44.03,\"avg_project_score\":46.09,\"avg_attendance_score\":69.21}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average exam, project, and attendance scores by grade value\",\"width\":640,\"height\":400,\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"grade_value\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Grade value\"}},\"y\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average score\"}},\"xOffset\":{\"value\":-14},\"color\":{\"value\":\"#1f77b4\"},\"tooltip\":[{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade value\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg exam score\"}]}},{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"grade_value\",\"type\":\"ordinal\"},\"y\":{\"field\":\"avg_project_score\",\"type\":\"quantitative\"},\"xOffset\":{\"value\":0},\"color\":{\"value\":\"#ff7f0e\"},\"tooltip\":[{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade value\"},{\"field\":\"avg_project_score\",\"type\":\"quantitative\",\"title\":\"Avg project score\"}]}},{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"grade_value\",\"type\":\"ordinal\"},\"y\":{\"field\":\"avg_attendance_score\",\"type\":\"quantitative\"},\"xOffset\":{\"value\":14},\"color\":{\"value\":\"#2ca02c\"},\"tooltip\":[{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade value\"},{\"field\":\"avg_attendance_score\",\"type\":\"quantitative\",\"title\":\"Avg attendance score\"}]}}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"]}},\"traceId\":\"34bc32e9bfec742cf940f56da507fa07\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-scores-by-grade-value/run-0001/run.json",
+    "queryPath": "runs/avg-scores-by-grade-value/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-scores-by-grade-value/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-scores-by-grade-value/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-scores-by-grade-value/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:54:09.241Z",
+  "traceId": "34bc32e9bfec742cf940f56da507fa07",
+  "success": true,
+  "durationMs": 39370,
+  "resultRaw": {
+    "data": [
+      {
+        "grade_value": "2.0",
+        "avg_exam_score": 54.07,
+        "avg_project_score": 49.03,
+        "avg_attendance_score": 63.1
+      },
+      {
+        "grade_value": "3.0",
+        "avg_exam_score": 44.03,
+        "avg_project_score": 46.09,
+        "avg_attendance_score": 69.21
+      },
+      {
+        "grade_value": "3.5",
+        "avg_exam_score": 37.96,
+        "avg_project_score": 39.15,
+        "avg_attendance_score": 60.75
+      },
+      {
+        "grade_value": "4.0",
+        "avg_exam_score": 59.27,
+        "avg_project_score": 74.82,
+        "avg_attendance_score": 49.63
+      },
+      {
+        "grade_value": "4.5",
+        "avg_exam_score": 52.05,
+        "avg_project_score": 46.75,
+        "avg_attendance_score": 45.29
+      },
+      {
+        "grade_value": "5.0",
+        "avg_exam_score": 51.28,
+        "avg_project_score": 34.97,
+        "avg_attendance_score": 56.5
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average exam, project, and attendance scores by grade value",
+      "width": 640,
+      "height": 400,
+      "layer": [
+        {
+          "mark": {
+            "type": "bar",
+            "cornerRadius": 3
+          },
+          "encoding": {
+            "x": {
+              "field": "grade_value",
+              "type": "ordinal",
+              "axis": {
+                "title": "Grade value"
+              }
+            },
+            "y": {
+              "field": "avg_exam_score",
+              "type": "quantitative",
+              "axis": {
+                "title": "Average score"
+              }
+            },
+            "xOffset": {
+              "value": -14
+            },
+            "color": {
+              "value": "#1f77b4"
+            },
+            "tooltip": [
+              {
+                "field": "grade_value",
+                "type": "nominal",
+                "title": "Grade value"
+              },
+              {
+                "field": "avg_exam_score",
+                "type": "quantitative",
+                "title": "Avg exam score"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "bar",
+            "cornerRadius": 3
+          },
+          "encoding": {
+            "x": {
+              "field": "grade_value",
+              "type": "ordinal"
+            },
+            "y": {
+              "field": "avg_project_score",
+              "type": "quantitative"
+            },
+            "xOffset": {
+              "value": 0
+            },
+            "color": {
+              "value": "#ff7f0e"
+            },
+            "tooltip": [
+              {
+                "field": "grade_value",
+                "type": "nominal",
+                "title": "Grade value"
+              },
+              {
+                "field": "avg_project_score",
+                "type": "quantitative",
+                "title": "Avg project score"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "bar",
+            "cornerRadius": 3
+          },
+          "encoding": {
+            "x": {
+              "field": "grade_value",
+              "type": "ordinal"
+            },
+            "y": {
+              "field": "avg_attendance_score",
+              "type": "quantitative"
+            },
+            "xOffset": {
+              "value": 14
+            },
+            "color": {
+              "value": "#2ca02c"
+            },
+            "tooltip": [
+              {
+                "field": "grade_value",
+                "type": "nominal",
+                "title": "Grade value"
+              },
+              {
+                "field": "avg_attendance_score",
+                "type": "quantitative",
+                "title": "Avg attendance score"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "sql": "SELECT\n  grade_value AS grade_value,\n  ROUND(AVG(exam_score)::numeric, 2) AS avg_exam_score,\n  ROUND(AVG(project_score)::numeric, 2) AS avg_project_score,\n  ROUND(AVG(attendance_score)::numeric, 2) AS avg_attendance_score\nFROM public.grades\nGROUP BY grade_value\nORDER BY grade_value",
+    "metadata": {
+      "columns": [
+        "grade_value",
+        "avg_exam_score",
+        "avg_project_score",
+        "avg_attendance_score"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "grade_value": "2.0",
+          "avg_exam_score": 54.07,
+          "avg_project_score": 49.03,
+          "avg_attendance_score": 63.1
+        },
+        {
+          "grade_value": "3.0",
+          "avg_exam_score": 44.03,
+          "avg_project_score": 46.09,
+          "avg_attendance_score": 69.21
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "grade_value": "2.0",
+        "avg_exam_score": 54.07,
+        "avg_project_score": 49.03,
+        "avg_attendance_score": 63.1
+      },
+      {
+        "grade_value": "3.0",
+        "avg_exam_score": 44.03,
+        "avg_project_score": 46.09,
+        "avg_attendance_score": 69.21
+      },
+      {
+        "grade_value": "3.5",
+        "avg_exam_score": 37.96,
+        "avg_project_score": 39.15,
+        "avg_attendance_score": 60.75
+      },
+      {
+        "grade_value": "4.0",
+        "avg_exam_score": 59.27,
+        "avg_project_score": 74.82,
+        "avg_attendance_score": 49.63
+      },
+      {
+        "grade_value": "4.5",
+        "avg_exam_score": 52.05,
+        "avg_project_score": 46.75,
+        "avg_attendance_score": 45.29
+      },
+      {
+        "grade_value": "5.0",
+        "avg_exam_score": 51.28,
+        "avg_project_score": 34.97,
+        "avg_attendance_score": 56.5
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average exam, project, and attendance scores by grade value",
+      "width": 640,
+      "height": 400,
+      "layer": [
+        {
+          "mark": {
+            "type": "bar",
+            "cornerRadius": 3
+          },
+          "encoding": {
+            "x": {
+              "field": "grade_value",
+              "type": "ordinal",
+              "axis": {
+                "title": "Grade value"
+              }
+            },
+            "y": {
+              "field": "avg_exam_score",
+              "type": "quantitative",
+              "axis": {
+                "title": "Average score"
+              }
+            },
+            "xOffset": {
+              "value": -14
+            },
+            "color": {
+              "value": "#1f77b4"
+            },
+            "tooltip": [
+              {
+                "field": "grade_value",
+                "type": "nominal",
+                "title": "Grade value"
+              },
+              {
+                "field": "avg_exam_score",
+                "type": "quantitative",
+                "title": "Avg exam score"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "bar",
+            "cornerRadius": 3
+          },
+          "encoding": {
+            "x": {
+              "field": "grade_value",
+              "type": "ordinal"
+            },
+            "y": {
+              "field": "avg_project_score",
+              "type": "quantitative"
+            },
+            "xOffset": {
+              "value": 0
+            },
+            "color": {
+              "value": "#ff7f0e"
+            },
+            "tooltip": [
+              {
+                "field": "grade_value",
+                "type": "nominal",
+                "title": "Grade value"
+              },
+              {
+                "field": "avg_project_score",
+                "type": "quantitative",
+                "title": "Avg project score"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "bar",
+            "cornerRadius": 3
+          },
+          "encoding": {
+            "x": {
+              "field": "grade_value",
+              "type": "ordinal"
+            },
+            "y": {
+              "field": "avg_attendance_score",
+              "type": "quantitative"
+            },
+            "xOffset": {
+              "value": 14
+            },
+            "color": {
+              "value": "#2ca02c"
+            },
+            "tooltip": [
+              {
+                "field": "grade_value",
+                "type": "nominal",
+                "title": "Grade value"
+              },
+              {
+                "field": "avg_attendance_score",
+                "type": "quantitative",
+                "title": "Avg attendance score"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "sql": "SELECT\n  grade_value AS grade_value,\n  ROUND(AVG(exam_score)::numeric, 2) AS avg_exam_score,\n  ROUND(AVG(project_score)::numeric, 2) AS avg_project_score,\n  ROUND(AVG(attendance_score)::numeric, 2) AS avg_attendance_score\nFROM public.grades\nGROUP BY grade_value\nORDER BY grade_value",
+    "metadata": {
+      "columns": [
+        "grade_value",
+        "avg_exam_score",
+        "avg_project_score",
+        "avg_attendance_score"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "grade_value": "2.0",
+          "avg_exam_score": 54.07,
+          "avg_project_score": 49.03,
+          "avg_attendance_score": 63.1
+        },
+        {
+          "grade_value": "3.0",
+          "avg_exam_score": 44.03,
+          "avg_project_score": 46.09,
+          "avg_attendance_score": 69.21
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:54:09.241Z",
+    "traceId": "34bc32e9bfec742cf940f56da507fa07",
+    "attempts": 5,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 5673,
+      "outputTokens": 3323,
+      "totalTokens": 8996,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2240,
+      "costUsd": 0.00806425
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 5673,
+        "outputTokens": 3323,
+        "totalTokens": 8996,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2240,
+        "costUsd": 0.00806425
+      }
+    ],
+    "warnings": []
+  }
+}

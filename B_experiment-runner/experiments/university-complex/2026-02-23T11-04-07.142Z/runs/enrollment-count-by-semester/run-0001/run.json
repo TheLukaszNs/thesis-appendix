@@ -1,0 +1,380 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "enrollment-count-by-semester",
+  "caseDirectory": "enrollment-count-by-semester",
+  "repeatIndex": 1,
+  "prompt": "How many enrollments are there per semester and academic year?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many enrollments are there per semester and academic year?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:05:49.902Z",
+    "endedAtUtc": "2026-02-23T11:07:19.882Z",
+    "durationMs": 89980
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "27870",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:07:19 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How many enrollments are there per semester and academic year?\"},\"planner\":{\"payload\":{\"question\":\"How many enrollments are there per semester and academic year?\"},\"startedAt\":1771844749913,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(enrollments.id)\"],\"dimensions\":[\"course_sections.semester_type\",\"course_sections.academic_year\"],\"filters\":[\"enrollments.course_section_id = course_sections.id\",\"enrollments.is_active = true\",\"course_sections.semester_type IS NOT NULL\",\"course_sections.academic_year IS NOT NULL\"],\"grain\":\"grouped by semester_type and academic_year\",\"aliases\":{\"course_sections.semester_type\":\"semester\",\"course_sections.academic_year\":\"academic_year\",\"COUNT(enrollments.id)\":\"enrollment_count\"},\"output_fields\":[\"semester\",\"academic_year\",\"enrollment_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"academic_year\",\"y_axis\":\"enrollment_count\",\"color_group\":\"semester\",\"title\":\"Enrollments per Semester and Academic Year\"},\"assumptions\":[\"I inspected the database schema in this session and confirmed the existence of public.enrollments and public.course_sections and the relevant columns used above.\",\"Enrollments are associated to sections via enrollments.course_section_id -> course_sections.id (foreign key confirmed).\",\"The question is interpreted as counting active enrollments; therefore I apply filter enrollments.is_active = true. If you want to count all historical (including inactive) enrollments, remove that filter.\",\"semester_type is a user-defined enum in course_sections; I treat it as a categorical dimension and expose it as 'semester'.\",\"Academic year is stored in course_sections.academic_year (varchar) and exposed as 'academic_year'. No parsing or normalization of academic_year strings is performed here.\",\"If you prefer unique student counts per semester (one student counted once per semester even if enrolled in multiple sections), replace COUNT(enrollments.id) with COUNT(DISTINCT enrollments.student_id).\"]}},\"endedAt\":1771844785662},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(enrollments.id)\"],\"dimensions\":[\"course_sections.semester_type\",\"course_sections.academic_year\"],\"filters\":[\"enrollments.course_section_id = course_sections.id\",\"enrollments.is_active = true\",\"course_sections.semester_type IS NOT NULL\",\"course_sections.academic_year IS NOT NULL\"],\"grain\":\"grouped by semester_type and academic_year\",\"aliases\":{\"course_sections.semester_type\":\"semester\",\"course_sections.academic_year\":\"academic_year\",\"COUNT(enrollments.id)\":\"enrollment_count\"},\"output_fields\":[\"semester\",\"academic_year\",\"enrollment_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"academic_year\",\"y_axis\":\"enrollment_count\",\"color_group\":\"semester\",\"title\":\"Enrollments per Semester and Academic Year\"},\"assumptions\":[\"I inspected the database schema in this session and confirmed the existence of public.enrollments and public.course_sections and the relevant columns used above.\",\"Enrollments are associated to sections via enrollments.course_section_id -> course_sections.id (foreign key confirmed).\",\"The question is interpreted as counting active enrollments; therefore I apply filter enrollments.is_active = true. If you want to count all historical (including inactive) enrollments, remove that filter.\",\"semester_type is a user-defined enum in course_sections; I treat it as a categorical dimension and expose it as 'semester'.\",\"Academic year is stored in course_sections.academic_year (varchar) and exposed as 'academic_year'. No parsing or normalization of academic_year strings is performed here.\",\"If you prefer unique student counts per semester (one student counted once per semester even if enrolled in multiple sections), replace COUNT(enrollments.id) with COUNT(DISTINCT enrollments.student_id).\"]}},\"startedAt\":1771844785669,\"status\":\"success\",\"output\":{\"question\":\"How many enrollments are there per semester and academic year?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(enrollments.id)\"],\"dimensions\":[\"course_sections.semester_type\",\"course_sections.academic_year\"],\"filters\":[\"enrollments.course_section_id = course_sections.id\",\"enrollments.is_active = true\",\"course_sections.semester_type IS NOT NULL\",\"course_sections.academic_year IS NOT NULL\"],\"grain\":\"grouped by semester_type and academic_year\",\"aliases\":{\"course_sections.semester_type\":\"semester\",\"course_sections.academic_year\":\"academic_year\",\"COUNT(enrollments.id)\":\"enrollment_count\"},\"output_fields\":[\"semester\",\"academic_year\",\"enrollment_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"academic_year\",\"y_axis\":\"enrollment_count\",\"color_group\":\"semester\",\"title\":\"Enrollments per Semester and Academic Year\"},\"assumptions\":[\"I inspected the database schema in this session and confirmed the existence of public.enrollments and public.course_sections and the relevant columns used above.\",\"Enrollments are associated to sections via enrollments.course_section_id -> course_sections.id (foreign key confirmed).\",\"The question is interpreted as counting active enrollments; therefore I apply filter enrollments.is_active = true. If you want to count all historical (including inactive) enrollments, remove that filter.\",\"semester_type is a user-defined enum in course_sections; I treat it as a categorical dimension and expose it as 'semester'.\",\"Academic year is stored in course_sections.academic_year (varchar) and exposed as 'academic_year'. No parsing or normalization of academic_year strings is performed here.\",\"If you prefer unique student counts per semester (one student counted once per semester even if enrolled in multiple sections), replace COUNT(enrollments.id) with COUNT(DISTINCT enrollments.student_id).\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771844785671},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"How many enrollments are there per semester and academic year?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(enrollments.id)\"],\"dimensions\":[\"course_sections.semester_type\",\"course_sections.academic_year\"],\"filters\":[\"enrollments.course_section_id = course_sections.id\",\"enrollments.is_active = true\",\"course_sections.semester_type IS NOT NULL\",\"course_sections.academic_year IS NOT NULL\"],\"grain\":\"grouped by semester_type and academic_year\",\"aliases\":{\"course_sections.semester_type\":\"semester\",\"course_sections.academic_year\":\"academic_year\",\"COUNT(enrollments.id)\":\"enrollment_count\"},\"output_fields\":[\"semester\",\"academic_year\",\"enrollment_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"academic_year\",\"y_axis\":\"enrollment_count\",\"color_group\":\"semester\",\"title\":\"Enrollments per Semester and Academic Year\"},\"assumptions\":[\"I inspected the database schema in this session and confirmed the existence of public.enrollments and public.course_sections and the relevant columns used above.\",\"Enrollments are associated to sections via enrollments.course_section_id -> course_sections.id (foreign key confirmed).\",\"The question is interpreted as counting active enrollments; therefore I apply filter enrollments.is_active = true. If you want to count all historical (including inactive) enrollments, remove that filter.\",\"semester_type is a user-defined enum in course_sections; I treat it as a categorical dimension and expose it as 'semester'.\",\"Academic year is stored in course_sections.academic_year (varchar) and exposed as 'academic_year'. No parsing or normalization of academic_year strings is performed here.\",\"If you prefer unique student counts per semester (one student counted once per semester even if enrolled in multiple sections), replace COUNT(enrollments.id) with COUNT(DISTINCT enrollments.student_id).\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771844785674,\"status\":\"success\",\"output\":{\"question\":\"How many enrollments are there per semester and academic year?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(enrollments.id)\"],\"dimensions\":[\"course_sections.semester_type\",\"course_sections.academic_year\"],\"filters\":[\"enrollments.course_section_id = course_sections.id\",\"enrollments.is_active = true\",\"course_sections.semester_type IS NOT NULL\",\"course_sections.academic_year IS NOT NULL\"],\"grain\":\"grouped by semester_type and academic_year\",\"aliases\":{\"course_sections.semester_type\":\"semester\",\"course_sections.academic_year\":\"academic_year\",\"COUNT(enrollments.id)\":\"enrollment_count\"},\"output_fields\":[\"semester\",\"academic_year\",\"enrollment_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"academic_year\",\"y_axis\":\"enrollment_count\",\"color_group\":\"semester\",\"title\":\"Enrollments per Semester and Academic Year\"},\"assumptions\":[\"I inspected the database schema in this session and confirmed the existence of public.enrollments and public.course_sections and the relevant columns used above.\",\"Enrollments are associated to sections via enrollments.course_section_id -> course_sections.id (foreign key confirmed).\",\"The question is interpreted as counting active enrollments; therefore I apply filter enrollments.is_active = true. If you want to count all historical (including inactive) enrollments, remove that filter.\",\"semester_type is a user-defined enum in course_sections; I treat it as a categorical dimension and expose it as 'semester'.\",\"Academic year is stored in course_sections.academic_year (varchar) and exposed as 'academic_year'. No parsing or normalization of academic_year strings is performed here.\",\"If you prefer unique student counts per semester (one student counted once per semester even if enrolled in multiple sections), replace COUNT(enrollments.id) with COUNT(DISTINCT enrollments.student_id).\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT cs.semester_type AS semester, cs.academic_year AS academic_year, COUNT(e.id) AS enrollment_count FROM public.enrollments e JOIN public.course_sections cs ON e.course_section_id = cs.id WHERE e.is_active = true AND cs.semester_type IS NOT NULL AND cs.academic_year IS NOT NULL GROUP BY cs.semester_type, cs.academic_year ORDER BY cs.academic_year ASC, cs.semester_type ASC;\",\"validationIssues\":[\"academic_year is treated as a nominal (string) field — lexicographic sorting (sort: \\\"ascending\\\") may not be chronological; consider parsing/normalizing academic_year or providing an explicit sort order if you need true chronological order.\",\"semester has no explicit sort/domain — if you require a specific semester order (e.g., SPRING, SUMMER, FALL), set an ordinal domain for the color/xOffset scale.\",\"If the intent was to count unique students per semester rather than enrollment rows, replace COUNT(e.id) with COUNT(DISTINCT e.student_id).\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"I inspected public.enrollments and public.course_sections (confirmed columns and FK). The query counts active enrollments grouped by course_sections.semester_type and course_sections.academic_year, applying the requested non-null filters and deterministic ordering.\",\"sql\":\"SELECT cs.semester_type AS semester, cs.academic_year AS academic_year, COUNT(e.id) AS enrollment_count FROM public.enrollments e JOIN public.course_sections cs ON e.course_section_id = cs.id WHERE e.is_active = true AND cs.semester_type IS NOT NULL AND cs.academic_year IS NOT NULL GROUP BY cs.semester_type, cs.academic_year ORDER BY cs.academic_year ASC, cs.semester_type ASC;\",\"assumptions\":[\"enrollments.course_section_id references course_sections.id (confirmed via schema inspection).\",\"Active enrollments are defined as enrollments.is_active = true and only those are counted.\",\"semester and academic_year come from course_sections.semester_type and course_sections.academic_year respectively (both non-null filtered).\",\"No deduplication by student is required; counting enrollment records (COUNT(enrollments.id)).\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT cs.semester_type AS semester, cs.academic_year AS academic_year, COUNT(e.id) AS enrollment_count FROM public.enrollments e JOIN public.course_sections cs ON e.course_section_id = cs.id WHERE e.is_active = true AND cs.semester_type IS NOT NULL AND cs.academic_year IS NOT NULL GROUP BY cs.semester_type, cs.academic_year ORDER BY cs.academic_year ASC, cs.semester_type ASC\",\"metadata\":{\"columns\":[\"semester\",\"academic_year\",\"enrollment_count\"],\"rowCount\":11,\"sample\":[{\"semester\":\"WINTER\",\"academic_year\":\"2019/2020\",\"enrollment_count\":1},{\"semester\":\"SUMMER\",\"academic_year\":\"2019/2020\",\"enrollment_count\":4}]},\"data\":[{\"semester\":\"WINTER\",\"academic_year\":\"2019/2020\",\"enrollment_count\":1},{\"semester\":\"SUMMER\",\"academic_year\":\"2019/2020\",\"enrollment_count\":4},{\"semester\":\"WINTER\",\"academic_year\":\"2020/2021\",\"enrollment_count\":9},{\"semester\":\"SUMMER\",\"academic_year\":\"2020/2021\",\"enrollment_count\":6},{\"semester\":\"WINTER\",\"academic_year\":\"2021/2022\",\"enrollment_count\":8},{\"semester\":\"WINTER\",\"academic_year\":\"2022/2023\",\"enrollment_count\":3},{\"semester\":\"SUMMER\",\"academic_year\":\"2022/2023\",\"enrollment_count\":6},{\"semester\":\"WINTER\",\"academic_year\":\"2023/2024\",\"enrollment_count\":8},{\"semester\":\"SUMMER\",\"academic_year\":\"2023/2024\",\"enrollment_count\":4},{\"semester\":\"WINTER\",\"academic_year\":\"2024/2025\",\"enrollment_count\":6},{\"semester\":\"SUMMER\",\"academic_year\":\"2024/2025\",\"enrollment_count\":2}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Enrollments per Semester and Academic Year\",\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"nominal\",\"axis\":{\"title\":\"Academic Year\"},\"sort\":\"ascending\"},\"xOffset\":{\"field\":\"semester\"},\"y\":{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Enrollment Count\"}},\"color\":{\"field\":\"semester\",\"type\":\"nominal\",\"legend\":{\"title\":\"Semester\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"semester\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"title\":\"Enrollments\"}]}},\"reasoning\":\"Grouped bar chart shows enrollment_count per academic_year with bars colored (and offset) by semester so you can compare semesters within each year; tooltip exposes the exact counts.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"academic_year is treated as a nominal (string) field — lexicographic sorting (sort: \\\"ascending\\\") may not be chronological; consider parsing/normalizing academic_year or providing an explicit sort order if you need true chronological order.\",\"semester has no explicit sort/domain — if you require a specific semester order (e.g., SPRING, SUMMER, FALL), set an ordinal domain for the color/xOffset scale.\",\"If the intent was to count unique students per semester rather than enrollment rows, replace COUNT(e.id) with COUNT(DISTINCT e.student_id).\"]}}},\"endedAt\":1771844839856,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"How many enrollments are there per semester and academic year?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(enrollments.id)\"],\"dimensions\":[\"course_sections.semester_type\",\"course_sections.academic_year\"],\"filters\":[\"enrollments.course_section_id = course_sections.id\",\"enrollments.is_active = true\",\"course_sections.semester_type IS NOT NULL\",\"course_sections.academic_year IS NOT NULL\"],\"grain\":\"grouped by semester_type and academic_year\",\"aliases\":{\"course_sections.semester_type\":\"semester\",\"course_sections.academic_year\":\"academic_year\",\"COUNT(enrollments.id)\":\"enrollment_count\"},\"output_fields\":[\"semester\",\"academic_year\",\"enrollment_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"academic_year\",\"y_axis\":\"enrollment_count\",\"color_group\":\"semester\",\"title\":\"Enrollments per Semester and Academic Year\"},\"assumptions\":[\"I inspected the database schema in this session and confirmed the existence of public.enrollments and public.course_sections and the relevant columns used above.\",\"Enrollments are associated to sections via enrollments.course_section_id -> course_sections.id (foreign key confirmed).\",\"The question is interpreted as counting active enrollments; therefore I apply filter enrollments.is_active = true. If you want to count all historical (including inactive) enrollments, remove that filter.\",\"semester_type is a user-defined enum in course_sections; I treat it as a categorical dimension and expose it as 'semester'.\",\"Academic year is stored in course_sections.academic_year (varchar) and exposed as 'academic_year'. No parsing or normalization of academic_year strings is performed here.\",\"If you prefer unique student counts per semester (one student counted once per semester even if enrolled in multiple sections), replace COUNT(enrollments.id) with COUNT(DISTINCT enrollments.student_id).\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT cs.semester_type AS semester, cs.academic_year AS academic_year, COUNT(e.id) AS enrollment_count FROM public.enrollments e JOIN public.course_sections cs ON e.course_section_id = cs.id WHERE e.is_active = true AND cs.semester_type IS NOT NULL AND cs.academic_year IS NOT NULL GROUP BY cs.semester_type, cs.academic_year ORDER BY cs.academic_year ASC, cs.semester_type ASC;\",\"validationIssues\":[\"academic_year is treated as a nominal (string) field — lexicographic sorting (sort: \\\"ascending\\\") may not be chronological; consider parsing/normalizing academic_year or providing an explicit sort order if you need true chronological order.\",\"semester has no explicit sort/domain — if you require a specific semester order (e.g., SPRING, SUMMER, FALL), set an ordinal domain for the color/xOffset scale.\",\"If the intent was to count unique students per semester rather than enrollment rows, replace COUNT(e.id) with COUNT(DISTINCT e.student_id).\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"I inspected public.enrollments and public.course_sections (confirmed columns and FK). The query counts active enrollments grouped by course_sections.semester_type and course_sections.academic_year, applying the requested non-null filters and deterministic ordering.\",\"sql\":\"SELECT cs.semester_type AS semester, cs.academic_year AS academic_year, COUNT(e.id) AS enrollment_count FROM public.enrollments e JOIN public.course_sections cs ON e.course_section_id = cs.id WHERE e.is_active = true AND cs.semester_type IS NOT NULL AND cs.academic_year IS NOT NULL GROUP BY cs.semester_type, cs.academic_year ORDER BY cs.academic_year ASC, cs.semester_type ASC;\",\"assumptions\":[\"enrollments.course_section_id references course_sections.id (confirmed via schema inspection).\",\"Active enrollments are defined as enrollments.is_active = true and only those are counted.\",\"semester and academic_year come from course_sections.semester_type and course_sections.academic_year respectively (both non-null filtered).\",\"No deduplication by student is required; counting enrollment records (COUNT(enrollments.id)).\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT cs.semester_type AS semester, cs.academic_year AS academic_year, COUNT(e.id) AS enrollment_count FROM public.enrollments e JOIN public.course_sections cs ON e.course_section_id = cs.id WHERE e.is_active = true AND cs.semester_type IS NOT NULL AND cs.academic_year IS NOT NULL GROUP BY cs.semester_type, cs.academic_year ORDER BY cs.academic_year ASC, cs.semester_type ASC\",\"metadata\":{\"columns\":[\"semester\",\"academic_year\",\"enrollment_count\"],\"rowCount\":11,\"sample\":[{\"semester\":\"WINTER\",\"academic_year\":\"2019/2020\",\"enrollment_count\":1},{\"semester\":\"SUMMER\",\"academic_year\":\"2019/2020\",\"enrollment_count\":4}]},\"data\":[{\"semester\":\"WINTER\",\"academic_year\":\"2019/2020\",\"enrollment_count\":1},{\"semester\":\"SUMMER\",\"academic_year\":\"2019/2020\",\"enrollment_count\":4},{\"semester\":\"WINTER\",\"academic_year\":\"2020/2021\",\"enrollment_count\":9},{\"semester\":\"SUMMER\",\"academic_year\":\"2020/2021\",\"enrollment_count\":6},{\"semester\":\"WINTER\",\"academic_year\":\"2021/2022\",\"enrollment_count\":8},{\"semester\":\"WINTER\",\"academic_year\":\"2022/2023\",\"enrollment_count\":3},{\"semester\":\"SUMMER\",\"academic_year\":\"2022/2023\",\"enrollment_count\":6},{\"semester\":\"WINTER\",\"academic_year\":\"2023/2024\",\"enrollment_count\":8},{\"semester\":\"SUMMER\",\"academic_year\":\"2023/2024\",\"enrollment_count\":4},{\"semester\":\"WINTER\",\"academic_year\":\"2024/2025\",\"enrollment_count\":6},{\"semester\":\"SUMMER\",\"academic_year\":\"2024/2025\",\"enrollment_count\":2}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Enrollments per Semester and Academic Year\",\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"nominal\",\"axis\":{\"title\":\"Academic Year\"},\"sort\":\"ascending\"},\"xOffset\":{\"field\":\"semester\"},\"y\":{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Enrollment Count\"}},\"color\":{\"field\":\"semester\",\"type\":\"nominal\",\"legend\":{\"title\":\"Semester\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"semester\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"title\":\"Enrollments\"}]}},\"reasoning\":\"Grouped bar chart shows enrollment_count per academic_year with bars colored (and offset) by semester so you can compare semesters within each year; tooltip exposes the exact counts.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"academic_year is treated as a nominal (string) field — lexicographic sorting (sort: \\\"ascending\\\") may not be chronological; consider parsing/normalizing academic_year or providing an explicit sort order if you need true chronological order.\",\"semester has no explicit sort/domain — if you require a specific semester order (e.g., SPRING, SUMMER, FALL), set an ordinal domain for the color/xOffset scale.\",\"If the intent was to count unique students per semester rather than enrollment rows, replace COUNT(e.id) with COUNT(DISTINCT e.student_id).\"]}}},\"startedAt\":1771844839859,\"status\":\"success\",\"output\":{\"sql\":\"SELECT cs.semester_type AS semester, cs.academic_year AS academic_year, COUNT(e.id) AS enrollment_count FROM public.enrollments e JOIN public.course_sections cs ON e.course_section_id = cs.id WHERE e.is_active = true AND cs.semester_type IS NOT NULL AND cs.academic_year IS NOT NULL GROUP BY cs.semester_type, cs.academic_year ORDER BY cs.academic_year ASC, cs.semester_type ASC;\",\"data\":[{\"semester\":\"WINTER\",\"academic_year\":\"2019/2020\",\"enrollment_count\":1},{\"semester\":\"SUMMER\",\"academic_year\":\"2019/2020\",\"enrollment_count\":4},{\"semester\":\"WINTER\",\"academic_year\":\"2020/2021\",\"enrollment_count\":9},{\"semester\":\"SUMMER\",\"academic_year\":\"2020/2021\",\"enrollment_count\":6},{\"semester\":\"WINTER\",\"academic_year\":\"2021/2022\",\"enrollment_count\":8},{\"semester\":\"WINTER\",\"academic_year\":\"2022/2023\",\"enrollment_count\":3},{\"semester\":\"SUMMER\",\"academic_year\":\"2022/2023\",\"enrollment_count\":6},{\"semester\":\"WINTER\",\"academic_year\":\"2023/2024\",\"enrollment_count\":8},{\"semester\":\"SUMMER\",\"academic_year\":\"2023/2024\",\"enrollment_count\":4},{\"semester\":\"WINTER\",\"academic_year\":\"2024/2025\",\"enrollment_count\":6},{\"semester\":\"SUMMER\",\"academic_year\":\"2024/2025\",\"enrollment_count\":2}],\"metadata\":{\"columns\":[\"semester\",\"academic_year\",\"enrollment_count\"],\"rowCount\":11,\"sample\":[{\"semester\":\"WINTER\",\"academic_year\":\"2019/2020\",\"enrollment_count\":1},{\"semester\":\"SUMMER\",\"academic_year\":\"2019/2020\",\"enrollment_count\":4}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Enrollments per Semester and Academic Year\",\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"nominal\",\"axis\":{\"title\":\"Academic Year\"},\"sort\":\"ascending\"},\"xOffset\":{\"field\":\"semester\"},\"y\":{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Enrollment Count\"}},\"color\":{\"field\":\"semester\",\"type\":\"nominal\",\"legend\":{\"title\":\"Semester\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"semester\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"title\":\"Enrollments\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"academic_year is treated as a nominal (string) field — lexicographic sorting (sort: \\\"ascending\\\") may not be chronological; consider parsing/normalizing academic_year or providing an explicit sort order if you need true chronological order.\",\"semester has no explicit sort/domain — if you require a specific semester order (e.g., SPRING, SUMMER, FALL), set an ordinal domain for the color/xOffset scale.\",\"If the intent was to count unique students per semester rather than enrollment rows, replace COUNT(e.id) with COUNT(DISTINCT e.student_id).\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771844839862}},\"input\":{\"question\":\"How many enrollments are there per semester and academic year?\"},\"result\":{\"sql\":\"SELECT cs.semester_type AS semester, cs.academic_year AS academic_year, COUNT(e.id) AS enrollment_count FROM public.enrollments e JOIN public.course_sections cs ON e.course_section_id = cs.id WHERE e.is_active = true AND cs.semester_type IS NOT NULL AND cs.academic_year IS NOT NULL GROUP BY cs.semester_type, cs.academic_year ORDER BY cs.academic_year ASC, cs.semester_type ASC;\",\"data\":[{\"semester\":\"WINTER\",\"academic_year\":\"2019/2020\",\"enrollment_count\":1},{\"semester\":\"SUMMER\",\"academic_year\":\"2019/2020\",\"enrollment_count\":4},{\"semester\":\"WINTER\",\"academic_year\":\"2020/2021\",\"enrollment_count\":9},{\"semester\":\"SUMMER\",\"academic_year\":\"2020/2021\",\"enrollment_count\":6},{\"semester\":\"WINTER\",\"academic_year\":\"2021/2022\",\"enrollment_count\":8},{\"semester\":\"WINTER\",\"academic_year\":\"2022/2023\",\"enrollment_count\":3},{\"semester\":\"SUMMER\",\"academic_year\":\"2022/2023\",\"enrollment_count\":6},{\"semester\":\"WINTER\",\"academic_year\":\"2023/2024\",\"enrollment_count\":8},{\"semester\":\"SUMMER\",\"academic_year\":\"2023/2024\",\"enrollment_count\":4},{\"semester\":\"WINTER\",\"academic_year\":\"2024/2025\",\"enrollment_count\":6},{\"semester\":\"SUMMER\",\"academic_year\":\"2024/2025\",\"enrollment_count\":2}],\"metadata\":{\"columns\":[\"semester\",\"academic_year\",\"enrollment_count\"],\"rowCount\":11,\"sample\":[{\"semester\":\"WINTER\",\"academic_year\":\"2019/2020\",\"enrollment_count\":1},{\"semester\":\"SUMMER\",\"academic_year\":\"2019/2020\",\"enrollment_count\":4}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Enrollments per Semester and Academic Year\",\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"nominal\",\"axis\":{\"title\":\"Academic Year\"},\"sort\":\"ascending\"},\"xOffset\":{\"field\":\"semester\"},\"y\":{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Enrollment Count\"}},\"color\":{\"field\":\"semester\",\"type\":\"nominal\",\"legend\":{\"title\":\"Semester\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"semester\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"title\":\"Enrollments\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"academic_year is treated as a nominal (string) field — lexicographic sorting (sort: \\\"ascending\\\") may not be chronological; consider parsing/normalizing academic_year or providing an explicit sort order if you need true chronological order.\",\"semester has no explicit sort/domain — if you require a specific semester order (e.g., SPRING, SUMMER, FALL), set an ordinal domain for the color/xOffset scale.\",\"If the intent was to count unique students per semester rather than enrollment rows, replace COUNT(e.id) with COUNT(DISTINCT e.student_id).\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"df2460a442a45470a28ee254f394b17a\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/enrollment-count-by-semester/run-0001/run.json",
+    "queryPath": "runs/enrollment-count-by-semester/run-0001/query.sql",
+    "vegaRawPath": "runs/enrollment-count-by-semester/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/enrollment-count-by-semester/run-0001/vega.resolved.json",
+    "imagePath": "runs/enrollment-count-by-semester/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:07:20.354Z",
+  "traceId": "df2460a442a45470a28ee254f394b17a",
+  "success": true,
+  "durationMs": 90452,
+  "resultRaw": {
+    "data": [
+      {
+        "semester": "WINTER",
+        "academic_year": "2019/2020",
+        "enrollment_count": 1
+      },
+      {
+        "semester": "SUMMER",
+        "academic_year": "2019/2020",
+        "enrollment_count": 4
+      },
+      {
+        "semester": "WINTER",
+        "academic_year": "2020/2021",
+        "enrollment_count": 9
+      },
+      {
+        "semester": "SUMMER",
+        "academic_year": "2020/2021",
+        "enrollment_count": 6
+      },
+      {
+        "semester": "WINTER",
+        "academic_year": "2021/2022",
+        "enrollment_count": 8
+      },
+      {
+        "semester": "WINTER",
+        "academic_year": "2022/2023",
+        "enrollment_count": 3
+      },
+      {
+        "semester": "SUMMER",
+        "academic_year": "2022/2023",
+        "enrollment_count": 6
+      },
+      {
+        "semester": "WINTER",
+        "academic_year": "2023/2024",
+        "enrollment_count": 8
+      },
+      {
+        "semester": "SUMMER",
+        "academic_year": "2023/2024",
+        "enrollment_count": 4
+      },
+      {
+        "semester": "WINTER",
+        "academic_year": "2024/2025",
+        "enrollment_count": 6
+      },
+      {
+        "semester": "SUMMER",
+        "academic_year": "2024/2025",
+        "enrollment_count": 2
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Enrollments per Semester and Academic Year",
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "academic_year",
+          "type": "nominal",
+          "axis": {
+            "title": "Academic Year"
+          },
+          "sort": "ascending"
+        },
+        "xOffset": {
+          "field": "semester"
+        },
+        "y": {
+          "field": "enrollment_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Enrollment Count"
+          }
+        },
+        "color": {
+          "field": "semester",
+          "type": "nominal",
+          "legend": {
+            "title": "Semester"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "academic_year",
+            "type": "nominal",
+            "title": "Academic Year"
+          },
+          {
+            "field": "semester",
+            "type": "nominal",
+            "title": "Semester"
+          },
+          {
+            "field": "enrollment_count",
+            "type": "quantitative",
+            "title": "Enrollments"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT cs.semester_type AS semester, cs.academic_year AS academic_year, COUNT(e.id) AS enrollment_count FROM public.enrollments e JOIN public.course_sections cs ON e.course_section_id = cs.id WHERE e.is_active = true AND cs.semester_type IS NOT NULL AND cs.academic_year IS NOT NULL GROUP BY cs.semester_type, cs.academic_year ORDER BY cs.academic_year ASC, cs.semester_type ASC;",
+    "metadata": {
+      "columns": [
+        "semester",
+        "academic_year",
+        "enrollment_count"
+      ],
+      "rowCount": 11,
+      "sample": [
+        {
+          "semester": "WINTER",
+          "academic_year": "2019/2020",
+          "enrollment_count": 1
+        },
+        {
+          "semester": "SUMMER",
+          "academic_year": "2019/2020",
+          "enrollment_count": 4
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "academic_year is treated as a nominal (string) field — lexicographic sorting (sort: \"ascending\") may not be chronological; consider parsing/normalizing academic_year or providing an explicit sort order if you need true chronological order.",
+        "semester has no explicit sort/domain — if you require a specific semester order (e.g., SPRING, SUMMER, FALL), set an ordinal domain for the color/xOffset scale.",
+        "If the intent was to count unique students per semester rather than enrollment rows, replace COUNT(e.id) with COUNT(DISTINCT e.student_id)."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "semester": "WINTER",
+        "academic_year": "2019/2020",
+        "enrollment_count": 1
+      },
+      {
+        "semester": "SUMMER",
+        "academic_year": "2019/2020",
+        "enrollment_count": 4
+      },
+      {
+        "semester": "WINTER",
+        "academic_year": "2020/2021",
+        "enrollment_count": 9
+      },
+      {
+        "semester": "SUMMER",
+        "academic_year": "2020/2021",
+        "enrollment_count": 6
+      },
+      {
+        "semester": "WINTER",
+        "academic_year": "2021/2022",
+        "enrollment_count": 8
+      },
+      {
+        "semester": "WINTER",
+        "academic_year": "2022/2023",
+        "enrollment_count": 3
+      },
+      {
+        "semester": "SUMMER",
+        "academic_year": "2022/2023",
+        "enrollment_count": 6
+      },
+      {
+        "semester": "WINTER",
+        "academic_year": "2023/2024",
+        "enrollment_count": 8
+      },
+      {
+        "semester": "SUMMER",
+        "academic_year": "2023/2024",
+        "enrollment_count": 4
+      },
+      {
+        "semester": "WINTER",
+        "academic_year": "2024/2025",
+        "enrollment_count": 6
+      },
+      {
+        "semester": "SUMMER",
+        "academic_year": "2024/2025",
+        "enrollment_count": 2
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Enrollments per Semester and Academic Year",
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "academic_year",
+          "type": "nominal",
+          "axis": {
+            "title": "Academic Year"
+          },
+          "sort": "ascending"
+        },
+        "xOffset": {
+          "field": "semester"
+        },
+        "y": {
+          "field": "enrollment_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Enrollment Count"
+          }
+        },
+        "color": {
+          "field": "semester",
+          "type": "nominal",
+          "legend": {
+            "title": "Semester"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "academic_year",
+            "type": "nominal",
+            "title": "Academic Year"
+          },
+          {
+            "field": "semester",
+            "type": "nominal",
+            "title": "Semester"
+          },
+          {
+            "field": "enrollment_count",
+            "type": "quantitative",
+            "title": "Enrollments"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT cs.semester_type AS semester, cs.academic_year AS academic_year, COUNT(e.id) AS enrollment_count FROM public.enrollments e JOIN public.course_sections cs ON e.course_section_id = cs.id WHERE e.is_active = true AND cs.semester_type IS NOT NULL AND cs.academic_year IS NOT NULL GROUP BY cs.semester_type, cs.academic_year ORDER BY cs.academic_year ASC, cs.semester_type ASC;",
+    "metadata": {
+      "columns": [
+        "semester",
+        "academic_year",
+        "enrollment_count"
+      ],
+      "rowCount": 11,
+      "sample": [
+        {
+          "semester": "WINTER",
+          "academic_year": "2019/2020",
+          "enrollment_count": 1
+        },
+        {
+          "semester": "SUMMER",
+          "academic_year": "2019/2020",
+          "enrollment_count": 4
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "academic_year is treated as a nominal (string) field — lexicographic sorting (sort: \"ascending\") may not be chronological; consider parsing/normalizing academic_year or providing an explicit sort order if you need true chronological order.",
+        "semester has no explicit sort/domain — if you require a specific semester order (e.g., SPRING, SUMMER, FALL), set an ordinal domain for the color/xOffset scale.",
+        "If the intent was to count unique students per semester rather than enrollment rows, replace COUNT(e.id) with COUNT(DISTINCT e.student_id)."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:07:20.354Z",
+    "traceId": "df2460a442a45470a28ee254f394b17a",
+    "attempts": 6,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 19529,
+      "outputTokens": 4874,
+      "totalTokens": 24403,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 3200,
+      "costUsd": 0.01463025
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 19529,
+        "outputTokens": 4874,
+        "totalTokens": 24403,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 3200,
+        "costUsd": 0.01463025
+      }
+    ],
+    "warnings": []
+  }
+}

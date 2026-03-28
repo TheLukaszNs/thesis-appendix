@@ -1,0 +1,246 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "scholarship-recipients-count",
+  "caseDirectory": "scholarship-recipients-count",
+  "repeatIndex": 1,
+  "prompt": "How many students received each type of scholarship?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many students received each type of scholarship?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:38:37.472Z",
+    "endedAtUtc": "2026-02-22T23:39:02.164Z",
+    "durationMs": 24692
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "6625",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:39:02 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How many students received each type of scholarship?\"},\"sql\":{\"payload\":{\"question\":\"How many students received each type of scholarship?\"},\"startedAt\":1771803517482,\"status\":\"success\",\"output\":{\"reasoning\":\"Count distinct students per scholarship_type from confirmed public.scholarships table; order deterministically by descending counts then type.\",\"sql\":\"SELECT s.scholarship_type AS scholarship_type, COUNT(DISTINCT s.student_id) AS student_count\\nFROM public.scholarships AS s\\nGROUP BY s.scholarship_type\\nORDER BY student_count DESC, s.scholarship_type ASC;\",\"assumptions\":[\"Count should reflect unique students per scholarship type (use COUNT(DISTINCT student_id)).\",\"Table public.scholarships and columns (student_id, scholarship_type) exist as discovered in the preflight.\"]},\"endedAt\":1771803530954},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT s.scholarship_type AS scholarship_type, COUNT(DISTINCT s.student_id) AS student_count\\nFROM public.scholarships AS s\\nGROUP BY s.scholarship_type\\nORDER BY student_count DESC, s.scholarship_type ASC;\"},\"startedAt\":1771803530957,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT s.scholarship_type AS scholarship_type, COUNT(DISTINCT s.student_id) AS student_count\\nFROM public.scholarships AS s\\nGROUP BY s.scholarship_type\\nORDER BY student_count DESC, s.scholarship_type ASC\",\"metadata\":{\"columns\":[\"student_count\",\"scholarship_type\"],\"rowCount\":3,\"sample\":[{\"student_count\":4,\"scholarship_type\":\"SPECIAL\"},{\"student_count\":3,\"scholarship_type\":\"MERIT\"}]},\"data\":[{\"student_count\":4,\"scholarship_type\":\"SPECIAL\"},{\"student_count\":3,\"scholarship_type\":\"MERIT\"},{\"student_count\":2,\"scholarship_type\":\"SOCIAL\"}]},\"endedAt\":1771803531005},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT s.scholarship_type AS scholarship_type, COUNT(DISTINCT s.student_id) AS student_count\\nFROM public.scholarships AS s\\nGROUP BY s.scholarship_type\\nORDER BY student_count DESC, s.scholarship_type ASC\",\"metadata\":{\"columns\":[\"student_count\",\"scholarship_type\"],\"rowCount\":3,\"sample\":[{\"student_count\":4,\"scholarship_type\":\"SPECIAL\"},{\"student_count\":3,\"scholarship_type\":\"MERIT\"}]},\"data\":[{\"student_count\":4,\"scholarship_type\":\"SPECIAL\"},{\"student_count\":3,\"scholarship_type\":\"MERIT\"},{\"student_count\":2,\"scholarship_type\":\"SOCIAL\"}]},\"startedAt\":1771803531007,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of Students by Scholarship Type\",\"width\":400,\"height\":300,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\",\"sort\":{\"field\":\"student_count\",\"order\":\"descending\"}},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Number of Students\"},\"tooltip\":[{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"reasoning\":\"A simple bar chart shows the count of distinct students per scholarship_type, sorted by descending student_count for easy comparison.\"},\"endedAt\":1771803542129},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of Students by Scholarship Type\",\"width\":400,\"height\":300,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\",\"sort\":{\"field\":\"student_count\",\"order\":\"descending\"}},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Number of Students\"},\"tooltip\":[{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"reasoning\":\"A simple bar chart shows the count of distinct students per scholarship_type, sorted by descending student_count for easy comparison.\"},\"startedAt\":1771803542134,\"status\":\"success\",\"output\":{\"sql\":\"SELECT s.scholarship_type AS scholarship_type, COUNT(DISTINCT s.student_id) AS student_count\\nFROM public.scholarships AS s\\nGROUP BY s.scholarship_type\\nORDER BY student_count DESC, s.scholarship_type ASC;\",\"data\":[{\"student_count\":4,\"scholarship_type\":\"SPECIAL\"},{\"student_count\":3,\"scholarship_type\":\"MERIT\"},{\"student_count\":2,\"scholarship_type\":\"SOCIAL\"}],\"metadata\":{\"columns\":[\"student_count\",\"scholarship_type\"],\"rowCount\":3,\"sample\":[{\"student_count\":4,\"scholarship_type\":\"SPECIAL\"},{\"student_count\":3,\"scholarship_type\":\"MERIT\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of Students by Scholarship Type\",\"width\":400,\"height\":300,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\",\"sort\":{\"field\":\"student_count\",\"order\":\"descending\"}},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Number of Students\"},\"tooltip\":[{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771803542145}},\"input\":{\"question\":\"How many students received each type of scholarship?\"},\"result\":{\"sql\":\"SELECT s.scholarship_type AS scholarship_type, COUNT(DISTINCT s.student_id) AS student_count\\nFROM public.scholarships AS s\\nGROUP BY s.scholarship_type\\nORDER BY student_count DESC, s.scholarship_type ASC;\",\"data\":[{\"student_count\":4,\"scholarship_type\":\"SPECIAL\"},{\"student_count\":3,\"scholarship_type\":\"MERIT\"},{\"student_count\":2,\"scholarship_type\":\"SOCIAL\"}],\"metadata\":{\"columns\":[\"student_count\",\"scholarship_type\"],\"rowCount\":3,\"sample\":[{\"student_count\":4,\"scholarship_type\":\"SPECIAL\"},{\"student_count\":3,\"scholarship_type\":\"MERIT\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of Students by Scholarship Type\",\"width\":400,\"height\":300,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\",\"sort\":{\"field\":\"student_count\",\"order\":\"descending\"}},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Number of Students\"},\"tooltip\":[{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"b62e52b5afdadccc59b863ba2f386821\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/scholarship-recipients-count/run-0001/run.json",
+    "queryPath": "runs/scholarship-recipients-count/run-0001/query.sql",
+    "vegaRawPath": "runs/scholarship-recipients-count/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/scholarship-recipients-count/run-0001/vega.resolved.json",
+    "imagePath": "runs/scholarship-recipients-count/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:39:02.695Z",
+  "traceId": "b62e52b5afdadccc59b863ba2f386821",
+  "success": true,
+  "durationMs": 25223,
+  "resultRaw": {
+    "data": [
+      {
+        "student_count": 4,
+        "scholarship_type": "SPECIAL"
+      },
+      {
+        "student_count": 3,
+        "scholarship_type": "MERIT"
+      },
+      {
+        "student_count": 2,
+        "scholarship_type": "SOCIAL"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Number of Students by Scholarship Type",
+      "width": 400,
+      "height": 300,
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "scholarship_type",
+          "type": "nominal",
+          "title": "Scholarship Type",
+          "sort": {
+            "field": "student_count",
+            "order": "descending"
+          }
+        },
+        "y": {
+          "field": "student_count",
+          "type": "quantitative",
+          "title": "Number of Students"
+        },
+        "tooltip": [
+          {
+            "field": "scholarship_type",
+            "type": "nominal",
+            "title": "Scholarship Type"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Student Count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT s.scholarship_type AS scholarship_type, COUNT(DISTINCT s.student_id) AS student_count\nFROM public.scholarships AS s\nGROUP BY s.scholarship_type\nORDER BY student_count DESC, s.scholarship_type ASC;",
+    "metadata": {
+      "columns": [
+        "student_count",
+        "scholarship_type"
+      ],
+      "rowCount": 3,
+      "sample": [
+        {
+          "student_count": 4,
+          "scholarship_type": "SPECIAL"
+        },
+        {
+          "student_count": 3,
+          "scholarship_type": "MERIT"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "student_count": 4,
+        "scholarship_type": "SPECIAL"
+      },
+      {
+        "student_count": 3,
+        "scholarship_type": "MERIT"
+      },
+      {
+        "student_count": 2,
+        "scholarship_type": "SOCIAL"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Number of Students by Scholarship Type",
+      "width": 400,
+      "height": 300,
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "scholarship_type",
+          "type": "nominal",
+          "title": "Scholarship Type",
+          "sort": {
+            "field": "student_count",
+            "order": "descending"
+          }
+        },
+        "y": {
+          "field": "student_count",
+          "type": "quantitative",
+          "title": "Number of Students"
+        },
+        "tooltip": [
+          {
+            "field": "scholarship_type",
+            "type": "nominal",
+            "title": "Scholarship Type"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Student Count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT s.scholarship_type AS scholarship_type, COUNT(DISTINCT s.student_id) AS student_count\nFROM public.scholarships AS s\nGROUP BY s.scholarship_type\nORDER BY student_count DESC, s.scholarship_type ASC;",
+    "metadata": {
+      "columns": [
+        "student_count",
+        "scholarship_type"
+      ],
+      "rowCount": 3,
+      "sample": [
+        {
+          "student_count": 4,
+          "scholarship_type": "SPECIAL"
+        },
+        {
+          "student_count": 3,
+          "scholarship_type": "MERIT"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:39:02.695Z",
+    "traceId": "b62e52b5afdadccc59b863ba2f386821",
+    "attempts": 2,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 5742,
+      "outputTokens": 1692,
+      "totalTokens": 7434,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1152,
+      "costUsd": 0.0048195
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 5742,
+        "outputTokens": 1692,
+        "totalTokens": 7434,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1152,
+        "costUsd": 0.0048195
+      }
+    ],
+    "warnings": []
+  }
+}

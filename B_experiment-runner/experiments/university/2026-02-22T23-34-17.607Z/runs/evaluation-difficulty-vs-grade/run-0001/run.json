@@ -1,0 +1,128 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "evaluation-difficulty-vs-grade",
+  "caseDirectory": "evaluation-difficulty-vs-grade",
+  "repeatIndex": 1,
+  "prompt": "Is there a correlation between difficulty rating and average grade per course?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Is there a correlation between difficulty rating and average grade per course?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:54:57.654Z",
+    "endedAtUtc": "2026-02-22T23:55:51.984Z",
+    "durationMs": 54330
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "9527",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:55:51 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Is there a correlation between difficulty rating and average grade per course?\"},\"sql\":{\"payload\":{\"question\":\"Is there a correlation between difficulty rating and average grade per course?\"},\"startedAt\":1771804497660,\"status\":\"success\",\"output\":{\"reasoning\":\"Compute per-course average difficulty from course_evaluations and per-course average numeric grade from numeric components in grades (exam/project/attendance). Then compute Pearson correlation and linear regression slope/intercept across courses that have both metrics. I treat per-enrollment grade as the average of the available numeric score components (ignore textual/letter grade_value).\",\"sql\":\"WITH avg_eval AS (\\n  SELECT\\n    cs.course_id,\\n    AVG(ce.difficulty_rating)::numeric AS avg_difficulty,\\n    COUNT(*) AS eval_count\\n  FROM public.course_evaluations ce\\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  GROUP BY cs.course_id\\n),\\navg_grade AS (\\n  SELECT\\n    cs.course_id,\\n    AVG(\\n      (COALESCE(g.exam_score,0) + COALESCE(g.project_score,0) + COALESCE(g.attendance_score,0))\\n      / NULLIF(\\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\\n          + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\\n          + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END),\\n          0\\n        )\\n    )::numeric AS avg_grade,\\n    COUNT(g.id) AS grade_count\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  GROUP BY cs.course_id\\n),\\nper_course AS (\\n  SELECT\\n    c.id AS course_id,\\n    c.code AS course_code,\\n    ae.avg_difficulty AS avg_difficulty,\\n    ag.avg_grade AS avg_grade,\\n    COALESCE(ae.eval_count,0) AS eval_count,\\n    COALESCE(ag.grade_count,0) AS grade_count\\n  FROM public.courses c\\n  LEFT JOIN avg_eval ae ON ae.course_id = c.id\\n  LEFT JOIN avg_grade ag ON ag.course_id = c.id\\n)\\nSELECT\\n  COUNT(*) FILTER (WHERE avg_difficulty IS NOT NULL AND avg_grade IS NOT NULL) AS courses_with_both,\\n  corr(avg_difficulty, avg_grade) AS pearson_correlation,\\n  regr_slope(avg_grade, avg_difficulty) AS regr_slope_grade_on_difficulty,\\n  regr_intercept(avg_grade, avg_difficulty) AS regr_intercept_grade_on_difficulty\\nFROM per_course\\nWHERE avg_difficulty IS NOT NULL AND avg_grade IS NOT NULL;\",\"assumptions\":[\"Per-enrollment numeric grade is computed as the average of the available numeric components (exam_score, project_score, attendance_score); enrollments with none of these numeric components are excluded from grade averages.\",\"Average difficulty is computed from course_evaluations joined through enrollments -> course_sections -> course; all evaluation rows are included (no deduplication by enrollment).\",\"Correlation reported is the Pearson correlation across courses that have both an avg_difficulty and avg_grade.\",\"grades.grade_value (user-defined, likely non-numeric) is ignored because it is not numeric.\",\"Using public schema tables discovered at preflight; joins and column names were confirmed via schema inspection.\"]},\"endedAt\":1771804551941},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH avg_eval AS (\\n  SELECT\\n    cs.course_id,\\n    AVG(ce.difficulty_rating)::numeric AS avg_difficulty,\\n    COUNT(*) AS eval_count\\n  FROM public.course_evaluations ce\\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  GROUP BY cs.course_id\\n),\\navg_grade AS (\\n  SELECT\\n    cs.course_id,\\n    AVG(\\n      (COALESCE(g.exam_score,0) + COALESCE(g.project_score,0) + COALESCE(g.attendance_score,0))\\n      / NULLIF(\\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\\n          + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\\n          + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END),\\n          0\\n        )\\n    )::numeric AS avg_grade,\\n    COUNT(g.id) AS grade_count\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  GROUP BY cs.course_id\\n),\\nper_course AS (\\n  SELECT\\n    c.id AS course_id,\\n    c.code AS course_code,\\n    ae.avg_difficulty AS avg_difficulty,\\n    ag.avg_grade AS avg_grade,\\n    COALESCE(ae.eval_count,0) AS eval_count,\\n    COALESCE(ag.grade_count,0) AS grade_count\\n  FROM public.courses c\\n  LEFT JOIN avg_eval ae ON ae.course_id = c.id\\n  LEFT JOIN avg_grade ag ON ag.course_id = c.id\\n)\\nSELECT\\n  COUNT(*) FILTER (WHERE avg_difficulty IS NOT NULL AND avg_grade IS NOT NULL) AS courses_with_both,\\n  corr(avg_difficulty, avg_grade) AS pearson_correlation,\\n  regr_slope(avg_grade, avg_difficulty) AS regr_slope_grade_on_difficulty,\\n  regr_intercept(avg_grade, avg_difficulty) AS regr_intercept_grade_on_difficulty\\nFROM per_course\\nWHERE avg_difficulty IS NOT NULL AND avg_grade IS NOT NULL;\"},\"startedAt\":1771804551945,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: Error validating query: WITH __query_result AS (\\nWITH avg_eval AS (\\n  SELECT\\n    cs.course_id,\\n    AVG(ce.difficulty_rating)::numeric AS avg_difficulty,\\n    COUNT(*) AS eval_count\\n  FROM public.course_evaluations ce\\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  GROUP BY cs.course_id\\n),\\navg_grade AS (\\n  SELECT\\n    cs.course_id,\\n    AVG(\\n      (COALESCE(g.exam_score,0) + COALESCE(g.project_score,0) + COALESCE(g.attendance_score,0))\\n      / NULLIF(\\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\\n          + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\\n          + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END),\\n          0\\n        )\\n    )::numeric AS avg_grade,\\n    COUNT(g.id) AS grade_count\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  GROUP BY cs.course_id\\n),\\nper_course AS (\\n  SELECT\\n    c.id AS course_id,\\n    c.code AS course_code,\\n    ae.avg_difficulty AS avg_difficulty,\\n    ag.avg_grade AS avg_grade,\\n    COALESCE(ae.eval_count,0) AS eval_count,\\n    COALESCE(ag.grade_count,0) AS grade_count\\n  FROM public.courses c\\n  LEFT JOIN avg_eval ae ON ae.course_id = c.id\\n  LEFT JOIN avg_grade ag ON ag.course_id = c.id\\n)\\nSELECT\\n  COUNT(*) FILTER (WHERE avg_difficulty IS NOT NULL AND avg_grade IS NOT NULL) AS courses_with_both,\\n  corr(avg_difficulty, avg_grade) AS pearson_correlation,\\n  regr_slope(avg_grade, avg_difficulty) AS regr_slope_grade_on_difficulty,\\n  regr_intercept(avg_grade, avg_difficulty) AS regr_intercept_grade_on_difficulty\\nFROM per_course\\nWHERE avg_difficulty IS NOT NULL AND avg_grade IS NOT NULL\\n),\\n__limited AS (\\n  SELECT * FROM __query_result LIMIT 501\\n),\\n__payload AS (\\n  SELECT json_build_object(\\n    'rows', COALESCE((SELECT json_agg(to_jsonb(__limited)) FROM __limited), '[]'::json)\\n  ) AS data\\n)\\nSELECT encode(convert_to((SELECT data::text FROM __payload), 'UTF8'), 'hex') AS __payload_hex\",\"name\":\"Error\"},\"endedAt\":1771804551979}},\"input\":{\"question\":\"Is there a correlation between difficulty rating and average grade per course?\"},\"error\":{\"message\":\"SQL execution failed: Error validating query: WITH __query_result AS (\\nWITH avg_eval AS (\\n  SELECT\\n    cs.course_id,\\n    AVG(ce.difficulty_rating)::numeric AS avg_difficulty,\\n    COUNT(*) AS eval_count\\n  FROM public.course_evaluations ce\\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  GROUP BY cs.course_id\\n),\\navg_grade AS (\\n  SELECT\\n    cs.course_id,\\n    AVG(\\n      (COALESCE(g.exam_score,0) + COALESCE(g.project_score,0) + COALESCE(g.attendance_score,0))\\n      / NULLIF(\\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\\n          + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\\n          + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END),\\n          0\\n        )\\n    )::numeric AS avg_grade,\\n    COUNT(g.id) AS grade_count\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  GROUP BY cs.course_id\\n),\\nper_course AS (\\n  SELECT\\n    c.id AS course_id,\\n    c.code AS course_code,\\n    ae.avg_difficulty AS avg_difficulty,\\n    ag.avg_grade AS avg_grade,\\n    COALESCE(ae.eval_count,0) AS eval_count,\\n    COALESCE(ag.grade_count,0) AS grade_count\\n  FROM public.courses c\\n  LEFT JOIN avg_eval ae ON ae.course_id = c.id\\n  LEFT JOIN avg_grade ag ON ag.course_id = c.id\\n)\\nSELECT\\n  COUNT(*) FILTER (WHERE avg_difficulty IS NOT NULL AND avg_grade IS NOT NULL) AS courses_with_both,\\n  corr(avg_difficulty, avg_grade) AS pearson_correlation,\\n  regr_slope(avg_grade, avg_difficulty) AS regr_slope_grade_on_difficulty,\\n  regr_intercept(avg_grade, avg_difficulty) AS regr_intercept_grade_on_difficulty\\nFROM per_course\\nWHERE avg_difficulty IS NOT NULL AND avg_grade IS NOT NULL\\n),\\n__limited AS (\\n  SELECT * FROM __query_result LIMIT 501\\n),\\n__payload AS (\\n  SELECT json_build_object(\\n    'rows', COALESCE((SELECT json_agg(to_jsonb(__limited)) FROM __limited), '[]'::json)\\n  ) AS data\\n)\\nSELECT encode(convert_to((SELECT data::text FROM __payload), 'UTF8'), 'hex') AS __payload_hex\",\"name\":\"Error\"},\"traceId\":\"754421be840c3a3b226e8e2e1613b29d\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/evaluation-difficulty-vs-grade/run-0001/run.json",
+    "queryPath": "runs/evaluation-difficulty-vs-grade/run-0001/query.sql",
+    "vegaRawPath": "runs/evaluation-difficulty-vs-grade/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/evaluation-difficulty-vs-grade/run-0001/vega.resolved.json",
+    "imagePath": "runs/evaluation-difficulty-vs-grade/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:55:51.985Z",
+  "traceId": "754421be840c3a3b226e8e2e1613b29d",
+  "success": false,
+  "durationMs": 54331,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Is there a correlation between difficulty rating and average grade per course?"
+      },
+      "sql": {
+        "payload": {
+          "question": "Is there a correlation between difficulty rating and average grade per course?"
+        },
+        "startedAt": 1771804497660,
+        "status": "success",
+        "output": {
+          "reasoning": "Compute per-course average difficulty from course_evaluations and per-course average numeric grade from numeric components in grades (exam/project/attendance). Then compute Pearson correlation and linear regression slope/intercept across courses that have both metrics. I treat per-enrollment grade as the average of the available numeric score components (ignore textual/letter grade_value).",
+          "sql": "WITH avg_eval AS (\n  SELECT\n    cs.course_id,\n    AVG(ce.difficulty_rating)::numeric AS avg_difficulty,\n    COUNT(*) AS eval_count\n  FROM public.course_evaluations ce\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\n  GROUP BY cs.course_id\n),\navg_grade AS (\n  SELECT\n    cs.course_id,\n    AVG(\n      (COALESCE(g.exam_score,0) + COALESCE(g.project_score,0) + COALESCE(g.attendance_score,0))\n      / NULLIF(\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\n          + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\n          + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END),\n          0\n        )\n    )::numeric AS avg_grade,\n    COUNT(g.id) AS grade_count\n  FROM public.grades g\n  JOIN public.enrollments e ON g.enrollment_id = e.id\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\n  GROUP BY cs.course_id\n),\nper_course AS (\n  SELECT\n    c.id AS course_id,\n    c.code AS course_code,\n    ae.avg_difficulty AS avg_difficulty,\n    ag.avg_grade AS avg_grade,\n    COALESCE(ae.eval_count,0) AS eval_count,\n    COALESCE(ag.grade_count,0) AS grade_count\n  FROM public.courses c\n  LEFT JOIN avg_eval ae ON ae.course_id = c.id\n  LEFT JOIN avg_grade ag ON ag.course_id = c.id\n)\nSELECT\n  COUNT(*) FILTER (WHERE avg_difficulty IS NOT NULL AND avg_grade IS NOT NULL) AS courses_with_both,\n  corr(avg_difficulty, avg_grade) AS pearson_correlation,\n  regr_slope(avg_grade, avg_difficulty) AS regr_slope_grade_on_difficulty,\n  regr_intercept(avg_grade, avg_difficulty) AS regr_intercept_grade_on_difficulty\nFROM per_course\nWHERE avg_difficulty IS NOT NULL AND avg_grade IS NOT NULL;",
+          "assumptions": [
+            "Per-enrollment numeric grade is computed as the average of the available numeric components (exam_score, project_score, attendance_score); enrollments with none of these numeric components are excluded from grade averages.",
+            "Average difficulty is computed from course_evaluations joined through enrollments -> course_sections -> course; all evaluation rows are included (no deduplication by enrollment).",
+            "Correlation reported is the Pearson correlation across courses that have both an avg_difficulty and avg_grade.",
+            "grades.grade_value (user-defined, likely non-numeric) is ignored because it is not numeric.",
+            "Using public schema tables discovered at preflight; joins and column names were confirmed via schema inspection."
+          ]
+        },
+        "endedAt": 1771804551941
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH avg_eval AS (\n  SELECT\n    cs.course_id,\n    AVG(ce.difficulty_rating)::numeric AS avg_difficulty,\n    COUNT(*) AS eval_count\n  FROM public.course_evaluations ce\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\n  GROUP BY cs.course_id\n),\navg_grade AS (\n  SELECT\n    cs.course_id,\n    AVG(\n      (COALESCE(g.exam_score,0) + COALESCE(g.project_score,0) + COALESCE(g.attendance_score,0))\n      / NULLIF(\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\n          + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\n          + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END),\n          0\n        )\n    )::numeric AS avg_grade,\n    COUNT(g.id) AS grade_count\n  FROM public.grades g\n  JOIN public.enrollments e ON g.enrollment_id = e.id\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\n  GROUP BY cs.course_id\n),\nper_course AS (\n  SELECT\n    c.id AS course_id,\n    c.code AS course_code,\n    ae.avg_difficulty AS avg_difficulty,\n    ag.avg_grade AS avg_grade,\n    COALESCE(ae.eval_count,0) AS eval_count,\n    COALESCE(ag.grade_count,0) AS grade_count\n  FROM public.courses c\n  LEFT JOIN avg_eval ae ON ae.course_id = c.id\n  LEFT JOIN avg_grade ag ON ag.course_id = c.id\n)\nSELECT\n  COUNT(*) FILTER (WHERE avg_difficulty IS NOT NULL AND avg_grade IS NOT NULL) AS courses_with_both,\n  corr(avg_difficulty, avg_grade) AS pearson_correlation,\n  regr_slope(avg_grade, avg_difficulty) AS regr_slope_grade_on_difficulty,\n  regr_intercept(avg_grade, avg_difficulty) AS regr_intercept_grade_on_difficulty\nFROM per_course\nWHERE avg_difficulty IS NOT NULL AND avg_grade IS NOT NULL;"
+        },
+        "startedAt": 1771804551945,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: Error validating query: WITH __query_result AS (\nWITH avg_eval AS (\n  SELECT\n    cs.course_id,\n    AVG(ce.difficulty_rating)::numeric AS avg_difficulty,\n    COUNT(*) AS eval_count\n  FROM public.course_evaluations ce\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\n  GROUP BY cs.course_id\n),\navg_grade AS (\n  SELECT\n    cs.course_id,\n    AVG(\n      (COALESCE(g.exam_score,0) + COALESCE(g.project_score,0) + COALESCE(g.attendance_score,0))\n      / NULLIF(\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\n          + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\n          + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END),\n          0\n        )\n    )::numeric AS avg_grade,\n    COUNT(g.id) AS grade_count\n  FROM public.grades g\n  JOIN public.enrollments e ON g.enrollment_id = e.id\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\n  GROUP BY cs.course_id\n),\nper_course AS (\n  SELECT\n    c.id AS course_id,\n    c.code AS course_code,\n    ae.avg_difficulty AS avg_difficulty,\n    ag.avg_grade AS avg_grade,\n    COALESCE(ae.eval_count,0) AS eval_count,\n    COALESCE(ag.grade_count,0) AS grade_count\n  FROM public.courses c\n  LEFT JOIN avg_eval ae ON ae.course_id = c.id\n  LEFT JOIN avg_grade ag ON ag.course_id = c.id\n)\nSELECT\n  COUNT(*) FILTER (WHERE avg_difficulty IS NOT NULL AND avg_grade IS NOT NULL) AS courses_with_both,\n  corr(avg_difficulty, avg_grade) AS pearson_correlation,\n  regr_slope(avg_grade, avg_difficulty) AS regr_slope_grade_on_difficulty,\n  regr_intercept(avg_grade, avg_difficulty) AS regr_intercept_grade_on_difficulty\nFROM per_course\nWHERE avg_difficulty IS NOT NULL AND avg_grade IS NOT NULL\n),\n__limited AS (\n  SELECT * FROM __query_result LIMIT 501\n),\n__payload AS (\n  SELECT json_build_object(\n    'rows', COALESCE((SELECT json_agg(to_jsonb(__limited)) FROM __limited), '[]'::json)\n  ) AS data\n)\nSELECT encode(convert_to((SELECT data::text FROM __payload), 'UTF8'), 'hex') AS __payload_hex",
+          "name": "Error"
+        },
+        "endedAt": 1771804551979
+      }
+    },
+    "input": {
+      "question": "Is there a correlation between difficulty rating and average grade per course?"
+    },
+    "error": {
+      "message": "SQL execution failed: Error validating query: WITH __query_result AS (\nWITH avg_eval AS (\n  SELECT\n    cs.course_id,\n    AVG(ce.difficulty_rating)::numeric AS avg_difficulty,\n    COUNT(*) AS eval_count\n  FROM public.course_evaluations ce\n  JOIN public.enrollments e ON ce.enrollment_id = e.id\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\n  GROUP BY cs.course_id\n),\navg_grade AS (\n  SELECT\n    cs.course_id,\n    AVG(\n      (COALESCE(g.exam_score,0) + COALESCE(g.project_score,0) + COALESCE(g.attendance_score,0))\n      / NULLIF(\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\n          + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\n          + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END),\n          0\n        )\n    )::numeric AS avg_grade,\n    COUNT(g.id) AS grade_count\n  FROM public.grades g\n  JOIN public.enrollments e ON g.enrollment_id = e.id\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\n  GROUP BY cs.course_id\n),\nper_course AS (\n  SELECT\n    c.id AS course_id,\n    c.code AS course_code,\n    ae.avg_difficulty AS avg_difficulty,\n    ag.avg_grade AS avg_grade,\n    COALESCE(ae.eval_count,0) AS eval_count,\n    COALESCE(ag.grade_count,0) AS grade_count\n  FROM public.courses c\n  LEFT JOIN avg_eval ae ON ae.course_id = c.id\n  LEFT JOIN avg_grade ag ON ag.course_id = c.id\n)\nSELECT\n  COUNT(*) FILTER (WHERE avg_difficulty IS NOT NULL AND avg_grade IS NOT NULL) AS courses_with_both,\n  corr(avg_difficulty, avg_grade) AS pearson_correlation,\n  regr_slope(avg_grade, avg_difficulty) AS regr_slope_grade_on_difficulty,\n  regr_intercept(avg_grade, avg_difficulty) AS regr_intercept_grade_on_difficulty\nFROM per_course\nWHERE avg_difficulty IS NOT NULL AND avg_grade IS NOT NULL\n),\n__limited AS (\n  SELECT * FROM __query_result LIMIT 501\n),\n__payload AS (\n  SELECT json_build_object(\n    'rows', COALESCE((SELECT json_agg(to_jsonb(__limited)) FROM __limited), '[]'::json)\n  ) AS data\n)\nSELECT encode(convert_to((SELECT data::text FROM __payload), 'UTF8'), 'hex') AS __payload_hex",
+      "name": "Error"
+    },
+    "traceId": "754421be840c3a3b226e8e2e1613b29d"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:55:51.986Z",
+    "traceId": "754421be840c3a3b226e8e2e1613b29d",
+    "attempts": 4,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 21554,
+      "outputTokens": 4636,
+      "totalTokens": 26190,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 3456,
+      "costUsd": 0.0146605
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 21554,
+        "outputTokens": 4636,
+        "totalTokens": 26190,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 3456,
+        "costUsd": 0.0146605
+      }
+    ],
+    "warnings": []
+  }
+}

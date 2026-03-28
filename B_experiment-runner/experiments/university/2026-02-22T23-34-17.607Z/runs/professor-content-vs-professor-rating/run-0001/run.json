@@ -1,0 +1,720 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "professor-content-vs-professor-rating",
+  "caseDirectory": "professor-content-vs-professor-rating",
+  "repeatIndex": 1,
+  "prompt": "Show average content rating vs professor rating for each professor",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show average content rating vs professor rating for each professor"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:49:21.628Z",
+    "endedAtUtc": "2026-02-22T23:50:31.211Z",
+    "durationMs": 69583
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "28595",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:50:31 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show average content rating vs professor rating for each professor\"},\"sql\":{\"payload\":{\"question\":\"Show average content rating vs professor rating for each professor\"},\"startedAt\":1771804161634,\"status\":\"success\",\"output\":{\"reasoning\":\"Aggregate course_evaluations back to professors via enrollments -> course_sections to compute per-professor averages. Return professor id/name, rounded average content and professor ratings, and count of evaluations. Order deterministically by last then first name.\",\"sql\":\"SELECT\\n  p.id AS professor_id,\\n  (p.last_name || ', ' || p.first_name) AS professor_name,\\n  ROUND(AVG(ce.content_rating)::numeric, 2) AS average_content_rating,\\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS average_professor_rating,\\n  COUNT(ce.id) AS evaluation_count\\nFROM public.professors p\\nJOIN public.course_sections cs ON cs.professor_id = p.id\\nJOIN public.enrollments e ON e.course_section_id = cs.id\\nJOIN public.course_evaluations ce ON ce.enrollment_id = e.id\\nGROUP BY p.id, p.last_name, p.first_name\\nORDER BY p.last_name, p.first_name;\",\"assumptions\":[\"Only evaluations linked through enrollments -> course_sections -> professors are relevant (professors without evaluations are excluded).\",\"Ratings are stored in course_evaluations.content_rating and course_evaluations.professor_rating as integer values.\"]},\"endedAt\":1771804196654},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  p.id AS professor_id,\\n  (p.last_name || ', ' || p.first_name) AS professor_name,\\n  ROUND(AVG(ce.content_rating)::numeric, 2) AS average_content_rating,\\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS average_professor_rating,\\n  COUNT(ce.id) AS evaluation_count\\nFROM public.professors p\\nJOIN public.course_sections cs ON cs.professor_id = p.id\\nJOIN public.enrollments e ON e.course_section_id = cs.id\\nJOIN public.course_evaluations ce ON ce.enrollment_id = e.id\\nGROUP BY p.id, p.last_name, p.first_name\\nORDER BY p.last_name, p.first_name;\"},\"startedAt\":1771804196660,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT\\n  p.id AS professor_id,\\n  (p.last_name || ', ' || p.first_name) AS professor_name,\\n  ROUND(AVG(ce.content_rating)::numeric, 2) AS average_content_rating,\\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS average_professor_rating,\\n  COUNT(ce.id) AS evaluation_count\\nFROM public.professors p\\nJOIN public.course_sections cs ON cs.professor_id = p.id\\nJOIN public.enrollments e ON e.course_section_id = cs.id\\nJOIN public.course_evaluations ce ON ce.enrollment_id = e.id\\nGROUP BY p.id, p.last_name, p.first_name\\nORDER BY p.last_name, p.first_name\",\"metadata\":{\"columns\":[\"professor_id\",\"professor_name\",\"evaluation_count\",\"average_content_rating\",\"average_professor_rating\"],\"rowCount\":20,\"sample\":[{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"professor_name\":\"Jankowski, Grzegorz\",\"evaluation_count\":1,\"average_content_rating\":1,\"average_professor_rating\":2},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"professor_name\":\"Kowalczyk, Ryszard\",\"evaluation_count\":3,\"average_content_rating\":2.33,\"average_professor_rating\":3.33}]},\"data\":[{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"professor_name\":\"Jankowski, Grzegorz\",\"evaluation_count\":1,\"average_content_rating\":1,\"average_professor_rating\":2},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"professor_name\":\"Kowalczyk, Ryszard\",\"evaluation_count\":3,\"average_content_rating\":2.33,\"average_professor_rating\":3.33},{\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"professor_name\":\"Kozłowski, Agnieszka\",\"evaluation_count\":2,\"average_content_rating\":4.5,\"average_professor_rating\":3},{\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"professor_name\":\"Kozłowski, Katarzyna\",\"evaluation_count\":2,\"average_content_rating\":3.5,\"average_professor_rating\":3},{\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"professor_name\":\"Krawczyk, Ewa\",\"evaluation_count\":3,\"average_content_rating\":2.33,\"average_professor_rating\":3.33},{\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"professor_name\":\"Lewandowski, Marek\",\"evaluation_count\":1,\"average_content_rating\":4,\"average_professor_rating\":2},{\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"professor_name\":\"Majewski, Tomasz\",\"evaluation_count\":1,\"average_content_rating\":5,\"average_professor_rating\":2},{\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"professor_name\":\"Michalski, Ewa\",\"evaluation_count\":2,\"average_content_rating\":3.5,\"average_professor_rating\":3},{\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"professor_name\":\"Nowak, Michał\",\"evaluation_count\":1,\"average_content_rating\":4,\"average_professor_rating\":4},{\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"professor_name\":\"Nowakowski, Mariusz\",\"evaluation_count\":2,\"average_content_rating\":3.5,\"average_professor_rating\":2.5},{\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"professor_name\":\"Olszewski, Małgorzata\",\"evaluation_count\":5,\"average_content_rating\":3.4,\"average_professor_rating\":3.2},{\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"professor_name\":\"Pawłowski, Teresa\",\"evaluation_count\":2,\"average_content_rating\":3.5,\"average_professor_rating\":1.5},{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"professor_name\":\"Piotrowski, Magdalena\",\"evaluation_count\":1,\"average_content_rating\":2,\"average_professor_rating\":4},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"professor_name\":\"Szymański, Katarzyna\",\"evaluation_count\":1,\"average_content_rating\":1,\"average_professor_rating\":2},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"professor_name\":\"Wieczorek, Adam\",\"evaluation_count\":2,\"average_content_rating\":3.5,\"average_professor_rating\":4},{\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"professor_name\":\"Wieczorek, Tomasz\",\"evaluation_count\":1,\"average_content_rating\":4,\"average_professor_rating\":4},{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"professor_name\":\"Wojciechowski, Jacek\",\"evaluation_count\":3,\"average_content_rating\":2.33,\"average_professor_rating\":1.67},{\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"professor_name\":\"Woźniak, Marek\",\"evaluation_count\":2,\"average_content_rating\":5,\"average_professor_rating\":2},{\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"professor_name\":\"Woźniak, Ryszard\",\"evaluation_count\":4,\"average_content_rating\":3,\"average_professor_rating\":4},{\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"professor_name\":\"Woźniak, Teresa\",\"evaluation_count\":2,\"average_content_rating\":4,\"average_professor_rating\":5}]},\"endedAt\":1771804196671},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT\\n  p.id AS professor_id,\\n  (p.last_name || ', ' || p.first_name) AS professor_name,\\n  ROUND(AVG(ce.content_rating)::numeric, 2) AS average_content_rating,\\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS average_professor_rating,\\n  COUNT(ce.id) AS evaluation_count\\nFROM public.professors p\\nJOIN public.course_sections cs ON cs.professor_id = p.id\\nJOIN public.enrollments e ON e.course_section_id = cs.id\\nJOIN public.course_evaluations ce ON ce.enrollment_id = e.id\\nGROUP BY p.id, p.last_name, p.first_name\\nORDER BY p.last_name, p.first_name\",\"metadata\":{\"columns\":[\"professor_id\",\"professor_name\",\"evaluation_count\",\"average_content_rating\",\"average_professor_rating\"],\"rowCount\":20,\"sample\":[{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"professor_name\":\"Jankowski, Grzegorz\",\"evaluation_count\":1,\"average_content_rating\":1,\"average_professor_rating\":2},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"professor_name\":\"Kowalczyk, Ryszard\",\"evaluation_count\":3,\"average_content_rating\":2.33,\"average_professor_rating\":3.33}]},\"data\":[{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"professor_name\":\"Jankowski, Grzegorz\",\"evaluation_count\":1,\"average_content_rating\":1,\"average_professor_rating\":2},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"professor_name\":\"Kowalczyk, Ryszard\",\"evaluation_count\":3,\"average_content_rating\":2.33,\"average_professor_rating\":3.33},{\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"professor_name\":\"Kozłowski, Agnieszka\",\"evaluation_count\":2,\"average_content_rating\":4.5,\"average_professor_rating\":3},{\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"professor_name\":\"Kozłowski, Katarzyna\",\"evaluation_count\":2,\"average_content_rating\":3.5,\"average_professor_rating\":3},{\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"professor_name\":\"Krawczyk, Ewa\",\"evaluation_count\":3,\"average_content_rating\":2.33,\"average_professor_rating\":3.33},{\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"professor_name\":\"Lewandowski, Marek\",\"evaluation_count\":1,\"average_content_rating\":4,\"average_professor_rating\":2},{\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"professor_name\":\"Majewski, Tomasz\",\"evaluation_count\":1,\"average_content_rating\":5,\"average_professor_rating\":2},{\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"professor_name\":\"Michalski, Ewa\",\"evaluation_count\":2,\"average_content_rating\":3.5,\"average_professor_rating\":3},{\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"professor_name\":\"Nowak, Michał\",\"evaluation_count\":1,\"average_content_rating\":4,\"average_professor_rating\":4},{\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"professor_name\":\"Nowakowski, Mariusz\",\"evaluation_count\":2,\"average_content_rating\":3.5,\"average_professor_rating\":2.5},{\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"professor_name\":\"Olszewski, Małgorzata\",\"evaluation_count\":5,\"average_content_rating\":3.4,\"average_professor_rating\":3.2},{\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"professor_name\":\"Pawłowski, Teresa\",\"evaluation_count\":2,\"average_content_rating\":3.5,\"average_professor_rating\":1.5},{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"professor_name\":\"Piotrowski, Magdalena\",\"evaluation_count\":1,\"average_content_rating\":2,\"average_professor_rating\":4},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"professor_name\":\"Szymański, Katarzyna\",\"evaluation_count\":1,\"average_content_rating\":1,\"average_professor_rating\":2},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"professor_name\":\"Wieczorek, Adam\",\"evaluation_count\":2,\"average_content_rating\":3.5,\"average_professor_rating\":4},{\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"professor_name\":\"Wieczorek, Tomasz\",\"evaluation_count\":1,\"average_content_rating\":4,\"average_professor_rating\":4},{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"professor_name\":\"Wojciechowski, Jacek\",\"evaluation_count\":3,\"average_content_rating\":2.33,\"average_professor_rating\":1.67},{\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"professor_name\":\"Woźniak, Marek\",\"evaluation_count\":2,\"average_content_rating\":5,\"average_professor_rating\":2},{\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"professor_name\":\"Woźniak, Ryszard\",\"evaluation_count\":4,\"average_content_rating\":3,\"average_professor_rating\":4},{\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"professor_name\":\"Woźniak, Teresa\",\"evaluation_count\":2,\"average_content_rating\":4,\"average_professor_rating\":5}]},\"startedAt\":1771804196673,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Content Rating vs Average Professor Rating by Professor\",\"width\":700,\"height\":450,\"layer\":[{\"mark\":{\"type\":\"point\",\"filled\":true,\"opacity\":0.9},\"encoding\":{\"x\":{\"field\":\"average_content_rating\",\"type\":\"quantitative\",\"title\":\"Average Content Rating\",\"scale\":{\"domain\":[1,5]}},\"y\":{\"field\":\"average_professor_rating\",\"type\":\"quantitative\",\"title\":\"Average Professor Rating\",\"scale\":{\"domain\":[1,5]}},\"size\":{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Evaluation Count\",\"scale\":{\"range\":[60,360]}},\"color\":{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"legend\":{\"title\":\"Evaluation Count\"},\"scale\":{\"scheme\":\"blues\"}},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Evaluations\"},{\"field\":\"average_content_rating\",\"type\":\"quantitative\",\"title\":\"Avg Content\",\"format\":\".2f\"},{\"field\":\"average_professor_rating\",\"type\":\"quantitative\",\"title\":\"Avg Professor\",\"format\":\".2f\"}]}},{\"mark\":{\"type\":\"text\",\"dy\":-12,\"fontSize\":11,\"opacity\":0.9},\"encoding\":{\"x\":{\"field\":\"average_content_rating\",\"type\":\"quantitative\"},\"y\":{\"field\":\"average_professor_rating\",\"type\":\"quantitative\"},\"text\":{\"field\":\"professor_name\",\"type\":\"nominal\"},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Evaluations\"},{\"field\":\"average_content_rating\",\"type\":\"quantitative\",\"title\":\"Avg Content\",\"format\":\".2f\"},{\"field\":\"average_professor_rating\",\"type\":\"quantitative\",\"title\":\"Avg Professor\",\"format\":\".2f\"}]}}]},\"reasoning\":\"Scatter plot of average content vs professor ratings per professor; point size and color encode evaluation_count; text labels show professor names and tooltips provide details.\"},\"endedAt\":1771804231179},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Content Rating vs Average Professor Rating by Professor\",\"width\":700,\"height\":450,\"layer\":[{\"mark\":{\"type\":\"point\",\"filled\":true,\"opacity\":0.9},\"encoding\":{\"x\":{\"field\":\"average_content_rating\",\"type\":\"quantitative\",\"title\":\"Average Content Rating\",\"scale\":{\"domain\":[1,5]}},\"y\":{\"field\":\"average_professor_rating\",\"type\":\"quantitative\",\"title\":\"Average Professor Rating\",\"scale\":{\"domain\":[1,5]}},\"size\":{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Evaluation Count\",\"scale\":{\"range\":[60,360]}},\"color\":{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"legend\":{\"title\":\"Evaluation Count\"},\"scale\":{\"scheme\":\"blues\"}},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Evaluations\"},{\"field\":\"average_content_rating\",\"type\":\"quantitative\",\"title\":\"Avg Content\",\"format\":\".2f\"},{\"field\":\"average_professor_rating\",\"type\":\"quantitative\",\"title\":\"Avg Professor\",\"format\":\".2f\"}]}},{\"mark\":{\"type\":\"text\",\"dy\":-12,\"fontSize\":11,\"opacity\":0.9},\"encoding\":{\"x\":{\"field\":\"average_content_rating\",\"type\":\"quantitative\"},\"y\":{\"field\":\"average_professor_rating\",\"type\":\"quantitative\"},\"text\":{\"field\":\"professor_name\",\"type\":\"nominal\"},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Evaluations\"},{\"field\":\"average_content_rating\",\"type\":\"quantitative\",\"title\":\"Avg Content\",\"format\":\".2f\"},{\"field\":\"average_professor_rating\",\"type\":\"quantitative\",\"title\":\"Avg Professor\",\"format\":\".2f\"}]}}]},\"reasoning\":\"Scatter plot of average content vs professor ratings per professor; point size and color encode evaluation_count; text labels show professor names and tooltips provide details.\"},\"startedAt\":1771804231185,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  p.id AS professor_id,\\n  (p.last_name || ', ' || p.first_name) AS professor_name,\\n  ROUND(AVG(ce.content_rating)::numeric, 2) AS average_content_rating,\\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS average_professor_rating,\\n  COUNT(ce.id) AS evaluation_count\\nFROM public.professors p\\nJOIN public.course_sections cs ON cs.professor_id = p.id\\nJOIN public.enrollments e ON e.course_section_id = cs.id\\nJOIN public.course_evaluations ce ON ce.enrollment_id = e.id\\nGROUP BY p.id, p.last_name, p.first_name\\nORDER BY p.last_name, p.first_name;\",\"data\":[{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"professor_name\":\"Jankowski, Grzegorz\",\"evaluation_count\":1,\"average_content_rating\":1,\"average_professor_rating\":2},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"professor_name\":\"Kowalczyk, Ryszard\",\"evaluation_count\":3,\"average_content_rating\":2.33,\"average_professor_rating\":3.33},{\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"professor_name\":\"Kozłowski, Agnieszka\",\"evaluation_count\":2,\"average_content_rating\":4.5,\"average_professor_rating\":3},{\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"professor_name\":\"Kozłowski, Katarzyna\",\"evaluation_count\":2,\"average_content_rating\":3.5,\"average_professor_rating\":3},{\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"professor_name\":\"Krawczyk, Ewa\",\"evaluation_count\":3,\"average_content_rating\":2.33,\"average_professor_rating\":3.33},{\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"professor_name\":\"Lewandowski, Marek\",\"evaluation_count\":1,\"average_content_rating\":4,\"average_professor_rating\":2},{\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"professor_name\":\"Majewski, Tomasz\",\"evaluation_count\":1,\"average_content_rating\":5,\"average_professor_rating\":2},{\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"professor_name\":\"Michalski, Ewa\",\"evaluation_count\":2,\"average_content_rating\":3.5,\"average_professor_rating\":3},{\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"professor_name\":\"Nowak, Michał\",\"evaluation_count\":1,\"average_content_rating\":4,\"average_professor_rating\":4},{\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"professor_name\":\"Nowakowski, Mariusz\",\"evaluation_count\":2,\"average_content_rating\":3.5,\"average_professor_rating\":2.5},{\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"professor_name\":\"Olszewski, Małgorzata\",\"evaluation_count\":5,\"average_content_rating\":3.4,\"average_professor_rating\":3.2},{\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"professor_name\":\"Pawłowski, Teresa\",\"evaluation_count\":2,\"average_content_rating\":3.5,\"average_professor_rating\":1.5},{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"professor_name\":\"Piotrowski, Magdalena\",\"evaluation_count\":1,\"average_content_rating\":2,\"average_professor_rating\":4},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"professor_name\":\"Szymański, Katarzyna\",\"evaluation_count\":1,\"average_content_rating\":1,\"average_professor_rating\":2},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"professor_name\":\"Wieczorek, Adam\",\"evaluation_count\":2,\"average_content_rating\":3.5,\"average_professor_rating\":4},{\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"professor_name\":\"Wieczorek, Tomasz\",\"evaluation_count\":1,\"average_content_rating\":4,\"average_professor_rating\":4},{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"professor_name\":\"Wojciechowski, Jacek\",\"evaluation_count\":3,\"average_content_rating\":2.33,\"average_professor_rating\":1.67},{\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"professor_name\":\"Woźniak, Marek\",\"evaluation_count\":2,\"average_content_rating\":5,\"average_professor_rating\":2},{\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"professor_name\":\"Woźniak, Ryszard\",\"evaluation_count\":4,\"average_content_rating\":3,\"average_professor_rating\":4},{\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"professor_name\":\"Woźniak, Teresa\",\"evaluation_count\":2,\"average_content_rating\":4,\"average_professor_rating\":5}],\"metadata\":{\"columns\":[\"professor_id\",\"professor_name\",\"evaluation_count\",\"average_content_rating\",\"average_professor_rating\"],\"rowCount\":20,\"sample\":[{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"professor_name\":\"Jankowski, Grzegorz\",\"evaluation_count\":1,\"average_content_rating\":1,\"average_professor_rating\":2},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"professor_name\":\"Kowalczyk, Ryszard\",\"evaluation_count\":3,\"average_content_rating\":2.33,\"average_professor_rating\":3.33}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Content Rating vs Average Professor Rating by Professor\",\"width\":700,\"height\":450,\"layer\":[{\"mark\":{\"type\":\"point\",\"filled\":true,\"opacity\":0.9},\"encoding\":{\"x\":{\"field\":\"average_content_rating\",\"type\":\"quantitative\",\"title\":\"Average Content Rating\",\"scale\":{\"domain\":[1,5]}},\"y\":{\"field\":\"average_professor_rating\",\"type\":\"quantitative\",\"title\":\"Average Professor Rating\",\"scale\":{\"domain\":[1,5]}},\"size\":{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Evaluation Count\",\"scale\":{\"range\":[60,360]}},\"color\":{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"legend\":{\"title\":\"Evaluation Count\"},\"scale\":{\"scheme\":\"blues\"}},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Evaluations\"},{\"field\":\"average_content_rating\",\"type\":\"quantitative\",\"title\":\"Avg Content\",\"format\":\".2f\"},{\"field\":\"average_professor_rating\",\"type\":\"quantitative\",\"title\":\"Avg Professor\",\"format\":\".2f\"}]}},{\"mark\":{\"type\":\"text\",\"dy\":-12,\"fontSize\":11,\"opacity\":0.9},\"encoding\":{\"x\":{\"field\":\"average_content_rating\",\"type\":\"quantitative\"},\"y\":{\"field\":\"average_professor_rating\",\"type\":\"quantitative\"},\"text\":{\"field\":\"professor_name\",\"type\":\"nominal\"},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Evaluations\"},{\"field\":\"average_content_rating\",\"type\":\"quantitative\",\"title\":\"Avg Content\",\"format\":\".2f\"},{\"field\":\"average_professor_rating\",\"type\":\"quantitative\",\"title\":\"Avg Professor\",\"format\":\".2f\"}]}}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"]}},\"endedAt\":1771804231189}},\"input\":{\"question\":\"Show average content rating vs professor rating for each professor\"},\"result\":{\"sql\":\"SELECT\\n  p.id AS professor_id,\\n  (p.last_name || ', ' || p.first_name) AS professor_name,\\n  ROUND(AVG(ce.content_rating)::numeric, 2) AS average_content_rating,\\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS average_professor_rating,\\n  COUNT(ce.id) AS evaluation_count\\nFROM public.professors p\\nJOIN public.course_sections cs ON cs.professor_id = p.id\\nJOIN public.enrollments e ON e.course_section_id = cs.id\\nJOIN public.course_evaluations ce ON ce.enrollment_id = e.id\\nGROUP BY p.id, p.last_name, p.first_name\\nORDER BY p.last_name, p.first_name;\",\"data\":[{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"professor_name\":\"Jankowski, Grzegorz\",\"evaluation_count\":1,\"average_content_rating\":1,\"average_professor_rating\":2},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"professor_name\":\"Kowalczyk, Ryszard\",\"evaluation_count\":3,\"average_content_rating\":2.33,\"average_professor_rating\":3.33},{\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"professor_name\":\"Kozłowski, Agnieszka\",\"evaluation_count\":2,\"average_content_rating\":4.5,\"average_professor_rating\":3},{\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"professor_name\":\"Kozłowski, Katarzyna\",\"evaluation_count\":2,\"average_content_rating\":3.5,\"average_professor_rating\":3},{\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"professor_name\":\"Krawczyk, Ewa\",\"evaluation_count\":3,\"average_content_rating\":2.33,\"average_professor_rating\":3.33},{\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"professor_name\":\"Lewandowski, Marek\",\"evaluation_count\":1,\"average_content_rating\":4,\"average_professor_rating\":2},{\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"professor_name\":\"Majewski, Tomasz\",\"evaluation_count\":1,\"average_content_rating\":5,\"average_professor_rating\":2},{\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"professor_name\":\"Michalski, Ewa\",\"evaluation_count\":2,\"average_content_rating\":3.5,\"average_professor_rating\":3},{\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"professor_name\":\"Nowak, Michał\",\"evaluation_count\":1,\"average_content_rating\":4,\"average_professor_rating\":4},{\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"professor_name\":\"Nowakowski, Mariusz\",\"evaluation_count\":2,\"average_content_rating\":3.5,\"average_professor_rating\":2.5},{\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"professor_name\":\"Olszewski, Małgorzata\",\"evaluation_count\":5,\"average_content_rating\":3.4,\"average_professor_rating\":3.2},{\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"professor_name\":\"Pawłowski, Teresa\",\"evaluation_count\":2,\"average_content_rating\":3.5,\"average_professor_rating\":1.5},{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"professor_name\":\"Piotrowski, Magdalena\",\"evaluation_count\":1,\"average_content_rating\":2,\"average_professor_rating\":4},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"professor_name\":\"Szymański, Katarzyna\",\"evaluation_count\":1,\"average_content_rating\":1,\"average_professor_rating\":2},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"professor_name\":\"Wieczorek, Adam\",\"evaluation_count\":2,\"average_content_rating\":3.5,\"average_professor_rating\":4},{\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"professor_name\":\"Wieczorek, Tomasz\",\"evaluation_count\":1,\"average_content_rating\":4,\"average_professor_rating\":4},{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"professor_name\":\"Wojciechowski, Jacek\",\"evaluation_count\":3,\"average_content_rating\":2.33,\"average_professor_rating\":1.67},{\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"professor_name\":\"Woźniak, Marek\",\"evaluation_count\":2,\"average_content_rating\":5,\"average_professor_rating\":2},{\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"professor_name\":\"Woźniak, Ryszard\",\"evaluation_count\":4,\"average_content_rating\":3,\"average_professor_rating\":4},{\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"professor_name\":\"Woźniak, Teresa\",\"evaluation_count\":2,\"average_content_rating\":4,\"average_professor_rating\":5}],\"metadata\":{\"columns\":[\"professor_id\",\"professor_name\",\"evaluation_count\",\"average_content_rating\",\"average_professor_rating\"],\"rowCount\":20,\"sample\":[{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"professor_name\":\"Jankowski, Grzegorz\",\"evaluation_count\":1,\"average_content_rating\":1,\"average_professor_rating\":2},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"professor_name\":\"Kowalczyk, Ryszard\",\"evaluation_count\":3,\"average_content_rating\":2.33,\"average_professor_rating\":3.33}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Content Rating vs Average Professor Rating by Professor\",\"width\":700,\"height\":450,\"layer\":[{\"mark\":{\"type\":\"point\",\"filled\":true,\"opacity\":0.9},\"encoding\":{\"x\":{\"field\":\"average_content_rating\",\"type\":\"quantitative\",\"title\":\"Average Content Rating\",\"scale\":{\"domain\":[1,5]}},\"y\":{\"field\":\"average_professor_rating\",\"type\":\"quantitative\",\"title\":\"Average Professor Rating\",\"scale\":{\"domain\":[1,5]}},\"size\":{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Evaluation Count\",\"scale\":{\"range\":[60,360]}},\"color\":{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"legend\":{\"title\":\"Evaluation Count\"},\"scale\":{\"scheme\":\"blues\"}},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Evaluations\"},{\"field\":\"average_content_rating\",\"type\":\"quantitative\",\"title\":\"Avg Content\",\"format\":\".2f\"},{\"field\":\"average_professor_rating\",\"type\":\"quantitative\",\"title\":\"Avg Professor\",\"format\":\".2f\"}]}},{\"mark\":{\"type\":\"text\",\"dy\":-12,\"fontSize\":11,\"opacity\":0.9},\"encoding\":{\"x\":{\"field\":\"average_content_rating\",\"type\":\"quantitative\"},\"y\":{\"field\":\"average_professor_rating\",\"type\":\"quantitative\"},\"text\":{\"field\":\"professor_name\",\"type\":\"nominal\"},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Evaluations\"},{\"field\":\"average_content_rating\",\"type\":\"quantitative\",\"title\":\"Avg Content\",\"format\":\".2f\"},{\"field\":\"average_professor_rating\",\"type\":\"quantitative\",\"title\":\"Avg Professor\",\"format\":\".2f\"}]}}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"]}},\"traceId\":\"8bfe193600a7e29f465c6e0dff7652dd\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/professor-content-vs-professor-rating/run-0001/run.json",
+    "queryPath": "runs/professor-content-vs-professor-rating/run-0001/query.sql",
+    "vegaRawPath": "runs/professor-content-vs-professor-rating/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/professor-content-vs-professor-rating/run-0001/vega.resolved.json",
+    "imagePath": "runs/professor-content-vs-professor-rating/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:50:31.588Z",
+  "traceId": "8bfe193600a7e29f465c6e0dff7652dd",
+  "success": true,
+  "durationMs": 69960,
+  "resultRaw": {
+    "data": [
+      {
+        "professor_id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+        "professor_name": "Jankowski, Grzegorz",
+        "evaluation_count": 1,
+        "average_content_rating": 1,
+        "average_professor_rating": 2
+      },
+      {
+        "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+        "professor_name": "Kowalczyk, Ryszard",
+        "evaluation_count": 3,
+        "average_content_rating": 2.33,
+        "average_professor_rating": 3.33
+      },
+      {
+        "professor_id": "7fbf0e4c-fd08-4312-bb83-087368f81e46",
+        "professor_name": "Kozłowski, Agnieszka",
+        "evaluation_count": 2,
+        "average_content_rating": 4.5,
+        "average_professor_rating": 3
+      },
+      {
+        "professor_id": "bcf3a47c-67cf-438d-93de-07c55ab583e0",
+        "professor_name": "Kozłowski, Katarzyna",
+        "evaluation_count": 2,
+        "average_content_rating": 3.5,
+        "average_professor_rating": 3
+      },
+      {
+        "professor_id": "a82c40da-e7dc-4e49-9e66-386ea4bb7483",
+        "professor_name": "Krawczyk, Ewa",
+        "evaluation_count": 3,
+        "average_content_rating": 2.33,
+        "average_professor_rating": 3.33
+      },
+      {
+        "professor_id": "037011f2-f3d4-406e-9554-a6ffba701e06",
+        "professor_name": "Lewandowski, Marek",
+        "evaluation_count": 1,
+        "average_content_rating": 4,
+        "average_professor_rating": 2
+      },
+      {
+        "professor_id": "f221aafd-0e9c-4345-aff5-7e290e1a7864",
+        "professor_name": "Majewski, Tomasz",
+        "evaluation_count": 1,
+        "average_content_rating": 5,
+        "average_professor_rating": 2
+      },
+      {
+        "professor_id": "dd993c5f-eb62-491f-a783-5ca9a0132ade",
+        "professor_name": "Michalski, Ewa",
+        "evaluation_count": 2,
+        "average_content_rating": 3.5,
+        "average_professor_rating": 3
+      },
+      {
+        "professor_id": "f24d24fc-5446-4d72-bb11-9d9dd1545f97",
+        "professor_name": "Nowak, Michał",
+        "evaluation_count": 1,
+        "average_content_rating": 4,
+        "average_professor_rating": 4
+      },
+      {
+        "professor_id": "d19adcea-56d6-4557-8f93-95ec58fa5d34",
+        "professor_name": "Nowakowski, Mariusz",
+        "evaluation_count": 2,
+        "average_content_rating": 3.5,
+        "average_professor_rating": 2.5
+      },
+      {
+        "professor_id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+        "professor_name": "Olszewski, Małgorzata",
+        "evaluation_count": 5,
+        "average_content_rating": 3.4,
+        "average_professor_rating": 3.2
+      },
+      {
+        "professor_id": "cee911dc-17c4-4395-b173-2af1418983fe",
+        "professor_name": "Pawłowski, Teresa",
+        "evaluation_count": 2,
+        "average_content_rating": 3.5,
+        "average_professor_rating": 1.5
+      },
+      {
+        "professor_id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+        "professor_name": "Piotrowski, Magdalena",
+        "evaluation_count": 1,
+        "average_content_rating": 2,
+        "average_professor_rating": 4
+      },
+      {
+        "professor_id": "33ba2086-7c0f-4a57-9451-014db3e74209",
+        "professor_name": "Szymański, Katarzyna",
+        "evaluation_count": 1,
+        "average_content_rating": 1,
+        "average_professor_rating": 2
+      },
+      {
+        "professor_id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+        "professor_name": "Wieczorek, Adam",
+        "evaluation_count": 2,
+        "average_content_rating": 3.5,
+        "average_professor_rating": 4
+      },
+      {
+        "professor_id": "4050afec-f68c-49bb-9982-4a3c9d1a23d9",
+        "professor_name": "Wieczorek, Tomasz",
+        "evaluation_count": 1,
+        "average_content_rating": 4,
+        "average_professor_rating": 4
+      },
+      {
+        "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+        "professor_name": "Wojciechowski, Jacek",
+        "evaluation_count": 3,
+        "average_content_rating": 2.33,
+        "average_professor_rating": 1.67
+      },
+      {
+        "professor_id": "2b5262b8-932c-4951-9390-c56d4b69d888",
+        "professor_name": "Woźniak, Marek",
+        "evaluation_count": 2,
+        "average_content_rating": 5,
+        "average_professor_rating": 2
+      },
+      {
+        "professor_id": "5d70abe8-4f1a-44ec-9816-2ec96a2807cb",
+        "professor_name": "Woźniak, Ryszard",
+        "evaluation_count": 4,
+        "average_content_rating": 3,
+        "average_professor_rating": 4
+      },
+      {
+        "professor_id": "173e49aa-5a27-41e8-b1fa-4d19423bdc0b",
+        "professor_name": "Woźniak, Teresa",
+        "evaluation_count": 2,
+        "average_content_rating": 4,
+        "average_professor_rating": 5
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Content Rating vs Average Professor Rating by Professor",
+      "width": 700,
+      "height": 450,
+      "layer": [
+        {
+          "mark": {
+            "type": "point",
+            "filled": true,
+            "opacity": 0.9
+          },
+          "encoding": {
+            "x": {
+              "field": "average_content_rating",
+              "type": "quantitative",
+              "title": "Average Content Rating",
+              "scale": {
+                "domain": [
+                  1,
+                  5
+                ]
+              }
+            },
+            "y": {
+              "field": "average_professor_rating",
+              "type": "quantitative",
+              "title": "Average Professor Rating",
+              "scale": {
+                "domain": [
+                  1,
+                  5
+                ]
+              }
+            },
+            "size": {
+              "field": "evaluation_count",
+              "type": "quantitative",
+              "title": "Evaluation Count",
+              "scale": {
+                "range": [
+                  60,
+                  360
+                ]
+              }
+            },
+            "color": {
+              "field": "evaluation_count",
+              "type": "quantitative",
+              "legend": {
+                "title": "Evaluation Count"
+              },
+              "scale": {
+                "scheme": "blues"
+              }
+            },
+            "tooltip": [
+              {
+                "field": "professor_name",
+                "type": "nominal",
+                "title": "Professor"
+              },
+              {
+                "field": "evaluation_count",
+                "type": "quantitative",
+                "title": "Evaluations"
+              },
+              {
+                "field": "average_content_rating",
+                "type": "quantitative",
+                "title": "Avg Content",
+                "format": ".2f"
+              },
+              {
+                "field": "average_professor_rating",
+                "type": "quantitative",
+                "title": "Avg Professor",
+                "format": ".2f"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "dy": -12,
+            "fontSize": 11,
+            "opacity": 0.9
+          },
+          "encoding": {
+            "x": {
+              "field": "average_content_rating",
+              "type": "quantitative"
+            },
+            "y": {
+              "field": "average_professor_rating",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "professor_name",
+              "type": "nominal"
+            },
+            "tooltip": [
+              {
+                "field": "professor_name",
+                "type": "nominal",
+                "title": "Professor"
+              },
+              {
+                "field": "evaluation_count",
+                "type": "quantitative",
+                "title": "Evaluations"
+              },
+              {
+                "field": "average_content_rating",
+                "type": "quantitative",
+                "title": "Avg Content",
+                "format": ".2f"
+              },
+              {
+                "field": "average_professor_rating",
+                "type": "quantitative",
+                "title": "Avg Professor",
+                "format": ".2f"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "sql": "SELECT\n  p.id AS professor_id,\n  (p.last_name || ', ' || p.first_name) AS professor_name,\n  ROUND(AVG(ce.content_rating)::numeric, 2) AS average_content_rating,\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS average_professor_rating,\n  COUNT(ce.id) AS evaluation_count\nFROM public.professors p\nJOIN public.course_sections cs ON cs.professor_id = p.id\nJOIN public.enrollments e ON e.course_section_id = cs.id\nJOIN public.course_evaluations ce ON ce.enrollment_id = e.id\nGROUP BY p.id, p.last_name, p.first_name\nORDER BY p.last_name, p.first_name;",
+    "metadata": {
+      "columns": [
+        "professor_id",
+        "professor_name",
+        "evaluation_count",
+        "average_content_rating",
+        "average_professor_rating"
+      ],
+      "rowCount": 20,
+      "sample": [
+        {
+          "professor_id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+          "professor_name": "Jankowski, Grzegorz",
+          "evaluation_count": 1,
+          "average_content_rating": 1,
+          "average_professor_rating": 2
+        },
+        {
+          "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+          "professor_name": "Kowalczyk, Ryszard",
+          "evaluation_count": 3,
+          "average_content_rating": 2.33,
+          "average_professor_rating": 3.33
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "professor_id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+        "professor_name": "Jankowski, Grzegorz",
+        "evaluation_count": 1,
+        "average_content_rating": 1,
+        "average_professor_rating": 2
+      },
+      {
+        "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+        "professor_name": "Kowalczyk, Ryszard",
+        "evaluation_count": 3,
+        "average_content_rating": 2.33,
+        "average_professor_rating": 3.33
+      },
+      {
+        "professor_id": "7fbf0e4c-fd08-4312-bb83-087368f81e46",
+        "professor_name": "Kozłowski, Agnieszka",
+        "evaluation_count": 2,
+        "average_content_rating": 4.5,
+        "average_professor_rating": 3
+      },
+      {
+        "professor_id": "bcf3a47c-67cf-438d-93de-07c55ab583e0",
+        "professor_name": "Kozłowski, Katarzyna",
+        "evaluation_count": 2,
+        "average_content_rating": 3.5,
+        "average_professor_rating": 3
+      },
+      {
+        "professor_id": "a82c40da-e7dc-4e49-9e66-386ea4bb7483",
+        "professor_name": "Krawczyk, Ewa",
+        "evaluation_count": 3,
+        "average_content_rating": 2.33,
+        "average_professor_rating": 3.33
+      },
+      {
+        "professor_id": "037011f2-f3d4-406e-9554-a6ffba701e06",
+        "professor_name": "Lewandowski, Marek",
+        "evaluation_count": 1,
+        "average_content_rating": 4,
+        "average_professor_rating": 2
+      },
+      {
+        "professor_id": "f221aafd-0e9c-4345-aff5-7e290e1a7864",
+        "professor_name": "Majewski, Tomasz",
+        "evaluation_count": 1,
+        "average_content_rating": 5,
+        "average_professor_rating": 2
+      },
+      {
+        "professor_id": "dd993c5f-eb62-491f-a783-5ca9a0132ade",
+        "professor_name": "Michalski, Ewa",
+        "evaluation_count": 2,
+        "average_content_rating": 3.5,
+        "average_professor_rating": 3
+      },
+      {
+        "professor_id": "f24d24fc-5446-4d72-bb11-9d9dd1545f97",
+        "professor_name": "Nowak, Michał",
+        "evaluation_count": 1,
+        "average_content_rating": 4,
+        "average_professor_rating": 4
+      },
+      {
+        "professor_id": "d19adcea-56d6-4557-8f93-95ec58fa5d34",
+        "professor_name": "Nowakowski, Mariusz",
+        "evaluation_count": 2,
+        "average_content_rating": 3.5,
+        "average_professor_rating": 2.5
+      },
+      {
+        "professor_id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+        "professor_name": "Olszewski, Małgorzata",
+        "evaluation_count": 5,
+        "average_content_rating": 3.4,
+        "average_professor_rating": 3.2
+      },
+      {
+        "professor_id": "cee911dc-17c4-4395-b173-2af1418983fe",
+        "professor_name": "Pawłowski, Teresa",
+        "evaluation_count": 2,
+        "average_content_rating": 3.5,
+        "average_professor_rating": 1.5
+      },
+      {
+        "professor_id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+        "professor_name": "Piotrowski, Magdalena",
+        "evaluation_count": 1,
+        "average_content_rating": 2,
+        "average_professor_rating": 4
+      },
+      {
+        "professor_id": "33ba2086-7c0f-4a57-9451-014db3e74209",
+        "professor_name": "Szymański, Katarzyna",
+        "evaluation_count": 1,
+        "average_content_rating": 1,
+        "average_professor_rating": 2
+      },
+      {
+        "professor_id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+        "professor_name": "Wieczorek, Adam",
+        "evaluation_count": 2,
+        "average_content_rating": 3.5,
+        "average_professor_rating": 4
+      },
+      {
+        "professor_id": "4050afec-f68c-49bb-9982-4a3c9d1a23d9",
+        "professor_name": "Wieczorek, Tomasz",
+        "evaluation_count": 1,
+        "average_content_rating": 4,
+        "average_professor_rating": 4
+      },
+      {
+        "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+        "professor_name": "Wojciechowski, Jacek",
+        "evaluation_count": 3,
+        "average_content_rating": 2.33,
+        "average_professor_rating": 1.67
+      },
+      {
+        "professor_id": "2b5262b8-932c-4951-9390-c56d4b69d888",
+        "professor_name": "Woźniak, Marek",
+        "evaluation_count": 2,
+        "average_content_rating": 5,
+        "average_professor_rating": 2
+      },
+      {
+        "professor_id": "5d70abe8-4f1a-44ec-9816-2ec96a2807cb",
+        "professor_name": "Woźniak, Ryszard",
+        "evaluation_count": 4,
+        "average_content_rating": 3,
+        "average_professor_rating": 4
+      },
+      {
+        "professor_id": "173e49aa-5a27-41e8-b1fa-4d19423bdc0b",
+        "professor_name": "Woźniak, Teresa",
+        "evaluation_count": 2,
+        "average_content_rating": 4,
+        "average_professor_rating": 5
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Content Rating vs Average Professor Rating by Professor",
+      "width": 700,
+      "height": 450,
+      "layer": [
+        {
+          "mark": {
+            "type": "point",
+            "filled": true,
+            "opacity": 0.9
+          },
+          "encoding": {
+            "x": {
+              "field": "average_content_rating",
+              "type": "quantitative",
+              "title": "Average Content Rating",
+              "scale": {
+                "domain": [
+                  1,
+                  5
+                ]
+              }
+            },
+            "y": {
+              "field": "average_professor_rating",
+              "type": "quantitative",
+              "title": "Average Professor Rating",
+              "scale": {
+                "domain": [
+                  1,
+                  5
+                ]
+              }
+            },
+            "size": {
+              "field": "evaluation_count",
+              "type": "quantitative",
+              "title": "Evaluation Count",
+              "scale": {
+                "range": [
+                  60,
+                  360
+                ]
+              }
+            },
+            "color": {
+              "field": "evaluation_count",
+              "type": "quantitative",
+              "legend": {
+                "title": "Evaluation Count"
+              },
+              "scale": {
+                "scheme": "blues"
+              }
+            },
+            "tooltip": [
+              {
+                "field": "professor_name",
+                "type": "nominal",
+                "title": "Professor"
+              },
+              {
+                "field": "evaluation_count",
+                "type": "quantitative",
+                "title": "Evaluations"
+              },
+              {
+                "field": "average_content_rating",
+                "type": "quantitative",
+                "title": "Avg Content",
+                "format": ".2f"
+              },
+              {
+                "field": "average_professor_rating",
+                "type": "quantitative",
+                "title": "Avg Professor",
+                "format": ".2f"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "dy": -12,
+            "fontSize": 11,
+            "opacity": 0.9
+          },
+          "encoding": {
+            "x": {
+              "field": "average_content_rating",
+              "type": "quantitative"
+            },
+            "y": {
+              "field": "average_professor_rating",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "professor_name",
+              "type": "nominal"
+            },
+            "tooltip": [
+              {
+                "field": "professor_name",
+                "type": "nominal",
+                "title": "Professor"
+              },
+              {
+                "field": "evaluation_count",
+                "type": "quantitative",
+                "title": "Evaluations"
+              },
+              {
+                "field": "average_content_rating",
+                "type": "quantitative",
+                "title": "Avg Content",
+                "format": ".2f"
+              },
+              {
+                "field": "average_professor_rating",
+                "type": "quantitative",
+                "title": "Avg Professor",
+                "format": ".2f"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "sql": "SELECT\n  p.id AS professor_id,\n  (p.last_name || ', ' || p.first_name) AS professor_name,\n  ROUND(AVG(ce.content_rating)::numeric, 2) AS average_content_rating,\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS average_professor_rating,\n  COUNT(ce.id) AS evaluation_count\nFROM public.professors p\nJOIN public.course_sections cs ON cs.professor_id = p.id\nJOIN public.enrollments e ON e.course_section_id = cs.id\nJOIN public.course_evaluations ce ON ce.enrollment_id = e.id\nGROUP BY p.id, p.last_name, p.first_name\nORDER BY p.last_name, p.first_name;",
+    "metadata": {
+      "columns": [
+        "professor_id",
+        "professor_name",
+        "evaluation_count",
+        "average_content_rating",
+        "average_professor_rating"
+      ],
+      "rowCount": 20,
+      "sample": [
+        {
+          "professor_id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+          "professor_name": "Jankowski, Grzegorz",
+          "evaluation_count": 1,
+          "average_content_rating": 1,
+          "average_professor_rating": 2
+        },
+        {
+          "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+          "professor_name": "Kowalczyk, Ryszard",
+          "evaluation_count": 3,
+          "average_content_rating": 2.33,
+          "average_professor_rating": 3.33
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:50:31.588Z",
+    "traceId": "8bfe193600a7e29f465c6e0dff7652dd",
+    "attempts": 3,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 17180,
+      "outputTokens": 4221,
+      "totalTokens": 21401,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2880,
+      "costUsd": 0.012737
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 17180,
+        "outputTokens": 4221,
+        "totalTokens": 21401,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2880,
+        "costUsd": 0.012737
+      }
+    ],
+    "warnings": []
+  }
+}

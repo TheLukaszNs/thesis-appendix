@@ -1,0 +1,460 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "avg-exam-score-by-course",
+  "caseDirectory": "avg-exam-score-by-course",
+  "repeatIndex": 1,
+  "prompt": "What is the average exam score for each course?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average exam score for each course?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:01:53.634Z",
+    "endedAtUtc": "2026-02-23T14:02:11.726Z",
+    "durationMs": 18092
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "17341",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:02:11 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the average exam score for each course?\"},\"sql\":{\"payload\":{\"question\":\"What is the average exam score for each course?\"},\"startedAt\":1771855313639,\"status\":\"success\",\"output\":{\"reasoning\":\"The user wants the average exam score for each course. I need to join the grades table (which contains exam_score) with enrollments and course_sections to get the course information. The path is: grades → enrollments → course_sections → courses. I'll group by course and calculate the average of exam_score, filtering out NULL values.\",\"sql\":\"SELECT c.id, c.code, c.name, AVG(g.exam_score) AS average_exam_score FROM courses c JOIN course_sections cs ON c.id = cs.course_id JOIN enrollments e ON cs.id = e.course_section_id JOIN grades g ON e.id = g.enrollment_id WHERE g.exam_score IS NOT NULL GROUP BY c.id, c.code, c.name ORDER BY c.code\",\"assumptions\":[\"Exam scores are stored in the grades.exam_score column\",\"NULL exam scores should be excluded from the average calculation\",\"Results are grouped by course and ordered by course code for deterministic output\"]},\"endedAt\":1771855327722},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT c.id, c.code, c.name, AVG(g.exam_score) AS average_exam_score FROM courses c JOIN course_sections cs ON c.id = cs.course_id JOIN enrollments e ON cs.id = e.course_section_id JOIN grades g ON e.id = g.enrollment_id WHERE g.exam_score IS NOT NULL GROUP BY c.id, c.code, c.name ORDER BY c.code\"},\"startedAt\":1771855327735,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT c.id, c.code, c.name, AVG(g.exam_score) AS average_exam_score FROM courses c JOIN course_sections cs ON c.id = cs.course_id JOIN enrollments e ON cs.id = e.course_section_id JOIN grades g ON e.id = g.enrollment_id WHERE g.exam_score IS NOT NULL GROUP BY c.id, c.code, c.name ORDER BY c.code\",\"metadata\":{\"columns\":[\"id\",\"code\",\"name\",\"average_exam_score\"],\"rowCount\":17,\"sample\":[{\"id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"average_exam_score\":\"50.0500000000000000\"},{\"id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"average_exam_score\":\"37.4000000000000000\"}]},\"data\":[{\"id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"average_exam_score\":\"50.0500000000000000\"},{\"id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"average_exam_score\":\"37.4000000000000000\"},{\"id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"average_exam_score\":\"96.3000000000000000\"},{\"id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"code\":\"BSS-943\",\"name\":\"Algebra Liniowa\",\"average_exam_score\":\"54.5050000000000000\"},{\"id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"average_exam_score\":\"17.7700000000000000\"},{\"id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"average_exam_score\":\"35.6800000000000000\"},{\"id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"code\":\"JFH-143\",\"name\":\"Architektura Komputerów\",\"average_exam_score\":\"42.5033333333333333\"},{\"id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"code\":\"MKO-885\",\"name\":\"Rachunek Prawdopodobieństwa\",\"average_exam_score\":\"20.7600000000000000\"},{\"id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"average_exam_score\":\"53.6966666666666667\"},{\"id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"average_exam_score\":\"99.8800000000000000\"},{\"id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"average_exam_score\":\"54.1680000000000000\"},{\"id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"average_exam_score\":\"55.2100000000000000\"},{\"id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"average_exam_score\":\"28.2485714285714286\"},{\"id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"average_exam_score\":\"47.0300000000000000\"},{\"id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"average_exam_score\":\"87.6866666666666667\"},{\"id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"average_exam_score\":\"52.6800000000000000\"},{\"id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"code\":\"ZUQ-127\",\"name\":\"Fizyka\",\"average_exam_score\":\"79.0800000000000000\"}]},\"endedAt\":1771855327744},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT c.id, c.code, c.name, AVG(g.exam_score) AS average_exam_score FROM courses c JOIN course_sections cs ON c.id = cs.course_id JOIN enrollments e ON cs.id = e.course_section_id JOIN grades g ON e.id = g.enrollment_id WHERE g.exam_score IS NOT NULL GROUP BY c.id, c.code, c.name ORDER BY c.code\",\"metadata\":{\"columns\":[\"id\",\"code\",\"name\",\"average_exam_score\"],\"rowCount\":17,\"sample\":[{\"id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"average_exam_score\":\"50.0500000000000000\"},{\"id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"average_exam_score\":\"37.4000000000000000\"}]},\"data\":[{\"id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"average_exam_score\":\"50.0500000000000000\"},{\"id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"average_exam_score\":\"37.4000000000000000\"},{\"id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"average_exam_score\":\"96.3000000000000000\"},{\"id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"code\":\"BSS-943\",\"name\":\"Algebra Liniowa\",\"average_exam_score\":\"54.5050000000000000\"},{\"id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"average_exam_score\":\"17.7700000000000000\"},{\"id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"average_exam_score\":\"35.6800000000000000\"},{\"id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"code\":\"JFH-143\",\"name\":\"Architektura Komputerów\",\"average_exam_score\":\"42.5033333333333333\"},{\"id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"code\":\"MKO-885\",\"name\":\"Rachunek Prawdopodobieństwa\",\"average_exam_score\":\"20.7600000000000000\"},{\"id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"average_exam_score\":\"53.6966666666666667\"},{\"id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"average_exam_score\":\"99.8800000000000000\"},{\"id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"average_exam_score\":\"54.1680000000000000\"},{\"id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"average_exam_score\":\"55.2100000000000000\"},{\"id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"average_exam_score\":\"28.2485714285714286\"},{\"id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"average_exam_score\":\"47.0300000000000000\"},{\"id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"average_exam_score\":\"87.6866666666666667\"},{\"id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"average_exam_score\":\"52.6800000000000000\"},{\"id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"code\":\"ZUQ-127\",\"name\":\"Fizyka\",\"average_exam_score\":\"79.0800000000000000\"}]},\"startedAt\":1771855327747,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Exam Score by Course\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\",\"axis\":{\"labelAngle\":-45}},\"y\":{\"field\":\"average_exam_score\",\"type\":\"quantitative\",\"title\":\"Average Exam Score\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"average_exam_score\",\"type\":\"quantitative\",\"title\":\"Average Exam Score\",\"format\":\".2f\"}],\"color\":{\"field\":\"average_exam_score\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Average Score\"}},\"width\":800,\"height\":400},\"reasoning\":\"Bar chart showing average exam scores for each course, sorted by course code. Color intensity represents score magnitude for quick visual comparison. Tooltip includes course name for context. X-axis labels are angled for readability with 17 courses.\"},\"endedAt\":1771855331705},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Exam Score by Course\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\",\"axis\":{\"labelAngle\":-45}},\"y\":{\"field\":\"average_exam_score\",\"type\":\"quantitative\",\"title\":\"Average Exam Score\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"average_exam_score\",\"type\":\"quantitative\",\"title\":\"Average Exam Score\",\"format\":\".2f\"}],\"color\":{\"field\":\"average_exam_score\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Average Score\"}},\"width\":800,\"height\":400},\"reasoning\":\"Bar chart showing average exam scores for each course, sorted by course code. Color intensity represents score magnitude for quick visual comparison. Tooltip includes course name for context. X-axis labels are angled for readability with 17 courses.\"},\"startedAt\":1771855331712,\"status\":\"success\",\"output\":{\"sql\":\"SELECT c.id, c.code, c.name, AVG(g.exam_score) AS average_exam_score FROM courses c JOIN course_sections cs ON c.id = cs.course_id JOIN enrollments e ON cs.id = e.course_section_id JOIN grades g ON e.id = g.enrollment_id WHERE g.exam_score IS NOT NULL GROUP BY c.id, c.code, c.name ORDER BY c.code\",\"data\":[{\"id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"average_exam_score\":\"50.0500000000000000\"},{\"id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"average_exam_score\":\"37.4000000000000000\"},{\"id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"average_exam_score\":\"96.3000000000000000\"},{\"id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"code\":\"BSS-943\",\"name\":\"Algebra Liniowa\",\"average_exam_score\":\"54.5050000000000000\"},{\"id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"average_exam_score\":\"17.7700000000000000\"},{\"id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"average_exam_score\":\"35.6800000000000000\"},{\"id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"code\":\"JFH-143\",\"name\":\"Architektura Komputerów\",\"average_exam_score\":\"42.5033333333333333\"},{\"id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"code\":\"MKO-885\",\"name\":\"Rachunek Prawdopodobieństwa\",\"average_exam_score\":\"20.7600000000000000\"},{\"id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"average_exam_score\":\"53.6966666666666667\"},{\"id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"average_exam_score\":\"99.8800000000000000\"},{\"id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"average_exam_score\":\"54.1680000000000000\"},{\"id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"average_exam_score\":\"55.2100000000000000\"},{\"id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"average_exam_score\":\"28.2485714285714286\"},{\"id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"average_exam_score\":\"47.0300000000000000\"},{\"id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"average_exam_score\":\"87.6866666666666667\"},{\"id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"average_exam_score\":\"52.6800000000000000\"},{\"id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"code\":\"ZUQ-127\",\"name\":\"Fizyka\",\"average_exam_score\":\"79.0800000000000000\"}],\"metadata\":{\"columns\":[\"id\",\"code\",\"name\",\"average_exam_score\"],\"rowCount\":17,\"sample\":[{\"id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"average_exam_score\":\"50.0500000000000000\"},{\"id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"average_exam_score\":\"37.4000000000000000\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Exam Score by Course\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\",\"axis\":{\"labelAngle\":-45}},\"y\":{\"field\":\"average_exam_score\",\"type\":\"quantitative\",\"title\":\"Average Exam Score\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"average_exam_score\",\"type\":\"quantitative\",\"title\":\"Average Exam Score\",\"format\":\".2f\"}],\"color\":{\"field\":\"average_exam_score\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Average Score\"}},\"width\":800,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855331715}},\"input\":{\"question\":\"What is the average exam score for each course?\"},\"result\":{\"sql\":\"SELECT c.id, c.code, c.name, AVG(g.exam_score) AS average_exam_score FROM courses c JOIN course_sections cs ON c.id = cs.course_id JOIN enrollments e ON cs.id = e.course_section_id JOIN grades g ON e.id = g.enrollment_id WHERE g.exam_score IS NOT NULL GROUP BY c.id, c.code, c.name ORDER BY c.code\",\"data\":[{\"id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"average_exam_score\":\"50.0500000000000000\"},{\"id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"average_exam_score\":\"37.4000000000000000\"},{\"id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"average_exam_score\":\"96.3000000000000000\"},{\"id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"code\":\"BSS-943\",\"name\":\"Algebra Liniowa\",\"average_exam_score\":\"54.5050000000000000\"},{\"id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"average_exam_score\":\"17.7700000000000000\"},{\"id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"average_exam_score\":\"35.6800000000000000\"},{\"id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"code\":\"JFH-143\",\"name\":\"Architektura Komputerów\",\"average_exam_score\":\"42.5033333333333333\"},{\"id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"code\":\"MKO-885\",\"name\":\"Rachunek Prawdopodobieństwa\",\"average_exam_score\":\"20.7600000000000000\"},{\"id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"average_exam_score\":\"53.6966666666666667\"},{\"id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"average_exam_score\":\"99.8800000000000000\"},{\"id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"average_exam_score\":\"54.1680000000000000\"},{\"id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"average_exam_score\":\"55.2100000000000000\"},{\"id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"average_exam_score\":\"28.2485714285714286\"},{\"id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"average_exam_score\":\"47.0300000000000000\"},{\"id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"average_exam_score\":\"87.6866666666666667\"},{\"id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"average_exam_score\":\"52.6800000000000000\"},{\"id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"code\":\"ZUQ-127\",\"name\":\"Fizyka\",\"average_exam_score\":\"79.0800000000000000\"}],\"metadata\":{\"columns\":[\"id\",\"code\",\"name\",\"average_exam_score\"],\"rowCount\":17,\"sample\":[{\"id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"average_exam_score\":\"50.0500000000000000\"},{\"id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"average_exam_score\":\"37.4000000000000000\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Exam Score by Course\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\",\"axis\":{\"labelAngle\":-45}},\"y\":{\"field\":\"average_exam_score\",\"type\":\"quantitative\",\"title\":\"Average Exam Score\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"average_exam_score\",\"type\":\"quantitative\",\"title\":\"Average Exam Score\",\"format\":\".2f\"}],\"color\":{\"field\":\"average_exam_score\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Average Score\"}},\"width\":800,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"26fbbb045eb38f090a67de8e91a2f519\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-exam-score-by-course/run-0001/run.json",
+    "queryPath": "runs/avg-exam-score-by-course/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-exam-score-by-course/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-exam-score-by-course/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-exam-score-by-course/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:02:12.060Z",
+  "traceId": "26fbbb045eb38f090a67de8e91a2f519",
+  "success": true,
+  "durationMs": 18426,
+  "resultRaw": {
+    "data": [
+      {
+        "id": "91922683-9cba-47f2-bb00-babfbce3866f",
+        "code": "AAX-989",
+        "name": "Elektronika",
+        "average_exam_score": "50.0500000000000000"
+      },
+      {
+        "id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "code": "AFI-682",
+        "name": "Matematyka Dyskretna",
+        "average_exam_score": "37.4000000000000000"
+      },
+      {
+        "id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+        "code": "BEW-951",
+        "name": "Fizyka",
+        "average_exam_score": "96.3000000000000000"
+      },
+      {
+        "id": "7dc872b8-c34e-4061-8f34-8b4c099b6325",
+        "code": "BSS-943",
+        "name": "Algebra Liniowa",
+        "average_exam_score": "54.5050000000000000"
+      },
+      {
+        "id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+        "code": "FCL-532",
+        "name": "Uczenie Maszynowe",
+        "average_exam_score": "17.7700000000000000"
+      },
+      {
+        "id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+        "code": "FEO-908",
+        "name": "Analiza Matematyczna",
+        "average_exam_score": "35.6800000000000000"
+      },
+      {
+        "id": "e6b62b9f-429a-423d-84c7-77b28a64b9a3",
+        "code": "JFH-143",
+        "name": "Architektura Komputerów",
+        "average_exam_score": "42.5033333333333333"
+      },
+      {
+        "id": "59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23",
+        "code": "MKO-885",
+        "name": "Rachunek Prawdopodobieństwa",
+        "average_exam_score": "20.7600000000000000"
+      },
+      {
+        "id": "0b97f1bf-8c86-431a-a583-563354b1e01f",
+        "code": "RZR-301",
+        "name": "Sieci Komputerowe",
+        "average_exam_score": "53.6966666666666667"
+      },
+      {
+        "id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "code": "TAU-627",
+        "name": "Analiza Matematyczna",
+        "average_exam_score": "99.8800000000000000"
+      },
+      {
+        "id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+        "code": "TJJ-354",
+        "name": "Projektowanie Aplikacji Webowych",
+        "average_exam_score": "54.1680000000000000"
+      },
+      {
+        "id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "code": "UQL-274",
+        "name": "Zarządzanie Projektami IT",
+        "average_exam_score": "55.2100000000000000"
+      },
+      {
+        "id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "code": "VBC-395",
+        "name": "Sieci Komputerowe",
+        "average_exam_score": "28.2485714285714286"
+      },
+      {
+        "id": "b18a39cf-8a1b-471c-b67a-94aa04eccfae",
+        "code": "WZC-570",
+        "name": "Programowanie Obiektowe",
+        "average_exam_score": "47.0300000000000000"
+      },
+      {
+        "id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "code": "XQA-597",
+        "name": "Analiza Matematyczna",
+        "average_exam_score": "87.6866666666666667"
+      },
+      {
+        "id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+        "code": "YWI-134",
+        "name": "Metody Numeryczne",
+        "average_exam_score": "52.6800000000000000"
+      },
+      {
+        "id": "c0e00b1c-84d6-4ccd-999d-7c9197625f2e",
+        "code": "ZUQ-127",
+        "name": "Fizyka",
+        "average_exam_score": "79.0800000000000000"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Exam Score by Course",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "code",
+          "type": "nominal",
+          "title": "Course Code",
+          "axis": {
+            "labelAngle": -45
+          }
+        },
+        "y": {
+          "field": "average_exam_score",
+          "type": "quantitative",
+          "title": "Average Exam Score"
+        },
+        "tooltip": [
+          {
+            "field": "code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "average_exam_score",
+            "type": "quantitative",
+            "title": "Average Exam Score",
+            "format": ".2f"
+          }
+        ],
+        "color": {
+          "field": "average_exam_score",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "blues"
+          },
+          "title": "Average Score"
+        }
+      },
+      "width": 800,
+      "height": 400
+    },
+    "sql": "SELECT c.id, c.code, c.name, AVG(g.exam_score) AS average_exam_score FROM courses c JOIN course_sections cs ON c.id = cs.course_id JOIN enrollments e ON cs.id = e.course_section_id JOIN grades g ON e.id = g.enrollment_id WHERE g.exam_score IS NOT NULL GROUP BY c.id, c.code, c.name ORDER BY c.code",
+    "metadata": {
+      "columns": [
+        "id",
+        "code",
+        "name",
+        "average_exam_score"
+      ],
+      "rowCount": 17,
+      "sample": [
+        {
+          "id": "91922683-9cba-47f2-bb00-babfbce3866f",
+          "code": "AAX-989",
+          "name": "Elektronika",
+          "average_exam_score": "50.0500000000000000"
+        },
+        {
+          "id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+          "code": "AFI-682",
+          "name": "Matematyka Dyskretna",
+          "average_exam_score": "37.4000000000000000"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "id": "91922683-9cba-47f2-bb00-babfbce3866f",
+        "code": "AAX-989",
+        "name": "Elektronika",
+        "average_exam_score": "50.0500000000000000"
+      },
+      {
+        "id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "code": "AFI-682",
+        "name": "Matematyka Dyskretna",
+        "average_exam_score": "37.4000000000000000"
+      },
+      {
+        "id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+        "code": "BEW-951",
+        "name": "Fizyka",
+        "average_exam_score": "96.3000000000000000"
+      },
+      {
+        "id": "7dc872b8-c34e-4061-8f34-8b4c099b6325",
+        "code": "BSS-943",
+        "name": "Algebra Liniowa",
+        "average_exam_score": "54.5050000000000000"
+      },
+      {
+        "id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+        "code": "FCL-532",
+        "name": "Uczenie Maszynowe",
+        "average_exam_score": "17.7700000000000000"
+      },
+      {
+        "id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+        "code": "FEO-908",
+        "name": "Analiza Matematyczna",
+        "average_exam_score": "35.6800000000000000"
+      },
+      {
+        "id": "e6b62b9f-429a-423d-84c7-77b28a64b9a3",
+        "code": "JFH-143",
+        "name": "Architektura Komputerów",
+        "average_exam_score": "42.5033333333333333"
+      },
+      {
+        "id": "59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23",
+        "code": "MKO-885",
+        "name": "Rachunek Prawdopodobieństwa",
+        "average_exam_score": "20.7600000000000000"
+      },
+      {
+        "id": "0b97f1bf-8c86-431a-a583-563354b1e01f",
+        "code": "RZR-301",
+        "name": "Sieci Komputerowe",
+        "average_exam_score": "53.6966666666666667"
+      },
+      {
+        "id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "code": "TAU-627",
+        "name": "Analiza Matematyczna",
+        "average_exam_score": "99.8800000000000000"
+      },
+      {
+        "id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+        "code": "TJJ-354",
+        "name": "Projektowanie Aplikacji Webowych",
+        "average_exam_score": "54.1680000000000000"
+      },
+      {
+        "id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "code": "UQL-274",
+        "name": "Zarządzanie Projektami IT",
+        "average_exam_score": "55.2100000000000000"
+      },
+      {
+        "id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "code": "VBC-395",
+        "name": "Sieci Komputerowe",
+        "average_exam_score": "28.2485714285714286"
+      },
+      {
+        "id": "b18a39cf-8a1b-471c-b67a-94aa04eccfae",
+        "code": "WZC-570",
+        "name": "Programowanie Obiektowe",
+        "average_exam_score": "47.0300000000000000"
+      },
+      {
+        "id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "code": "XQA-597",
+        "name": "Analiza Matematyczna",
+        "average_exam_score": "87.6866666666666667"
+      },
+      {
+        "id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+        "code": "YWI-134",
+        "name": "Metody Numeryczne",
+        "average_exam_score": "52.6800000000000000"
+      },
+      {
+        "id": "c0e00b1c-84d6-4ccd-999d-7c9197625f2e",
+        "code": "ZUQ-127",
+        "name": "Fizyka",
+        "average_exam_score": "79.0800000000000000"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Exam Score by Course",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "code",
+          "type": "nominal",
+          "title": "Course Code",
+          "axis": {
+            "labelAngle": -45
+          }
+        },
+        "y": {
+          "field": "average_exam_score",
+          "type": "quantitative",
+          "title": "Average Exam Score"
+        },
+        "tooltip": [
+          {
+            "field": "code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "average_exam_score",
+            "type": "quantitative",
+            "title": "Average Exam Score",
+            "format": ".2f"
+          }
+        ],
+        "color": {
+          "field": "average_exam_score",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "blues"
+          },
+          "title": "Average Score"
+        }
+      },
+      "width": 800,
+      "height": 400
+    },
+    "sql": "SELECT c.id, c.code, c.name, AVG(g.exam_score) AS average_exam_score FROM courses c JOIN course_sections cs ON c.id = cs.course_id JOIN enrollments e ON cs.id = e.course_section_id JOIN grades g ON e.id = g.enrollment_id WHERE g.exam_score IS NOT NULL GROUP BY c.id, c.code, c.name ORDER BY c.code",
+    "metadata": {
+      "columns": [
+        "id",
+        "code",
+        "name",
+        "average_exam_score"
+      ],
+      "rowCount": 17,
+      "sample": [
+        {
+          "id": "91922683-9cba-47f2-bb00-babfbce3866f",
+          "code": "AAX-989",
+          "name": "Elektronika",
+          "average_exam_score": "50.0500000000000000"
+        },
+        {
+          "id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+          "code": "AFI-682",
+          "name": "Matematyka Dyskretna",
+          "average_exam_score": "37.4000000000000000"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.267Z",
+    "traceId": "26fbbb045eb38f090a67de8e91a2f519",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 20113,
+      "outputTokens": 1106,
+      "totalTokens": 21219,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.025643
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 20113,
+        "outputTokens": 1106,
+        "totalTokens": 21219,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.025643
+      }
+    ],
+    "warnings": []
+  }
+}

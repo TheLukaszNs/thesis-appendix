@@ -1,0 +1,330 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "highest-workload-courses",
+  "caseDirectory": "highest-workload-courses",
+  "repeatIndex": 1,
+  "prompt": "Which 10 courses have the highest average reported workload?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which 10 courses have the highest average reported workload?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:10:37.642Z",
+    "endedAtUtc": "2026-02-23T14:11:10.617Z",
+    "durationMs": 32975
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "11424",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:11:10 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Which 10 courses have the highest average reported workload?\"},\"sql\":{\"payload\":{\"question\":\"Which 10 courses have the highest average reported workload?\"},\"startedAt\":1771855837651,\"status\":\"success\",\"output\":{\"reasoning\":\"The question asks for the 10 courses with the highest average reported workload. I need to:\\n1. Join courses → course_sections → enrollments → course_evaluations\\n2. Calculate the average of workload_hours (from course_evaluations) grouped by course\\n3. Order by average workload descending and limit to 10\\n4. Return course name/code and the average workload\\n\\nThe workload_hours column in course_evaluations contains the reported workload data. I'll aggregate by course and rank by average workload.\",\"sql\":\"\\nSELECT \\n  c.code,\\n  c.name,\\n  ROUND(AVG(ce.workload_hours)::numeric, 2) AS avg_workload_hours\\nFROM courses c\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nWHERE ce.workload_hours IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY avg_workload_hours DESC\\nLIMIT 10\\n\",\"assumptions\":[\"workload_hours in course_evaluations represents the reported workload for a course\",\"NULL workload_hours values should be excluded from the average calculation\",\"A course is identified by its id, code, and name from the courses table\"]},\"endedAt\":1771855867369},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  c.code,\\n  c.name,\\n  ROUND(AVG(ce.workload_hours)::numeric, 2) AS avg_workload_hours\\nFROM courses c\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nWHERE ce.workload_hours IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY avg_workload_hours DESC\\nLIMIT 10\\n\"},\"startedAt\":1771855867372,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  c.code,\\n  c.name,\\n  ROUND(AVG(ce.workload_hours)::numeric, 2) AS avg_workload_hours\\nFROM courses c\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nWHERE ce.workload_hours IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY avg_workload_hours DESC\\nLIMIT 10\",\"metadata\":{\"columns\":[\"code\",\"name\",\"avg_workload_hours\"],\"rowCount\":10,\"sample\":[{\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"avg_workload_hours\":\"13.45\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"avg_workload_hours\":\"13.35\"}]},\"data\":[{\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"avg_workload_hours\":\"13.45\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"avg_workload_hours\":\"13.35\"},{\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"avg_workload_hours\":\"13.13\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"avg_workload_hours\":\"12.47\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"avg_workload_hours\":\"10.70\"},{\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"avg_workload_hours\":\"8.85\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"avg_workload_hours\":\"8.80\"},{\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"avg_workload_hours\":\"8.70\"},{\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"avg_workload_hours\":\"8.13\"},{\"code\":\"PSC-614\",\"name\":\"Architektura Komputerów\",\"avg_workload_hours\":\"7.90\"}]},\"endedAt\":1771855867383},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  c.code,\\n  c.name,\\n  ROUND(AVG(ce.workload_hours)::numeric, 2) AS avg_workload_hours\\nFROM courses c\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nWHERE ce.workload_hours IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY avg_workload_hours DESC\\nLIMIT 10\",\"metadata\":{\"columns\":[\"code\",\"name\",\"avg_workload_hours\"],\"rowCount\":10,\"sample\":[{\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"avg_workload_hours\":\"13.45\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"avg_workload_hours\":\"13.35\"}]},\"data\":[{\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"avg_workload_hours\":\"13.45\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"avg_workload_hours\":\"13.35\"},{\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"avg_workload_hours\":\"13.13\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"avg_workload_hours\":\"12.47\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"avg_workload_hours\":\"10.70\"},{\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"avg_workload_hours\":\"8.85\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"avg_workload_hours\":\"8.80\"},{\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"avg_workload_hours\":\"8.70\"},{\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"avg_workload_hours\":\"8.13\"},{\"code\":\"PSC-614\",\"name\":\"Architektura Komputerów\",\"avg_workload_hours\":\"7.90\"}]},\"startedAt\":1771855867385,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Top 10 Courses by Average Reported Workload\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"name\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Course Name\"},\"x\":{\"field\":\"avg_workload_hours\",\"type\":\"quantitative\",\"title\":\"Average Workload (hours)\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"avg_workload_hours\",\"type\":\"quantitative\",\"title\":\"Average Workload (hours)\",\"format\":\".2f\"}]},\"height\":400,\"width\":600},\"reasoning\":\"This horizontal bar chart displays the 10 courses with the highest average reported workload. The bars are sorted in descending order by workload hours, making it easy to identify which courses demand the most student effort. The tooltip includes the course code, name, and exact average workload for detailed reference.\"},\"endedAt\":1771855870601},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Top 10 Courses by Average Reported Workload\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"name\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Course Name\"},\"x\":{\"field\":\"avg_workload_hours\",\"type\":\"quantitative\",\"title\":\"Average Workload (hours)\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"avg_workload_hours\",\"type\":\"quantitative\",\"title\":\"Average Workload (hours)\",\"format\":\".2f\"}]},\"height\":400,\"width\":600},\"reasoning\":\"This horizontal bar chart displays the 10 courses with the highest average reported workload. The bars are sorted in descending order by workload hours, making it easy to identify which courses demand the most student effort. The tooltip includes the course code, name, and exact average workload for detailed reference.\"},\"startedAt\":1771855870604,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT \\n  c.code,\\n  c.name,\\n  ROUND(AVG(ce.workload_hours)::numeric, 2) AS avg_workload_hours\\nFROM courses c\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nWHERE ce.workload_hours IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY avg_workload_hours DESC\\nLIMIT 10\\n\",\"data\":[{\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"avg_workload_hours\":\"13.45\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"avg_workload_hours\":\"13.35\"},{\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"avg_workload_hours\":\"13.13\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"avg_workload_hours\":\"12.47\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"avg_workload_hours\":\"10.70\"},{\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"avg_workload_hours\":\"8.85\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"avg_workload_hours\":\"8.80\"},{\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"avg_workload_hours\":\"8.70\"},{\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"avg_workload_hours\":\"8.13\"},{\"code\":\"PSC-614\",\"name\":\"Architektura Komputerów\",\"avg_workload_hours\":\"7.90\"}],\"metadata\":{\"columns\":[\"code\",\"name\",\"avg_workload_hours\"],\"rowCount\":10,\"sample\":[{\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"avg_workload_hours\":\"13.45\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"avg_workload_hours\":\"13.35\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Top 10 Courses by Average Reported Workload\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"name\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Course Name\"},\"x\":{\"field\":\"avg_workload_hours\",\"type\":\"quantitative\",\"title\":\"Average Workload (hours)\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"avg_workload_hours\",\"type\":\"quantitative\",\"title\":\"Average Workload (hours)\",\"format\":\".2f\"}]},\"height\":400,\"width\":600},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855870608}},\"input\":{\"question\":\"Which 10 courses have the highest average reported workload?\"},\"result\":{\"sql\":\"\\nSELECT \\n  c.code,\\n  c.name,\\n  ROUND(AVG(ce.workload_hours)::numeric, 2) AS avg_workload_hours\\nFROM courses c\\nINNER JOIN course_sections cs ON c.id = cs.course_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nWHERE ce.workload_hours IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY avg_workload_hours DESC\\nLIMIT 10\\n\",\"data\":[{\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"avg_workload_hours\":\"13.45\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"avg_workload_hours\":\"13.35\"},{\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"avg_workload_hours\":\"13.13\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"avg_workload_hours\":\"12.47\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"avg_workload_hours\":\"10.70\"},{\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"avg_workload_hours\":\"8.85\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"avg_workload_hours\":\"8.80\"},{\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"avg_workload_hours\":\"8.70\"},{\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"avg_workload_hours\":\"8.13\"},{\"code\":\"PSC-614\",\"name\":\"Architektura Komputerów\",\"avg_workload_hours\":\"7.90\"}],\"metadata\":{\"columns\":[\"code\",\"name\",\"avg_workload_hours\"],\"rowCount\":10,\"sample\":[{\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"avg_workload_hours\":\"13.45\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"avg_workload_hours\":\"13.35\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Top 10 Courses by Average Reported Workload\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"name\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Course Name\"},\"x\":{\"field\":\"avg_workload_hours\",\"type\":\"quantitative\",\"title\":\"Average Workload (hours)\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"avg_workload_hours\",\"type\":\"quantitative\",\"title\":\"Average Workload (hours)\",\"format\":\".2f\"}]},\"height\":400,\"width\":600},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"21579f1344cc92f44e2bdfd2c66b5c1a\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/highest-workload-courses/run-0001/run.json",
+    "queryPath": "runs/highest-workload-courses/run-0001/query.sql",
+    "vegaRawPath": "runs/highest-workload-courses/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/highest-workload-courses/run-0001/vega.resolved.json",
+    "imagePath": "runs/highest-workload-courses/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:11:10.986Z",
+  "traceId": "21579f1344cc92f44e2bdfd2c66b5c1a",
+  "success": true,
+  "durationMs": 33344,
+  "resultRaw": {
+    "data": [
+      {
+        "code": "FEO-908",
+        "name": "Analiza Matematyczna",
+        "avg_workload_hours": "13.45"
+      },
+      {
+        "code": "YWI-134",
+        "name": "Metody Numeryczne",
+        "avg_workload_hours": "13.35"
+      },
+      {
+        "code": "XQA-597",
+        "name": "Analiza Matematyczna",
+        "avg_workload_hours": "13.13"
+      },
+      {
+        "code": "AFI-682",
+        "name": "Matematyka Dyskretna",
+        "avg_workload_hours": "12.47"
+      },
+      {
+        "code": "WZC-570",
+        "name": "Programowanie Obiektowe",
+        "avg_workload_hours": "10.70"
+      },
+      {
+        "code": "TAU-627",
+        "name": "Analiza Matematyczna",
+        "avg_workload_hours": "8.85"
+      },
+      {
+        "code": "UQL-274",
+        "name": "Zarządzanie Projektami IT",
+        "avg_workload_hours": "8.80"
+      },
+      {
+        "code": "HPF-845",
+        "name": "Systemy Wbudowane",
+        "avg_workload_hours": "8.70"
+      },
+      {
+        "code": "VBC-395",
+        "name": "Sieci Komputerowe",
+        "avg_workload_hours": "8.13"
+      },
+      {
+        "code": "PSC-614",
+        "name": "Architektura Komputerów",
+        "avg_workload_hours": "7.90"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Top 10 Courses by Average Reported Workload",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "name",
+          "type": "nominal",
+          "sort": "-x",
+          "title": "Course Name"
+        },
+        "x": {
+          "field": "avg_workload_hours",
+          "type": "quantitative",
+          "title": "Average Workload (hours)"
+        },
+        "tooltip": [
+          {
+            "field": "code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "avg_workload_hours",
+            "type": "quantitative",
+            "title": "Average Workload (hours)",
+            "format": ".2f"
+          }
+        ]
+      },
+      "height": 400,
+      "width": 600
+    },
+    "sql": "\nSELECT \n  c.code,\n  c.name,\n  ROUND(AVG(ce.workload_hours)::numeric, 2) AS avg_workload_hours\nFROM courses c\nINNER JOIN course_sections cs ON c.id = cs.course_id\nINNER JOIN enrollments e ON cs.id = e.course_section_id\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\nWHERE ce.workload_hours IS NOT NULL\nGROUP BY c.id, c.code, c.name\nORDER BY avg_workload_hours DESC\nLIMIT 10\n",
+    "metadata": {
+      "columns": [
+        "code",
+        "name",
+        "avg_workload_hours"
+      ],
+      "rowCount": 10,
+      "sample": [
+        {
+          "code": "FEO-908",
+          "name": "Analiza Matematyczna",
+          "avg_workload_hours": "13.45"
+        },
+        {
+          "code": "YWI-134",
+          "name": "Metody Numeryczne",
+          "avg_workload_hours": "13.35"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "code": "FEO-908",
+        "name": "Analiza Matematyczna",
+        "avg_workload_hours": "13.45"
+      },
+      {
+        "code": "YWI-134",
+        "name": "Metody Numeryczne",
+        "avg_workload_hours": "13.35"
+      },
+      {
+        "code": "XQA-597",
+        "name": "Analiza Matematyczna",
+        "avg_workload_hours": "13.13"
+      },
+      {
+        "code": "AFI-682",
+        "name": "Matematyka Dyskretna",
+        "avg_workload_hours": "12.47"
+      },
+      {
+        "code": "WZC-570",
+        "name": "Programowanie Obiektowe",
+        "avg_workload_hours": "10.70"
+      },
+      {
+        "code": "TAU-627",
+        "name": "Analiza Matematyczna",
+        "avg_workload_hours": "8.85"
+      },
+      {
+        "code": "UQL-274",
+        "name": "Zarządzanie Projektami IT",
+        "avg_workload_hours": "8.80"
+      },
+      {
+        "code": "HPF-845",
+        "name": "Systemy Wbudowane",
+        "avg_workload_hours": "8.70"
+      },
+      {
+        "code": "VBC-395",
+        "name": "Sieci Komputerowe",
+        "avg_workload_hours": "8.13"
+      },
+      {
+        "code": "PSC-614",
+        "name": "Architektura Komputerów",
+        "avg_workload_hours": "7.90"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Top 10 Courses by Average Reported Workload",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "name",
+          "type": "nominal",
+          "sort": "-x",
+          "title": "Course Name"
+        },
+        "x": {
+          "field": "avg_workload_hours",
+          "type": "quantitative",
+          "title": "Average Workload (hours)"
+        },
+        "tooltip": [
+          {
+            "field": "code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "avg_workload_hours",
+            "type": "quantitative",
+            "title": "Average Workload (hours)",
+            "format": ".2f"
+          }
+        ]
+      },
+      "height": 400,
+      "width": 600
+    },
+    "sql": "\nSELECT \n  c.code,\n  c.name,\n  ROUND(AVG(ce.workload_hours)::numeric, 2) AS avg_workload_hours\nFROM courses c\nINNER JOIN course_sections cs ON c.id = cs.course_id\nINNER JOIN enrollments e ON cs.id = e.course_section_id\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\nWHERE ce.workload_hours IS NOT NULL\nGROUP BY c.id, c.code, c.name\nORDER BY avg_workload_hours DESC\nLIMIT 10\n",
+    "metadata": {
+      "columns": [
+        "code",
+        "name",
+        "avg_workload_hours"
+      ],
+      "rowCount": 10,
+      "sample": [
+        {
+          "code": "FEO-908",
+          "name": "Analiza Matematyczna",
+          "avg_workload_hours": "13.45"
+        },
+        {
+          "code": "YWI-134",
+          "name": "Metody Numeryczne",
+          "avg_workload_hours": "13.35"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.355Z",
+    "traceId": "21579f1344cc92f44e2bdfd2c66b5c1a",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 23013,
+      "outputTokens": 1069,
+      "totalTokens": 24082,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.028358
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 23013,
+        "outputTokens": 1069,
+        "totalTokens": 24082,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.028358
+      }
+    ],
+    "warnings": []
+  }
+}

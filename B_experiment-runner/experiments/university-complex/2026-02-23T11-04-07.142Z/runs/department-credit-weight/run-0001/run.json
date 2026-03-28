@@ -1,0 +1,434 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "department-credit-weight",
+  "caseDirectory": "department-credit-weight",
+  "repeatIndex": 1,
+  "prompt": "Show the distribution of credit values for courses in each department",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the distribution of credit values for courses in each department"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:42:05.345Z",
+    "endedAtUtc": "2026-02-23T11:43:14.535Z",
+    "durationMs": 69190
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "26315",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:43:14 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show the distribution of credit values for courses in each department\"},\"planner\":{\"payload\":{\"question\":\"Show the distribution of credit values for courses in each department\"},\"startedAt\":1771846925360,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(c.id)\"],\"dimensions\":[\"d.name\",\"c.credits\"],\"filters\":[],\"grain\":\"per department and per credit value (department x credit)\",\"aliases\":{\"d.name\":\"department_name\",\"c.credits\":\"credits\",\"COUNT(c.id)\":\"course_count\"},\"output_fields\":[\"department_name\",\"credits\",\"course_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"credits\",\"y_axis\":\"course_count\",\"color_group\":\"department_name\",\"title\":\"Course credit distribution by department\"},\"assumptions\":[\"courses.department_id references departments.id (confirmed by schema constraint fk_courses_department_id).\",\"credits is an integer and defined as NOT NULL on courses (confirmed).\",\"We will aggregate by department name (departments.name) and credit value from courses. The SQL will JOIN courses c ON c.department_id = d.id.\",\"Metric uses COUNT(c.id) to count courses per (department, credits) group.\",\"No additional filters (e.g., active/inactive) are applied because no such flag exists in the schema; caller can request filters if desired.\",\"If you prefer a histogram with numeric bins instead of exact credit values, specify bin ranges; credits are integers so grouping by exact values is usually appropriate.\",\"If there are many departments, the bar chart may be crowded; consider filtering to top N departments or faceting instead.\"]}},\"endedAt\":1771846950947},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(c.id)\"],\"dimensions\":[\"d.name\",\"c.credits\"],\"filters\":[],\"grain\":\"per department and per credit value (department x credit)\",\"aliases\":{\"d.name\":\"department_name\",\"c.credits\":\"credits\",\"COUNT(c.id)\":\"course_count\"},\"output_fields\":[\"department_name\",\"credits\",\"course_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"credits\",\"y_axis\":\"course_count\",\"color_group\":\"department_name\",\"title\":\"Course credit distribution by department\"},\"assumptions\":[\"courses.department_id references departments.id (confirmed by schema constraint fk_courses_department_id).\",\"credits is an integer and defined as NOT NULL on courses (confirmed).\",\"We will aggregate by department name (departments.name) and credit value from courses. The SQL will JOIN courses c ON c.department_id = d.id.\",\"Metric uses COUNT(c.id) to count courses per (department, credits) group.\",\"No additional filters (e.g., active/inactive) are applied because no such flag exists in the schema; caller can request filters if desired.\",\"If you prefer a histogram with numeric bins instead of exact credit values, specify bin ranges; credits are integers so grouping by exact values is usually appropriate.\",\"If there are many departments, the bar chart may be crowded; consider filtering to top N departments or faceting instead.\"]}},\"startedAt\":1771846950967,\"status\":\"success\",\"output\":{\"question\":\"Show the distribution of credit values for courses in each department\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(c.id)\"],\"dimensions\":[\"d.name\",\"c.credits\"],\"filters\":[],\"grain\":\"per department and per credit value (department x credit)\",\"aliases\":{\"d.name\":\"department_name\",\"c.credits\":\"credits\",\"COUNT(c.id)\":\"course_count\"},\"output_fields\":[\"department_name\",\"credits\",\"course_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"credits\",\"y_axis\":\"course_count\",\"color_group\":\"department_name\",\"title\":\"Course credit distribution by department\"},\"assumptions\":[\"courses.department_id references departments.id (confirmed by schema constraint fk_courses_department_id).\",\"credits is an integer and defined as NOT NULL on courses (confirmed).\",\"We will aggregate by department name (departments.name) and credit value from courses. The SQL will JOIN courses c ON c.department_id = d.id.\",\"Metric uses COUNT(c.id) to count courses per (department, credits) group.\",\"No additional filters (e.g., active/inactive) are applied because no such flag exists in the schema; caller can request filters if desired.\",\"If you prefer a histogram with numeric bins instead of exact credit values, specify bin ranges; credits are integers so grouping by exact values is usually appropriate.\",\"If there are many departments, the bar chart may be crowded; consider filtering to top N departments or faceting instead.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771846950976},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"Show the distribution of credit values for courses in each department\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(c.id)\"],\"dimensions\":[\"d.name\",\"c.credits\"],\"filters\":[],\"grain\":\"per department and per credit value (department x credit)\",\"aliases\":{\"d.name\":\"department_name\",\"c.credits\":\"credits\",\"COUNT(c.id)\":\"course_count\"},\"output_fields\":[\"department_name\",\"credits\",\"course_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"credits\",\"y_axis\":\"course_count\",\"color_group\":\"department_name\",\"title\":\"Course credit distribution by department\"},\"assumptions\":[\"courses.department_id references departments.id (confirmed by schema constraint fk_courses_department_id).\",\"credits is an integer and defined as NOT NULL on courses (confirmed).\",\"We will aggregate by department name (departments.name) and credit value from courses. The SQL will JOIN courses c ON c.department_id = d.id.\",\"Metric uses COUNT(c.id) to count courses per (department, credits) group.\",\"No additional filters (e.g., active/inactive) are applied because no such flag exists in the schema; caller can request filters if desired.\",\"If you prefer a histogram with numeric bins instead of exact credit values, specify bin ranges; credits are integers so grouping by exact values is usually appropriate.\",\"If there are many departments, the bar chart may be crowded; consider filtering to top N departments or faceting instead.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771846950979,\"status\":\"success\",\"output\":{\"question\":\"Show the distribution of credit values for courses in each department\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(c.id)\"],\"dimensions\":[\"d.name\",\"c.credits\"],\"filters\":[],\"grain\":\"per department and per credit value (department x credit)\",\"aliases\":{\"d.name\":\"department_name\",\"c.credits\":\"credits\",\"COUNT(c.id)\":\"course_count\"},\"output_fields\":[\"department_name\",\"credits\",\"course_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"credits\",\"y_axis\":\"course_count\",\"color_group\":\"department_name\",\"title\":\"Course credit distribution by department\"},\"assumptions\":[\"courses.department_id references departments.id (confirmed by schema constraint fk_courses_department_id).\",\"credits is an integer and defined as NOT NULL on courses (confirmed).\",\"We will aggregate by department name (departments.name) and credit value from courses. The SQL will JOIN courses c ON c.department_id = d.id.\",\"Metric uses COUNT(c.id) to count courses per (department, credits) group.\",\"No additional filters (e.g., active/inactive) are applied because no such flag exists in the schema; caller can request filters if desired.\",\"If you prefer a histogram with numeric bins instead of exact credit values, specify bin ranges; credits are integers so grouping by exact values is usually appropriate.\",\"If there are many departments, the bar chart may be crowded; consider filtering to top N departments or faceting instead.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT d.name AS department_name, c.credits AS credits, COUNT(c.id) AS course_count\\nFROM public.departments d\\nJOIN public.courses c ON c.department_id = d.id\\nGROUP BY d.name, c.credits\\nORDER BY d.name, c.credits;\",\"validationIssues\":[\"Credits encoded as ordinal — may sort lexicographically; consider using quantitative type or an explicit sort to ensure numeric order of credit values.\",\"If there are many departments the grouped bar chart may become crowded; consider filtering to a subset of departments, faceting, or using an interactive legend to toggle departments.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Count courses grouped by department name and credit value using confirmed tables/columns and FK; results ordered deterministically by department_name then credits.\",\"sql\":\"SELECT d.name AS department_name, c.credits AS credits, COUNT(c.id) AS course_count\\nFROM public.departments d\\nJOIN public.courses c ON c.department_id = d.id\\nGROUP BY d.name, c.credits\\nORDER BY d.name, c.credits;\",\"assumptions\":[\"courses.department_id references departments.id (confirmed by constraint fk_courses_department_id).\",\"courses.credits is integer and defined NOT NULL (confirmed in schema).\",\"Using an INNER JOIN: only departments that have at least one course will appear. If you want departments with zero courses included, switch to LEFT JOIN and handle credit bins accordingly.\",\"Schema 'public' contains the departments and courses tables (confirmed).\",\"Output aliases match requested fields: department_name, credits, course_count.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT d.name AS department_name, c.credits AS credits, COUNT(c.id) AS course_count\\nFROM public.departments d\\nJOIN public.courses c ON c.department_id = d.id\\nGROUP BY d.name, c.credits\\nORDER BY d.name, c.credits\",\"metadata\":{\"columns\":[\"credits\",\"course_count\",\"department_name\"],\"rowCount\":18,\"sample\":[{\"credits\":2,\"course_count\":1,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"credits\":4,\"course_count\":2,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"}]},\"data\":[{\"credits\":2,\"course_count\":1,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"credits\":4,\"course_count\":2,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"credits\":5,\"course_count\":2,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"credits\":6,\"course_count\":1,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"credits\":6,\"course_count\":2,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"},{\"credits\":3,\"course_count\":1,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"credits\":4,\"course_count\":1,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"credits\":6,\"course_count\":2,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"credits\":2,\"course_count\":2,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"credits\":3,\"course_count\":1,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"credits\":4,\"course_count\":2,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"credits\":2,\"course_count\":1,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"credits\":3,\"course_count\":1,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"credits\":4,\"course_count\":1,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"credits\":5,\"course_count\":2,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"credits\":6,\"course_count\":1,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"credits\":5,\"course_count\":2,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"credits\":6,\"course_count\":1,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Course credit distribution by department\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"credits\",\"type\":\"ordinal\",\"title\":\"Credits\"},\"y\":{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Number of courses\"},\"color\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},\"xOffset\":{\"field\":\"department_name\",\"type\":\"nominal\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"credits\",\"type\":\"ordinal\",\"title\":\"Credits\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Course count\"}]}},\"reasoning\":\"Grouped bar chart showing count of courses per credit value, with bars colored (and offset) by department. Credits treated as discrete categories (ordinal) since they are integer values.\"},\"validation\":{\"passed\":true,\"score\":0.8,\"issues\":[\"Credits encoded as ordinal — may sort lexicographically; consider using quantitative type or an explicit sort to ensure numeric order of credit values.\",\"If there are many departments the grouped bar chart may become crowded; consider filtering to a subset of departments, faceting, or using an interactive legend to toggle departments.\"]}}},\"endedAt\":1771846994517,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"Show the distribution of credit values for courses in each department\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(c.id)\"],\"dimensions\":[\"d.name\",\"c.credits\"],\"filters\":[],\"grain\":\"per department and per credit value (department x credit)\",\"aliases\":{\"d.name\":\"department_name\",\"c.credits\":\"credits\",\"COUNT(c.id)\":\"course_count\"},\"output_fields\":[\"department_name\",\"credits\",\"course_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"credits\",\"y_axis\":\"course_count\",\"color_group\":\"department_name\",\"title\":\"Course credit distribution by department\"},\"assumptions\":[\"courses.department_id references departments.id (confirmed by schema constraint fk_courses_department_id).\",\"credits is an integer and defined as NOT NULL on courses (confirmed).\",\"We will aggregate by department name (departments.name) and credit value from courses. The SQL will JOIN courses c ON c.department_id = d.id.\",\"Metric uses COUNT(c.id) to count courses per (department, credits) group.\",\"No additional filters (e.g., active/inactive) are applied because no such flag exists in the schema; caller can request filters if desired.\",\"If you prefer a histogram with numeric bins instead of exact credit values, specify bin ranges; credits are integers so grouping by exact values is usually appropriate.\",\"If there are many departments, the bar chart may be crowded; consider filtering to top N departments or faceting instead.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT d.name AS department_name, c.credits AS credits, COUNT(c.id) AS course_count\\nFROM public.departments d\\nJOIN public.courses c ON c.department_id = d.id\\nGROUP BY d.name, c.credits\\nORDER BY d.name, c.credits;\",\"validationIssues\":[\"Credits encoded as ordinal — may sort lexicographically; consider using quantitative type or an explicit sort to ensure numeric order of credit values.\",\"If there are many departments the grouped bar chart may become crowded; consider filtering to a subset of departments, faceting, or using an interactive legend to toggle departments.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Count courses grouped by department name and credit value using confirmed tables/columns and FK; results ordered deterministically by department_name then credits.\",\"sql\":\"SELECT d.name AS department_name, c.credits AS credits, COUNT(c.id) AS course_count\\nFROM public.departments d\\nJOIN public.courses c ON c.department_id = d.id\\nGROUP BY d.name, c.credits\\nORDER BY d.name, c.credits;\",\"assumptions\":[\"courses.department_id references departments.id (confirmed by constraint fk_courses_department_id).\",\"courses.credits is integer and defined NOT NULL (confirmed in schema).\",\"Using an INNER JOIN: only departments that have at least one course will appear. If you want departments with zero courses included, switch to LEFT JOIN and handle credit bins accordingly.\",\"Schema 'public' contains the departments and courses tables (confirmed).\",\"Output aliases match requested fields: department_name, credits, course_count.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT d.name AS department_name, c.credits AS credits, COUNT(c.id) AS course_count\\nFROM public.departments d\\nJOIN public.courses c ON c.department_id = d.id\\nGROUP BY d.name, c.credits\\nORDER BY d.name, c.credits\",\"metadata\":{\"columns\":[\"credits\",\"course_count\",\"department_name\"],\"rowCount\":18,\"sample\":[{\"credits\":2,\"course_count\":1,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"credits\":4,\"course_count\":2,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"}]},\"data\":[{\"credits\":2,\"course_count\":1,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"credits\":4,\"course_count\":2,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"credits\":5,\"course_count\":2,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"credits\":6,\"course_count\":1,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"credits\":6,\"course_count\":2,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"},{\"credits\":3,\"course_count\":1,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"credits\":4,\"course_count\":1,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"credits\":6,\"course_count\":2,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"credits\":2,\"course_count\":2,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"credits\":3,\"course_count\":1,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"credits\":4,\"course_count\":2,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"credits\":2,\"course_count\":1,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"credits\":3,\"course_count\":1,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"credits\":4,\"course_count\":1,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"credits\":5,\"course_count\":2,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"credits\":6,\"course_count\":1,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"credits\":5,\"course_count\":2,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"credits\":6,\"course_count\":1,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Course credit distribution by department\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"credits\",\"type\":\"ordinal\",\"title\":\"Credits\"},\"y\":{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Number of courses\"},\"color\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},\"xOffset\":{\"field\":\"department_name\",\"type\":\"nominal\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"credits\",\"type\":\"ordinal\",\"title\":\"Credits\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Course count\"}]}},\"reasoning\":\"Grouped bar chart showing count of courses per credit value, with bars colored (and offset) by department. Credits treated as discrete categories (ordinal) since they are integer values.\"},\"validation\":{\"passed\":true,\"score\":0.8,\"issues\":[\"Credits encoded as ordinal — may sort lexicographically; consider using quantitative type or an explicit sort to ensure numeric order of credit values.\",\"If there are many departments the grouped bar chart may become crowded; consider filtering to a subset of departments, faceting, or using an interactive legend to toggle departments.\"]}}},\"startedAt\":1771846994521,\"status\":\"success\",\"output\":{\"sql\":\"SELECT d.name AS department_name, c.credits AS credits, COUNT(c.id) AS course_count\\nFROM public.departments d\\nJOIN public.courses c ON c.department_id = d.id\\nGROUP BY d.name, c.credits\\nORDER BY d.name, c.credits;\",\"data\":[{\"credits\":2,\"course_count\":1,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"credits\":4,\"course_count\":2,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"credits\":5,\"course_count\":2,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"credits\":6,\"course_count\":1,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"credits\":6,\"course_count\":2,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"},{\"credits\":3,\"course_count\":1,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"credits\":4,\"course_count\":1,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"credits\":6,\"course_count\":2,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"credits\":2,\"course_count\":2,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"credits\":3,\"course_count\":1,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"credits\":4,\"course_count\":2,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"credits\":2,\"course_count\":1,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"credits\":3,\"course_count\":1,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"credits\":4,\"course_count\":1,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"credits\":5,\"course_count\":2,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"credits\":6,\"course_count\":1,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"credits\":5,\"course_count\":2,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"credits\":6,\"course_count\":1,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"}],\"metadata\":{\"columns\":[\"credits\",\"course_count\",\"department_name\"],\"rowCount\":18,\"sample\":[{\"credits\":2,\"course_count\":1,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"credits\":4,\"course_count\":2,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Course credit distribution by department\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"credits\",\"type\":\"ordinal\",\"title\":\"Credits\"},\"y\":{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Number of courses\"},\"color\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},\"xOffset\":{\"field\":\"department_name\",\"type\":\"nominal\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"credits\",\"type\":\"ordinal\",\"title\":\"Credits\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Course count\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.8,\"issues\":[\"Credits encoded as ordinal — may sort lexicographically; consider using quantitative type or an explicit sort to ensure numeric order of credit values.\",\"If there are many departments the grouped bar chart may become crowded; consider filtering to a subset of departments, faceting, or using an interactive legend to toggle departments.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771846994525}},\"input\":{\"question\":\"Show the distribution of credit values for courses in each department\"},\"result\":{\"sql\":\"SELECT d.name AS department_name, c.credits AS credits, COUNT(c.id) AS course_count\\nFROM public.departments d\\nJOIN public.courses c ON c.department_id = d.id\\nGROUP BY d.name, c.credits\\nORDER BY d.name, c.credits;\",\"data\":[{\"credits\":2,\"course_count\":1,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"credits\":4,\"course_count\":2,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"credits\":5,\"course_count\":2,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"credits\":6,\"course_count\":1,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"credits\":6,\"course_count\":2,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"},{\"credits\":3,\"course_count\":1,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"credits\":4,\"course_count\":1,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"credits\":6,\"course_count\":2,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"credits\":2,\"course_count\":2,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"credits\":3,\"course_count\":1,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"credits\":4,\"course_count\":2,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"credits\":2,\"course_count\":1,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"credits\":3,\"course_count\":1,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"credits\":4,\"course_count\":1,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"credits\":5,\"course_count\":2,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"credits\":6,\"course_count\":1,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"credits\":5,\"course_count\":2,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"credits\":6,\"course_count\":1,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"}],\"metadata\":{\"columns\":[\"credits\",\"course_count\",\"department_name\"],\"rowCount\":18,\"sample\":[{\"credits\":2,\"course_count\":1,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"credits\":4,\"course_count\":2,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Course credit distribution by department\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"credits\",\"type\":\"ordinal\",\"title\":\"Credits\"},\"y\":{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Number of courses\"},\"color\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},\"xOffset\":{\"field\":\"department_name\",\"type\":\"nominal\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"credits\",\"type\":\"ordinal\",\"title\":\"Credits\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Course count\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.8,\"issues\":[\"Credits encoded as ordinal — may sort lexicographically; consider using quantitative type or an explicit sort to ensure numeric order of credit values.\",\"If there are many departments the grouped bar chart may become crowded; consider filtering to a subset of departments, faceting, or using an interactive legend to toggle departments.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"5d028eba9d404a70654a6ae8f6d4cacd\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/department-credit-weight/run-0001/run.json",
+    "queryPath": "runs/department-credit-weight/run-0001/query.sql",
+    "vegaRawPath": "runs/department-credit-weight/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/department-credit-weight/run-0001/vega.resolved.json",
+    "imagePath": "runs/department-credit-weight/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:43:14.888Z",
+  "traceId": "5d028eba9d404a70654a6ae8f6d4cacd",
+  "success": true,
+  "durationMs": 69543,
+  "resultRaw": {
+    "data": [
+      {
+        "credits": 2,
+        "course_count": 1,
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+      },
+      {
+        "credits": 4,
+        "course_count": 2,
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+      },
+      {
+        "credits": 5,
+        "course_count": 2,
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+      },
+      {
+        "credits": 6,
+        "course_count": 1,
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+      },
+      {
+        "credits": 6,
+        "course_count": 2,
+        "department_name": "Wydział Informatyki i Nauki o Materiałach"
+      },
+      {
+        "credits": 3,
+        "course_count": 1,
+        "department_name": "Wydział Inżynierii Biomedycznej"
+      },
+      {
+        "credits": 4,
+        "course_count": 1,
+        "department_name": "Wydział Inżynierii Biomedycznej"
+      },
+      {
+        "credits": 6,
+        "course_count": 2,
+        "department_name": "Wydział Inżynierii Biomedycznej"
+      },
+      {
+        "credits": 2,
+        "course_count": 2,
+        "department_name": "Wydział Inżynierii Produkcji"
+      },
+      {
+        "credits": 3,
+        "course_count": 1,
+        "department_name": "Wydział Inżynierii Produkcji"
+      },
+      {
+        "credits": 4,
+        "course_count": 2,
+        "department_name": "Wydział Inżynierii Produkcji"
+      },
+      {
+        "credits": 2,
+        "course_count": 1,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+      },
+      {
+        "credits": 3,
+        "course_count": 1,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+      },
+      {
+        "credits": 4,
+        "course_count": 1,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+      },
+      {
+        "credits": 5,
+        "course_count": 2,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+      },
+      {
+        "credits": 6,
+        "course_count": 1,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+      },
+      {
+        "credits": 5,
+        "course_count": 2,
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej"
+      },
+      {
+        "credits": 6,
+        "course_count": 1,
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Course credit distribution by department",
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "credits",
+          "type": "ordinal",
+          "title": "Credits"
+        },
+        "y": {
+          "field": "course_count",
+          "type": "quantitative",
+          "title": "Number of courses"
+        },
+        "color": {
+          "field": "department_name",
+          "type": "nominal",
+          "title": "Department"
+        },
+        "xOffset": {
+          "field": "department_name",
+          "type": "nominal"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "credits",
+            "type": "ordinal",
+            "title": "Credits"
+          },
+          {
+            "field": "course_count",
+            "type": "quantitative",
+            "title": "Course count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT d.name AS department_name, c.credits AS credits, COUNT(c.id) AS course_count\nFROM public.departments d\nJOIN public.courses c ON c.department_id = d.id\nGROUP BY d.name, c.credits\nORDER BY d.name, c.credits;",
+    "metadata": {
+      "columns": [
+        "credits",
+        "course_count",
+        "department_name"
+      ],
+      "rowCount": 18,
+      "sample": [
+        {
+          "credits": 2,
+          "course_count": 1,
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+        },
+        {
+          "credits": 4,
+          "course_count": 2,
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.8,
+      "issues": [
+        "Credits encoded as ordinal — may sort lexicographically; consider using quantitative type or an explicit sort to ensure numeric order of credit values.",
+        "If there are many departments the grouped bar chart may become crowded; consider filtering to a subset of departments, faceting, or using an interactive legend to toggle departments."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "credits": 2,
+        "course_count": 1,
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+      },
+      {
+        "credits": 4,
+        "course_count": 2,
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+      },
+      {
+        "credits": 5,
+        "course_count": 2,
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+      },
+      {
+        "credits": 6,
+        "course_count": 1,
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+      },
+      {
+        "credits": 6,
+        "course_count": 2,
+        "department_name": "Wydział Informatyki i Nauki o Materiałach"
+      },
+      {
+        "credits": 3,
+        "course_count": 1,
+        "department_name": "Wydział Inżynierii Biomedycznej"
+      },
+      {
+        "credits": 4,
+        "course_count": 1,
+        "department_name": "Wydział Inżynierii Biomedycznej"
+      },
+      {
+        "credits": 6,
+        "course_count": 2,
+        "department_name": "Wydział Inżynierii Biomedycznej"
+      },
+      {
+        "credits": 2,
+        "course_count": 2,
+        "department_name": "Wydział Inżynierii Produkcji"
+      },
+      {
+        "credits": 3,
+        "course_count": 1,
+        "department_name": "Wydział Inżynierii Produkcji"
+      },
+      {
+        "credits": 4,
+        "course_count": 2,
+        "department_name": "Wydział Inżynierii Produkcji"
+      },
+      {
+        "credits": 2,
+        "course_count": 1,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+      },
+      {
+        "credits": 3,
+        "course_count": 1,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+      },
+      {
+        "credits": 4,
+        "course_count": 1,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+      },
+      {
+        "credits": 5,
+        "course_count": 2,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+      },
+      {
+        "credits": 6,
+        "course_count": 1,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+      },
+      {
+        "credits": 5,
+        "course_count": 2,
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej"
+      },
+      {
+        "credits": 6,
+        "course_count": 1,
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Course credit distribution by department",
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "credits",
+          "type": "ordinal",
+          "title": "Credits"
+        },
+        "y": {
+          "field": "course_count",
+          "type": "quantitative",
+          "title": "Number of courses"
+        },
+        "color": {
+          "field": "department_name",
+          "type": "nominal",
+          "title": "Department"
+        },
+        "xOffset": {
+          "field": "department_name",
+          "type": "nominal"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "credits",
+            "type": "ordinal",
+            "title": "Credits"
+          },
+          {
+            "field": "course_count",
+            "type": "quantitative",
+            "title": "Course count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT d.name AS department_name, c.credits AS credits, COUNT(c.id) AS course_count\nFROM public.departments d\nJOIN public.courses c ON c.department_id = d.id\nGROUP BY d.name, c.credits\nORDER BY d.name, c.credits;",
+    "metadata": {
+      "columns": [
+        "credits",
+        "course_count",
+        "department_name"
+      ],
+      "rowCount": 18,
+      "sample": [
+        {
+          "credits": 2,
+          "course_count": 1,
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+        },
+        {
+          "credits": 4,
+          "course_count": 2,
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.8,
+      "issues": [
+        "Credits encoded as ordinal — may sort lexicographically; consider using quantitative type or an explicit sort to ensure numeric order of credit values.",
+        "If there are many departments the grouped bar chart may become crowded; consider filtering to a subset of departments, faceting, or using an interactive legend to toggle departments."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:43:14.888Z",
+    "traceId": "5d028eba9d404a70654a6ae8f6d4cacd",
+    "attempts": 5,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 18222,
+      "outputTokens": 4609,
+      "totalTokens": 22831,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2944,
+      "costUsd": 0.0137735
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 18222,
+        "outputTokens": 4609,
+        "totalTokens": 22831,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2944,
+        "costUsd": 0.0137735
+      }
+    ],
+    "warnings": []
+  }
+}

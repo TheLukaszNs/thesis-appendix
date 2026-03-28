@@ -1,0 +1,416 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "student-age-distribution",
+  "caseDirectory": "student-age-distribution",
+  "repeatIndex": 1,
+  "prompt": "Show the age distribution of students",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the age distribution of students"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:43:08.609Z",
+    "endedAtUtc": "2026-02-22T23:44:04.312Z",
+    "durationMs": 55703
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "15154",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:44:04 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show the age distribution of students\"},\"sql\":{\"payload\":{\"question\":\"Show the age distribution of students\"},\"startedAt\":1771803788621,\"status\":\"success\",\"output\":{\"reasoning\":\"Compute student ages from date_of_birth, include an 'Unknown' bucket for null/future DOBs, show counts and percentage of total students, and order deterministically by age (Unknown last).\",\"sql\":\"WITH totals AS (\\n  SELECT COUNT(*) AS total_all\\n  FROM public.students\\n),\\nage_known AS (\\n  SELECT\\n    DATE_PART('year', AGE(CURRENT_DATE, date_of_birth))::int AS age_years,\\n    COUNT(*) AS student_count\\n  FROM public.students\\n  WHERE date_of_birth IS NOT NULL\\n    AND date_of_birth <= CURRENT_DATE\\n  GROUP BY age_years\\n),\\nage_unknown AS (\\n  SELECT NULL::int AS age_years, COUNT(*) AS student_count\\n  FROM public.students\\n  WHERE date_of_birth IS NULL OR date_of_birth > CURRENT_DATE\\n),\\ncombined AS (\\n  SELECT age_years, student_count FROM age_known\\n  UNION ALL\\n  SELECT age_years, student_count FROM age_unknown\\n)\\nSELECT\\n  CASE WHEN c.age_years IS NULL THEN 'Unknown' ELSE c.age_years::text END AS age_label,\\n  c.age_years AS age_years,\\n  c.student_count AS student_count,\\n  ROUND((c.student_count::numeric / t.total_all) * 100.0, 2) AS percentage\\nFROM combined c\\nCROSS JOIN totals t\\nORDER BY CASE WHEN c.age_years IS NULL THEN 999 ELSE c.age_years END ASC;\",\"assumptions\":[\"Use CURRENT_DATE to compute ages in whole years.\",\"Treat date_of_birth IS NULL or date_of_birth > CURRENT_DATE as 'Unknown'.\",\"Distribution percentages are relative to all rows in public.students (including unknown DOBs).\"]},\"endedAt\":1771803823317},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH totals AS (\\n  SELECT COUNT(*) AS total_all\\n  FROM public.students\\n),\\nage_known AS (\\n  SELECT\\n    DATE_PART('year', AGE(CURRENT_DATE, date_of_birth))::int AS age_years,\\n    COUNT(*) AS student_count\\n  FROM public.students\\n  WHERE date_of_birth IS NOT NULL\\n    AND date_of_birth <= CURRENT_DATE\\n  GROUP BY age_years\\n),\\nage_unknown AS (\\n  SELECT NULL::int AS age_years, COUNT(*) AS student_count\\n  FROM public.students\\n  WHERE date_of_birth IS NULL OR date_of_birth > CURRENT_DATE\\n),\\ncombined AS (\\n  SELECT age_years, student_count FROM age_known\\n  UNION ALL\\n  SELECT age_years, student_count FROM age_unknown\\n)\\nSELECT\\n  CASE WHEN c.age_years IS NULL THEN 'Unknown' ELSE c.age_years::text END AS age_label,\\n  c.age_years AS age_years,\\n  c.student_count AS student_count,\\n  ROUND((c.student_count::numeric / t.total_all) * 100.0, 2) AS percentage\\nFROM combined c\\nCROSS JOIN totals t\\nORDER BY CASE WHEN c.age_years IS NULL THEN 999 ELSE c.age_years END ASC;\"},\"startedAt\":1771803823320,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH totals AS (\\n  SELECT COUNT(*) AS total_all\\n  FROM public.students\\n),\\nage_known AS (\\n  SELECT\\n    DATE_PART('year', AGE(CURRENT_DATE, date_of_birth))::int AS age_years,\\n    COUNT(*) AS student_count\\n  FROM public.students\\n  WHERE date_of_birth IS NOT NULL\\n    AND date_of_birth <= CURRENT_DATE\\n  GROUP BY age_years\\n),\\nage_unknown AS (\\n  SELECT NULL::int AS age_years, COUNT(*) AS student_count\\n  FROM public.students\\n  WHERE date_of_birth IS NULL OR date_of_birth > CURRENT_DATE\\n),\\ncombined AS (\\n  SELECT age_years, student_count FROM age_known\\n  UNION ALL\\n  SELECT age_years, student_count FROM age_unknown\\n)\\nSELECT\\n  CASE WHEN c.age_years IS NULL THEN 'Unknown' ELSE c.age_years::text END AS age_label,\\n  c.age_years AS age_years,\\n  c.student_count AS student_count,\\n  ROUND((c.student_count::numeric / t.total_all) * 100.0, 2) AS percentage\\nFROM combined c\\nCROSS JOIN totals t\\nORDER BY CASE WHEN c.age_years IS NULL THEN 999 ELSE c.age_years END ASC\",\"metadata\":{\"columns\":[\"age_label\",\"age_years\",\"percentage\",\"student_count\"],\"rowCount\":14,\"sample\":[{\"age_label\":\"18\",\"age_years\":18,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"19\",\"age_years\":19,\"percentage\":7.83,\"student_count\":9}]},\"data\":[{\"age_label\":\"18\",\"age_years\":18,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"19\",\"age_years\":19,\"percentage\":7.83,\"student_count\":9},{\"age_label\":\"20\",\"age_years\":20,\"percentage\":1.74,\"student_count\":2},{\"age_label\":\"21\",\"age_years\":21,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"22\",\"age_years\":22,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"23\",\"age_years\":23,\"percentage\":10.43,\"student_count\":12},{\"age_label\":\"24\",\"age_years\":24,\"percentage\":12.17,\"student_count\":14},{\"age_label\":\"25\",\"age_years\":25,\"percentage\":6.96,\"student_count\":8},{\"age_label\":\"26\",\"age_years\":26,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"27\",\"age_years\":27,\"percentage\":7.83,\"student_count\":9},{\"age_label\":\"28\",\"age_years\":28,\"percentage\":5.22,\"student_count\":6},{\"age_label\":\"29\",\"age_years\":29,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"30\",\"age_years\":30,\"percentage\":8.7,\"student_count\":10},{\"age_label\":\"Unknown\",\"age_years\":null,\"percentage\":8.7,\"student_count\":10}]},\"endedAt\":1771803823338},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"WITH totals AS (\\n  SELECT COUNT(*) AS total_all\\n  FROM public.students\\n),\\nage_known AS (\\n  SELECT\\n    DATE_PART('year', AGE(CURRENT_DATE, date_of_birth))::int AS age_years,\\n    COUNT(*) AS student_count\\n  FROM public.students\\n  WHERE date_of_birth IS NOT NULL\\n    AND date_of_birth <= CURRENT_DATE\\n  GROUP BY age_years\\n),\\nage_unknown AS (\\n  SELECT NULL::int AS age_years, COUNT(*) AS student_count\\n  FROM public.students\\n  WHERE date_of_birth IS NULL OR date_of_birth > CURRENT_DATE\\n),\\ncombined AS (\\n  SELECT age_years, student_count FROM age_known\\n  UNION ALL\\n  SELECT age_years, student_count FROM age_unknown\\n)\\nSELECT\\n  CASE WHEN c.age_years IS NULL THEN 'Unknown' ELSE c.age_years::text END AS age_label,\\n  c.age_years AS age_years,\\n  c.student_count AS student_count,\\n  ROUND((c.student_count::numeric / t.total_all) * 100.0, 2) AS percentage\\nFROM combined c\\nCROSS JOIN totals t\\nORDER BY CASE WHEN c.age_years IS NULL THEN 999 ELSE c.age_years END ASC\",\"metadata\":{\"columns\":[\"age_label\",\"age_years\",\"percentage\",\"student_count\"],\"rowCount\":14,\"sample\":[{\"age_label\":\"18\",\"age_years\":18,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"19\",\"age_years\":19,\"percentage\":7.83,\"student_count\":9}]},\"data\":[{\"age_label\":\"18\",\"age_years\":18,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"19\",\"age_years\":19,\"percentage\":7.83,\"student_count\":9},{\"age_label\":\"20\",\"age_years\":20,\"percentage\":1.74,\"student_count\":2},{\"age_label\":\"21\",\"age_years\":21,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"22\",\"age_years\":22,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"23\",\"age_years\":23,\"percentage\":10.43,\"student_count\":12},{\"age_label\":\"24\",\"age_years\":24,\"percentage\":12.17,\"student_count\":14},{\"age_label\":\"25\",\"age_years\":25,\"percentage\":6.96,\"student_count\":8},{\"age_label\":\"26\",\"age_years\":26,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"27\",\"age_years\":27,\"percentage\":7.83,\"student_count\":9},{\"age_label\":\"28\",\"age_years\":28,\"percentage\":5.22,\"student_count\":6},{\"age_label\":\"29\",\"age_years\":29,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"30\",\"age_years\":30,\"percentage\":8.7,\"student_count\":10},{\"age_label\":\"Unknown\",\"age_years\":null,\"percentage\":8.7,\"student_count\":10}]},\"startedAt\":1771803823341,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Age distribution of students\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"age_label\",\"type\":\"nominal\",\"title\":\"Age\",\"sort\":null},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Number of students\"},\"color\":{\"condition\":{\"test\":\"datum.age_label === 'Unknown'\",\"value\":\"#d62728\"},\"value\":\"#1f77b4\"},\"tooltip\":[{\"field\":\"age_label\",\"type\":\"nominal\",\"title\":\"Age\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"percentage\",\"type\":\"quantitative\",\"title\":\"Share (%)\"}]}},\"reasoning\":\"Bar chart shows student counts per age (age_label). Color highlights Unknown ages. sort:null preserves the SQL ordering which places Unknown last.\"},\"endedAt\":1771803844266},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Age distribution of students\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"age_label\",\"type\":\"nominal\",\"title\":\"Age\",\"sort\":null},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Number of students\"},\"color\":{\"condition\":{\"test\":\"datum.age_label === 'Unknown'\",\"value\":\"#d62728\"},\"value\":\"#1f77b4\"},\"tooltip\":[{\"field\":\"age_label\",\"type\":\"nominal\",\"title\":\"Age\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"percentage\",\"type\":\"quantitative\",\"title\":\"Share (%)\"}]}},\"reasoning\":\"Bar chart shows student counts per age (age_label). Color highlights Unknown ages. sort:null preserves the SQL ordering which places Unknown last.\"},\"startedAt\":1771803844286,\"status\":\"success\",\"output\":{\"sql\":\"WITH totals AS (\\n  SELECT COUNT(*) AS total_all\\n  FROM public.students\\n),\\nage_known AS (\\n  SELECT\\n    DATE_PART('year', AGE(CURRENT_DATE, date_of_birth))::int AS age_years,\\n    COUNT(*) AS student_count\\n  FROM public.students\\n  WHERE date_of_birth IS NOT NULL\\n    AND date_of_birth <= CURRENT_DATE\\n  GROUP BY age_years\\n),\\nage_unknown AS (\\n  SELECT NULL::int AS age_years, COUNT(*) AS student_count\\n  FROM public.students\\n  WHERE date_of_birth IS NULL OR date_of_birth > CURRENT_DATE\\n),\\ncombined AS (\\n  SELECT age_years, student_count FROM age_known\\n  UNION ALL\\n  SELECT age_years, student_count FROM age_unknown\\n)\\nSELECT\\n  CASE WHEN c.age_years IS NULL THEN 'Unknown' ELSE c.age_years::text END AS age_label,\\n  c.age_years AS age_years,\\n  c.student_count AS student_count,\\n  ROUND((c.student_count::numeric / t.total_all) * 100.0, 2) AS percentage\\nFROM combined c\\nCROSS JOIN totals t\\nORDER BY CASE WHEN c.age_years IS NULL THEN 999 ELSE c.age_years END ASC;\",\"data\":[{\"age_label\":\"18\",\"age_years\":18,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"19\",\"age_years\":19,\"percentage\":7.83,\"student_count\":9},{\"age_label\":\"20\",\"age_years\":20,\"percentage\":1.74,\"student_count\":2},{\"age_label\":\"21\",\"age_years\":21,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"22\",\"age_years\":22,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"23\",\"age_years\":23,\"percentage\":10.43,\"student_count\":12},{\"age_label\":\"24\",\"age_years\":24,\"percentage\":12.17,\"student_count\":14},{\"age_label\":\"25\",\"age_years\":25,\"percentage\":6.96,\"student_count\":8},{\"age_label\":\"26\",\"age_years\":26,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"27\",\"age_years\":27,\"percentage\":7.83,\"student_count\":9},{\"age_label\":\"28\",\"age_years\":28,\"percentage\":5.22,\"student_count\":6},{\"age_label\":\"29\",\"age_years\":29,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"30\",\"age_years\":30,\"percentage\":8.7,\"student_count\":10},{\"age_label\":\"Unknown\",\"age_years\":null,\"percentage\":8.7,\"student_count\":10}],\"metadata\":{\"columns\":[\"age_label\",\"age_years\",\"percentage\",\"student_count\"],\"rowCount\":14,\"sample\":[{\"age_label\":\"18\",\"age_years\":18,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"19\",\"age_years\":19,\"percentage\":7.83,\"student_count\":9}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Age distribution of students\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"age_label\",\"type\":\"nominal\",\"title\":\"Age\",\"sort\":null},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Number of students\"},\"color\":{\"condition\":{\"test\":\"datum.age_label === 'Unknown'\",\"value\":\"#d62728\"},\"value\":\"#1f77b4\"},\"tooltip\":[{\"field\":\"age_label\",\"type\":\"nominal\",\"title\":\"Age\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"percentage\",\"type\":\"quantitative\",\"title\":\"Share (%)\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771803844290}},\"input\":{\"question\":\"Show the age distribution of students\"},\"result\":{\"sql\":\"WITH totals AS (\\n  SELECT COUNT(*) AS total_all\\n  FROM public.students\\n),\\nage_known AS (\\n  SELECT\\n    DATE_PART('year', AGE(CURRENT_DATE, date_of_birth))::int AS age_years,\\n    COUNT(*) AS student_count\\n  FROM public.students\\n  WHERE date_of_birth IS NOT NULL\\n    AND date_of_birth <= CURRENT_DATE\\n  GROUP BY age_years\\n),\\nage_unknown AS (\\n  SELECT NULL::int AS age_years, COUNT(*) AS student_count\\n  FROM public.students\\n  WHERE date_of_birth IS NULL OR date_of_birth > CURRENT_DATE\\n),\\ncombined AS (\\n  SELECT age_years, student_count FROM age_known\\n  UNION ALL\\n  SELECT age_years, student_count FROM age_unknown\\n)\\nSELECT\\n  CASE WHEN c.age_years IS NULL THEN 'Unknown' ELSE c.age_years::text END AS age_label,\\n  c.age_years AS age_years,\\n  c.student_count AS student_count,\\n  ROUND((c.student_count::numeric / t.total_all) * 100.0, 2) AS percentage\\nFROM combined c\\nCROSS JOIN totals t\\nORDER BY CASE WHEN c.age_years IS NULL THEN 999 ELSE c.age_years END ASC;\",\"data\":[{\"age_label\":\"18\",\"age_years\":18,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"19\",\"age_years\":19,\"percentage\":7.83,\"student_count\":9},{\"age_label\":\"20\",\"age_years\":20,\"percentage\":1.74,\"student_count\":2},{\"age_label\":\"21\",\"age_years\":21,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"22\",\"age_years\":22,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"23\",\"age_years\":23,\"percentage\":10.43,\"student_count\":12},{\"age_label\":\"24\",\"age_years\":24,\"percentage\":12.17,\"student_count\":14},{\"age_label\":\"25\",\"age_years\":25,\"percentage\":6.96,\"student_count\":8},{\"age_label\":\"26\",\"age_years\":26,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"27\",\"age_years\":27,\"percentage\":7.83,\"student_count\":9},{\"age_label\":\"28\",\"age_years\":28,\"percentage\":5.22,\"student_count\":6},{\"age_label\":\"29\",\"age_years\":29,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"30\",\"age_years\":30,\"percentage\":8.7,\"student_count\":10},{\"age_label\":\"Unknown\",\"age_years\":null,\"percentage\":8.7,\"student_count\":10}],\"metadata\":{\"columns\":[\"age_label\",\"age_years\",\"percentage\",\"student_count\"],\"rowCount\":14,\"sample\":[{\"age_label\":\"18\",\"age_years\":18,\"percentage\":6.09,\"student_count\":7},{\"age_label\":\"19\",\"age_years\":19,\"percentage\":7.83,\"student_count\":9}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Age distribution of students\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"age_label\",\"type\":\"nominal\",\"title\":\"Age\",\"sort\":null},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Number of students\"},\"color\":{\"condition\":{\"test\":\"datum.age_label === 'Unknown'\",\"value\":\"#d62728\"},\"value\":\"#1f77b4\"},\"tooltip\":[{\"field\":\"age_label\",\"type\":\"nominal\",\"title\":\"Age\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"percentage\",\"type\":\"quantitative\",\"title\":\"Share (%)\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"21b128c8667f869dfcab584e26de6d82\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/student-age-distribution/run-0001/run.json",
+    "queryPath": "runs/student-age-distribution/run-0001/query.sql",
+    "vegaRawPath": "runs/student-age-distribution/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/student-age-distribution/run-0001/vega.resolved.json",
+    "imagePath": "runs/student-age-distribution/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:44:04.734Z",
+  "traceId": "21b128c8667f869dfcab584e26de6d82",
+  "success": true,
+  "durationMs": 56125,
+  "resultRaw": {
+    "data": [
+      {
+        "age_label": "18",
+        "age_years": 18,
+        "percentage": 6.09,
+        "student_count": 7
+      },
+      {
+        "age_label": "19",
+        "age_years": 19,
+        "percentage": 7.83,
+        "student_count": 9
+      },
+      {
+        "age_label": "20",
+        "age_years": 20,
+        "percentage": 1.74,
+        "student_count": 2
+      },
+      {
+        "age_label": "21",
+        "age_years": 21,
+        "percentage": 6.09,
+        "student_count": 7
+      },
+      {
+        "age_label": "22",
+        "age_years": 22,
+        "percentage": 6.09,
+        "student_count": 7
+      },
+      {
+        "age_label": "23",
+        "age_years": 23,
+        "percentage": 10.43,
+        "student_count": 12
+      },
+      {
+        "age_label": "24",
+        "age_years": 24,
+        "percentage": 12.17,
+        "student_count": 14
+      },
+      {
+        "age_label": "25",
+        "age_years": 25,
+        "percentage": 6.96,
+        "student_count": 8
+      },
+      {
+        "age_label": "26",
+        "age_years": 26,
+        "percentage": 6.09,
+        "student_count": 7
+      },
+      {
+        "age_label": "27",
+        "age_years": 27,
+        "percentage": 7.83,
+        "student_count": 9
+      },
+      {
+        "age_label": "28",
+        "age_years": 28,
+        "percentage": 5.22,
+        "student_count": 6
+      },
+      {
+        "age_label": "29",
+        "age_years": 29,
+        "percentage": 6.09,
+        "student_count": 7
+      },
+      {
+        "age_label": "30",
+        "age_years": 30,
+        "percentage": 8.7,
+        "student_count": 10
+      },
+      {
+        "age_label": "Unknown",
+        "age_years": null,
+        "percentage": 8.7,
+        "student_count": 10
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Age distribution of students",
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "age_label",
+          "type": "nominal",
+          "title": "Age",
+          "sort": null
+        },
+        "y": {
+          "field": "student_count",
+          "type": "quantitative",
+          "title": "Number of students"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.age_label === 'Unknown'",
+            "value": "#d62728"
+          },
+          "value": "#1f77b4"
+        },
+        "tooltip": [
+          {
+            "field": "age_label",
+            "type": "nominal",
+            "title": "Age"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Count"
+          },
+          {
+            "field": "percentage",
+            "type": "quantitative",
+            "title": "Share (%)"
+          }
+        ]
+      }
+    },
+    "sql": "WITH totals AS (\n  SELECT COUNT(*) AS total_all\n  FROM public.students\n),\nage_known AS (\n  SELECT\n    DATE_PART('year', AGE(CURRENT_DATE, date_of_birth))::int AS age_years,\n    COUNT(*) AS student_count\n  FROM public.students\n  WHERE date_of_birth IS NOT NULL\n    AND date_of_birth <= CURRENT_DATE\n  GROUP BY age_years\n),\nage_unknown AS (\n  SELECT NULL::int AS age_years, COUNT(*) AS student_count\n  FROM public.students\n  WHERE date_of_birth IS NULL OR date_of_birth > CURRENT_DATE\n),\ncombined AS (\n  SELECT age_years, student_count FROM age_known\n  UNION ALL\n  SELECT age_years, student_count FROM age_unknown\n)\nSELECT\n  CASE WHEN c.age_years IS NULL THEN 'Unknown' ELSE c.age_years::text END AS age_label,\n  c.age_years AS age_years,\n  c.student_count AS student_count,\n  ROUND((c.student_count::numeric / t.total_all) * 100.0, 2) AS percentage\nFROM combined c\nCROSS JOIN totals t\nORDER BY CASE WHEN c.age_years IS NULL THEN 999 ELSE c.age_years END ASC;",
+    "metadata": {
+      "columns": [
+        "age_label",
+        "age_years",
+        "percentage",
+        "student_count"
+      ],
+      "rowCount": 14,
+      "sample": [
+        {
+          "age_label": "18",
+          "age_years": 18,
+          "percentage": 6.09,
+          "student_count": 7
+        },
+        {
+          "age_label": "19",
+          "age_years": 19,
+          "percentage": 7.83,
+          "student_count": 9
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "age_label": "18",
+        "age_years": 18,
+        "percentage": 6.09,
+        "student_count": 7
+      },
+      {
+        "age_label": "19",
+        "age_years": 19,
+        "percentage": 7.83,
+        "student_count": 9
+      },
+      {
+        "age_label": "20",
+        "age_years": 20,
+        "percentage": 1.74,
+        "student_count": 2
+      },
+      {
+        "age_label": "21",
+        "age_years": 21,
+        "percentage": 6.09,
+        "student_count": 7
+      },
+      {
+        "age_label": "22",
+        "age_years": 22,
+        "percentage": 6.09,
+        "student_count": 7
+      },
+      {
+        "age_label": "23",
+        "age_years": 23,
+        "percentage": 10.43,
+        "student_count": 12
+      },
+      {
+        "age_label": "24",
+        "age_years": 24,
+        "percentage": 12.17,
+        "student_count": 14
+      },
+      {
+        "age_label": "25",
+        "age_years": 25,
+        "percentage": 6.96,
+        "student_count": 8
+      },
+      {
+        "age_label": "26",
+        "age_years": 26,
+        "percentage": 6.09,
+        "student_count": 7
+      },
+      {
+        "age_label": "27",
+        "age_years": 27,
+        "percentage": 7.83,
+        "student_count": 9
+      },
+      {
+        "age_label": "28",
+        "age_years": 28,
+        "percentage": 5.22,
+        "student_count": 6
+      },
+      {
+        "age_label": "29",
+        "age_years": 29,
+        "percentage": 6.09,
+        "student_count": 7
+      },
+      {
+        "age_label": "30",
+        "age_years": 30,
+        "percentage": 8.7,
+        "student_count": 10
+      },
+      {
+        "age_label": "Unknown",
+        "age_years": null,
+        "percentage": 8.7,
+        "student_count": 10
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Age distribution of students",
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "age_label",
+          "type": "nominal",
+          "title": "Age",
+          "sort": null
+        },
+        "y": {
+          "field": "student_count",
+          "type": "quantitative",
+          "title": "Number of students"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.age_label === 'Unknown'",
+            "value": "#d62728"
+          },
+          "value": "#1f77b4"
+        },
+        "tooltip": [
+          {
+            "field": "age_label",
+            "type": "nominal",
+            "title": "Age"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Count"
+          },
+          {
+            "field": "percentage",
+            "type": "quantitative",
+            "title": "Share (%)"
+          }
+        ]
+      }
+    },
+    "sql": "WITH totals AS (\n  SELECT COUNT(*) AS total_all\n  FROM public.students\n),\nage_known AS (\n  SELECT\n    DATE_PART('year', AGE(CURRENT_DATE, date_of_birth))::int AS age_years,\n    COUNT(*) AS student_count\n  FROM public.students\n  WHERE date_of_birth IS NOT NULL\n    AND date_of_birth <= CURRENT_DATE\n  GROUP BY age_years\n),\nage_unknown AS (\n  SELECT NULL::int AS age_years, COUNT(*) AS student_count\n  FROM public.students\n  WHERE date_of_birth IS NULL OR date_of_birth > CURRENT_DATE\n),\ncombined AS (\n  SELECT age_years, student_count FROM age_known\n  UNION ALL\n  SELECT age_years, student_count FROM age_unknown\n)\nSELECT\n  CASE WHEN c.age_years IS NULL THEN 'Unknown' ELSE c.age_years::text END AS age_label,\n  c.age_years AS age_years,\n  c.student_count AS student_count,\n  ROUND((c.student_count::numeric / t.total_all) * 100.0, 2) AS percentage\nFROM combined c\nCROSS JOIN totals t\nORDER BY CASE WHEN c.age_years IS NULL THEN 999 ELSE c.age_years END ASC;",
+    "metadata": {
+      "columns": [
+        "age_label",
+        "age_years",
+        "percentage",
+        "student_count"
+      ],
+      "rowCount": 14,
+      "sample": [
+        {
+          "age_label": "18",
+          "age_years": 18,
+          "percentage": 6.09,
+          "student_count": 7
+        },
+        {
+          "age_label": "19",
+          "age_years": 19,
+          "percentage": 7.83,
+          "student_count": 9
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:44:04.734Z",
+    "traceId": "21b128c8667f869dfcab584e26de6d82",
+    "attempts": 3,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 6062,
+      "outputTokens": 3377,
+      "totalTokens": 9439,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2432,
+      "costUsd": 0.0082695
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 6062,
+        "outputTokens": 3377,
+        "totalTokens": 9439,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2432,
+        "costUsd": 0.0082695
+      }
+    ],
+    "warnings": []
+  }
+}

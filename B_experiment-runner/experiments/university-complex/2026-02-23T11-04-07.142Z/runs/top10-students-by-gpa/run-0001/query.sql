@@ -1,0 +1,1 @@
+SELECT s.id AS student_id, s.index_number AS index_number, s.first_name || ' ' || s.last_name AS full_name, s.gpa AS gpa FROM public.students AS s WHERE s.gpa IS NOT NULL ORDER BY s.gpa DESC, s.last_name ASC, s.first_name ASC, s.id ASC LIMIT 10;

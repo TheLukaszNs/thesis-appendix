@@ -1,0 +1,1 @@
+SELECT COUNT(*) AS students_with_multiple_scholarships FROM (SELECT student_id FROM public.scholarships GROUP BY student_id HAVING COUNT(*) > 1) AS t(student_id);

@@ -1,0 +1,398 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "avg-overall-rating-by-professor",
+  "caseDirectory": "avg-overall-rating-by-professor",
+  "repeatIndex": 1,
+  "prompt": "Show the average overall course evaluation rating for each professor",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the average overall course evaluation rating for each professor"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:07:41.011Z",
+    "endedAtUtc": "2026-02-23T11:09:20.297Z",
+    "durationMs": 99286
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "27444",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:09:20 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show the average overall course evaluation rating for each professor\"},\"planner\":{\"payload\":{\"question\":\"Show the average overall course evaluation rating for each professor\"},\"startedAt\":1771844861030,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.overall_rating)\"],\"dimensions\":[\"professors.id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\"],\"filters\":[\"course_evaluations.overall_rating IS NOT NULL\",\"course_sections.professor_id IS NOT NULL\"],\"grain\":\"per professor\",\"aliases\":{\"AVG(course_evaluations.overall_rating)\":\"avg_overall_rating\",\"professors.id\":\"professor_id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\":\"professor_name\"},\"output_fields\":[\"professor_name\",\"avg_overall_rating\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"professor_name\",\"y_axis\":\"avg_overall_rating\",\"title\":\"Average Overall Course Evaluation Rating by Professor\"},\"assumptions\":[\"Joins and foreign keys used are confirmed from schema: course_evaluations.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.professor_id -> professors.id.\",\"We aggregate all evaluations for a professor across all course sections and semesters (no further partitioning by semester/course).\",\"Using INNER joins (implicitly) so only professors with at least one evaluation will appear. Professors with zero evaluations are excluded.\",\"Professor display name is produced by concatenating professors.first_name and professors.last_name. Names may not be unique; if uniqueness is required, use professor_id instead.\",\"overall_rating is an integer and non-null filter ensures we only average valid ratings.\"]}},\"endedAt\":1771844898539},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.overall_rating)\"],\"dimensions\":[\"professors.id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\"],\"filters\":[\"course_evaluations.overall_rating IS NOT NULL\",\"course_sections.professor_id IS NOT NULL\"],\"grain\":\"per professor\",\"aliases\":{\"AVG(course_evaluations.overall_rating)\":\"avg_overall_rating\",\"professors.id\":\"professor_id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\":\"professor_name\"},\"output_fields\":[\"professor_name\",\"avg_overall_rating\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"professor_name\",\"y_axis\":\"avg_overall_rating\",\"title\":\"Average Overall Course Evaluation Rating by Professor\"},\"assumptions\":[\"Joins and foreign keys used are confirmed from schema: course_evaluations.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.professor_id -> professors.id.\",\"We aggregate all evaluations for a professor across all course sections and semesters (no further partitioning by semester/course).\",\"Using INNER joins (implicitly) so only professors with at least one evaluation will appear. Professors with zero evaluations are excluded.\",\"Professor display name is produced by concatenating professors.first_name and professors.last_name. Names may not be unique; if uniqueness is required, use professor_id instead.\",\"overall_rating is an integer and non-null filter ensures we only average valid ratings.\"]}},\"startedAt\":1771844898556,\"status\":\"success\",\"output\":{\"question\":\"Show the average overall course evaluation rating for each professor\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.overall_rating)\"],\"dimensions\":[\"professors.id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\"],\"filters\":[\"course_evaluations.overall_rating IS NOT NULL\",\"course_sections.professor_id IS NOT NULL\"],\"grain\":\"per professor\",\"aliases\":{\"AVG(course_evaluations.overall_rating)\":\"avg_overall_rating\",\"professors.id\":\"professor_id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\":\"professor_name\"},\"output_fields\":[\"professor_name\",\"avg_overall_rating\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"professor_name\",\"y_axis\":\"avg_overall_rating\",\"title\":\"Average Overall Course Evaluation Rating by Professor\"},\"assumptions\":[\"Joins and foreign keys used are confirmed from schema: course_evaluations.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.professor_id -> professors.id.\",\"We aggregate all evaluations for a professor across all course sections and semesters (no further partitioning by semester/course).\",\"Using INNER joins (implicitly) so only professors with at least one evaluation will appear. Professors with zero evaluations are excluded.\",\"Professor display name is produced by concatenating professors.first_name and professors.last_name. Names may not be unique; if uniqueness is required, use professor_id instead.\",\"overall_rating is an integer and non-null filter ensures we only average valid ratings.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771844898558},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"Show the average overall course evaluation rating for each professor\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.overall_rating)\"],\"dimensions\":[\"professors.id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\"],\"filters\":[\"course_evaluations.overall_rating IS NOT NULL\",\"course_sections.professor_id IS NOT NULL\"],\"grain\":\"per professor\",\"aliases\":{\"AVG(course_evaluations.overall_rating)\":\"avg_overall_rating\",\"professors.id\":\"professor_id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\":\"professor_name\"},\"output_fields\":[\"professor_name\",\"avg_overall_rating\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"professor_name\",\"y_axis\":\"avg_overall_rating\",\"title\":\"Average Overall Course Evaluation Rating by Professor\"},\"assumptions\":[\"Joins and foreign keys used are confirmed from schema: course_evaluations.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.professor_id -> professors.id.\",\"We aggregate all evaluations for a professor across all course sections and semesters (no further partitioning by semester/course).\",\"Using INNER joins (implicitly) so only professors with at least one evaluation will appear. Professors with zero evaluations are excluded.\",\"Professor display name is produced by concatenating professors.first_name and professors.last_name. Names may not be unique; if uniqueness is required, use professor_id instead.\",\"overall_rating is an integer and non-null filter ensures we only average valid ratings.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771844898561,\"status\":\"success\",\"output\":{\"question\":\"Show the average overall course evaluation rating for each professor\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.overall_rating)\"],\"dimensions\":[\"professors.id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\"],\"filters\":[\"course_evaluations.overall_rating IS NOT NULL\",\"course_sections.professor_id IS NOT NULL\"],\"grain\":\"per professor\",\"aliases\":{\"AVG(course_evaluations.overall_rating)\":\"avg_overall_rating\",\"professors.id\":\"professor_id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\":\"professor_name\"},\"output_fields\":[\"professor_name\",\"avg_overall_rating\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"professor_name\",\"y_axis\":\"avg_overall_rating\",\"title\":\"Average Overall Course Evaluation Rating by Professor\"},\"assumptions\":[\"Joins and foreign keys used are confirmed from schema: course_evaluations.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.professor_id -> professors.id.\",\"We aggregate all evaluations for a professor across all course sections and semesters (no further partitioning by semester/course).\",\"Using INNER joins (implicitly) so only professors with at least one evaluation will appear. Professors with zero evaluations are excluded.\",\"Professor display name is produced by concatenating professors.first_name and professors.last_name. Names may not be unique; if uniqueness is required, use professor_id instead.\",\"overall_rating is an integer and non-null filter ensures we only average valid ratings.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT\\n  CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nJOIN public.professors AS p ON cs.professor_id = p.id\\nWHERE ce.overall_rating IS NOT NULL\\n  AND cs.professor_id IS NOT NULL\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY professor_name ASC;\",\"validationIssues\":[\"Professor names may not be unique — consider including professor_id in the label if uniqueness is required.\",\"The SQL orders by professor_name (alphabetical). If the user expected professors ranked by average rating, ORDER BY avg_overall_rating DESC is needed.\",\"If ratings use a known fixed scale (e.g., 1–5), consider setting the y-axis domain to that range for clearer interpretation.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Join confirmed tables (course_evaluations -> enrollments -> course_sections -> professors). Aggregate AVG of overall_rating per professor and present professor name by concatenating first and last name. Group by professor id and name parts to ensure correctness and deterministic ordering by professor_name.\",\"sql\":\"SELECT\\n  CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nJOIN public.professors AS p ON cs.professor_id = p.id\\nWHERE ce.overall_rating IS NOT NULL\\n  AND cs.professor_id IS NOT NULL\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY professor_name ASC;\",\"assumptions\":[\"Joins confirmed by schema: course_evaluations.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.professor_id -> professors.id.\",\"Only professors with at least one evaluation are returned (INNER joins and non-null overall_rating).\",\"Professor display name is CONCAT(first_name, ' ', last_name).\",\"avg_overall_rating is rounded to 2 decimal places for readability.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT\\n  CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nJOIN public.professors AS p ON cs.professor_id = p.id\\nWHERE ce.overall_rating IS NOT NULL\\n  AND cs.professor_id IS NOT NULL\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY professor_name ASC\",\"metadata\":{\"columns\":[\"professor_name\",\"avg_overall_rating\"],\"rowCount\":20,\"sample\":[{\"professor_name\":\"Adam Wieczorek\",\"avg_overall_rating\":1.5},{\"professor_name\":\"Agnieszka Kozłowski\",\"avg_overall_rating\":4.5}]},\"data\":[{\"professor_name\":\"Adam Wieczorek\",\"avg_overall_rating\":1.5},{\"professor_name\":\"Agnieszka Kozłowski\",\"avg_overall_rating\":4.5},{\"professor_name\":\"Ewa Krawczyk\",\"avg_overall_rating\":3},{\"professor_name\":\"Ewa Michalski\",\"avg_overall_rating\":2.5},{\"professor_name\":\"Grzegorz Jankowski\",\"avg_overall_rating\":3},{\"professor_name\":\"Jacek Wojciechowski\",\"avg_overall_rating\":3.67},{\"professor_name\":\"Katarzyna Kozłowski\",\"avg_overall_rating\":3},{\"professor_name\":\"Katarzyna Szymański\",\"avg_overall_rating\":5},{\"professor_name\":\"Magdalena Piotrowski\",\"avg_overall_rating\":5},{\"professor_name\":\"Małgorzata Olszewski\",\"avg_overall_rating\":3},{\"professor_name\":\"Marek Lewandowski\",\"avg_overall_rating\":2},{\"professor_name\":\"Marek Woźniak\",\"avg_overall_rating\":2.5},{\"professor_name\":\"Mariusz Nowakowski\",\"avg_overall_rating\":3},{\"professor_name\":\"Michał Nowak\",\"avg_overall_rating\":1},{\"professor_name\":\"Ryszard Kowalczyk\",\"avg_overall_rating\":2},{\"professor_name\":\"Ryszard Woźniak\",\"avg_overall_rating\":3.75},{\"professor_name\":\"Teresa Pawłowski\",\"avg_overall_rating\":3},{\"professor_name\":\"Teresa Woźniak\",\"avg_overall_rating\":2.5},{\"professor_name\":\"Tomasz Majewski\",\"avg_overall_rating\":2},{\"professor_name\":\"Tomasz Wieczorek\",\"avg_overall_rating\":4}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Overall Course Evaluation Rating by Professor\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Professor\",\"labelAngle\":-45}},\"y\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Overall Rating\"}},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Avg Rating\"}]}},\"reasoning\":\"Bar chart shows average overall rating per professor using professor_name on the x-axis and avg_overall_rating on the y-axis. Tooltip includes both fields for precise values; labelAngle helps readability for many names.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"Professor names may not be unique — consider including professor_id in the label if uniqueness is required.\",\"The SQL orders by professor_name (alphabetical). If the user expected professors ranked by average rating, ORDER BY avg_overall_rating DESC is needed.\",\"If ratings use a known fixed scale (e.g., 1–5), consider setting the y-axis domain to that range for clearer interpretation.\"]}}},\"endedAt\":1771844960265,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"Show the average overall course evaluation rating for each professor\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.overall_rating)\"],\"dimensions\":[\"professors.id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\"],\"filters\":[\"course_evaluations.overall_rating IS NOT NULL\",\"course_sections.professor_id IS NOT NULL\"],\"grain\":\"per professor\",\"aliases\":{\"AVG(course_evaluations.overall_rating)\":\"avg_overall_rating\",\"professors.id\":\"professor_id\",\"CONCAT(professors.first_name, ' ', professors.last_name)\":\"professor_name\"},\"output_fields\":[\"professor_name\",\"avg_overall_rating\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"professor_name\",\"y_axis\":\"avg_overall_rating\",\"title\":\"Average Overall Course Evaluation Rating by Professor\"},\"assumptions\":[\"Joins and foreign keys used are confirmed from schema: course_evaluations.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.professor_id -> professors.id.\",\"We aggregate all evaluations for a professor across all course sections and semesters (no further partitioning by semester/course).\",\"Using INNER joins (implicitly) so only professors with at least one evaluation will appear. Professors with zero evaluations are excluded.\",\"Professor display name is produced by concatenating professors.first_name and professors.last_name. Names may not be unique; if uniqueness is required, use professor_id instead.\",\"overall_rating is an integer and non-null filter ensures we only average valid ratings.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT\\n  CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nJOIN public.professors AS p ON cs.professor_id = p.id\\nWHERE ce.overall_rating IS NOT NULL\\n  AND cs.professor_id IS NOT NULL\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY professor_name ASC;\",\"validationIssues\":[\"Professor names may not be unique — consider including professor_id in the label if uniqueness is required.\",\"The SQL orders by professor_name (alphabetical). If the user expected professors ranked by average rating, ORDER BY avg_overall_rating DESC is needed.\",\"If ratings use a known fixed scale (e.g., 1–5), consider setting the y-axis domain to that range for clearer interpretation.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Join confirmed tables (course_evaluations -> enrollments -> course_sections -> professors). Aggregate AVG of overall_rating per professor and present professor name by concatenating first and last name. Group by professor id and name parts to ensure correctness and deterministic ordering by professor_name.\",\"sql\":\"SELECT\\n  CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nJOIN public.professors AS p ON cs.professor_id = p.id\\nWHERE ce.overall_rating IS NOT NULL\\n  AND cs.professor_id IS NOT NULL\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY professor_name ASC;\",\"assumptions\":[\"Joins confirmed by schema: course_evaluations.enrollment_id -> enrollments.id; enrollments.course_section_id -> course_sections.id; course_sections.professor_id -> professors.id.\",\"Only professors with at least one evaluation are returned (INNER joins and non-null overall_rating).\",\"Professor display name is CONCAT(first_name, ' ', last_name).\",\"avg_overall_rating is rounded to 2 decimal places for readability.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT\\n  CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nJOIN public.professors AS p ON cs.professor_id = p.id\\nWHERE ce.overall_rating IS NOT NULL\\n  AND cs.professor_id IS NOT NULL\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY professor_name ASC\",\"metadata\":{\"columns\":[\"professor_name\",\"avg_overall_rating\"],\"rowCount\":20,\"sample\":[{\"professor_name\":\"Adam Wieczorek\",\"avg_overall_rating\":1.5},{\"professor_name\":\"Agnieszka Kozłowski\",\"avg_overall_rating\":4.5}]},\"data\":[{\"professor_name\":\"Adam Wieczorek\",\"avg_overall_rating\":1.5},{\"professor_name\":\"Agnieszka Kozłowski\",\"avg_overall_rating\":4.5},{\"professor_name\":\"Ewa Krawczyk\",\"avg_overall_rating\":3},{\"professor_name\":\"Ewa Michalski\",\"avg_overall_rating\":2.5},{\"professor_name\":\"Grzegorz Jankowski\",\"avg_overall_rating\":3},{\"professor_name\":\"Jacek Wojciechowski\",\"avg_overall_rating\":3.67},{\"professor_name\":\"Katarzyna Kozłowski\",\"avg_overall_rating\":3},{\"professor_name\":\"Katarzyna Szymański\",\"avg_overall_rating\":5},{\"professor_name\":\"Magdalena Piotrowski\",\"avg_overall_rating\":5},{\"professor_name\":\"Małgorzata Olszewski\",\"avg_overall_rating\":3},{\"professor_name\":\"Marek Lewandowski\",\"avg_overall_rating\":2},{\"professor_name\":\"Marek Woźniak\",\"avg_overall_rating\":2.5},{\"professor_name\":\"Mariusz Nowakowski\",\"avg_overall_rating\":3},{\"professor_name\":\"Michał Nowak\",\"avg_overall_rating\":1},{\"professor_name\":\"Ryszard Kowalczyk\",\"avg_overall_rating\":2},{\"professor_name\":\"Ryszard Woźniak\",\"avg_overall_rating\":3.75},{\"professor_name\":\"Teresa Pawłowski\",\"avg_overall_rating\":3},{\"professor_name\":\"Teresa Woźniak\",\"avg_overall_rating\":2.5},{\"professor_name\":\"Tomasz Majewski\",\"avg_overall_rating\":2},{\"professor_name\":\"Tomasz Wieczorek\",\"avg_overall_rating\":4}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Overall Course Evaluation Rating by Professor\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Professor\",\"labelAngle\":-45}},\"y\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Overall Rating\"}},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Avg Rating\"}]}},\"reasoning\":\"Bar chart shows average overall rating per professor using professor_name on the x-axis and avg_overall_rating on the y-axis. Tooltip includes both fields for precise values; labelAngle helps readability for many names.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"Professor names may not be unique — consider including professor_id in the label if uniqueness is required.\",\"The SQL orders by professor_name (alphabetical). If the user expected professors ranked by average rating, ORDER BY avg_overall_rating DESC is needed.\",\"If ratings use a known fixed scale (e.g., 1–5), consider setting the y-axis domain to that range for clearer interpretation.\"]}}},\"startedAt\":1771844960269,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nJOIN public.professors AS p ON cs.professor_id = p.id\\nWHERE ce.overall_rating IS NOT NULL\\n  AND cs.professor_id IS NOT NULL\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY professor_name ASC;\",\"data\":[{\"professor_name\":\"Adam Wieczorek\",\"avg_overall_rating\":1.5},{\"professor_name\":\"Agnieszka Kozłowski\",\"avg_overall_rating\":4.5},{\"professor_name\":\"Ewa Krawczyk\",\"avg_overall_rating\":3},{\"professor_name\":\"Ewa Michalski\",\"avg_overall_rating\":2.5},{\"professor_name\":\"Grzegorz Jankowski\",\"avg_overall_rating\":3},{\"professor_name\":\"Jacek Wojciechowski\",\"avg_overall_rating\":3.67},{\"professor_name\":\"Katarzyna Kozłowski\",\"avg_overall_rating\":3},{\"professor_name\":\"Katarzyna Szymański\",\"avg_overall_rating\":5},{\"professor_name\":\"Magdalena Piotrowski\",\"avg_overall_rating\":5},{\"professor_name\":\"Małgorzata Olszewski\",\"avg_overall_rating\":3},{\"professor_name\":\"Marek Lewandowski\",\"avg_overall_rating\":2},{\"professor_name\":\"Marek Woźniak\",\"avg_overall_rating\":2.5},{\"professor_name\":\"Mariusz Nowakowski\",\"avg_overall_rating\":3},{\"professor_name\":\"Michał Nowak\",\"avg_overall_rating\":1},{\"professor_name\":\"Ryszard Kowalczyk\",\"avg_overall_rating\":2},{\"professor_name\":\"Ryszard Woźniak\",\"avg_overall_rating\":3.75},{\"professor_name\":\"Teresa Pawłowski\",\"avg_overall_rating\":3},{\"professor_name\":\"Teresa Woźniak\",\"avg_overall_rating\":2.5},{\"professor_name\":\"Tomasz Majewski\",\"avg_overall_rating\":2},{\"professor_name\":\"Tomasz Wieczorek\",\"avg_overall_rating\":4}],\"metadata\":{\"columns\":[\"professor_name\",\"avg_overall_rating\"],\"rowCount\":20,\"sample\":[{\"professor_name\":\"Adam Wieczorek\",\"avg_overall_rating\":1.5},{\"professor_name\":\"Agnieszka Kozłowski\",\"avg_overall_rating\":4.5}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Overall Course Evaluation Rating by Professor\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Professor\",\"labelAngle\":-45}},\"y\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Overall Rating\"}},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Avg Rating\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"Professor names may not be unique — consider including professor_id in the label if uniqueness is required.\",\"The SQL orders by professor_name (alphabetical). If the user expected professors ranked by average rating, ORDER BY avg_overall_rating DESC is needed.\",\"If ratings use a known fixed scale (e.g., 1–5), consider setting the y-axis domain to that range for clearer interpretation.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771844960273}},\"input\":{\"question\":\"Show the average overall course evaluation rating for each professor\"},\"result\":{\"sql\":\"SELECT\\n  CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nJOIN public.professors AS p ON cs.professor_id = p.id\\nWHERE ce.overall_rating IS NOT NULL\\n  AND cs.professor_id IS NOT NULL\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY professor_name ASC;\",\"data\":[{\"professor_name\":\"Adam Wieczorek\",\"avg_overall_rating\":1.5},{\"professor_name\":\"Agnieszka Kozłowski\",\"avg_overall_rating\":4.5},{\"professor_name\":\"Ewa Krawczyk\",\"avg_overall_rating\":3},{\"professor_name\":\"Ewa Michalski\",\"avg_overall_rating\":2.5},{\"professor_name\":\"Grzegorz Jankowski\",\"avg_overall_rating\":3},{\"professor_name\":\"Jacek Wojciechowski\",\"avg_overall_rating\":3.67},{\"professor_name\":\"Katarzyna Kozłowski\",\"avg_overall_rating\":3},{\"professor_name\":\"Katarzyna Szymański\",\"avg_overall_rating\":5},{\"professor_name\":\"Magdalena Piotrowski\",\"avg_overall_rating\":5},{\"professor_name\":\"Małgorzata Olszewski\",\"avg_overall_rating\":3},{\"professor_name\":\"Marek Lewandowski\",\"avg_overall_rating\":2},{\"professor_name\":\"Marek Woźniak\",\"avg_overall_rating\":2.5},{\"professor_name\":\"Mariusz Nowakowski\",\"avg_overall_rating\":3},{\"professor_name\":\"Michał Nowak\",\"avg_overall_rating\":1},{\"professor_name\":\"Ryszard Kowalczyk\",\"avg_overall_rating\":2},{\"professor_name\":\"Ryszard Woźniak\",\"avg_overall_rating\":3.75},{\"professor_name\":\"Teresa Pawłowski\",\"avg_overall_rating\":3},{\"professor_name\":\"Teresa Woźniak\",\"avg_overall_rating\":2.5},{\"professor_name\":\"Tomasz Majewski\",\"avg_overall_rating\":2},{\"professor_name\":\"Tomasz Wieczorek\",\"avg_overall_rating\":4}],\"metadata\":{\"columns\":[\"professor_name\",\"avg_overall_rating\"],\"rowCount\":20,\"sample\":[{\"professor_name\":\"Adam Wieczorek\",\"avg_overall_rating\":1.5},{\"professor_name\":\"Agnieszka Kozłowski\",\"avg_overall_rating\":4.5}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Overall Course Evaluation Rating by Professor\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Professor\",\"labelAngle\":-45}},\"y\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Overall Rating\"}},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Avg Rating\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"Professor names may not be unique — consider including professor_id in the label if uniqueness is required.\",\"The SQL orders by professor_name (alphabetical). If the user expected professors ranked by average rating, ORDER BY avg_overall_rating DESC is needed.\",\"If ratings use a known fixed scale (e.g., 1–5), consider setting the y-axis domain to that range for clearer interpretation.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"131a26e16415f0c467baf17862a1807b\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-overall-rating-by-professor/run-0001/run.json",
+    "queryPath": "runs/avg-overall-rating-by-professor/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-overall-rating-by-professor/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-overall-rating-by-professor/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-overall-rating-by-professor/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:09:20.792Z",
+  "traceId": "131a26e16415f0c467baf17862a1807b",
+  "success": true,
+  "durationMs": 99781,
+  "resultRaw": {
+    "data": [
+      {
+        "professor_name": "Adam Wieczorek",
+        "avg_overall_rating": 1.5
+      },
+      {
+        "professor_name": "Agnieszka Kozłowski",
+        "avg_overall_rating": 4.5
+      },
+      {
+        "professor_name": "Ewa Krawczyk",
+        "avg_overall_rating": 3
+      },
+      {
+        "professor_name": "Ewa Michalski",
+        "avg_overall_rating": 2.5
+      },
+      {
+        "professor_name": "Grzegorz Jankowski",
+        "avg_overall_rating": 3
+      },
+      {
+        "professor_name": "Jacek Wojciechowski",
+        "avg_overall_rating": 3.67
+      },
+      {
+        "professor_name": "Katarzyna Kozłowski",
+        "avg_overall_rating": 3
+      },
+      {
+        "professor_name": "Katarzyna Szymański",
+        "avg_overall_rating": 5
+      },
+      {
+        "professor_name": "Magdalena Piotrowski",
+        "avg_overall_rating": 5
+      },
+      {
+        "professor_name": "Małgorzata Olszewski",
+        "avg_overall_rating": 3
+      },
+      {
+        "professor_name": "Marek Lewandowski",
+        "avg_overall_rating": 2
+      },
+      {
+        "professor_name": "Marek Woźniak",
+        "avg_overall_rating": 2.5
+      },
+      {
+        "professor_name": "Mariusz Nowakowski",
+        "avg_overall_rating": 3
+      },
+      {
+        "professor_name": "Michał Nowak",
+        "avg_overall_rating": 1
+      },
+      {
+        "professor_name": "Ryszard Kowalczyk",
+        "avg_overall_rating": 2
+      },
+      {
+        "professor_name": "Ryszard Woźniak",
+        "avg_overall_rating": 3.75
+      },
+      {
+        "professor_name": "Teresa Pawłowski",
+        "avg_overall_rating": 3
+      },
+      {
+        "professor_name": "Teresa Woźniak",
+        "avg_overall_rating": 2.5
+      },
+      {
+        "professor_name": "Tomasz Majewski",
+        "avg_overall_rating": 2
+      },
+      {
+        "professor_name": "Tomasz Wieczorek",
+        "avg_overall_rating": 4
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Overall Course Evaluation Rating by Professor",
+      "width": 700,
+      "height": 400,
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "professor_name",
+          "type": "nominal",
+          "axis": {
+            "title": "Professor",
+            "labelAngle": -45
+          }
+        },
+        "y": {
+          "field": "avg_overall_rating",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average Overall Rating"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "professor_name",
+            "type": "nominal",
+            "title": "Professor"
+          },
+          {
+            "field": "avg_overall_rating",
+            "type": "quantitative",
+            "title": "Avg Rating"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT\n  CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\nFROM public.course_evaluations AS ce\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\nJOIN public.professors AS p ON cs.professor_id = p.id\nWHERE ce.overall_rating IS NOT NULL\n  AND cs.professor_id IS NOT NULL\nGROUP BY p.id, p.first_name, p.last_name\nORDER BY professor_name ASC;",
+    "metadata": {
+      "columns": [
+        "professor_name",
+        "avg_overall_rating"
+      ],
+      "rowCount": 20,
+      "sample": [
+        {
+          "professor_name": "Adam Wieczorek",
+          "avg_overall_rating": 1.5
+        },
+        {
+          "professor_name": "Agnieszka Kozłowski",
+          "avg_overall_rating": 4.5
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "Professor names may not be unique — consider including professor_id in the label if uniqueness is required.",
+        "The SQL orders by professor_name (alphabetical). If the user expected professors ranked by average rating, ORDER BY avg_overall_rating DESC is needed.",
+        "If ratings use a known fixed scale (e.g., 1–5), consider setting the y-axis domain to that range for clearer interpretation."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "professor_name": "Adam Wieczorek",
+        "avg_overall_rating": 1.5
+      },
+      {
+        "professor_name": "Agnieszka Kozłowski",
+        "avg_overall_rating": 4.5
+      },
+      {
+        "professor_name": "Ewa Krawczyk",
+        "avg_overall_rating": 3
+      },
+      {
+        "professor_name": "Ewa Michalski",
+        "avg_overall_rating": 2.5
+      },
+      {
+        "professor_name": "Grzegorz Jankowski",
+        "avg_overall_rating": 3
+      },
+      {
+        "professor_name": "Jacek Wojciechowski",
+        "avg_overall_rating": 3.67
+      },
+      {
+        "professor_name": "Katarzyna Kozłowski",
+        "avg_overall_rating": 3
+      },
+      {
+        "professor_name": "Katarzyna Szymański",
+        "avg_overall_rating": 5
+      },
+      {
+        "professor_name": "Magdalena Piotrowski",
+        "avg_overall_rating": 5
+      },
+      {
+        "professor_name": "Małgorzata Olszewski",
+        "avg_overall_rating": 3
+      },
+      {
+        "professor_name": "Marek Lewandowski",
+        "avg_overall_rating": 2
+      },
+      {
+        "professor_name": "Marek Woźniak",
+        "avg_overall_rating": 2.5
+      },
+      {
+        "professor_name": "Mariusz Nowakowski",
+        "avg_overall_rating": 3
+      },
+      {
+        "professor_name": "Michał Nowak",
+        "avg_overall_rating": 1
+      },
+      {
+        "professor_name": "Ryszard Kowalczyk",
+        "avg_overall_rating": 2
+      },
+      {
+        "professor_name": "Ryszard Woźniak",
+        "avg_overall_rating": 3.75
+      },
+      {
+        "professor_name": "Teresa Pawłowski",
+        "avg_overall_rating": 3
+      },
+      {
+        "professor_name": "Teresa Woźniak",
+        "avg_overall_rating": 2.5
+      },
+      {
+        "professor_name": "Tomasz Majewski",
+        "avg_overall_rating": 2
+      },
+      {
+        "professor_name": "Tomasz Wieczorek",
+        "avg_overall_rating": 4
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Overall Course Evaluation Rating by Professor",
+      "width": 700,
+      "height": 400,
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "professor_name",
+          "type": "nominal",
+          "axis": {
+            "title": "Professor",
+            "labelAngle": -45
+          }
+        },
+        "y": {
+          "field": "avg_overall_rating",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average Overall Rating"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "professor_name",
+            "type": "nominal",
+            "title": "Professor"
+          },
+          {
+            "field": "avg_overall_rating",
+            "type": "quantitative",
+            "title": "Avg Rating"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT\n  CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating\nFROM public.course_evaluations AS ce\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\nJOIN public.professors AS p ON cs.professor_id = p.id\nWHERE ce.overall_rating IS NOT NULL\n  AND cs.professor_id IS NOT NULL\nGROUP BY p.id, p.first_name, p.last_name\nORDER BY professor_name ASC;",
+    "metadata": {
+      "columns": [
+        "professor_name",
+        "avg_overall_rating"
+      ],
+      "rowCount": 20,
+      "sample": [
+        {
+          "professor_name": "Adam Wieczorek",
+          "avg_overall_rating": 1.5
+        },
+        {
+          "professor_name": "Agnieszka Kozłowski",
+          "avg_overall_rating": 4.5
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "Professor names may not be unique — consider including professor_id in the label if uniqueness is required.",
+        "The SQL orders by professor_name (alphabetical). If the user expected professors ranked by average rating, ORDER BY avg_overall_rating DESC is needed.",
+        "If ratings use a known fixed scale (e.g., 1–5), consider setting the y-axis domain to that range for clearer interpretation."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:09:20.792Z",
+    "traceId": "131a26e16415f0c467baf17862a1807b",
+    "attempts": 6,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 36520,
+      "outputTokens": 5518,
+      "totalTokens": 42038,
+      "cachedInputTokens": 1152,
+      "reasoningTokens": 3712,
+      "costUsd": 0.020166
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 36520,
+        "outputTokens": 5518,
+        "totalTokens": 42038,
+        "cachedInputTokens": 1152,
+        "reasoningTokens": 3712,
+        "costUsd": 0.020166
+      }
+    ],
+    "warnings": []
+  }
+}

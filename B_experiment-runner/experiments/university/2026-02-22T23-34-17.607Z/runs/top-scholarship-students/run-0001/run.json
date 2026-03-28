@@ -1,0 +1,246 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "top-scholarship-students",
+  "caseDirectory": "top-scholarship-students",
+  "repeatIndex": 1,
+  "prompt": "Which students received the highest total scholarship amounts?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which students received the highest total scholarship amounts?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:45:02.723Z",
+    "endedAtUtc": "2026-02-22T23:45:40.606Z",
+    "durationMs": 37883
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "9118",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:45:40 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Which students received the highest total scholarship amounts?\"},\"sql\":{\"payload\":{\"question\":\"Which students received the highest total scholarship amounts?\"},\"startedAt\":1771803902745,\"status\":\"success\",\"output\":{\"reasoning\":\"Compute total scholarship per student using scholarships.amount, then return students whose total equals the maximum total (includes ties). Uses students and scholarships confirmed in schema.\",\"sql\":\"WITH totals AS (\\n  SELECT\\n    s.id AS student_id,\\n    s.first_name AS first_name,\\n    s.last_name AS last_name,\\n    SUM(sc.amount) AS total_amount\\n  FROM public.students s\\n  JOIN public.scholarships sc ON sc.student_id = s.id\\n  GROUP BY s.id, s.first_name, s.last_name\\n)\\nSELECT\\n  t.student_id AS student_id,\\n  t.first_name AS first_name,\\n  t.last_name AS last_name,\\n  t.total_amount AS total_amount\\nFROM totals t\\nWHERE t.total_amount = (SELECT MAX(total_amount) FROM totals)\\nORDER BY t.student_id;\\n\",\"assumptions\":[\"scholarships.amount represents the monetary scholarship value to sum\",\"Return all students tied for the highest total (ties included)\",\"Only students with at least one scholarship entry should be considered\"]},\"endedAt\":1771803923859},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH totals AS (\\n  SELECT\\n    s.id AS student_id,\\n    s.first_name AS first_name,\\n    s.last_name AS last_name,\\n    SUM(sc.amount) AS total_amount\\n  FROM public.students s\\n  JOIN public.scholarships sc ON sc.student_id = s.id\\n  GROUP BY s.id, s.first_name, s.last_name\\n)\\nSELECT\\n  t.student_id AS student_id,\\n  t.first_name AS first_name,\\n  t.last_name AS last_name,\\n  t.total_amount AS total_amount\\nFROM totals t\\nWHERE t.total_amount = (SELECT MAX(total_amount) FROM totals)\\nORDER BY t.student_id;\\n\"},\"startedAt\":1771803923862,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH totals AS (\\n  SELECT\\n    s.id AS student_id,\\n    s.first_name AS first_name,\\n    s.last_name AS last_name,\\n    SUM(sc.amount) AS total_amount\\n  FROM public.students s\\n  JOIN public.scholarships sc ON sc.student_id = s.id\\n  GROUP BY s.id, s.first_name, s.last_name\\n)\\nSELECT\\n  t.student_id AS student_id,\\n  t.first_name AS first_name,\\n  t.last_name AS last_name,\\n  t.total_amount AS total_amount\\nFROM totals t\\nWHERE t.total_amount = (SELECT MAX(total_amount) FROM totals)\\nORDER BY t.student_id\",\"metadata\":{\"columns\":[\"last_name\",\"first_name\",\"student_id\",\"total_amount\"],\"rowCount\":1,\"sample\":[{\"last_name\":\"Jankowski\",\"first_name\":\"Dariusz\",\"student_id\":\"4f8e25f6-b563-439b-aa92-6104f284fa5a\",\"total_amount\":5000}]},\"data\":[{\"last_name\":\"Jankowski\",\"first_name\":\"Dariusz\",\"student_id\":\"4f8e25f6-b563-439b-aa92-6104f284fa5a\",\"total_amount\":5000}]},\"endedAt\":1771803923925},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"WITH totals AS (\\n  SELECT\\n    s.id AS student_id,\\n    s.first_name AS first_name,\\n    s.last_name AS last_name,\\n    SUM(sc.amount) AS total_amount\\n  FROM public.students s\\n  JOIN public.scholarships sc ON sc.student_id = s.id\\n  GROUP BY s.id, s.first_name, s.last_name\\n)\\nSELECT\\n  t.student_id AS student_id,\\n  t.first_name AS first_name,\\n  t.last_name AS last_name,\\n  t.total_amount AS total_amount\\nFROM totals t\\nWHERE t.total_amount = (SELECT MAX(total_amount) FROM totals)\\nORDER BY t.student_id\",\"metadata\":{\"columns\":[\"last_name\",\"first_name\",\"student_id\",\"total_amount\"],\"rowCount\":1,\"sample\":[{\"last_name\":\"Jankowski\",\"first_name\":\"Dariusz\",\"student_id\":\"4f8e25f6-b563-439b-aa92-6104f284fa5a\",\"total_amount\":5000}]},\"data\":[{\"last_name\":\"Jankowski\",\"first_name\":\"Dariusz\",\"student_id\":\"4f8e25f6-b563-439b-aa92-6104f284fa5a\",\"total_amount\":5000}]},\"startedAt\":1771803923926,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Students with Highest Total Scholarship Amounts\",\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last name\",\"sort\":{\"field\":\"total_amount\",\"order\":\"descending\"}},\"x\":{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total scholarship amount\"},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last name\"},{\"field\":\"student_id\",\"type\":\"nominal\",\"title\":\"Student ID\"},{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total amount\"}]}},\"reasoning\":\"Horizontal bar chart uses last_name on the nominal axis and total_amount on the quantitative axis so the students with the largest scholarship totals appear first; tooltip includes first name, student id, and amount for detail.\"},\"endedAt\":1771803940586},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Students with Highest Total Scholarship Amounts\",\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last name\",\"sort\":{\"field\":\"total_amount\",\"order\":\"descending\"}},\"x\":{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total scholarship amount\"},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last name\"},{\"field\":\"student_id\",\"type\":\"nominal\",\"title\":\"Student ID\"},{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total amount\"}]}},\"reasoning\":\"Horizontal bar chart uses last_name on the nominal axis and total_amount on the quantitative axis so the students with the largest scholarship totals appear first; tooltip includes first name, student id, and amount for detail.\"},\"startedAt\":1771803940590,\"status\":\"success\",\"output\":{\"sql\":\"WITH totals AS (\\n  SELECT\\n    s.id AS student_id,\\n    s.first_name AS first_name,\\n    s.last_name AS last_name,\\n    SUM(sc.amount) AS total_amount\\n  FROM public.students s\\n  JOIN public.scholarships sc ON sc.student_id = s.id\\n  GROUP BY s.id, s.first_name, s.last_name\\n)\\nSELECT\\n  t.student_id AS student_id,\\n  t.first_name AS first_name,\\n  t.last_name AS last_name,\\n  t.total_amount AS total_amount\\nFROM totals t\\nWHERE t.total_amount = (SELECT MAX(total_amount) FROM totals)\\nORDER BY t.student_id;\\n\",\"data\":[{\"last_name\":\"Jankowski\",\"first_name\":\"Dariusz\",\"student_id\":\"4f8e25f6-b563-439b-aa92-6104f284fa5a\",\"total_amount\":5000}],\"metadata\":{\"columns\":[\"last_name\",\"first_name\",\"student_id\",\"total_amount\"],\"rowCount\":1,\"sample\":[{\"last_name\":\"Jankowski\",\"first_name\":\"Dariusz\",\"student_id\":\"4f8e25f6-b563-439b-aa92-6104f284fa5a\",\"total_amount\":5000}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Students with Highest Total Scholarship Amounts\",\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last name\",\"sort\":{\"field\":\"total_amount\",\"order\":\"descending\"}},\"x\":{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total scholarship amount\"},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last name\"},{\"field\":\"student_id\",\"type\":\"nominal\",\"title\":\"Student ID\"},{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total amount\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771803940593}},\"input\":{\"question\":\"Which students received the highest total scholarship amounts?\"},\"result\":{\"sql\":\"WITH totals AS (\\n  SELECT\\n    s.id AS student_id,\\n    s.first_name AS first_name,\\n    s.last_name AS last_name,\\n    SUM(sc.amount) AS total_amount\\n  FROM public.students s\\n  JOIN public.scholarships sc ON sc.student_id = s.id\\n  GROUP BY s.id, s.first_name, s.last_name\\n)\\nSELECT\\n  t.student_id AS student_id,\\n  t.first_name AS first_name,\\n  t.last_name AS last_name,\\n  t.total_amount AS total_amount\\nFROM totals t\\nWHERE t.total_amount = (SELECT MAX(total_amount) FROM totals)\\nORDER BY t.student_id;\\n\",\"data\":[{\"last_name\":\"Jankowski\",\"first_name\":\"Dariusz\",\"student_id\":\"4f8e25f6-b563-439b-aa92-6104f284fa5a\",\"total_amount\":5000}],\"metadata\":{\"columns\":[\"last_name\",\"first_name\",\"student_id\",\"total_amount\"],\"rowCount\":1,\"sample\":[{\"last_name\":\"Jankowski\",\"first_name\":\"Dariusz\",\"student_id\":\"4f8e25f6-b563-439b-aa92-6104f284fa5a\",\"total_amount\":5000}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Students with Highest Total Scholarship Amounts\",\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last name\",\"sort\":{\"field\":\"total_amount\",\"order\":\"descending\"}},\"x\":{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total scholarship amount\"},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last name\"},{\"field\":\"student_id\",\"type\":\"nominal\",\"title\":\"Student ID\"},{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total amount\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"7a5538de4b17029fbbd341e1e6a30b17\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/top-scholarship-students/run-0001/run.json",
+    "queryPath": "runs/top-scholarship-students/run-0001/query.sql",
+    "vegaRawPath": "runs/top-scholarship-students/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/top-scholarship-students/run-0001/vega.resolved.json",
+    "imagePath": "runs/top-scholarship-students/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:45:41.048Z",
+  "traceId": "7a5538de4b17029fbbd341e1e6a30b17",
+  "success": true,
+  "durationMs": 38325,
+  "resultRaw": {
+    "data": [
+      {
+        "last_name": "Jankowski",
+        "first_name": "Dariusz",
+        "student_id": "4f8e25f6-b563-439b-aa92-6104f284fa5a",
+        "total_amount": 5000
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Students with Highest Total Scholarship Amounts",
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "last_name",
+          "type": "nominal",
+          "title": "Last name",
+          "sort": {
+            "field": "total_amount",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "total_amount",
+          "type": "quantitative",
+          "title": "Total scholarship amount"
+        },
+        "tooltip": [
+          {
+            "field": "first_name",
+            "type": "nominal",
+            "title": "First name"
+          },
+          {
+            "field": "last_name",
+            "type": "nominal",
+            "title": "Last name"
+          },
+          {
+            "field": "student_id",
+            "type": "nominal",
+            "title": "Student ID"
+          },
+          {
+            "field": "total_amount",
+            "type": "quantitative",
+            "title": "Total amount"
+          }
+        ]
+      }
+    },
+    "sql": "WITH totals AS (\n  SELECT\n    s.id AS student_id,\n    s.first_name AS first_name,\n    s.last_name AS last_name,\n    SUM(sc.amount) AS total_amount\n  FROM public.students s\n  JOIN public.scholarships sc ON sc.student_id = s.id\n  GROUP BY s.id, s.first_name, s.last_name\n)\nSELECT\n  t.student_id AS student_id,\n  t.first_name AS first_name,\n  t.last_name AS last_name,\n  t.total_amount AS total_amount\nFROM totals t\nWHERE t.total_amount = (SELECT MAX(total_amount) FROM totals)\nORDER BY t.student_id;\n",
+    "metadata": {
+      "columns": [
+        "last_name",
+        "first_name",
+        "student_id",
+        "total_amount"
+      ],
+      "rowCount": 1,
+      "sample": [
+        {
+          "last_name": "Jankowski",
+          "first_name": "Dariusz",
+          "student_id": "4f8e25f6-b563-439b-aa92-6104f284fa5a",
+          "total_amount": 5000
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "last_name": "Jankowski",
+        "first_name": "Dariusz",
+        "student_id": "4f8e25f6-b563-439b-aa92-6104f284fa5a",
+        "total_amount": 5000
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Students with Highest Total Scholarship Amounts",
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "last_name",
+          "type": "nominal",
+          "title": "Last name",
+          "sort": {
+            "field": "total_amount",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "total_amount",
+          "type": "quantitative",
+          "title": "Total scholarship amount"
+        },
+        "tooltip": [
+          {
+            "field": "first_name",
+            "type": "nominal",
+            "title": "First name"
+          },
+          {
+            "field": "last_name",
+            "type": "nominal",
+            "title": "Last name"
+          },
+          {
+            "field": "student_id",
+            "type": "nominal",
+            "title": "Student ID"
+          },
+          {
+            "field": "total_amount",
+            "type": "quantitative",
+            "title": "Total amount"
+          }
+        ]
+      }
+    },
+    "sql": "WITH totals AS (\n  SELECT\n    s.id AS student_id,\n    s.first_name AS first_name,\n    s.last_name AS last_name,\n    SUM(sc.amount) AS total_amount\n  FROM public.students s\n  JOIN public.scholarships sc ON sc.student_id = s.id\n  GROUP BY s.id, s.first_name, s.last_name\n)\nSELECT\n  t.student_id AS student_id,\n  t.first_name AS first_name,\n  t.last_name AS last_name,\n  t.total_amount AS total_amount\nFROM totals t\nWHERE t.total_amount = (SELECT MAX(total_amount) FROM totals)\nORDER BY t.student_id;\n",
+    "metadata": {
+      "columns": [
+        "last_name",
+        "first_name",
+        "student_id",
+        "total_amount"
+      ],
+      "rowCount": 1,
+      "sample": [
+        {
+          "last_name": "Jankowski",
+          "first_name": "Dariusz",
+          "student_id": "4f8e25f6-b563-439b-aa92-6104f284fa5a",
+          "total_amount": 5000
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:45:41.048Z",
+    "traceId": "7a5538de4b17029fbbd341e1e6a30b17",
+    "attempts": 2,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 9099,
+      "outputTokens": 2521,
+      "totalTokens": 11620,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1728,
+      "costUsd": 0.00731675
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 9099,
+        "outputTokens": 2521,
+        "totalTokens": 11620,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1728,
+        "costUsd": 0.00731675
+      }
+    ],
+    "warnings": []
+  }
+}

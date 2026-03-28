@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "grade-by-semester-type-and-course-type",
+  "caseDirectory": "grade-by-semester-type-and-course-type",
+  "repeatIndex": 1,
+  "prompt": "Compare average grades across course types for winter vs summer semesters",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Compare average grades across course types for winter vs summer semesters"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:52:55.227Z",
+    "endedAtUtc": "2026-02-23T10:53:13.883Z",
+    "durationMs": 18656
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2275",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:53:13 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Compare average grades across course types for winter vs summer semesters\"},\"agent\":{\"payload\":{\"question\":\"Compare average grades across course types for winter vs summer semesters\"},\"startedAt\":1771843975230,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  ce.course_type AS course_type,\\n  ce.semester AS semester,\\n  AVG(ce.numeric_grade) AS avg_grade,\\n  COUNT(*) AS enrollment_count\\nFROM course_enrollments ce\\nWHERE ce.semester IN ('Winter', 'Summer')\\nGROUP BY ce.course_type, ce.semester\\nORDER BY ce.course_type, ce.semester;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Average grades by course type for Winter vs Summer semesters\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Grade by Course Type: Winter vs Summer\",\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},\"y\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},\"color\":{\"field\":\"semester\",\"type\":\"nominal\",\"title\":\"Semester\"},\"xOffset\":{\"field\":\"semester\",\"type\":\"nominal\"},\"tooltip\":[{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"semester\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Avg Grade\"},{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"title\":\"Enrollments\"}]}}},\"endedAt\":1771843993845},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  ce.course_type AS course_type,\\n  ce.semester AS semester,\\n  AVG(ce.numeric_grade) AS avg_grade,\\n  COUNT(*) AS enrollment_count\\nFROM course_enrollments ce\\nWHERE ce.semester IN ('Winter', 'Summer')\\nGROUP BY ce.course_type, ce.semester\\nORDER BY ce.course_type, ce.semester;\"},\"startedAt\":1771843993850,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: relation \\\"course_enrollments\\\" does not exist\\nLINE 7: FROM course_enrollments ce\\n             ^\",\"name\":\"Error\"},\"endedAt\":1771843993880}},\"input\":{\"question\":\"Compare average grades across course types for winter vs summer semesters\"},\"error\":{\"message\":\"SQL execution failed: relation \\\"course_enrollments\\\" does not exist\\nLINE 7: FROM course_enrollments ce\\n             ^\",\"name\":\"Error\"},\"traceId\":\"db7e57dcab25b8c0d515a4bd3cf0aff7\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/grade-by-semester-type-and-course-type/run-0001/run.json",
+    "queryPath": "runs/grade-by-semester-type-and-course-type/run-0001/query.sql",
+    "vegaRawPath": "runs/grade-by-semester-type-and-course-type/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/grade-by-semester-type-and-course-type/run-0001/vega.resolved.json",
+    "imagePath": "runs/grade-by-semester-type-and-course-type/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:53:13.883Z",
+  "traceId": "db7e57dcab25b8c0d515a4bd3cf0aff7",
+  "success": false,
+  "durationMs": 18656,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Compare average grades across course types for winter vs summer semesters"
+      },
+      "agent": {
+        "payload": {
+          "question": "Compare average grades across course types for winter vs summer semesters"
+        },
+        "startedAt": 1771843975230,
+        "status": "success",
+        "output": {
+          "sql": "SELECT\n  ce.course_type AS course_type,\n  ce.semester AS semester,\n  AVG(ce.numeric_grade) AS avg_grade,\n  COUNT(*) AS enrollment_count\nFROM course_enrollments ce\nWHERE ce.semester IN ('Winter', 'Summer')\nGROUP BY ce.course_type, ce.semester\nORDER BY ce.course_type, ce.semester;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Average grades by course type for Winter vs Summer semesters",
+            "data": {
+              "name": "query_result"
+            },
+            "title": "Average Grade by Course Type: Winter vs Summer",
+            "mark": {
+              "type": "bar",
+              "tooltip": true
+            },
+            "encoding": {
+              "x": {
+                "field": "course_type",
+                "type": "nominal",
+                "title": "Course Type"
+              },
+              "y": {
+                "field": "avg_grade",
+                "type": "quantitative",
+                "title": "Average Grade"
+              },
+              "color": {
+                "field": "semester",
+                "type": "nominal",
+                "title": "Semester"
+              },
+              "xOffset": {
+                "field": "semester",
+                "type": "nominal"
+              },
+              "tooltip": [
+                {
+                  "field": "course_type",
+                  "type": "nominal",
+                  "title": "Course Type"
+                },
+                {
+                  "field": "semester",
+                  "type": "nominal",
+                  "title": "Semester"
+                },
+                {
+                  "field": "avg_grade",
+                  "type": "quantitative",
+                  "title": "Avg Grade"
+                },
+                {
+                  "field": "enrollment_count",
+                  "type": "quantitative",
+                  "title": "Enrollments"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843993845
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT\n  ce.course_type AS course_type,\n  ce.semester AS semester,\n  AVG(ce.numeric_grade) AS avg_grade,\n  COUNT(*) AS enrollment_count\nFROM course_enrollments ce\nWHERE ce.semester IN ('Winter', 'Summer')\nGROUP BY ce.course_type, ce.semester\nORDER BY ce.course_type, ce.semester;"
+        },
+        "startedAt": 1771843993850,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: relation \"course_enrollments\" does not exist\nLINE 7: FROM course_enrollments ce\n             ^",
+          "name": "Error"
+        },
+        "endedAt": 1771843993880
+      }
+    },
+    "input": {
+      "question": "Compare average grades across course types for winter vs summer semesters"
+    },
+    "error": {
+      "message": "SQL execution failed: relation \"course_enrollments\" does not exist\nLINE 7: FROM course_enrollments ce\n             ^",
+      "name": "Error"
+    },
+    "traceId": "db7e57dcab25b8c0d515a4bd3cf0aff7"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:53:13.883Z",
+    "traceId": "db7e57dcab25b8c0d515a4bd3cf0aff7",
+    "attempts": 4,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 267,
+      "outputTokens": 995,
+      "totalTokens": 1262,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 576,
+      "costUsd": 0.00205675
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 267,
+        "outputTokens": 995,
+        "totalTokens": 1262,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 576,
+        "costUsd": 0.00205675
+      }
+    ],
+    "warnings": []
+  }
+}

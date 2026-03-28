@@ -1,0 +1,60 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Stacked bar chart showing counts of each course type within each department.",
+  "data": {
+    "name": "query_result"
+  },
+  "title": "Course type breakdown by department",
+  "width": 800,
+  "height": 600,
+  "mark": {
+    "type": "bar"
+  },
+  "encoding": {
+    "y": {
+      "field": "department_name",
+      "type": "nominal",
+      "title": "Department",
+      "sort": {
+        "op": "sum",
+        "field": "course_count",
+        "order": "descending"
+      }
+    },
+    "x": {
+      "aggregate": "sum",
+      "field": "course_count",
+      "type": "quantitative",
+      "title": "Number of courses",
+      "stack": "zero"
+    },
+    "color": {
+      "field": "course_type",
+      "type": "nominal",
+      "title": "Course type"
+    },
+    "tooltip": [
+      {
+        "field": "department_name",
+        "type": "nominal",
+        "title": "Department"
+      },
+      {
+        "field": "department_code",
+        "type": "nominal",
+        "title": "Department code"
+      },
+      {
+        "field": "course_type",
+        "type": "nominal",
+        "title": "Course type"
+      },
+      {
+        "aggregate": "sum",
+        "field": "course_count",
+        "type": "quantitative",
+        "title": "Course count"
+      }
+    ]
+  }
+}

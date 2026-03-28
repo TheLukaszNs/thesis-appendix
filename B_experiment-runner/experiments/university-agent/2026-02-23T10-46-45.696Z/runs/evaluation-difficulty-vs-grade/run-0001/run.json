@@ -1,0 +1,201 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "evaluation-difficulty-vs-grade",
+  "caseDirectory": "evaluation-difficulty-vs-grade",
+  "repeatIndex": 1,
+  "prompt": "Is there a correlation between difficulty rating and average grade per course?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Is there a correlation between difficulty rating and average grade per course?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:55:27.523Z",
+    "endedAtUtc": "2026-02-23T10:55:49.241Z",
+    "durationMs": 21718
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2854",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:55:49 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Is there a correlation between difficulty rating and average grade per course?\"},\"agent\":{\"payload\":{\"question\":\"Is there a correlation between difficulty rating and average grade per course?\"},\"startedAt\":1771844127536,\"status\":\"success\",\"output\":{\"sql\":\"WITH course_avg AS (\\n  SELECT\\n    c.id AS course_id,\\n    c.name AS course_name,\\n    c.difficulty_rating AS difficulty_rating,\\n    AVG(g.grade) AS avg_grade,\\n    COUNT(g.grade) AS n_grades\\n  FROM courses AS c\\n  JOIN grades AS g ON g.course_id = c.id\\n  GROUP BY c.id, c.name, c.difficulty_rating\\n)\\nSELECT\\n  course_id,\\n  course_name,\\n  difficulty_rating,\\n  avg_grade,\\n  n_grades\\nFROM course_avg\\nORDER BY difficulty_rating ASC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Grade vs Difficulty Rating per Course\",\"layer\":[{\"mark\":{\"type\":\"point\",\"filled\":true,\"opacity\":0.8},\"encoding\":{\"x\":{\"field\":\"difficulty_rating\",\"type\":\"quantitative\",\"title\":\"Difficulty Rating\"},\"y\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},\"size\":{\"field\":\"n_grades\",\"type\":\"quantitative\",\"title\":\"Number of Grades\"},\"color\":{\"value\":\"#1f77b4\"},\"tooltip\":[{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course\"},{\"field\":\"difficulty_rating\",\"type\":\"quantitative\",\"title\":\"Difficulty Rating\"},{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},{\"field\":\"n_grades\",\"type\":\"quantitative\",\"title\":\"Count of Grades\"}]}},{\"transform\":[{\"regression\":\"avg_grade\",\"on\":\"difficulty_rating\",\"method\":\"linear\"}],\"mark\":{\"type\":\"line\",\"color\":\"red\"},\"encoding\":{\"x\":{\"field\":\"difficulty_rating\",\"type\":\"quantitative\"},\"y\":{\"field\":\"avg_grade\",\"type\":\"quantitative\"}}}]}},\"endedAt\":1771844149139},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH course_avg AS (\\n  SELECT\\n    c.id AS course_id,\\n    c.name AS course_name,\\n    c.difficulty_rating AS difficulty_rating,\\n    AVG(g.grade) AS avg_grade,\\n    COUNT(g.grade) AS n_grades\\n  FROM courses AS c\\n  JOIN grades AS g ON g.course_id = c.id\\n  GROUP BY c.id, c.name, c.difficulty_rating\\n)\\nSELECT\\n  course_id,\\n  course_name,\\n  difficulty_rating,\\n  avg_grade,\\n  n_grades\\nFROM course_avg\\nORDER BY difficulty_rating ASC;\"},\"startedAt\":1771844149143,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column g.course_id does not exist\\nLINE 10:   JOIN grades AS g ON g.course_id = c.id\\n                               ^\",\"name\":\"Error\"},\"endedAt\":1771844149235}},\"input\":{\"question\":\"Is there a correlation between difficulty rating and average grade per course?\"},\"error\":{\"message\":\"SQL execution failed: column g.course_id does not exist\\nLINE 10:   JOIN grades AS g ON g.course_id = c.id\\n                               ^\",\"name\":\"Error\"},\"traceId\":\"b09b83a48b09bea9bbe053fbfbd8082d\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/evaluation-difficulty-vs-grade/run-0001/run.json",
+    "queryPath": "runs/evaluation-difficulty-vs-grade/run-0001/query.sql",
+    "vegaRawPath": "runs/evaluation-difficulty-vs-grade/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/evaluation-difficulty-vs-grade/run-0001/vega.resolved.json",
+    "imagePath": "runs/evaluation-difficulty-vs-grade/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:55:49.241Z",
+  "traceId": "b09b83a48b09bea9bbe053fbfbd8082d",
+  "success": false,
+  "durationMs": 21718,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Is there a correlation between difficulty rating and average grade per course?"
+      },
+      "agent": {
+        "payload": {
+          "question": "Is there a correlation between difficulty rating and average grade per course?"
+        },
+        "startedAt": 1771844127536,
+        "status": "success",
+        "output": {
+          "sql": "WITH course_avg AS (\n  SELECT\n    c.id AS course_id,\n    c.name AS course_name,\n    c.difficulty_rating AS difficulty_rating,\n    AVG(g.grade) AS avg_grade,\n    COUNT(g.grade) AS n_grades\n  FROM courses AS c\n  JOIN grades AS g ON g.course_id = c.id\n  GROUP BY c.id, c.name, c.difficulty_rating\n)\nSELECT\n  course_id,\n  course_name,\n  difficulty_rating,\n  avg_grade,\n  n_grades\nFROM course_avg\nORDER BY difficulty_rating ASC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "data": {
+              "name": "query_result"
+            },
+            "title": "Average Grade vs Difficulty Rating per Course",
+            "layer": [
+              {
+                "mark": {
+                  "type": "point",
+                  "filled": true,
+                  "opacity": 0.8
+                },
+                "encoding": {
+                  "x": {
+                    "field": "difficulty_rating",
+                    "type": "quantitative",
+                    "title": "Difficulty Rating"
+                  },
+                  "y": {
+                    "field": "avg_grade",
+                    "type": "quantitative",
+                    "title": "Average Grade"
+                  },
+                  "size": {
+                    "field": "n_grades",
+                    "type": "quantitative",
+                    "title": "Number of Grades"
+                  },
+                  "color": {
+                    "value": "#1f77b4"
+                  },
+                  "tooltip": [
+                    {
+                      "field": "course_name",
+                      "type": "nominal",
+                      "title": "Course"
+                    },
+                    {
+                      "field": "difficulty_rating",
+                      "type": "quantitative",
+                      "title": "Difficulty Rating"
+                    },
+                    {
+                      "field": "avg_grade",
+                      "type": "quantitative",
+                      "title": "Average Grade"
+                    },
+                    {
+                      "field": "n_grades",
+                      "type": "quantitative",
+                      "title": "Count of Grades"
+                    }
+                  ]
+                }
+              },
+              {
+                "transform": [
+                  {
+                    "regression": "avg_grade",
+                    "on": "difficulty_rating",
+                    "method": "linear"
+                  }
+                ],
+                "mark": {
+                  "type": "line",
+                  "color": "red"
+                },
+                "encoding": {
+                  "x": {
+                    "field": "difficulty_rating",
+                    "type": "quantitative"
+                  },
+                  "y": {
+                    "field": "avg_grade",
+                    "type": "quantitative"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "endedAt": 1771844149139
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH course_avg AS (\n  SELECT\n    c.id AS course_id,\n    c.name AS course_name,\n    c.difficulty_rating AS difficulty_rating,\n    AVG(g.grade) AS avg_grade,\n    COUNT(g.grade) AS n_grades\n  FROM courses AS c\n  JOIN grades AS g ON g.course_id = c.id\n  GROUP BY c.id, c.name, c.difficulty_rating\n)\nSELECT\n  course_id,\n  course_name,\n  difficulty_rating,\n  avg_grade,\n  n_grades\nFROM course_avg\nORDER BY difficulty_rating ASC;"
+        },
+        "startedAt": 1771844149143,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column g.course_id does not exist\nLINE 10:   JOIN grades AS g ON g.course_id = c.id\n                               ^",
+          "name": "Error"
+        },
+        "endedAt": 1771844149235
+      }
+    },
+    "input": {
+      "question": "Is there a correlation between difficulty rating and average grade per course?"
+    },
+    "error": {
+      "message": "SQL execution failed: column g.course_id does not exist\nLINE 10:   JOIN grades AS g ON g.course_id = c.id\n                               ^",
+      "name": "Error"
+    },
+    "traceId": "b09b83a48b09bea9bbe053fbfbd8082d"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:55:49.241Z",
+    "traceId": "b09b83a48b09bea9bbe053fbfbd8082d",
+    "attempts": 3,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 269,
+      "outputTokens": 1879,
+      "totalTokens": 2148,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1280,
+      "costUsd": 0.00382525
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 269,
+        "outputTokens": 1879,
+        "totalTokens": 2148,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1280,
+        "costUsd": 0.00382525
+      }
+    ],
+    "warnings": []
+  }
+}

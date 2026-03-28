@@ -1,0 +1,1 @@
+SELECT s.id AS student_id, CONCAT(s.first_name, ' ', s.last_name) AS student_name, SUM(sc.amount) AS total_amount FROM students s JOIN scholarships sc ON sc.student_id = s.id GROUP BY s.id, s.first_name, s.last_name ORDER BY total_amount DESC LIMIT 10;

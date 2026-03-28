@@ -1,0 +1,264 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "student-enrollment-date-trend",
+  "caseDirectory": "student-enrollment-date-trend",
+  "repeatIndex": 1,
+  "prompt": "How many students enrolled per year at the university?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many students enrolled per year at the university?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:15:50.201Z",
+    "endedAtUtc": "2026-02-23T11:17:13.840Z",
+    "durationMs": 83639
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "23844",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:17:13 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How many students enrolled per year at the university?\"},\"planner\":{\"payload\":{\"question\":\"How many students enrolled per year at the university?\"},\"startedAt\":1771845350216,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT student_id) AS students_enrolled\"],\"dimensions\":[\"EXTRACT(YEAR FROM enrollment_date) AS enrollment_year\"],\"filters\":[\"enrollment_date IS NOT NULL\",\"is_active = true\"],\"grain\":\"calendar year\",\"aliases\":{\"EXTRACT(YEAR FROM enrollment_date)\":\"enrollment_year\",\"COUNT(DISTINCT student_id)\":\"students_enrolled\"},\"output_fields\":[\"enrollment_year\",\"students_enrolled\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"enrollment_year\",\"y_axis\":\"students_enrolled\",\"title\":\"Distinct students enrolled per year\"},\"assumptions\":[\"Table public.enrollments exists and contains columns: student_id (uuid), enrollment_date (timestamp with time zone), is_active (boolean). These were verified in the preflight.\",\"The user intends to know how many unique students enrolled each calendar year. Therefore metric is COUNT(DISTINCT student_id) grouped by EXTRACT(YEAR FROM enrollment_date).\",\"Only enrollments with enrollment_date NOT NULL and is_active = true are counted. If the user instead wants to count all enrollment records (including inactive) or count enrollments (not distinct students), change filters/metric accordingly (e.g., COUNT(*) AS enrollments).\",\"Calendar year is used (EXTRACT(YEAR FROM enrollment_date)). If the institution uses an academic year (e.g., Fall-starting academic year), the dimension should be adjusted to map enrollment_date to the academic year boundary.\",\"Time zone normalization: enrollment_date is a timestamptz; EXTRACT(YEAR ...) uses stored timestamptz values. If a specific timezone interpretation is required, cast or convert enrollment_date accordingly before extracting year.\",\"Aliases provided in 'aliases' must be used exactly as output field names in the SQL and by downstream visualization (output_fields reflect those aliases).\"]}},\"endedAt\":1771845384414},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT student_id) AS students_enrolled\"],\"dimensions\":[\"EXTRACT(YEAR FROM enrollment_date) AS enrollment_year\"],\"filters\":[\"enrollment_date IS NOT NULL\",\"is_active = true\"],\"grain\":\"calendar year\",\"aliases\":{\"EXTRACT(YEAR FROM enrollment_date)\":\"enrollment_year\",\"COUNT(DISTINCT student_id)\":\"students_enrolled\"},\"output_fields\":[\"enrollment_year\",\"students_enrolled\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"enrollment_year\",\"y_axis\":\"students_enrolled\",\"title\":\"Distinct students enrolled per year\"},\"assumptions\":[\"Table public.enrollments exists and contains columns: student_id (uuid), enrollment_date (timestamp with time zone), is_active (boolean). These were verified in the preflight.\",\"The user intends to know how many unique students enrolled each calendar year. Therefore metric is COUNT(DISTINCT student_id) grouped by EXTRACT(YEAR FROM enrollment_date).\",\"Only enrollments with enrollment_date NOT NULL and is_active = true are counted. If the user instead wants to count all enrollment records (including inactive) or count enrollments (not distinct students), change filters/metric accordingly (e.g., COUNT(*) AS enrollments).\",\"Calendar year is used (EXTRACT(YEAR FROM enrollment_date)). If the institution uses an academic year (e.g., Fall-starting academic year), the dimension should be adjusted to map enrollment_date to the academic year boundary.\",\"Time zone normalization: enrollment_date is a timestamptz; EXTRACT(YEAR ...) uses stored timestamptz values. If a specific timezone interpretation is required, cast or convert enrollment_date accordingly before extracting year.\",\"Aliases provided in 'aliases' must be used exactly as output field names in the SQL and by downstream visualization (output_fields reflect those aliases).\"]}},\"startedAt\":1771845384419,\"status\":\"success\",\"output\":{\"question\":\"How many students enrolled per year at the university?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT student_id) AS students_enrolled\"],\"dimensions\":[\"EXTRACT(YEAR FROM enrollment_date) AS enrollment_year\"],\"filters\":[\"enrollment_date IS NOT NULL\",\"is_active = true\"],\"grain\":\"calendar year\",\"aliases\":{\"EXTRACT(YEAR FROM enrollment_date)\":\"enrollment_year\",\"COUNT(DISTINCT student_id)\":\"students_enrolled\"},\"output_fields\":[\"enrollment_year\",\"students_enrolled\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"enrollment_year\",\"y_axis\":\"students_enrolled\",\"title\":\"Distinct students enrolled per year\"},\"assumptions\":[\"Table public.enrollments exists and contains columns: student_id (uuid), enrollment_date (timestamp with time zone), is_active (boolean). These were verified in the preflight.\",\"The user intends to know how many unique students enrolled each calendar year. Therefore metric is COUNT(DISTINCT student_id) grouped by EXTRACT(YEAR FROM enrollment_date).\",\"Only enrollments with enrollment_date NOT NULL and is_active = true are counted. If the user instead wants to count all enrollment records (including inactive) or count enrollments (not distinct students), change filters/metric accordingly (e.g., COUNT(*) AS enrollments).\",\"Calendar year is used (EXTRACT(YEAR FROM enrollment_date)). If the institution uses an academic year (e.g., Fall-starting academic year), the dimension should be adjusted to map enrollment_date to the academic year boundary.\",\"Time zone normalization: enrollment_date is a timestamptz; EXTRACT(YEAR ...) uses stored timestamptz values. If a specific timezone interpretation is required, cast or convert enrollment_date accordingly before extracting year.\",\"Aliases provided in 'aliases' must be used exactly as output field names in the SQL and by downstream visualization (output_fields reflect those aliases).\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771845384420},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"How many students enrolled per year at the university?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT student_id) AS students_enrolled\"],\"dimensions\":[\"EXTRACT(YEAR FROM enrollment_date) AS enrollment_year\"],\"filters\":[\"enrollment_date IS NOT NULL\",\"is_active = true\"],\"grain\":\"calendar year\",\"aliases\":{\"EXTRACT(YEAR FROM enrollment_date)\":\"enrollment_year\",\"COUNT(DISTINCT student_id)\":\"students_enrolled\"},\"output_fields\":[\"enrollment_year\",\"students_enrolled\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"enrollment_year\",\"y_axis\":\"students_enrolled\",\"title\":\"Distinct students enrolled per year\"},\"assumptions\":[\"Table public.enrollments exists and contains columns: student_id (uuid), enrollment_date (timestamp with time zone), is_active (boolean). These were verified in the preflight.\",\"The user intends to know how many unique students enrolled each calendar year. Therefore metric is COUNT(DISTINCT student_id) grouped by EXTRACT(YEAR FROM enrollment_date).\",\"Only enrollments with enrollment_date NOT NULL and is_active = true are counted. If the user instead wants to count all enrollment records (including inactive) or count enrollments (not distinct students), change filters/metric accordingly (e.g., COUNT(*) AS enrollments).\",\"Calendar year is used (EXTRACT(YEAR FROM enrollment_date)). If the institution uses an academic year (e.g., Fall-starting academic year), the dimension should be adjusted to map enrollment_date to the academic year boundary.\",\"Time zone normalization: enrollment_date is a timestamptz; EXTRACT(YEAR ...) uses stored timestamptz values. If a specific timezone interpretation is required, cast or convert enrollment_date accordingly before extracting year.\",\"Aliases provided in 'aliases' must be used exactly as output field names in the SQL and by downstream visualization (output_fields reflect those aliases).\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771845384423,\"status\":\"success\",\"output\":{\"question\":\"How many students enrolled per year at the university?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT student_id) AS students_enrolled\"],\"dimensions\":[\"EXTRACT(YEAR FROM enrollment_date) AS enrollment_year\"],\"filters\":[\"enrollment_date IS NOT NULL\",\"is_active = true\"],\"grain\":\"calendar year\",\"aliases\":{\"EXTRACT(YEAR FROM enrollment_date)\":\"enrollment_year\",\"COUNT(DISTINCT student_id)\":\"students_enrolled\"},\"output_fields\":[\"enrollment_year\",\"students_enrolled\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"enrollment_year\",\"y_axis\":\"students_enrolled\",\"title\":\"Distinct students enrolled per year\"},\"assumptions\":[\"Table public.enrollments exists and contains columns: student_id (uuid), enrollment_date (timestamp with time zone), is_active (boolean). These were verified in the preflight.\",\"The user intends to know how many unique students enrolled each calendar year. Therefore metric is COUNT(DISTINCT student_id) grouped by EXTRACT(YEAR FROM enrollment_date).\",\"Only enrollments with enrollment_date NOT NULL and is_active = true are counted. If the user instead wants to count all enrollment records (including inactive) or count enrollments (not distinct students), change filters/metric accordingly (e.g., COUNT(*) AS enrollments).\",\"Calendar year is used (EXTRACT(YEAR FROM enrollment_date)). If the institution uses an academic year (e.g., Fall-starting academic year), the dimension should be adjusted to map enrollment_date to the academic year boundary.\",\"Time zone normalization: enrollment_date is a timestamptz; EXTRACT(YEAR ...) uses stored timestamptz values. If a specific timezone interpretation is required, cast or convert enrollment_date accordingly before extracting year.\",\"Aliases provided in 'aliases' must be used exactly as output field names in the SQL and by downstream visualization (output_fields reflect those aliases).\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT EXTRACT(YEAR FROM e.enrollment_date)::int AS enrollment_year, COUNT(DISTINCT e.student_id) AS students_enrolled FROM public.enrollments AS e WHERE e.enrollment_date IS NOT NULL AND e.is_active = true GROUP BY EXTRACT(YEAR FROM e.enrollment_date)::int ORDER BY enrollment_year ASC;\",\"validationIssues\":[\"X encoding uses type \\\"ordinal\\\" for enrollment_year — for a temporal series consider using \\\"temporal\\\" (with a year unit) or \\\"quantitative\\\"/\\\"integer\\\" so the axis is treated as time/numeric rather than categorical.\",\"metadata.rowCount is 3 but the provided sample contains 2 rows — metadata inconsistency (may be harmless but worth fixing).\",\"If the user expects academic-year grouping rather than calendar year, the SQL/grouping should be adjusted (warning from plan assumptions, not a blocker).\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Preflight confirmed public.enrollments exists with columns student_id (uuid), enrollment_date (timestamptz), and is_active (boolean). The query counts distinct students per calendar year, filters out NULL enrollment_date and only active enrollments, and orders years ascending for deterministic output.\",\"sql\":\"SELECT EXTRACT(YEAR FROM e.enrollment_date)::int AS enrollment_year, COUNT(DISTINCT e.student_id) AS students_enrolled FROM public.enrollments AS e WHERE e.enrollment_date IS NOT NULL AND e.is_active = true GROUP BY EXTRACT(YEAR FROM e.enrollment_date)::int ORDER BY enrollment_year ASC;\",\"assumptions\":[\"public.enrollments exists with columns student_id (uuid), enrollment_date (timestamp with time zone), is_active (boolean) — verified in preflight\",\"Calendar year via EXTRACT(YEAR FROM enrollment_date) is the desired grain\",\"Filtering by enrollment_date IS NOT NULL is included (column is defined NOT NULL in the table but kept per plan)\",\"Only enrollments with is_active = true are counted as requested\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT EXTRACT(YEAR FROM e.enrollment_date)::int AS enrollment_year, COUNT(DISTINCT e.student_id) AS students_enrolled FROM public.enrollments AS e WHERE e.enrollment_date IS NOT NULL AND e.is_active = true GROUP BY EXTRACT(YEAR FROM e.enrollment_date)::int ORDER BY enrollment_year ASC\",\"metadata\":{\"columns\":[\"enrollment_year\",\"students_enrolled\"],\"rowCount\":3,\"sample\":[{\"enrollment_year\":2024,\"students_enrolled\":21},{\"enrollment_year\":2025,\"students_enrolled\":27}]},\"data\":[{\"enrollment_year\":2024,\"students_enrolled\":21},{\"enrollment_year\":2025,\"students_enrolled\":27},{\"enrollment_year\":2026,\"students_enrolled\":1}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Distinct students enrolled per year\",\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Enrollment year\"},\"sort\":{\"field\":\"enrollment_year\",\"order\":\"ascending\"}},\"y\":{\"field\":\"students_enrolled\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Students enrolled\"}},\"tooltip\":[{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"title\":\"Year\"},{\"field\":\"students_enrolled\",\"type\":\"quantitative\",\"title\":\"Students enrolled\"}]}},\"reasoning\":\"Bar chart showing distinct active students per calendar year using enrollment_year (EXTRACT YEAR) on the x-axis and students_enrolled (COUNT DISTINCT) on the y-axis. Tooltip surfaces exact values.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"X encoding uses type \\\"ordinal\\\" for enrollment_year — for a temporal series consider using \\\"temporal\\\" (with a year unit) or \\\"quantitative\\\"/\\\"integer\\\" so the axis is treated as time/numeric rather than categorical.\",\"metadata.rowCount is 3 but the provided sample contains 2 rows — metadata inconsistency (may be harmless but worth fixing).\",\"If the user expects academic-year grouping rather than calendar year, the SQL/grouping should be adjusted (warning from plan assumptions, not a blocker).\"]}}},\"endedAt\":1771845433807,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"How many students enrolled per year at the university?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT student_id) AS students_enrolled\"],\"dimensions\":[\"EXTRACT(YEAR FROM enrollment_date) AS enrollment_year\"],\"filters\":[\"enrollment_date IS NOT NULL\",\"is_active = true\"],\"grain\":\"calendar year\",\"aliases\":{\"EXTRACT(YEAR FROM enrollment_date)\":\"enrollment_year\",\"COUNT(DISTINCT student_id)\":\"students_enrolled\"},\"output_fields\":[\"enrollment_year\",\"students_enrolled\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"enrollment_year\",\"y_axis\":\"students_enrolled\",\"title\":\"Distinct students enrolled per year\"},\"assumptions\":[\"Table public.enrollments exists and contains columns: student_id (uuid), enrollment_date (timestamp with time zone), is_active (boolean). These were verified in the preflight.\",\"The user intends to know how many unique students enrolled each calendar year. Therefore metric is COUNT(DISTINCT student_id) grouped by EXTRACT(YEAR FROM enrollment_date).\",\"Only enrollments with enrollment_date NOT NULL and is_active = true are counted. If the user instead wants to count all enrollment records (including inactive) or count enrollments (not distinct students), change filters/metric accordingly (e.g., COUNT(*) AS enrollments).\",\"Calendar year is used (EXTRACT(YEAR FROM enrollment_date)). If the institution uses an academic year (e.g., Fall-starting academic year), the dimension should be adjusted to map enrollment_date to the academic year boundary.\",\"Time zone normalization: enrollment_date is a timestamptz; EXTRACT(YEAR ...) uses stored timestamptz values. If a specific timezone interpretation is required, cast or convert enrollment_date accordingly before extracting year.\",\"Aliases provided in 'aliases' must be used exactly as output field names in the SQL and by downstream visualization (output_fields reflect those aliases).\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT EXTRACT(YEAR FROM e.enrollment_date)::int AS enrollment_year, COUNT(DISTINCT e.student_id) AS students_enrolled FROM public.enrollments AS e WHERE e.enrollment_date IS NOT NULL AND e.is_active = true GROUP BY EXTRACT(YEAR FROM e.enrollment_date)::int ORDER BY enrollment_year ASC;\",\"validationIssues\":[\"X encoding uses type \\\"ordinal\\\" for enrollment_year — for a temporal series consider using \\\"temporal\\\" (with a year unit) or \\\"quantitative\\\"/\\\"integer\\\" so the axis is treated as time/numeric rather than categorical.\",\"metadata.rowCount is 3 but the provided sample contains 2 rows — metadata inconsistency (may be harmless but worth fixing).\",\"If the user expects academic-year grouping rather than calendar year, the SQL/grouping should be adjusted (warning from plan assumptions, not a blocker).\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Preflight confirmed public.enrollments exists with columns student_id (uuid), enrollment_date (timestamptz), and is_active (boolean). The query counts distinct students per calendar year, filters out NULL enrollment_date and only active enrollments, and orders years ascending for deterministic output.\",\"sql\":\"SELECT EXTRACT(YEAR FROM e.enrollment_date)::int AS enrollment_year, COUNT(DISTINCT e.student_id) AS students_enrolled FROM public.enrollments AS e WHERE e.enrollment_date IS NOT NULL AND e.is_active = true GROUP BY EXTRACT(YEAR FROM e.enrollment_date)::int ORDER BY enrollment_year ASC;\",\"assumptions\":[\"public.enrollments exists with columns student_id (uuid), enrollment_date (timestamp with time zone), is_active (boolean) — verified in preflight\",\"Calendar year via EXTRACT(YEAR FROM enrollment_date) is the desired grain\",\"Filtering by enrollment_date IS NOT NULL is included (column is defined NOT NULL in the table but kept per plan)\",\"Only enrollments with is_active = true are counted as requested\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT EXTRACT(YEAR FROM e.enrollment_date)::int AS enrollment_year, COUNT(DISTINCT e.student_id) AS students_enrolled FROM public.enrollments AS e WHERE e.enrollment_date IS NOT NULL AND e.is_active = true GROUP BY EXTRACT(YEAR FROM e.enrollment_date)::int ORDER BY enrollment_year ASC\",\"metadata\":{\"columns\":[\"enrollment_year\",\"students_enrolled\"],\"rowCount\":3,\"sample\":[{\"enrollment_year\":2024,\"students_enrolled\":21},{\"enrollment_year\":2025,\"students_enrolled\":27}]},\"data\":[{\"enrollment_year\":2024,\"students_enrolled\":21},{\"enrollment_year\":2025,\"students_enrolled\":27},{\"enrollment_year\":2026,\"students_enrolled\":1}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Distinct students enrolled per year\",\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Enrollment year\"},\"sort\":{\"field\":\"enrollment_year\",\"order\":\"ascending\"}},\"y\":{\"field\":\"students_enrolled\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Students enrolled\"}},\"tooltip\":[{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"title\":\"Year\"},{\"field\":\"students_enrolled\",\"type\":\"quantitative\",\"title\":\"Students enrolled\"}]}},\"reasoning\":\"Bar chart showing distinct active students per calendar year using enrollment_year (EXTRACT YEAR) on the x-axis and students_enrolled (COUNT DISTINCT) on the y-axis. Tooltip surfaces exact values.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"X encoding uses type \\\"ordinal\\\" for enrollment_year — for a temporal series consider using \\\"temporal\\\" (with a year unit) or \\\"quantitative\\\"/\\\"integer\\\" so the axis is treated as time/numeric rather than categorical.\",\"metadata.rowCount is 3 but the provided sample contains 2 rows — metadata inconsistency (may be harmless but worth fixing).\",\"If the user expects academic-year grouping rather than calendar year, the SQL/grouping should be adjusted (warning from plan assumptions, not a blocker).\"]}}},\"startedAt\":1771845433812,\"status\":\"success\",\"output\":{\"sql\":\"SELECT EXTRACT(YEAR FROM e.enrollment_date)::int AS enrollment_year, COUNT(DISTINCT e.student_id) AS students_enrolled FROM public.enrollments AS e WHERE e.enrollment_date IS NOT NULL AND e.is_active = true GROUP BY EXTRACT(YEAR FROM e.enrollment_date)::int ORDER BY enrollment_year ASC;\",\"data\":[{\"enrollment_year\":2024,\"students_enrolled\":21},{\"enrollment_year\":2025,\"students_enrolled\":27},{\"enrollment_year\":2026,\"students_enrolled\":1}],\"metadata\":{\"columns\":[\"enrollment_year\",\"students_enrolled\"],\"rowCount\":3,\"sample\":[{\"enrollment_year\":2024,\"students_enrolled\":21},{\"enrollment_year\":2025,\"students_enrolled\":27}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Distinct students enrolled per year\",\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Enrollment year\"},\"sort\":{\"field\":\"enrollment_year\",\"order\":\"ascending\"}},\"y\":{\"field\":\"students_enrolled\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Students enrolled\"}},\"tooltip\":[{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"title\":\"Year\"},{\"field\":\"students_enrolled\",\"type\":\"quantitative\",\"title\":\"Students enrolled\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"X encoding uses type \\\"ordinal\\\" for enrollment_year — for a temporal series consider using \\\"temporal\\\" (with a year unit) or \\\"quantitative\\\"/\\\"integer\\\" so the axis is treated as time/numeric rather than categorical.\",\"metadata.rowCount is 3 but the provided sample contains 2 rows — metadata inconsistency (may be harmless but worth fixing).\",\"If the user expects academic-year grouping rather than calendar year, the SQL/grouping should be adjusted (warning from plan assumptions, not a blocker).\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771845433817}},\"input\":{\"question\":\"How many students enrolled per year at the university?\"},\"result\":{\"sql\":\"SELECT EXTRACT(YEAR FROM e.enrollment_date)::int AS enrollment_year, COUNT(DISTINCT e.student_id) AS students_enrolled FROM public.enrollments AS e WHERE e.enrollment_date IS NOT NULL AND e.is_active = true GROUP BY EXTRACT(YEAR FROM e.enrollment_date)::int ORDER BY enrollment_year ASC;\",\"data\":[{\"enrollment_year\":2024,\"students_enrolled\":21},{\"enrollment_year\":2025,\"students_enrolled\":27},{\"enrollment_year\":2026,\"students_enrolled\":1}],\"metadata\":{\"columns\":[\"enrollment_year\",\"students_enrolled\"],\"rowCount\":3,\"sample\":[{\"enrollment_year\":2024,\"students_enrolled\":21},{\"enrollment_year\":2025,\"students_enrolled\":27}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Distinct students enrolled per year\",\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Enrollment year\"},\"sort\":{\"field\":\"enrollment_year\",\"order\":\"ascending\"}},\"y\":{\"field\":\"students_enrolled\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Students enrolled\"}},\"tooltip\":[{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"title\":\"Year\"},{\"field\":\"students_enrolled\",\"type\":\"quantitative\",\"title\":\"Students enrolled\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"X encoding uses type \\\"ordinal\\\" for enrollment_year — for a temporal series consider using \\\"temporal\\\" (with a year unit) or \\\"quantitative\\\"/\\\"integer\\\" so the axis is treated as time/numeric rather than categorical.\",\"metadata.rowCount is 3 but the provided sample contains 2 rows — metadata inconsistency (may be harmless but worth fixing).\",\"If the user expects academic-year grouping rather than calendar year, the SQL/grouping should be adjusted (warning from plan assumptions, not a blocker).\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"347dbc1c1feef6031b9a2d93b7dbc960\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/student-enrollment-date-trend/run-0001/run.json",
+    "queryPath": "runs/student-enrollment-date-trend/run-0001/query.sql",
+    "vegaRawPath": "runs/student-enrollment-date-trend/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/student-enrollment-date-trend/run-0001/vega.resolved.json",
+    "imagePath": "runs/student-enrollment-date-trend/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:17:14.337Z",
+  "traceId": "347dbc1c1feef6031b9a2d93b7dbc960",
+  "success": true,
+  "durationMs": 84136,
+  "resultRaw": {
+    "data": [
+      {
+        "enrollment_year": 2024,
+        "students_enrolled": 21
+      },
+      {
+        "enrollment_year": 2025,
+        "students_enrolled": 27
+      },
+      {
+        "enrollment_year": 2026,
+        "students_enrolled": 1
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Distinct students enrolled per year",
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "enrollment_year",
+          "type": "ordinal",
+          "axis": {
+            "title": "Enrollment year"
+          },
+          "sort": {
+            "field": "enrollment_year",
+            "order": "ascending"
+          }
+        },
+        "y": {
+          "field": "students_enrolled",
+          "type": "quantitative",
+          "axis": {
+            "title": "Students enrolled"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "enrollment_year",
+            "type": "ordinal",
+            "title": "Year"
+          },
+          {
+            "field": "students_enrolled",
+            "type": "quantitative",
+            "title": "Students enrolled"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT EXTRACT(YEAR FROM e.enrollment_date)::int AS enrollment_year, COUNT(DISTINCT e.student_id) AS students_enrolled FROM public.enrollments AS e WHERE e.enrollment_date IS NOT NULL AND e.is_active = true GROUP BY EXTRACT(YEAR FROM e.enrollment_date)::int ORDER BY enrollment_year ASC;",
+    "metadata": {
+      "columns": [
+        "enrollment_year",
+        "students_enrolled"
+      ],
+      "rowCount": 3,
+      "sample": [
+        {
+          "enrollment_year": 2024,
+          "students_enrolled": 21
+        },
+        {
+          "enrollment_year": 2025,
+          "students_enrolled": 27
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "X encoding uses type \"ordinal\" for enrollment_year — for a temporal series consider using \"temporal\" (with a year unit) or \"quantitative\"/\"integer\" so the axis is treated as time/numeric rather than categorical.",
+        "metadata.rowCount is 3 but the provided sample contains 2 rows — metadata inconsistency (may be harmless but worth fixing).",
+        "If the user expects academic-year grouping rather than calendar year, the SQL/grouping should be adjusted (warning from plan assumptions, not a blocker)."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "enrollment_year": 2024,
+        "students_enrolled": 21
+      },
+      {
+        "enrollment_year": 2025,
+        "students_enrolled": 27
+      },
+      {
+        "enrollment_year": 2026,
+        "students_enrolled": 1
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Distinct students enrolled per year",
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "enrollment_year",
+          "type": "ordinal",
+          "axis": {
+            "title": "Enrollment year"
+          },
+          "sort": {
+            "field": "enrollment_year",
+            "order": "ascending"
+          }
+        },
+        "y": {
+          "field": "students_enrolled",
+          "type": "quantitative",
+          "axis": {
+            "title": "Students enrolled"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "enrollment_year",
+            "type": "ordinal",
+            "title": "Year"
+          },
+          {
+            "field": "students_enrolled",
+            "type": "quantitative",
+            "title": "Students enrolled"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT EXTRACT(YEAR FROM e.enrollment_date)::int AS enrollment_year, COUNT(DISTINCT e.student_id) AS students_enrolled FROM public.enrollments AS e WHERE e.enrollment_date IS NOT NULL AND e.is_active = true GROUP BY EXTRACT(YEAR FROM e.enrollment_date)::int ORDER BY enrollment_year ASC;",
+    "metadata": {
+      "columns": [
+        "enrollment_year",
+        "students_enrolled"
+      ],
+      "rowCount": 3,
+      "sample": [
+        {
+          "enrollment_year": 2024,
+          "students_enrolled": 21
+        },
+        {
+          "enrollment_year": 2025,
+          "students_enrolled": 27
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "X encoding uses type \"ordinal\" for enrollment_year — for a temporal series consider using \"temporal\" (with a year unit) or \"quantitative\"/\"integer\" so the axis is treated as time/numeric rather than categorical.",
+        "metadata.rowCount is 3 but the provided sample contains 2 rows — metadata inconsistency (may be harmless but worth fixing).",
+        "If the user expects academic-year grouping rather than calendar year, the SQL/grouping should be adjusted (warning from plan assumptions, not a blocker)."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:17:14.337Z",
+    "traceId": "347dbc1c1feef6031b9a2d93b7dbc960",
+    "attempts": 3,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 13371,
+      "outputTokens": 4163,
+      "totalTokens": 17534,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2624,
+      "costUsd": 0.01166875
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 13371,
+        "outputTokens": 4163,
+        "totalTokens": 17534,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2624,
+        "costUsd": 0.01166875
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,1 @@
+SELECT scholarship_type AS scholarship_type, SUM(amount) AS total_awarded FROM scholarships WHERE amount IS NOT NULL GROUP BY scholarship_type ORDER BY total_awarded DESC;

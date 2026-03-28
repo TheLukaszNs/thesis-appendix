@@ -1,0 +1,588 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "grade-by-semester-type-and-course-type",
+  "caseDirectory": "grade-by-semester-type-and-course-type",
+  "repeatIndex": 1,
+  "prompt": "Compare average grades across course types for winter vs summer semesters",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Compare average grades across course types for winter vs summer semesters"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:48:28.485Z",
+    "endedAtUtc": "2026-02-22T23:50:04.652Z",
+    "durationMs": 96167
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "20803",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:50:04 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Compare average grades across course types for winter vs summer semesters\"},\"sql\":{\"payload\":{\"question\":\"Compare average grades across course types for winter vs summer semesters\"},\"startedAt\":1771804108493,\"status\":\"success\",\"output\":{\"reasoning\":\"Join grades -> enrollments -> course_sections -> courses, filter to winter/summer semesters and compute average exam score and an average of available numeric components per grade, grouped by course_type and semester. Deterministic ordering by course_type then semester.\",\"sql\":\"SELECT\\n  c.course_type::text AS course_type,\\n  cs.semester_type::text AS semester,\\n  ROUND(AVG(g.exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(\\n    (COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) /\\n    NULLIF(\\n      (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\\n      (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\\n      (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\\n    , 0)\\n  )::numeric, 2) AS avg_component_average,\\n  COUNT(g.id) AS num_grades\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nWHERE lower(cs.semester_type::text) IN ('winter', 'summer')\\nGROUP BY c.course_type::text, cs.semester_type::text\\nORDER BY c.course_type::text ASC, cs.semester_type::text ASC;\",\"assumptions\":[\"semester_type uses values like 'winter' and 'summer' (case-insensitive)\",\"course_type is stored on courses and can be cast to text for grouping\",\"exam_score, project_score, attendance_score are numeric and represent measurable components to average\",\"component average is computed per-grade as the mean of the non-null numeric components, then those per-grade averages are averaged across the group\",\"rows with no numeric components will be excluded from the component-average calculation (NULL)\"]},\"endedAt\":1771804174656},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  c.course_type::text AS course_type,\\n  cs.semester_type::text AS semester,\\n  ROUND(AVG(g.exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(\\n    (COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) /\\n    NULLIF(\\n      (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\\n      (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\\n      (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\\n    , 0)\\n  )::numeric, 2) AS avg_component_average,\\n  COUNT(g.id) AS num_grades\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nWHERE lower(cs.semester_type::text) IN ('winter', 'summer')\\nGROUP BY c.course_type::text, cs.semester_type::text\\nORDER BY c.course_type::text ASC, cs.semester_type::text ASC;\"},\"startedAt\":1771804174730,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT\\n  c.course_type::text AS course_type,\\n  cs.semester_type::text AS semester,\\n  ROUND(AVG(g.exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(\\n    (COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) /\\n    NULLIF(\\n      (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\\n      (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\\n      (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\\n    , 0)\\n  )::numeric, 2) AS avg_component_average,\\n  COUNT(g.id) AS num_grades\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nWHERE lower(cs.semester_type::text) IN ('winter', 'summer')\\nGROUP BY c.course_type::text, cs.semester_type::text\\nORDER BY c.course_type::text ASC, cs.semester_type::text ASC\",\"metadata\":{\"columns\":[\"semester\",\"num_grades\",\"course_type\",\"avg_exam_score\",\"avg_component_average\"],\"rowCount\":9,\"sample\":[{\"semester\":\"SUMMER\",\"num_grades\":3,\"course_type\":\"EXERCISE\",\"avg_exam_score\":35.68,\"avg_component_average\":52.18},{\"semester\":\"WINTER\",\"num_grades\":4,\"course_type\":\"EXERCISE\",\"avg_exam_score\":53.7,\"avg_component_average\":55.81}]},\"data\":[{\"semester\":\"SUMMER\",\"num_grades\":3,\"course_type\":\"EXERCISE\",\"avg_exam_score\":35.68,\"avg_component_average\":52.18},{\"semester\":\"WINTER\",\"num_grades\":4,\"course_type\":\"EXERCISE\",\"avg_exam_score\":53.7,\"avg_component_average\":55.81},{\"semester\":\"SUMMER\",\"num_grades\":5,\"course_type\":\"LABORATORY\",\"avg_exam_score\":22.39,\"avg_component_average\":46.83},{\"semester\":\"WINTER\",\"num_grades\":5,\"course_type\":\"LABORATORY\",\"avg_exam_score\":40.15,\"avg_component_average\":44.12},{\"semester\":\"SUMMER\",\"num_grades\":5,\"course_type\":\"LECTURE\",\"avg_exam_score\":87.78,\"avg_component_average\":52.11},{\"semester\":\"WINTER\",\"num_grades\":9,\"course_type\":\"LECTURE\",\"avg_exam_score\":49.95,\"avg_component_average\":52.88},{\"semester\":\"SUMMER\",\"num_grades\":9,\"course_type\":\"PROJECT\",\"avg_exam_score\":55.71,\"avg_component_average\":51.05},{\"semester\":\"WINTER\",\"num_grades\":10,\"course_type\":\"PROJECT\",\"avg_exam_score\":44.13,\"avg_component_average\":49.67},{\"semester\":\"WINTER\",\"num_grades\":2,\"course_type\":\"SEMINAR\",\"avg_exam_score\":64.57,\"avg_component_average\":42.63}]},\"endedAt\":1771804174753},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT\\n  c.course_type::text AS course_type,\\n  cs.semester_type::text AS semester,\\n  ROUND(AVG(g.exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(\\n    (COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) /\\n    NULLIF(\\n      (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\\n      (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\\n      (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\\n    , 0)\\n  )::numeric, 2) AS avg_component_average,\\n  COUNT(g.id) AS num_grades\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nWHERE lower(cs.semester_type::text) IN ('winter', 'summer')\\nGROUP BY c.course_type::text, cs.semester_type::text\\nORDER BY c.course_type::text ASC, cs.semester_type::text ASC\",\"metadata\":{\"columns\":[\"semester\",\"num_grades\",\"course_type\",\"avg_exam_score\",\"avg_component_average\"],\"rowCount\":9,\"sample\":[{\"semester\":\"SUMMER\",\"num_grades\":3,\"course_type\":\"EXERCISE\",\"avg_exam_score\":35.68,\"avg_component_average\":52.18},{\"semester\":\"WINTER\",\"num_grades\":4,\"course_type\":\"EXERCISE\",\"avg_exam_score\":53.7,\"avg_component_average\":55.81}]},\"data\":[{\"semester\":\"SUMMER\",\"num_grades\":3,\"course_type\":\"EXERCISE\",\"avg_exam_score\":35.68,\"avg_component_average\":52.18},{\"semester\":\"WINTER\",\"num_grades\":4,\"course_type\":\"EXERCISE\",\"avg_exam_score\":53.7,\"avg_component_average\":55.81},{\"semester\":\"SUMMER\",\"num_grades\":5,\"course_type\":\"LABORATORY\",\"avg_exam_score\":22.39,\"avg_component_average\":46.83},{\"semester\":\"WINTER\",\"num_grades\":5,\"course_type\":\"LABORATORY\",\"avg_exam_score\":40.15,\"avg_component_average\":44.12},{\"semester\":\"SUMMER\",\"num_grades\":5,\"course_type\":\"LECTURE\",\"avg_exam_score\":87.78,\"avg_component_average\":52.11},{\"semester\":\"WINTER\",\"num_grades\":9,\"course_type\":\"LECTURE\",\"avg_exam_score\":49.95,\"avg_component_average\":52.88},{\"semester\":\"SUMMER\",\"num_grades\":9,\"course_type\":\"PROJECT\",\"avg_exam_score\":55.71,\"avg_component_average\":51.05},{\"semester\":\"WINTER\",\"num_grades\":10,\"course_type\":\"PROJECT\",\"avg_exam_score\":44.13,\"avg_component_average\":49.67},{\"semester\":\"WINTER\",\"num_grades\":2,\"course_type\":\"SEMINAR\",\"avg_exam_score\":64.57,\"avg_component_average\":42.63}]},\"startedAt\":1771804174757,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Grades by Course Type — Winter vs Summer\",\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"course_type\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course Type\",\"labelAngle\":0}},\"xOffset\":{\"field\":\"semester\"},\"y\":{\"field\":\"avg_component_average\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Avg Component Average\"}},\"color\":{\"field\":\"semester\",\"type\":\"nominal\",\"title\":\"Semester\",\"scale\":{\"domain\":[\"WINTER\",\"SUMMER\"],\"range\":[\"#1f77b4\",\"#ff7f0e\"]}},\"tooltip\":[{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"semester\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"avg_component_average\",\"type\":\"quantitative\",\"title\":\"Avg Component Avg\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\"},{\"field\":\"num_grades\",\"type\":\"quantitative\",\"title\":\"Num Grades\"}]}},{\"mark\":{\"type\":\"point\",\"filled\":true,\"size\":80,\"stroke\":\"black\",\"strokeWidth\":0.5},\"encoding\":{\"x\":{\"field\":\"course_type\",\"type\":\"nominal\"},\"xOffset\":{\"field\":\"semester\"},\"y\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Avg Exam Score\"}},\"color\":{\"field\":\"semester\",\"type\":\"nominal\",\"legend\":null,\"scale\":{\"domain\":[\"WINTER\",\"SUMMER\"],\"range\":[\"#1f77b4\",\"#ff7f0e\"]}},\"tooltip\":[{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"semester\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"avg_component_average\",\"type\":\"quantitative\",\"title\":\"Avg Component Avg\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\"},{\"field\":\"num_grades\",\"type\":\"quantitative\",\"title\":\"Num Grades\"}]}}]},\"reasoning\":\"Layered bars (avg component average) with overlaid points (avg exam score), offset by semester, let you compare winter vs summer across course types while showing both average metrics and counts in the tooltip.\"},\"endedAt\":1771804204622},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Grades by Course Type — Winter vs Summer\",\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"course_type\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course Type\",\"labelAngle\":0}},\"xOffset\":{\"field\":\"semester\"},\"y\":{\"field\":\"avg_component_average\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Avg Component Average\"}},\"color\":{\"field\":\"semester\",\"type\":\"nominal\",\"title\":\"Semester\",\"scale\":{\"domain\":[\"WINTER\",\"SUMMER\"],\"range\":[\"#1f77b4\",\"#ff7f0e\"]}},\"tooltip\":[{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"semester\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"avg_component_average\",\"type\":\"quantitative\",\"title\":\"Avg Component Avg\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\"},{\"field\":\"num_grades\",\"type\":\"quantitative\",\"title\":\"Num Grades\"}]}},{\"mark\":{\"type\":\"point\",\"filled\":true,\"size\":80,\"stroke\":\"black\",\"strokeWidth\":0.5},\"encoding\":{\"x\":{\"field\":\"course_type\",\"type\":\"nominal\"},\"xOffset\":{\"field\":\"semester\"},\"y\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Avg Exam Score\"}},\"color\":{\"field\":\"semester\",\"type\":\"nominal\",\"legend\":null,\"scale\":{\"domain\":[\"WINTER\",\"SUMMER\"],\"range\":[\"#1f77b4\",\"#ff7f0e\"]}},\"tooltip\":[{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"semester\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"avg_component_average\",\"type\":\"quantitative\",\"title\":\"Avg Component Avg\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\"},{\"field\":\"num_grades\",\"type\":\"quantitative\",\"title\":\"Num Grades\"}]}}]},\"reasoning\":\"Layered bars (avg component average) with overlaid points (avg exam score), offset by semester, let you compare winter vs summer across course types while showing both average metrics and counts in the tooltip.\"},\"startedAt\":1771804204627,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  c.course_type::text AS course_type,\\n  cs.semester_type::text AS semester,\\n  ROUND(AVG(g.exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(\\n    (COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) /\\n    NULLIF(\\n      (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\\n      (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\\n      (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\\n    , 0)\\n  )::numeric, 2) AS avg_component_average,\\n  COUNT(g.id) AS num_grades\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nWHERE lower(cs.semester_type::text) IN ('winter', 'summer')\\nGROUP BY c.course_type::text, cs.semester_type::text\\nORDER BY c.course_type::text ASC, cs.semester_type::text ASC;\",\"data\":[{\"semester\":\"SUMMER\",\"num_grades\":3,\"course_type\":\"EXERCISE\",\"avg_exam_score\":35.68,\"avg_component_average\":52.18},{\"semester\":\"WINTER\",\"num_grades\":4,\"course_type\":\"EXERCISE\",\"avg_exam_score\":53.7,\"avg_component_average\":55.81},{\"semester\":\"SUMMER\",\"num_grades\":5,\"course_type\":\"LABORATORY\",\"avg_exam_score\":22.39,\"avg_component_average\":46.83},{\"semester\":\"WINTER\",\"num_grades\":5,\"course_type\":\"LABORATORY\",\"avg_exam_score\":40.15,\"avg_component_average\":44.12},{\"semester\":\"SUMMER\",\"num_grades\":5,\"course_type\":\"LECTURE\",\"avg_exam_score\":87.78,\"avg_component_average\":52.11},{\"semester\":\"WINTER\",\"num_grades\":9,\"course_type\":\"LECTURE\",\"avg_exam_score\":49.95,\"avg_component_average\":52.88},{\"semester\":\"SUMMER\",\"num_grades\":9,\"course_type\":\"PROJECT\",\"avg_exam_score\":55.71,\"avg_component_average\":51.05},{\"semester\":\"WINTER\",\"num_grades\":10,\"course_type\":\"PROJECT\",\"avg_exam_score\":44.13,\"avg_component_average\":49.67},{\"semester\":\"WINTER\",\"num_grades\":2,\"course_type\":\"SEMINAR\",\"avg_exam_score\":64.57,\"avg_component_average\":42.63}],\"metadata\":{\"columns\":[\"semester\",\"num_grades\",\"course_type\",\"avg_exam_score\",\"avg_component_average\"],\"rowCount\":9,\"sample\":[{\"semester\":\"SUMMER\",\"num_grades\":3,\"course_type\":\"EXERCISE\",\"avg_exam_score\":35.68,\"avg_component_average\":52.18},{\"semester\":\"WINTER\",\"num_grades\":4,\"course_type\":\"EXERCISE\",\"avg_exam_score\":53.7,\"avg_component_average\":55.81}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Grades by Course Type — Winter vs Summer\",\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"course_type\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course Type\",\"labelAngle\":0}},\"xOffset\":{\"field\":\"semester\"},\"y\":{\"field\":\"avg_component_average\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Avg Component Average\"}},\"color\":{\"field\":\"semester\",\"type\":\"nominal\",\"title\":\"Semester\",\"scale\":{\"domain\":[\"WINTER\",\"SUMMER\"],\"range\":[\"#1f77b4\",\"#ff7f0e\"]}},\"tooltip\":[{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"semester\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"avg_component_average\",\"type\":\"quantitative\",\"title\":\"Avg Component Avg\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\"},{\"field\":\"num_grades\",\"type\":\"quantitative\",\"title\":\"Num Grades\"}]}},{\"mark\":{\"type\":\"point\",\"filled\":true,\"size\":80,\"stroke\":\"black\",\"strokeWidth\":0.5},\"encoding\":{\"x\":{\"field\":\"course_type\",\"type\":\"nominal\"},\"xOffset\":{\"field\":\"semester\"},\"y\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Avg Exam Score\"}},\"color\":{\"field\":\"semester\",\"type\":\"nominal\",\"legend\":null,\"scale\":{\"domain\":[\"WINTER\",\"SUMMER\"],\"range\":[\"#1f77b4\",\"#ff7f0e\"]}},\"tooltip\":[{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"semester\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"avg_component_average\",\"type\":\"quantitative\",\"title\":\"Avg Component Avg\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\"},{\"field\":\"num_grades\",\"type\":\"quantitative\",\"title\":\"Num Grades\"}]}}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"]}},\"endedAt\":1771804204632}},\"input\":{\"question\":\"Compare average grades across course types for winter vs summer semesters\"},\"result\":{\"sql\":\"SELECT\\n  c.course_type::text AS course_type,\\n  cs.semester_type::text AS semester,\\n  ROUND(AVG(g.exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(\\n    (COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) /\\n    NULLIF(\\n      (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\\n      (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\\n      (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\\n    , 0)\\n  )::numeric, 2) AS avg_component_average,\\n  COUNT(g.id) AS num_grades\\nFROM public.grades g\\nJOIN public.enrollments e ON g.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nWHERE lower(cs.semester_type::text) IN ('winter', 'summer')\\nGROUP BY c.course_type::text, cs.semester_type::text\\nORDER BY c.course_type::text ASC, cs.semester_type::text ASC;\",\"data\":[{\"semester\":\"SUMMER\",\"num_grades\":3,\"course_type\":\"EXERCISE\",\"avg_exam_score\":35.68,\"avg_component_average\":52.18},{\"semester\":\"WINTER\",\"num_grades\":4,\"course_type\":\"EXERCISE\",\"avg_exam_score\":53.7,\"avg_component_average\":55.81},{\"semester\":\"SUMMER\",\"num_grades\":5,\"course_type\":\"LABORATORY\",\"avg_exam_score\":22.39,\"avg_component_average\":46.83},{\"semester\":\"WINTER\",\"num_grades\":5,\"course_type\":\"LABORATORY\",\"avg_exam_score\":40.15,\"avg_component_average\":44.12},{\"semester\":\"SUMMER\",\"num_grades\":5,\"course_type\":\"LECTURE\",\"avg_exam_score\":87.78,\"avg_component_average\":52.11},{\"semester\":\"WINTER\",\"num_grades\":9,\"course_type\":\"LECTURE\",\"avg_exam_score\":49.95,\"avg_component_average\":52.88},{\"semester\":\"SUMMER\",\"num_grades\":9,\"course_type\":\"PROJECT\",\"avg_exam_score\":55.71,\"avg_component_average\":51.05},{\"semester\":\"WINTER\",\"num_grades\":10,\"course_type\":\"PROJECT\",\"avg_exam_score\":44.13,\"avg_component_average\":49.67},{\"semester\":\"WINTER\",\"num_grades\":2,\"course_type\":\"SEMINAR\",\"avg_exam_score\":64.57,\"avg_component_average\":42.63}],\"metadata\":{\"columns\":[\"semester\",\"num_grades\",\"course_type\",\"avg_exam_score\",\"avg_component_average\"],\"rowCount\":9,\"sample\":[{\"semester\":\"SUMMER\",\"num_grades\":3,\"course_type\":\"EXERCISE\",\"avg_exam_score\":35.68,\"avg_component_average\":52.18},{\"semester\":\"WINTER\",\"num_grades\":4,\"course_type\":\"EXERCISE\",\"avg_exam_score\":53.7,\"avg_component_average\":55.81}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Grades by Course Type — Winter vs Summer\",\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"course_type\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course Type\",\"labelAngle\":0}},\"xOffset\":{\"field\":\"semester\"},\"y\":{\"field\":\"avg_component_average\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Avg Component Average\"}},\"color\":{\"field\":\"semester\",\"type\":\"nominal\",\"title\":\"Semester\",\"scale\":{\"domain\":[\"WINTER\",\"SUMMER\"],\"range\":[\"#1f77b4\",\"#ff7f0e\"]}},\"tooltip\":[{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"semester\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"avg_component_average\",\"type\":\"quantitative\",\"title\":\"Avg Component Avg\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\"},{\"field\":\"num_grades\",\"type\":\"quantitative\",\"title\":\"Num Grades\"}]}},{\"mark\":{\"type\":\"point\",\"filled\":true,\"size\":80,\"stroke\":\"black\",\"strokeWidth\":0.5},\"encoding\":{\"x\":{\"field\":\"course_type\",\"type\":\"nominal\"},\"xOffset\":{\"field\":\"semester\"},\"y\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Avg Exam Score\"}},\"color\":{\"field\":\"semester\",\"type\":\"nominal\",\"legend\":null,\"scale\":{\"domain\":[\"WINTER\",\"SUMMER\"],\"range\":[\"#1f77b4\",\"#ff7f0e\"]}},\"tooltip\":[{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"semester\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"avg_component_average\",\"type\":\"quantitative\",\"title\":\"Avg Component Avg\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\"},{\"field\":\"num_grades\",\"type\":\"quantitative\",\"title\":\"Num Grades\"}]}}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"]}},\"traceId\":\"84e7bbe66e75cda28b18088d0b96bc13\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/grade-by-semester-type-and-course-type/run-0001/run.json",
+    "queryPath": "runs/grade-by-semester-type-and-course-type/run-0001/query.sql",
+    "vegaRawPath": "runs/grade-by-semester-type-and-course-type/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/grade-by-semester-type-and-course-type/run-0001/vega.resolved.json",
+    "imagePath": "runs/grade-by-semester-type-and-course-type/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:50:05.086Z",
+  "traceId": "84e7bbe66e75cda28b18088d0b96bc13",
+  "success": true,
+  "durationMs": 96601,
+  "resultRaw": {
+    "data": [
+      {
+        "semester": "SUMMER",
+        "num_grades": 3,
+        "course_type": "EXERCISE",
+        "avg_exam_score": 35.68,
+        "avg_component_average": 52.18
+      },
+      {
+        "semester": "WINTER",
+        "num_grades": 4,
+        "course_type": "EXERCISE",
+        "avg_exam_score": 53.7,
+        "avg_component_average": 55.81
+      },
+      {
+        "semester": "SUMMER",
+        "num_grades": 5,
+        "course_type": "LABORATORY",
+        "avg_exam_score": 22.39,
+        "avg_component_average": 46.83
+      },
+      {
+        "semester": "WINTER",
+        "num_grades": 5,
+        "course_type": "LABORATORY",
+        "avg_exam_score": 40.15,
+        "avg_component_average": 44.12
+      },
+      {
+        "semester": "SUMMER",
+        "num_grades": 5,
+        "course_type": "LECTURE",
+        "avg_exam_score": 87.78,
+        "avg_component_average": 52.11
+      },
+      {
+        "semester": "WINTER",
+        "num_grades": 9,
+        "course_type": "LECTURE",
+        "avg_exam_score": 49.95,
+        "avg_component_average": 52.88
+      },
+      {
+        "semester": "SUMMER",
+        "num_grades": 9,
+        "course_type": "PROJECT",
+        "avg_exam_score": 55.71,
+        "avg_component_average": 51.05
+      },
+      {
+        "semester": "WINTER",
+        "num_grades": 10,
+        "course_type": "PROJECT",
+        "avg_exam_score": 44.13,
+        "avg_component_average": 49.67
+      },
+      {
+        "semester": "WINTER",
+        "num_grades": 2,
+        "course_type": "SEMINAR",
+        "avg_exam_score": 64.57,
+        "avg_component_average": 42.63
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Grades by Course Type — Winter vs Summer",
+      "layer": [
+        {
+          "mark": {
+            "type": "bar",
+            "cornerRadius": 3
+          },
+          "encoding": {
+            "x": {
+              "field": "course_type",
+              "type": "nominal",
+              "axis": {
+                "title": "Course Type",
+                "labelAngle": 0
+              }
+            },
+            "xOffset": {
+              "field": "semester"
+            },
+            "y": {
+              "field": "avg_component_average",
+              "type": "quantitative",
+              "axis": {
+                "title": "Avg Component Average"
+              }
+            },
+            "color": {
+              "field": "semester",
+              "type": "nominal",
+              "title": "Semester",
+              "scale": {
+                "domain": [
+                  "WINTER",
+                  "SUMMER"
+                ],
+                "range": [
+                  "#1f77b4",
+                  "#ff7f0e"
+                ]
+              }
+            },
+            "tooltip": [
+              {
+                "field": "course_type",
+                "type": "nominal",
+                "title": "Course Type"
+              },
+              {
+                "field": "semester",
+                "type": "nominal",
+                "title": "Semester"
+              },
+              {
+                "field": "avg_component_average",
+                "type": "quantitative",
+                "title": "Avg Component Avg"
+              },
+              {
+                "field": "avg_exam_score",
+                "type": "quantitative",
+                "title": "Avg Exam Score"
+              },
+              {
+                "field": "num_grades",
+                "type": "quantitative",
+                "title": "Num Grades"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "point",
+            "filled": true,
+            "size": 80,
+            "stroke": "black",
+            "strokeWidth": 0.5
+          },
+          "encoding": {
+            "x": {
+              "field": "course_type",
+              "type": "nominal"
+            },
+            "xOffset": {
+              "field": "semester"
+            },
+            "y": {
+              "field": "avg_exam_score",
+              "type": "quantitative",
+              "axis": {
+                "title": "Avg Exam Score"
+              }
+            },
+            "color": {
+              "field": "semester",
+              "type": "nominal",
+              "legend": null,
+              "scale": {
+                "domain": [
+                  "WINTER",
+                  "SUMMER"
+                ],
+                "range": [
+                  "#1f77b4",
+                  "#ff7f0e"
+                ]
+              }
+            },
+            "tooltip": [
+              {
+                "field": "course_type",
+                "type": "nominal",
+                "title": "Course Type"
+              },
+              {
+                "field": "semester",
+                "type": "nominal",
+                "title": "Semester"
+              },
+              {
+                "field": "avg_component_average",
+                "type": "quantitative",
+                "title": "Avg Component Avg"
+              },
+              {
+                "field": "avg_exam_score",
+                "type": "quantitative",
+                "title": "Avg Exam Score"
+              },
+              {
+                "field": "num_grades",
+                "type": "quantitative",
+                "title": "Num Grades"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "sql": "SELECT\n  c.course_type::text AS course_type,\n  cs.semester_type::text AS semester,\n  ROUND(AVG(g.exam_score)::numeric, 2) AS avg_exam_score,\n  ROUND(AVG(\n    (COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) /\n    NULLIF(\n      (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\n      (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\n      (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\n    , 0)\n  )::numeric, 2) AS avg_component_average,\n  COUNT(g.id) AS num_grades\nFROM public.grades g\nJOIN public.enrollments e ON g.enrollment_id = e.id\nJOIN public.course_sections cs ON e.course_section_id = cs.id\nJOIN public.courses c ON cs.course_id = c.id\nWHERE lower(cs.semester_type::text) IN ('winter', 'summer')\nGROUP BY c.course_type::text, cs.semester_type::text\nORDER BY c.course_type::text ASC, cs.semester_type::text ASC;",
+    "metadata": {
+      "columns": [
+        "semester",
+        "num_grades",
+        "course_type",
+        "avg_exam_score",
+        "avg_component_average"
+      ],
+      "rowCount": 9,
+      "sample": [
+        {
+          "semester": "SUMMER",
+          "num_grades": 3,
+          "course_type": "EXERCISE",
+          "avg_exam_score": 35.68,
+          "avg_component_average": 52.18
+        },
+        {
+          "semester": "WINTER",
+          "num_grades": 4,
+          "course_type": "EXERCISE",
+          "avg_exam_score": 53.7,
+          "avg_component_average": 55.81
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "semester": "SUMMER",
+        "num_grades": 3,
+        "course_type": "EXERCISE",
+        "avg_exam_score": 35.68,
+        "avg_component_average": 52.18
+      },
+      {
+        "semester": "WINTER",
+        "num_grades": 4,
+        "course_type": "EXERCISE",
+        "avg_exam_score": 53.7,
+        "avg_component_average": 55.81
+      },
+      {
+        "semester": "SUMMER",
+        "num_grades": 5,
+        "course_type": "LABORATORY",
+        "avg_exam_score": 22.39,
+        "avg_component_average": 46.83
+      },
+      {
+        "semester": "WINTER",
+        "num_grades": 5,
+        "course_type": "LABORATORY",
+        "avg_exam_score": 40.15,
+        "avg_component_average": 44.12
+      },
+      {
+        "semester": "SUMMER",
+        "num_grades": 5,
+        "course_type": "LECTURE",
+        "avg_exam_score": 87.78,
+        "avg_component_average": 52.11
+      },
+      {
+        "semester": "WINTER",
+        "num_grades": 9,
+        "course_type": "LECTURE",
+        "avg_exam_score": 49.95,
+        "avg_component_average": 52.88
+      },
+      {
+        "semester": "SUMMER",
+        "num_grades": 9,
+        "course_type": "PROJECT",
+        "avg_exam_score": 55.71,
+        "avg_component_average": 51.05
+      },
+      {
+        "semester": "WINTER",
+        "num_grades": 10,
+        "course_type": "PROJECT",
+        "avg_exam_score": 44.13,
+        "avg_component_average": 49.67
+      },
+      {
+        "semester": "WINTER",
+        "num_grades": 2,
+        "course_type": "SEMINAR",
+        "avg_exam_score": 64.57,
+        "avg_component_average": 42.63
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Grades by Course Type — Winter vs Summer",
+      "layer": [
+        {
+          "mark": {
+            "type": "bar",
+            "cornerRadius": 3
+          },
+          "encoding": {
+            "x": {
+              "field": "course_type",
+              "type": "nominal",
+              "axis": {
+                "title": "Course Type",
+                "labelAngle": 0
+              }
+            },
+            "xOffset": {
+              "field": "semester"
+            },
+            "y": {
+              "field": "avg_component_average",
+              "type": "quantitative",
+              "axis": {
+                "title": "Avg Component Average"
+              }
+            },
+            "color": {
+              "field": "semester",
+              "type": "nominal",
+              "title": "Semester",
+              "scale": {
+                "domain": [
+                  "WINTER",
+                  "SUMMER"
+                ],
+                "range": [
+                  "#1f77b4",
+                  "#ff7f0e"
+                ]
+              }
+            },
+            "tooltip": [
+              {
+                "field": "course_type",
+                "type": "nominal",
+                "title": "Course Type"
+              },
+              {
+                "field": "semester",
+                "type": "nominal",
+                "title": "Semester"
+              },
+              {
+                "field": "avg_component_average",
+                "type": "quantitative",
+                "title": "Avg Component Avg"
+              },
+              {
+                "field": "avg_exam_score",
+                "type": "quantitative",
+                "title": "Avg Exam Score"
+              },
+              {
+                "field": "num_grades",
+                "type": "quantitative",
+                "title": "Num Grades"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "point",
+            "filled": true,
+            "size": 80,
+            "stroke": "black",
+            "strokeWidth": 0.5
+          },
+          "encoding": {
+            "x": {
+              "field": "course_type",
+              "type": "nominal"
+            },
+            "xOffset": {
+              "field": "semester"
+            },
+            "y": {
+              "field": "avg_exam_score",
+              "type": "quantitative",
+              "axis": {
+                "title": "Avg Exam Score"
+              }
+            },
+            "color": {
+              "field": "semester",
+              "type": "nominal",
+              "legend": null,
+              "scale": {
+                "domain": [
+                  "WINTER",
+                  "SUMMER"
+                ],
+                "range": [
+                  "#1f77b4",
+                  "#ff7f0e"
+                ]
+              }
+            },
+            "tooltip": [
+              {
+                "field": "course_type",
+                "type": "nominal",
+                "title": "Course Type"
+              },
+              {
+                "field": "semester",
+                "type": "nominal",
+                "title": "Semester"
+              },
+              {
+                "field": "avg_component_average",
+                "type": "quantitative",
+                "title": "Avg Component Avg"
+              },
+              {
+                "field": "avg_exam_score",
+                "type": "quantitative",
+                "title": "Avg Exam Score"
+              },
+              {
+                "field": "num_grades",
+                "type": "quantitative",
+                "title": "Num Grades"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "sql": "SELECT\n  c.course_type::text AS course_type,\n  cs.semester_type::text AS semester,\n  ROUND(AVG(g.exam_score)::numeric, 2) AS avg_exam_score,\n  ROUND(AVG(\n    (COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) /\n    NULLIF(\n      (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END) +\n      (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END) +\n      (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\n    , 0)\n  )::numeric, 2) AS avg_component_average,\n  COUNT(g.id) AS num_grades\nFROM public.grades g\nJOIN public.enrollments e ON g.enrollment_id = e.id\nJOIN public.course_sections cs ON e.course_section_id = cs.id\nJOIN public.courses c ON cs.course_id = c.id\nWHERE lower(cs.semester_type::text) IN ('winter', 'summer')\nGROUP BY c.course_type::text, cs.semester_type::text\nORDER BY c.course_type::text ASC, cs.semester_type::text ASC;",
+    "metadata": {
+      "columns": [
+        "semester",
+        "num_grades",
+        "course_type",
+        "avg_exam_score",
+        "avg_component_average"
+      ],
+      "rowCount": 9,
+      "sample": [
+        {
+          "semester": "SUMMER",
+          "num_grades": 3,
+          "course_type": "EXERCISE",
+          "avg_exam_score": 35.68,
+          "avg_component_average": 52.18
+        },
+        {
+          "semester": "WINTER",
+          "num_grades": 4,
+          "course_type": "EXERCISE",
+          "avg_exam_score": 53.7,
+          "avg_component_average": 55.81
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:50:05.086Z",
+    "traceId": "84e7bbe66e75cda28b18088d0b96bc13",
+    "attempts": 3,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 16473,
+      "outputTokens": 5044,
+      "totalTokens": 21517,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 3456,
+      "costUsd": 0.01420625
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 16473,
+        "outputTokens": 5044,
+        "totalTokens": 21517,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 3456,
+        "costUsd": 0.01420625
+      }
+    ],
+    "warnings": []
+  }
+}

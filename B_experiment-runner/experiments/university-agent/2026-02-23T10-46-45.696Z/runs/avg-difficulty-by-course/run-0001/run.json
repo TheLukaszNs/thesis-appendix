@@ -1,0 +1,162 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "avg-difficulty-by-course",
+  "caseDirectory": "avg-difficulty-by-course",
+  "repeatIndex": 1,
+  "prompt": "What is the average difficulty rating for each course?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average difficulty rating for each course?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:47:36.106Z",
+    "endedAtUtc": "2026-02-23T10:47:48.947Z",
+    "durationMs": 12841
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2203",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:47:48 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"What is the average difficulty rating for each course?\"},\"agent\":{\"payload\":{\"question\":\"What is the average difficulty rating for each course?\"},\"startedAt\":1771843656115,\"status\":\"success\",\"output\":{\"sql\":\"WITH avg_difficulty_per_course AS (\\n  SELECT\\n    course_id AS course_id,\\n    course_name AS course_name,\\n    AVG(difficulty) AS avg_difficulty\\n  FROM course_ratings\\n  GROUP BY course_id, course_name\\n)\\nSELECT\\n  course_id AS course_id,\\n  course_name AS course_name,\\n  ROUND(avg_difficulty, 2) AS avg_difficulty\\nFROM avg_difficulty_per_course\\nORDER BY avg_difficulty DESC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Average difficulty rating for each course.\",\"title\":\"Average Difficulty Rating by Course\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course\",\"sort\":\"-x\"},\"x\":{\"field\":\"avg_difficulty\",\"type\":\"quantitative\",\"title\":\"Average Difficulty\"},\"tooltip\":[{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course\"},{\"field\":\"avg_difficulty\",\"type\":\"quantitative\",\"title\":\"Avg Difficulty\"},{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"}]}}},\"endedAt\":1771843668852},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH avg_difficulty_per_course AS (\\n  SELECT\\n    course_id AS course_id,\\n    course_name AS course_name,\\n    AVG(difficulty) AS avg_difficulty\\n  FROM course_ratings\\n  GROUP BY course_id, course_name\\n)\\nSELECT\\n  course_id AS course_id,\\n  course_name AS course_name,\\n  ROUND(avg_difficulty, 2) AS avg_difficulty\\nFROM avg_difficulty_per_course\\nORDER BY avg_difficulty DESC;\"},\"startedAt\":1771843668856,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: relation \\\"course_ratings\\\" does not exist\\nLINE 7:   FROM course_ratings\\n               ^\",\"name\":\"Error\"},\"endedAt\":1771843668942}},\"input\":{\"question\":\"What is the average difficulty rating for each course?\"},\"error\":{\"message\":\"SQL execution failed: relation \\\"course_ratings\\\" does not exist\\nLINE 7:   FROM course_ratings\\n               ^\",\"name\":\"Error\"},\"traceId\":\"7aa2cc40ee606b38b205919ba1e35b6b\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-difficulty-by-course/run-0001/run.json",
+    "queryPath": "runs/avg-difficulty-by-course/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-difficulty-by-course/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-difficulty-by-course/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-difficulty-by-course/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:47:48.948Z",
+  "traceId": "7aa2cc40ee606b38b205919ba1e35b6b",
+  "success": false,
+  "durationMs": 12842,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "What is the average difficulty rating for each course?"
+      },
+      "agent": {
+        "payload": {
+          "question": "What is the average difficulty rating for each course?"
+        },
+        "startedAt": 1771843656115,
+        "status": "success",
+        "output": {
+          "sql": "WITH avg_difficulty_per_course AS (\n  SELECT\n    course_id AS course_id,\n    course_name AS course_name,\n    AVG(difficulty) AS avg_difficulty\n  FROM course_ratings\n  GROUP BY course_id, course_name\n)\nSELECT\n  course_id AS course_id,\n  course_name AS course_name,\n  ROUND(avg_difficulty, 2) AS avg_difficulty\nFROM avg_difficulty_per_course\nORDER BY avg_difficulty DESC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Average difficulty rating for each course.",
+            "title": "Average Difficulty Rating by Course",
+            "data": {
+              "name": "query_result"
+            },
+            "mark": {
+              "type": "bar",
+              "tooltip": true
+            },
+            "encoding": {
+              "y": {
+                "field": "course_name",
+                "type": "nominal",
+                "title": "Course",
+                "sort": "-x"
+              },
+              "x": {
+                "field": "avg_difficulty",
+                "type": "quantitative",
+                "title": "Average Difficulty"
+              },
+              "tooltip": [
+                {
+                  "field": "course_name",
+                  "type": "nominal",
+                  "title": "Course"
+                },
+                {
+                  "field": "avg_difficulty",
+                  "type": "quantitative",
+                  "title": "Avg Difficulty"
+                },
+                {
+                  "field": "course_id",
+                  "type": "nominal",
+                  "title": "Course ID"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843668852
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH avg_difficulty_per_course AS (\n  SELECT\n    course_id AS course_id,\n    course_name AS course_name,\n    AVG(difficulty) AS avg_difficulty\n  FROM course_ratings\n  GROUP BY course_id, course_name\n)\nSELECT\n  course_id AS course_id,\n  course_name AS course_name,\n  ROUND(avg_difficulty, 2) AS avg_difficulty\nFROM avg_difficulty_per_course\nORDER BY avg_difficulty DESC;"
+        },
+        "startedAt": 1771843668856,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: relation \"course_ratings\" does not exist\nLINE 7:   FROM course_ratings\n               ^",
+          "name": "Error"
+        },
+        "endedAt": 1771843668942
+      }
+    },
+    "input": {
+      "question": "What is the average difficulty rating for each course?"
+    },
+    "error": {
+      "message": "SQL execution failed: relation \"course_ratings\" does not exist\nLINE 7:   FROM course_ratings\n               ^",
+      "name": "Error"
+    },
+    "traceId": "7aa2cc40ee606b38b205919ba1e35b6b"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:47:48.948Z",
+    "traceId": "7aa2cc40ee606b38b205919ba1e35b6b",
+    "attempts": 6,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 266,
+      "outputTokens": 1112,
+      "totalTokens": 1378,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 704,
+      "costUsd": 0.0022905
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 266,
+        "outputTokens": 1112,
+        "totalTokens": 1378,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 704,
+        "costUsd": 0.0022905
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,386 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "professor-hire-year-trend",
+  "caseDirectory": "professor-hire-year-trend",
+  "repeatIndex": 1,
+  "prompt": "Show the number of professors hired per year",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the number of professors hired per year"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:38:41.639Z",
+    "endedAtUtc": "2026-02-22T23:39:11.597Z",
+    "durationMs": 29958
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "8976",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:39:11 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show the number of professors hired per year\"},\"sql\":{\"payload\":{\"question\":\"Show the number of professors hired per year\"},\"startedAt\":1771803521646,\"status\":\"success\",\"output\":{\"reasoning\":\"Count professors by the year extracted from professors.hire_date (exclude NULL hire_date). Order results by year ascending. Verified table and column names from schema preflight.\",\"sql\":\"SELECT EXTRACT(YEAR FROM hire_date)::int AS hire_year, COUNT(*) AS professors_hired\\nFROM public.professors\\nWHERE hire_date IS NOT NULL\\nGROUP BY hire_year\\nORDER BY hire_year ASC;\",\"assumptions\":[\"Table public.professors exists and has a column hire_date of type date (verified).\",\"hire_date represents the professor's hiring date; rows with NULL hire_date should be excluded.\",\"Desired output field names: hire_year and professors_hired.\"]},\"endedAt\":1771803534984},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT EXTRACT(YEAR FROM hire_date)::int AS hire_year, COUNT(*) AS professors_hired\\nFROM public.professors\\nWHERE hire_date IS NOT NULL\\nGROUP BY hire_year\\nORDER BY hire_year ASC;\"},\"startedAt\":1771803534987,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT EXTRACT(YEAR FROM hire_date)::int AS hire_year, COUNT(*) AS professors_hired\\nFROM public.professors\\nWHERE hire_date IS NOT NULL\\nGROUP BY hire_year\\nORDER BY hire_year ASC\",\"metadata\":{\"columns\":[\"hire_year\",\"professors_hired\"],\"rowCount\":19,\"sample\":[{\"hire_year\":2001,\"professors_hired\":1},{\"hire_year\":2002,\"professors_hired\":5}]},\"data\":[{\"hire_year\":2001,\"professors_hired\":1},{\"hire_year\":2002,\"professors_hired\":5},{\"hire_year\":2003,\"professors_hired\":2},{\"hire_year\":2004,\"professors_hired\":3},{\"hire_year\":2007,\"professors_hired\":2},{\"hire_year\":2008,\"professors_hired\":1},{\"hire_year\":2009,\"professors_hired\":3},{\"hire_year\":2010,\"professors_hired\":4},{\"hire_year\":2011,\"professors_hired\":2},{\"hire_year\":2013,\"professors_hired\":2},{\"hire_year\":2014,\"professors_hired\":1},{\"hire_year\":2015,\"professors_hired\":3},{\"hire_year\":2016,\"professors_hired\":2},{\"hire_year\":2018,\"professors_hired\":3},{\"hire_year\":2019,\"professors_hired\":1},{\"hire_year\":2020,\"professors_hired\":4},{\"hire_year\":2021,\"professors_hired\":3},{\"hire_year\":2022,\"professors_hired\":3},{\"hire_year\":2024,\"professors_hired\":2}]},\"endedAt\":1771803535033},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT EXTRACT(YEAR FROM hire_date)::int AS hire_year, COUNT(*) AS professors_hired\\nFROM public.professors\\nWHERE hire_date IS NOT NULL\\nGROUP BY hire_year\\nORDER BY hire_year ASC\",\"metadata\":{\"columns\":[\"hire_year\",\"professors_hired\"],\"rowCount\":19,\"sample\":[{\"hire_year\":2001,\"professors_hired\":1},{\"hire_year\":2002,\"professors_hired\":5}]},\"data\":[{\"hire_year\":2001,\"professors_hired\":1},{\"hire_year\":2002,\"professors_hired\":5},{\"hire_year\":2003,\"professors_hired\":2},{\"hire_year\":2004,\"professors_hired\":3},{\"hire_year\":2007,\"professors_hired\":2},{\"hire_year\":2008,\"professors_hired\":1},{\"hire_year\":2009,\"professors_hired\":3},{\"hire_year\":2010,\"professors_hired\":4},{\"hire_year\":2011,\"professors_hired\":2},{\"hire_year\":2013,\"professors_hired\":2},{\"hire_year\":2014,\"professors_hired\":1},{\"hire_year\":2015,\"professors_hired\":3},{\"hire_year\":2016,\"professors_hired\":2},{\"hire_year\":2018,\"professors_hired\":3},{\"hire_year\":2019,\"professors_hired\":1},{\"hire_year\":2020,\"professors_hired\":4},{\"hire_year\":2021,\"professors_hired\":3},{\"hire_year\":2022,\"professors_hired\":3},{\"hire_year\":2024,\"professors_hired\":2}]},\"startedAt\":1771803535036,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Professors Hired per Year\",\"width\":700,\"height\":360,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"hire_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Hire Year\",\"labelAngle\":0},\"sort\":{\"field\":\"hire_year\",\"order\":\"ascending\"}},\"y\":{\"field\":\"professors_hired\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Professors Hired\"}},\"tooltip\":[{\"field\":\"hire_year\",\"type\":\"ordinal\",\"title\":\"Year\"},{\"field\":\"professors_hired\",\"type\":\"quantitative\",\"title\":\"Professors Hired\"}]}},\"reasoning\":\"Bar chart showing number of professors hired each year. X uses hire_year and is sorted ascending; Y shows the counted hires. Tooltip provides exact values.\"},\"endedAt\":1771803551568},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Professors Hired per Year\",\"width\":700,\"height\":360,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"hire_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Hire Year\",\"labelAngle\":0},\"sort\":{\"field\":\"hire_year\",\"order\":\"ascending\"}},\"y\":{\"field\":\"professors_hired\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Professors Hired\"}},\"tooltip\":[{\"field\":\"hire_year\",\"type\":\"ordinal\",\"title\":\"Year\"},{\"field\":\"professors_hired\",\"type\":\"quantitative\",\"title\":\"Professors Hired\"}]}},\"reasoning\":\"Bar chart showing number of professors hired each year. X uses hire_year and is sorted ascending; Y shows the counted hires. Tooltip provides exact values.\"},\"startedAt\":1771803551576,\"status\":\"success\",\"output\":{\"sql\":\"SELECT EXTRACT(YEAR FROM hire_date)::int AS hire_year, COUNT(*) AS professors_hired\\nFROM public.professors\\nWHERE hire_date IS NOT NULL\\nGROUP BY hire_year\\nORDER BY hire_year ASC;\",\"data\":[{\"hire_year\":2001,\"professors_hired\":1},{\"hire_year\":2002,\"professors_hired\":5},{\"hire_year\":2003,\"professors_hired\":2},{\"hire_year\":2004,\"professors_hired\":3},{\"hire_year\":2007,\"professors_hired\":2},{\"hire_year\":2008,\"professors_hired\":1},{\"hire_year\":2009,\"professors_hired\":3},{\"hire_year\":2010,\"professors_hired\":4},{\"hire_year\":2011,\"professors_hired\":2},{\"hire_year\":2013,\"professors_hired\":2},{\"hire_year\":2014,\"professors_hired\":1},{\"hire_year\":2015,\"professors_hired\":3},{\"hire_year\":2016,\"professors_hired\":2},{\"hire_year\":2018,\"professors_hired\":3},{\"hire_year\":2019,\"professors_hired\":1},{\"hire_year\":2020,\"professors_hired\":4},{\"hire_year\":2021,\"professors_hired\":3},{\"hire_year\":2022,\"professors_hired\":3},{\"hire_year\":2024,\"professors_hired\":2}],\"metadata\":{\"columns\":[\"hire_year\",\"professors_hired\"],\"rowCount\":19,\"sample\":[{\"hire_year\":2001,\"professors_hired\":1},{\"hire_year\":2002,\"professors_hired\":5}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Professors Hired per Year\",\"width\":700,\"height\":360,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"hire_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Hire Year\",\"labelAngle\":0},\"sort\":{\"field\":\"hire_year\",\"order\":\"ascending\"}},\"y\":{\"field\":\"professors_hired\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Professors Hired\"}},\"tooltip\":[{\"field\":\"hire_year\",\"type\":\"ordinal\",\"title\":\"Year\"},{\"field\":\"professors_hired\",\"type\":\"quantitative\",\"title\":\"Professors Hired\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771803551579}},\"input\":{\"question\":\"Show the number of professors hired per year\"},\"result\":{\"sql\":\"SELECT EXTRACT(YEAR FROM hire_date)::int AS hire_year, COUNT(*) AS professors_hired\\nFROM public.professors\\nWHERE hire_date IS NOT NULL\\nGROUP BY hire_year\\nORDER BY hire_year ASC;\",\"data\":[{\"hire_year\":2001,\"professors_hired\":1},{\"hire_year\":2002,\"professors_hired\":5},{\"hire_year\":2003,\"professors_hired\":2},{\"hire_year\":2004,\"professors_hired\":3},{\"hire_year\":2007,\"professors_hired\":2},{\"hire_year\":2008,\"professors_hired\":1},{\"hire_year\":2009,\"professors_hired\":3},{\"hire_year\":2010,\"professors_hired\":4},{\"hire_year\":2011,\"professors_hired\":2},{\"hire_year\":2013,\"professors_hired\":2},{\"hire_year\":2014,\"professors_hired\":1},{\"hire_year\":2015,\"professors_hired\":3},{\"hire_year\":2016,\"professors_hired\":2},{\"hire_year\":2018,\"professors_hired\":3},{\"hire_year\":2019,\"professors_hired\":1},{\"hire_year\":2020,\"professors_hired\":4},{\"hire_year\":2021,\"professors_hired\":3},{\"hire_year\":2022,\"professors_hired\":3},{\"hire_year\":2024,\"professors_hired\":2}],\"metadata\":{\"columns\":[\"hire_year\",\"professors_hired\"],\"rowCount\":19,\"sample\":[{\"hire_year\":2001,\"professors_hired\":1},{\"hire_year\":2002,\"professors_hired\":5}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Professors Hired per Year\",\"width\":700,\"height\":360,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"hire_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Hire Year\",\"labelAngle\":0},\"sort\":{\"field\":\"hire_year\",\"order\":\"ascending\"}},\"y\":{\"field\":\"professors_hired\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Professors Hired\"}},\"tooltip\":[{\"field\":\"hire_year\",\"type\":\"ordinal\",\"title\":\"Year\"},{\"field\":\"professors_hired\",\"type\":\"quantitative\",\"title\":\"Professors Hired\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"20d846e5e84bba3fcfa97be50b565316\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/professor-hire-year-trend/run-0001/run.json",
+    "queryPath": "runs/professor-hire-year-trend/run-0001/query.sql",
+    "vegaRawPath": "runs/professor-hire-year-trend/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/professor-hire-year-trend/run-0001/vega.resolved.json",
+    "imagePath": "runs/professor-hire-year-trend/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:39:12.007Z",
+  "traceId": "20d846e5e84bba3fcfa97be50b565316",
+  "success": true,
+  "durationMs": 30368,
+  "resultRaw": {
+    "data": [
+      {
+        "hire_year": 2001,
+        "professors_hired": 1
+      },
+      {
+        "hire_year": 2002,
+        "professors_hired": 5
+      },
+      {
+        "hire_year": 2003,
+        "professors_hired": 2
+      },
+      {
+        "hire_year": 2004,
+        "professors_hired": 3
+      },
+      {
+        "hire_year": 2007,
+        "professors_hired": 2
+      },
+      {
+        "hire_year": 2008,
+        "professors_hired": 1
+      },
+      {
+        "hire_year": 2009,
+        "professors_hired": 3
+      },
+      {
+        "hire_year": 2010,
+        "professors_hired": 4
+      },
+      {
+        "hire_year": 2011,
+        "professors_hired": 2
+      },
+      {
+        "hire_year": 2013,
+        "professors_hired": 2
+      },
+      {
+        "hire_year": 2014,
+        "professors_hired": 1
+      },
+      {
+        "hire_year": 2015,
+        "professors_hired": 3
+      },
+      {
+        "hire_year": 2016,
+        "professors_hired": 2
+      },
+      {
+        "hire_year": 2018,
+        "professors_hired": 3
+      },
+      {
+        "hire_year": 2019,
+        "professors_hired": 1
+      },
+      {
+        "hire_year": 2020,
+        "professors_hired": 4
+      },
+      {
+        "hire_year": 2021,
+        "professors_hired": 3
+      },
+      {
+        "hire_year": 2022,
+        "professors_hired": 3
+      },
+      {
+        "hire_year": 2024,
+        "professors_hired": 2
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Professors Hired per Year",
+      "width": 700,
+      "height": 360,
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "hire_year",
+          "type": "ordinal",
+          "axis": {
+            "title": "Hire Year",
+            "labelAngle": 0
+          },
+          "sort": {
+            "field": "hire_year",
+            "order": "ascending"
+          }
+        },
+        "y": {
+          "field": "professors_hired",
+          "type": "quantitative",
+          "axis": {
+            "title": "Professors Hired"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "hire_year",
+            "type": "ordinal",
+            "title": "Year"
+          },
+          {
+            "field": "professors_hired",
+            "type": "quantitative",
+            "title": "Professors Hired"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT EXTRACT(YEAR FROM hire_date)::int AS hire_year, COUNT(*) AS professors_hired\nFROM public.professors\nWHERE hire_date IS NOT NULL\nGROUP BY hire_year\nORDER BY hire_year ASC;",
+    "metadata": {
+      "columns": [
+        "hire_year",
+        "professors_hired"
+      ],
+      "rowCount": 19,
+      "sample": [
+        {
+          "hire_year": 2001,
+          "professors_hired": 1
+        },
+        {
+          "hire_year": 2002,
+          "professors_hired": 5
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "hire_year": 2001,
+        "professors_hired": 1
+      },
+      {
+        "hire_year": 2002,
+        "professors_hired": 5
+      },
+      {
+        "hire_year": 2003,
+        "professors_hired": 2
+      },
+      {
+        "hire_year": 2004,
+        "professors_hired": 3
+      },
+      {
+        "hire_year": 2007,
+        "professors_hired": 2
+      },
+      {
+        "hire_year": 2008,
+        "professors_hired": 1
+      },
+      {
+        "hire_year": 2009,
+        "professors_hired": 3
+      },
+      {
+        "hire_year": 2010,
+        "professors_hired": 4
+      },
+      {
+        "hire_year": 2011,
+        "professors_hired": 2
+      },
+      {
+        "hire_year": 2013,
+        "professors_hired": 2
+      },
+      {
+        "hire_year": 2014,
+        "professors_hired": 1
+      },
+      {
+        "hire_year": 2015,
+        "professors_hired": 3
+      },
+      {
+        "hire_year": 2016,
+        "professors_hired": 2
+      },
+      {
+        "hire_year": 2018,
+        "professors_hired": 3
+      },
+      {
+        "hire_year": 2019,
+        "professors_hired": 1
+      },
+      {
+        "hire_year": 2020,
+        "professors_hired": 4
+      },
+      {
+        "hire_year": 2021,
+        "professors_hired": 3
+      },
+      {
+        "hire_year": 2022,
+        "professors_hired": 3
+      },
+      {
+        "hire_year": 2024,
+        "professors_hired": 2
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Professors Hired per Year",
+      "width": 700,
+      "height": 360,
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "hire_year",
+          "type": "ordinal",
+          "axis": {
+            "title": "Hire Year",
+            "labelAngle": 0
+          },
+          "sort": {
+            "field": "hire_year",
+            "order": "ascending"
+          }
+        },
+        "y": {
+          "field": "professors_hired",
+          "type": "quantitative",
+          "axis": {
+            "title": "Professors Hired"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "hire_year",
+            "type": "ordinal",
+            "title": "Year"
+          },
+          {
+            "field": "professors_hired",
+            "type": "quantitative",
+            "title": "Professors Hired"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT EXTRACT(YEAR FROM hire_date)::int AS hire_year, COUNT(*) AS professors_hired\nFROM public.professors\nWHERE hire_date IS NOT NULL\nGROUP BY hire_year\nORDER BY hire_year ASC;",
+    "metadata": {
+      "columns": [
+        "hire_year",
+        "professors_hired"
+      ],
+      "rowCount": 19,
+      "sample": [
+        {
+          "hire_year": 2001,
+          "professors_hired": 1
+        },
+        {
+          "hire_year": 2002,
+          "professors_hired": 5
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:39:12.007Z",
+    "traceId": "20d846e5e84bba3fcfa97be50b565316",
+    "attempts": 3,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 5681,
+      "outputTokens": 1727,
+      "totalTokens": 7408,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 960,
+      "costUsd": 0.00487425
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 5681,
+        "outputTokens": 1727,
+        "totalTokens": 7408,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 960,
+        "costUsd": 0.00487425
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "scholarship-amount-vs-gpa",
+  "caseDirectory": "scholarship-amount-vs-gpa",
+  "repeatIndex": 1,
+  "prompt": "Show average GPA for different scholarship amount ranges",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show average GPA for different scholarship amount ranges"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:15:41.780Z",
+    "endedAtUtc": "2026-02-23T14:16:07.500Z",
+    "durationMs": 25720
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2877",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:16:07 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Show average GPA for different scholarship amount ranges\"},\"sql\":{\"payload\":{\"question\":\"Show average GPA for different scholarship amount ranges\"},\"startedAt\":1771856141784,\"status\":\"success\",\"output\":{\"reasoning\":\"The user wants to see average GPA grouped by scholarship amount ranges. I have confirmed that:\\n1. The `scholarships` table has an `amount` column (numeric, range 1000-5000)\\n2. The `students` table has a `gpa` column (numeric)\\n3. There's a foreign key linking scholarships.student_id to students.id\\n\\nI'll create ranges for scholarship amounts (e.g., 1000-2000, 2000-3000, 3000-4000, 4000-5000) and calculate the average GPA for students in each range. I'll use a CASE statement to define the ranges and GROUP BY to aggregate.\",\"sql\":\"SELECT \\n  CASE \\n    WHEN s.amount < 2000 THEN '1000-1999'\\n    WHEN s.amount < 3000 THEN '2000-2999'\\n    WHEN s.amount < 4000 THEN '3000-3999'\\n    WHEN s.amount < 5000 THEN '4000-4999'\\n    ELSE '5000+'\\n  END AS scholarship_range,\\n  ROUND(AVG(st.gpa)::numeric, 2) AS average_gpa,\\n  COUNT(DISTINCT st.id) AS student_count\\nFROM public.scholarships s\\nINNER JOIN public.students st ON s.student_id = st.id\\nWHERE st.gpa IS NOT NULL\\nGROUP BY scholarship_range\\nORDER BY \\n  CASE \\n    WHEN scholarship_range = '1000-1999' THEN 1\\n    WHEN scholarship_range = '2000-2999' THEN 2\\n    WHEN scholarship_range = '3000-3999' THEN 3\\n    WHEN scholarship_range = '4000-4999' THEN 4\\n    ELSE 5\\n  END\",\"assumptions\":[\"Scholarship amounts range from 1000 to 5000\",\"GPA values are stored in the students table\",\"We exclude students with NULL GPA values\",\"Each scholarship record represents one award to a student\"]},\"endedAt\":1771856167466},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT \\n  CASE \\n    WHEN s.amount < 2000 THEN '1000-1999'\\n    WHEN s.amount < 3000 THEN '2000-2999'\\n    WHEN s.amount < 4000 THEN '3000-3999'\\n    WHEN s.amount < 5000 THEN '4000-4999'\\n    ELSE '5000+'\\n  END AS scholarship_range,\\n  ROUND(AVG(st.gpa)::numeric, 2) AS average_gpa,\\n  COUNT(DISTINCT st.id) AS student_count\\nFROM public.scholarships s\\nINNER JOIN public.students st ON s.student_id = st.id\\nWHERE st.gpa IS NOT NULL\\nGROUP BY scholarship_range\\nORDER BY \\n  CASE \\n    WHEN scholarship_range = '1000-1999' THEN 1\\n    WHEN scholarship_range = '2000-2999' THEN 2\\n    WHEN scholarship_range = '3000-3999' THEN 3\\n    WHEN scholarship_range = '4000-4999' THEN 4\\n    ELSE 5\\n  END\"},\"startedAt\":1771856167471,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column \\\"scholarship_range\\\" does not exist\",\"name\":\"Error\"},\"endedAt\":1771856167487}},\"input\":{\"question\":\"Show average GPA for different scholarship amount ranges\"},\"error\":{\"message\":\"SQL execution failed: column \\\"scholarship_range\\\" does not exist\",\"name\":\"Error\"},\"traceId\":\"fee19469fd37e589d560e89dfb218b4e\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/scholarship-amount-vs-gpa/run-0001/run.json",
+    "queryPath": "runs/scholarship-amount-vs-gpa/run-0001/query.sql",
+    "vegaRawPath": "runs/scholarship-amount-vs-gpa/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/scholarship-amount-vs-gpa/run-0001/vega.resolved.json",
+    "imagePath": "runs/scholarship-amount-vs-gpa/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:16:07.501Z",
+  "traceId": "fee19469fd37e589d560e89dfb218b4e",
+  "success": false,
+  "durationMs": 25721,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Show average GPA for different scholarship amount ranges"
+      },
+      "sql": {
+        "payload": {
+          "question": "Show average GPA for different scholarship amount ranges"
+        },
+        "startedAt": 1771856141784,
+        "status": "success",
+        "output": {
+          "reasoning": "The user wants to see average GPA grouped by scholarship amount ranges. I have confirmed that:\n1. The `scholarships` table has an `amount` column (numeric, range 1000-5000)\n2. The `students` table has a `gpa` column (numeric)\n3. There's a foreign key linking scholarships.student_id to students.id\n\nI'll create ranges for scholarship amounts (e.g., 1000-2000, 2000-3000, 3000-4000, 4000-5000) and calculate the average GPA for students in each range. I'll use a CASE statement to define the ranges and GROUP BY to aggregate.",
+          "sql": "SELECT \n  CASE \n    WHEN s.amount < 2000 THEN '1000-1999'\n    WHEN s.amount < 3000 THEN '2000-2999'\n    WHEN s.amount < 4000 THEN '3000-3999'\n    WHEN s.amount < 5000 THEN '4000-4999'\n    ELSE '5000+'\n  END AS scholarship_range,\n  ROUND(AVG(st.gpa)::numeric, 2) AS average_gpa,\n  COUNT(DISTINCT st.id) AS student_count\nFROM public.scholarships s\nINNER JOIN public.students st ON s.student_id = st.id\nWHERE st.gpa IS NOT NULL\nGROUP BY scholarship_range\nORDER BY \n  CASE \n    WHEN scholarship_range = '1000-1999' THEN 1\n    WHEN scholarship_range = '2000-2999' THEN 2\n    WHEN scholarship_range = '3000-3999' THEN 3\n    WHEN scholarship_range = '4000-4999' THEN 4\n    ELSE 5\n  END",
+          "assumptions": [
+            "Scholarship amounts range from 1000 to 5000",
+            "GPA values are stored in the students table",
+            "We exclude students with NULL GPA values",
+            "Each scholarship record represents one award to a student"
+          ]
+        },
+        "endedAt": 1771856167466
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT \n  CASE \n    WHEN s.amount < 2000 THEN '1000-1999'\n    WHEN s.amount < 3000 THEN '2000-2999'\n    WHEN s.amount < 4000 THEN '3000-3999'\n    WHEN s.amount < 5000 THEN '4000-4999'\n    ELSE '5000+'\n  END AS scholarship_range,\n  ROUND(AVG(st.gpa)::numeric, 2) AS average_gpa,\n  COUNT(DISTINCT st.id) AS student_count\nFROM public.scholarships s\nINNER JOIN public.students st ON s.student_id = st.id\nWHERE st.gpa IS NOT NULL\nGROUP BY scholarship_range\nORDER BY \n  CASE \n    WHEN scholarship_range = '1000-1999' THEN 1\n    WHEN scholarship_range = '2000-2999' THEN 2\n    WHEN scholarship_range = '3000-3999' THEN 3\n    WHEN scholarship_range = '4000-4999' THEN 4\n    ELSE 5\n  END"
+        },
+        "startedAt": 1771856167471,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column \"scholarship_range\" does not exist",
+          "name": "Error"
+        },
+        "endedAt": 1771856167487
+      }
+    },
+    "input": {
+      "question": "Show average GPA for different scholarship amount ranges"
+    },
+    "error": {
+      "message": "SQL execution failed: column \"scholarship_range\" does not exist",
+      "name": "Error"
+    },
+    "traceId": "fee19469fd37e589d560e89dfb218b4e"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.389Z",
+    "traceId": "fee19469fd37e589d560e89dfb218b4e",
+    "attempts": 1,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 16817,
+      "outputTokens": 755,
+      "totalTokens": 17572,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.020592
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 1,
+        "inputTokens": 16817,
+        "outputTokens": 755,
+        "totalTokens": 17572,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.020592
+      }
+    ],
+    "warnings": []
+  }
+}

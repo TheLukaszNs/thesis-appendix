@@ -1,0 +1,628 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "courses-most-sections",
+  "caseDirectory": "courses-most-sections",
+  "repeatIndex": 1,
+  "prompt": "Which courses have been offered in the most sections overall?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which courses have been offered in the most sections overall?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:54:18.675Z",
+    "endedAtUtc": "2026-02-22T23:54:55.136Z",
+    "durationMs": 36461
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "23505",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:54:55 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Which courses have been offered in the most sections overall?\"},\"sql\":{\"payload\":{\"question\":\"Which courses have been offered in the most sections overall?\"},\"startedAt\":1771804458683,\"status\":\"success\",\"output\":{\"reasoning\":\"Count the number of course_sections per course by joining courses to course_sections; order by descending section count and tie-break deterministically by course code and name. Use LEFT JOIN to include courses with zero sections.\",\"sql\":\"SELECT c.id AS course_id, c.code AS course_code, c.name AS course_name, COUNT(cs.id) AS sections_offered\\nFROM public.courses AS c\\nLEFT JOIN public.course_sections AS cs ON cs.course_id = c.id\\nGROUP BY c.id, c.code, c.name\\nORDER BY sections_offered DESC, c.code ASC, c.name ASC;\",\"assumptions\":[\"courses.id is the primary key and course_sections.course_id references courses.id (confirmed in schema)\",\"We count every row in course_sections as one offered section (across all semesters/years)\",\"Include courses with zero sections (LEFT JOIN); ties are deterministically ordered by course_code then course_name\"]},\"endedAt\":1771804476964},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT c.id AS course_id, c.code AS course_code, c.name AS course_name, COUNT(cs.id) AS sections_offered\\nFROM public.courses AS c\\nLEFT JOIN public.course_sections AS cs ON cs.course_id = c.id\\nGROUP BY c.id, c.code, c.name\\nORDER BY sections_offered DESC, c.code ASC, c.name ASC;\"},\"startedAt\":1771804476966,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT c.id AS course_id, c.code AS course_code, c.name AS course_name, COUNT(cs.id) AS sections_offered\\nFROM public.courses AS c\\nLEFT JOIN public.course_sections AS cs ON cs.course_id = c.id\\nGROUP BY c.id, c.code, c.name\\nORDER BY sections_offered DESC, c.code ASC, c.name ASC\",\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"sections_offered\"],\"rowCount\":26,\"sample\":[{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"sections_offered\":3},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"sections_offered\":3}]},\"data\":[{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"sections_offered\":3},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"sections_offered\":3},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"sections_offered\":3},{\"course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"sections_offered\":2},{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"sections_offered\":2},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"sections_offered\":2},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"sections_offered\":2},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"sections_offered\":2},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"sections_offered\":2},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"sections_offered\":2},{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"sections_offered\":1},{\"course_id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"sections_offered\":1},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"sections_offered\":1},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"sections_offered\":1},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"sections_offered\":1},{\"course_id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"course_code\":\"HMI-889\",\"course_name\":\"Elektronika\",\"sections_offered\":1},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"sections_offered\":1},{\"course_id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"sections_offered\":1},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"sections_offered\":1},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"sections_offered\":1},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"sections_offered\":1},{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"sections_offered\":0},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"sections_offered\":0},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\",\"sections_offered\":0},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\",\"sections_offered\":0},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\",\"sections_offered\":0}]},\"endedAt\":1771804476984},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT c.id AS course_id, c.code AS course_code, c.name AS course_name, COUNT(cs.id) AS sections_offered\\nFROM public.courses AS c\\nLEFT JOIN public.course_sections AS cs ON cs.course_id = c.id\\nGROUP BY c.id, c.code, c.name\\nORDER BY sections_offered DESC, c.code ASC, c.name ASC\",\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"sections_offered\"],\"rowCount\":26,\"sample\":[{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"sections_offered\":3},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"sections_offered\":3}]},\"data\":[{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"sections_offered\":3},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"sections_offered\":3},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"sections_offered\":3},{\"course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"sections_offered\":2},{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"sections_offered\":2},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"sections_offered\":2},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"sections_offered\":2},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"sections_offered\":2},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"sections_offered\":2},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"sections_offered\":2},{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"sections_offered\":1},{\"course_id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"sections_offered\":1},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"sections_offered\":1},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"sections_offered\":1},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"sections_offered\":1},{\"course_id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"course_code\":\"HMI-889\",\"course_name\":\"Elektronika\",\"sections_offered\":1},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"sections_offered\":1},{\"course_id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"sections_offered\":1},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"sections_offered\":1},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"sections_offered\":1},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"sections_offered\":1},{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"sections_offered\":0},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"sections_offered\":0},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\",\"sections_offered\":0},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\",\"sections_offered\":0},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\",\"sections_offered\":0}]},\"startedAt\":1771804476986,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Courses offered in the most sections (ranked)\",\"height\":{\"step\":22},\"layer\":[{\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"sections_offered\",\"type\":\"quantitative\",\"title\":\"Sections offered\"},\"y\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\",\"sort\":\"-x\"},\"color\":{\"field\":\"sections_offered\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course name\"},{\"field\":\"sections_offered\",\"type\":\"quantitative\",\"title\":\"Sections offered\"}]}},{\"mark\":{\"type\":\"text\",\"align\":\"left\",\"dx\":4},\"encoding\":{\"x\":{\"field\":\"sections_offered\",\"type\":\"quantitative\"},\"y\":{\"field\":\"course_code\",\"type\":\"nominal\",\"sort\":\"-x\"},\"text\":{\"field\":\"sections_offered\",\"type\":\"quantitative\"}}}]},\"reasoning\":\"Horizontal bars show each course (by course_code) sorted by total sections_offered; tooltip includes the full course_name for context and the exact count is shown at the end of each bar.\"},\"endedAt\":1771804495111},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Courses offered in the most sections (ranked)\",\"height\":{\"step\":22},\"layer\":[{\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"sections_offered\",\"type\":\"quantitative\",\"title\":\"Sections offered\"},\"y\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\",\"sort\":\"-x\"},\"color\":{\"field\":\"sections_offered\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course name\"},{\"field\":\"sections_offered\",\"type\":\"quantitative\",\"title\":\"Sections offered\"}]}},{\"mark\":{\"type\":\"text\",\"align\":\"left\",\"dx\":4},\"encoding\":{\"x\":{\"field\":\"sections_offered\",\"type\":\"quantitative\"},\"y\":{\"field\":\"course_code\",\"type\":\"nominal\",\"sort\":\"-x\"},\"text\":{\"field\":\"sections_offered\",\"type\":\"quantitative\"}}}]},\"reasoning\":\"Horizontal bars show each course (by course_code) sorted by total sections_offered; tooltip includes the full course_name for context and the exact count is shown at the end of each bar.\"},\"startedAt\":1771804495115,\"status\":\"success\",\"output\":{\"sql\":\"SELECT c.id AS course_id, c.code AS course_code, c.name AS course_name, COUNT(cs.id) AS sections_offered\\nFROM public.courses AS c\\nLEFT JOIN public.course_sections AS cs ON cs.course_id = c.id\\nGROUP BY c.id, c.code, c.name\\nORDER BY sections_offered DESC, c.code ASC, c.name ASC;\",\"data\":[{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"sections_offered\":3},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"sections_offered\":3},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"sections_offered\":3},{\"course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"sections_offered\":2},{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"sections_offered\":2},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"sections_offered\":2},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"sections_offered\":2},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"sections_offered\":2},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"sections_offered\":2},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"sections_offered\":2},{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"sections_offered\":1},{\"course_id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"sections_offered\":1},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"sections_offered\":1},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"sections_offered\":1},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"sections_offered\":1},{\"course_id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"course_code\":\"HMI-889\",\"course_name\":\"Elektronika\",\"sections_offered\":1},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"sections_offered\":1},{\"course_id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"sections_offered\":1},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"sections_offered\":1},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"sections_offered\":1},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"sections_offered\":1},{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"sections_offered\":0},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"sections_offered\":0},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\",\"sections_offered\":0},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\",\"sections_offered\":0},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\",\"sections_offered\":0}],\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"sections_offered\"],\"rowCount\":26,\"sample\":[{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"sections_offered\":3},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"sections_offered\":3}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Courses offered in the most sections (ranked)\",\"height\":{\"step\":22},\"layer\":[{\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"sections_offered\",\"type\":\"quantitative\",\"title\":\"Sections offered\"},\"y\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\",\"sort\":\"-x\"},\"color\":{\"field\":\"sections_offered\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course name\"},{\"field\":\"sections_offered\",\"type\":\"quantitative\",\"title\":\"Sections offered\"}]}},{\"mark\":{\"type\":\"text\",\"align\":\"left\",\"dx\":4},\"encoding\":{\"x\":{\"field\":\"sections_offered\",\"type\":\"quantitative\"},\"y\":{\"field\":\"course_code\",\"type\":\"nominal\",\"sort\":\"-x\"},\"text\":{\"field\":\"sections_offered\",\"type\":\"quantitative\"}}}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"]}},\"endedAt\":1771804495118}},\"input\":{\"question\":\"Which courses have been offered in the most sections overall?\"},\"result\":{\"sql\":\"SELECT c.id AS course_id, c.code AS course_code, c.name AS course_name, COUNT(cs.id) AS sections_offered\\nFROM public.courses AS c\\nLEFT JOIN public.course_sections AS cs ON cs.course_id = c.id\\nGROUP BY c.id, c.code, c.name\\nORDER BY sections_offered DESC, c.code ASC, c.name ASC;\",\"data\":[{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"sections_offered\":3},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"sections_offered\":3},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"sections_offered\":3},{\"course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"sections_offered\":2},{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"sections_offered\":2},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"sections_offered\":2},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"sections_offered\":2},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"sections_offered\":2},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"sections_offered\":2},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"sections_offered\":2},{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"sections_offered\":1},{\"course_id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"sections_offered\":1},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"sections_offered\":1},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"sections_offered\":1},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"sections_offered\":1},{\"course_id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"course_code\":\"HMI-889\",\"course_name\":\"Elektronika\",\"sections_offered\":1},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"sections_offered\":1},{\"course_id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"sections_offered\":1},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"sections_offered\":1},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"sections_offered\":1},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"sections_offered\":1},{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"sections_offered\":0},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"sections_offered\":0},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\",\"sections_offered\":0},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\",\"sections_offered\":0},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\",\"sections_offered\":0}],\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"sections_offered\"],\"rowCount\":26,\"sample\":[{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"sections_offered\":3},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"sections_offered\":3}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Courses offered in the most sections (ranked)\",\"height\":{\"step\":22},\"layer\":[{\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"sections_offered\",\"type\":\"quantitative\",\"title\":\"Sections offered\"},\"y\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\",\"sort\":\"-x\"},\"color\":{\"field\":\"sections_offered\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course name\"},{\"field\":\"sections_offered\",\"type\":\"quantitative\",\"title\":\"Sections offered\"}]}},{\"mark\":{\"type\":\"text\",\"align\":\"left\",\"dx\":4},\"encoding\":{\"x\":{\"field\":\"sections_offered\",\"type\":\"quantitative\"},\"y\":{\"field\":\"course_code\",\"type\":\"nominal\",\"sort\":\"-x\"},\"text\":{\"field\":\"sections_offered\",\"type\":\"quantitative\"}}}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"]}},\"traceId\":\"744437ad810b7fcb61e718108e0613aa\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/courses-most-sections/run-0001/run.json",
+    "queryPath": "runs/courses-most-sections/run-0001/query.sql",
+    "vegaRawPath": "runs/courses-most-sections/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/courses-most-sections/run-0001/vega.resolved.json",
+    "imagePath": "runs/courses-most-sections/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:54:55.645Z",
+  "traceId": "744437ad810b7fcb61e718108e0613aa",
+  "success": true,
+  "durationMs": 36970,
+  "resultRaw": {
+    "data": [
+      {
+        "course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "course_code": "AFI-682",
+        "course_name": "Matematyka Dyskretna",
+        "sections_offered": 3
+      },
+      {
+        "course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+        "course_code": "FCL-532",
+        "course_name": "Uczenie Maszynowe",
+        "sections_offered": 3
+      },
+      {
+        "course_id": "0b97f1bf-8c86-431a-a583-563354b1e01f",
+        "course_code": "RZR-301",
+        "course_name": "Sieci Komputerowe",
+        "sections_offered": 3
+      },
+      {
+        "course_id": "59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23",
+        "course_code": "MKO-885",
+        "course_name": "Rachunek Prawdopodobieństwa",
+        "sections_offered": 2
+      },
+      {
+        "course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+        "course_code": "TJJ-354",
+        "course_name": "Projektowanie Aplikacji Webowych",
+        "sections_offered": 2
+      },
+      {
+        "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "sections_offered": 2
+      },
+      {
+        "course_id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "sections_offered": 2
+      },
+      {
+        "course_id": "b18a39cf-8a1b-471c-b67a-94aa04eccfae",
+        "course_code": "WZC-570",
+        "course_name": "Programowanie Obiektowe",
+        "sections_offered": 2
+      },
+      {
+        "course_id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "sections_offered": 2
+      },
+      {
+        "course_id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "sections_offered": 2
+      },
+      {
+        "course_id": "91922683-9cba-47f2-bb00-babfbce3866f",
+        "course_code": "AAX-989",
+        "course_name": "Elektronika",
+        "sections_offered": 1
+      },
+      {
+        "course_id": "3d59b771-6ed9-47a0-b46f-f90c188f7863",
+        "course_code": "ARH-232",
+        "course_name": "Cloud Computing",
+        "sections_offered": 1
+      },
+      {
+        "course_id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+        "course_code": "BEW-951",
+        "course_name": "Fizyka",
+        "sections_offered": 1
+      },
+      {
+        "course_id": "7dc872b8-c34e-4061-8f34-8b4c099b6325",
+        "course_code": "BSS-943",
+        "course_name": "Algebra Liniowa",
+        "sections_offered": 1
+      },
+      {
+        "course_id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+        "course_code": "FEO-908",
+        "course_name": "Analiza Matematyczna",
+        "sections_offered": 1
+      },
+      {
+        "course_id": "47f61e5e-19e7-4b9e-b8d0-153ca7c76090",
+        "course_code": "HMI-889",
+        "course_name": "Elektronika",
+        "sections_offered": 1
+      },
+      {
+        "course_id": "d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5",
+        "course_code": "HPF-845",
+        "course_name": "Systemy Wbudowane",
+        "sections_offered": 1
+      },
+      {
+        "course_id": "e6b62b9f-429a-423d-84c7-77b28a64b9a3",
+        "course_code": "JFH-143",
+        "course_name": "Architektura Komputerów",
+        "sections_offered": 1
+      },
+      {
+        "course_id": "0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca",
+        "course_code": "PSC-614",
+        "course_name": "Architektura Komputerów",
+        "sections_offered": 1
+      },
+      {
+        "course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "course_code": "TAU-627",
+        "course_name": "Analiza Matematyczna",
+        "sections_offered": 1
+      },
+      {
+        "course_id": "c0e00b1c-84d6-4ccd-999d-7c9197625f2e",
+        "course_code": "ZUQ-127",
+        "course_name": "Fizyka",
+        "sections_offered": 1
+      },
+      {
+        "course_id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+        "course_code": "FPW-573",
+        "course_name": "Programowanie Obiektowe",
+        "sections_offered": 0
+      },
+      {
+        "course_id": "410a9134-116d-41eb-84bc-1b5144736995",
+        "course_code": "FWJ-758",
+        "course_name": "Bezpieczeństwo Systemów Komputerowych",
+        "sections_offered": 0
+      },
+      {
+        "course_id": "6002cfac-f371-4c9b-a048-8aaf1aae450a",
+        "course_code": "LUO-736",
+        "course_name": "Grafika Komputerowa",
+        "sections_offered": 0
+      },
+      {
+        "course_id": "e89877df-7199-4b1f-a8e8-8e5c0872fe23",
+        "course_code": "NWG-686",
+        "course_name": "Programowanie Funkcyjne",
+        "sections_offered": 0
+      },
+      {
+        "course_id": "32619ee8-5d87-49a4-9ca1-c94668909e2e",
+        "course_code": "SBW-955",
+        "course_name": "Sieci Komputerowe",
+        "sections_offered": 0
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Courses offered in the most sections (ranked)",
+      "height": {
+        "step": 22
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "bar"
+          },
+          "encoding": {
+            "x": {
+              "field": "sections_offered",
+              "type": "quantitative",
+              "title": "Sections offered"
+            },
+            "y": {
+              "field": "course_code",
+              "type": "nominal",
+              "title": "Course code",
+              "sort": "-x"
+            },
+            "color": {
+              "field": "sections_offered",
+              "type": "quantitative",
+              "legend": null
+            },
+            "tooltip": [
+              {
+                "field": "course_code",
+                "type": "nominal",
+                "title": "Course code"
+              },
+              {
+                "field": "course_name",
+                "type": "nominal",
+                "title": "Course name"
+              },
+              {
+                "field": "sections_offered",
+                "type": "quantitative",
+                "title": "Sections offered"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dx": 4
+          },
+          "encoding": {
+            "x": {
+              "field": "sections_offered",
+              "type": "quantitative"
+            },
+            "y": {
+              "field": "course_code",
+              "type": "nominal",
+              "sort": "-x"
+            },
+            "text": {
+              "field": "sections_offered",
+              "type": "quantitative"
+            }
+          }
+        }
+      ]
+    },
+    "sql": "SELECT c.id AS course_id, c.code AS course_code, c.name AS course_name, COUNT(cs.id) AS sections_offered\nFROM public.courses AS c\nLEFT JOIN public.course_sections AS cs ON cs.course_id = c.id\nGROUP BY c.id, c.code, c.name\nORDER BY sections_offered DESC, c.code ASC, c.name ASC;",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "course_code",
+        "course_name",
+        "sections_offered"
+      ],
+      "rowCount": 26,
+      "sample": [
+        {
+          "course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+          "course_code": "AFI-682",
+          "course_name": "Matematyka Dyskretna",
+          "sections_offered": 3
+        },
+        {
+          "course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+          "course_code": "FCL-532",
+          "course_name": "Uczenie Maszynowe",
+          "sections_offered": 3
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "course_code": "AFI-682",
+        "course_name": "Matematyka Dyskretna",
+        "sections_offered": 3
+      },
+      {
+        "course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+        "course_code": "FCL-532",
+        "course_name": "Uczenie Maszynowe",
+        "sections_offered": 3
+      },
+      {
+        "course_id": "0b97f1bf-8c86-431a-a583-563354b1e01f",
+        "course_code": "RZR-301",
+        "course_name": "Sieci Komputerowe",
+        "sections_offered": 3
+      },
+      {
+        "course_id": "59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23",
+        "course_code": "MKO-885",
+        "course_name": "Rachunek Prawdopodobieństwa",
+        "sections_offered": 2
+      },
+      {
+        "course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+        "course_code": "TJJ-354",
+        "course_name": "Projektowanie Aplikacji Webowych",
+        "sections_offered": 2
+      },
+      {
+        "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "sections_offered": 2
+      },
+      {
+        "course_id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "sections_offered": 2
+      },
+      {
+        "course_id": "b18a39cf-8a1b-471c-b67a-94aa04eccfae",
+        "course_code": "WZC-570",
+        "course_name": "Programowanie Obiektowe",
+        "sections_offered": 2
+      },
+      {
+        "course_id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "sections_offered": 2
+      },
+      {
+        "course_id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "sections_offered": 2
+      },
+      {
+        "course_id": "91922683-9cba-47f2-bb00-babfbce3866f",
+        "course_code": "AAX-989",
+        "course_name": "Elektronika",
+        "sections_offered": 1
+      },
+      {
+        "course_id": "3d59b771-6ed9-47a0-b46f-f90c188f7863",
+        "course_code": "ARH-232",
+        "course_name": "Cloud Computing",
+        "sections_offered": 1
+      },
+      {
+        "course_id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+        "course_code": "BEW-951",
+        "course_name": "Fizyka",
+        "sections_offered": 1
+      },
+      {
+        "course_id": "7dc872b8-c34e-4061-8f34-8b4c099b6325",
+        "course_code": "BSS-943",
+        "course_name": "Algebra Liniowa",
+        "sections_offered": 1
+      },
+      {
+        "course_id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+        "course_code": "FEO-908",
+        "course_name": "Analiza Matematyczna",
+        "sections_offered": 1
+      },
+      {
+        "course_id": "47f61e5e-19e7-4b9e-b8d0-153ca7c76090",
+        "course_code": "HMI-889",
+        "course_name": "Elektronika",
+        "sections_offered": 1
+      },
+      {
+        "course_id": "d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5",
+        "course_code": "HPF-845",
+        "course_name": "Systemy Wbudowane",
+        "sections_offered": 1
+      },
+      {
+        "course_id": "e6b62b9f-429a-423d-84c7-77b28a64b9a3",
+        "course_code": "JFH-143",
+        "course_name": "Architektura Komputerów",
+        "sections_offered": 1
+      },
+      {
+        "course_id": "0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca",
+        "course_code": "PSC-614",
+        "course_name": "Architektura Komputerów",
+        "sections_offered": 1
+      },
+      {
+        "course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "course_code": "TAU-627",
+        "course_name": "Analiza Matematyczna",
+        "sections_offered": 1
+      },
+      {
+        "course_id": "c0e00b1c-84d6-4ccd-999d-7c9197625f2e",
+        "course_code": "ZUQ-127",
+        "course_name": "Fizyka",
+        "sections_offered": 1
+      },
+      {
+        "course_id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+        "course_code": "FPW-573",
+        "course_name": "Programowanie Obiektowe",
+        "sections_offered": 0
+      },
+      {
+        "course_id": "410a9134-116d-41eb-84bc-1b5144736995",
+        "course_code": "FWJ-758",
+        "course_name": "Bezpieczeństwo Systemów Komputerowych",
+        "sections_offered": 0
+      },
+      {
+        "course_id": "6002cfac-f371-4c9b-a048-8aaf1aae450a",
+        "course_code": "LUO-736",
+        "course_name": "Grafika Komputerowa",
+        "sections_offered": 0
+      },
+      {
+        "course_id": "e89877df-7199-4b1f-a8e8-8e5c0872fe23",
+        "course_code": "NWG-686",
+        "course_name": "Programowanie Funkcyjne",
+        "sections_offered": 0
+      },
+      {
+        "course_id": "32619ee8-5d87-49a4-9ca1-c94668909e2e",
+        "course_code": "SBW-955",
+        "course_name": "Sieci Komputerowe",
+        "sections_offered": 0
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Courses offered in the most sections (ranked)",
+      "height": {
+        "step": 22
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "bar"
+          },
+          "encoding": {
+            "x": {
+              "field": "sections_offered",
+              "type": "quantitative",
+              "title": "Sections offered"
+            },
+            "y": {
+              "field": "course_code",
+              "type": "nominal",
+              "title": "Course code",
+              "sort": "-x"
+            },
+            "color": {
+              "field": "sections_offered",
+              "type": "quantitative",
+              "legend": null
+            },
+            "tooltip": [
+              {
+                "field": "course_code",
+                "type": "nominal",
+                "title": "Course code"
+              },
+              {
+                "field": "course_name",
+                "type": "nominal",
+                "title": "Course name"
+              },
+              {
+                "field": "sections_offered",
+                "type": "quantitative",
+                "title": "Sections offered"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dx": 4
+          },
+          "encoding": {
+            "x": {
+              "field": "sections_offered",
+              "type": "quantitative"
+            },
+            "y": {
+              "field": "course_code",
+              "type": "nominal",
+              "sort": "-x"
+            },
+            "text": {
+              "field": "sections_offered",
+              "type": "quantitative"
+            }
+          }
+        }
+      ]
+    },
+    "sql": "SELECT c.id AS course_id, c.code AS course_code, c.name AS course_name, COUNT(cs.id) AS sections_offered\nFROM public.courses AS c\nLEFT JOIN public.course_sections AS cs ON cs.course_id = c.id\nGROUP BY c.id, c.code, c.name\nORDER BY sections_offered DESC, c.code ASC, c.name ASC;",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "course_code",
+        "course_name",
+        "sections_offered"
+      ],
+      "rowCount": 26,
+      "sample": [
+        {
+          "course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+          "course_code": "AFI-682",
+          "course_name": "Matematyka Dyskretna",
+          "sections_offered": 3
+        },
+        {
+          "course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+          "course_code": "FCL-532",
+          "course_name": "Uczenie Maszynowe",
+          "sections_offered": 3
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:54:55.645Z",
+    "traceId": "744437ad810b7fcb61e718108e0613aa",
+    "attempts": 3,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 8649,
+      "outputTokens": 3057,
+      "totalTokens": 11706,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2176,
+      "costUsd": 0.00827625
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 8649,
+        "outputTokens": 3057,
+        "totalTokens": 11706,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2176,
+        "costUsd": 0.00827625
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,1 @@
+SELECT course_type AS course_type, ROUND(AVG(credits), 2) AS avg_credits FROM courses GROUP BY course_type ORDER BY avg_credits DESC;

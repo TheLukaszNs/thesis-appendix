@@ -1,0 +1,1 @@
+SELECT scholarship_type AS scholarship_type, AVG(amount) AS avg_amount FROM public.scholarships WHERE amount IS NOT NULL GROUP BY scholarship_type ORDER BY scholarship_type ASC

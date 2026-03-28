@@ -1,0 +1,183 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "evaluation-recommendation-by-department",
+  "caseDirectory": "evaluation-recommendation-by-department",
+  "repeatIndex": 1,
+  "prompt": "What percentage of students would recommend courses in each department?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What percentage of students would recommend courses in each department?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:54:06.266Z",
+    "endedAtUtc": "2026-02-23T10:54:37.531Z",
+    "durationMs": 31265
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2571",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:54:37 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"What percentage of students would recommend courses in each department?\"},\"agent\":{\"payload\":{\"question\":\"What percentage of students would recommend courses in each department?\"},\"startedAt\":1771844046286,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  department AS department,\\n  COUNT(*) AS total_responses,\\n  SUM(CASE WHEN LOWER(CAST(would_recommend AS VARCHAR)) IN ('yes','y','true','1') THEN 1 ELSE 0 END) AS recommend_count,\\n  ROUND(100.0 * SUM(CASE WHEN LOWER(CAST(would_recommend AS VARCHAR)) IN ('yes','y','true','1') THEN 1 ELSE 0 END) / NULLIF(COUNT(*),0), 2) AS recommend_pct\\nFROM course_feedback\\nGROUP BY department\\nORDER BY recommend_pct DESC\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Percentage of students who would recommend courses by department\",\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"department\",\"type\":\"nominal\",\"sort\":{\"field\":\"recommend_pct\",\"op\":\"max\",\"order\":\"descending\"},\"axis\":{\"title\":\"\"}},\"x\":{\"field\":\"recommend_pct\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Recommend (%)\",\"format\":\".1f\"}},\"color\":{\"field\":\"recommend_pct\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"department\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"recommend_pct\",\"type\":\"quantitative\",\"title\":\"Recommend (%)\",\"format\":\".2f\"},{\"field\":\"recommend_count\",\"type\":\"quantitative\",\"title\":\"Recommend Count\"},{\"field\":\"total_responses\",\"type\":\"quantitative\",\"title\":\"Total Responses\"}]}}},\"endedAt\":1771844077477},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  department AS department,\\n  COUNT(*) AS total_responses,\\n  SUM(CASE WHEN LOWER(CAST(would_recommend AS VARCHAR)) IN ('yes','y','true','1') THEN 1 ELSE 0 END) AS recommend_count,\\n  ROUND(100.0 * SUM(CASE WHEN LOWER(CAST(would_recommend AS VARCHAR)) IN ('yes','y','true','1') THEN 1 ELSE 0 END) / NULLIF(COUNT(*),0), 2) AS recommend_pct\\nFROM course_feedback\\nGROUP BY department\\nORDER BY recommend_pct DESC\"},\"startedAt\":1771844077485,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: relation \\\"course_feedback\\\" does not exist\\nLINE 7: FROM course_feedback\\n             ^\",\"name\":\"Error\"},\"endedAt\":1771844077526}},\"input\":{\"question\":\"What percentage of students would recommend courses in each department?\"},\"error\":{\"message\":\"SQL execution failed: relation \\\"course_feedback\\\" does not exist\\nLINE 7: FROM course_feedback\\n             ^\",\"name\":\"Error\"},\"traceId\":\"4f238f20cba66d37136dc5cce1f6c4ac\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/evaluation-recommendation-by-department/run-0001/run.json",
+    "queryPath": "runs/evaluation-recommendation-by-department/run-0001/query.sql",
+    "vegaRawPath": "runs/evaluation-recommendation-by-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/evaluation-recommendation-by-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/evaluation-recommendation-by-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:54:37.532Z",
+  "traceId": "4f238f20cba66d37136dc5cce1f6c4ac",
+  "success": false,
+  "durationMs": 31266,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "What percentage of students would recommend courses in each department?"
+      },
+      "agent": {
+        "payload": {
+          "question": "What percentage of students would recommend courses in each department?"
+        },
+        "startedAt": 1771844046286,
+        "status": "success",
+        "output": {
+          "sql": "SELECT\n  department AS department,\n  COUNT(*) AS total_responses,\n  SUM(CASE WHEN LOWER(CAST(would_recommend AS VARCHAR)) IN ('yes','y','true','1') THEN 1 ELSE 0 END) AS recommend_count,\n  ROUND(100.0 * SUM(CASE WHEN LOWER(CAST(would_recommend AS VARCHAR)) IN ('yes','y','true','1') THEN 1 ELSE 0 END) / NULLIF(COUNT(*),0), 2) AS recommend_pct\nFROM course_feedback\nGROUP BY department\nORDER BY recommend_pct DESC",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "data": {
+              "name": "query_result"
+            },
+            "title": "Percentage of students who would recommend courses by department",
+            "width": 700,
+            "height": 400,
+            "mark": {
+              "type": "bar",
+              "tooltip": true
+            },
+            "encoding": {
+              "y": {
+                "field": "department",
+                "type": "nominal",
+                "sort": {
+                  "field": "recommend_pct",
+                  "op": "max",
+                  "order": "descending"
+                },
+                "axis": {
+                  "title": ""
+                }
+              },
+              "x": {
+                "field": "recommend_pct",
+                "type": "quantitative",
+                "axis": {
+                  "title": "Recommend (%)",
+                  "format": ".1f"
+                }
+              },
+              "color": {
+                "field": "recommend_pct",
+                "type": "quantitative",
+                "legend": null
+              },
+              "tooltip": [
+                {
+                  "field": "department",
+                  "type": "nominal",
+                  "title": "Department"
+                },
+                {
+                  "field": "recommend_pct",
+                  "type": "quantitative",
+                  "title": "Recommend (%)",
+                  "format": ".2f"
+                },
+                {
+                  "field": "recommend_count",
+                  "type": "quantitative",
+                  "title": "Recommend Count"
+                },
+                {
+                  "field": "total_responses",
+                  "type": "quantitative",
+                  "title": "Total Responses"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771844077477
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT\n  department AS department,\n  COUNT(*) AS total_responses,\n  SUM(CASE WHEN LOWER(CAST(would_recommend AS VARCHAR)) IN ('yes','y','true','1') THEN 1 ELSE 0 END) AS recommend_count,\n  ROUND(100.0 * SUM(CASE WHEN LOWER(CAST(would_recommend AS VARCHAR)) IN ('yes','y','true','1') THEN 1 ELSE 0 END) / NULLIF(COUNT(*),0), 2) AS recommend_pct\nFROM course_feedback\nGROUP BY department\nORDER BY recommend_pct DESC"
+        },
+        "startedAt": 1771844077485,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: relation \"course_feedback\" does not exist\nLINE 7: FROM course_feedback\n             ^",
+          "name": "Error"
+        },
+        "endedAt": 1771844077526
+      }
+    },
+    "input": {
+      "question": "What percentage of students would recommend courses in each department?"
+    },
+    "error": {
+      "message": "SQL execution failed: relation \"course_feedback\" does not exist\nLINE 7: FROM course_feedback\n             ^",
+      "name": "Error"
+    },
+    "traceId": "4f238f20cba66d37136dc5cce1f6c4ac"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:54:37.532Z",
+    "traceId": "4f238f20cba66d37136dc5cce1f6c4ac",
+    "attempts": 5,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 267,
+      "outputTokens": 1825,
+      "totalTokens": 2092,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1344,
+      "costUsd": 0.00371675
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 267,
+        "outputTokens": 1825,
+        "totalTokens": 2092,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1344,
+        "costUsd": 0.00371675
+      }
+    ],
+    "warnings": []
+  }
+}

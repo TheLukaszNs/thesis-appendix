@@ -1,0 +1,258 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "courses-without-prerequisites",
+  "caseDirectory": "courses-without-prerequisites",
+  "repeatIndex": 1,
+  "prompt": "How many courses have no prerequisites vs at least one?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many courses have no prerequisites vs at least one?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:25:38.662Z",
+    "endedAtUtc": "2026-02-23T11:27:05.594Z",
+    "durationMs": 86932
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "23669",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:27:05 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How many courses have no prerequisites vs at least one?\"},\"planner\":{\"payload\":{\"question\":\"How many courses have no prerequisites vs at least one?\"},\"startedAt\":1771845938669,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT public.courses.id)\"],\"dimensions\":[\"CASE WHEN COUNT(public.prerequisites.id) = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END\"],\"filters\":[],\"grain\":\"one row per prerequisite-category (no_prerequisites vs at_least_one)\",\"aliases\":{\"CASE WHEN COUNT(public.prerequisites.id) = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END\":\"prereq_category\",\"COUNT(DISTINCT public.courses.id)\":\"course_count\"},\"output_fields\":[\"prereq_category\",\"course_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"prereq_category\",\"y_axis\":\"course_count\",\"title\":\"Number of courses: no prerequisites vs at least one\"},\"assumptions\":[\"Tables and columns confirmed in preflight: public.courses (id) and public.prerequisites (id, course_id).\",\"prerequisites.course_id is a foreign key to courses.id (confirmed).\",\"A course is classified as 'no_prerequisites' if it has zero rows in prerequisites with prerequisites.course_id = courses.id; otherwise 'at_least_one'.\",\"Courses with multiple prerequisite rows count once in the 'at_least_one' bucket (we count distinct courses).\",\"The intended SQL should use a LEFT JOIN from public.courses to public.prerequisites ON prerequisites.course_id = courses.id, group by the CASE expression, and compute COUNT(DISTINCT courses.id) as course_count.\",\"No additional filters (e.g., by department, active flag) were specified; all rows in public.courses are included.\"]}},\"endedAt\":1771845970841},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT public.courses.id)\"],\"dimensions\":[\"CASE WHEN COUNT(public.prerequisites.id) = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END\"],\"filters\":[],\"grain\":\"one row per prerequisite-category (no_prerequisites vs at_least_one)\",\"aliases\":{\"CASE WHEN COUNT(public.prerequisites.id) = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END\":\"prereq_category\",\"COUNT(DISTINCT public.courses.id)\":\"course_count\"},\"output_fields\":[\"prereq_category\",\"course_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"prereq_category\",\"y_axis\":\"course_count\",\"title\":\"Number of courses: no prerequisites vs at least one\"},\"assumptions\":[\"Tables and columns confirmed in preflight: public.courses (id) and public.prerequisites (id, course_id).\",\"prerequisites.course_id is a foreign key to courses.id (confirmed).\",\"A course is classified as 'no_prerequisites' if it has zero rows in prerequisites with prerequisites.course_id = courses.id; otherwise 'at_least_one'.\",\"Courses with multiple prerequisite rows count once in the 'at_least_one' bucket (we count distinct courses).\",\"The intended SQL should use a LEFT JOIN from public.courses to public.prerequisites ON prerequisites.course_id = courses.id, group by the CASE expression, and compute COUNT(DISTINCT courses.id) as course_count.\",\"No additional filters (e.g., by department, active flag) were specified; all rows in public.courses are included.\"]}},\"startedAt\":1771845970848,\"status\":\"success\",\"output\":{\"question\":\"How many courses have no prerequisites vs at least one?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT public.courses.id)\"],\"dimensions\":[\"CASE WHEN COUNT(public.prerequisites.id) = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END\"],\"filters\":[],\"grain\":\"one row per prerequisite-category (no_prerequisites vs at_least_one)\",\"aliases\":{\"CASE WHEN COUNT(public.prerequisites.id) = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END\":\"prereq_category\",\"COUNT(DISTINCT public.courses.id)\":\"course_count\"},\"output_fields\":[\"prereq_category\",\"course_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"prereq_category\",\"y_axis\":\"course_count\",\"title\":\"Number of courses: no prerequisites vs at least one\"},\"assumptions\":[\"Tables and columns confirmed in preflight: public.courses (id) and public.prerequisites (id, course_id).\",\"prerequisites.course_id is a foreign key to courses.id (confirmed).\",\"A course is classified as 'no_prerequisites' if it has zero rows in prerequisites with prerequisites.course_id = courses.id; otherwise 'at_least_one'.\",\"Courses with multiple prerequisite rows count once in the 'at_least_one' bucket (we count distinct courses).\",\"The intended SQL should use a LEFT JOIN from public.courses to public.prerequisites ON prerequisites.course_id = courses.id, group by the CASE expression, and compute COUNT(DISTINCT courses.id) as course_count.\",\"No additional filters (e.g., by department, active flag) were specified; all rows in public.courses are included.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771845970850},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"How many courses have no prerequisites vs at least one?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT public.courses.id)\"],\"dimensions\":[\"CASE WHEN COUNT(public.prerequisites.id) = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END\"],\"filters\":[],\"grain\":\"one row per prerequisite-category (no_prerequisites vs at_least_one)\",\"aliases\":{\"CASE WHEN COUNT(public.prerequisites.id) = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END\":\"prereq_category\",\"COUNT(DISTINCT public.courses.id)\":\"course_count\"},\"output_fields\":[\"prereq_category\",\"course_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"prereq_category\",\"y_axis\":\"course_count\",\"title\":\"Number of courses: no prerequisites vs at least one\"},\"assumptions\":[\"Tables and columns confirmed in preflight: public.courses (id) and public.prerequisites (id, course_id).\",\"prerequisites.course_id is a foreign key to courses.id (confirmed).\",\"A course is classified as 'no_prerequisites' if it has zero rows in prerequisites with prerequisites.course_id = courses.id; otherwise 'at_least_one'.\",\"Courses with multiple prerequisite rows count once in the 'at_least_one' bucket (we count distinct courses).\",\"The intended SQL should use a LEFT JOIN from public.courses to public.prerequisites ON prerequisites.course_id = courses.id, group by the CASE expression, and compute COUNT(DISTINCT courses.id) as course_count.\",\"No additional filters (e.g., by department, active flag) were specified; all rows in public.courses are included.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771845970853,\"status\":\"success\",\"output\":{\"question\":\"How many courses have no prerequisites vs at least one?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT public.courses.id)\"],\"dimensions\":[\"CASE WHEN COUNT(public.prerequisites.id) = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END\"],\"filters\":[],\"grain\":\"one row per prerequisite-category (no_prerequisites vs at_least_one)\",\"aliases\":{\"CASE WHEN COUNT(public.prerequisites.id) = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END\":\"prereq_category\",\"COUNT(DISTINCT public.courses.id)\":\"course_count\"},\"output_fields\":[\"prereq_category\",\"course_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"prereq_category\",\"y_axis\":\"course_count\",\"title\":\"Number of courses: no prerequisites vs at least one\"},\"assumptions\":[\"Tables and columns confirmed in preflight: public.courses (id) and public.prerequisites (id, course_id).\",\"prerequisites.course_id is a foreign key to courses.id (confirmed).\",\"A course is classified as 'no_prerequisites' if it has zero rows in prerequisites with prerequisites.course_id = courses.id; otherwise 'at_least_one'.\",\"Courses with multiple prerequisite rows count once in the 'at_least_one' bucket (we count distinct courses).\",\"The intended SQL should use a LEFT JOIN from public.courses to public.prerequisites ON prerequisites.course_id = courses.id, group by the CASE expression, and compute COUNT(DISTINCT courses.id) as course_count.\",\"No additional filters (e.g., by department, active flag) were specified; all rows in public.courses are included.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"WITH course_pr_counts AS (\\n  SELECT\\n    c.id AS course_id,\\n    COUNT(pr.id) AS prereq_count\\n  FROM public.courses AS c\\n  LEFT JOIN public.prerequisites AS pr\\n    ON pr.course_id = c.id\\n  GROUP BY c.id\\n)\\nSELECT\\n  CASE WHEN cpc.prereq_count = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END AS prereq_category,\\n  COUNT(cpc.course_id) AS course_count\\nFROM course_pr_counts AS cpc\\nGROUP BY CASE WHEN cpc.prereq_count = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END\\nORDER BY MIN(cpc.prereq_count) ASC;\",\"validationIssues\":[\"SQL uses COUNT(cpc.course_id) instead of COUNT(DISTINCT public.courses.id) — functionally equivalent here because the CTE has one row per course, but differs from the stated alias in the plan.\",\"ORDER BY MIN(cpc.prereq_count) is valid to sort categories (0 before >0) but is a slightly indirect way to order; explicit category sort or ORDER BY prereq_category might be clearer.\",\"X-axis title in the visualization is 'Prerequisite category' (readable) while the plan used the field name 'prereq_category' — purely cosmetic, not a functional mismatch.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Count distinct courses grouped by whether they have zero prerequisites (no_prerequisites) or at least one (at_least_one). Preflight confirmed public.courses.id and public.prerequisites.course_id exist, so I compute per-course prerequisite counts with a LEFT JOIN, then aggregate into the two buckets. Deterministic ordering places the 'no_prerequisites' row first.\",\"sql\":\"WITH course_pr_counts AS (\\n  SELECT\\n    c.id AS course_id,\\n    COUNT(pr.id) AS prereq_count\\n  FROM public.courses AS c\\n  LEFT JOIN public.prerequisites AS pr\\n    ON pr.course_id = c.id\\n  GROUP BY c.id\\n)\\nSELECT\\n  CASE WHEN cpc.prereq_count = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END AS prereq_category,\\n  COUNT(cpc.course_id) AS course_count\\nFROM course_pr_counts AS cpc\\nGROUP BY CASE WHEN cpc.prereq_count = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END\\nORDER BY MIN(cpc.prereq_count) ASC;\",\"assumptions\":[\"public.courses.id is the primary key for courses (confirmed).\",\"public.prerequisites.course_id is a foreign key referencing courses.id (confirmed).\",\"All courses in public.courses should be considered; there are no additional filters.\",\"A course with multiple prerequisite rows is counted once in the 'at_least_one' bucket.\"]},\"execution\":{\"ok\":true,\"sql\":\"WITH course_pr_counts AS (\\n  SELECT\\n    c.id AS course_id,\\n    COUNT(pr.id) AS prereq_count\\n  FROM public.courses AS c\\n  LEFT JOIN public.prerequisites AS pr\\n    ON pr.course_id = c.id\\n  GROUP BY c.id\\n)\\nSELECT\\n  CASE WHEN cpc.prereq_count = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END AS prereq_category,\\n  COUNT(cpc.course_id) AS course_count\\nFROM course_pr_counts AS cpc\\nGROUP BY CASE WHEN cpc.prereq_count = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END\\nORDER BY MIN(cpc.prereq_count) ASC\",\"metadata\":{\"columns\":[\"course_count\",\"prereq_category\"],\"rowCount\":2,\"sample\":[{\"course_count\":6,\"prereq_category\":\"no_prerequisites\"},{\"course_count\":20,\"prereq_category\":\"at_least_one\"}]},\"data\":[{\"course_count\":6,\"prereq_category\":\"no_prerequisites\"},{\"course_count\":20,\"prereq_category\":\"at_least_one\"}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of courses: no prerequisites vs at least one\",\"width\":480,\"height\":320,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"prereq_category\",\"type\":\"nominal\",\"axis\":{\"title\":\"Prerequisite category\"},\"sort\":[\"no_prerequisites\",\"at_least_one\"]},\"y\":{\"field\":\"course_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of courses\"}},\"tooltip\":[{\"field\":\"prereq_category\",\"type\":\"nominal\",\"title\":\"Prereq category\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Course count\"}]}},\"reasoning\":\"Simple vertical bar chart showing the count of distinct courses in the two prereq categories. Tooltip exposes both category and course_count. The x sort enforces 'no_prerequisites' before 'at_least_one'.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"SQL uses COUNT(cpc.course_id) instead of COUNT(DISTINCT public.courses.id) — functionally equivalent here because the CTE has one row per course, but differs from the stated alias in the plan.\",\"ORDER BY MIN(cpc.prereq_count) is valid to sort categories (0 before >0) but is a slightly indirect way to order; explicit category sort or ORDER BY prereq_category might be clearer.\",\"X-axis title in the visualization is 'Prerequisite category' (readable) while the plan used the field name 'prereq_category' — purely cosmetic, not a functional mismatch.\"]}}},\"endedAt\":1771846025572,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"How many courses have no prerequisites vs at least one?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT public.courses.id)\"],\"dimensions\":[\"CASE WHEN COUNT(public.prerequisites.id) = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END\"],\"filters\":[],\"grain\":\"one row per prerequisite-category (no_prerequisites vs at_least_one)\",\"aliases\":{\"CASE WHEN COUNT(public.prerequisites.id) = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END\":\"prereq_category\",\"COUNT(DISTINCT public.courses.id)\":\"course_count\"},\"output_fields\":[\"prereq_category\",\"course_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"prereq_category\",\"y_axis\":\"course_count\",\"title\":\"Number of courses: no prerequisites vs at least one\"},\"assumptions\":[\"Tables and columns confirmed in preflight: public.courses (id) and public.prerequisites (id, course_id).\",\"prerequisites.course_id is a foreign key to courses.id (confirmed).\",\"A course is classified as 'no_prerequisites' if it has zero rows in prerequisites with prerequisites.course_id = courses.id; otherwise 'at_least_one'.\",\"Courses with multiple prerequisite rows count once in the 'at_least_one' bucket (we count distinct courses).\",\"The intended SQL should use a LEFT JOIN from public.courses to public.prerequisites ON prerequisites.course_id = courses.id, group by the CASE expression, and compute COUNT(DISTINCT courses.id) as course_count.\",\"No additional filters (e.g., by department, active flag) were specified; all rows in public.courses are included.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"WITH course_pr_counts AS (\\n  SELECT\\n    c.id AS course_id,\\n    COUNT(pr.id) AS prereq_count\\n  FROM public.courses AS c\\n  LEFT JOIN public.prerequisites AS pr\\n    ON pr.course_id = c.id\\n  GROUP BY c.id\\n)\\nSELECT\\n  CASE WHEN cpc.prereq_count = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END AS prereq_category,\\n  COUNT(cpc.course_id) AS course_count\\nFROM course_pr_counts AS cpc\\nGROUP BY CASE WHEN cpc.prereq_count = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END\\nORDER BY MIN(cpc.prereq_count) ASC;\",\"validationIssues\":[\"SQL uses COUNT(cpc.course_id) instead of COUNT(DISTINCT public.courses.id) — functionally equivalent here because the CTE has one row per course, but differs from the stated alias in the plan.\",\"ORDER BY MIN(cpc.prereq_count) is valid to sort categories (0 before >0) but is a slightly indirect way to order; explicit category sort or ORDER BY prereq_category might be clearer.\",\"X-axis title in the visualization is 'Prerequisite category' (readable) while the plan used the field name 'prereq_category' — purely cosmetic, not a functional mismatch.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Count distinct courses grouped by whether they have zero prerequisites (no_prerequisites) or at least one (at_least_one). Preflight confirmed public.courses.id and public.prerequisites.course_id exist, so I compute per-course prerequisite counts with a LEFT JOIN, then aggregate into the two buckets. Deterministic ordering places the 'no_prerequisites' row first.\",\"sql\":\"WITH course_pr_counts AS (\\n  SELECT\\n    c.id AS course_id,\\n    COUNT(pr.id) AS prereq_count\\n  FROM public.courses AS c\\n  LEFT JOIN public.prerequisites AS pr\\n    ON pr.course_id = c.id\\n  GROUP BY c.id\\n)\\nSELECT\\n  CASE WHEN cpc.prereq_count = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END AS prereq_category,\\n  COUNT(cpc.course_id) AS course_count\\nFROM course_pr_counts AS cpc\\nGROUP BY CASE WHEN cpc.prereq_count = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END\\nORDER BY MIN(cpc.prereq_count) ASC;\",\"assumptions\":[\"public.courses.id is the primary key for courses (confirmed).\",\"public.prerequisites.course_id is a foreign key referencing courses.id (confirmed).\",\"All courses in public.courses should be considered; there are no additional filters.\",\"A course with multiple prerequisite rows is counted once in the 'at_least_one' bucket.\"]},\"execution\":{\"ok\":true,\"sql\":\"WITH course_pr_counts AS (\\n  SELECT\\n    c.id AS course_id,\\n    COUNT(pr.id) AS prereq_count\\n  FROM public.courses AS c\\n  LEFT JOIN public.prerequisites AS pr\\n    ON pr.course_id = c.id\\n  GROUP BY c.id\\n)\\nSELECT\\n  CASE WHEN cpc.prereq_count = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END AS prereq_category,\\n  COUNT(cpc.course_id) AS course_count\\nFROM course_pr_counts AS cpc\\nGROUP BY CASE WHEN cpc.prereq_count = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END\\nORDER BY MIN(cpc.prereq_count) ASC\",\"metadata\":{\"columns\":[\"course_count\",\"prereq_category\"],\"rowCount\":2,\"sample\":[{\"course_count\":6,\"prereq_category\":\"no_prerequisites\"},{\"course_count\":20,\"prereq_category\":\"at_least_one\"}]},\"data\":[{\"course_count\":6,\"prereq_category\":\"no_prerequisites\"},{\"course_count\":20,\"prereq_category\":\"at_least_one\"}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of courses: no prerequisites vs at least one\",\"width\":480,\"height\":320,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"prereq_category\",\"type\":\"nominal\",\"axis\":{\"title\":\"Prerequisite category\"},\"sort\":[\"no_prerequisites\",\"at_least_one\"]},\"y\":{\"field\":\"course_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of courses\"}},\"tooltip\":[{\"field\":\"prereq_category\",\"type\":\"nominal\",\"title\":\"Prereq category\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Course count\"}]}},\"reasoning\":\"Simple vertical bar chart showing the count of distinct courses in the two prereq categories. Tooltip exposes both category and course_count. The x sort enforces 'no_prerequisites' before 'at_least_one'.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"SQL uses COUNT(cpc.course_id) instead of COUNT(DISTINCT public.courses.id) — functionally equivalent here because the CTE has one row per course, but differs from the stated alias in the plan.\",\"ORDER BY MIN(cpc.prereq_count) is valid to sort categories (0 before >0) but is a slightly indirect way to order; explicit category sort or ORDER BY prereq_category might be clearer.\",\"X-axis title in the visualization is 'Prerequisite category' (readable) while the plan used the field name 'prereq_category' — purely cosmetic, not a functional mismatch.\"]}}},\"startedAt\":1771846025576,\"status\":\"success\",\"output\":{\"sql\":\"WITH course_pr_counts AS (\\n  SELECT\\n    c.id AS course_id,\\n    COUNT(pr.id) AS prereq_count\\n  FROM public.courses AS c\\n  LEFT JOIN public.prerequisites AS pr\\n    ON pr.course_id = c.id\\n  GROUP BY c.id\\n)\\nSELECT\\n  CASE WHEN cpc.prereq_count = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END AS prereq_category,\\n  COUNT(cpc.course_id) AS course_count\\nFROM course_pr_counts AS cpc\\nGROUP BY CASE WHEN cpc.prereq_count = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END\\nORDER BY MIN(cpc.prereq_count) ASC;\",\"data\":[{\"course_count\":6,\"prereq_category\":\"no_prerequisites\"},{\"course_count\":20,\"prereq_category\":\"at_least_one\"}],\"metadata\":{\"columns\":[\"course_count\",\"prereq_category\"],\"rowCount\":2,\"sample\":[{\"course_count\":6,\"prereq_category\":\"no_prerequisites\"},{\"course_count\":20,\"prereq_category\":\"at_least_one\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of courses: no prerequisites vs at least one\",\"width\":480,\"height\":320,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"prereq_category\",\"type\":\"nominal\",\"axis\":{\"title\":\"Prerequisite category\"},\"sort\":[\"no_prerequisites\",\"at_least_one\"]},\"y\":{\"field\":\"course_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of courses\"}},\"tooltip\":[{\"field\":\"prereq_category\",\"type\":\"nominal\",\"title\":\"Prereq category\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Course count\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"SQL uses COUNT(cpc.course_id) instead of COUNT(DISTINCT public.courses.id) — functionally equivalent here because the CTE has one row per course, but differs from the stated alias in the plan.\",\"ORDER BY MIN(cpc.prereq_count) is valid to sort categories (0 before >0) but is a slightly indirect way to order; explicit category sort or ORDER BY prereq_category might be clearer.\",\"X-axis title in the visualization is 'Prerequisite category' (readable) while the plan used the field name 'prereq_category' — purely cosmetic, not a functional mismatch.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771846025578}},\"input\":{\"question\":\"How many courses have no prerequisites vs at least one?\"},\"result\":{\"sql\":\"WITH course_pr_counts AS (\\n  SELECT\\n    c.id AS course_id,\\n    COUNT(pr.id) AS prereq_count\\n  FROM public.courses AS c\\n  LEFT JOIN public.prerequisites AS pr\\n    ON pr.course_id = c.id\\n  GROUP BY c.id\\n)\\nSELECT\\n  CASE WHEN cpc.prereq_count = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END AS prereq_category,\\n  COUNT(cpc.course_id) AS course_count\\nFROM course_pr_counts AS cpc\\nGROUP BY CASE WHEN cpc.prereq_count = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END\\nORDER BY MIN(cpc.prereq_count) ASC;\",\"data\":[{\"course_count\":6,\"prereq_category\":\"no_prerequisites\"},{\"course_count\":20,\"prereq_category\":\"at_least_one\"}],\"metadata\":{\"columns\":[\"course_count\",\"prereq_category\"],\"rowCount\":2,\"sample\":[{\"course_count\":6,\"prereq_category\":\"no_prerequisites\"},{\"course_count\":20,\"prereq_category\":\"at_least_one\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of courses: no prerequisites vs at least one\",\"width\":480,\"height\":320,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"prereq_category\",\"type\":\"nominal\",\"axis\":{\"title\":\"Prerequisite category\"},\"sort\":[\"no_prerequisites\",\"at_least_one\"]},\"y\":{\"field\":\"course_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of courses\"}},\"tooltip\":[{\"field\":\"prereq_category\",\"type\":\"nominal\",\"title\":\"Prereq category\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Course count\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"SQL uses COUNT(cpc.course_id) instead of COUNT(DISTINCT public.courses.id) — functionally equivalent here because the CTE has one row per course, but differs from the stated alias in the plan.\",\"ORDER BY MIN(cpc.prereq_count) is valid to sort categories (0 before >0) but is a slightly indirect way to order; explicit category sort or ORDER BY prereq_category might be clearer.\",\"X-axis title in the visualization is 'Prerequisite category' (readable) while the plan used the field name 'prereq_category' — purely cosmetic, not a functional mismatch.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"9b77a5e801fef8b34672ad1672afca66\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/courses-without-prerequisites/run-0001/run.json",
+    "queryPath": "runs/courses-without-prerequisites/run-0001/query.sql",
+    "vegaRawPath": "runs/courses-without-prerequisites/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/courses-without-prerequisites/run-0001/vega.resolved.json",
+    "imagePath": "runs/courses-without-prerequisites/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:27:06.116Z",
+  "traceId": "9b77a5e801fef8b34672ad1672afca66",
+  "success": true,
+  "durationMs": 87454,
+  "resultRaw": {
+    "data": [
+      {
+        "course_count": 6,
+        "prereq_category": "no_prerequisites"
+      },
+      {
+        "course_count": 20,
+        "prereq_category": "at_least_one"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Number of courses: no prerequisites vs at least one",
+      "width": 480,
+      "height": 320,
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "prereq_category",
+          "type": "nominal",
+          "axis": {
+            "title": "Prerequisite category"
+          },
+          "sort": [
+            "no_prerequisites",
+            "at_least_one"
+          ]
+        },
+        "y": {
+          "field": "course_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Number of courses"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "prereq_category",
+            "type": "nominal",
+            "title": "Prereq category"
+          },
+          {
+            "field": "course_count",
+            "type": "quantitative",
+            "title": "Course count"
+          }
+        ]
+      }
+    },
+    "sql": "WITH course_pr_counts AS (\n  SELECT\n    c.id AS course_id,\n    COUNT(pr.id) AS prereq_count\n  FROM public.courses AS c\n  LEFT JOIN public.prerequisites AS pr\n    ON pr.course_id = c.id\n  GROUP BY c.id\n)\nSELECT\n  CASE WHEN cpc.prereq_count = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END AS prereq_category,\n  COUNT(cpc.course_id) AS course_count\nFROM course_pr_counts AS cpc\nGROUP BY CASE WHEN cpc.prereq_count = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END\nORDER BY MIN(cpc.prereq_count) ASC;",
+    "metadata": {
+      "columns": [
+        "course_count",
+        "prereq_category"
+      ],
+      "rowCount": 2,
+      "sample": [
+        {
+          "course_count": 6,
+          "prereq_category": "no_prerequisites"
+        },
+        {
+          "course_count": 20,
+          "prereq_category": "at_least_one"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "SQL uses COUNT(cpc.course_id) instead of COUNT(DISTINCT public.courses.id) — functionally equivalent here because the CTE has one row per course, but differs from the stated alias in the plan.",
+        "ORDER BY MIN(cpc.prereq_count) is valid to sort categories (0 before >0) but is a slightly indirect way to order; explicit category sort or ORDER BY prereq_category might be clearer.",
+        "X-axis title in the visualization is 'Prerequisite category' (readable) while the plan used the field name 'prereq_category' — purely cosmetic, not a functional mismatch."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "course_count": 6,
+        "prereq_category": "no_prerequisites"
+      },
+      {
+        "course_count": 20,
+        "prereq_category": "at_least_one"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Number of courses: no prerequisites vs at least one",
+      "width": 480,
+      "height": 320,
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "prereq_category",
+          "type": "nominal",
+          "axis": {
+            "title": "Prerequisite category"
+          },
+          "sort": [
+            "no_prerequisites",
+            "at_least_one"
+          ]
+        },
+        "y": {
+          "field": "course_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Number of courses"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "prereq_category",
+            "type": "nominal",
+            "title": "Prereq category"
+          },
+          {
+            "field": "course_count",
+            "type": "quantitative",
+            "title": "Course count"
+          }
+        ]
+      }
+    },
+    "sql": "WITH course_pr_counts AS (\n  SELECT\n    c.id AS course_id,\n    COUNT(pr.id) AS prereq_count\n  FROM public.courses AS c\n  LEFT JOIN public.prerequisites AS pr\n    ON pr.course_id = c.id\n  GROUP BY c.id\n)\nSELECT\n  CASE WHEN cpc.prereq_count = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END AS prereq_category,\n  COUNT(cpc.course_id) AS course_count\nFROM course_pr_counts AS cpc\nGROUP BY CASE WHEN cpc.prereq_count = 0 THEN 'no_prerequisites' ELSE 'at_least_one' END\nORDER BY MIN(cpc.prereq_count) ASC;",
+    "metadata": {
+      "columns": [
+        "course_count",
+        "prereq_category"
+      ],
+      "rowCount": 2,
+      "sample": [
+        {
+          "course_count": 6,
+          "prereq_category": "no_prerequisites"
+        },
+        {
+          "course_count": 20,
+          "prereq_category": "at_least_one"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "SQL uses COUNT(cpc.course_id) instead of COUNT(DISTINCT public.courses.id) — functionally equivalent here because the CTE has one row per course, but differs from the stated alias in the plan.",
+        "ORDER BY MIN(cpc.prereq_count) is valid to sort categories (0 before >0) but is a slightly indirect way to order; explicit category sort or ORDER BY prereq_category might be clearer.",
+        "X-axis title in the visualization is 'Prerequisite category' (readable) while the plan used the field name 'prereq_category' — purely cosmetic, not a functional mismatch."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:27:06.116Z",
+    "traceId": "9b77a5e801fef8b34672ad1672afca66",
+    "attempts": 5,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 18800,
+      "outputTokens": 5176,
+      "totalTokens": 23976,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 3392,
+      "costUsd": 0.015052
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 18800,
+        "outputTokens": 5176,
+        "totalTokens": 23976,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 3392,
+        "costUsd": 0.015052
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,356 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "professor-avg-grade",
+  "caseDirectory": "professor-avg-grade",
+  "repeatIndex": 1,
+  "prompt": "What is the average grade given by each professor?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average grade given by each professor?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:05:43.715Z",
+    "endedAtUtc": "2026-02-23T14:06:13.631Z",
+    "durationMs": 29916
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "13135",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:06:13 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the average grade given by each professor?\"},\"sql\":{\"payload\":{\"question\":\"What is the average grade given by each professor?\"},\"startedAt\":1771855543737,\"status\":\"success\",\"output\":{\"reasoning\":\"The user wants the average grade given by each professor. I've confirmed the schema structure: professors table contains professor names, course_sections links professors to courses, enrollments links students to course sections, and grades contains exam_score. The query joins these tables and calculates the average exam_score grouped by professor, ordered alphabetically by professor name for deterministic output.\",\"sql\":\"SELECT \\n  CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\\n  AVG(CAST(g.exam_score AS NUMERIC)) AS average_grade\\nFROM professors p\\nJOIN course_sections cs ON p.id = cs.professor_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nWHERE g.exam_score IS NOT NULL\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY professor_name\",\"assumptions\":[\"Grades are measured by exam_score column in the grades table\",\"Average grade is calculated across all students enrolled in courses taught by each professor\",\"Only non-null exam scores are included in the average\",\"Professor name is the concatenation of first_name and last_name\"]},\"endedAt\":1771855570128},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT \\n  CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\\n  AVG(CAST(g.exam_score AS NUMERIC)) AS average_grade\\nFROM professors p\\nJOIN course_sections cs ON p.id = cs.professor_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nWHERE g.exam_score IS NOT NULL\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY professor_name\"},\"startedAt\":1771855570132,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\\n  AVG(CAST(g.exam_score AS NUMERIC)) AS average_grade\\nFROM professors p\\nJOIN course_sections cs ON p.id = cs.professor_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nWHERE g.exam_score IS NOT NULL\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY professor_name\",\"metadata\":{\"columns\":[\"professor_name\",\"average_grade\"],\"rowCount\":17,\"sample\":[{\"professor_name\":\"Adam Wieczorek\",\"average_grade\":\"50.0500000000000000\"},{\"professor_name\":\"Agnieszka Krawczyk\",\"average_grade\":\"42.5033333333333333\"}]},\"data\":[{\"professor_name\":\"Adam Wieczorek\",\"average_grade\":\"50.0500000000000000\"},{\"professor_name\":\"Agnieszka Krawczyk\",\"average_grade\":\"42.5033333333333333\"},{\"professor_name\":\"Ewa Krawczyk\",\"average_grade\":\"35.6800000000000000\"},{\"professor_name\":\"Grzegorz Jankowski\",\"average_grade\":\"47.0300000000000000\"},{\"professor_name\":\"Jacek Wojciechowski\",\"average_grade\":\"78.1875000000000000\"},{\"professor_name\":\"Joanna Stępień\",\"average_grade\":\"54.5050000000000000\"},{\"professor_name\":\"Magdalena Michalski\",\"average_grade\":\"20.7600000000000000\"},{\"professor_name\":\"Małgorzata Olszewski\",\"average_grade\":\"87.6866666666666667\"},{\"professor_name\":\"Marek Lewandowski\",\"average_grade\":\"51.4233333333333333\"},{\"professor_name\":\"Marek Woźniak\",\"average_grade\":\"40.1450000000000000\"},{\"professor_name\":\"Mariusz Nowakowski\",\"average_grade\":\"22.3500000000000000\"},{\"professor_name\":\"Michał Nowak\",\"average_grade\":\"76.2700000000000000\"},{\"professor_name\":\"Robert Jaworski\",\"average_grade\":\"35.8000000000000000\"},{\"professor_name\":\"Ryszard Kowalczyk\",\"average_grade\":\"48.4250000000000000\"},{\"professor_name\":\"Ryszard Woźniak\",\"average_grade\":\"19.0400000000000000\"},{\"professor_name\":\"Teresa Woźniak\",\"average_grade\":\"88.0700000000000000\"},{\"professor_name\":\"Tomasz Majewski\",\"average_grade\":\"50.1125000000000000\"}]},\"endedAt\":1771855570150},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\\n  AVG(CAST(g.exam_score AS NUMERIC)) AS average_grade\\nFROM professors p\\nJOIN course_sections cs ON p.id = cs.professor_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nWHERE g.exam_score IS NOT NULL\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY professor_name\",\"metadata\":{\"columns\":[\"professor_name\",\"average_grade\"],\"rowCount\":17,\"sample\":[{\"professor_name\":\"Adam Wieczorek\",\"average_grade\":\"50.0500000000000000\"},{\"professor_name\":\"Agnieszka Krawczyk\",\"average_grade\":\"42.5033333333333333\"}]},\"data\":[{\"professor_name\":\"Adam Wieczorek\",\"average_grade\":\"50.0500000000000000\"},{\"professor_name\":\"Agnieszka Krawczyk\",\"average_grade\":\"42.5033333333333333\"},{\"professor_name\":\"Ewa Krawczyk\",\"average_grade\":\"35.6800000000000000\"},{\"professor_name\":\"Grzegorz Jankowski\",\"average_grade\":\"47.0300000000000000\"},{\"professor_name\":\"Jacek Wojciechowski\",\"average_grade\":\"78.1875000000000000\"},{\"professor_name\":\"Joanna Stępień\",\"average_grade\":\"54.5050000000000000\"},{\"professor_name\":\"Magdalena Michalski\",\"average_grade\":\"20.7600000000000000\"},{\"professor_name\":\"Małgorzata Olszewski\",\"average_grade\":\"87.6866666666666667\"},{\"professor_name\":\"Marek Lewandowski\",\"average_grade\":\"51.4233333333333333\"},{\"professor_name\":\"Marek Woźniak\",\"average_grade\":\"40.1450000000000000\"},{\"professor_name\":\"Mariusz Nowakowski\",\"average_grade\":\"22.3500000000000000\"},{\"professor_name\":\"Michał Nowak\",\"average_grade\":\"76.2700000000000000\"},{\"professor_name\":\"Robert Jaworski\",\"average_grade\":\"35.8000000000000000\"},{\"professor_name\":\"Ryszard Kowalczyk\",\"average_grade\":\"48.4250000000000000\"},{\"professor_name\":\"Ryszard Woźniak\",\"average_grade\":\"19.0400000000000000\"},{\"professor_name\":\"Teresa Woźniak\",\"average_grade\":\"88.0700000000000000\"},{\"professor_name\":\"Tomasz Majewski\",\"average_grade\":\"50.1125000000000000\"}]},\"startedAt\":1771855570154,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Grade Given by Each Professor\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Professor Name\"},\"y\":{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"format\":\".2f\"}]},\"width\":900,\"height\":400},\"reasoning\":\"Bar chart showing average exam scores by professor, sorted alphabetically. The x-axis displays professor names at a -45° angle for readability with 17 professors. The y-axis shows the average grade on a quantitative scale. Tooltips provide precise grade values formatted to 2 decimal places for clarity.\"},\"endedAt\":1771855573601},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Grade Given by Each Professor\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Professor Name\"},\"y\":{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"format\":\".2f\"}]},\"width\":900,\"height\":400},\"reasoning\":\"Bar chart showing average exam scores by professor, sorted alphabetically. The x-axis displays professor names at a -45° angle for readability with 17 professors. The y-axis shows the average grade on a quantitative scale. Tooltips provide precise grade values formatted to 2 decimal places for clarity.\"},\"startedAt\":1771855573608,\"status\":\"success\",\"output\":{\"sql\":\"SELECT \\n  CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\\n  AVG(CAST(g.exam_score AS NUMERIC)) AS average_grade\\nFROM professors p\\nJOIN course_sections cs ON p.id = cs.professor_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nWHERE g.exam_score IS NOT NULL\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY professor_name\",\"data\":[{\"professor_name\":\"Adam Wieczorek\",\"average_grade\":\"50.0500000000000000\"},{\"professor_name\":\"Agnieszka Krawczyk\",\"average_grade\":\"42.5033333333333333\"},{\"professor_name\":\"Ewa Krawczyk\",\"average_grade\":\"35.6800000000000000\"},{\"professor_name\":\"Grzegorz Jankowski\",\"average_grade\":\"47.0300000000000000\"},{\"professor_name\":\"Jacek Wojciechowski\",\"average_grade\":\"78.1875000000000000\"},{\"professor_name\":\"Joanna Stępień\",\"average_grade\":\"54.5050000000000000\"},{\"professor_name\":\"Magdalena Michalski\",\"average_grade\":\"20.7600000000000000\"},{\"professor_name\":\"Małgorzata Olszewski\",\"average_grade\":\"87.6866666666666667\"},{\"professor_name\":\"Marek Lewandowski\",\"average_grade\":\"51.4233333333333333\"},{\"professor_name\":\"Marek Woźniak\",\"average_grade\":\"40.1450000000000000\"},{\"professor_name\":\"Mariusz Nowakowski\",\"average_grade\":\"22.3500000000000000\"},{\"professor_name\":\"Michał Nowak\",\"average_grade\":\"76.2700000000000000\"},{\"professor_name\":\"Robert Jaworski\",\"average_grade\":\"35.8000000000000000\"},{\"professor_name\":\"Ryszard Kowalczyk\",\"average_grade\":\"48.4250000000000000\"},{\"professor_name\":\"Ryszard Woźniak\",\"average_grade\":\"19.0400000000000000\"},{\"professor_name\":\"Teresa Woźniak\",\"average_grade\":\"88.0700000000000000\"},{\"professor_name\":\"Tomasz Majewski\",\"average_grade\":\"50.1125000000000000\"}],\"metadata\":{\"columns\":[\"professor_name\",\"average_grade\"],\"rowCount\":17,\"sample\":[{\"professor_name\":\"Adam Wieczorek\",\"average_grade\":\"50.0500000000000000\"},{\"professor_name\":\"Agnieszka Krawczyk\",\"average_grade\":\"42.5033333333333333\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Grade Given by Each Professor\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Professor Name\"},\"y\":{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"format\":\".2f\"}]},\"width\":900,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855573613}},\"input\":{\"question\":\"What is the average grade given by each professor?\"},\"result\":{\"sql\":\"SELECT \\n  CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\\n  AVG(CAST(g.exam_score AS NUMERIC)) AS average_grade\\nFROM professors p\\nJOIN course_sections cs ON p.id = cs.professor_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nWHERE g.exam_score IS NOT NULL\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY professor_name\",\"data\":[{\"professor_name\":\"Adam Wieczorek\",\"average_grade\":\"50.0500000000000000\"},{\"professor_name\":\"Agnieszka Krawczyk\",\"average_grade\":\"42.5033333333333333\"},{\"professor_name\":\"Ewa Krawczyk\",\"average_grade\":\"35.6800000000000000\"},{\"professor_name\":\"Grzegorz Jankowski\",\"average_grade\":\"47.0300000000000000\"},{\"professor_name\":\"Jacek Wojciechowski\",\"average_grade\":\"78.1875000000000000\"},{\"professor_name\":\"Joanna Stępień\",\"average_grade\":\"54.5050000000000000\"},{\"professor_name\":\"Magdalena Michalski\",\"average_grade\":\"20.7600000000000000\"},{\"professor_name\":\"Małgorzata Olszewski\",\"average_grade\":\"87.6866666666666667\"},{\"professor_name\":\"Marek Lewandowski\",\"average_grade\":\"51.4233333333333333\"},{\"professor_name\":\"Marek Woźniak\",\"average_grade\":\"40.1450000000000000\"},{\"professor_name\":\"Mariusz Nowakowski\",\"average_grade\":\"22.3500000000000000\"},{\"professor_name\":\"Michał Nowak\",\"average_grade\":\"76.2700000000000000\"},{\"professor_name\":\"Robert Jaworski\",\"average_grade\":\"35.8000000000000000\"},{\"professor_name\":\"Ryszard Kowalczyk\",\"average_grade\":\"48.4250000000000000\"},{\"professor_name\":\"Ryszard Woźniak\",\"average_grade\":\"19.0400000000000000\"},{\"professor_name\":\"Teresa Woźniak\",\"average_grade\":\"88.0700000000000000\"},{\"professor_name\":\"Tomasz Majewski\",\"average_grade\":\"50.1125000000000000\"}],\"metadata\":{\"columns\":[\"professor_name\",\"average_grade\"],\"rowCount\":17,\"sample\":[{\"professor_name\":\"Adam Wieczorek\",\"average_grade\":\"50.0500000000000000\"},{\"professor_name\":\"Agnieszka Krawczyk\",\"average_grade\":\"42.5033333333333333\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Grade Given by Each Professor\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Professor Name\"},\"y\":{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"format\":\".2f\"}]},\"width\":900,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"31e67c191fcb42fcb5fb1bae75a1b21a\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/professor-avg-grade/run-0001/run.json",
+    "queryPath": "runs/professor-avg-grade/run-0001/query.sql",
+    "vegaRawPath": "runs/professor-avg-grade/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/professor-avg-grade/run-0001/vega.resolved.json",
+    "imagePath": "runs/professor-avg-grade/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:06:14.002Z",
+  "traceId": "31e67c191fcb42fcb5fb1bae75a1b21a",
+  "success": true,
+  "durationMs": 30287,
+  "resultRaw": {
+    "data": [
+      {
+        "professor_name": "Adam Wieczorek",
+        "average_grade": "50.0500000000000000"
+      },
+      {
+        "professor_name": "Agnieszka Krawczyk",
+        "average_grade": "42.5033333333333333"
+      },
+      {
+        "professor_name": "Ewa Krawczyk",
+        "average_grade": "35.6800000000000000"
+      },
+      {
+        "professor_name": "Grzegorz Jankowski",
+        "average_grade": "47.0300000000000000"
+      },
+      {
+        "professor_name": "Jacek Wojciechowski",
+        "average_grade": "78.1875000000000000"
+      },
+      {
+        "professor_name": "Joanna Stępień",
+        "average_grade": "54.5050000000000000"
+      },
+      {
+        "professor_name": "Magdalena Michalski",
+        "average_grade": "20.7600000000000000"
+      },
+      {
+        "professor_name": "Małgorzata Olszewski",
+        "average_grade": "87.6866666666666667"
+      },
+      {
+        "professor_name": "Marek Lewandowski",
+        "average_grade": "51.4233333333333333"
+      },
+      {
+        "professor_name": "Marek Woźniak",
+        "average_grade": "40.1450000000000000"
+      },
+      {
+        "professor_name": "Mariusz Nowakowski",
+        "average_grade": "22.3500000000000000"
+      },
+      {
+        "professor_name": "Michał Nowak",
+        "average_grade": "76.2700000000000000"
+      },
+      {
+        "professor_name": "Robert Jaworski",
+        "average_grade": "35.8000000000000000"
+      },
+      {
+        "professor_name": "Ryszard Kowalczyk",
+        "average_grade": "48.4250000000000000"
+      },
+      {
+        "professor_name": "Ryszard Woźniak",
+        "average_grade": "19.0400000000000000"
+      },
+      {
+        "professor_name": "Teresa Woźniak",
+        "average_grade": "88.0700000000000000"
+      },
+      {
+        "professor_name": "Tomasz Majewski",
+        "average_grade": "50.1125000000000000"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Grade Given by Each Professor",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "professor_name",
+          "type": "nominal",
+          "axis": {
+            "labelAngle": -45,
+            "labelAlign": "right"
+          },
+          "title": "Professor Name"
+        },
+        "y": {
+          "field": "average_grade",
+          "type": "quantitative",
+          "title": "Average Grade"
+        },
+        "tooltip": [
+          {
+            "field": "professor_name",
+            "type": "nominal",
+            "title": "Professor"
+          },
+          {
+            "field": "average_grade",
+            "type": "quantitative",
+            "title": "Average Grade",
+            "format": ".2f"
+          }
+        ]
+      },
+      "width": 900,
+      "height": 400
+    },
+    "sql": "SELECT \n  CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\n  AVG(CAST(g.exam_score AS NUMERIC)) AS average_grade\nFROM professors p\nJOIN course_sections cs ON p.id = cs.professor_id\nJOIN enrollments e ON cs.id = e.course_section_id\nJOIN grades g ON e.id = g.enrollment_id\nWHERE g.exam_score IS NOT NULL\nGROUP BY p.id, p.first_name, p.last_name\nORDER BY professor_name",
+    "metadata": {
+      "columns": [
+        "professor_name",
+        "average_grade"
+      ],
+      "rowCount": 17,
+      "sample": [
+        {
+          "professor_name": "Adam Wieczorek",
+          "average_grade": "50.0500000000000000"
+        },
+        {
+          "professor_name": "Agnieszka Krawczyk",
+          "average_grade": "42.5033333333333333"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "professor_name": "Adam Wieczorek",
+        "average_grade": "50.0500000000000000"
+      },
+      {
+        "professor_name": "Agnieszka Krawczyk",
+        "average_grade": "42.5033333333333333"
+      },
+      {
+        "professor_name": "Ewa Krawczyk",
+        "average_grade": "35.6800000000000000"
+      },
+      {
+        "professor_name": "Grzegorz Jankowski",
+        "average_grade": "47.0300000000000000"
+      },
+      {
+        "professor_name": "Jacek Wojciechowski",
+        "average_grade": "78.1875000000000000"
+      },
+      {
+        "professor_name": "Joanna Stępień",
+        "average_grade": "54.5050000000000000"
+      },
+      {
+        "professor_name": "Magdalena Michalski",
+        "average_grade": "20.7600000000000000"
+      },
+      {
+        "professor_name": "Małgorzata Olszewski",
+        "average_grade": "87.6866666666666667"
+      },
+      {
+        "professor_name": "Marek Lewandowski",
+        "average_grade": "51.4233333333333333"
+      },
+      {
+        "professor_name": "Marek Woźniak",
+        "average_grade": "40.1450000000000000"
+      },
+      {
+        "professor_name": "Mariusz Nowakowski",
+        "average_grade": "22.3500000000000000"
+      },
+      {
+        "professor_name": "Michał Nowak",
+        "average_grade": "76.2700000000000000"
+      },
+      {
+        "professor_name": "Robert Jaworski",
+        "average_grade": "35.8000000000000000"
+      },
+      {
+        "professor_name": "Ryszard Kowalczyk",
+        "average_grade": "48.4250000000000000"
+      },
+      {
+        "professor_name": "Ryszard Woźniak",
+        "average_grade": "19.0400000000000000"
+      },
+      {
+        "professor_name": "Teresa Woźniak",
+        "average_grade": "88.0700000000000000"
+      },
+      {
+        "professor_name": "Tomasz Majewski",
+        "average_grade": "50.1125000000000000"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Grade Given by Each Professor",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "professor_name",
+          "type": "nominal",
+          "axis": {
+            "labelAngle": -45,
+            "labelAlign": "right"
+          },
+          "title": "Professor Name"
+        },
+        "y": {
+          "field": "average_grade",
+          "type": "quantitative",
+          "title": "Average Grade"
+        },
+        "tooltip": [
+          {
+            "field": "professor_name",
+            "type": "nominal",
+            "title": "Professor"
+          },
+          {
+            "field": "average_grade",
+            "type": "quantitative",
+            "title": "Average Grade",
+            "format": ".2f"
+          }
+        ]
+      },
+      "width": 900,
+      "height": 400
+    },
+    "sql": "SELECT \n  CONCAT(p.first_name, ' ', p.last_name) AS professor_name,\n  AVG(CAST(g.exam_score AS NUMERIC)) AS average_grade\nFROM professors p\nJOIN course_sections cs ON p.id = cs.professor_id\nJOIN enrollments e ON cs.id = e.course_section_id\nJOIN grades g ON e.id = g.enrollment_id\nWHERE g.exam_score IS NOT NULL\nGROUP BY p.id, p.first_name, p.last_name\nORDER BY professor_name",
+    "metadata": {
+      "columns": [
+        "professor_name",
+        "average_grade"
+      ],
+      "rowCount": 17,
+      "sample": [
+        {
+          "professor_name": "Adam Wieczorek",
+          "average_grade": "50.0500000000000000"
+        },
+        {
+          "professor_name": "Agnieszka Krawczyk",
+          "average_grade": "42.5033333333333333"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.365Z",
+    "traceId": "31e67c191fcb42fcb5fb1bae75a1b21a",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 29250,
+      "outputTokens": 1177,
+      "totalTokens": 30427,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.035135
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 29250,
+        "outputTokens": 1177,
+        "totalTokens": 30427,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.035135
+      }
+    ],
+    "warnings": []
+  }
+}

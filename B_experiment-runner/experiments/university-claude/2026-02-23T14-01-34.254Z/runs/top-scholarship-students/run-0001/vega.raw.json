@@ -1,0 +1,63 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Students with Highest Total Scholarship Amounts",
+  "description": "Top students ranked by total scholarship received",
+  "data": {
+    "name": "query_result"
+  },
+  "mark": "bar",
+  "encoding": {
+    "y": {
+      "field": "first_name",
+      "type": "nominal",
+      "sort": "-x",
+      "title": "Student Name",
+      "axis": {
+        "labelExpr": "datum.value + ' ' + data('query_result')[indexof(data('query_result'), datum)].last_name"
+      }
+    },
+    "x": {
+      "field": "total_scholarship_amount",
+      "type": "quantitative",
+      "title": "Total Scholarship Amount ($)"
+    },
+    "tooltip": [
+      {
+        "field": "first_name",
+        "type": "nominal",
+        "title": "First Name"
+      },
+      {
+        "field": "last_name",
+        "type": "nominal",
+        "title": "Last Name"
+      },
+      {
+        "field": "email",
+        "type": "nominal",
+        "title": "Email"
+      },
+      {
+        "field": "total_scholarship_amount",
+        "type": "quantitative",
+        "title": "Total Scholarship Amount",
+        "format": "$,.2f"
+      }
+    ],
+    "color": {
+      "field": "total_scholarship_amount",
+      "type": "quantitative",
+      "scale": {
+        "scheme": "blues"
+      },
+      "title": "Amount ($)"
+    }
+  },
+  "height": 600,
+  "width": 700,
+  "config": {
+    "mark": {
+      "tooltip": true
+    }
+  }
+}

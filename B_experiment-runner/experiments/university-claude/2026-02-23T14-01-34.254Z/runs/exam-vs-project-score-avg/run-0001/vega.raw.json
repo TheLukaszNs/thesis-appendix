@@ -1,0 +1,78 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Average Exam Scores vs Project Scores by Department",
+  "data": {
+    "name": "query_result"
+  },
+  "width": 800,
+  "height": 400,
+  "transform": [
+    {
+      "fold": [
+        "avg_exam_score",
+        "avg_project_score"
+      ],
+      "as": [
+        "score_type",
+        "average_score"
+      ]
+    }
+  ],
+  "mark": "bar",
+  "encoding": {
+    "x": {
+      "field": "department",
+      "type": "nominal",
+      "axis": {
+        "labelAngle": -45,
+        "labelAlign": "right"
+      },
+      "title": "Department"
+    },
+    "y": {
+      "field": "average_score",
+      "type": "quantitative",
+      "title": "Average Score"
+    },
+    "color": {
+      "field": "score_type",
+      "type": "nominal",
+      "scale": {
+        "domain": [
+          "avg_exam_score",
+          "avg_project_score"
+        ],
+        "range": [
+          "#1f77b4",
+          "#ff7f0e"
+        ]
+      },
+      "legend": {
+        "title": "Score Type",
+        "labelExpr": "datum.label === 'avg_exam_score' ? 'Exam Score' : 'Project Score'"
+      }
+    },
+    "xOffset": {
+      "field": "score_type"
+    },
+    "tooltip": [
+      {
+        "field": "department",
+        "type": "nominal",
+        "title": "Department"
+      },
+      {
+        "field": "score_type",
+        "type": "nominal",
+        "title": "Score Type",
+        "format": ""
+      },
+      {
+        "field": "average_score",
+        "type": "quantitative",
+        "title": "Average Score",
+        "format": ".2f"
+      }
+    ]
+  }
+}

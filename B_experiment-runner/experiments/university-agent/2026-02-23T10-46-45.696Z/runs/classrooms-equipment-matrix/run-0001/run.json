@@ -1,0 +1,164 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "classrooms-equipment-matrix",
+  "caseDirectory": "classrooms-equipment-matrix",
+  "repeatIndex": 1,
+  "prompt": "Show classrooms grouped by equipment type: projector only, computers only, both, or neither",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show classrooms grouped by equipment type: projector only, computers only, both, or neither"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:54:07.105Z",
+    "endedAtUtc": "2026-02-23T10:54:25.190Z",
+    "durationMs": 18085
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2506",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:54:25 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Show classrooms grouped by equipment type: projector only, computers only, both, or neither\"},\"agent\":{\"payload\":{\"question\":\"Show classrooms grouped by equipment type: projector only, computers only, both, or neither\"},\"startedAt\":1771844047110,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  CASE\\n    WHEN has_projector AND has_computers THEN 'both'\\n    WHEN has_projector AND NOT has_computers THEN 'projector only'\\n    WHEN has_computers AND NOT has_projector THEN 'computers only'\\n    ELSE 'neither'\\n  END AS equipment_type,\\n  COUNT(*) AS classroom_count,\\n  STRING_AGG(name, ', ' ORDER BY name) AS classroom_names\\nFROM classrooms\\nGROUP BY equipment_type\\nORDER BY classroom_count DESC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Count of classrooms by equipment type and list of classroom names in each group\",\"title\":\"Classrooms by Equipment Type\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"equipment_type\",\"type\":\"nominal\",\"axis\":{\"title\":\"\"}},\"x\":{\"field\":\"classroom_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of Classrooms\"}},\"tooltip\":[{\"field\":\"equipment_type\",\"type\":\"nominal\",\"title\":\"Equipment Type\"},{\"field\":\"classroom_count\",\"type\":\"quantitative\",\"title\":\"Classroom Count\"},{\"field\":\"classroom_names\",\"type\":\"nominal\",\"title\":\"Classroom Names\"}]},\"width\":600,\"height\":240}},\"endedAt\":1771844065124},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  CASE\\n    WHEN has_projector AND has_computers THEN 'both'\\n    WHEN has_projector AND NOT has_computers THEN 'projector only'\\n    WHEN has_computers AND NOT has_projector THEN 'computers only'\\n    ELSE 'neither'\\n  END AS equipment_type,\\n  COUNT(*) AS classroom_count,\\n  STRING_AGG(name, ', ' ORDER BY name) AS classroom_names\\nFROM classrooms\\nGROUP BY equipment_type\\nORDER BY classroom_count DESC;\"},\"startedAt\":1771844065127,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column \\\"name\\\" does not exist\\nLINE 10:   STRING_AGG(name, ', ' ORDER BY name) AS classroom_names\\n                      ^\",\"name\":\"Error\"},\"endedAt\":1771844065187}},\"input\":{\"question\":\"Show classrooms grouped by equipment type: projector only, computers only, both, or neither\"},\"error\":{\"message\":\"SQL execution failed: column \\\"name\\\" does not exist\\nLINE 10:   STRING_AGG(name, ', ' ORDER BY name) AS classroom_names\\n                      ^\",\"name\":\"Error\"},\"traceId\":\"4fce38ce3a0efba6f01a7b30cb6299ce\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/classrooms-equipment-matrix/run-0001/run.json",
+    "queryPath": "runs/classrooms-equipment-matrix/run-0001/query.sql",
+    "vegaRawPath": "runs/classrooms-equipment-matrix/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/classrooms-equipment-matrix/run-0001/vega.resolved.json",
+    "imagePath": "runs/classrooms-equipment-matrix/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:54:25.190Z",
+  "traceId": "4fce38ce3a0efba6f01a7b30cb6299ce",
+  "success": false,
+  "durationMs": 18085,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Show classrooms grouped by equipment type: projector only, computers only, both, or neither"
+      },
+      "agent": {
+        "payload": {
+          "question": "Show classrooms grouped by equipment type: projector only, computers only, both, or neither"
+        },
+        "startedAt": 1771844047110,
+        "status": "success",
+        "output": {
+          "sql": "SELECT\n  CASE\n    WHEN has_projector AND has_computers THEN 'both'\n    WHEN has_projector AND NOT has_computers THEN 'projector only'\n    WHEN has_computers AND NOT has_projector THEN 'computers only'\n    ELSE 'neither'\n  END AS equipment_type,\n  COUNT(*) AS classroom_count,\n  STRING_AGG(name, ', ' ORDER BY name) AS classroom_names\nFROM classrooms\nGROUP BY equipment_type\nORDER BY classroom_count DESC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Count of classrooms by equipment type and list of classroom names in each group",
+            "title": "Classrooms by Equipment Type",
+            "data": {
+              "name": "query_result"
+            },
+            "mark": "bar",
+            "encoding": {
+              "y": {
+                "field": "equipment_type",
+                "type": "nominal",
+                "axis": {
+                  "title": ""
+                }
+              },
+              "x": {
+                "field": "classroom_count",
+                "type": "quantitative",
+                "axis": {
+                  "title": "Number of Classrooms"
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "equipment_type",
+                  "type": "nominal",
+                  "title": "Equipment Type"
+                },
+                {
+                  "field": "classroom_count",
+                  "type": "quantitative",
+                  "title": "Classroom Count"
+                },
+                {
+                  "field": "classroom_names",
+                  "type": "nominal",
+                  "title": "Classroom Names"
+                }
+              ]
+            },
+            "width": 600,
+            "height": 240
+          }
+        },
+        "endedAt": 1771844065124
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT\n  CASE\n    WHEN has_projector AND has_computers THEN 'both'\n    WHEN has_projector AND NOT has_computers THEN 'projector only'\n    WHEN has_computers AND NOT has_projector THEN 'computers only'\n    ELSE 'neither'\n  END AS equipment_type,\n  COUNT(*) AS classroom_count,\n  STRING_AGG(name, ', ' ORDER BY name) AS classroom_names\nFROM classrooms\nGROUP BY equipment_type\nORDER BY classroom_count DESC;"
+        },
+        "startedAt": 1771844065127,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column \"name\" does not exist\nLINE 10:   STRING_AGG(name, ', ' ORDER BY name) AS classroom_names\n                      ^",
+          "name": "Error"
+        },
+        "endedAt": 1771844065187
+      }
+    },
+    "input": {
+      "question": "Show classrooms grouped by equipment type: projector only, computers only, both, or neither"
+    },
+    "error": {
+      "message": "SQL execution failed: column \"name\" does not exist\nLINE 10:   STRING_AGG(name, ', ' ORDER BY name) AS classroom_names\n                      ^",
+      "name": "Error"
+    },
+    "traceId": "4fce38ce3a0efba6f01a7b30cb6299ce"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:54:25.190Z",
+    "traceId": "4fce38ce3a0efba6f01a7b30cb6299ce",
+    "attempts": 6,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 273,
+      "outputTokens": 1365,
+      "totalTokens": 1638,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 960,
+      "costUsd": 0.00279825
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 273,
+        "outputTokens": 1365,
+        "totalTokens": 1638,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 960,
+        "costUsd": 0.00279825
+      }
+    ],
+    "warnings": []
+  }
+}

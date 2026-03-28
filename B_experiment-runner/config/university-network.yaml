@@ -1,0 +1,28 @@
+name: university-network
+description: "University testset: departments, students, grades, courses, professors (with golden SQL)"
+
+api:
+  baseUrl: http://localhost:4111
+  workflowId: networkWorkflow
+  model: vercel/anthropic/claude-haiku-4.5
+  timeoutMs: 120000
+
+testset: testsets/university.jsonl
+
+execution:
+  repetitions: 1
+  concurrency: 4
+
+trace:
+  enabled: true
+  database: postgresql://postgres:postgres@localhost:5433/mastra
+  pollTimeoutMs: 15000
+  pollIntervalMs: 1000
+
+output:
+  dir: experiments
+
+metadata:
+  condition: baseline
+  hypothesis: "University NL-to-SQL testset achieves target pass@1 with golden SQL evaluation"
+  tags: [university, golden-sql]

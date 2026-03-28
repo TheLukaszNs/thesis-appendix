@@ -1,0 +1,180 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "department-fail-rate",
+  "caseDirectory": "department-fail-rate",
+  "repeatIndex": 1,
+  "prompt": "What is the failure rate per department?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the failure rate per department?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:51:20.767Z",
+    "endedAtUtc": "2026-02-23T10:51:42.739Z",
+    "durationMs": 21972
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2389",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:51:42 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"What is the failure rate per department?\"},\"agent\":{\"payload\":{\"question\":\"What is the failure rate per department?\"},\"startedAt\":1771843880777,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  department AS department,\\n  SUM(CASE WHEN ((status IS NOT NULL AND LOWER(status) IN ('failed','failure','error')) OR (is_failed = TRUE)) THEN 1 ELSE 0 END) AS failure_count,\\n  COUNT(*) AS total_count,\\n  100.0 * SUM(CASE WHEN ((status IS NOT NULL AND LOWER(status) IN ('failed','failure','error')) OR (is_failed = TRUE)) THEN 1 ELSE 0 END) / NULLIF(COUNT(*),0) AS failure_rate\\nFROM incidents\\nGROUP BY department\\nORDER BY failure_rate DESC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Failure rate per department (%)\",\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"department\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\"}},\"y\":{\"field\":\"failure_rate\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Failure rate (%)\"},\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"failure_rate\",\"type\":\"quantitative\"},\"tooltip\":[{\"field\":\"department\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"failure_count\",\"type\":\"quantitative\",\"title\":\"Failures\"},{\"field\":\"total_count\",\"type\":\"quantitative\",\"title\":\"Total\"},{\"field\":\"failure_rate\",\"type\":\"quantitative\",\"title\":\"Failure rate (%)\",\"format\":\".2f\"}]}}},\"endedAt\":1771843902715},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  department AS department,\\n  SUM(CASE WHEN ((status IS NOT NULL AND LOWER(status) IN ('failed','failure','error')) OR (is_failed = TRUE)) THEN 1 ELSE 0 END) AS failure_count,\\n  COUNT(*) AS total_count,\\n  100.0 * SUM(CASE WHEN ((status IS NOT NULL AND LOWER(status) IN ('failed','failure','error')) OR (is_failed = TRUE)) THEN 1 ELSE 0 END) / NULLIF(COUNT(*),0) AS failure_rate\\nFROM incidents\\nGROUP BY department\\nORDER BY failure_rate DESC;\"},\"startedAt\":1771843902718,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: relation \\\"incidents\\\" does not exist\\nLINE 7: FROM incidents\\n             ^\",\"name\":\"Error\"},\"endedAt\":1771843902736}},\"input\":{\"question\":\"What is the failure rate per department?\"},\"error\":{\"message\":\"SQL execution failed: relation \\\"incidents\\\" does not exist\\nLINE 7: FROM incidents\\n             ^\",\"name\":\"Error\"},\"traceId\":\"3a7eff0d28837c1364718a81c0ac9efb\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/department-fail-rate/run-0001/run.json",
+    "queryPath": "runs/department-fail-rate/run-0001/query.sql",
+    "vegaRawPath": "runs/department-fail-rate/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/department-fail-rate/run-0001/vega.resolved.json",
+    "imagePath": "runs/department-fail-rate/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:51:42.739Z",
+  "traceId": "3a7eff0d28837c1364718a81c0ac9efb",
+  "success": false,
+  "durationMs": 21972,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "What is the failure rate per department?"
+      },
+      "agent": {
+        "payload": {
+          "question": "What is the failure rate per department?"
+        },
+        "startedAt": 1771843880777,
+        "status": "success",
+        "output": {
+          "sql": "SELECT\n  department AS department,\n  SUM(CASE WHEN ((status IS NOT NULL AND LOWER(status) IN ('failed','failure','error')) OR (is_failed = TRUE)) THEN 1 ELSE 0 END) AS failure_count,\n  COUNT(*) AS total_count,\n  100.0 * SUM(CASE WHEN ((status IS NOT NULL AND LOWER(status) IN ('failed','failure','error')) OR (is_failed = TRUE)) THEN 1 ELSE 0 END) / NULLIF(COUNT(*),0) AS failure_rate\nFROM incidents\nGROUP BY department\nORDER BY failure_rate DESC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "data": {
+              "name": "query_result"
+            },
+            "title": "Failure rate per department (%)",
+            "mark": {
+              "type": "bar",
+              "tooltip": true
+            },
+            "encoding": {
+              "x": {
+                "field": "department",
+                "type": "nominal",
+                "axis": {
+                  "title": "Department"
+                }
+              },
+              "y": {
+                "field": "failure_rate",
+                "type": "quantitative",
+                "axis": {
+                  "title": "Failure rate (%)"
+                },
+                "scale": {
+                  "domain": [
+                    0,
+                    100
+                  ]
+                }
+              },
+              "color": {
+                "field": "failure_rate",
+                "type": "quantitative"
+              },
+              "tooltip": [
+                {
+                  "field": "department",
+                  "type": "nominal",
+                  "title": "Department"
+                },
+                {
+                  "field": "failure_count",
+                  "type": "quantitative",
+                  "title": "Failures"
+                },
+                {
+                  "field": "total_count",
+                  "type": "quantitative",
+                  "title": "Total"
+                },
+                {
+                  "field": "failure_rate",
+                  "type": "quantitative",
+                  "title": "Failure rate (%)",
+                  "format": ".2f"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843902715
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT\n  department AS department,\n  SUM(CASE WHEN ((status IS NOT NULL AND LOWER(status) IN ('failed','failure','error')) OR (is_failed = TRUE)) THEN 1 ELSE 0 END) AS failure_count,\n  COUNT(*) AS total_count,\n  100.0 * SUM(CASE WHEN ((status IS NOT NULL AND LOWER(status) IN ('failed','failure','error')) OR (is_failed = TRUE)) THEN 1 ELSE 0 END) / NULLIF(COUNT(*),0) AS failure_rate\nFROM incidents\nGROUP BY department\nORDER BY failure_rate DESC;"
+        },
+        "startedAt": 1771843902718,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: relation \"incidents\" does not exist\nLINE 7: FROM incidents\n             ^",
+          "name": "Error"
+        },
+        "endedAt": 1771843902736
+      }
+    },
+    "input": {
+      "question": "What is the failure rate per department?"
+    },
+    "error": {
+      "message": "SQL execution failed: relation \"incidents\" does not exist\nLINE 7: FROM incidents\n             ^",
+      "name": "Error"
+    },
+    "traceId": "3a7eff0d28837c1364718a81c0ac9efb"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:51:42.739Z",
+    "traceId": "3a7eff0d28837c1364718a81c0ac9efb",
+    "attempts": 5,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 264,
+      "outputTokens": 1521,
+      "totalTokens": 1785,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1088,
+      "costUsd": 0.003108
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 264,
+        "outputTokens": 1521,
+        "totalTokens": 1785,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1088,
+        "costUsd": 0.003108
+      }
+    ],
+    "warnings": []
+  }
+}

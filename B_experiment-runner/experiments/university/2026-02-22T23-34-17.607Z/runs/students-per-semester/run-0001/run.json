@@ -1,0 +1,286 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "students-per-semester",
+  "caseDirectory": "students-per-semester",
+  "repeatIndex": 1,
+  "prompt": "How many students are in each semester?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many students are in each semester?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:36:05.829Z",
+    "endedAtUtc": "2026-02-22T23:36:33.778Z",
+    "durationMs": 27949
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "6454",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:36:33 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How many students are in each semester?\"},\"sql\":{\"payload\":{\"question\":\"How many students are in each semester?\"},\"startedAt\":1771803365841,\"status\":\"success\",\"output\":{\"reasoning\":\"Aggregate students by the confirmed column current_semester in public.students to get counts per semester; order results deterministically by semester.\",\"sql\":\"SELECT s.current_semester AS semester, COUNT(*) AS student_count\\nFROM public.students AS s\\nGROUP BY s.current_semester\\nORDER BY s.current_semester ASC;\",\"assumptions\":[\"current_semester (integer) in public.students represents the student's semester and should be used for grouping\",\"Count should include all rows in public.students (no additional active/inactive filter was requested)\"]},\"endedAt\":1771803381589},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT s.current_semester AS semester, COUNT(*) AS student_count\\nFROM public.students AS s\\nGROUP BY s.current_semester\\nORDER BY s.current_semester ASC;\"},\"startedAt\":1771803381600,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT s.current_semester AS semester, COUNT(*) AS student_count\\nFROM public.students AS s\\nGROUP BY s.current_semester\\nORDER BY s.current_semester ASC\",\"metadata\":{\"columns\":[\"semester\",\"student_count\"],\"rowCount\":7,\"sample\":[{\"semester\":1,\"student_count\":20},{\"semester\":2,\"student_count\":14}]},\"data\":[{\"semester\":1,\"student_count\":20},{\"semester\":2,\"student_count\":14},{\"semester\":3,\"student_count\":19},{\"semester\":4,\"student_count\":16},{\"semester\":5,\"student_count\":13},{\"semester\":6,\"student_count\":22},{\"semester\":7,\"student_count\":11}]},\"endedAt\":1771803381684},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT s.current_semester AS semester, COUNT(*) AS student_count\\nFROM public.students AS s\\nGROUP BY s.current_semester\\nORDER BY s.current_semester ASC\",\"metadata\":{\"columns\":[\"semester\",\"student_count\"],\"rowCount\":7,\"sample\":[{\"semester\":1,\"student_count\":20},{\"semester\":2,\"student_count\":14}]},\"data\":[{\"semester\":1,\"student_count\":20},{\"semester\":2,\"student_count\":14},{\"semester\":3,\"student_count\":19},{\"semester\":4,\"student_count\":16},{\"semester\":5,\"student_count\":13},{\"semester\":6,\"student_count\":22},{\"semester\":7,\"student_count\":11}]},\"startedAt\":1771803381687,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of Students by Semester\",\"width\":600,\"height\":360,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"semester\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Semester\"},\"sort\":{\"field\":\"semester\",\"order\":\"ascending\"}},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Student Count\"}},\"tooltip\":[{\"field\":\"semester\",\"type\":\"ordinal\",\"title\":\"Semester\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Students\"}]}},\"reasoning\":\"A simple vertical bar chart shows student counts per semester. Semester is treated as an ordinal category and student_count is quantitative; tooltip provides exact values.\"},\"endedAt\":1771803393747},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of Students by Semester\",\"width\":600,\"height\":360,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"semester\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Semester\"},\"sort\":{\"field\":\"semester\",\"order\":\"ascending\"}},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Student Count\"}},\"tooltip\":[{\"field\":\"semester\",\"type\":\"ordinal\",\"title\":\"Semester\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Students\"}]}},\"reasoning\":\"A simple vertical bar chart shows student counts per semester. Semester is treated as an ordinal category and student_count is quantitative; tooltip provides exact values.\"},\"startedAt\":1771803393759,\"status\":\"success\",\"output\":{\"sql\":\"SELECT s.current_semester AS semester, COUNT(*) AS student_count\\nFROM public.students AS s\\nGROUP BY s.current_semester\\nORDER BY s.current_semester ASC;\",\"data\":[{\"semester\":1,\"student_count\":20},{\"semester\":2,\"student_count\":14},{\"semester\":3,\"student_count\":19},{\"semester\":4,\"student_count\":16},{\"semester\":5,\"student_count\":13},{\"semester\":6,\"student_count\":22},{\"semester\":7,\"student_count\":11}],\"metadata\":{\"columns\":[\"semester\",\"student_count\"],\"rowCount\":7,\"sample\":[{\"semester\":1,\"student_count\":20},{\"semester\":2,\"student_count\":14}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of Students by Semester\",\"width\":600,\"height\":360,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"semester\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Semester\"},\"sort\":{\"field\":\"semester\",\"order\":\"ascending\"}},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Student Count\"}},\"tooltip\":[{\"field\":\"semester\",\"type\":\"ordinal\",\"title\":\"Semester\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Students\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771803393761}},\"input\":{\"question\":\"How many students are in each semester?\"},\"result\":{\"sql\":\"SELECT s.current_semester AS semester, COUNT(*) AS student_count\\nFROM public.students AS s\\nGROUP BY s.current_semester\\nORDER BY s.current_semester ASC;\",\"data\":[{\"semester\":1,\"student_count\":20},{\"semester\":2,\"student_count\":14},{\"semester\":3,\"student_count\":19},{\"semester\":4,\"student_count\":16},{\"semester\":5,\"student_count\":13},{\"semester\":6,\"student_count\":22},{\"semester\":7,\"student_count\":11}],\"metadata\":{\"columns\":[\"semester\",\"student_count\"],\"rowCount\":7,\"sample\":[{\"semester\":1,\"student_count\":20},{\"semester\":2,\"student_count\":14}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of Students by Semester\",\"width\":600,\"height\":360,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"semester\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Semester\"},\"sort\":{\"field\":\"semester\",\"order\":\"ascending\"}},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Student Count\"}},\"tooltip\":[{\"field\":\"semester\",\"type\":\"ordinal\",\"title\":\"Semester\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Students\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"20f1dab05459f0cfdd44a46a74a1a7a8\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/students-per-semester/run-0001/run.json",
+    "queryPath": "runs/students-per-semester/run-0001/query.sql",
+    "vegaRawPath": "runs/students-per-semester/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/students-per-semester/run-0001/vega.resolved.json",
+    "imagePath": "runs/students-per-semester/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:36:34.236Z",
+  "traceId": "20f1dab05459f0cfdd44a46a74a1a7a8",
+  "success": true,
+  "durationMs": 28407,
+  "resultRaw": {
+    "data": [
+      {
+        "semester": 1,
+        "student_count": 20
+      },
+      {
+        "semester": 2,
+        "student_count": 14
+      },
+      {
+        "semester": 3,
+        "student_count": 19
+      },
+      {
+        "semester": 4,
+        "student_count": 16
+      },
+      {
+        "semester": 5,
+        "student_count": 13
+      },
+      {
+        "semester": 6,
+        "student_count": 22
+      },
+      {
+        "semester": 7,
+        "student_count": 11
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Number of Students by Semester",
+      "width": 600,
+      "height": 360,
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "semester",
+          "type": "ordinal",
+          "axis": {
+            "title": "Semester"
+          },
+          "sort": {
+            "field": "semester",
+            "order": "ascending"
+          }
+        },
+        "y": {
+          "field": "student_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Student Count"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "semester",
+            "type": "ordinal",
+            "title": "Semester"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Students"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT s.current_semester AS semester, COUNT(*) AS student_count\nFROM public.students AS s\nGROUP BY s.current_semester\nORDER BY s.current_semester ASC;",
+    "metadata": {
+      "columns": [
+        "semester",
+        "student_count"
+      ],
+      "rowCount": 7,
+      "sample": [
+        {
+          "semester": 1,
+          "student_count": 20
+        },
+        {
+          "semester": 2,
+          "student_count": 14
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "semester": 1,
+        "student_count": 20
+      },
+      {
+        "semester": 2,
+        "student_count": 14
+      },
+      {
+        "semester": 3,
+        "student_count": 19
+      },
+      {
+        "semester": 4,
+        "student_count": 16
+      },
+      {
+        "semester": 5,
+        "student_count": 13
+      },
+      {
+        "semester": 6,
+        "student_count": 22
+      },
+      {
+        "semester": 7,
+        "student_count": 11
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Number of Students by Semester",
+      "width": 600,
+      "height": 360,
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "semester",
+          "type": "ordinal",
+          "axis": {
+            "title": "Semester"
+          },
+          "sort": {
+            "field": "semester",
+            "order": "ascending"
+          }
+        },
+        "y": {
+          "field": "student_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Student Count"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "semester",
+            "type": "ordinal",
+            "title": "Semester"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Students"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT s.current_semester AS semester, COUNT(*) AS student_count\nFROM public.students AS s\nGROUP BY s.current_semester\nORDER BY s.current_semester ASC;",
+    "metadata": {
+      "columns": [
+        "semester",
+        "student_count"
+      ],
+      "rowCount": 7,
+      "sample": [
+        {
+          "semester": 1,
+          "student_count": 20
+        },
+        {
+          "semester": 2,
+          "student_count": 14
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:36:34.236Z",
+    "traceId": "20f1dab05459f0cfdd44a46a74a1a7a8",
+    "attempts": 2,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 5817,
+      "outputTokens": 1687,
+      "totalTokens": 7504,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1088,
+      "costUsd": 0.00482825
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 5817,
+        "outputTokens": 1687,
+        "totalTokens": 7504,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1088,
+        "costUsd": 0.00482825
+      }
+    ],
+    "warnings": []
+  }
+}

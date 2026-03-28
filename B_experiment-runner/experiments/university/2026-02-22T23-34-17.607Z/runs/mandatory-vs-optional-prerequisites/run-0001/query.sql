@@ -1,0 +1,1 @@
+SELECT CASE WHEN is_mandatory THEN 'mandatory' ELSE 'optional' END AS prerequisite_type, COUNT(*)::bigint AS total_count FROM public.prerequisites GROUP BY is_mandatory ORDER BY is_mandatory DESC;

@@ -1,0 +1,402 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "grade-by-semester-type-and-course-type",
+  "caseDirectory": "grade-by-semester-type-and-course-type",
+  "repeatIndex": 1,
+  "prompt": "Compare average grades across course types for winter vs summer semesters",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Compare average grades across course types for winter vs summer semesters"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:11:35.575Z",
+    "endedAtUtc": "2026-02-23T14:12:40.172Z",
+    "durationMs": 64597
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "13002",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:12:40 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Compare average grades across course types for winter vs summer semesters\"},\"sql\":{\"payload\":{\"question\":\"Compare average grades across course types for winter vs summer semesters\"},\"startedAt\":1771855895580,\"status\":\"success\",\"output\":{\"reasoning\":\"The user wants to compare average grades across course types for winter vs summer semesters. I've confirmed the schema structure: grades table contains grade_value (a custom type), enrollments links to course_sections, and courses have course_type. The grade_value is a custom enum-like type that must be cast to text then numeric. The query groups by semester_type and course_type, calculates average grades and counts, and orders deterministically by semester and course type.\",\"sql\":\"SELECT \\n  cs.semester_type,\\n  c.course_type,\\n  ROUND(AVG((g.grade_value::text)::NUMERIC), 2) AS avg_grade,\\n  COUNT(g.id) AS grade_count\\nFROM grades g\\nJOIN enrollments e ON g.enrollment_id = e.id\\nJOIN course_sections cs ON e.course_section_id = cs.id\\nJOIN courses c ON cs.course_id = c.id\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY cs.semester_type, c.course_type\\nORDER BY cs.semester_type, c.course_type\",\"assumptions\":[\"grade_value is a custom type that requires casting to text then numeric for aggregation\",\"semester_type contains values like 'WINTER' and 'SUMMER'\",\"course_type contains values like 'LECTURE', 'LABORATORY', 'PROJECT', 'SEMINAR', 'EXERCISE'\",\"Only grades with non-null grade_value are included in the comparison\"]},\"endedAt\":1771855955995},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT \\n  cs.semester_type,\\n  c.course_type,\\n  ROUND(AVG((g.grade_value::text)::NUMERIC), 2) AS avg_grade,\\n  COUNT(g.id) AS grade_count\\nFROM grades g\\nJOIN enrollments e ON g.enrollment_id = e.id\\nJOIN course_sections cs ON e.course_section_id = cs.id\\nJOIN courses c ON cs.course_id = c.id\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY cs.semester_type, c.course_type\\nORDER BY cs.semester_type, c.course_type\"},\"startedAt\":1771855955999,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  cs.semester_type,\\n  c.course_type,\\n  ROUND(AVG((g.grade_value::text)::NUMERIC), 2) AS avg_grade,\\n  COUNT(g.id) AS grade_count\\nFROM grades g\\nJOIN enrollments e ON g.enrollment_id = e.id\\nJOIN course_sections cs ON e.course_section_id = cs.id\\nJOIN courses c ON cs.course_id = c.id\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY cs.semester_type, c.course_type\\nORDER BY cs.semester_type, c.course_type\",\"metadata\":{\"columns\":[\"semester_type\",\"course_type\",\"avg_grade\",\"grade_count\"],\"rowCount\":9,\"sample\":[{\"semester_type\":\"WINTER\",\"course_type\":\"LECTURE\",\"avg_grade\":\"3.94\",\"grade_count\":\"9\"},{\"semester_type\":\"WINTER\",\"course_type\":\"LABORATORY\",\"avg_grade\":\"3.70\",\"grade_count\":\"5\"}]},\"data\":[{\"semester_type\":\"WINTER\",\"course_type\":\"LECTURE\",\"avg_grade\":\"3.94\",\"grade_count\":\"9\"},{\"semester_type\":\"WINTER\",\"course_type\":\"LABORATORY\",\"avg_grade\":\"3.70\",\"grade_count\":\"5\"},{\"semester_type\":\"WINTER\",\"course_type\":\"PROJECT\",\"avg_grade\":\"3.95\",\"grade_count\":\"10\"},{\"semester_type\":\"WINTER\",\"course_type\":\"SEMINAR\",\"avg_grade\":\"3.75\",\"grade_count\":\"2\"},{\"semester_type\":\"WINTER\",\"course_type\":\"EXERCISE\",\"avg_grade\":\"2.63\",\"grade_count\":\"4\"},{\"semester_type\":\"SUMMER\",\"course_type\":\"LECTURE\",\"avg_grade\":\"3.60\",\"grade_count\":\"5\"},{\"semester_type\":\"SUMMER\",\"course_type\":\"LABORATORY\",\"avg_grade\":\"3.60\",\"grade_count\":\"5\"},{\"semester_type\":\"SUMMER\",\"course_type\":\"PROJECT\",\"avg_grade\":\"3.94\",\"grade_count\":\"9\"},{\"semester_type\":\"SUMMER\",\"course_type\":\"EXERCISE\",\"avg_grade\":\"3.33\",\"grade_count\":\"3\"}]},\"endedAt\":1771855956016},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  cs.semester_type,\\n  c.course_type,\\n  ROUND(AVG((g.grade_value::text)::NUMERIC), 2) AS avg_grade,\\n  COUNT(g.id) AS grade_count\\nFROM grades g\\nJOIN enrollments e ON g.enrollment_id = e.id\\nJOIN course_sections cs ON e.course_section_id = cs.id\\nJOIN courses c ON cs.course_id = c.id\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY cs.semester_type, c.course_type\\nORDER BY cs.semester_type, c.course_type\",\"metadata\":{\"columns\":[\"semester_type\",\"course_type\",\"avg_grade\",\"grade_count\"],\"rowCount\":9,\"sample\":[{\"semester_type\":\"WINTER\",\"course_type\":\"LECTURE\",\"avg_grade\":\"3.94\",\"grade_count\":\"9\"},{\"semester_type\":\"WINTER\",\"course_type\":\"LABORATORY\",\"avg_grade\":\"3.70\",\"grade_count\":\"5\"}]},\"data\":[{\"semester_type\":\"WINTER\",\"course_type\":\"LECTURE\",\"avg_grade\":\"3.94\",\"grade_count\":\"9\"},{\"semester_type\":\"WINTER\",\"course_type\":\"LABORATORY\",\"avg_grade\":\"3.70\",\"grade_count\":\"5\"},{\"semester_type\":\"WINTER\",\"course_type\":\"PROJECT\",\"avg_grade\":\"3.95\",\"grade_count\":\"10\"},{\"semester_type\":\"WINTER\",\"course_type\":\"SEMINAR\",\"avg_grade\":\"3.75\",\"grade_count\":\"2\"},{\"semester_type\":\"WINTER\",\"course_type\":\"EXERCISE\",\"avg_grade\":\"2.63\",\"grade_count\":\"4\"},{\"semester_type\":\"SUMMER\",\"course_type\":\"LECTURE\",\"avg_grade\":\"3.60\",\"grade_count\":\"5\"},{\"semester_type\":\"SUMMER\",\"course_type\":\"LABORATORY\",\"avg_grade\":\"3.60\",\"grade_count\":\"5\"},{\"semester_type\":\"SUMMER\",\"course_type\":\"PROJECT\",\"avg_grade\":\"3.94\",\"grade_count\":\"9\"},{\"semester_type\":\"SUMMER\",\"course_type\":\"EXERCISE\",\"avg_grade\":\"3.33\",\"grade_count\":\"3\"}]},\"startedAt\":1771855956019,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Grades by Course Type: Winter vs Summer Semesters\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"scale\":{\"domain\":[0,4]}},\"color\":{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester Type\",\"scale\":{\"domain\":[\"WINTER\",\"SUMMER\"],\"range\":[\"#1f77b4\",\"#ff7f0e\"]}},\"xOffset\":{\"field\":\"semester_type\"},\"tooltip\":[{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"format\":\".2f\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Grade Count\"}]}},\"reasoning\":\"This grouped bar chart enables direct comparison of average grades across course types (LECTURE, LABORATORY, SEMINAR, etc.) with semester type (WINTER vs SUMMER) shown as adjacent bars with distinct colors. The y-axis is scaled to 0-4 to reflect typical GPA ranges. The tooltip includes all relevant metrics (semester, course type, average grade, and count) for detailed inspection.\"},\"endedAt\":1771855960141},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Grades by Course Type: Winter vs Summer Semesters\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"scale\":{\"domain\":[0,4]}},\"color\":{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester Type\",\"scale\":{\"domain\":[\"WINTER\",\"SUMMER\"],\"range\":[\"#1f77b4\",\"#ff7f0e\"]}},\"xOffset\":{\"field\":\"semester_type\"},\"tooltip\":[{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"format\":\".2f\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Grade Count\"}]}},\"reasoning\":\"This grouped bar chart enables direct comparison of average grades across course types (LECTURE, LABORATORY, SEMINAR, etc.) with semester type (WINTER vs SUMMER) shown as adjacent bars with distinct colors. The y-axis is scaled to 0-4 to reflect typical GPA ranges. The tooltip includes all relevant metrics (semester, course type, average grade, and count) for detailed inspection.\"},\"startedAt\":1771855960148,\"status\":\"success\",\"output\":{\"sql\":\"SELECT \\n  cs.semester_type,\\n  c.course_type,\\n  ROUND(AVG((g.grade_value::text)::NUMERIC), 2) AS avg_grade,\\n  COUNT(g.id) AS grade_count\\nFROM grades g\\nJOIN enrollments e ON g.enrollment_id = e.id\\nJOIN course_sections cs ON e.course_section_id = cs.id\\nJOIN courses c ON cs.course_id = c.id\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY cs.semester_type, c.course_type\\nORDER BY cs.semester_type, c.course_type\",\"data\":[{\"semester_type\":\"WINTER\",\"course_type\":\"LECTURE\",\"avg_grade\":\"3.94\",\"grade_count\":\"9\"},{\"semester_type\":\"WINTER\",\"course_type\":\"LABORATORY\",\"avg_grade\":\"3.70\",\"grade_count\":\"5\"},{\"semester_type\":\"WINTER\",\"course_type\":\"PROJECT\",\"avg_grade\":\"3.95\",\"grade_count\":\"10\"},{\"semester_type\":\"WINTER\",\"course_type\":\"SEMINAR\",\"avg_grade\":\"3.75\",\"grade_count\":\"2\"},{\"semester_type\":\"WINTER\",\"course_type\":\"EXERCISE\",\"avg_grade\":\"2.63\",\"grade_count\":\"4\"},{\"semester_type\":\"SUMMER\",\"course_type\":\"LECTURE\",\"avg_grade\":\"3.60\",\"grade_count\":\"5\"},{\"semester_type\":\"SUMMER\",\"course_type\":\"LABORATORY\",\"avg_grade\":\"3.60\",\"grade_count\":\"5\"},{\"semester_type\":\"SUMMER\",\"course_type\":\"PROJECT\",\"avg_grade\":\"3.94\",\"grade_count\":\"9\"},{\"semester_type\":\"SUMMER\",\"course_type\":\"EXERCISE\",\"avg_grade\":\"3.33\",\"grade_count\":\"3\"}],\"metadata\":{\"columns\":[\"semester_type\",\"course_type\",\"avg_grade\",\"grade_count\"],\"rowCount\":9,\"sample\":[{\"semester_type\":\"WINTER\",\"course_type\":\"LECTURE\",\"avg_grade\":\"3.94\",\"grade_count\":\"9\"},{\"semester_type\":\"WINTER\",\"course_type\":\"LABORATORY\",\"avg_grade\":\"3.70\",\"grade_count\":\"5\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Grades by Course Type: Winter vs Summer Semesters\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"scale\":{\"domain\":[0,4]}},\"color\":{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester Type\",\"scale\":{\"domain\":[\"WINTER\",\"SUMMER\"],\"range\":[\"#1f77b4\",\"#ff7f0e\"]}},\"xOffset\":{\"field\":\"semester_type\"},\"tooltip\":[{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"format\":\".2f\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Grade Count\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855960152}},\"input\":{\"question\":\"Compare average grades across course types for winter vs summer semesters\"},\"result\":{\"sql\":\"SELECT \\n  cs.semester_type,\\n  c.course_type,\\n  ROUND(AVG((g.grade_value::text)::NUMERIC), 2) AS avg_grade,\\n  COUNT(g.id) AS grade_count\\nFROM grades g\\nJOIN enrollments e ON g.enrollment_id = e.id\\nJOIN course_sections cs ON e.course_section_id = cs.id\\nJOIN courses c ON cs.course_id = c.id\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY cs.semester_type, c.course_type\\nORDER BY cs.semester_type, c.course_type\",\"data\":[{\"semester_type\":\"WINTER\",\"course_type\":\"LECTURE\",\"avg_grade\":\"3.94\",\"grade_count\":\"9\"},{\"semester_type\":\"WINTER\",\"course_type\":\"LABORATORY\",\"avg_grade\":\"3.70\",\"grade_count\":\"5\"},{\"semester_type\":\"WINTER\",\"course_type\":\"PROJECT\",\"avg_grade\":\"3.95\",\"grade_count\":\"10\"},{\"semester_type\":\"WINTER\",\"course_type\":\"SEMINAR\",\"avg_grade\":\"3.75\",\"grade_count\":\"2\"},{\"semester_type\":\"WINTER\",\"course_type\":\"EXERCISE\",\"avg_grade\":\"2.63\",\"grade_count\":\"4\"},{\"semester_type\":\"SUMMER\",\"course_type\":\"LECTURE\",\"avg_grade\":\"3.60\",\"grade_count\":\"5\"},{\"semester_type\":\"SUMMER\",\"course_type\":\"LABORATORY\",\"avg_grade\":\"3.60\",\"grade_count\":\"5\"},{\"semester_type\":\"SUMMER\",\"course_type\":\"PROJECT\",\"avg_grade\":\"3.94\",\"grade_count\":\"9\"},{\"semester_type\":\"SUMMER\",\"course_type\":\"EXERCISE\",\"avg_grade\":\"3.33\",\"grade_count\":\"3\"}],\"metadata\":{\"columns\":[\"semester_type\",\"course_type\",\"avg_grade\",\"grade_count\"],\"rowCount\":9,\"sample\":[{\"semester_type\":\"WINTER\",\"course_type\":\"LECTURE\",\"avg_grade\":\"3.94\",\"grade_count\":\"9\"},{\"semester_type\":\"WINTER\",\"course_type\":\"LABORATORY\",\"avg_grade\":\"3.70\",\"grade_count\":\"5\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Grades by Course Type: Winter vs Summer Semesters\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"scale\":{\"domain\":[0,4]}},\"color\":{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester Type\",\"scale\":{\"domain\":[\"WINTER\",\"SUMMER\"],\"range\":[\"#1f77b4\",\"#ff7f0e\"]}},\"xOffset\":{\"field\":\"semester_type\"},\"tooltip\":[{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"format\":\".2f\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Grade Count\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"fd102f676684b9839c51585997bd80b8\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/grade-by-semester-type-and-course-type/run-0001/run.json",
+    "queryPath": "runs/grade-by-semester-type-and-course-type/run-0001/query.sql",
+    "vegaRawPath": "runs/grade-by-semester-type-and-course-type/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/grade-by-semester-type-and-course-type/run-0001/vega.resolved.json",
+    "imagePath": "runs/grade-by-semester-type-and-course-type/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:12:40.623Z",
+  "traceId": "fd102f676684b9839c51585997bd80b8",
+  "success": true,
+  "durationMs": 65048,
+  "resultRaw": {
+    "data": [
+      {
+        "semester_type": "WINTER",
+        "course_type": "LECTURE",
+        "avg_grade": "3.94",
+        "grade_count": "9"
+      },
+      {
+        "semester_type": "WINTER",
+        "course_type": "LABORATORY",
+        "avg_grade": "3.70",
+        "grade_count": "5"
+      },
+      {
+        "semester_type": "WINTER",
+        "course_type": "PROJECT",
+        "avg_grade": "3.95",
+        "grade_count": "10"
+      },
+      {
+        "semester_type": "WINTER",
+        "course_type": "SEMINAR",
+        "avg_grade": "3.75",
+        "grade_count": "2"
+      },
+      {
+        "semester_type": "WINTER",
+        "course_type": "EXERCISE",
+        "avg_grade": "2.63",
+        "grade_count": "4"
+      },
+      {
+        "semester_type": "SUMMER",
+        "course_type": "LECTURE",
+        "avg_grade": "3.60",
+        "grade_count": "5"
+      },
+      {
+        "semester_type": "SUMMER",
+        "course_type": "LABORATORY",
+        "avg_grade": "3.60",
+        "grade_count": "5"
+      },
+      {
+        "semester_type": "SUMMER",
+        "course_type": "PROJECT",
+        "avg_grade": "3.94",
+        "grade_count": "9"
+      },
+      {
+        "semester_type": "SUMMER",
+        "course_type": "EXERCISE",
+        "avg_grade": "3.33",
+        "grade_count": "3"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Grades by Course Type: Winter vs Summer Semesters",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "course_type",
+          "type": "nominal",
+          "title": "Course Type",
+          "axis": {
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "avg_grade",
+          "type": "quantitative",
+          "title": "Average Grade",
+          "scale": {
+            "domain": [
+              0,
+              4
+            ]
+          }
+        },
+        "color": {
+          "field": "semester_type",
+          "type": "nominal",
+          "title": "Semester Type",
+          "scale": {
+            "domain": [
+              "WINTER",
+              "SUMMER"
+            ],
+            "range": [
+              "#1f77b4",
+              "#ff7f0e"
+            ]
+          }
+        },
+        "xOffset": {
+          "field": "semester_type"
+        },
+        "tooltip": [
+          {
+            "field": "semester_type",
+            "type": "nominal",
+            "title": "Semester"
+          },
+          {
+            "field": "course_type",
+            "type": "nominal",
+            "title": "Course Type"
+          },
+          {
+            "field": "avg_grade",
+            "type": "quantitative",
+            "title": "Average Grade",
+            "format": ".2f"
+          },
+          {
+            "field": "grade_count",
+            "type": "quantitative",
+            "title": "Grade Count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT \n  cs.semester_type,\n  c.course_type,\n  ROUND(AVG((g.grade_value::text)::NUMERIC), 2) AS avg_grade,\n  COUNT(g.id) AS grade_count\nFROM grades g\nJOIN enrollments e ON g.enrollment_id = e.id\nJOIN course_sections cs ON e.course_section_id = cs.id\nJOIN courses c ON cs.course_id = c.id\nWHERE g.grade_value IS NOT NULL\nGROUP BY cs.semester_type, c.course_type\nORDER BY cs.semester_type, c.course_type",
+    "metadata": {
+      "columns": [
+        "semester_type",
+        "course_type",
+        "avg_grade",
+        "grade_count"
+      ],
+      "rowCount": 9,
+      "sample": [
+        {
+          "semester_type": "WINTER",
+          "course_type": "LECTURE",
+          "avg_grade": "3.94",
+          "grade_count": "9"
+        },
+        {
+          "semester_type": "WINTER",
+          "course_type": "LABORATORY",
+          "avg_grade": "3.70",
+          "grade_count": "5"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "semester_type": "WINTER",
+        "course_type": "LECTURE",
+        "avg_grade": "3.94",
+        "grade_count": "9"
+      },
+      {
+        "semester_type": "WINTER",
+        "course_type": "LABORATORY",
+        "avg_grade": "3.70",
+        "grade_count": "5"
+      },
+      {
+        "semester_type": "WINTER",
+        "course_type": "PROJECT",
+        "avg_grade": "3.95",
+        "grade_count": "10"
+      },
+      {
+        "semester_type": "WINTER",
+        "course_type": "SEMINAR",
+        "avg_grade": "3.75",
+        "grade_count": "2"
+      },
+      {
+        "semester_type": "WINTER",
+        "course_type": "EXERCISE",
+        "avg_grade": "2.63",
+        "grade_count": "4"
+      },
+      {
+        "semester_type": "SUMMER",
+        "course_type": "LECTURE",
+        "avg_grade": "3.60",
+        "grade_count": "5"
+      },
+      {
+        "semester_type": "SUMMER",
+        "course_type": "LABORATORY",
+        "avg_grade": "3.60",
+        "grade_count": "5"
+      },
+      {
+        "semester_type": "SUMMER",
+        "course_type": "PROJECT",
+        "avg_grade": "3.94",
+        "grade_count": "9"
+      },
+      {
+        "semester_type": "SUMMER",
+        "course_type": "EXERCISE",
+        "avg_grade": "3.33",
+        "grade_count": "3"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Grades by Course Type: Winter vs Summer Semesters",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "course_type",
+          "type": "nominal",
+          "title": "Course Type",
+          "axis": {
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "avg_grade",
+          "type": "quantitative",
+          "title": "Average Grade",
+          "scale": {
+            "domain": [
+              0,
+              4
+            ]
+          }
+        },
+        "color": {
+          "field": "semester_type",
+          "type": "nominal",
+          "title": "Semester Type",
+          "scale": {
+            "domain": [
+              "WINTER",
+              "SUMMER"
+            ],
+            "range": [
+              "#1f77b4",
+              "#ff7f0e"
+            ]
+          }
+        },
+        "xOffset": {
+          "field": "semester_type"
+        },
+        "tooltip": [
+          {
+            "field": "semester_type",
+            "type": "nominal",
+            "title": "Semester"
+          },
+          {
+            "field": "course_type",
+            "type": "nominal",
+            "title": "Course Type"
+          },
+          {
+            "field": "avg_grade",
+            "type": "quantitative",
+            "title": "Average Grade",
+            "format": ".2f"
+          },
+          {
+            "field": "grade_count",
+            "type": "quantitative",
+            "title": "Grade Count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT \n  cs.semester_type,\n  c.course_type,\n  ROUND(AVG((g.grade_value::text)::NUMERIC), 2) AS avg_grade,\n  COUNT(g.id) AS grade_count\nFROM grades g\nJOIN enrollments e ON g.enrollment_id = e.id\nJOIN course_sections cs ON e.course_section_id = cs.id\nJOIN courses c ON cs.course_id = c.id\nWHERE g.grade_value IS NOT NULL\nGROUP BY cs.semester_type, c.course_type\nORDER BY cs.semester_type, c.course_type",
+    "metadata": {
+      "columns": [
+        "semester_type",
+        "course_type",
+        "avg_grade",
+        "grade_count"
+      ],
+      "rowCount": 9,
+      "sample": [
+        {
+          "semester_type": "WINTER",
+          "course_type": "LECTURE",
+          "avg_grade": "3.94",
+          "grade_count": "9"
+        },
+        {
+          "semester_type": "WINTER",
+          "course_type": "LABORATORY",
+          "avg_grade": "3.70",
+          "grade_count": "5"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.347Z",
+    "traceId": "fd102f676684b9839c51585997bd80b8",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 58987,
+      "outputTokens": 1949,
+      "totalTokens": 60936,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.068732
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 58987,
+        "outputTokens": 1949,
+        "totalTokens": 60936,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.068732
+      }
+    ],
+    "warnings": []
+  }
+}

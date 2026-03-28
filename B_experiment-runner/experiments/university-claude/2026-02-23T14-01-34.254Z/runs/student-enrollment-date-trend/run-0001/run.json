@@ -1,0 +1,278 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "student-enrollment-date-trend",
+  "caseDirectory": "student-enrollment-date-trend",
+  "repeatIndex": 1,
+  "prompt": "How many students enrolled per year at the university?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many students enrolled per year at the university?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:05:22.563Z",
+    "endedAtUtc": "2026-02-23T14:05:54.486Z",
+    "durationMs": 31923
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "7806",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:05:54 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How many students enrolled per year at the university?\"},\"sql\":{\"payload\":{\"question\":\"How many students enrolled per year at the university?\"},\"startedAt\":1771855522571,\"status\":\"success\",\"output\":{\"reasoning\":\"The students table has an enrollment_date column that captures when each student enrolled. To count students per year, I extract the year from enrollment_date, group by that year, and count distinct student IDs. This gives the enrollment count per year at the university.\",\"sql\":\"\\nSELECT \\n  EXTRACT(YEAR FROM s.enrollment_date)::INTEGER AS enrollment_year,\\n  COUNT(s.id) AS student_count\\nFROM students s\\nGROUP BY EXTRACT(YEAR FROM s.enrollment_date)\\nORDER BY enrollment_year ASC\\n\",\"assumptions\":[\"The enrollment_date column in the students table represents when each student enrolled at the university\",\"Each row in the students table represents a unique student\",\"We count all students regardless of current status\"]},\"endedAt\":1771855551267},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  EXTRACT(YEAR FROM s.enrollment_date)::INTEGER AS enrollment_year,\\n  COUNT(s.id) AS student_count\\nFROM students s\\nGROUP BY EXTRACT(YEAR FROM s.enrollment_date)\\nORDER BY enrollment_year ASC\\n\"},\"startedAt\":1771855551271,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  EXTRACT(YEAR FROM s.enrollment_date)::INTEGER AS enrollment_year,\\n  COUNT(s.id) AS student_count\\nFROM students s\\nGROUP BY EXTRACT(YEAR FROM s.enrollment_date)\\nORDER BY enrollment_year ASC\",\"metadata\":{\"columns\":[\"enrollment_year\",\"student_count\"],\"rowCount\":8,\"sample\":[{\"enrollment_year\":2019,\"student_count\":\"13\"},{\"enrollment_year\":2020,\"student_count\":\"19\"}]},\"data\":[{\"enrollment_year\":2019,\"student_count\":\"13\"},{\"enrollment_year\":2020,\"student_count\":\"19\"},{\"enrollment_year\":2021,\"student_count\":\"20\"},{\"enrollment_year\":2022,\"student_count\":\"14\"},{\"enrollment_year\":2023,\"student_count\":\"14\"},{\"enrollment_year\":2024,\"student_count\":\"17\"},{\"enrollment_year\":2025,\"student_count\":\"16\"},{\"enrollment_year\":2026,\"student_count\":\"2\"}]},\"endedAt\":1771855551282},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  EXTRACT(YEAR FROM s.enrollment_date)::INTEGER AS enrollment_year,\\n  COUNT(s.id) AS student_count\\nFROM students s\\nGROUP BY EXTRACT(YEAR FROM s.enrollment_date)\\nORDER BY enrollment_year ASC\",\"metadata\":{\"columns\":[\"enrollment_year\",\"student_count\"],\"rowCount\":8,\"sample\":[{\"enrollment_year\":2019,\"student_count\":\"13\"},{\"enrollment_year\":2020,\"student_count\":\"19\"}]},\"data\":[{\"enrollment_year\":2019,\"student_count\":\"13\"},{\"enrollment_year\":2020,\"student_count\":\"19\"},{\"enrollment_year\":2021,\"student_count\":\"20\"},{\"enrollment_year\":2022,\"student_count\":\"14\"},{\"enrollment_year\":2023,\"student_count\":\"14\"},{\"enrollment_year\":2024,\"student_count\":\"17\"},{\"enrollment_year\":2025,\"student_count\":\"16\"},{\"enrollment_year\":2026,\"student_count\":\"2\"}]},\"startedAt\":1771855551285,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Student Enrollment per Year\",\"description\":\"Number of students enrolled at the university by year\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"title\":\"Enrollment Year\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Number of Students\"},\"tooltip\":[{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"title\":\"Year\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Students Enrolled\"}]}},\"reasoning\":\"Bar chart is ideal for showing enrollment counts across discrete years. The x-axis displays enrollment years as ordinal values, while the y-axis shows the count of students. Tooltips provide detailed information on hover for better interactivity.\"},\"endedAt\":1771855554470},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Student Enrollment per Year\",\"description\":\"Number of students enrolled at the university by year\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"title\":\"Enrollment Year\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Number of Students\"},\"tooltip\":[{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"title\":\"Year\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Students Enrolled\"}]}},\"reasoning\":\"Bar chart is ideal for showing enrollment counts across discrete years. The x-axis displays enrollment years as ordinal values, while the y-axis shows the count of students. Tooltips provide detailed information on hover for better interactivity.\"},\"startedAt\":1771855554475,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT \\n  EXTRACT(YEAR FROM s.enrollment_date)::INTEGER AS enrollment_year,\\n  COUNT(s.id) AS student_count\\nFROM students s\\nGROUP BY EXTRACT(YEAR FROM s.enrollment_date)\\nORDER BY enrollment_year ASC\\n\",\"data\":[{\"enrollment_year\":2019,\"student_count\":\"13\"},{\"enrollment_year\":2020,\"student_count\":\"19\"},{\"enrollment_year\":2021,\"student_count\":\"20\"},{\"enrollment_year\":2022,\"student_count\":\"14\"},{\"enrollment_year\":2023,\"student_count\":\"14\"},{\"enrollment_year\":2024,\"student_count\":\"17\"},{\"enrollment_year\":2025,\"student_count\":\"16\"},{\"enrollment_year\":2026,\"student_count\":\"2\"}],\"metadata\":{\"columns\":[\"enrollment_year\",\"student_count\"],\"rowCount\":8,\"sample\":[{\"enrollment_year\":2019,\"student_count\":\"13\"},{\"enrollment_year\":2020,\"student_count\":\"19\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Student Enrollment per Year\",\"description\":\"Number of students enrolled at the university by year\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"title\":\"Enrollment Year\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Number of Students\"},\"tooltip\":[{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"title\":\"Year\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Students Enrolled\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855554477}},\"input\":{\"question\":\"How many students enrolled per year at the university?\"},\"result\":{\"sql\":\"\\nSELECT \\n  EXTRACT(YEAR FROM s.enrollment_date)::INTEGER AS enrollment_year,\\n  COUNT(s.id) AS student_count\\nFROM students s\\nGROUP BY EXTRACT(YEAR FROM s.enrollment_date)\\nORDER BY enrollment_year ASC\\n\",\"data\":[{\"enrollment_year\":2019,\"student_count\":\"13\"},{\"enrollment_year\":2020,\"student_count\":\"19\"},{\"enrollment_year\":2021,\"student_count\":\"20\"},{\"enrollment_year\":2022,\"student_count\":\"14\"},{\"enrollment_year\":2023,\"student_count\":\"14\"},{\"enrollment_year\":2024,\"student_count\":\"17\"},{\"enrollment_year\":2025,\"student_count\":\"16\"},{\"enrollment_year\":2026,\"student_count\":\"2\"}],\"metadata\":{\"columns\":[\"enrollment_year\",\"student_count\"],\"rowCount\":8,\"sample\":[{\"enrollment_year\":2019,\"student_count\":\"13\"},{\"enrollment_year\":2020,\"student_count\":\"19\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Student Enrollment per Year\",\"description\":\"Number of students enrolled at the university by year\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"title\":\"Enrollment Year\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Number of Students\"},\"tooltip\":[{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"title\":\"Year\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Students Enrolled\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"f659888954dd2c5f053af9f1a4895b5f\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/student-enrollment-date-trend/run-0001/run.json",
+    "queryPath": "runs/student-enrollment-date-trend/run-0001/query.sql",
+    "vegaRawPath": "runs/student-enrollment-date-trend/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/student-enrollment-date-trend/run-0001/vega.resolved.json",
+    "imagePath": "runs/student-enrollment-date-trend/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:05:54.873Z",
+  "traceId": "f659888954dd2c5f053af9f1a4895b5f",
+  "success": true,
+  "durationMs": 32310,
+  "resultRaw": {
+    "data": [
+      {
+        "enrollment_year": 2019,
+        "student_count": "13"
+      },
+      {
+        "enrollment_year": 2020,
+        "student_count": "19"
+      },
+      {
+        "enrollment_year": 2021,
+        "student_count": "20"
+      },
+      {
+        "enrollment_year": 2022,
+        "student_count": "14"
+      },
+      {
+        "enrollment_year": 2023,
+        "student_count": "14"
+      },
+      {
+        "enrollment_year": 2024,
+        "student_count": "17"
+      },
+      {
+        "enrollment_year": 2025,
+        "student_count": "16"
+      },
+      {
+        "enrollment_year": 2026,
+        "student_count": "2"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Student Enrollment per Year",
+      "description": "Number of students enrolled at the university by year",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "enrollment_year",
+          "type": "ordinal",
+          "title": "Enrollment Year",
+          "axis": {
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "student_count",
+          "type": "quantitative",
+          "title": "Number of Students"
+        },
+        "tooltip": [
+          {
+            "field": "enrollment_year",
+            "type": "ordinal",
+            "title": "Year"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Students Enrolled"
+          }
+        ]
+      }
+    },
+    "sql": "\nSELECT \n  EXTRACT(YEAR FROM s.enrollment_date)::INTEGER AS enrollment_year,\n  COUNT(s.id) AS student_count\nFROM students s\nGROUP BY EXTRACT(YEAR FROM s.enrollment_date)\nORDER BY enrollment_year ASC\n",
+    "metadata": {
+      "columns": [
+        "enrollment_year",
+        "student_count"
+      ],
+      "rowCount": 8,
+      "sample": [
+        {
+          "enrollment_year": 2019,
+          "student_count": "13"
+        },
+        {
+          "enrollment_year": 2020,
+          "student_count": "19"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "enrollment_year": 2019,
+        "student_count": "13"
+      },
+      {
+        "enrollment_year": 2020,
+        "student_count": "19"
+      },
+      {
+        "enrollment_year": 2021,
+        "student_count": "20"
+      },
+      {
+        "enrollment_year": 2022,
+        "student_count": "14"
+      },
+      {
+        "enrollment_year": 2023,
+        "student_count": "14"
+      },
+      {
+        "enrollment_year": 2024,
+        "student_count": "17"
+      },
+      {
+        "enrollment_year": 2025,
+        "student_count": "16"
+      },
+      {
+        "enrollment_year": 2026,
+        "student_count": "2"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Student Enrollment per Year",
+      "description": "Number of students enrolled at the university by year",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "enrollment_year",
+          "type": "ordinal",
+          "title": "Enrollment Year",
+          "axis": {
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "student_count",
+          "type": "quantitative",
+          "title": "Number of Students"
+        },
+        "tooltip": [
+          {
+            "field": "enrollment_year",
+            "type": "ordinal",
+            "title": "Year"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Students Enrolled"
+          }
+        ]
+      }
+    },
+    "sql": "\nSELECT \n  EXTRACT(YEAR FROM s.enrollment_date)::INTEGER AS enrollment_year,\n  COUNT(s.id) AS student_count\nFROM students s\nGROUP BY EXTRACT(YEAR FROM s.enrollment_date)\nORDER BY enrollment_year ASC\n",
+    "metadata": {
+      "columns": [
+        "enrollment_year",
+        "student_count"
+      ],
+      "rowCount": 8,
+      "sample": [
+        {
+          "enrollment_year": 2019,
+          "student_count": "13"
+        },
+        {
+          "enrollment_year": 2020,
+          "student_count": "19"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.427Z",
+    "traceId": "f659888954dd2c5f053af9f1a4895b5f",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 10253,
+      "outputTokens": 690,
+      "totalTokens": 10943,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.013703
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 10253,
+        "outputTokens": 690,
+        "totalTokens": 10943,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.013703
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,338 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "avg-grade-by-credits",
+  "caseDirectory": "avg-grade-by-credits",
+  "repeatIndex": 1,
+  "prompt": "Is there a relationship between course credits and average grade?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Is there a relationship between course credits and average grade?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:33:50.013Z",
+    "endedAtUtc": "2026-02-23T11:35:37.364Z",
+    "durationMs": 107351
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "37891",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:35:37 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Is there a relationship between course credits and average grade?\"},\"planner\":{\"payload\":{\"question\":\"Is there a relationship between course credits and average grade?\"},\"startedAt\":1771846430020,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG( (COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF( (CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0) )\",\"COUNT(enrollments.id)\"],\"dimensions\":[\"courses.credits\"],\"filters\":[\"grades.enrollment_id IS NOT NULL\",\"(grades.exam_score IS NOT NULL OR grades.project_score IS NOT NULL OR grades.attendance_score IS NOT NULL)\"],\"grain\":\"one row per credits value (aggregate across all courses / sections / semesters for each credits integer)\",\"aliases\":{\"courses.credits\":\"credits\",\"AVG( (COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF( (CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0) )\":\"avg_grade\",\"COUNT(enrollments.id)\":\"n_enrollments\"},\"output_fields\":[\"credits\",\"avg_grade\",\"n_enrollments\"]},\"visual_requirements\":{\"chart_type\":\"scatter\",\"x_axis\":\"credits\",\"y_axis\":\"avg_grade\",\"color_group\":\"n_enrollments\",\"title\":\"Average numeric grade vs course credits\"},\"assumptions\":[\"Relationships / joins confirmed from schema: courses.id -> course_sections.course_id; course_sections.id -> enrollments.course_section_id; enrollments.id -> grades.enrollment_id (one grade row per enrollment).\",\"We compute a numeric grade using available numeric components (exam_score, project_score, attendance_score). Each available component is treated as equally weighted; the per-enrollment numeric grade is the mean of the non-null numeric components.\",\"Rows where none of the numeric components are present are excluded. The column grades.grade_value (USER-DEFINED) is NOT used because its type/encoding (letter vs numeric) wasn't confirmed in the schema; if grade_value contains numeric or letter grades, the SQL would need modification and/or a mapping.\",\"Aggregation/grain: results are aggregated to the course credits value (integer). This collapses across courses, sections, semesters and years. If you want the relationship within a specific semester, department, or course level, add filters or additional group-by dimensions.\",\"If component scores are on different scales or need weighting (e.g., exam 70%, project 20%, attendance 10%), the numeric-grade expression must be adjusted accordingly.\",\"We include all enrollments that have at least one numeric component; we do not further filter by enrollments.is_active, academic_year, or semester_type. Add filters if you need to restrict to active enrollments or a time window.\"]}},\"endedAt\":1771846482324},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG( (COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF( (CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0) )\",\"COUNT(enrollments.id)\"],\"dimensions\":[\"courses.credits\"],\"filters\":[\"grades.enrollment_id IS NOT NULL\",\"(grades.exam_score IS NOT NULL OR grades.project_score IS NOT NULL OR grades.attendance_score IS NOT NULL)\"],\"grain\":\"one row per credits value (aggregate across all courses / sections / semesters for each credits integer)\",\"aliases\":{\"courses.credits\":\"credits\",\"AVG( (COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF( (CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0) )\":\"avg_grade\",\"COUNT(enrollments.id)\":\"n_enrollments\"},\"output_fields\":[\"credits\",\"avg_grade\",\"n_enrollments\"]},\"visual_requirements\":{\"chart_type\":\"scatter\",\"x_axis\":\"credits\",\"y_axis\":\"avg_grade\",\"color_group\":\"n_enrollments\",\"title\":\"Average numeric grade vs course credits\"},\"assumptions\":[\"Relationships / joins confirmed from schema: courses.id -> course_sections.course_id; course_sections.id -> enrollments.course_section_id; enrollments.id -> grades.enrollment_id (one grade row per enrollment).\",\"We compute a numeric grade using available numeric components (exam_score, project_score, attendance_score). Each available component is treated as equally weighted; the per-enrollment numeric grade is the mean of the non-null numeric components.\",\"Rows where none of the numeric components are present are excluded. The column grades.grade_value (USER-DEFINED) is NOT used because its type/encoding (letter vs numeric) wasn't confirmed in the schema; if grade_value contains numeric or letter grades, the SQL would need modification and/or a mapping.\",\"Aggregation/grain: results are aggregated to the course credits value (integer). This collapses across courses, sections, semesters and years. If you want the relationship within a specific semester, department, or course level, add filters or additional group-by dimensions.\",\"If component scores are on different scales or need weighting (e.g., exam 70%, project 20%, attendance 10%), the numeric-grade expression must be adjusted accordingly.\",\"We include all enrollments that have at least one numeric component; we do not further filter by enrollments.is_active, academic_year, or semester_type. Add filters if you need to restrict to active enrollments or a time window.\"]}},\"startedAt\":1771846482332,\"status\":\"success\",\"output\":{\"question\":\"Is there a relationship between course credits and average grade?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG( (COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF( (CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0) )\",\"COUNT(enrollments.id)\"],\"dimensions\":[\"courses.credits\"],\"filters\":[\"grades.enrollment_id IS NOT NULL\",\"(grades.exam_score IS NOT NULL OR grades.project_score IS NOT NULL OR grades.attendance_score IS NOT NULL)\"],\"grain\":\"one row per credits value (aggregate across all courses / sections / semesters for each credits integer)\",\"aliases\":{\"courses.credits\":\"credits\",\"AVG( (COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF( (CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0) )\":\"avg_grade\",\"COUNT(enrollments.id)\":\"n_enrollments\"},\"output_fields\":[\"credits\",\"avg_grade\",\"n_enrollments\"]},\"visual_requirements\":{\"chart_type\":\"scatter\",\"x_axis\":\"credits\",\"y_axis\":\"avg_grade\",\"color_group\":\"n_enrollments\",\"title\":\"Average numeric grade vs course credits\"},\"assumptions\":[\"Relationships / joins confirmed from schema: courses.id -> course_sections.course_id; course_sections.id -> enrollments.course_section_id; enrollments.id -> grades.enrollment_id (one grade row per enrollment).\",\"We compute a numeric grade using available numeric components (exam_score, project_score, attendance_score). Each available component is treated as equally weighted; the per-enrollment numeric grade is the mean of the non-null numeric components.\",\"Rows where none of the numeric components are present are excluded. The column grades.grade_value (USER-DEFINED) is NOT used because its type/encoding (letter vs numeric) wasn't confirmed in the schema; if grade_value contains numeric or letter grades, the SQL would need modification and/or a mapping.\",\"Aggregation/grain: results are aggregated to the course credits value (integer). This collapses across courses, sections, semesters and years. If you want the relationship within a specific semester, department, or course level, add filters or additional group-by dimensions.\",\"If component scores are on different scales or need weighting (e.g., exam 70%, project 20%, attendance 10%), the numeric-grade expression must be adjusted accordingly.\",\"We include all enrollments that have at least one numeric component; we do not further filter by enrollments.is_active, academic_year, or semester_type. Add filters if you need to restrict to active enrollments or a time window.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771846482334},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"Is there a relationship between course credits and average grade?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG( (COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF( (CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0) )\",\"COUNT(enrollments.id)\"],\"dimensions\":[\"courses.credits\"],\"filters\":[\"grades.enrollment_id IS NOT NULL\",\"(grades.exam_score IS NOT NULL OR grades.project_score IS NOT NULL OR grades.attendance_score IS NOT NULL)\"],\"grain\":\"one row per credits value (aggregate across all courses / sections / semesters for each credits integer)\",\"aliases\":{\"courses.credits\":\"credits\",\"AVG( (COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF( (CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0) )\":\"avg_grade\",\"COUNT(enrollments.id)\":\"n_enrollments\"},\"output_fields\":[\"credits\",\"avg_grade\",\"n_enrollments\"]},\"visual_requirements\":{\"chart_type\":\"scatter\",\"x_axis\":\"credits\",\"y_axis\":\"avg_grade\",\"color_group\":\"n_enrollments\",\"title\":\"Average numeric grade vs course credits\"},\"assumptions\":[\"Relationships / joins confirmed from schema: courses.id -> course_sections.course_id; course_sections.id -> enrollments.course_section_id; enrollments.id -> grades.enrollment_id (one grade row per enrollment).\",\"We compute a numeric grade using available numeric components (exam_score, project_score, attendance_score). Each available component is treated as equally weighted; the per-enrollment numeric grade is the mean of the non-null numeric components.\",\"Rows where none of the numeric components are present are excluded. The column grades.grade_value (USER-DEFINED) is NOT used because its type/encoding (letter vs numeric) wasn't confirmed in the schema; if grade_value contains numeric or letter grades, the SQL would need modification and/or a mapping.\",\"Aggregation/grain: results are aggregated to the course credits value (integer). This collapses across courses, sections, semesters and years. If you want the relationship within a specific semester, department, or course level, add filters or additional group-by dimensions.\",\"If component scores are on different scales or need weighting (e.g., exam 70%, project 20%, attendance 10%), the numeric-grade expression must be adjusted accordingly.\",\"We include all enrollments that have at least one numeric component; we do not further filter by enrollments.is_active, academic_year, or semester_type. Add filters if you need to restrict to active enrollments or a time window.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771846482335,\"status\":\"success\",\"output\":{\"question\":\"Is there a relationship between course credits and average grade?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG( (COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF( (CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0) )\",\"COUNT(enrollments.id)\"],\"dimensions\":[\"courses.credits\"],\"filters\":[\"grades.enrollment_id IS NOT NULL\",\"(grades.exam_score IS NOT NULL OR grades.project_score IS NOT NULL OR grades.attendance_score IS NOT NULL)\"],\"grain\":\"one row per credits value (aggregate across all courses / sections / semesters for each credits integer)\",\"aliases\":{\"courses.credits\":\"credits\",\"AVG( (COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF( (CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0) )\":\"avg_grade\",\"COUNT(enrollments.id)\":\"n_enrollments\"},\"output_fields\":[\"credits\",\"avg_grade\",\"n_enrollments\"]},\"visual_requirements\":{\"chart_type\":\"scatter\",\"x_axis\":\"credits\",\"y_axis\":\"avg_grade\",\"color_group\":\"n_enrollments\",\"title\":\"Average numeric grade vs course credits\"},\"assumptions\":[\"Relationships / joins confirmed from schema: courses.id -> course_sections.course_id; course_sections.id -> enrollments.course_section_id; enrollments.id -> grades.enrollment_id (one grade row per enrollment).\",\"We compute a numeric grade using available numeric components (exam_score, project_score, attendance_score). Each available component is treated as equally weighted; the per-enrollment numeric grade is the mean of the non-null numeric components.\",\"Rows where none of the numeric components are present are excluded. The column grades.grade_value (USER-DEFINED) is NOT used because its type/encoding (letter vs numeric) wasn't confirmed in the schema; if grade_value contains numeric or letter grades, the SQL would need modification and/or a mapping.\",\"Aggregation/grain: results are aggregated to the course credits value (integer). This collapses across courses, sections, semesters and years. If you want the relationship within a specific semester, department, or course level, add filters or additional group-by dimensions.\",\"If component scores are on different scales or need weighting (e.g., exam 70%, project 20%, attendance 10%), the numeric-grade expression must be adjusted accordingly.\",\"We include all enrollments that have at least one numeric component; we do not further filter by enrollments.is_active, academic_year, or semester_type. Add filters if you need to restrict to active enrollments or a time window.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT c.credits AS credits,\\n       AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0))\\n           / NULLIF((CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END\\n                     + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END\\n                     + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0))\\n           AS avg_grade,\\n       COUNT(e.id) AS n_enrollments\\nFROM public.courses AS c\\nJOIN public.course_sections AS cs ON cs.course_id = c.id\\nJOIN public.enrollments AS e ON e.course_section_id = cs.id\\nJOIN public.grades AS g ON g.enrollment_id = e.id\\nWHERE (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\\nGROUP BY c.credits\\nORDER BY c.credits ASC;\",\"validationIssues\":[\"All encoded fields (credits, avg_grade, n_enrollments) are present in metadata.columns — good.\",\"SQL groups by c.credits so there will be one aggregated point per credits value; with few distinct credit values the scatter will be discrete and may hide within-credit variability (semester/course-level effects).\",\"The y-axis domain is fixed to [0,100] in the visualization; this assumes component scores and the computed avg_grade are on a 0–100 scale — if scores use a different scale, the domain could be misleading.\",\"The SQL assumes equal weighting of available numeric components when computing per-enrollment grade; if components should be weighted (e.g., exam 70%, project 20%, attendance 10%) the calculation and resulting chart would change.\",\"Color and size both encode n_enrollments (redundant encodings). This is not invalid but may be unnecessary; consider using one channel for clarity.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Compute each enrollment's numeric grade as the mean of its non-null numeric components (exam_score, project_score, attendance_score), then aggregate by courses.credits to produce average grade and enrollment counts. Joins follow confirmed foreign keys: courses -> course_sections -> enrollments -> grades. Filtered out grade rows with no numeric components. Results ordered by credits for determinism.\",\"sql\":\"SELECT c.credits AS credits,\\n       AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0))\\n           / NULLIF((CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END\\n                     + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END\\n                     + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0))\\n           AS avg_grade,\\n       COUNT(e.id) AS n_enrollments\\nFROM public.courses AS c\\nJOIN public.course_sections AS cs ON cs.course_id = c.id\\nJOIN public.enrollments AS e ON e.course_section_id = cs.id\\nJOIN public.grades AS g ON g.enrollment_id = e.id\\nWHERE (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\\nGROUP BY c.credits\\nORDER BY c.credits ASC;\",\"assumptions\":[\"Per-enrollment numeric grade is the simple mean of the non-null numeric components (exam_score, project_score, attendance_score).\",\"grades.enrollment_id is NOT NULL and grades has at most one row per enrollment (confirmed by unique index).\",\"Aggregation collapses across courses/sections/semesters as requested (one row per integer credits value).\",\"Do not use grades.grade_value because its user-defined type/encoding wasn't mapped; only numeric component columns are used.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT c.credits AS credits,\\n       AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0))\\n           / NULLIF((CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END\\n                     + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END\\n                     + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0))\\n           AS avg_grade,\\n       COUNT(e.id) AS n_enrollments\\nFROM public.courses AS c\\nJOIN public.course_sections AS cs ON cs.course_id = c.id\\nJOIN public.enrollments AS e ON e.course_section_id = cs.id\\nJOIN public.grades AS g ON g.enrollment_id = e.id\\nWHERE (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\\nGROUP BY c.credits\\nORDER BY c.credits ASC\",\"metadata\":{\"columns\":[\"credits\",\"avg_grade\",\"n_enrollments\"],\"rowCount\":4,\"sample\":[{\"credits\":3,\"avg_grade\":57.65416666666667,\"n_enrollments\":8},{\"credits\":4,\"avg_grade\":48.79954545454545,\"n_enrollments\":11}]},\"data\":[{\"credits\":3,\"avg_grade\":57.65416666666667,\"n_enrollments\":8},{\"credits\":4,\"avg_grade\":48.79954545454545,\"n_enrollments\":11},{\"credits\":5,\"avg_grade\":49.21263888888889,\"n_enrollments\":12},{\"credits\":6,\"avg_grade\":48.756904761904764,\"n_enrollments\":21}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average numeric grade vs course credits\",\"mark\":{\"type\":\"point\",\"filled\":true,\"opacity\":0.85},\"encoding\":{\"x\":{\"field\":\"credits\",\"type\":\"quantitative\",\"title\":\"Course credits\"},\"y\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average grade\",\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"n_enrollments\",\"type\":\"quantitative\",\"title\":\"Number of enrollments\",\"scale\":{\"scheme\":\"blues\"}},\"size\":{\"field\":\"n_enrollments\",\"type\":\"quantitative\",\"title\":\"Enrollments\",\"scale\":{\"range\":[60,350]}},\"tooltip\":[{\"field\":\"credits\",\"type\":\"quantitative\",\"title\":\"Credits\"},{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average grade\",\"format\":\".1f\"},{\"field\":\"n_enrollments\",\"type\":\"quantitative\",\"title\":\"Enrollments\"}]}},\"reasoning\":\"Scatter plot with credits on x and aggregated avg grade on y. Point color and size encode enrollment count so larger/more-populated credit values are easier to spot. Tooltip shows exact values.\"},\"validation\":{\"passed\":true,\"score\":0.65,\"issues\":[\"All encoded fields (credits, avg_grade, n_enrollments) are present in metadata.columns — good.\",\"SQL groups by c.credits so there will be one aggregated point per credits value; with few distinct credit values the scatter will be discrete and may hide within-credit variability (semester/course-level effects).\",\"The y-axis domain is fixed to [0,100] in the visualization; this assumes component scores and the computed avg_grade are on a 0–100 scale — if scores use a different scale, the domain could be misleading.\",\"The SQL assumes equal weighting of available numeric components when computing per-enrollment grade; if components should be weighted (e.g., exam 70%, project 20%, attendance 10%) the calculation and resulting chart would change.\",\"Color and size both encode n_enrollments (redundant encodings). This is not invalid but may be unnecessary; consider using one channel for clarity.\"]}}},\"endedAt\":1771846537336,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"Is there a relationship between course credits and average grade?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG( (COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF( (CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0) )\",\"COUNT(enrollments.id)\"],\"dimensions\":[\"courses.credits\"],\"filters\":[\"grades.enrollment_id IS NOT NULL\",\"(grades.exam_score IS NOT NULL OR grades.project_score IS NOT NULL OR grades.attendance_score IS NOT NULL)\"],\"grain\":\"one row per credits value (aggregate across all courses / sections / semesters for each credits integer)\",\"aliases\":{\"courses.credits\":\"credits\",\"AVG( (COALESCE(grades.exam_score,0) + COALESCE(grades.project_score,0) + COALESCE(grades.attendance_score,0)) / NULLIF( (CASE WHEN grades.exam_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.project_score IS NOT NULL THEN 1 ELSE 0 END + CASE WHEN grades.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0) )\":\"avg_grade\",\"COUNT(enrollments.id)\":\"n_enrollments\"},\"output_fields\":[\"credits\",\"avg_grade\",\"n_enrollments\"]},\"visual_requirements\":{\"chart_type\":\"scatter\",\"x_axis\":\"credits\",\"y_axis\":\"avg_grade\",\"color_group\":\"n_enrollments\",\"title\":\"Average numeric grade vs course credits\"},\"assumptions\":[\"Relationships / joins confirmed from schema: courses.id -> course_sections.course_id; course_sections.id -> enrollments.course_section_id; enrollments.id -> grades.enrollment_id (one grade row per enrollment).\",\"We compute a numeric grade using available numeric components (exam_score, project_score, attendance_score). Each available component is treated as equally weighted; the per-enrollment numeric grade is the mean of the non-null numeric components.\",\"Rows where none of the numeric components are present are excluded. The column grades.grade_value (USER-DEFINED) is NOT used because its type/encoding (letter vs numeric) wasn't confirmed in the schema; if grade_value contains numeric or letter grades, the SQL would need modification and/or a mapping.\",\"Aggregation/grain: results are aggregated to the course credits value (integer). This collapses across courses, sections, semesters and years. If you want the relationship within a specific semester, department, or course level, add filters or additional group-by dimensions.\",\"If component scores are on different scales or need weighting (e.g., exam 70%, project 20%, attendance 10%), the numeric-grade expression must be adjusted accordingly.\",\"We include all enrollments that have at least one numeric component; we do not further filter by enrollments.is_active, academic_year, or semester_type. Add filters if you need to restrict to active enrollments or a time window.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT c.credits AS credits,\\n       AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0))\\n           / NULLIF((CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END\\n                     + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END\\n                     + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0))\\n           AS avg_grade,\\n       COUNT(e.id) AS n_enrollments\\nFROM public.courses AS c\\nJOIN public.course_sections AS cs ON cs.course_id = c.id\\nJOIN public.enrollments AS e ON e.course_section_id = cs.id\\nJOIN public.grades AS g ON g.enrollment_id = e.id\\nWHERE (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\\nGROUP BY c.credits\\nORDER BY c.credits ASC;\",\"validationIssues\":[\"All encoded fields (credits, avg_grade, n_enrollments) are present in metadata.columns — good.\",\"SQL groups by c.credits so there will be one aggregated point per credits value; with few distinct credit values the scatter will be discrete and may hide within-credit variability (semester/course-level effects).\",\"The y-axis domain is fixed to [0,100] in the visualization; this assumes component scores and the computed avg_grade are on a 0–100 scale — if scores use a different scale, the domain could be misleading.\",\"The SQL assumes equal weighting of available numeric components when computing per-enrollment grade; if components should be weighted (e.g., exam 70%, project 20%, attendance 10%) the calculation and resulting chart would change.\",\"Color and size both encode n_enrollments (redundant encodings). This is not invalid but may be unnecessary; consider using one channel for clarity.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Compute each enrollment's numeric grade as the mean of its non-null numeric components (exam_score, project_score, attendance_score), then aggregate by courses.credits to produce average grade and enrollment counts. Joins follow confirmed foreign keys: courses -> course_sections -> enrollments -> grades. Filtered out grade rows with no numeric components. Results ordered by credits for determinism.\",\"sql\":\"SELECT c.credits AS credits,\\n       AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0))\\n           / NULLIF((CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END\\n                     + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END\\n                     + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0))\\n           AS avg_grade,\\n       COUNT(e.id) AS n_enrollments\\nFROM public.courses AS c\\nJOIN public.course_sections AS cs ON cs.course_id = c.id\\nJOIN public.enrollments AS e ON e.course_section_id = cs.id\\nJOIN public.grades AS g ON g.enrollment_id = e.id\\nWHERE (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\\nGROUP BY c.credits\\nORDER BY c.credits ASC;\",\"assumptions\":[\"Per-enrollment numeric grade is the simple mean of the non-null numeric components (exam_score, project_score, attendance_score).\",\"grades.enrollment_id is NOT NULL and grades has at most one row per enrollment (confirmed by unique index).\",\"Aggregation collapses across courses/sections/semesters as requested (one row per integer credits value).\",\"Do not use grades.grade_value because its user-defined type/encoding wasn't mapped; only numeric component columns are used.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT c.credits AS credits,\\n       AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0))\\n           / NULLIF((CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END\\n                     + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END\\n                     + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0))\\n           AS avg_grade,\\n       COUNT(e.id) AS n_enrollments\\nFROM public.courses AS c\\nJOIN public.course_sections AS cs ON cs.course_id = c.id\\nJOIN public.enrollments AS e ON e.course_section_id = cs.id\\nJOIN public.grades AS g ON g.enrollment_id = e.id\\nWHERE (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\\nGROUP BY c.credits\\nORDER BY c.credits ASC\",\"metadata\":{\"columns\":[\"credits\",\"avg_grade\",\"n_enrollments\"],\"rowCount\":4,\"sample\":[{\"credits\":3,\"avg_grade\":57.65416666666667,\"n_enrollments\":8},{\"credits\":4,\"avg_grade\":48.79954545454545,\"n_enrollments\":11}]},\"data\":[{\"credits\":3,\"avg_grade\":57.65416666666667,\"n_enrollments\":8},{\"credits\":4,\"avg_grade\":48.79954545454545,\"n_enrollments\":11},{\"credits\":5,\"avg_grade\":49.21263888888889,\"n_enrollments\":12},{\"credits\":6,\"avg_grade\":48.756904761904764,\"n_enrollments\":21}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average numeric grade vs course credits\",\"mark\":{\"type\":\"point\",\"filled\":true,\"opacity\":0.85},\"encoding\":{\"x\":{\"field\":\"credits\",\"type\":\"quantitative\",\"title\":\"Course credits\"},\"y\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average grade\",\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"n_enrollments\",\"type\":\"quantitative\",\"title\":\"Number of enrollments\",\"scale\":{\"scheme\":\"blues\"}},\"size\":{\"field\":\"n_enrollments\",\"type\":\"quantitative\",\"title\":\"Enrollments\",\"scale\":{\"range\":[60,350]}},\"tooltip\":[{\"field\":\"credits\",\"type\":\"quantitative\",\"title\":\"Credits\"},{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average grade\",\"format\":\".1f\"},{\"field\":\"n_enrollments\",\"type\":\"quantitative\",\"title\":\"Enrollments\"}]}},\"reasoning\":\"Scatter plot with credits on x and aggregated avg grade on y. Point color and size encode enrollment count so larger/more-populated credit values are easier to spot. Tooltip shows exact values.\"},\"validation\":{\"passed\":true,\"score\":0.65,\"issues\":[\"All encoded fields (credits, avg_grade, n_enrollments) are present in metadata.columns — good.\",\"SQL groups by c.credits so there will be one aggregated point per credits value; with few distinct credit values the scatter will be discrete and may hide within-credit variability (semester/course-level effects).\",\"The y-axis domain is fixed to [0,100] in the visualization; this assumes component scores and the computed avg_grade are on a 0–100 scale — if scores use a different scale, the domain could be misleading.\",\"The SQL assumes equal weighting of available numeric components when computing per-enrollment grade; if components should be weighted (e.g., exam 70%, project 20%, attendance 10%) the calculation and resulting chart would change.\",\"Color and size both encode n_enrollments (redundant encodings). This is not invalid but may be unnecessary; consider using one channel for clarity.\"]}}},\"startedAt\":1771846537340,\"status\":\"success\",\"output\":{\"sql\":\"SELECT c.credits AS credits,\\n       AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0))\\n           / NULLIF((CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END\\n                     + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END\\n                     + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0))\\n           AS avg_grade,\\n       COUNT(e.id) AS n_enrollments\\nFROM public.courses AS c\\nJOIN public.course_sections AS cs ON cs.course_id = c.id\\nJOIN public.enrollments AS e ON e.course_section_id = cs.id\\nJOIN public.grades AS g ON g.enrollment_id = e.id\\nWHERE (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\\nGROUP BY c.credits\\nORDER BY c.credits ASC;\",\"data\":[{\"credits\":3,\"avg_grade\":57.65416666666667,\"n_enrollments\":8},{\"credits\":4,\"avg_grade\":48.79954545454545,\"n_enrollments\":11},{\"credits\":5,\"avg_grade\":49.21263888888889,\"n_enrollments\":12},{\"credits\":6,\"avg_grade\":48.756904761904764,\"n_enrollments\":21}],\"metadata\":{\"columns\":[\"credits\",\"avg_grade\",\"n_enrollments\"],\"rowCount\":4,\"sample\":[{\"credits\":3,\"avg_grade\":57.65416666666667,\"n_enrollments\":8},{\"credits\":4,\"avg_grade\":48.79954545454545,\"n_enrollments\":11}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average numeric grade vs course credits\",\"mark\":{\"type\":\"point\",\"filled\":true,\"opacity\":0.85},\"encoding\":{\"x\":{\"field\":\"credits\",\"type\":\"quantitative\",\"title\":\"Course credits\"},\"y\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average grade\",\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"n_enrollments\",\"type\":\"quantitative\",\"title\":\"Number of enrollments\",\"scale\":{\"scheme\":\"blues\"}},\"size\":{\"field\":\"n_enrollments\",\"type\":\"quantitative\",\"title\":\"Enrollments\",\"scale\":{\"range\":[60,350]}},\"tooltip\":[{\"field\":\"credits\",\"type\":\"quantitative\",\"title\":\"Credits\"},{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average grade\",\"format\":\".1f\"},{\"field\":\"n_enrollments\",\"type\":\"quantitative\",\"title\":\"Enrollments\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.65,\"issues\":[\"All encoded fields (credits, avg_grade, n_enrollments) are present in metadata.columns — good.\",\"SQL groups by c.credits so there will be one aggregated point per credits value; with few distinct credit values the scatter will be discrete and may hide within-credit variability (semester/course-level effects).\",\"The y-axis domain is fixed to [0,100] in the visualization; this assumes component scores and the computed avg_grade are on a 0–100 scale — if scores use a different scale, the domain could be misleading.\",\"The SQL assumes equal weighting of available numeric components when computing per-enrollment grade; if components should be weighted (e.g., exam 70%, project 20%, attendance 10%) the calculation and resulting chart would change.\",\"Color and size both encode n_enrollments (redundant encodings). This is not invalid but may be unnecessary; consider using one channel for clarity.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771846537344}},\"input\":{\"question\":\"Is there a relationship between course credits and average grade?\"},\"result\":{\"sql\":\"SELECT c.credits AS credits,\\n       AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0))\\n           / NULLIF((CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END\\n                     + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END\\n                     + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0))\\n           AS avg_grade,\\n       COUNT(e.id) AS n_enrollments\\nFROM public.courses AS c\\nJOIN public.course_sections AS cs ON cs.course_id = c.id\\nJOIN public.enrollments AS e ON e.course_section_id = cs.id\\nJOIN public.grades AS g ON g.enrollment_id = e.id\\nWHERE (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\\nGROUP BY c.credits\\nORDER BY c.credits ASC;\",\"data\":[{\"credits\":3,\"avg_grade\":57.65416666666667,\"n_enrollments\":8},{\"credits\":4,\"avg_grade\":48.79954545454545,\"n_enrollments\":11},{\"credits\":5,\"avg_grade\":49.21263888888889,\"n_enrollments\":12},{\"credits\":6,\"avg_grade\":48.756904761904764,\"n_enrollments\":21}],\"metadata\":{\"columns\":[\"credits\",\"avg_grade\",\"n_enrollments\"],\"rowCount\":4,\"sample\":[{\"credits\":3,\"avg_grade\":57.65416666666667,\"n_enrollments\":8},{\"credits\":4,\"avg_grade\":48.79954545454545,\"n_enrollments\":11}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average numeric grade vs course credits\",\"mark\":{\"type\":\"point\",\"filled\":true,\"opacity\":0.85},\"encoding\":{\"x\":{\"field\":\"credits\",\"type\":\"quantitative\",\"title\":\"Course credits\"},\"y\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average grade\",\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"n_enrollments\",\"type\":\"quantitative\",\"title\":\"Number of enrollments\",\"scale\":{\"scheme\":\"blues\"}},\"size\":{\"field\":\"n_enrollments\",\"type\":\"quantitative\",\"title\":\"Enrollments\",\"scale\":{\"range\":[60,350]}},\"tooltip\":[{\"field\":\"credits\",\"type\":\"quantitative\",\"title\":\"Credits\"},{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average grade\",\"format\":\".1f\"},{\"field\":\"n_enrollments\",\"type\":\"quantitative\",\"title\":\"Enrollments\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.65,\"issues\":[\"All encoded fields (credits, avg_grade, n_enrollments) are present in metadata.columns — good.\",\"SQL groups by c.credits so there will be one aggregated point per credits value; with few distinct credit values the scatter will be discrete and may hide within-credit variability (semester/course-level effects).\",\"The y-axis domain is fixed to [0,100] in the visualization; this assumes component scores and the computed avg_grade are on a 0–100 scale — if scores use a different scale, the domain could be misleading.\",\"The SQL assumes equal weighting of available numeric components when computing per-enrollment grade; if components should be weighted (e.g., exam 70%, project 20%, attendance 10%) the calculation and resulting chart would change.\",\"Color and size both encode n_enrollments (redundant encodings). This is not invalid but may be unnecessary; consider using one channel for clarity.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"58c2f8c357abd2bef25650470aa15f5d\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-grade-by-credits/run-0001/run.json",
+    "queryPath": "runs/avg-grade-by-credits/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-grade-by-credits/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-grade-by-credits/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-grade-by-credits/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:35:37.819Z",
+  "traceId": "58c2f8c357abd2bef25650470aa15f5d",
+  "success": true,
+  "durationMs": 107806,
+  "resultRaw": {
+    "data": [
+      {
+        "credits": 3,
+        "avg_grade": 57.65416666666667,
+        "n_enrollments": 8
+      },
+      {
+        "credits": 4,
+        "avg_grade": 48.79954545454545,
+        "n_enrollments": 11
+      },
+      {
+        "credits": 5,
+        "avg_grade": 49.21263888888889,
+        "n_enrollments": 12
+      },
+      {
+        "credits": 6,
+        "avg_grade": 48.756904761904764,
+        "n_enrollments": 21
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average numeric grade vs course credits",
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "opacity": 0.85
+      },
+      "encoding": {
+        "x": {
+          "field": "credits",
+          "type": "quantitative",
+          "title": "Course credits"
+        },
+        "y": {
+          "field": "avg_grade",
+          "type": "quantitative",
+          "title": "Average grade",
+          "scale": {
+            "domain": [
+              0,
+              100
+            ]
+          }
+        },
+        "color": {
+          "field": "n_enrollments",
+          "type": "quantitative",
+          "title": "Number of enrollments",
+          "scale": {
+            "scheme": "blues"
+          }
+        },
+        "size": {
+          "field": "n_enrollments",
+          "type": "quantitative",
+          "title": "Enrollments",
+          "scale": {
+            "range": [
+              60,
+              350
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "credits",
+            "type": "quantitative",
+            "title": "Credits"
+          },
+          {
+            "field": "avg_grade",
+            "type": "quantitative",
+            "title": "Average grade",
+            "format": ".1f"
+          },
+          {
+            "field": "n_enrollments",
+            "type": "quantitative",
+            "title": "Enrollments"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT c.credits AS credits,\n       AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0))\n           / NULLIF((CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END\n                     + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END\n                     + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0))\n           AS avg_grade,\n       COUNT(e.id) AS n_enrollments\nFROM public.courses AS c\nJOIN public.course_sections AS cs ON cs.course_id = c.id\nJOIN public.enrollments AS e ON e.course_section_id = cs.id\nJOIN public.grades AS g ON g.enrollment_id = e.id\nWHERE (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\nGROUP BY c.credits\nORDER BY c.credits ASC;",
+    "metadata": {
+      "columns": [
+        "credits",
+        "avg_grade",
+        "n_enrollments"
+      ],
+      "rowCount": 4,
+      "sample": [
+        {
+          "credits": 3,
+          "avg_grade": 57.65416666666667,
+          "n_enrollments": 8
+        },
+        {
+          "credits": 4,
+          "avg_grade": 48.79954545454545,
+          "n_enrollments": 11
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.65,
+      "issues": [
+        "All encoded fields (credits, avg_grade, n_enrollments) are present in metadata.columns — good.",
+        "SQL groups by c.credits so there will be one aggregated point per credits value; with few distinct credit values the scatter will be discrete and may hide within-credit variability (semester/course-level effects).",
+        "The y-axis domain is fixed to [0,100] in the visualization; this assumes component scores and the computed avg_grade are on a 0–100 scale — if scores use a different scale, the domain could be misleading.",
+        "The SQL assumes equal weighting of available numeric components when computing per-enrollment grade; if components should be weighted (e.g., exam 70%, project 20%, attendance 10%) the calculation and resulting chart would change.",
+        "Color and size both encode n_enrollments (redundant encodings). This is not invalid but may be unnecessary; consider using one channel for clarity."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "credits": 3,
+        "avg_grade": 57.65416666666667,
+        "n_enrollments": 8
+      },
+      {
+        "credits": 4,
+        "avg_grade": 48.79954545454545,
+        "n_enrollments": 11
+      },
+      {
+        "credits": 5,
+        "avg_grade": 49.21263888888889,
+        "n_enrollments": 12
+      },
+      {
+        "credits": 6,
+        "avg_grade": 48.756904761904764,
+        "n_enrollments": 21
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average numeric grade vs course credits",
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "opacity": 0.85
+      },
+      "encoding": {
+        "x": {
+          "field": "credits",
+          "type": "quantitative",
+          "title": "Course credits"
+        },
+        "y": {
+          "field": "avg_grade",
+          "type": "quantitative",
+          "title": "Average grade",
+          "scale": {
+            "domain": [
+              0,
+              100
+            ]
+          }
+        },
+        "color": {
+          "field": "n_enrollments",
+          "type": "quantitative",
+          "title": "Number of enrollments",
+          "scale": {
+            "scheme": "blues"
+          }
+        },
+        "size": {
+          "field": "n_enrollments",
+          "type": "quantitative",
+          "title": "Enrollments",
+          "scale": {
+            "range": [
+              60,
+              350
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "credits",
+            "type": "quantitative",
+            "title": "Credits"
+          },
+          {
+            "field": "avg_grade",
+            "type": "quantitative",
+            "title": "Average grade",
+            "format": ".1f"
+          },
+          {
+            "field": "n_enrollments",
+            "type": "quantitative",
+            "title": "Enrollments"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT c.credits AS credits,\n       AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0))\n           / NULLIF((CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END\n                     + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END\n                     + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END), 0))\n           AS avg_grade,\n       COUNT(e.id) AS n_enrollments\nFROM public.courses AS c\nJOIN public.course_sections AS cs ON cs.course_id = c.id\nJOIN public.enrollments AS e ON e.course_section_id = cs.id\nJOIN public.grades AS g ON g.enrollment_id = e.id\nWHERE (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\nGROUP BY c.credits\nORDER BY c.credits ASC;",
+    "metadata": {
+      "columns": [
+        "credits",
+        "avg_grade",
+        "n_enrollments"
+      ],
+      "rowCount": 4,
+      "sample": [
+        {
+          "credits": 3,
+          "avg_grade": 57.65416666666667,
+          "n_enrollments": 8
+        },
+        {
+          "credits": 4,
+          "avg_grade": 48.79954545454545,
+          "n_enrollments": 11
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.65,
+      "issues": [
+        "All encoded fields (credits, avg_grade, n_enrollments) are present in metadata.columns — good.",
+        "SQL groups by c.credits so there will be one aggregated point per credits value; with few distinct credit values the scatter will be discrete and may hide within-credit variability (semester/course-level effects).",
+        "The y-axis domain is fixed to [0,100] in the visualization; this assumes component scores and the computed avg_grade are on a 0–100 scale — if scores use a different scale, the domain could be misleading.",
+        "The SQL assumes equal weighting of available numeric components when computing per-enrollment grade; if components should be weighted (e.g., exam 70%, project 20%, attendance 10%) the calculation and resulting chart would change.",
+        "Color and size both encode n_enrollments (redundant encodings). This is not invalid but may be unnecessary; consider using one channel for clarity."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:35:37.819Z",
+    "traceId": "58c2f8c357abd2bef25650470aa15f5d",
+    "attempts": 6,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 38413,
+      "outputTokens": 6752,
+      "totalTokens": 45165,
+      "cachedInputTokens": 4608,
+      "reasoningTokens": 4288,
+      "costUsd": 0.02310725
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 38413,
+        "outputTokens": 6752,
+        "totalTokens": 45165,
+        "cachedInputTokens": 4608,
+        "reasoningTokens": 4288,
+        "costUsd": 0.02310725
+      }
+    ],
+    "warnings": []
+  }
+}

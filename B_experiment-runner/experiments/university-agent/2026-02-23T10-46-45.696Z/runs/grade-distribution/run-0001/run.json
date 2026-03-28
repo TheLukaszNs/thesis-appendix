@@ -1,0 +1,160 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "grade-distribution",
+  "caseDirectory": "grade-distribution",
+  "repeatIndex": 1,
+  "prompt": "Show the distribution of final grades across all courses",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the distribution of final grades across all courses"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:46:45.718Z",
+    "endedAtUtc": "2026-02-23T10:47:13.486Z",
+    "durationMs": 27768
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "3771",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:47:13 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Show the distribution of final grades across all courses\"},\"agent\":{\"payload\":{\"question\":\"Show the distribution of final grades across all courses\"},\"startedAt\":1771843605956,\"status\":\"success\",\"output\":{\"sql\":\"WITH grade_buckets AS (\\n  SELECT\\n    final_grade AS final_grade,\\n    CASE\\n      WHEN final_grade >= 100 THEN 90\\n      WHEN final_grade >= 90 THEN 90\\n      WHEN final_grade >= 80 THEN 80\\n      WHEN final_grade >= 70 THEN 70\\n      WHEN final_grade >= 60 THEN 60\\n      WHEN final_grade >= 50 THEN 50\\n      WHEN final_grade >= 40 THEN 40\\n      WHEN final_grade >= 30 THEN 30\\n      WHEN final_grade >= 20 THEN 20\\n      WHEN final_grade >= 10 THEN 10\\n      WHEN final_grade >= 0 THEN 0\\n      ELSE NULL\\n    END AS bucket_start\\n  FROM grades\\n  WHERE final_grade IS NOT NULL\\n)\\nSELECT\\n  bucket_start AS bucket_start,\\n  CASE\\n    WHEN bucket_start = 90 THEN '90-100'\\n    WHEN bucket_start = 80 THEN '80-89'\\n    WHEN bucket_start = 70 THEN '70-79'\\n    WHEN bucket_start = 60 THEN '60-69'\\n    WHEN bucket_start = 50 THEN '50-59'\\n    WHEN bucket_start = 40 THEN '40-49'\\n    WHEN bucket_start = 30 THEN '30-39'\\n    WHEN bucket_start = 20 THEN '20-29'\\n    WHEN bucket_start = 10 THEN '10-19'\\n    WHEN bucket_start = 0 THEN '0-9'\\n    ELSE 'Other'\\n  END AS bucket_label,\\n  COUNT(*) AS count\\nFROM grade_buckets\\nWHERE bucket_start IS NOT NULL\\nGROUP BY bucket_start\\nORDER BY bucket_start ASC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Distribution of final grades across all courses\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"bucket_label\",\"type\":\"nominal\",\"axis\":{\"title\":\"Grade range\"},\"sort\":{\"field\":\"bucket_start\",\"op\":\"min\"}},\"y\":{\"field\":\"count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of students\"}},\"tooltip\":[{\"field\":\"bucket_label\",\"type\":\"nominal\",\"title\":\"Grade range\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"}]}}},\"endedAt\":1771843633399},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH grade_buckets AS (\\n  SELECT\\n    final_grade AS final_grade,\\n    CASE\\n      WHEN final_grade >= 100 THEN 90\\n      WHEN final_grade >= 90 THEN 90\\n      WHEN final_grade >= 80 THEN 80\\n      WHEN final_grade >= 70 THEN 70\\n      WHEN final_grade >= 60 THEN 60\\n      WHEN final_grade >= 50 THEN 50\\n      WHEN final_grade >= 40 THEN 40\\n      WHEN final_grade >= 30 THEN 30\\n      WHEN final_grade >= 20 THEN 20\\n      WHEN final_grade >= 10 THEN 10\\n      WHEN final_grade >= 0 THEN 0\\n      ELSE NULL\\n    END AS bucket_start\\n  FROM grades\\n  WHERE final_grade IS NOT NULL\\n)\\nSELECT\\n  bucket_start AS bucket_start,\\n  CASE\\n    WHEN bucket_start = 90 THEN '90-100'\\n    WHEN bucket_start = 80 THEN '80-89'\\n    WHEN bucket_start = 70 THEN '70-79'\\n    WHEN bucket_start = 60 THEN '60-69'\\n    WHEN bucket_start = 50 THEN '50-59'\\n    WHEN bucket_start = 40 THEN '40-49'\\n    WHEN bucket_start = 30 THEN '30-39'\\n    WHEN bucket_start = 20 THEN '20-29'\\n    WHEN bucket_start = 10 THEN '10-19'\\n    WHEN bucket_start = 0 THEN '0-9'\\n    ELSE 'Other'\\n  END AS bucket_label,\\n  COUNT(*) AS count\\nFROM grade_buckets\\nWHERE bucket_start IS NOT NULL\\nGROUP BY bucket_start\\nORDER BY bucket_start ASC;\"},\"startedAt\":1771843633403,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column \\\"final_grade\\\" does not exist\\nLINE 4:     final_grade AS final_grade,\\n            ^\",\"name\":\"Error\"},\"endedAt\":1771843633478}},\"input\":{\"question\":\"Show the distribution of final grades across all courses\"},\"error\":{\"message\":\"SQL execution failed: column \\\"final_grade\\\" does not exist\\nLINE 4:     final_grade AS final_grade,\\n            ^\",\"name\":\"Error\"},\"traceId\":\"aea56479649649bca409890bf952f64d\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/grade-distribution/run-0001/run.json",
+    "queryPath": "runs/grade-distribution/run-0001/query.sql",
+    "vegaRawPath": "runs/grade-distribution/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/grade-distribution/run-0001/vega.resolved.json",
+    "imagePath": "runs/grade-distribution/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:47:13.487Z",
+  "traceId": "aea56479649649bca409890bf952f64d",
+  "success": false,
+  "durationMs": 27769,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Show the distribution of final grades across all courses"
+      },
+      "agent": {
+        "payload": {
+          "question": "Show the distribution of final grades across all courses"
+        },
+        "startedAt": 1771843605956,
+        "status": "success",
+        "output": {
+          "sql": "WITH grade_buckets AS (\n  SELECT\n    final_grade AS final_grade,\n    CASE\n      WHEN final_grade >= 100 THEN 90\n      WHEN final_grade >= 90 THEN 90\n      WHEN final_grade >= 80 THEN 80\n      WHEN final_grade >= 70 THEN 70\n      WHEN final_grade >= 60 THEN 60\n      WHEN final_grade >= 50 THEN 50\n      WHEN final_grade >= 40 THEN 40\n      WHEN final_grade >= 30 THEN 30\n      WHEN final_grade >= 20 THEN 20\n      WHEN final_grade >= 10 THEN 10\n      WHEN final_grade >= 0 THEN 0\n      ELSE NULL\n    END AS bucket_start\n  FROM grades\n  WHERE final_grade IS NOT NULL\n)\nSELECT\n  bucket_start AS bucket_start,\n  CASE\n    WHEN bucket_start = 90 THEN '90-100'\n    WHEN bucket_start = 80 THEN '80-89'\n    WHEN bucket_start = 70 THEN '70-79'\n    WHEN bucket_start = 60 THEN '60-69'\n    WHEN bucket_start = 50 THEN '50-59'\n    WHEN bucket_start = 40 THEN '40-49'\n    WHEN bucket_start = 30 THEN '30-39'\n    WHEN bucket_start = 20 THEN '20-29'\n    WHEN bucket_start = 10 THEN '10-19'\n    WHEN bucket_start = 0 THEN '0-9'\n    ELSE 'Other'\n  END AS bucket_label,\n  COUNT(*) AS count\nFROM grade_buckets\nWHERE bucket_start IS NOT NULL\nGROUP BY bucket_start\nORDER BY bucket_start ASC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "title": "Distribution of final grades across all courses",
+            "data": {
+              "name": "query_result"
+            },
+            "mark": "bar",
+            "encoding": {
+              "x": {
+                "field": "bucket_label",
+                "type": "nominal",
+                "axis": {
+                  "title": "Grade range"
+                },
+                "sort": {
+                  "field": "bucket_start",
+                  "op": "min"
+                }
+              },
+              "y": {
+                "field": "count",
+                "type": "quantitative",
+                "axis": {
+                  "title": "Number of students"
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "bucket_label",
+                  "type": "nominal",
+                  "title": "Grade range"
+                },
+                {
+                  "field": "count",
+                  "type": "quantitative",
+                  "title": "Count"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843633399
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH grade_buckets AS (\n  SELECT\n    final_grade AS final_grade,\n    CASE\n      WHEN final_grade >= 100 THEN 90\n      WHEN final_grade >= 90 THEN 90\n      WHEN final_grade >= 80 THEN 80\n      WHEN final_grade >= 70 THEN 70\n      WHEN final_grade >= 60 THEN 60\n      WHEN final_grade >= 50 THEN 50\n      WHEN final_grade >= 40 THEN 40\n      WHEN final_grade >= 30 THEN 30\n      WHEN final_grade >= 20 THEN 20\n      WHEN final_grade >= 10 THEN 10\n      WHEN final_grade >= 0 THEN 0\n      ELSE NULL\n    END AS bucket_start\n  FROM grades\n  WHERE final_grade IS NOT NULL\n)\nSELECT\n  bucket_start AS bucket_start,\n  CASE\n    WHEN bucket_start = 90 THEN '90-100'\n    WHEN bucket_start = 80 THEN '80-89'\n    WHEN bucket_start = 70 THEN '70-79'\n    WHEN bucket_start = 60 THEN '60-69'\n    WHEN bucket_start = 50 THEN '50-59'\n    WHEN bucket_start = 40 THEN '40-49'\n    WHEN bucket_start = 30 THEN '30-39'\n    WHEN bucket_start = 20 THEN '20-29'\n    WHEN bucket_start = 10 THEN '10-19'\n    WHEN bucket_start = 0 THEN '0-9'\n    ELSE 'Other'\n  END AS bucket_label,\n  COUNT(*) AS count\nFROM grade_buckets\nWHERE bucket_start IS NOT NULL\nGROUP BY bucket_start\nORDER BY bucket_start ASC;"
+        },
+        "startedAt": 1771843633403,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column \"final_grade\" does not exist\nLINE 4:     final_grade AS final_grade,\n            ^",
+          "name": "Error"
+        },
+        "endedAt": 1771843633478
+      }
+    },
+    "input": {
+      "question": "Show the distribution of final grades across all courses"
+    },
+    "error": {
+      "message": "SQL execution failed: column \"final_grade\" does not exist\nLINE 4:     final_grade AS final_grade,\n            ^",
+      "name": "Error"
+    },
+    "traceId": "aea56479649649bca409890bf952f64d"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:47:13.487Z",
+    "traceId": "aea56479649649bca409890bf952f64d",
+    "attempts": 5,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 265,
+      "outputTokens": 2264,
+      "totalTokens": 2529,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1664,
+      "costUsd": 0.00459425
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 265,
+        "outputTokens": 2264,
+        "totalTokens": 2529,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1664,
+        "costUsd": 0.00459425
+      }
+    ],
+    "warnings": []
+  }
+}

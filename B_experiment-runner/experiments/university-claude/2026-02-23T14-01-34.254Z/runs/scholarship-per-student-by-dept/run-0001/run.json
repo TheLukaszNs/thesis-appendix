@@ -1,0 +1,312 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "scholarship-per-student-by-dept",
+  "caseDirectory": "scholarship-per-student-by-dept",
+  "repeatIndex": 1,
+  "prompt": "What is the average scholarship amount per student in each department?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average scholarship amount per student in each department?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:12:05.201Z",
+    "endedAtUtc": "2026-02-23T14:12:51.547Z",
+    "durationMs": 46346
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "13547",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:12:51 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the average scholarship amount per student in each department?\"},\"sql\":{\"payload\":{\"question\":\"What is the average scholarship amount per student in each department?\"},\"startedAt\":1771855925208,\"status\":\"success\",\"output\":{\"reasoning\":\"The question asks for the average scholarship amount per student in each department. I need to:\\n1. Join scholarships to students (via student_id)\\n2. Join students to departments (via department_id)\\n3. Group by department\\n4. Calculate the average scholarship amount per student\\n\\nThe key insight is \\\"per student\\\" - this means we need to sum scholarship amounts per student first, then average across students in each department. Alternatively, we can calculate the total scholarship amount divided by the count of distinct students per department.\\n\\nI'll use a straightforward approach: group by department and calculate AVG(scholarship.amount) while ensuring we're counting distinct students properly. Since multiple scholarships can exist per student, I'll aggregate at the student level first using a subquery or window function approach.\\n\\nActually, the simplest interpretation is: for each department, what is the average scholarship amount awarded (across all scholarship records). But \\\"per student\\\" suggests we should average the total scholarships each student received.\\n\\nI'll go with: SUM(scholarship amount) / COUNT(DISTINCT students) per department, which gives the average scholarship amount per student in each department.\\n\",\"sql\":\"\\nSELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  ROUND(SUM(s.amount)::numeric / COUNT(DISTINCT s.student_id), 2) AS avg_scholarship_per_student\\nFROM departments d\\nLEFT JOIN students st ON d.id = st.department_id\\nLEFT JOIN scholarships s ON st.id = s.student_id\\nGROUP BY d.id, d.name, d.code\\nORDER BY avg_scholarship_per_student DESC NULLS LAST\\n\",\"assumptions\":[\"Assuming 'average scholarship amount per student' means the total scholarship amount divided by the number of distinct students in each department\",\"Using LEFT JOINs to include departments with no students or scholarships\",\"Rounding the result to 2 decimal places for currency representation\"]},\"endedAt\":1771855966687},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  ROUND(SUM(s.amount)::numeric / COUNT(DISTINCT s.student_id), 2) AS avg_scholarship_per_student\\nFROM departments d\\nLEFT JOIN students st ON d.id = st.department_id\\nLEFT JOIN scholarships s ON st.id = s.student_id\\nGROUP BY d.id, d.name, d.code\\nORDER BY avg_scholarship_per_student DESC NULLS LAST\\n\"},\"startedAt\":1771855966689,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  ROUND(SUM(s.amount)::numeric / COUNT(DISTINCT s.student_id), 2) AS avg_scholarship_per_student\\nFROM departments d\\nLEFT JOIN students st ON d.id = st.department_id\\nLEFT JOIN scholarships s ON st.id = s.student_id\\nGROUP BY d.id, d.name, d.code\\nORDER BY avg_scholarship_per_student DESC NULLS LAST\",\"metadata\":{\"columns\":[\"department_name\",\"department_code\",\"avg_scholarship_per_student\"],\"rowCount\":6,\"sample\":[{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"avg_scholarship_per_student\":\"4000.00\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"department_code\":\"TCH\",\"avg_scholarship_per_student\":\"3000.00\"}]},\"data\":[{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"avg_scholarship_per_student\":\"4000.00\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"department_code\":\"TCH\",\"avg_scholarship_per_student\":\"3000.00\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"department_code\":\"AEI\",\"avg_scholarship_per_student\":\"2500.00\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"department_code\":\"IBM\",\"avg_scholarship_per_student\":\"2000.00\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"department_code\":\"WIP\",\"avg_scholarship_per_student\":\"2000.00\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"department_code\":\"INF\",\"avg_scholarship_per_student\":null}]},\"endedAt\":1771855966694},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  ROUND(SUM(s.amount)::numeric / COUNT(DISTINCT s.student_id), 2) AS avg_scholarship_per_student\\nFROM departments d\\nLEFT JOIN students st ON d.id = st.department_id\\nLEFT JOIN scholarships s ON st.id = s.student_id\\nGROUP BY d.id, d.name, d.code\\nORDER BY avg_scholarship_per_student DESC NULLS LAST\",\"metadata\":{\"columns\":[\"department_name\",\"department_code\",\"avg_scholarship_per_student\"],\"rowCount\":6,\"sample\":[{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"avg_scholarship_per_student\":\"4000.00\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"department_code\":\"TCH\",\"avg_scholarship_per_student\":\"3000.00\"}]},\"data\":[{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"avg_scholarship_per_student\":\"4000.00\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"department_code\":\"TCH\",\"avg_scholarship_per_student\":\"3000.00\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"department_code\":\"AEI\",\"avg_scholarship_per_student\":\"2500.00\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"department_code\":\"IBM\",\"avg_scholarship_per_student\":\"2000.00\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"department_code\":\"WIP\",\"avg_scholarship_per_student\":\"2000.00\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"department_code\":\"INF\",\"avg_scholarship_per_student\":null}]},\"startedAt\":1771855966696,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Scholarship Amount per Student by Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"avg_scholarship_per_student\",\"type\":\"quantitative\",\"title\":\"Average Scholarship per Student (PLN)\",\"axis\":{\"format\":\"$,.0f\"}},\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\",\"sort\":\"-x\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"avg_scholarship_per_student\",\"type\":\"quantitative\",\"title\":\"Avg Scholarship per Student\",\"format\":\",.2f\"}],\"color\":{\"field\":\"avg_scholarship_per_student\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Average Scholarship (PLN)\"}},\"width\":600,\"height\":300},\"reasoning\":\"This horizontal bar chart displays the average scholarship amount per student for each department, sorted in descending order. The color intensity represents the scholarship amount, making it easy to compare departments at a glance. The tooltip includes department name, code, and the exact average scholarship value for detailed inspection.\"},\"endedAt\":1771855971521},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Scholarship Amount per Student by Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"avg_scholarship_per_student\",\"type\":\"quantitative\",\"title\":\"Average Scholarship per Student (PLN)\",\"axis\":{\"format\":\"$,.0f\"}},\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\",\"sort\":\"-x\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"avg_scholarship_per_student\",\"type\":\"quantitative\",\"title\":\"Avg Scholarship per Student\",\"format\":\",.2f\"}],\"color\":{\"field\":\"avg_scholarship_per_student\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Average Scholarship (PLN)\"}},\"width\":600,\"height\":300},\"reasoning\":\"This horizontal bar chart displays the average scholarship amount per student for each department, sorted in descending order. The color intensity represents the scholarship amount, making it easy to compare departments at a glance. The tooltip includes department name, code, and the exact average scholarship value for detailed inspection.\"},\"startedAt\":1771855971527,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  ROUND(SUM(s.amount)::numeric / COUNT(DISTINCT s.student_id), 2) AS avg_scholarship_per_student\\nFROM departments d\\nLEFT JOIN students st ON d.id = st.department_id\\nLEFT JOIN scholarships s ON st.id = s.student_id\\nGROUP BY d.id, d.name, d.code\\nORDER BY avg_scholarship_per_student DESC NULLS LAST\\n\",\"data\":[{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"avg_scholarship_per_student\":\"4000.00\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"department_code\":\"TCH\",\"avg_scholarship_per_student\":\"3000.00\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"department_code\":\"AEI\",\"avg_scholarship_per_student\":\"2500.00\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"department_code\":\"IBM\",\"avg_scholarship_per_student\":\"2000.00\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"department_code\":\"WIP\",\"avg_scholarship_per_student\":\"2000.00\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"department_code\":\"INF\",\"avg_scholarship_per_student\":null}],\"metadata\":{\"columns\":[\"department_name\",\"department_code\",\"avg_scholarship_per_student\"],\"rowCount\":6,\"sample\":[{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"avg_scholarship_per_student\":\"4000.00\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"department_code\":\"TCH\",\"avg_scholarship_per_student\":\"3000.00\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Scholarship Amount per Student by Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"avg_scholarship_per_student\",\"type\":\"quantitative\",\"title\":\"Average Scholarship per Student (PLN)\",\"axis\":{\"format\":\"$,.0f\"}},\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\",\"sort\":\"-x\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"avg_scholarship_per_student\",\"type\":\"quantitative\",\"title\":\"Avg Scholarship per Student\",\"format\":\",.2f\"}],\"color\":{\"field\":\"avg_scholarship_per_student\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Average Scholarship (PLN)\"}},\"width\":600,\"height\":300},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855971531}},\"input\":{\"question\":\"What is the average scholarship amount per student in each department?\"},\"result\":{\"sql\":\"\\nSELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  ROUND(SUM(s.amount)::numeric / COUNT(DISTINCT s.student_id), 2) AS avg_scholarship_per_student\\nFROM departments d\\nLEFT JOIN students st ON d.id = st.department_id\\nLEFT JOIN scholarships s ON st.id = s.student_id\\nGROUP BY d.id, d.name, d.code\\nORDER BY avg_scholarship_per_student DESC NULLS LAST\\n\",\"data\":[{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"avg_scholarship_per_student\":\"4000.00\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"department_code\":\"TCH\",\"avg_scholarship_per_student\":\"3000.00\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"department_code\":\"AEI\",\"avg_scholarship_per_student\":\"2500.00\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"department_code\":\"IBM\",\"avg_scholarship_per_student\":\"2000.00\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"department_code\":\"WIP\",\"avg_scholarship_per_student\":\"2000.00\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"department_code\":\"INF\",\"avg_scholarship_per_student\":null}],\"metadata\":{\"columns\":[\"department_name\",\"department_code\",\"avg_scholarship_per_student\"],\"rowCount\":6,\"sample\":[{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"avg_scholarship_per_student\":\"4000.00\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"department_code\":\"TCH\",\"avg_scholarship_per_student\":\"3000.00\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Scholarship Amount per Student by Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"avg_scholarship_per_student\",\"type\":\"quantitative\",\"title\":\"Average Scholarship per Student (PLN)\",\"axis\":{\"format\":\"$,.0f\"}},\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\",\"sort\":\"-x\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"avg_scholarship_per_student\",\"type\":\"quantitative\",\"title\":\"Avg Scholarship per Student\",\"format\":\",.2f\"}],\"color\":{\"field\":\"avg_scholarship_per_student\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Average Scholarship (PLN)\"}},\"width\":600,\"height\":300},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"4cf794bb387db475c4897c2de9b30b83\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/scholarship-per-student-by-dept/run-0001/run.json",
+    "queryPath": "runs/scholarship-per-student-by-dept/run-0001/query.sql",
+    "vegaRawPath": "runs/scholarship-per-student-by-dept/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/scholarship-per-student-by-dept/run-0001/vega.resolved.json",
+    "imagePath": "runs/scholarship-per-student-by-dept/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:12:51.918Z",
+  "traceId": "4cf794bb387db475c4897c2de9b30b83",
+  "success": true,
+  "durationMs": 46717,
+  "resultRaw": {
+    "data": [
+      {
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "department_code": "MTR",
+        "avg_scholarship_per_student": "4000.00"
+      },
+      {
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "department_code": "TCH",
+        "avg_scholarship_per_student": "3000.00"
+      },
+      {
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "department_code": "AEI",
+        "avg_scholarship_per_student": "2500.00"
+      },
+      {
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "department_code": "IBM",
+        "avg_scholarship_per_student": "2000.00"
+      },
+      {
+        "department_name": "Wydział Inżynierii Produkcji",
+        "department_code": "WIP",
+        "avg_scholarship_per_student": "2000.00"
+      },
+      {
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "department_code": "INF",
+        "avg_scholarship_per_student": null
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Scholarship Amount per Student by Department",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "avg_scholarship_per_student",
+          "type": "quantitative",
+          "title": "Average Scholarship per Student (PLN)",
+          "axis": {
+            "format": "$,.0f"
+          }
+        },
+        "y": {
+          "field": "department_name",
+          "type": "nominal",
+          "title": "Department",
+          "sort": "-x"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "department_code",
+            "type": "nominal",
+            "title": "Code"
+          },
+          {
+            "field": "avg_scholarship_per_student",
+            "type": "quantitative",
+            "title": "Avg Scholarship per Student",
+            "format": ",.2f"
+          }
+        ],
+        "color": {
+          "field": "avg_scholarship_per_student",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "blues"
+          },
+          "title": "Average Scholarship (PLN)"
+        }
+      },
+      "width": 600,
+      "height": 300
+    },
+    "sql": "\nSELECT \n  d.name AS department_name,\n  d.code AS department_code,\n  ROUND(SUM(s.amount)::numeric / COUNT(DISTINCT s.student_id), 2) AS avg_scholarship_per_student\nFROM departments d\nLEFT JOIN students st ON d.id = st.department_id\nLEFT JOIN scholarships s ON st.id = s.student_id\nGROUP BY d.id, d.name, d.code\nORDER BY avg_scholarship_per_student DESC NULLS LAST\n",
+    "metadata": {
+      "columns": [
+        "department_name",
+        "department_code",
+        "avg_scholarship_per_student"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+          "department_code": "MTR",
+          "avg_scholarship_per_student": "4000.00"
+        },
+        {
+          "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+          "department_code": "TCH",
+          "avg_scholarship_per_student": "3000.00"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "department_code": "MTR",
+        "avg_scholarship_per_student": "4000.00"
+      },
+      {
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "department_code": "TCH",
+        "avg_scholarship_per_student": "3000.00"
+      },
+      {
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "department_code": "AEI",
+        "avg_scholarship_per_student": "2500.00"
+      },
+      {
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "department_code": "IBM",
+        "avg_scholarship_per_student": "2000.00"
+      },
+      {
+        "department_name": "Wydział Inżynierii Produkcji",
+        "department_code": "WIP",
+        "avg_scholarship_per_student": "2000.00"
+      },
+      {
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "department_code": "INF",
+        "avg_scholarship_per_student": null
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Scholarship Amount per Student by Department",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "avg_scholarship_per_student",
+          "type": "quantitative",
+          "title": "Average Scholarship per Student (PLN)",
+          "axis": {
+            "format": "$,.0f"
+          }
+        },
+        "y": {
+          "field": "department_name",
+          "type": "nominal",
+          "title": "Department",
+          "sort": "-x"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "department_code",
+            "type": "nominal",
+            "title": "Code"
+          },
+          {
+            "field": "avg_scholarship_per_student",
+            "type": "quantitative",
+            "title": "Avg Scholarship per Student",
+            "format": ",.2f"
+          }
+        ],
+        "color": {
+          "field": "avg_scholarship_per_student",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "blues"
+          },
+          "title": "Average Scholarship (PLN)"
+        }
+      },
+      "width": 600,
+      "height": 300
+    },
+    "sql": "\nSELECT \n  d.name AS department_name,\n  d.code AS department_code,\n  ROUND(SUM(s.amount)::numeric / COUNT(DISTINCT s.student_id), 2) AS avg_scholarship_per_student\nFROM departments d\nLEFT JOIN students st ON d.id = st.department_id\nLEFT JOIN scholarships s ON st.id = s.student_id\nGROUP BY d.id, d.name, d.code\nORDER BY avg_scholarship_per_student DESC NULLS LAST\n",
+    "metadata": {
+      "columns": [
+        "department_name",
+        "department_code",
+        "avg_scholarship_per_student"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+          "department_code": "MTR",
+          "avg_scholarship_per_student": "4000.00"
+        },
+        {
+          "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+          "department_code": "TCH",
+          "avg_scholarship_per_student": "3000.00"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.395Z",
+    "traceId": "4cf794bb387db475c4897c2de9b30b83",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 18412,
+      "outputTokens": 1207,
+      "totalTokens": 19619,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.024447
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 18412,
+        "outputTokens": 1207,
+        "totalTokens": 19619,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.024447
+      }
+    ],
+    "warnings": []
+  }
+}

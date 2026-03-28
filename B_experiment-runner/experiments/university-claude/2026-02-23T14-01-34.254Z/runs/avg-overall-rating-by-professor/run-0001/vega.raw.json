@@ -1,0 +1,62 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Average Overall Course Evaluation Rating by Professor",
+  "data": {
+    "name": "query_result"
+  },
+  "mark": "bar",
+  "encoding": {
+    "y": {
+      "field": "last_name",
+      "type": "nominal",
+      "sort": "-x",
+      "title": "Professor (Last Name)",
+      "axis": {
+        "labelExpr": "datum.value + ', ' + data('query_result')[indexof(data('query_result'), datum)].first_name"
+      }
+    },
+    "x": {
+      "field": "average_overall_rating",
+      "type": "quantitative",
+      "title": "Average Overall Rating",
+      "scale": {
+        "domain": [
+          0,
+          5
+        ]
+      }
+    },
+    "color": {
+      "field": "average_overall_rating",
+      "type": "quantitative",
+      "scale": {
+        "scheme": "blues",
+        "domain": [
+          0,
+          5
+        ]
+      },
+      "title": "Rating"
+    },
+    "tooltip": [
+      {
+        "field": "first_name",
+        "type": "nominal",
+        "title": "First Name"
+      },
+      {
+        "field": "last_name",
+        "type": "nominal",
+        "title": "Last Name"
+      },
+      {
+        "field": "average_overall_rating",
+        "type": "quantitative",
+        "title": "Average Overall Rating",
+        "format": ".2f"
+      }
+    ]
+  },
+  "width": 600,
+  "height": 400
+}

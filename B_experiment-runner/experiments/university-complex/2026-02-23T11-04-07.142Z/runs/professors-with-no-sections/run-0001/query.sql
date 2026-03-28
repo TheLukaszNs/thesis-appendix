@@ -1,0 +1,1 @@
+SELECT 'Never Taught'::text AS label, COUNT(p.id) AS professors_never_taught FROM public.professors p WHERE NOT EXISTS (SELECT 1 FROM public.course_sections cs WHERE cs.professor_id = p.id);

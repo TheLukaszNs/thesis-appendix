@@ -1,0 +1,205 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "grade-by-professor-title",
+  "caseDirectory": "grade-by-professor-title",
+  "repeatIndex": 1,
+  "prompt": "Do professors with higher academic titles give different grades?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Do professors with higher academic titles give different grades?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:54:41.554Z",
+    "endedAtUtc": "2026-02-23T10:55:06.011Z",
+    "durationMs": 24457
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "4802",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:55:06 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Do professors with higher academic titles give different grades?\"},\"agent\":{\"payload\":{\"question\":\"Do professors with higher academic titles give different grades?\"},\"startedAt\":1771844081560,\"status\":\"success\",\"output\":{\"sql\":\"WITH avg_by_title AS (\\n  SELECT\\n    p.academic_title AS academic_title,\\n    AVG(g.grade) AS avg_grade,\\n    STDDEV_POP(g.grade) AS grade_stddev,\\n    AVG(g.grade) - STDDEV_POP(g.grade) AS lower_bound,\\n    AVG(g.grade) + STDDEV_POP(g.grade) AS upper_bound,\\n    COUNT(*) AS count_grades\\n  FROM course_grades g\\n  JOIN professors p\\n    ON g.professor_id = p.id\\n  WHERE p.academic_title IS NOT NULL\\n  GROUP BY p.academic_title\\n)\\nSELECT\\n  academic_title,\\n  avg_grade,\\n  grade_stddev,\\n  lower_bound,\\n  upper_bound,\\n  count_grades\\nFROM avg_by_title\\nORDER BY avg_grade DESC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Grade by Professor Academic Title (with ±1 stddev)\",\"layer\":[{\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"academic_title\",\"type\":\"nominal\",\"title\":\"Academic Title\",\"axis\":{\"labelAngle\":-40}},\"y\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},\"tooltip\":[{\"field\":\"academic_title\",\"type\":\"nominal\",\"title\":\"Academic Title\"},{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Avg Grade\",\"format\":\".2f\"},{\"field\":\"grade_stddev\",\"type\":\"quantitative\",\"title\":\"Std Dev\",\"format\":\".2f\"},{\"field\":\"count_grades\",\"type\":\"quantitative\",\"title\":\"N\"}]}},{\"mark\":{\"type\":\"rule\",\"color\":\"black\"},\"encoding\":{\"x\":{\"field\":\"academic_title\",\"type\":\"nominal\"},\"y\":{\"field\":\"lower_bound\",\"type\":\"quantitative\"},\"y2\":{\"field\":\"upper_bound\",\"type\":\"quantitative\"},\"tooltip\":[{\"field\":\"lower_bound\",\"type\":\"quantitative\",\"title\":\"Lower (avg - sd)\",\"format\":\".2f\"},{\"field\":\"upper_bound\",\"type\":\"quantitative\",\"title\":\"Upper (avg + sd)\",\"format\":\".2f\"}]}}]}},\"endedAt\":1771844105992},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH avg_by_title AS (\\n  SELECT\\n    p.academic_title AS academic_title,\\n    AVG(g.grade) AS avg_grade,\\n    STDDEV_POP(g.grade) AS grade_stddev,\\n    AVG(g.grade) - STDDEV_POP(g.grade) AS lower_bound,\\n    AVG(g.grade) + STDDEV_POP(g.grade) AS upper_bound,\\n    COUNT(*) AS count_grades\\n  FROM course_grades g\\n  JOIN professors p\\n    ON g.professor_id = p.id\\n  WHERE p.academic_title IS NOT NULL\\n  GROUP BY p.academic_title\\n)\\nSELECT\\n  academic_title,\\n  avg_grade,\\n  grade_stddev,\\n  lower_bound,\\n  upper_bound,\\n  count_grades\\nFROM avg_by_title\\nORDER BY avg_grade DESC;\"},\"startedAt\":1771844105996,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: Error validating query: WITH __query_result AS (\\nWITH avg_by_title AS (\\n  SELECT\\n    p.academic_title AS academic_title,\\n    AVG(g.grade) AS avg_grade,\\n    STDDEV_POP(g.grade) AS grade_stddev,\\n    AVG(g.grade) - STDDEV_POP(g.grade) AS lower_bound,\\n    AVG(g.grade) + STDDEV_POP(g.grade) AS upper_bound,\\n    COUNT(*) AS count_grades\\n  FROM course_grades g\\n  JOIN professors p\\n    ON g.professor_id = p.id\\n  WHERE p.academic_title IS NOT NULL\\n  GROUP BY p.academic_title\\n)\\nSELECT\\n  academic_title,\\n  avg_grade,\\n  grade_stddev,\\n  lower_bound,\\n  upper_bound,\\n  count_grades\\nFROM avg_by_title\\nORDER BY avg_grade DESC\\n),\\n__limited AS (\\n  SELECT * FROM __query_result LIMIT 501\\n),\\n__payload AS (\\n  SELECT json_build_object(\\n    'rows', COALESCE((SELECT json_agg(to_jsonb(__limited)) FROM __limited), '[]'::json)\\n  ) AS data\\n)\\nSELECT encode(convert_to((SELECT data::text FROM __payload), 'UTF8'), 'hex') AS __payload_hex\",\"name\":\"Error\"},\"endedAt\":1771844106007}},\"input\":{\"question\":\"Do professors with higher academic titles give different grades?\"},\"error\":{\"message\":\"SQL execution failed: Error validating query: WITH __query_result AS (\\nWITH avg_by_title AS (\\n  SELECT\\n    p.academic_title AS academic_title,\\n    AVG(g.grade) AS avg_grade,\\n    STDDEV_POP(g.grade) AS grade_stddev,\\n    AVG(g.grade) - STDDEV_POP(g.grade) AS lower_bound,\\n    AVG(g.grade) + STDDEV_POP(g.grade) AS upper_bound,\\n    COUNT(*) AS count_grades\\n  FROM course_grades g\\n  JOIN professors p\\n    ON g.professor_id = p.id\\n  WHERE p.academic_title IS NOT NULL\\n  GROUP BY p.academic_title\\n)\\nSELECT\\n  academic_title,\\n  avg_grade,\\n  grade_stddev,\\n  lower_bound,\\n  upper_bound,\\n  count_grades\\nFROM avg_by_title\\nORDER BY avg_grade DESC\\n),\\n__limited AS (\\n  SELECT * FROM __query_result LIMIT 501\\n),\\n__payload AS (\\n  SELECT json_build_object(\\n    'rows', COALESCE((SELECT json_agg(to_jsonb(__limited)) FROM __limited), '[]'::json)\\n  ) AS data\\n)\\nSELECT encode(convert_to((SELECT data::text FROM __payload), 'UTF8'), 'hex') AS __payload_hex\",\"name\":\"Error\"},\"traceId\":\"ac4447cf18878aea6e0d13d6c0f9959c\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/grade-by-professor-title/run-0001/run.json",
+    "queryPath": "runs/grade-by-professor-title/run-0001/query.sql",
+    "vegaRawPath": "runs/grade-by-professor-title/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/grade-by-professor-title/run-0001/vega.resolved.json",
+    "imagePath": "runs/grade-by-professor-title/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:55:06.012Z",
+  "traceId": "ac4447cf18878aea6e0d13d6c0f9959c",
+  "success": false,
+  "durationMs": 24458,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Do professors with higher academic titles give different grades?"
+      },
+      "agent": {
+        "payload": {
+          "question": "Do professors with higher academic titles give different grades?"
+        },
+        "startedAt": 1771844081560,
+        "status": "success",
+        "output": {
+          "sql": "WITH avg_by_title AS (\n  SELECT\n    p.academic_title AS academic_title,\n    AVG(g.grade) AS avg_grade,\n    STDDEV_POP(g.grade) AS grade_stddev,\n    AVG(g.grade) - STDDEV_POP(g.grade) AS lower_bound,\n    AVG(g.grade) + STDDEV_POP(g.grade) AS upper_bound,\n    COUNT(*) AS count_grades\n  FROM course_grades g\n  JOIN professors p\n    ON g.professor_id = p.id\n  WHERE p.academic_title IS NOT NULL\n  GROUP BY p.academic_title\n)\nSELECT\n  academic_title,\n  avg_grade,\n  grade_stddev,\n  lower_bound,\n  upper_bound,\n  count_grades\nFROM avg_by_title\nORDER BY avg_grade DESC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "data": {
+              "name": "query_result"
+            },
+            "title": "Average Grade by Professor Academic Title (with ±1 stddev)",
+            "layer": [
+              {
+                "mark": "bar",
+                "encoding": {
+                  "x": {
+                    "field": "academic_title",
+                    "type": "nominal",
+                    "title": "Academic Title",
+                    "axis": {
+                      "labelAngle": -40
+                    }
+                  },
+                  "y": {
+                    "field": "avg_grade",
+                    "type": "quantitative",
+                    "title": "Average Grade"
+                  },
+                  "tooltip": [
+                    {
+                      "field": "academic_title",
+                      "type": "nominal",
+                      "title": "Academic Title"
+                    },
+                    {
+                      "field": "avg_grade",
+                      "type": "quantitative",
+                      "title": "Avg Grade",
+                      "format": ".2f"
+                    },
+                    {
+                      "field": "grade_stddev",
+                      "type": "quantitative",
+                      "title": "Std Dev",
+                      "format": ".2f"
+                    },
+                    {
+                      "field": "count_grades",
+                      "type": "quantitative",
+                      "title": "N"
+                    }
+                  ]
+                }
+              },
+              {
+                "mark": {
+                  "type": "rule",
+                  "color": "black"
+                },
+                "encoding": {
+                  "x": {
+                    "field": "academic_title",
+                    "type": "nominal"
+                  },
+                  "y": {
+                    "field": "lower_bound",
+                    "type": "quantitative"
+                  },
+                  "y2": {
+                    "field": "upper_bound",
+                    "type": "quantitative"
+                  },
+                  "tooltip": [
+                    {
+                      "field": "lower_bound",
+                      "type": "quantitative",
+                      "title": "Lower (avg - sd)",
+                      "format": ".2f"
+                    },
+                    {
+                      "field": "upper_bound",
+                      "type": "quantitative",
+                      "title": "Upper (avg + sd)",
+                      "format": ".2f"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "endedAt": 1771844105992
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH avg_by_title AS (\n  SELECT\n    p.academic_title AS academic_title,\n    AVG(g.grade) AS avg_grade,\n    STDDEV_POP(g.grade) AS grade_stddev,\n    AVG(g.grade) - STDDEV_POP(g.grade) AS lower_bound,\n    AVG(g.grade) + STDDEV_POP(g.grade) AS upper_bound,\n    COUNT(*) AS count_grades\n  FROM course_grades g\n  JOIN professors p\n    ON g.professor_id = p.id\n  WHERE p.academic_title IS NOT NULL\n  GROUP BY p.academic_title\n)\nSELECT\n  academic_title,\n  avg_grade,\n  grade_stddev,\n  lower_bound,\n  upper_bound,\n  count_grades\nFROM avg_by_title\nORDER BY avg_grade DESC;"
+        },
+        "startedAt": 1771844105996,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: Error validating query: WITH __query_result AS (\nWITH avg_by_title AS (\n  SELECT\n    p.academic_title AS academic_title,\n    AVG(g.grade) AS avg_grade,\n    STDDEV_POP(g.grade) AS grade_stddev,\n    AVG(g.grade) - STDDEV_POP(g.grade) AS lower_bound,\n    AVG(g.grade) + STDDEV_POP(g.grade) AS upper_bound,\n    COUNT(*) AS count_grades\n  FROM course_grades g\n  JOIN professors p\n    ON g.professor_id = p.id\n  WHERE p.academic_title IS NOT NULL\n  GROUP BY p.academic_title\n)\nSELECT\n  academic_title,\n  avg_grade,\n  grade_stddev,\n  lower_bound,\n  upper_bound,\n  count_grades\nFROM avg_by_title\nORDER BY avg_grade DESC\n),\n__limited AS (\n  SELECT * FROM __query_result LIMIT 501\n),\n__payload AS (\n  SELECT json_build_object(\n    'rows', COALESCE((SELECT json_agg(to_jsonb(__limited)) FROM __limited), '[]'::json)\n  ) AS data\n)\nSELECT encode(convert_to((SELECT data::text FROM __payload), 'UTF8'), 'hex') AS __payload_hex",
+          "name": "Error"
+        },
+        "endedAt": 1771844106007
+      }
+    },
+    "input": {
+      "question": "Do professors with higher academic titles give different grades?"
+    },
+    "error": {
+      "message": "SQL execution failed: Error validating query: WITH __query_result AS (\nWITH avg_by_title AS (\n  SELECT\n    p.academic_title AS academic_title,\n    AVG(g.grade) AS avg_grade,\n    STDDEV_POP(g.grade) AS grade_stddev,\n    AVG(g.grade) - STDDEV_POP(g.grade) AS lower_bound,\n    AVG(g.grade) + STDDEV_POP(g.grade) AS upper_bound,\n    COUNT(*) AS count_grades\n  FROM course_grades g\n  JOIN professors p\n    ON g.professor_id = p.id\n  WHERE p.academic_title IS NOT NULL\n  GROUP BY p.academic_title\n)\nSELECT\n  academic_title,\n  avg_grade,\n  grade_stddev,\n  lower_bound,\n  upper_bound,\n  count_grades\nFROM avg_by_title\nORDER BY avg_grade DESC\n),\n__limited AS (\n  SELECT * FROM __query_result LIMIT 501\n),\n__payload AS (\n  SELECT json_build_object(\n    'rows', COALESCE((SELECT json_agg(to_jsonb(__limited)) FROM __limited), '[]'::json)\n  ) AS data\n)\nSELECT encode(convert_to((SELECT data::text FROM __payload), 'UTF8'), 'hex') AS __payload_hex",
+      "name": "Error"
+    },
+    "traceId": "ac4447cf18878aea6e0d13d6c0f9959c"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:55:06.012Z",
+    "traceId": "ac4447cf18878aea6e0d13d6c0f9959c",
+    "attempts": 3,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 266,
+      "outputTokens": 1609,
+      "totalTokens": 1875,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1088,
+      "costUsd": 0.0032845
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 266,
+        "outputTokens": 1609,
+        "totalTokens": 1875,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1088,
+        "costUsd": 0.0032845
+      }
+    ],
+    "warnings": []
+  }
+}

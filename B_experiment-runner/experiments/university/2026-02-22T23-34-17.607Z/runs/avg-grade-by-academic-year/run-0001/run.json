@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "avg-grade-by-academic-year",
+  "caseDirectory": "avg-grade-by-academic-year",
+  "repeatIndex": 1,
+  "prompt": "How has the average grade changed over academic years?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How has the average grade changed over academic years?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:45:48.025Z",
+    "endedAtUtc": "2026-02-22T23:46:29.151Z",
+    "durationMs": 41126
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "4041",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:46:29 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"How has the average grade changed over academic years?\"},\"sql\":{\"payload\":{\"question\":\"How has the average grade changed over academic years?\"},\"startedAt\":1771803948068,\"status\":\"success\",\"output\":{\"reasoning\":\"Compute a numeric grade per enrollment by using a numeric grade_value when it is purely numeric, otherwise falling back to the average of available numeric score components (exam_score, project_score, attendance_score). Then aggregate the average numeric grade per course_sections.academic_year and order by academic_year.\",\"sql\":\"WITH grade_numbers AS (\\n  SELECT\\n    cs.academic_year AS academic_year,\\n    CASE\\n      WHEN g.grade_value ~ '^[0-9]+(\\\\\\\\.[0-9]+)?$' THEN g.grade_value::numeric\\n      WHEN (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\\n        THEN (\\n          COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)\\n        ) / NULLIF(\\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END\\n           + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END\\n           + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END),\\n          0\\n        )\\n      ELSE NULL\\n    END AS grade_numeric\\n  FROM public.course_sections cs\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  JOIN public.grades g ON g.enrollment_id = e.id\\n)\\nSELECT\\n  academic_year AS academic_year,\\n  ROUND(AVG(grade_numeric)::numeric, 3) AS average_grade\\nFROM grade_numbers\\nWHERE grade_numeric IS NOT NULL\\nGROUP BY academic_year\\nORDER BY academic_year;\",\"assumptions\":[\"course_sections.academic_year is the academic year to report by\",\"grade_value may contain numeric strings (e.g., '85' or '85.5') or non-numeric letters; numeric strings are taken as final grade\",\"If grade_value is not numeric, use the average of available numeric components (exam_score, project_score, attendance_score) for that enrollment\",\"academic_year ordering is lexicographic (e.g., '2020-2021') which should reflect chronological order in this dataset\"]},\"endedAt\":1771803989024},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH grade_numbers AS (\\n  SELECT\\n    cs.academic_year AS academic_year,\\n    CASE\\n      WHEN g.grade_value ~ '^[0-9]+(\\\\\\\\.[0-9]+)?$' THEN g.grade_value::numeric\\n      WHEN (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\\n        THEN (\\n          COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)\\n        ) / NULLIF(\\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END\\n           + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END\\n           + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END),\\n          0\\n        )\\n      ELSE NULL\\n    END AS grade_numeric\\n  FROM public.course_sections cs\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  JOIN public.grades g ON g.enrollment_id = e.id\\n)\\nSELECT\\n  academic_year AS academic_year,\\n  ROUND(AVG(grade_numeric)::numeric, 3) AS average_grade\\nFROM grade_numbers\\nWHERE grade_numeric IS NOT NULL\\nGROUP BY academic_year\\nORDER BY academic_year;\"},\"startedAt\":1771803989028,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: operator does not exist: grade_value ~ unknown\\nLINE 6:       WHEN g.grade_value ~ '^[0-9]+(\\\\\\\\.[0-9]+)?$' THEN g.gra...\\n                                 ^\\nHINT:  No operator matches the given name and argument types. You might need to add explicit type casts.\",\"name\":\"Error\"},\"endedAt\":1771803989122}},\"input\":{\"question\":\"How has the average grade changed over academic years?\"},\"error\":{\"message\":\"SQL execution failed: operator does not exist: grade_value ~ unknown\\nLINE 6:       WHEN g.grade_value ~ '^[0-9]+(\\\\\\\\.[0-9]+)?$' THEN g.gra...\\n                                 ^\\nHINT:  No operator matches the given name and argument types. You might need to add explicit type casts.\",\"name\":\"Error\"},\"traceId\":\"febf79c0ab120b04a8fce57e0b08b4e9\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-grade-by-academic-year/run-0001/run.json",
+    "queryPath": "runs/avg-grade-by-academic-year/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-grade-by-academic-year/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-grade-by-academic-year/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-grade-by-academic-year/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:46:29.152Z",
+  "traceId": "febf79c0ab120b04a8fce57e0b08b4e9",
+  "success": false,
+  "durationMs": 41127,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "How has the average grade changed over academic years?"
+      },
+      "sql": {
+        "payload": {
+          "question": "How has the average grade changed over academic years?"
+        },
+        "startedAt": 1771803948068,
+        "status": "success",
+        "output": {
+          "reasoning": "Compute a numeric grade per enrollment by using a numeric grade_value when it is purely numeric, otherwise falling back to the average of available numeric score components (exam_score, project_score, attendance_score). Then aggregate the average numeric grade per course_sections.academic_year and order by academic_year.",
+          "sql": "WITH grade_numbers AS (\n  SELECT\n    cs.academic_year AS academic_year,\n    CASE\n      WHEN g.grade_value ~ '^[0-9]+(\\\\.[0-9]+)?$' THEN g.grade_value::numeric\n      WHEN (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\n        THEN (\n          COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)\n        ) / NULLIF(\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END\n           + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END\n           + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END),\n          0\n        )\n      ELSE NULL\n    END AS grade_numeric\n  FROM public.course_sections cs\n  JOIN public.enrollments e ON e.course_section_id = cs.id\n  JOIN public.grades g ON g.enrollment_id = e.id\n)\nSELECT\n  academic_year AS academic_year,\n  ROUND(AVG(grade_numeric)::numeric, 3) AS average_grade\nFROM grade_numbers\nWHERE grade_numeric IS NOT NULL\nGROUP BY academic_year\nORDER BY academic_year;",
+          "assumptions": [
+            "course_sections.academic_year is the academic year to report by",
+            "grade_value may contain numeric strings (e.g., '85' or '85.5') or non-numeric letters; numeric strings are taken as final grade",
+            "If grade_value is not numeric, use the average of available numeric components (exam_score, project_score, attendance_score) for that enrollment",
+            "academic_year ordering is lexicographic (e.g., '2020-2021') which should reflect chronological order in this dataset"
+          ]
+        },
+        "endedAt": 1771803989024
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH grade_numbers AS (\n  SELECT\n    cs.academic_year AS academic_year,\n    CASE\n      WHEN g.grade_value ~ '^[0-9]+(\\\\.[0-9]+)?$' THEN g.grade_value::numeric\n      WHEN (g.exam_score IS NOT NULL OR g.project_score IS NOT NULL OR g.attendance_score IS NOT NULL)\n        THEN (\n          COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)\n        ) / NULLIF(\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END\n           + CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END\n           + CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END),\n          0\n        )\n      ELSE NULL\n    END AS grade_numeric\n  FROM public.course_sections cs\n  JOIN public.enrollments e ON e.course_section_id = cs.id\n  JOIN public.grades g ON g.enrollment_id = e.id\n)\nSELECT\n  academic_year AS academic_year,\n  ROUND(AVG(grade_numeric)::numeric, 3) AS average_grade\nFROM grade_numbers\nWHERE grade_numeric IS NOT NULL\nGROUP BY academic_year\nORDER BY academic_year;"
+        },
+        "startedAt": 1771803989028,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: operator does not exist: grade_value ~ unknown\nLINE 6:       WHEN g.grade_value ~ '^[0-9]+(\\\\.[0-9]+)?$' THEN g.gra...\n                                 ^\nHINT:  No operator matches the given name and argument types. You might need to add explicit type casts.",
+          "name": "Error"
+        },
+        "endedAt": 1771803989122
+      }
+    },
+    "input": {
+      "question": "How has the average grade changed over academic years?"
+    },
+    "error": {
+      "message": "SQL execution failed: operator does not exist: grade_value ~ unknown\nLINE 6:       WHEN g.grade_value ~ '^[0-9]+(\\\\.[0-9]+)?$' THEN g.gra...\n                                 ^\nHINT:  No operator matches the given name and argument types. You might need to add explicit type casts.",
+      "name": "Error"
+    },
+    "traceId": "febf79c0ab120b04a8fce57e0b08b4e9"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:46:29.152Z",
+    "traceId": "febf79c0ab120b04a8fce57e0b08b4e9",
+    "attempts": 5,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 11696,
+      "outputTokens": 2716,
+      "totalTokens": 14412,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1856,
+      "costUsd": 0.008356
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 11696,
+        "outputTokens": 2716,
+        "totalTokens": 14412,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1856,
+        "costUsd": 0.008356
+      }
+    ],
+    "warnings": []
+  }
+}

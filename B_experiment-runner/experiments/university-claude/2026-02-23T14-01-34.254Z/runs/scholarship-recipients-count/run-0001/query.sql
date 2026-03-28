@@ -1,0 +1,1 @@
+SELECT scholarship_type, COUNT(DISTINCT student_id) AS student_count FROM public.scholarships GROUP BY scholarship_type ORDER BY scholarship_type

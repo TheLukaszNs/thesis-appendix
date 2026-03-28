@@ -1,0 +1,1 @@
+SELECT s.semester_type AS semester_type, s.scholarship_type AS scholarship_type, COUNT(*) AS scholarship_count FROM public.scholarships s GROUP BY s.semester_type, s.scholarship_type ORDER BY s.semester_type ASC, s.scholarship_type ASC;

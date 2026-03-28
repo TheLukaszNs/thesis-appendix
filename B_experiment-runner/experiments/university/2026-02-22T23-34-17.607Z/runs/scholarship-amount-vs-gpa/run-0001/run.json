@@ -1,0 +1,282 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "scholarship-amount-vs-gpa",
+  "caseDirectory": "scholarship-amount-vs-gpa",
+  "repeatIndex": 1,
+  "prompt": "Show average GPA for different scholarship amount ranges",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show average GPA for different scholarship amount ranges"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:54:23.435Z",
+    "endedAtUtc": "2026-02-22T23:55:13.252Z",
+    "durationMs": 49817
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "17213",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:55:13 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show average GPA for different scholarship amount ranges\"},\"sql\":{\"payload\":{\"question\":\"Show average GPA for different scholarship amount ranges\"},\"startedAt\":1771804463440,\"status\":\"success\",\"output\":{\"reasoning\":\"Bucket scholarships by amount, join to students, deduplicate to one student-per-bucket (so a student with multiple scholarships in the same range is counted once), exclude null GPAs from the average, and order buckets deterministically by a bucket_rank.\",\"sql\":\"WITH student_buckets AS (\\n  SELECT\\n    sc.student_id AS student_id,\\n    CASE\\n      WHEN sc.amount = 0 THEN '0'\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN '$1-999'\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN '$1,000-2,499'\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN '$2,500-4,999'\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN '$5,000-9,999'\\n      ELSE '$10,000+'\\n    END AS scholarship_range,\\n    CASE\\n      WHEN sc.amount = 0 THEN 0\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN 1\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN 2\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN 3\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN 4\\n      ELSE 5\\n    END AS bucket_rank,\\n    s.gpa AS gpa\\n  FROM public.scholarships sc\\n  JOIN public.students s ON sc.student_id = s.id\\n  GROUP BY\\n    sc.student_id,\\n    s.gpa,\\n    CASE\\n      WHEN sc.amount = 0 THEN '0'\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN '$1-999'\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN '$1,000-2,499'\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN '$2,500-4,999'\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN '$5,000-9,999'\\n      ELSE '$10,000+'\\n    END,\\n    CASE\\n      WHEN sc.amount = 0 THEN 0\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN 1\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN 2\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN 3\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN 4\\n      ELSE 5\\n    END\\n)\\nSELECT\\n  scholarship_range AS scholarship_range,\\n  ROUND(AVG(gpa)::numeric, 2) AS average_gpa,\\n  COUNT(DISTINCT student_id) FILTER (WHERE gpa IS NOT NULL) AS student_count\\nFROM student_buckets\\nGROUP BY bucket_rank, scholarship_range\\nORDER BY bucket_rank;\",\"assumptions\":[\"Scholarship amount ranges/buckets chosen as: 0, 1-999, 1,000-2,499, 2,500-4,999, 5,000-9,999, 10,000+ (adjust if you prefer different bins).\",\"Students with null gpa are excluded from the average and student_count.\",\"A student with multiple scholarships in the same bucket is counted once for that bucket; a student with scholarships in different buckets will appear in each relevant bucket.\"]},\"endedAt\":1771804498951},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH student_buckets AS (\\n  SELECT\\n    sc.student_id AS student_id,\\n    CASE\\n      WHEN sc.amount = 0 THEN '0'\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN '$1-999'\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN '$1,000-2,499'\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN '$2,500-4,999'\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN '$5,000-9,999'\\n      ELSE '$10,000+'\\n    END AS scholarship_range,\\n    CASE\\n      WHEN sc.amount = 0 THEN 0\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN 1\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN 2\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN 3\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN 4\\n      ELSE 5\\n    END AS bucket_rank,\\n    s.gpa AS gpa\\n  FROM public.scholarships sc\\n  JOIN public.students s ON sc.student_id = s.id\\n  GROUP BY\\n    sc.student_id,\\n    s.gpa,\\n    CASE\\n      WHEN sc.amount = 0 THEN '0'\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN '$1-999'\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN '$1,000-2,499'\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN '$2,500-4,999'\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN '$5,000-9,999'\\n      ELSE '$10,000+'\\n    END,\\n    CASE\\n      WHEN sc.amount = 0 THEN 0\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN 1\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN 2\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN 3\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN 4\\n      ELSE 5\\n    END\\n)\\nSELECT\\n  scholarship_range AS scholarship_range,\\n  ROUND(AVG(gpa)::numeric, 2) AS average_gpa,\\n  COUNT(DISTINCT student_id) FILTER (WHERE gpa IS NOT NULL) AS student_count\\nFROM student_buckets\\nGROUP BY bucket_rank, scholarship_range\\nORDER BY bucket_rank;\"},\"startedAt\":1771804498952,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH student_buckets AS (\\n  SELECT\\n    sc.student_id AS student_id,\\n    CASE\\n      WHEN sc.amount = 0 THEN '0'\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN '$1-999'\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN '$1,000-2,499'\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN '$2,500-4,999'\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN '$5,000-9,999'\\n      ELSE '$10,000+'\\n    END AS scholarship_range,\\n    CASE\\n      WHEN sc.amount = 0 THEN 0\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN 1\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN 2\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN 3\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN 4\\n      ELSE 5\\n    END AS bucket_rank,\\n    s.gpa AS gpa\\n  FROM public.scholarships sc\\n  JOIN public.students s ON sc.student_id = s.id\\n  GROUP BY\\n    sc.student_id,\\n    s.gpa,\\n    CASE\\n      WHEN sc.amount = 0 THEN '0'\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN '$1-999'\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN '$1,000-2,499'\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN '$2,500-4,999'\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN '$5,000-9,999'\\n      ELSE '$10,000+'\\n    END,\\n    CASE\\n      WHEN sc.amount = 0 THEN 0\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN 1\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN 2\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN 3\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN 4\\n      ELSE 5\\n    END\\n)\\nSELECT\\n  scholarship_range AS scholarship_range,\\n  ROUND(AVG(gpa)::numeric, 2) AS average_gpa,\\n  COUNT(DISTINCT student_id) FILTER (WHERE gpa IS NOT NULL) AS student_count\\nFROM student_buckets\\nGROUP BY bucket_rank, scholarship_range\\nORDER BY bucket_rank\",\"metadata\":{\"columns\":[\"average_gpa\",\"student_count\",\"scholarship_range\"],\"rowCount\":3,\"sample\":[{\"average_gpa\":4.2,\"student_count\":4,\"scholarship_range\":\"$1,000-2,499\"},{\"average_gpa\":4.08,\"student_count\":4,\"scholarship_range\":\"$2,500-4,999\"}]},\"data\":[{\"average_gpa\":4.2,\"student_count\":4,\"scholarship_range\":\"$1,000-2,499\"},{\"average_gpa\":4.08,\"student_count\":4,\"scholarship_range\":\"$2,500-4,999\"},{\"average_gpa\":3.52,\"student_count\":1,\"scholarship_range\":\"$5,000-9,999\"}]},\"endedAt\":1771804498964},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"WITH student_buckets AS (\\n  SELECT\\n    sc.student_id AS student_id,\\n    CASE\\n      WHEN sc.amount = 0 THEN '0'\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN '$1-999'\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN '$1,000-2,499'\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN '$2,500-4,999'\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN '$5,000-9,999'\\n      ELSE '$10,000+'\\n    END AS scholarship_range,\\n    CASE\\n      WHEN sc.amount = 0 THEN 0\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN 1\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN 2\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN 3\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN 4\\n      ELSE 5\\n    END AS bucket_rank,\\n    s.gpa AS gpa\\n  FROM public.scholarships sc\\n  JOIN public.students s ON sc.student_id = s.id\\n  GROUP BY\\n    sc.student_id,\\n    s.gpa,\\n    CASE\\n      WHEN sc.amount = 0 THEN '0'\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN '$1-999'\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN '$1,000-2,499'\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN '$2,500-4,999'\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN '$5,000-9,999'\\n      ELSE '$10,000+'\\n    END,\\n    CASE\\n      WHEN sc.amount = 0 THEN 0\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN 1\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN 2\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN 3\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN 4\\n      ELSE 5\\n    END\\n)\\nSELECT\\n  scholarship_range AS scholarship_range,\\n  ROUND(AVG(gpa)::numeric, 2) AS average_gpa,\\n  COUNT(DISTINCT student_id) FILTER (WHERE gpa IS NOT NULL) AS student_count\\nFROM student_buckets\\nGROUP BY bucket_rank, scholarship_range\\nORDER BY bucket_rank\",\"metadata\":{\"columns\":[\"average_gpa\",\"student_count\",\"scholarship_range\"],\"rowCount\":3,\"sample\":[{\"average_gpa\":4.2,\"student_count\":4,\"scholarship_range\":\"$1,000-2,499\"},{\"average_gpa\":4.08,\"student_count\":4,\"scholarship_range\":\"$2,500-4,999\"}]},\"data\":[{\"average_gpa\":4.2,\"student_count\":4,\"scholarship_range\":\"$1,000-2,499\"},{\"average_gpa\":4.08,\"student_count\":4,\"scholarship_range\":\"$2,500-4,999\"},{\"average_gpa\":3.52,\"student_count\":1,\"scholarship_range\":\"$5,000-9,999\"}]},\"startedAt\":1771804498966,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":{\"text\":\"Average GPA by Scholarship Amount Range\",\"subtitle\":\"Average GPA and student count for each scholarship range\"},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"scholarship_range\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Scholarship Range\"},\"sort\":null},\"y\":{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average GPA\"}},\"color\":{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"scholarship_range\",\"type\":\"nominal\",\"title\":\"Scholarship Range\"},{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"reasoning\":\"Bar chart maps scholarship range (ordinal) to average GPA (quantitative). Tooltip includes student count to provide context for each range. The x sort is set to null to respect the query ordering.\"},\"endedAt\":1771804513226},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":{\"text\":\"Average GPA by Scholarship Amount Range\",\"subtitle\":\"Average GPA and student count for each scholarship range\"},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"scholarship_range\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Scholarship Range\"},\"sort\":null},\"y\":{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average GPA\"}},\"color\":{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"scholarship_range\",\"type\":\"nominal\",\"title\":\"Scholarship Range\"},{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"reasoning\":\"Bar chart maps scholarship range (ordinal) to average GPA (quantitative). Tooltip includes student count to provide context for each range. The x sort is set to null to respect the query ordering.\"},\"startedAt\":1771804513232,\"status\":\"success\",\"output\":{\"sql\":\"WITH student_buckets AS (\\n  SELECT\\n    sc.student_id AS student_id,\\n    CASE\\n      WHEN sc.amount = 0 THEN '0'\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN '$1-999'\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN '$1,000-2,499'\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN '$2,500-4,999'\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN '$5,000-9,999'\\n      ELSE '$10,000+'\\n    END AS scholarship_range,\\n    CASE\\n      WHEN sc.amount = 0 THEN 0\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN 1\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN 2\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN 3\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN 4\\n      ELSE 5\\n    END AS bucket_rank,\\n    s.gpa AS gpa\\n  FROM public.scholarships sc\\n  JOIN public.students s ON sc.student_id = s.id\\n  GROUP BY\\n    sc.student_id,\\n    s.gpa,\\n    CASE\\n      WHEN sc.amount = 0 THEN '0'\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN '$1-999'\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN '$1,000-2,499'\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN '$2,500-4,999'\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN '$5,000-9,999'\\n      ELSE '$10,000+'\\n    END,\\n    CASE\\n      WHEN sc.amount = 0 THEN 0\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN 1\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN 2\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN 3\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN 4\\n      ELSE 5\\n    END\\n)\\nSELECT\\n  scholarship_range AS scholarship_range,\\n  ROUND(AVG(gpa)::numeric, 2) AS average_gpa,\\n  COUNT(DISTINCT student_id) FILTER (WHERE gpa IS NOT NULL) AS student_count\\nFROM student_buckets\\nGROUP BY bucket_rank, scholarship_range\\nORDER BY bucket_rank;\",\"data\":[{\"average_gpa\":4.2,\"student_count\":4,\"scholarship_range\":\"$1,000-2,499\"},{\"average_gpa\":4.08,\"student_count\":4,\"scholarship_range\":\"$2,500-4,999\"},{\"average_gpa\":3.52,\"student_count\":1,\"scholarship_range\":\"$5,000-9,999\"}],\"metadata\":{\"columns\":[\"average_gpa\",\"student_count\",\"scholarship_range\"],\"rowCount\":3,\"sample\":[{\"average_gpa\":4.2,\"student_count\":4,\"scholarship_range\":\"$1,000-2,499\"},{\"average_gpa\":4.08,\"student_count\":4,\"scholarship_range\":\"$2,500-4,999\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":{\"text\":\"Average GPA by Scholarship Amount Range\",\"subtitle\":\"Average GPA and student count for each scholarship range\"},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"scholarship_range\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Scholarship Range\"},\"sort\":null},\"y\":{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average GPA\"}},\"color\":{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"scholarship_range\",\"type\":\"nominal\",\"title\":\"Scholarship Range\"},{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771804513236}},\"input\":{\"question\":\"Show average GPA for different scholarship amount ranges\"},\"result\":{\"sql\":\"WITH student_buckets AS (\\n  SELECT\\n    sc.student_id AS student_id,\\n    CASE\\n      WHEN sc.amount = 0 THEN '0'\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN '$1-999'\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN '$1,000-2,499'\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN '$2,500-4,999'\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN '$5,000-9,999'\\n      ELSE '$10,000+'\\n    END AS scholarship_range,\\n    CASE\\n      WHEN sc.amount = 0 THEN 0\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN 1\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN 2\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN 3\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN 4\\n      ELSE 5\\n    END AS bucket_rank,\\n    s.gpa AS gpa\\n  FROM public.scholarships sc\\n  JOIN public.students s ON sc.student_id = s.id\\n  GROUP BY\\n    sc.student_id,\\n    s.gpa,\\n    CASE\\n      WHEN sc.amount = 0 THEN '0'\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN '$1-999'\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN '$1,000-2,499'\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN '$2,500-4,999'\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN '$5,000-9,999'\\n      ELSE '$10,000+'\\n    END,\\n    CASE\\n      WHEN sc.amount = 0 THEN 0\\n      WHEN sc.amount BETWEEN 1 AND 999 THEN 1\\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN 2\\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN 3\\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN 4\\n      ELSE 5\\n    END\\n)\\nSELECT\\n  scholarship_range AS scholarship_range,\\n  ROUND(AVG(gpa)::numeric, 2) AS average_gpa,\\n  COUNT(DISTINCT student_id) FILTER (WHERE gpa IS NOT NULL) AS student_count\\nFROM student_buckets\\nGROUP BY bucket_rank, scholarship_range\\nORDER BY bucket_rank;\",\"data\":[{\"average_gpa\":4.2,\"student_count\":4,\"scholarship_range\":\"$1,000-2,499\"},{\"average_gpa\":4.08,\"student_count\":4,\"scholarship_range\":\"$2,500-4,999\"},{\"average_gpa\":3.52,\"student_count\":1,\"scholarship_range\":\"$5,000-9,999\"}],\"metadata\":{\"columns\":[\"average_gpa\",\"student_count\",\"scholarship_range\"],\"rowCount\":3,\"sample\":[{\"average_gpa\":4.2,\"student_count\":4,\"scholarship_range\":\"$1,000-2,499\"},{\"average_gpa\":4.08,\"student_count\":4,\"scholarship_range\":\"$2,500-4,999\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":{\"text\":\"Average GPA by Scholarship Amount Range\",\"subtitle\":\"Average GPA and student count for each scholarship range\"},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"scholarship_range\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Scholarship Range\"},\"sort\":null},\"y\":{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average GPA\"}},\"color\":{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"scholarship_range\",\"type\":\"nominal\",\"title\":\"Scholarship Range\"},{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"a6aaf2dd7e02e5cb93a6b7d083dd0487\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/scholarship-amount-vs-gpa/run-0001/run.json",
+    "queryPath": "runs/scholarship-amount-vs-gpa/run-0001/query.sql",
+    "vegaRawPath": "runs/scholarship-amount-vs-gpa/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/scholarship-amount-vs-gpa/run-0001/vega.resolved.json",
+    "imagePath": "runs/scholarship-amount-vs-gpa/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:55:13.671Z",
+  "traceId": "a6aaf2dd7e02e5cb93a6b7d083dd0487",
+  "success": true,
+  "durationMs": 50236,
+  "resultRaw": {
+    "data": [
+      {
+        "average_gpa": 4.2,
+        "student_count": 4,
+        "scholarship_range": "$1,000-2,499"
+      },
+      {
+        "average_gpa": 4.08,
+        "student_count": 4,
+        "scholarship_range": "$2,500-4,999"
+      },
+      {
+        "average_gpa": 3.52,
+        "student_count": 1,
+        "scholarship_range": "$5,000-9,999"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": {
+        "text": "Average GPA by Scholarship Amount Range",
+        "subtitle": "Average GPA and student count for each scholarship range"
+      },
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "scholarship_range",
+          "type": "ordinal",
+          "axis": {
+            "title": "Scholarship Range"
+          },
+          "sort": null
+        },
+        "y": {
+          "field": "average_gpa",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average GPA"
+          }
+        },
+        "color": {
+          "field": "average_gpa",
+          "type": "quantitative",
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "scholarship_range",
+            "type": "nominal",
+            "title": "Scholarship Range"
+          },
+          {
+            "field": "average_gpa",
+            "type": "quantitative",
+            "title": "Average GPA"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Student Count"
+          }
+        ]
+      }
+    },
+    "sql": "WITH student_buckets AS (\n  SELECT\n    sc.student_id AS student_id,\n    CASE\n      WHEN sc.amount = 0 THEN '0'\n      WHEN sc.amount BETWEEN 1 AND 999 THEN '$1-999'\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN '$1,000-2,499'\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN '$2,500-4,999'\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN '$5,000-9,999'\n      ELSE '$10,000+'\n    END AS scholarship_range,\n    CASE\n      WHEN sc.amount = 0 THEN 0\n      WHEN sc.amount BETWEEN 1 AND 999 THEN 1\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN 2\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN 3\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN 4\n      ELSE 5\n    END AS bucket_rank,\n    s.gpa AS gpa\n  FROM public.scholarships sc\n  JOIN public.students s ON sc.student_id = s.id\n  GROUP BY\n    sc.student_id,\n    s.gpa,\n    CASE\n      WHEN sc.amount = 0 THEN '0'\n      WHEN sc.amount BETWEEN 1 AND 999 THEN '$1-999'\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN '$1,000-2,499'\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN '$2,500-4,999'\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN '$5,000-9,999'\n      ELSE '$10,000+'\n    END,\n    CASE\n      WHEN sc.amount = 0 THEN 0\n      WHEN sc.amount BETWEEN 1 AND 999 THEN 1\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN 2\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN 3\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN 4\n      ELSE 5\n    END\n)\nSELECT\n  scholarship_range AS scholarship_range,\n  ROUND(AVG(gpa)::numeric, 2) AS average_gpa,\n  COUNT(DISTINCT student_id) FILTER (WHERE gpa IS NOT NULL) AS student_count\nFROM student_buckets\nGROUP BY bucket_rank, scholarship_range\nORDER BY bucket_rank;",
+    "metadata": {
+      "columns": [
+        "average_gpa",
+        "student_count",
+        "scholarship_range"
+      ],
+      "rowCount": 3,
+      "sample": [
+        {
+          "average_gpa": 4.2,
+          "student_count": 4,
+          "scholarship_range": "$1,000-2,499"
+        },
+        {
+          "average_gpa": 4.08,
+          "student_count": 4,
+          "scholarship_range": "$2,500-4,999"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "average_gpa": 4.2,
+        "student_count": 4,
+        "scholarship_range": "$1,000-2,499"
+      },
+      {
+        "average_gpa": 4.08,
+        "student_count": 4,
+        "scholarship_range": "$2,500-4,999"
+      },
+      {
+        "average_gpa": 3.52,
+        "student_count": 1,
+        "scholarship_range": "$5,000-9,999"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": {
+        "text": "Average GPA by Scholarship Amount Range",
+        "subtitle": "Average GPA and student count for each scholarship range"
+      },
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "scholarship_range",
+          "type": "ordinal",
+          "axis": {
+            "title": "Scholarship Range"
+          },
+          "sort": null
+        },
+        "y": {
+          "field": "average_gpa",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average GPA"
+          }
+        },
+        "color": {
+          "field": "average_gpa",
+          "type": "quantitative",
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "scholarship_range",
+            "type": "nominal",
+            "title": "Scholarship Range"
+          },
+          {
+            "field": "average_gpa",
+            "type": "quantitative",
+            "title": "Average GPA"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Student Count"
+          }
+        ]
+      }
+    },
+    "sql": "WITH student_buckets AS (\n  SELECT\n    sc.student_id AS student_id,\n    CASE\n      WHEN sc.amount = 0 THEN '0'\n      WHEN sc.amount BETWEEN 1 AND 999 THEN '$1-999'\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN '$1,000-2,499'\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN '$2,500-4,999'\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN '$5,000-9,999'\n      ELSE '$10,000+'\n    END AS scholarship_range,\n    CASE\n      WHEN sc.amount = 0 THEN 0\n      WHEN sc.amount BETWEEN 1 AND 999 THEN 1\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN 2\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN 3\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN 4\n      ELSE 5\n    END AS bucket_rank,\n    s.gpa AS gpa\n  FROM public.scholarships sc\n  JOIN public.students s ON sc.student_id = s.id\n  GROUP BY\n    sc.student_id,\n    s.gpa,\n    CASE\n      WHEN sc.amount = 0 THEN '0'\n      WHEN sc.amount BETWEEN 1 AND 999 THEN '$1-999'\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN '$1,000-2,499'\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN '$2,500-4,999'\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN '$5,000-9,999'\n      ELSE '$10,000+'\n    END,\n    CASE\n      WHEN sc.amount = 0 THEN 0\n      WHEN sc.amount BETWEEN 1 AND 999 THEN 1\n      WHEN sc.amount BETWEEN 1000 AND 2499 THEN 2\n      WHEN sc.amount BETWEEN 2500 AND 4999 THEN 3\n      WHEN sc.amount BETWEEN 5000 AND 9999 THEN 4\n      ELSE 5\n    END\n)\nSELECT\n  scholarship_range AS scholarship_range,\n  ROUND(AVG(gpa)::numeric, 2) AS average_gpa,\n  COUNT(DISTINCT student_id) FILTER (WHERE gpa IS NOT NULL) AS student_count\nFROM student_buckets\nGROUP BY bucket_rank, scholarship_range\nORDER BY bucket_rank;",
+    "metadata": {
+      "columns": [
+        "average_gpa",
+        "student_count",
+        "scholarship_range"
+      ],
+      "rowCount": 3,
+      "sample": [
+        {
+          "average_gpa": 4.2,
+          "student_count": 4,
+          "scholarship_range": "$1,000-2,499"
+        },
+        {
+          "average_gpa": 4.08,
+          "student_count": 4,
+          "scholarship_range": "$2,500-4,999"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:55:13.671Z",
+    "traceId": "a6aaf2dd7e02e5cb93a6b7d083dd0487",
+    "attempts": 4,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 9386,
+      "outputTokens": 4485,
+      "totalTokens": 13871,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 3136,
+      "costUsd": 0.0113165
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 9386,
+        "outputTokens": 4485,
+        "totalTokens": 13871,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 3136,
+        "costUsd": 0.0113165
+      }
+    ],
+    "warnings": []
+  }
+}

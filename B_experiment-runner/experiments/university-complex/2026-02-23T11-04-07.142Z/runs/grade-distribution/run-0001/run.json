@@ -1,0 +1,282 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "grade-distribution",
+  "caseDirectory": "grade-distribution",
+  "repeatIndex": 1,
+  "prompt": "Show the distribution of final grades across all courses",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the distribution of final grades across all courses"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:04:07.154Z",
+    "endedAtUtc": "2026-02-23T11:06:02.650Z",
+    "durationMs": 115496
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "22010",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:06:02 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show the distribution of final grades across all courses\"},\"planner\":{\"payload\":{\"question\":\"Show the distribution of final grades across all courses\"},\"startedAt\":1771844647272,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(grades.id)\"],\"dimensions\":[\"grades.grade_value\"],\"filters\":[\"grades.grade_value IS NOT NULL\",\"grades.enrollment_id IS NOT NULL\",\"enrollments.course_section_id IS NOT NULL\"],\"grain\":\"grade_value (categorical) — one row per grade category\",\"aliases\":{\"grades.grade_value\":\"final_grade\",\"COUNT(grades.id)\":\"grade_count\"},\"output_fields\":[\"final_grade\",\"grade_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"final_grade\",\"y_axis\":\"grade_count\",\"title\":\"Distribution of final grades across all courses\"},\"assumptions\":[\"Use grades.grade_value as the 'final grade' categorical field (column confirmed in public.grades).\",\"Include only grade rows that are linked to an enrollment and that enrollment is linked to a course section (inner joins: grades -> enrollments -> course_sections). These relationships/foreign keys were confirmed during schema inspection.\",\"Exclude rows where grades.grade_value IS NULL.\",\"The requested visualization is an overall distribution aggregated across all courses (i.e., counts by grade category across the entire dataset). If you instead want per-course distributions, the query/visual should group by courses.code or courses.name in addition to grade_value.\",\"grade_value has a USER-DEFINED type in the schema; planner treats it as a categorical label (e.g., A/B/C or Pass/Fail). If you prefer a numeric histogram of final numeric scores, use grades.exam_score or a computed final numeric score instead.\"]}},\"endedAt\":1771844707106},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(grades.id)\"],\"dimensions\":[\"grades.grade_value\"],\"filters\":[\"grades.grade_value IS NOT NULL\",\"grades.enrollment_id IS NOT NULL\",\"enrollments.course_section_id IS NOT NULL\"],\"grain\":\"grade_value (categorical) — one row per grade category\",\"aliases\":{\"grades.grade_value\":\"final_grade\",\"COUNT(grades.id)\":\"grade_count\"},\"output_fields\":[\"final_grade\",\"grade_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"final_grade\",\"y_axis\":\"grade_count\",\"title\":\"Distribution of final grades across all courses\"},\"assumptions\":[\"Use grades.grade_value as the 'final grade' categorical field (column confirmed in public.grades).\",\"Include only grade rows that are linked to an enrollment and that enrollment is linked to a course section (inner joins: grades -> enrollments -> course_sections). These relationships/foreign keys were confirmed during schema inspection.\",\"Exclude rows where grades.grade_value IS NULL.\",\"The requested visualization is an overall distribution aggregated across all courses (i.e., counts by grade category across the entire dataset). If you instead want per-course distributions, the query/visual should group by courses.code or courses.name in addition to grade_value.\",\"grade_value has a USER-DEFINED type in the schema; planner treats it as a categorical label (e.g., A/B/C or Pass/Fail). If you prefer a numeric histogram of final numeric scores, use grades.exam_score or a computed final numeric score instead.\"]}},\"startedAt\":1771844707119,\"status\":\"success\",\"output\":{\"question\":\"Show the distribution of final grades across all courses\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(grades.id)\"],\"dimensions\":[\"grades.grade_value\"],\"filters\":[\"grades.grade_value IS NOT NULL\",\"grades.enrollment_id IS NOT NULL\",\"enrollments.course_section_id IS NOT NULL\"],\"grain\":\"grade_value (categorical) — one row per grade category\",\"aliases\":{\"grades.grade_value\":\"final_grade\",\"COUNT(grades.id)\":\"grade_count\"},\"output_fields\":[\"final_grade\",\"grade_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"final_grade\",\"y_axis\":\"grade_count\",\"title\":\"Distribution of final grades across all courses\"},\"assumptions\":[\"Use grades.grade_value as the 'final grade' categorical field (column confirmed in public.grades).\",\"Include only grade rows that are linked to an enrollment and that enrollment is linked to a course section (inner joins: grades -> enrollments -> course_sections). These relationships/foreign keys were confirmed during schema inspection.\",\"Exclude rows where grades.grade_value IS NULL.\",\"The requested visualization is an overall distribution aggregated across all courses (i.e., counts by grade category across the entire dataset). If you instead want per-course distributions, the query/visual should group by courses.code or courses.name in addition to grade_value.\",\"grade_value has a USER-DEFINED type in the schema; planner treats it as a categorical label (e.g., A/B/C or Pass/Fail). If you prefer a numeric histogram of final numeric scores, use grades.exam_score or a computed final numeric score instead.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771844707121},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"Show the distribution of final grades across all courses\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(grades.id)\"],\"dimensions\":[\"grades.grade_value\"],\"filters\":[\"grades.grade_value IS NOT NULL\",\"grades.enrollment_id IS NOT NULL\",\"enrollments.course_section_id IS NOT NULL\"],\"grain\":\"grade_value (categorical) — one row per grade category\",\"aliases\":{\"grades.grade_value\":\"final_grade\",\"COUNT(grades.id)\":\"grade_count\"},\"output_fields\":[\"final_grade\",\"grade_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"final_grade\",\"y_axis\":\"grade_count\",\"title\":\"Distribution of final grades across all courses\"},\"assumptions\":[\"Use grades.grade_value as the 'final grade' categorical field (column confirmed in public.grades).\",\"Include only grade rows that are linked to an enrollment and that enrollment is linked to a course section (inner joins: grades -> enrollments -> course_sections). These relationships/foreign keys were confirmed during schema inspection.\",\"Exclude rows where grades.grade_value IS NULL.\",\"The requested visualization is an overall distribution aggregated across all courses (i.e., counts by grade category across the entire dataset). If you instead want per-course distributions, the query/visual should group by courses.code or courses.name in addition to grade_value.\",\"grade_value has a USER-DEFINED type in the schema; planner treats it as a categorical label (e.g., A/B/C or Pass/Fail). If you prefer a numeric histogram of final numeric scores, use grades.exam_score or a computed final numeric score instead.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771844707127,\"status\":\"success\",\"output\":{\"question\":\"Show the distribution of final grades across all courses\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(grades.id)\"],\"dimensions\":[\"grades.grade_value\"],\"filters\":[\"grades.grade_value IS NOT NULL\",\"grades.enrollment_id IS NOT NULL\",\"enrollments.course_section_id IS NOT NULL\"],\"grain\":\"grade_value (categorical) — one row per grade category\",\"aliases\":{\"grades.grade_value\":\"final_grade\",\"COUNT(grades.id)\":\"grade_count\"},\"output_fields\":[\"final_grade\",\"grade_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"final_grade\",\"y_axis\":\"grade_count\",\"title\":\"Distribution of final grades across all courses\"},\"assumptions\":[\"Use grades.grade_value as the 'final grade' categorical field (column confirmed in public.grades).\",\"Include only grade rows that are linked to an enrollment and that enrollment is linked to a course section (inner joins: grades -> enrollments -> course_sections). These relationships/foreign keys were confirmed during schema inspection.\",\"Exclude rows where grades.grade_value IS NULL.\",\"The requested visualization is an overall distribution aggregated across all courses (i.e., counts by grade category across the entire dataset). If you instead want per-course distributions, the query/visual should group by courses.code or courses.name in addition to grade_value.\",\"grade_value has a USER-DEFINED type in the schema; planner treats it as a categorical label (e.g., A/B/C or Pass/Fail). If you prefer a numeric histogram of final numeric scores, use grades.exam_score or a computed final numeric score instead.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT g.grade_value AS final_grade,\\n       COUNT(g.id) AS grade_count\\nFROM public.grades AS g\\nJOIN public.enrollments AS e ON e.id = g.enrollment_id\\nJOIN public.course_sections AS cs ON cs.id = e.course_section_id\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY g.grade_value\\nORDER BY g.grade_value ASC;\",\"validationIssues\":[\"The x-encoding is set to type=nominal with sort=\\\"ascending\\\" — that will perform lexicographic sorting in the visualization and may not match numeric ordering from the SQL if grade_value is numeric-like. Consider using a quantitative type for numeric grades or explicitly specifying the sort order based on grade_count or a numeric cast of final_grade.\",\"metadata.sample shows only 2 of 6 rows — ensure the visualization data source includes all returned rows (rowCount=6) when rendering; this is a warning about the provided sample, not the SQL/viz logic.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Preflight confirmed tables and required columns in public.grades, public.enrollments, and public.course_sections. Use inner joins to include only grades linked to enrollments and course sections, exclude NULL grade_value, aggregate counts by grade_value and order deterministically.\",\"sql\":\"SELECT g.grade_value AS final_grade,\\n       COUNT(g.id) AS grade_count\\nFROM public.grades AS g\\nJOIN public.enrollments AS e ON e.id = g.enrollment_id\\nJOIN public.course_sections AS cs ON cs.id = e.course_section_id\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY g.grade_value\\nORDER BY g.grade_value ASC;\",\"assumptions\":[\"grades.grade_value is the categorical final-grade field to report\",\"Only grades linked to an enrollment and that enrollment linked to a course_section are included (inner joins)\",\"Alphabetical ordering of final_grade (ASC) provides deterministic output\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT g.grade_value AS final_grade,\\n       COUNT(g.id) AS grade_count\\nFROM public.grades AS g\\nJOIN public.enrollments AS e ON e.id = g.enrollment_id\\nJOIN public.course_sections AS cs ON cs.id = e.course_section_id\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY g.grade_value\\nORDER BY g.grade_value ASC\",\"metadata\":{\"columns\":[\"final_grade\",\"grade_count\"],\"rowCount\":6,\"sample\":[{\"final_grade\":\"2.0\",\"grade_count\":9},{\"final_grade\":\"3.0\",\"grade_count\":7}]},\"data\":[{\"final_grade\":\"2.0\",\"grade_count\":9},{\"final_grade\":\"3.0\",\"grade_count\":7},{\"final_grade\":\"3.5\",\"grade_count\":9},{\"final_grade\":\"4.0\",\"grade_count\":6},{\"final_grade\":\"4.5\",\"grade_count\":13},{\"final_grade\":\"5.0\",\"grade_count\":8}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Distribution of final grades across all courses\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"final_grade\",\"type\":\"nominal\",\"axis\":{\"title\":\"Final grade\"},\"sort\":\"ascending\"},\"y\":{\"field\":\"grade_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Count of grades\"}},\"tooltip\":[{\"field\":\"final_grade\",\"type\":\"nominal\",\"title\":\"Final grade\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Count\"}]},\"width\":640,\"height\":360},\"reasoning\":\"Simple categorical bar chart showing counts per final_grade (final_grade and grade_count come directly from the query). Tooltip exposes the grade category and its count.\"},\"validation\":{\"passed\":true,\"score\":0.8,\"issues\":[\"The x-encoding is set to type=nominal with sort=\\\"ascending\\\" — that will perform lexicographic sorting in the visualization and may not match numeric ordering from the SQL if grade_value is numeric-like. Consider using a quantitative type for numeric grades or explicitly specifying the sort order based on grade_count or a numeric cast of final_grade.\",\"metadata.sample shows only 2 of 6 rows — ensure the visualization data source includes all returned rows (rowCount=6) when rendering; this is a warning about the provided sample, not the SQL/viz logic.\"]}}},\"endedAt\":1771844762610,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"Show the distribution of final grades across all courses\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(grades.id)\"],\"dimensions\":[\"grades.grade_value\"],\"filters\":[\"grades.grade_value IS NOT NULL\",\"grades.enrollment_id IS NOT NULL\",\"enrollments.course_section_id IS NOT NULL\"],\"grain\":\"grade_value (categorical) — one row per grade category\",\"aliases\":{\"grades.grade_value\":\"final_grade\",\"COUNT(grades.id)\":\"grade_count\"},\"output_fields\":[\"final_grade\",\"grade_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"final_grade\",\"y_axis\":\"grade_count\",\"title\":\"Distribution of final grades across all courses\"},\"assumptions\":[\"Use grades.grade_value as the 'final grade' categorical field (column confirmed in public.grades).\",\"Include only grade rows that are linked to an enrollment and that enrollment is linked to a course section (inner joins: grades -> enrollments -> course_sections). These relationships/foreign keys were confirmed during schema inspection.\",\"Exclude rows where grades.grade_value IS NULL.\",\"The requested visualization is an overall distribution aggregated across all courses (i.e., counts by grade category across the entire dataset). If you instead want per-course distributions, the query/visual should group by courses.code or courses.name in addition to grade_value.\",\"grade_value has a USER-DEFINED type in the schema; planner treats it as a categorical label (e.g., A/B/C or Pass/Fail). If you prefer a numeric histogram of final numeric scores, use grades.exam_score or a computed final numeric score instead.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT g.grade_value AS final_grade,\\n       COUNT(g.id) AS grade_count\\nFROM public.grades AS g\\nJOIN public.enrollments AS e ON e.id = g.enrollment_id\\nJOIN public.course_sections AS cs ON cs.id = e.course_section_id\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY g.grade_value\\nORDER BY g.grade_value ASC;\",\"validationIssues\":[\"The x-encoding is set to type=nominal with sort=\\\"ascending\\\" — that will perform lexicographic sorting in the visualization and may not match numeric ordering from the SQL if grade_value is numeric-like. Consider using a quantitative type for numeric grades or explicitly specifying the sort order based on grade_count or a numeric cast of final_grade.\",\"metadata.sample shows only 2 of 6 rows — ensure the visualization data source includes all returned rows (rowCount=6) when rendering; this is a warning about the provided sample, not the SQL/viz logic.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Preflight confirmed tables and required columns in public.grades, public.enrollments, and public.course_sections. Use inner joins to include only grades linked to enrollments and course sections, exclude NULL grade_value, aggregate counts by grade_value and order deterministically.\",\"sql\":\"SELECT g.grade_value AS final_grade,\\n       COUNT(g.id) AS grade_count\\nFROM public.grades AS g\\nJOIN public.enrollments AS e ON e.id = g.enrollment_id\\nJOIN public.course_sections AS cs ON cs.id = e.course_section_id\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY g.grade_value\\nORDER BY g.grade_value ASC;\",\"assumptions\":[\"grades.grade_value is the categorical final-grade field to report\",\"Only grades linked to an enrollment and that enrollment linked to a course_section are included (inner joins)\",\"Alphabetical ordering of final_grade (ASC) provides deterministic output\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT g.grade_value AS final_grade,\\n       COUNT(g.id) AS grade_count\\nFROM public.grades AS g\\nJOIN public.enrollments AS e ON e.id = g.enrollment_id\\nJOIN public.course_sections AS cs ON cs.id = e.course_section_id\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY g.grade_value\\nORDER BY g.grade_value ASC\",\"metadata\":{\"columns\":[\"final_grade\",\"grade_count\"],\"rowCount\":6,\"sample\":[{\"final_grade\":\"2.0\",\"grade_count\":9},{\"final_grade\":\"3.0\",\"grade_count\":7}]},\"data\":[{\"final_grade\":\"2.0\",\"grade_count\":9},{\"final_grade\":\"3.0\",\"grade_count\":7},{\"final_grade\":\"3.5\",\"grade_count\":9},{\"final_grade\":\"4.0\",\"grade_count\":6},{\"final_grade\":\"4.5\",\"grade_count\":13},{\"final_grade\":\"5.0\",\"grade_count\":8}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Distribution of final grades across all courses\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"final_grade\",\"type\":\"nominal\",\"axis\":{\"title\":\"Final grade\"},\"sort\":\"ascending\"},\"y\":{\"field\":\"grade_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Count of grades\"}},\"tooltip\":[{\"field\":\"final_grade\",\"type\":\"nominal\",\"title\":\"Final grade\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Count\"}]},\"width\":640,\"height\":360},\"reasoning\":\"Simple categorical bar chart showing counts per final_grade (final_grade and grade_count come directly from the query). Tooltip exposes the grade category and its count.\"},\"validation\":{\"passed\":true,\"score\":0.8,\"issues\":[\"The x-encoding is set to type=nominal with sort=\\\"ascending\\\" — that will perform lexicographic sorting in the visualization and may not match numeric ordering from the SQL if grade_value is numeric-like. Consider using a quantitative type for numeric grades or explicitly specifying the sort order based on grade_count or a numeric cast of final_grade.\",\"metadata.sample shows only 2 of 6 rows — ensure the visualization data source includes all returned rows (rowCount=6) when rendering; this is a warning about the provided sample, not the SQL/viz logic.\"]}}},\"startedAt\":1771844762619,\"status\":\"success\",\"output\":{\"sql\":\"SELECT g.grade_value AS final_grade,\\n       COUNT(g.id) AS grade_count\\nFROM public.grades AS g\\nJOIN public.enrollments AS e ON e.id = g.enrollment_id\\nJOIN public.course_sections AS cs ON cs.id = e.course_section_id\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY g.grade_value\\nORDER BY g.grade_value ASC;\",\"data\":[{\"final_grade\":\"2.0\",\"grade_count\":9},{\"final_grade\":\"3.0\",\"grade_count\":7},{\"final_grade\":\"3.5\",\"grade_count\":9},{\"final_grade\":\"4.0\",\"grade_count\":6},{\"final_grade\":\"4.5\",\"grade_count\":13},{\"final_grade\":\"5.0\",\"grade_count\":8}],\"metadata\":{\"columns\":[\"final_grade\",\"grade_count\"],\"rowCount\":6,\"sample\":[{\"final_grade\":\"2.0\",\"grade_count\":9},{\"final_grade\":\"3.0\",\"grade_count\":7}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Distribution of final grades across all courses\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"final_grade\",\"type\":\"nominal\",\"axis\":{\"title\":\"Final grade\"},\"sort\":\"ascending\"},\"y\":{\"field\":\"grade_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Count of grades\"}},\"tooltip\":[{\"field\":\"final_grade\",\"type\":\"nominal\",\"title\":\"Final grade\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Count\"}]},\"width\":640,\"height\":360},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.8,\"issues\":[\"The x-encoding is set to type=nominal with sort=\\\"ascending\\\" — that will perform lexicographic sorting in the visualization and may not match numeric ordering from the SQL if grade_value is numeric-like. Consider using a quantitative type for numeric grades or explicitly specifying the sort order based on grade_count or a numeric cast of final_grade.\",\"metadata.sample shows only 2 of 6 rows — ensure the visualization data source includes all returned rows (rowCount=6) when rendering; this is a warning about the provided sample, not the SQL/viz logic.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771844762624}},\"input\":{\"question\":\"Show the distribution of final grades across all courses\"},\"result\":{\"sql\":\"SELECT g.grade_value AS final_grade,\\n       COUNT(g.id) AS grade_count\\nFROM public.grades AS g\\nJOIN public.enrollments AS e ON e.id = g.enrollment_id\\nJOIN public.course_sections AS cs ON cs.id = e.course_section_id\\nWHERE g.grade_value IS NOT NULL\\nGROUP BY g.grade_value\\nORDER BY g.grade_value ASC;\",\"data\":[{\"final_grade\":\"2.0\",\"grade_count\":9},{\"final_grade\":\"3.0\",\"grade_count\":7},{\"final_grade\":\"3.5\",\"grade_count\":9},{\"final_grade\":\"4.0\",\"grade_count\":6},{\"final_grade\":\"4.5\",\"grade_count\":13},{\"final_grade\":\"5.0\",\"grade_count\":8}],\"metadata\":{\"columns\":[\"final_grade\",\"grade_count\"],\"rowCount\":6,\"sample\":[{\"final_grade\":\"2.0\",\"grade_count\":9},{\"final_grade\":\"3.0\",\"grade_count\":7}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Distribution of final grades across all courses\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"final_grade\",\"type\":\"nominal\",\"axis\":{\"title\":\"Final grade\"},\"sort\":\"ascending\"},\"y\":{\"field\":\"grade_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Count of grades\"}},\"tooltip\":[{\"field\":\"final_grade\",\"type\":\"nominal\",\"title\":\"Final grade\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Count\"}]},\"width\":640,\"height\":360},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.8,\"issues\":[\"The x-encoding is set to type=nominal with sort=\\\"ascending\\\" — that will perform lexicographic sorting in the visualization and may not match numeric ordering from the SQL if grade_value is numeric-like. Consider using a quantitative type for numeric grades or explicitly specifying the sort order based on grade_count or a numeric cast of final_grade.\",\"metadata.sample shows only 2 of 6 rows — ensure the visualization data source includes all returned rows (rowCount=6) when rendering; this is a warning about the provided sample, not the SQL/viz logic.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"1b1a65048b443f0e9a3438bd12ebad4a\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/grade-distribution/run-0001/run.json",
+    "queryPath": "runs/grade-distribution/run-0001/query.sql",
+    "vegaRawPath": "runs/grade-distribution/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/grade-distribution/run-0001/vega.resolved.json",
+    "imagePath": "runs/grade-distribution/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:06:03.069Z",
+  "traceId": "1b1a65048b443f0e9a3438bd12ebad4a",
+  "success": true,
+  "durationMs": 115915,
+  "resultRaw": {
+    "data": [
+      {
+        "final_grade": "2.0",
+        "grade_count": 9
+      },
+      {
+        "final_grade": "3.0",
+        "grade_count": 7
+      },
+      {
+        "final_grade": "3.5",
+        "grade_count": 9
+      },
+      {
+        "final_grade": "4.0",
+        "grade_count": 6
+      },
+      {
+        "final_grade": "4.5",
+        "grade_count": 13
+      },
+      {
+        "final_grade": "5.0",
+        "grade_count": 8
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Distribution of final grades across all courses",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "final_grade",
+          "type": "nominal",
+          "axis": {
+            "title": "Final grade"
+          },
+          "sort": "ascending"
+        },
+        "y": {
+          "field": "grade_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Count of grades"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "final_grade",
+            "type": "nominal",
+            "title": "Final grade"
+          },
+          {
+            "field": "grade_count",
+            "type": "quantitative",
+            "title": "Count"
+          }
+        ]
+      },
+      "width": 640,
+      "height": 360
+    },
+    "sql": "SELECT g.grade_value AS final_grade,\n       COUNT(g.id) AS grade_count\nFROM public.grades AS g\nJOIN public.enrollments AS e ON e.id = g.enrollment_id\nJOIN public.course_sections AS cs ON cs.id = e.course_section_id\nWHERE g.grade_value IS NOT NULL\nGROUP BY g.grade_value\nORDER BY g.grade_value ASC;",
+    "metadata": {
+      "columns": [
+        "final_grade",
+        "grade_count"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "final_grade": "2.0",
+          "grade_count": 9
+        },
+        {
+          "final_grade": "3.0",
+          "grade_count": 7
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.8,
+      "issues": [
+        "The x-encoding is set to type=nominal with sort=\"ascending\" — that will perform lexicographic sorting in the visualization and may not match numeric ordering from the SQL if grade_value is numeric-like. Consider using a quantitative type for numeric grades or explicitly specifying the sort order based on grade_count or a numeric cast of final_grade.",
+        "metadata.sample shows only 2 of 6 rows — ensure the visualization data source includes all returned rows (rowCount=6) when rendering; this is a warning about the provided sample, not the SQL/viz logic."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "final_grade": "2.0",
+        "grade_count": 9
+      },
+      {
+        "final_grade": "3.0",
+        "grade_count": 7
+      },
+      {
+        "final_grade": "3.5",
+        "grade_count": 9
+      },
+      {
+        "final_grade": "4.0",
+        "grade_count": 6
+      },
+      {
+        "final_grade": "4.5",
+        "grade_count": 13
+      },
+      {
+        "final_grade": "5.0",
+        "grade_count": 8
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Distribution of final grades across all courses",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "final_grade",
+          "type": "nominal",
+          "axis": {
+            "title": "Final grade"
+          },
+          "sort": "ascending"
+        },
+        "y": {
+          "field": "grade_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Count of grades"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "final_grade",
+            "type": "nominal",
+            "title": "Final grade"
+          },
+          {
+            "field": "grade_count",
+            "type": "quantitative",
+            "title": "Count"
+          }
+        ]
+      },
+      "width": 640,
+      "height": 360
+    },
+    "sql": "SELECT g.grade_value AS final_grade,\n       COUNT(g.id) AS grade_count\nFROM public.grades AS g\nJOIN public.enrollments AS e ON e.id = g.enrollment_id\nJOIN public.course_sections AS cs ON cs.id = e.course_section_id\nWHERE g.grade_value IS NOT NULL\nGROUP BY g.grade_value\nORDER BY g.grade_value ASC;",
+    "metadata": {
+      "columns": [
+        "final_grade",
+        "grade_count"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "final_grade": "2.0",
+          "grade_count": 9
+        },
+        {
+          "final_grade": "3.0",
+          "grade_count": 7
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.8,
+      "issues": [
+        "The x-encoding is set to type=nominal with sort=\"ascending\" — that will perform lexicographic sorting in the visualization and may not match numeric ordering from the SQL if grade_value is numeric-like. Consider using a quantitative type for numeric grades or explicitly specifying the sort order based on grade_count or a numeric cast of final_grade.",
+        "metadata.sample shows only 2 of 6 rows — ensure the visualization data source includes all returned rows (rowCount=6) when rendering; this is a warning about the provided sample, not the SQL/viz logic."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:06:03.069Z",
+    "traceId": "1b1a65048b443f0e9a3438bd12ebad4a",
+    "attempts": 3,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 24174,
+      "outputTokens": 5698,
+      "totalTokens": 29872,
+      "cachedInputTokens": 1152,
+      "reasoningTokens": 4032,
+      "costUsd": 0.0174395
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 24174,
+        "outputTokens": 5698,
+        "totalTokens": 29872,
+        "cachedInputTokens": 1152,
+        "reasoningTokens": 4032,
+        "costUsd": 0.0174395
+      }
+    ],
+    "warnings": []
+  }
+}

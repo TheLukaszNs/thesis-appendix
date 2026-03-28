@@ -1,0 +1,1 @@
+SELECT p.id AS professor_id, p.first_name AS first_name, p.last_name AS last_name, COUNT(cs.id) AS section_count FROM public.professors p LEFT JOIN public.course_sections cs ON cs.professor_id = p.id GROUP BY p.id, p.first_name, p.last_name ORDER BY section_count DESC, p.last_name ASC, p.first_name ASC;

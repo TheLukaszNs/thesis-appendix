@@ -1,0 +1,1 @@
+SELECT COALESCE(academic_title, '(Unknown)') AS academic_title, COUNT(*) AS professor_count FROM public.professors GROUP BY COALESCE(academic_title, '(Unknown)') ORDER BY professor_count DESC, academic_title ASC;

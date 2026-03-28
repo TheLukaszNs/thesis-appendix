@@ -1,0 +1,126 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "avg-gpa-by-department",
+  "caseDirectory": "avg-gpa-by-department",
+  "repeatIndex": 1,
+  "prompt": "What is the average GPA per department?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average GPA per department?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:34:17.618Z",
+    "endedAtUtc": "2026-02-22T23:35:08.615Z",
+    "durationMs": 50997
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2842",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:35:08 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"What is the average GPA per department?\"},\"sql\":{\"payload\":{\"question\":\"What is the average GPA per department?\"},\"startedAt\":1771803257651,\"status\":\"success\",\"output\":{\"reasoning\":\"Computed department-level average by joining departments -> courses -> course_sections -> enrollments -> grades, casting grade_value to numeric and excluding non-numeric/null grades. Results ordered deterministically by department_name and averaged to 3 decimals.\",\"sql\":\"WITH dept_gpa AS (\\n  SELECT d.id AS department_id,\\n         d.name AS department_name,\\n         AVG((g.grade_value)::numeric) AS average_gpa\\n  FROM public.departments AS d\\n  JOIN public.courses AS c ON c.department_id = d.id\\n  JOIN public.course_sections AS cs ON cs.course_id = c.id\\n  JOIN public.enrollments AS e ON e.course_section_id = cs.id\\n  JOIN public.grades AS g ON g.enrollment_id = e.id\\n  WHERE g.grade_value IS NOT NULL\\n    AND g.grade_value ~ '^[0-9]+(\\\\.[0-9]+)?$'\\n  GROUP BY d.id, d.name\\n)\\nSELECT department_id,\\n       department_name,\\n       ROUND(average_gpa::numeric, 3) AS avg_gpa\\nFROM dept_gpa\\nORDER BY department_name;\",\"assumptions\":[\"grade_value contains GPA as a numeric string (e.g., '4.5'); non-numeric or NULL grade_value rows are excluded\",\"Average includes all enrollments with an associated grade (no filter by semester/year)\",\"department id is public.departments.id and joins follow courses.department_id -> course_sections.course_id -> enrollments.course_section_id -> grades.enrollment_id\"]},\"endedAt\":1771803308558},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH dept_gpa AS (\\n  SELECT d.id AS department_id,\\n         d.name AS department_name,\\n         AVG((g.grade_value)::numeric) AS average_gpa\\n  FROM public.departments AS d\\n  JOIN public.courses AS c ON c.department_id = d.id\\n  JOIN public.course_sections AS cs ON cs.course_id = c.id\\n  JOIN public.enrollments AS e ON e.course_section_id = cs.id\\n  JOIN public.grades AS g ON g.enrollment_id = e.id\\n  WHERE g.grade_value IS NOT NULL\\n    AND g.grade_value ~ '^[0-9]+(\\\\.[0-9]+)?$'\\n  GROUP BY d.id, d.name\\n)\\nSELECT department_id,\\n       department_name,\\n       ROUND(average_gpa::numeric, 3) AS avg_gpa\\nFROM dept_gpa\\nORDER BY department_name;\"},\"startedAt\":1771803308565,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: cannot cast type grade_value to numeric\\nLINE 5:          AVG((g.grade_value)::numeric) AS average_gpa\\n                                    ^\",\"name\":\"Error\"},\"endedAt\":1771803308609}},\"input\":{\"question\":\"What is the average GPA per department?\"},\"error\":{\"message\":\"SQL execution failed: cannot cast type grade_value to numeric\\nLINE 5:          AVG((g.grade_value)::numeric) AS average_gpa\\n                                    ^\",\"name\":\"Error\"},\"traceId\":\"894e9f1ee7bae628644d6e0dd3f412f3\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-gpa-by-department/run-0001/run.json",
+    "queryPath": "runs/avg-gpa-by-department/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-gpa-by-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-gpa-by-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-gpa-by-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:35:08.616Z",
+  "traceId": "894e9f1ee7bae628644d6e0dd3f412f3",
+  "success": false,
+  "durationMs": 50998,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "What is the average GPA per department?"
+      },
+      "sql": {
+        "payload": {
+          "question": "What is the average GPA per department?"
+        },
+        "startedAt": 1771803257651,
+        "status": "success",
+        "output": {
+          "reasoning": "Computed department-level average by joining departments -> courses -> course_sections -> enrollments -> grades, casting grade_value to numeric and excluding non-numeric/null grades. Results ordered deterministically by department_name and averaged to 3 decimals.",
+          "sql": "WITH dept_gpa AS (\n  SELECT d.id AS department_id,\n         d.name AS department_name,\n         AVG((g.grade_value)::numeric) AS average_gpa\n  FROM public.departments AS d\n  JOIN public.courses AS c ON c.department_id = d.id\n  JOIN public.course_sections AS cs ON cs.course_id = c.id\n  JOIN public.enrollments AS e ON e.course_section_id = cs.id\n  JOIN public.grades AS g ON g.enrollment_id = e.id\n  WHERE g.grade_value IS NOT NULL\n    AND g.grade_value ~ '^[0-9]+(\\.[0-9]+)?$'\n  GROUP BY d.id, d.name\n)\nSELECT department_id,\n       department_name,\n       ROUND(average_gpa::numeric, 3) AS avg_gpa\nFROM dept_gpa\nORDER BY department_name;",
+          "assumptions": [
+            "grade_value contains GPA as a numeric string (e.g., '4.5'); non-numeric or NULL grade_value rows are excluded",
+            "Average includes all enrollments with an associated grade (no filter by semester/year)",
+            "department id is public.departments.id and joins follow courses.department_id -> course_sections.course_id -> enrollments.course_section_id -> grades.enrollment_id"
+          ]
+        },
+        "endedAt": 1771803308558
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH dept_gpa AS (\n  SELECT d.id AS department_id,\n         d.name AS department_name,\n         AVG((g.grade_value)::numeric) AS average_gpa\n  FROM public.departments AS d\n  JOIN public.courses AS c ON c.department_id = d.id\n  JOIN public.course_sections AS cs ON cs.course_id = c.id\n  JOIN public.enrollments AS e ON e.course_section_id = cs.id\n  JOIN public.grades AS g ON g.enrollment_id = e.id\n  WHERE g.grade_value IS NOT NULL\n    AND g.grade_value ~ '^[0-9]+(\\.[0-9]+)?$'\n  GROUP BY d.id, d.name\n)\nSELECT department_id,\n       department_name,\n       ROUND(average_gpa::numeric, 3) AS avg_gpa\nFROM dept_gpa\nORDER BY department_name;"
+        },
+        "startedAt": 1771803308565,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: cannot cast type grade_value to numeric\nLINE 5:          AVG((g.grade_value)::numeric) AS average_gpa\n                                    ^",
+          "name": "Error"
+        },
+        "endedAt": 1771803308609
+      }
+    },
+    "input": {
+      "question": "What is the average GPA per department?"
+    },
+    "error": {
+      "message": "SQL execution failed: cannot cast type grade_value to numeric\nLINE 5:          AVG((g.grade_value)::numeric) AS average_gpa\n                                    ^",
+      "name": "Error"
+    },
+    "traceId": "894e9f1ee7bae628644d6e0dd3f412f3"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:35:08.616Z",
+    "traceId": "894e9f1ee7bae628644d6e0dd3f412f3",
+    "attempts": 5,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 25389,
+      "outputTokens": 3552,
+      "totalTokens": 28941,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2688,
+      "costUsd": 0.01345125
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 25389,
+        "outputTokens": 3552,
+        "totalTokens": 28941,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2688,
+        "costUsd": 0.01345125
+      }
+    ],
+    "warnings": []
+  }
+}

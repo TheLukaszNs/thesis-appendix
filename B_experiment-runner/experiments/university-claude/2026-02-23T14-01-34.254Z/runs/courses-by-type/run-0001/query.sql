@@ -1,0 +1,1 @@
+SELECT course_type, COUNT(*) AS number_of_courses FROM public.courses GROUP BY course_type ORDER BY number_of_courses DESC

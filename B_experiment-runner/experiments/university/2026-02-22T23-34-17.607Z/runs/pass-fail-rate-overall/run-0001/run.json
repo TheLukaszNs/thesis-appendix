@@ -1,0 +1,126 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "pass-fail-rate-overall",
+  "caseDirectory": "pass-fail-rate-overall",
+  "repeatIndex": 1,
+  "prompt": "What percentage of grades are passing vs failing?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What percentage of grades are passing vs failing?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:35:45.662Z",
+    "endedAtUtc": "2026-02-22T23:36:17.361Z",
+    "durationMs": 31699
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2621",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:36:17 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"What percentage of grades are passing vs failing?\"},\"sql\":{\"payload\":{\"question\":\"What percentage of grades are passing vs failing?\"},\"startedAt\":1771803345671,\"status\":\"success\",\"output\":{\"reasoning\":\"Classified grades as Passing when numeric grade_value >= 3.0 and Failing otherwise, excluded NULL grade_value from the denominator, and computed counts and percentages (rounded to 2 decimals). Verified table/columns exist before building the query.\",\"sql\":\"WITH categorized AS (\\n  SELECT\\n    CASE\\n      WHEN grade_value IS NULL THEN 'Unknown'\\n      WHEN (grade_value::numeric) >= 3.0 THEN 'Passing'\\n      ELSE 'Failing'\\n    END AS status,\\n    COUNT(*) AS count\\n  FROM public.grades\\n  GROUP BY 1\\n),\\ntot AS (\\n  SELECT SUM(count) AS total_count FROM categorized WHERE status <> 'Unknown'\\n)\\nSELECT\\n  c.status AS status,\\n  c.count AS count,\\n  ROUND((c.count::numeric / NULLIF(t.total_count, 0)) * 100, 2) AS percentage\\nFROM categorized c\\nCROSS JOIN tot t\\nWHERE c.status <> 'Unknown'\\nORDER BY CASE WHEN c.status = 'Passing' THEN 1 WHEN c.status = 'Failing' THEN 2 ELSE 3 END;\",\"assumptions\":[\"Passing threshold is grade_value >= 3.0\",\"grade_value values are castable to numeric (e.g., '4.5')\",\"Exclude NULL/unknown grade_value rows from the pass/fail percentage denominator\"]},\"endedAt\":1771803377293},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH categorized AS (\\n  SELECT\\n    CASE\\n      WHEN grade_value IS NULL THEN 'Unknown'\\n      WHEN (grade_value::numeric) >= 3.0 THEN 'Passing'\\n      ELSE 'Failing'\\n    END AS status,\\n    COUNT(*) AS count\\n  FROM public.grades\\n  GROUP BY 1\\n),\\ntot AS (\\n  SELECT SUM(count) AS total_count FROM categorized WHERE status <> 'Unknown'\\n)\\nSELECT\\n  c.status AS status,\\n  c.count AS count,\\n  ROUND((c.count::numeric / NULLIF(t.total_count, 0)) * 100, 2) AS percentage\\nFROM categorized c\\nCROSS JOIN tot t\\nWHERE c.status <> 'Unknown'\\nORDER BY CASE WHEN c.status = 'Passing' THEN 1 WHEN c.status = 'Failing' THEN 2 ELSE 3 END;\"},\"startedAt\":1771803377298,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: cannot cast type grade_value to numeric\\nLINE 6:       WHEN (grade_value::numeric) >= 3.0 THEN 'Passing'\\n                               ^\",\"name\":\"Error\"},\"endedAt\":1771803377356}},\"input\":{\"question\":\"What percentage of grades are passing vs failing?\"},\"error\":{\"message\":\"SQL execution failed: cannot cast type grade_value to numeric\\nLINE 6:       WHEN (grade_value::numeric) >= 3.0 THEN 'Passing'\\n                               ^\",\"name\":\"Error\"},\"traceId\":\"e33937e690f1e7a8b566b0b37e791a3e\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/pass-fail-rate-overall/run-0001/run.json",
+    "queryPath": "runs/pass-fail-rate-overall/run-0001/query.sql",
+    "vegaRawPath": "runs/pass-fail-rate-overall/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/pass-fail-rate-overall/run-0001/vega.resolved.json",
+    "imagePath": "runs/pass-fail-rate-overall/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:36:17.361Z",
+  "traceId": "e33937e690f1e7a8b566b0b37e791a3e",
+  "success": false,
+  "durationMs": 31699,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "What percentage of grades are passing vs failing?"
+      },
+      "sql": {
+        "payload": {
+          "question": "What percentage of grades are passing vs failing?"
+        },
+        "startedAt": 1771803345671,
+        "status": "success",
+        "output": {
+          "reasoning": "Classified grades as Passing when numeric grade_value >= 3.0 and Failing otherwise, excluded NULL grade_value from the denominator, and computed counts and percentages (rounded to 2 decimals). Verified table/columns exist before building the query.",
+          "sql": "WITH categorized AS (\n  SELECT\n    CASE\n      WHEN grade_value IS NULL THEN 'Unknown'\n      WHEN (grade_value::numeric) >= 3.0 THEN 'Passing'\n      ELSE 'Failing'\n    END AS status,\n    COUNT(*) AS count\n  FROM public.grades\n  GROUP BY 1\n),\ntot AS (\n  SELECT SUM(count) AS total_count FROM categorized WHERE status <> 'Unknown'\n)\nSELECT\n  c.status AS status,\n  c.count AS count,\n  ROUND((c.count::numeric / NULLIF(t.total_count, 0)) * 100, 2) AS percentage\nFROM categorized c\nCROSS JOIN tot t\nWHERE c.status <> 'Unknown'\nORDER BY CASE WHEN c.status = 'Passing' THEN 1 WHEN c.status = 'Failing' THEN 2 ELSE 3 END;",
+          "assumptions": [
+            "Passing threshold is grade_value >= 3.0",
+            "grade_value values are castable to numeric (e.g., '4.5')",
+            "Exclude NULL/unknown grade_value rows from the pass/fail percentage denominator"
+          ]
+        },
+        "endedAt": 1771803377293
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH categorized AS (\n  SELECT\n    CASE\n      WHEN grade_value IS NULL THEN 'Unknown'\n      WHEN (grade_value::numeric) >= 3.0 THEN 'Passing'\n      ELSE 'Failing'\n    END AS status,\n    COUNT(*) AS count\n  FROM public.grades\n  GROUP BY 1\n),\ntot AS (\n  SELECT SUM(count) AS total_count FROM categorized WHERE status <> 'Unknown'\n)\nSELECT\n  c.status AS status,\n  c.count AS count,\n  ROUND((c.count::numeric / NULLIF(t.total_count, 0)) * 100, 2) AS percentage\nFROM categorized c\nCROSS JOIN tot t\nWHERE c.status <> 'Unknown'\nORDER BY CASE WHEN c.status = 'Passing' THEN 1 WHEN c.status = 'Failing' THEN 2 ELSE 3 END;"
+        },
+        "startedAt": 1771803377298,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: cannot cast type grade_value to numeric\nLINE 6:       WHEN (grade_value::numeric) >= 3.0 THEN 'Passing'\n                               ^",
+          "name": "Error"
+        },
+        "endedAt": 1771803377356
+      }
+    },
+    "input": {
+      "question": "What percentage of grades are passing vs failing?"
+    },
+    "error": {
+      "message": "SQL execution failed: cannot cast type grade_value to numeric\nLINE 6:       WHEN (grade_value::numeric) >= 3.0 THEN 'Passing'\n                               ^",
+      "name": "Error"
+    },
+    "traceId": "e33937e690f1e7a8b566b0b37e791a3e"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:36:17.361Z",
+    "traceId": "e33937e690f1e7a8b566b0b37e791a3e",
+    "attempts": 6,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 7428,
+      "outputTokens": 1858,
+      "totalTokens": 9286,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1280,
+      "costUsd": 0.005573
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 7428,
+        "outputTokens": 1858,
+        "totalTokens": 9286,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1280,
+        "costUsd": 0.005573
+      }
+    ],
+    "warnings": []
+  }
+}

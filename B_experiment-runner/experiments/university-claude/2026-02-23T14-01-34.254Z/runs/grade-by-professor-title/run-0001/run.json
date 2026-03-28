@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "grade-by-professor-title",
+  "caseDirectory": "grade-by-professor-title",
+  "repeatIndex": 1,
+  "prompt": "Do professors with higher academic titles give different grades?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Do professors with higher academic titles give different grades?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:14:39.238Z",
+    "endedAtUtc": "2026-02-23T14:15:12.763Z",
+    "durationMs": 33525
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "3057",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:15:12 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Do professors with higher academic titles give different grades?\"},\"sql\":{\"payload\":{\"question\":\"Do professors with higher academic titles give different grades?\"},\"startedAt\":1771856079248,\"status\":\"success\",\"output\":{\"reasoning\":\"The question asks whether professors with higher academic titles give different grades. To answer this, I need to:\\n1. Group professors by academic title (ordered hierarchically from lower to higher)\\n2. Join with course_sections to find courses taught by each professor\\n3. Join with enrollments and grades to get the grades given\\n4. Calculate average grade (or grade distribution) by academic title\\n5. Compare grades across titles\\n\\nThe academic titles appear to follow a hierarchy: Inż. < Mgr inż. < Dr inż. < Dr < Dr hab. < Dr hab. inż. < Prof. dr inż. < Prof. dr hab. < Prof. nadzw. dr hab. inż. < Prof. zw. dr hab. inż.\\n\\nI'll calculate the average grade by academic title to show if there's a difference in grading patterns.\",\"sql\":\"\\nSELECT \\n  p.academic_title,\\n  COUNT(DISTINCT g.id) AS total_grades,\\n  COUNT(DISTINCT e.student_id) AS total_students,\\n  COUNT(DISTINCT cs.id) AS total_sections,\\n  AVG(CAST(g.grade_value AS NUMERIC)) AS avg_grade,\\n  MIN(CAST(g.grade_value AS NUMERIC)) AS min_grade,\\n  MAX(CAST(g.grade_value AS NUMERIC)) AS max_grade\\nFROM professors p\\nLEFT JOIN course_sections cs ON p.id = cs.professor_id\\nLEFT JOIN enrollments e ON cs.id = e.course_section_id\\nLEFT JOIN grades g ON e.id = g.enrollment_id\\nWHERE p.academic_title IS NOT NULL AND g.grade_value IS NOT NULL\\nGROUP BY p.academic_title\\nORDER BY AVG(CAST(g.grade_value AS NUMERIC)) DESC\\n\",\"assumptions\":[\"Academic titles represent a hierarchy from lower to higher qualifications\",\"Grade values are numeric (2.0 to 5.0 scale)\",\"Higher grades indicate better performance\",\"We're comparing average grades given by professors with different academic titles\"]},\"endedAt\":1771856112747},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  p.academic_title,\\n  COUNT(DISTINCT g.id) AS total_grades,\\n  COUNT(DISTINCT e.student_id) AS total_students,\\n  COUNT(DISTINCT cs.id) AS total_sections,\\n  AVG(CAST(g.grade_value AS NUMERIC)) AS avg_grade,\\n  MIN(CAST(g.grade_value AS NUMERIC)) AS min_grade,\\n  MAX(CAST(g.grade_value AS NUMERIC)) AS max_grade\\nFROM professors p\\nLEFT JOIN course_sections cs ON p.id = cs.professor_id\\nLEFT JOIN enrollments e ON cs.id = e.course_section_id\\nLEFT JOIN grades g ON e.id = g.enrollment_id\\nWHERE p.academic_title IS NOT NULL AND g.grade_value IS NOT NULL\\nGROUP BY p.academic_title\\nORDER BY AVG(CAST(g.grade_value AS NUMERIC)) DESC\\n\"},\"startedAt\":1771856112752,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: cannot cast type grade_value to numeric\",\"name\":\"Error\"},\"endedAt\":1771856112759}},\"input\":{\"question\":\"Do professors with higher academic titles give different grades?\"},\"error\":{\"message\":\"SQL execution failed: cannot cast type grade_value to numeric\",\"name\":\"Error\"},\"traceId\":\"ba3f680f0ab143315061c2f34f9ed2b3\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/grade-by-professor-title/run-0001/run.json",
+    "queryPath": "runs/grade-by-professor-title/run-0001/query.sql",
+    "vegaRawPath": "runs/grade-by-professor-title/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/grade-by-professor-title/run-0001/vega.resolved.json",
+    "imagePath": "runs/grade-by-professor-title/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:15:12.763Z",
+  "traceId": "ba3f680f0ab143315061c2f34f9ed2b3",
+  "success": false,
+  "durationMs": 33525,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Do professors with higher academic titles give different grades?"
+      },
+      "sql": {
+        "payload": {
+          "question": "Do professors with higher academic titles give different grades?"
+        },
+        "startedAt": 1771856079248,
+        "status": "success",
+        "output": {
+          "reasoning": "The question asks whether professors with higher academic titles give different grades. To answer this, I need to:\n1. Group professors by academic title (ordered hierarchically from lower to higher)\n2. Join with course_sections to find courses taught by each professor\n3. Join with enrollments and grades to get the grades given\n4. Calculate average grade (or grade distribution) by academic title\n5. Compare grades across titles\n\nThe academic titles appear to follow a hierarchy: Inż. < Mgr inż. < Dr inż. < Dr < Dr hab. < Dr hab. inż. < Prof. dr inż. < Prof. dr hab. < Prof. nadzw. dr hab. inż. < Prof. zw. dr hab. inż.\n\nI'll calculate the average grade by academic title to show if there's a difference in grading patterns.",
+          "sql": "\nSELECT \n  p.academic_title,\n  COUNT(DISTINCT g.id) AS total_grades,\n  COUNT(DISTINCT e.student_id) AS total_students,\n  COUNT(DISTINCT cs.id) AS total_sections,\n  AVG(CAST(g.grade_value AS NUMERIC)) AS avg_grade,\n  MIN(CAST(g.grade_value AS NUMERIC)) AS min_grade,\n  MAX(CAST(g.grade_value AS NUMERIC)) AS max_grade\nFROM professors p\nLEFT JOIN course_sections cs ON p.id = cs.professor_id\nLEFT JOIN enrollments e ON cs.id = e.course_section_id\nLEFT JOIN grades g ON e.id = g.enrollment_id\nWHERE p.academic_title IS NOT NULL AND g.grade_value IS NOT NULL\nGROUP BY p.academic_title\nORDER BY AVG(CAST(g.grade_value AS NUMERIC)) DESC\n",
+          "assumptions": [
+            "Academic titles represent a hierarchy from lower to higher qualifications",
+            "Grade values are numeric (2.0 to 5.0 scale)",
+            "Higher grades indicate better performance",
+            "We're comparing average grades given by professors with different academic titles"
+          ]
+        },
+        "endedAt": 1771856112747
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "\nSELECT \n  p.academic_title,\n  COUNT(DISTINCT g.id) AS total_grades,\n  COUNT(DISTINCT e.student_id) AS total_students,\n  COUNT(DISTINCT cs.id) AS total_sections,\n  AVG(CAST(g.grade_value AS NUMERIC)) AS avg_grade,\n  MIN(CAST(g.grade_value AS NUMERIC)) AS min_grade,\n  MAX(CAST(g.grade_value AS NUMERIC)) AS max_grade\nFROM professors p\nLEFT JOIN course_sections cs ON p.id = cs.professor_id\nLEFT JOIN enrollments e ON cs.id = e.course_section_id\nLEFT JOIN grades g ON e.id = g.enrollment_id\nWHERE p.academic_title IS NOT NULL AND g.grade_value IS NOT NULL\nGROUP BY p.academic_title\nORDER BY AVG(CAST(g.grade_value AS NUMERIC)) DESC\n"
+        },
+        "startedAt": 1771856112752,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: cannot cast type grade_value to numeric",
+          "name": "Error"
+        },
+        "endedAt": 1771856112759
+      }
+    },
+    "input": {
+      "question": "Do professors with higher academic titles give different grades?"
+    },
+    "error": {
+      "message": "SQL execution failed: cannot cast type grade_value to numeric",
+      "name": "Error"
+    },
+    "traceId": "ba3f680f0ab143315061c2f34f9ed2b3"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.346Z",
+    "traceId": "ba3f680f0ab143315061c2f34f9ed2b3",
+    "attempts": 1,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 33126,
+      "outputTokens": 939,
+      "totalTokens": 34065,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.037821
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 1,
+        "inputTokens": 33126,
+        "outputTokens": 939,
+        "totalTokens": 34065,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.037821
+      }
+    ],
+    "warnings": []
+  }
+}

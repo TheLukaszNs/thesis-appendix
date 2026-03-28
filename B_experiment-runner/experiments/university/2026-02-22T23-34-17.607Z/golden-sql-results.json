@@ -1,0 +1,2466 @@
+{
+  "schemaVersion": "agent-runner/golden-sql-results/v1",
+  "experimentName": "university",
+  "invocationDir": "2026-02-22T23-34-17.607Z",
+  "createdAtUtc": "2026-02-25T13:37:37.359Z",
+  "databaseUrl": "postgresql://postgres:***@localhost:5432/university_db",
+  "entries": [
+    {
+      "caseId": "active-vs-inactive-enrollments",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT CASE WHEN is_active THEN 'Active' ELSE 'Inactive' END AS status, COUNT(*) AS count FROM enrollments GROUP BY is_active",
+        "goldenRowCount": 2,
+        "predictedRowCount": 1,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "count"
+          },
+          {
+            "type": "missing",
+            "column": "status"
+          },
+          {
+            "type": "extra",
+            "column": "active_count"
+          },
+          {
+            "type": "extra",
+            "column": "active_to_inactive_ratio"
+          },
+          {
+            "type": "extra",
+            "column": "inactive_count"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=3"
+      }
+    },
+    {
+      "caseId": "avg-attendance-score-by-course",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT co.name AS course, ROUND(AVG(g.attendance_score), 2) AS avg_attendance FROM grades g JOIN enrollments e ON e.id = g.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN courses co ON co.id = cs.course_id WHERE g.attendance_score IS NOT NULL GROUP BY co.name ORDER BY avg_attendance DESC",
+        "goldenRowCount": 14,
+        "predictedRowCount": 19,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "avg_attendance"
+          },
+          {
+            "type": "missing",
+            "column": "course"
+          },
+          {
+            "type": "extra",
+            "column": "avg_attendance_score"
+          },
+          {
+            "type": "extra",
+            "column": "course_code"
+          },
+          {
+            "type": "extra",
+            "column": "course_id"
+          },
+          {
+            "type": "extra",
+            "column": "course_name"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=4"
+      }
+    },
+    {
+      "caseId": "avg-credits-by-course-type",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT course_type, ROUND(AVG(credits), 2) AS avg_credits FROM courses GROUP BY course_type ORDER BY avg_credits DESC",
+        "goldenRowCount": 5,
+        "predictedRowCount": 5,
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Row 2, column \"avg_credits\": golden=\"4.00\" vs predicted=\"4.71\""
+      }
+    },
+    {
+      "caseId": "avg-difficulty-by-course",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT co.name AS course, ROUND(AVG(ce.difficulty_rating), 2) AS avg_difficulty FROM course_evaluations ce JOIN enrollments e ON e.id = ce.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN courses co ON co.id = cs.course_id GROUP BY co.name ORDER BY avg_difficulty DESC",
+        "goldenRowCount": 12,
+        "predictedRowCount": 26,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "avg_difficulty"
+          },
+          {
+            "type": "missing",
+            "column": "course"
+          },
+          {
+            "type": "extra",
+            "column": "average_difficulty"
+          },
+          {
+            "type": "extra",
+            "column": "course_code"
+          },
+          {
+            "type": "extra",
+            "column": "course_id"
+          },
+          {
+            "type": "extra",
+            "column": "course_name"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=4"
+      }
+    },
+    {
+      "caseId": "avg-exam-score-by-course",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT co.name AS course, ROUND(AVG(g.exam_score), 2) AS avg_exam_score FROM grades g JOIN enrollments e ON e.id = g.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN courses co ON co.id = cs.course_id WHERE g.exam_score IS NOT NULL GROUP BY co.name ORDER BY avg_exam_score DESC",
+        "goldenRowCount": 13,
+        "predictedRowCount": 26,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "course"
+          },
+          {
+            "type": "extra",
+            "column": "course_code"
+          },
+          {
+            "type": "extra",
+            "column": "course_id"
+          },
+          {
+            "type": "extra",
+            "column": "course_name"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=4"
+      }
+    },
+    {
+      "caseId": "avg-gpa-by-department",
+      "repeatIndex": 1,
+      "result": {
+        "status": "skipped",
+        "goldenSql": "SELECT d.name AS department, ROUND(AVG(s.gpa), 2) AS avg_gpa FROM departments d JOIN students s ON s.department_id = d.id WHERE s.gpa IS NOT NULL GROUP BY d.name ORDER BY avg_gpa DESC",
+        "details": "No predicted data in run.json"
+      }
+    },
+    {
+      "caseId": "avg-gpa-by-enrollment-year",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT EXTRACT(YEAR FROM enrollment_date)::int AS enrollment_year, ROUND(AVG(gpa), 2) AS avg_gpa FROM students WHERE gpa IS NOT NULL GROUP BY enrollment_year ORDER BY enrollment_year",
+        "goldenRowCount": 8,
+        "predictedRowCount": 8,
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Row 1 values differ (positional comparison, column names ignored)"
+      }
+    },
+    {
+      "caseId": "avg-gpa-vs-semester",
+      "repeatIndex": 1,
+      "result": {
+        "status": "match",
+        "goldenSql": "SELECT current_semester, ROUND(AVG(gpa), 2) AS avg_gpa, COUNT(*) AS student_count FROM students WHERE gpa IS NOT NULL GROUP BY current_semester ORDER BY current_semester",
+        "goldenRowCount": 7,
+        "predictedRowCount": 7,
+        "rowCountMatch": true,
+        "contentMatch": true
+      }
+    },
+    {
+      "caseId": "avg-grade-by-academic-year",
+      "repeatIndex": 1,
+      "result": {
+        "status": "error",
+        "goldenSql": "SELECT cs.academic_year, ROUND(AVG(g.grade_value::numeric), 2) AS avg_grade FROM grades g JOIN enrollments e ON e.id = g.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id WHERE g.grade_value IS NOT NULL GROUP BY cs.academic_year ORDER BY cs.academic_year",
+        "details": "Golden SQL execution failed: cannot cast type grade_value to numeric"
+      }
+    },
+    {
+      "caseId": "avg-grade-by-course-type",
+      "repeatIndex": 1,
+      "result": {
+        "status": "error",
+        "goldenSql": "SELECT co.course_type, ROUND(AVG(g.grade_value::numeric), 2) AS avg_grade FROM grades g JOIN enrollments e ON e.id = g.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN courses co ON co.id = cs.course_id WHERE g.grade_value IS NOT NULL GROUP BY co.course_type ORDER BY avg_grade DESC",
+        "details": "Golden SQL execution failed: cannot cast type grade_value to numeric"
+      }
+    },
+    {
+      "caseId": "avg-grade-by-credits",
+      "repeatIndex": 1,
+      "result": {
+        "status": "error",
+        "goldenSql": "SELECT co.credits, ROUND(AVG(g.grade_value::numeric), 2) AS avg_grade, COUNT(g.id) AS grade_count FROM grades g JOIN enrollments e ON e.id = g.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN courses co ON co.id = cs.course_id WHERE g.grade_value IS NOT NULL GROUP BY co.credits ORDER BY co.credits",
+        "details": "Golden SQL execution failed: cannot cast type grade_value to numeric"
+      }
+    },
+    {
+      "caseId": "avg-grade-winter-vs-summer",
+      "repeatIndex": 1,
+      "result": {
+        "status": "error",
+        "goldenSql": "SELECT cs.semester_type, ROUND(AVG(g.grade_value::numeric), 2) AS avg_grade FROM grades g JOIN enrollments e ON e.id = g.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id WHERE g.grade_value IS NOT NULL GROUP BY cs.semester_type ORDER BY cs.semester_type",
+        "details": "Golden SQL execution failed: cannot cast type grade_value to numeric"
+      }
+    },
+    {
+      "caseId": "avg-overall-rating-by-professor",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT p.first_name || ' ' || p.last_name AS professor, p.academic_title, ROUND(AVG(ce.overall_rating), 2) AS avg_rating FROM course_evaluations ce JOIN enrollments e ON e.id = ce.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN professors p ON p.id = cs.professor_id GROUP BY p.id, p.first_name, p.last_name, p.academic_title ORDER BY avg_rating DESC",
+        "goldenRowCount": 20,
+        "predictedRowCount": 50,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "academic_title"
+          },
+          {
+            "type": "missing",
+            "column": "avg_rating"
+          },
+          {
+            "type": "missing",
+            "column": "professor"
+          },
+          {
+            "type": "extra",
+            "column": "avg_overall_rating"
+          },
+          {
+            "type": "extra",
+            "column": "professor_first_name"
+          },
+          {
+            "type": "extra",
+            "column": "professor_id"
+          },
+          {
+            "type": "extra",
+            "column": "professor_last_name"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=3, predicted=4"
+      }
+    },
+    {
+      "caseId": "avg-project-score-by-department",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT d.name AS department, ROUND(AVG(g.project_score), 2) AS avg_project_score FROM grades g JOIN enrollments e ON e.id = g.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN courses co ON co.id = cs.course_id JOIN departments d ON d.id = co.department_id WHERE g.project_score IS NOT NULL GROUP BY d.name ORDER BY avg_project_score DESC",
+        "goldenRowCount": 6,
+        "predictedRowCount": 6,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "department"
+          },
+          {
+            "type": "extra",
+            "column": "department_id"
+          },
+          {
+            "type": "extra",
+            "column": "department_name"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=3"
+      }
+    },
+    {
+      "caseId": "avg-scores-by-grade-value",
+      "repeatIndex": 1,
+      "result": {
+        "status": "match",
+        "goldenSql": "SELECT g.grade_value, ROUND(AVG(g.exam_score), 2) AS avg_exam, ROUND(AVG(g.project_score), 2) AS avg_project, ROUND(AVG(g.attendance_score), 2) AS avg_attendance FROM grades g WHERE g.grade_value IS NOT NULL GROUP BY g.grade_value ORDER BY g.grade_value",
+        "goldenRowCount": 6,
+        "predictedRowCount": 6,
+        "rowCountMatch": true,
+        "contentMatch": true
+      }
+    },
+    {
+      "caseId": "avg-section-size-by-department",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT d.name AS department, ROUND(AVG(cs.max_students), 1) AS avg_max_students FROM course_sections cs JOIN courses co ON co.id = cs.course_id JOIN departments d ON d.id = co.department_id GROUP BY d.name ORDER BY avg_max_students DESC",
+        "goldenRowCount": 6,
+        "predictedRowCount": 6,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "avg_max_students"
+          },
+          {
+            "type": "missing",
+            "column": "department"
+          },
+          {
+            "type": "extra",
+            "column": "avg_max_section_size"
+          },
+          {
+            "type": "extra",
+            "column": "department_code"
+          },
+          {
+            "type": "extra",
+            "column": "department_id"
+          },
+          {
+            "type": "extra",
+            "column": "department_name"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=4"
+      }
+    },
+    {
+      "caseId": "avg-workload-by-course",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT co.name AS course, ROUND(AVG(ce.workload_hours), 1) AS avg_workload_hours FROM course_evaluations ce JOIN enrollments e ON e.id = ce.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN courses co ON co.id = cs.course_id WHERE ce.workload_hours IS NOT NULL GROUP BY co.name ORDER BY avg_workload_hours DESC",
+        "goldenRowCount": 12,
+        "predictedRowCount": 26,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "avg_workload_hours"
+          },
+          {
+            "type": "missing",
+            "column": "course"
+          },
+          {
+            "type": "extra",
+            "column": "average_workload_hours"
+          },
+          {
+            "type": "extra",
+            "column": "course_code"
+          },
+          {
+            "type": "extra",
+            "column": "course_id"
+          },
+          {
+            "type": "extra",
+            "column": "course_name"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=4"
+      }
+    },
+    {
+      "caseId": "buildings-classroom-count",
+      "repeatIndex": 1,
+      "result": {
+        "status": "match",
+        "goldenSql": "SELECT building, COUNT(*) AS classroom_count FROM classrooms GROUP BY building ORDER BY classroom_count DESC",
+        "goldenRowCount": 20,
+        "predictedRowCount": 20,
+        "rowCountMatch": true,
+        "contentMatch": true
+      }
+    },
+    {
+      "caseId": "buildings-total-capacity",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT building, SUM(capacity) AS total_capacity, COUNT(*) AS room_count FROM classrooms GROUP BY building ORDER BY total_capacity DESC",
+        "goldenRowCount": 20,
+        "predictedRowCount": 20,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "room_count"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=3, predicted=2"
+      }
+    },
+    {
+      "caseId": "classroom-capacity-distribution",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT CASE WHEN capacity <= 30 THEN '1-30' WHEN capacity <= 60 THEN '31-60' WHEN capacity <= 100 THEN '61-100' WHEN capacity <= 200 THEN '101-200' ELSE '200+' END AS capacity_range, COUNT(*) AS room_count FROM classrooms GROUP BY capacity_range ORDER BY MIN(capacity)",
+        "goldenRowCount": 5,
+        "predictedRowCount": 16,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "capacity_range"
+          },
+          {
+            "type": "missing",
+            "column": "room_count"
+          },
+          {
+            "type": "extra",
+            "column": "capacity"
+          },
+          {
+            "type": "extra",
+            "column": "classroom_count"
+          },
+          {
+            "type": "extra",
+            "column": "pct_of_total"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=3"
+      }
+    },
+    {
+      "caseId": "classrooms-equipment-matrix",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT CASE WHEN has_projector AND has_computers THEN 'Both' WHEN has_projector THEN 'Projector Only' WHEN has_computers THEN 'Computers Only' ELSE 'Neither' END AS equipment, COUNT(*) AS room_count, ROUND(AVG(capacity), 0) AS avg_capacity FROM classrooms GROUP BY equipment ORDER BY room_count DESC",
+        "goldenRowCount": 4,
+        "predictedRowCount": 4,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "avg_capacity"
+          },
+          {
+            "type": "missing",
+            "column": "equipment"
+          },
+          {
+            "type": "missing",
+            "column": "room_count"
+          },
+          {
+            "type": "extra",
+            "column": "classroom_count"
+          },
+          {
+            "type": "extra",
+            "column": "equipment_group"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=3, predicted=2"
+      }
+    },
+    {
+      "caseId": "classrooms-with-projectors",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT building, COUNT(*) AS total_rooms, SUM(CASE WHEN has_projector THEN 1 ELSE 0 END) AS with_projector, ROUND(100.0 * SUM(CASE WHEN has_projector THEN 1 ELSE 0 END) / COUNT(*), 1) AS projector_pct FROM classrooms GROUP BY building ORDER BY projector_pct DESC",
+        "goldenRowCount": 20,
+        "predictedRowCount": 20,
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Row 12 values differ (positional comparison, column names ignored)"
+      }
+    },
+    {
+      "caseId": "computer-rooms-by-building",
+      "repeatIndex": 1,
+      "result": {
+        "status": "match",
+        "goldenSql": "SELECT building, COUNT(*) AS computer_room_count FROM classrooms WHERE has_computers = true GROUP BY building ORDER BY computer_room_count DESC",
+        "goldenRowCount": 16,
+        "predictedRowCount": 16,
+        "rowCountMatch": true,
+        "contentMatch": true
+      }
+    },
+    {
+      "caseId": "course-evaluation-over-time",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT cs.academic_year, ROUND(AVG(ce.overall_rating), 2) AS avg_overall_rating, COUNT(ce.id) AS evaluation_count FROM course_evaluations ce JOIN enrollments e ON e.id = ce.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id GROUP BY cs.academic_year ORDER BY cs.academic_year",
+        "goldenRowCount": 6,
+        "predictedRowCount": 3,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "evaluation_count"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=3, predicted=2"
+      }
+    },
+    {
+      "caseId": "course-sections-per-professor-department",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT d.name AS department, ROUND(COUNT(cs.id)::numeric / NULLIF(COUNT(DISTINCT p.id), 0), 1) AS avg_sections_per_prof FROM course_sections cs JOIN professors p ON p.id = cs.professor_id JOIN departments d ON d.id = p.department_id GROUP BY d.name ORDER BY avg_sections_per_prof DESC",
+        "goldenRowCount": 6,
+        "predictedRowCount": 6,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "avg_sections_per_prof"
+          },
+          {
+            "type": "missing",
+            "column": "department"
+          },
+          {
+            "type": "extra",
+            "column": "avg_sections_per_professor"
+          },
+          {
+            "type": "extra",
+            "column": "department_code"
+          },
+          {
+            "type": "extra",
+            "column": "department_id"
+          },
+          {
+            "type": "extra",
+            "column": "department_name"
+          },
+          {
+            "type": "extra",
+            "column": "professor_count"
+          },
+          {
+            "type": "extra",
+            "column": "total_sections"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=6"
+      }
+    },
+    {
+      "caseId": "course-type-per-department",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT d.name AS department, co.course_type, COUNT(*) AS count FROM courses co JOIN departments d ON d.id = co.department_id GROUP BY d.name, co.course_type ORDER BY d.name, co.course_type",
+        "goldenRowCount": 18,
+        "predictedRowCount": 30,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "count"
+          },
+          {
+            "type": "missing",
+            "column": "department"
+          },
+          {
+            "type": "extra",
+            "column": "course_count"
+          },
+          {
+            "type": "extra",
+            "column": "department_code"
+          },
+          {
+            "type": "extra",
+            "column": "department_id"
+          },
+          {
+            "type": "extra",
+            "column": "department_name"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=3, predicted=5"
+      }
+    },
+    {
+      "caseId": "courses-by-type",
+      "repeatIndex": 1,
+      "result": {
+        "status": "match",
+        "goldenSql": "SELECT c.course_type, COUNT(*) AS course_count FROM courses c GROUP BY c.course_type ORDER BY course_count DESC",
+        "goldenRowCount": 5,
+        "predictedRowCount": 5,
+        "rowCountMatch": true,
+        "contentMatch": true
+      }
+    },
+    {
+      "caseId": "courses-most-sections",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT co.name AS course, co.code, COUNT(cs.id) AS section_count FROM courses co JOIN course_sections cs ON cs.course_id = co.id GROUP BY co.id, co.name, co.code ORDER BY section_count DESC LIMIT 15",
+        "goldenRowCount": 15,
+        "predictedRowCount": 26,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "code"
+          },
+          {
+            "type": "missing",
+            "column": "course"
+          },
+          {
+            "type": "missing",
+            "column": "section_count"
+          },
+          {
+            "type": "extra",
+            "column": "course_code"
+          },
+          {
+            "type": "extra",
+            "column": "course_id"
+          },
+          {
+            "type": "extra",
+            "column": "course_name"
+          },
+          {
+            "type": "extra",
+            "column": "sections_offered"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=3, predicted=4"
+      }
+    },
+    {
+      "caseId": "courses-no-enrollments",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT co.name AS course, co.code, d.name AS department FROM courses co JOIN departments d ON d.id = co.department_id WHERE co.id NOT IN (SELECT DISTINCT cs.course_id FROM course_sections cs JOIN enrollments e ON e.course_section_id = cs.id) ORDER BY co.name",
+        "goldenRowCount": 5,
+        "predictedRowCount": 5,
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Row 1 values differ (positional comparison, column names ignored)"
+      }
+    },
+    {
+      "caseId": "courses-per-department",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT d.name AS department, COUNT(c.id) AS course_count FROM departments d LEFT JOIN courses c ON c.department_id = d.id GROUP BY d.name ORDER BY course_count DESC",
+        "goldenRowCount": 6,
+        "predictedRowCount": 6,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "department"
+          },
+          {
+            "type": "extra",
+            "column": "department_code"
+          },
+          {
+            "type": "extra",
+            "column": "department_id"
+          },
+          {
+            "type": "extra",
+            "column": "department_name"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=4"
+      }
+    },
+    {
+      "caseId": "courses-with-prerequisites",
+      "repeatIndex": 1,
+      "result": {
+        "status": "skipped",
+        "goldenSql": "SELECT c.name AS course, c.code, COUNT(p.id) AS prerequisite_count FROM courses c JOIN prerequisites p ON p.course_id = c.id GROUP BY c.id, c.name, c.code ORDER BY prerequisite_count DESC",
+        "details": "No predicted data in run.json"
+      }
+    },
+    {
+      "caseId": "courses-without-prerequisites",
+      "repeatIndex": 1,
+      "result": {
+        "status": "skipped",
+        "goldenSql": "SELECT CASE WHEN p.course_id IS NOT NULL THEN 'Has Prerequisites' ELSE 'No Prerequisites' END AS status, COUNT(DISTINCT c.id) AS course_count FROM courses c LEFT JOIN prerequisites p ON p.course_id = c.id GROUP BY status",
+        "details": "No predicted data in run.json"
+      }
+    },
+    {
+      "caseId": "credits-per-department",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT d.name AS department, SUM(c.credits) AS total_credits FROM departments d JOIN courses c ON c.department_id = d.id GROUP BY d.name ORDER BY total_credits DESC",
+        "goldenRowCount": 6,
+        "predictedRowCount": 6,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "department"
+          },
+          {
+            "type": "extra",
+            "column": "dept_code"
+          },
+          {
+            "type": "extra",
+            "column": "dept_id"
+          },
+          {
+            "type": "extra",
+            "column": "dept_name"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=4"
+      }
+    },
+    {
+      "caseId": "department-avg-evaluation",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT d.name AS department, ROUND(AVG(ce.overall_rating), 2) AS avg_overall_rating FROM course_evaluations ce JOIN enrollments e ON e.id = ce.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN courses co ON co.id = cs.course_id JOIN departments d ON d.id = co.department_id GROUP BY d.name ORDER BY avg_overall_rating DESC",
+        "goldenRowCount": 6,
+        "predictedRowCount": 6,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "department"
+          },
+          {
+            "type": "extra",
+            "column": "department_id"
+          },
+          {
+            "type": "extra",
+            "column": "department_name"
+          },
+          {
+            "type": "extra",
+            "column": "evaluations_count"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=4"
+      }
+    },
+    {
+      "caseId": "department-building-map",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT d.name AS department, d.building AS dept_building, STRING_AGG(DISTINCT cl.building, ', ' ORDER BY cl.building) AS classroom_buildings FROM departments d JOIN courses co ON co.department_id = d.id JOIN course_sections cs ON cs.course_id = co.id JOIN classrooms cl ON cl.id = cs.classroom_id GROUP BY d.name, d.building ORDER BY d.name",
+        "goldenRowCount": 6,
+        "predictedRowCount": 5,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "classroom_buildings"
+          },
+          {
+            "type": "missing",
+            "column": "department"
+          },
+          {
+            "type": "missing",
+            "column": "dept_building"
+          },
+          {
+            "type": "extra",
+            "column": "building"
+          },
+          {
+            "type": "extra",
+            "column": "departments"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=3, predicted=2"
+      }
+    },
+    {
+      "caseId": "department-credit-weight",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT d.name AS department, co.credits, COUNT(*) AS course_count FROM courses co JOIN departments d ON d.id = co.department_id GROUP BY d.name, co.credits ORDER BY d.name, co.credits",
+        "goldenRowCount": 18,
+        "predictedRowCount": 18,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "department"
+          },
+          {
+            "type": "extra",
+            "column": "department_code"
+          },
+          {
+            "type": "extra",
+            "column": "department_id"
+          },
+          {
+            "type": "extra",
+            "column": "department_name"
+          },
+          {
+            "type": "extra",
+            "column": "percent_of_department"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=3, predicted=6"
+      }
+    },
+    {
+      "caseId": "department-evaluation-radar",
+      "repeatIndex": 1,
+      "result": {
+        "status": "skipped",
+        "goldenSql": "SELECT d.name AS department, ROUND(AVG(ce.overall_rating), 2) AS avg_overall, ROUND(AVG(ce.professor_rating), 2) AS avg_professor, ROUND(AVG(ce.content_rating), 2) AS avg_content, ROUND(AVG(ce.difficulty_rating), 2) AS avg_difficulty FROM course_evaluations ce JOIN enrollments e ON e.id = ce.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN courses co ON co.id = cs.course_id JOIN departments d ON d.id = co.department_id GROUP BY d.name ORDER BY d.name",
+        "details": "No predicted data in run.json"
+      }
+    },
+    {
+      "caseId": "department-fail-rate",
+      "repeatIndex": 1,
+      "result": {
+        "status": "skipped",
+        "goldenSql": "SELECT d.name AS department, COUNT(g.id) AS total_grades, SUM(CASE WHEN g.grade_value = '2.0' THEN 1 ELSE 0 END) AS failures, ROUND(100.0 * SUM(CASE WHEN g.grade_value = '2.0' THEN 1 ELSE 0 END) / COUNT(g.id), 1) AS fail_rate_pct FROM grades g JOIN enrollments e ON e.id = g.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN courses co ON co.id = cs.course_id JOIN departments d ON d.id = co.department_id WHERE g.grade_value IS NOT NULL GROUP BY d.name ORDER BY fail_rate_pct DESC",
+        "details": "No predicted data in run.json"
+      }
+    },
+    {
+      "caseId": "enrollment-count-by-semester",
+      "repeatIndex": 1,
+      "result": {
+        "status": "match",
+        "goldenSql": "SELECT cs.academic_year, cs.semester_type, COUNT(e.id) AS enrollment_count FROM enrollments e JOIN course_sections cs ON cs.id = e.course_section_id GROUP BY cs.academic_year, cs.semester_type ORDER BY cs.academic_year, cs.semester_type",
+        "goldenRowCount": 11,
+        "predictedRowCount": 11,
+        "rowCountMatch": true,
+        "contentMatch": true
+      }
+    },
+    {
+      "caseId": "enrollment-trend-by-department",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT d.name AS department, cs.academic_year, COUNT(e.id) AS enrollments FROM enrollments e JOIN course_sections cs ON cs.id = e.course_section_id JOIN courses co ON co.id = cs.course_id JOIN departments d ON d.id = co.department_id GROUP BY d.name, cs.academic_year ORDER BY cs.academic_year, d.name",
+        "goldenRowCount": 23,
+        "predictedRowCount": 21,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "department"
+          },
+          {
+            "type": "missing",
+            "column": "enrollments"
+          },
+          {
+            "type": "extra",
+            "column": "department_code"
+          },
+          {
+            "type": "extra",
+            "column": "department_id"
+          },
+          {
+            "type": "extra",
+            "column": "department_name"
+          },
+          {
+            "type": "extra",
+            "column": "enrollments_count"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=3, predicted=5"
+      }
+    },
+    {
+      "caseId": "evaluation-count-by-course",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT co.name AS course, COUNT(ce.id) AS evaluation_count FROM course_evaluations ce JOIN enrollments e ON e.id = ce.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN courses co ON co.id = cs.course_id GROUP BY co.name ORDER BY evaluation_count DESC",
+        "goldenRowCount": 12,
+        "predictedRowCount": 26,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "course"
+          },
+          {
+            "type": "extra",
+            "column": "course_code"
+          },
+          {
+            "type": "extra",
+            "column": "course_id"
+          },
+          {
+            "type": "extra",
+            "column": "course_name"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=4"
+      }
+    },
+    {
+      "caseId": "evaluation-difficulty-vs-grade",
+      "repeatIndex": 1,
+      "result": {
+        "status": "error",
+        "goldenSql": "SELECT co.name AS course, ROUND(AVG(ce.difficulty_rating), 2) AS avg_difficulty, ROUND(AVG(g.grade_value::numeric), 2) AS avg_grade FROM course_evaluations ce JOIN enrollments e ON e.id = ce.enrollment_id JOIN grades g ON g.enrollment_id = e.id JOIN course_sections cs ON cs.id = e.course_section_id JOIN courses co ON co.id = cs.course_id WHERE g.grade_value IS NOT NULL GROUP BY co.name HAVING COUNT(ce.id) >= 5 ORDER BY avg_difficulty DESC",
+        "details": "Golden SQL execution failed: cannot cast type grade_value to numeric"
+      }
+    },
+    {
+      "caseId": "evaluation-overall-histogram",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT overall_rating, COUNT(*) AS count FROM course_evaluations GROUP BY overall_rating ORDER BY overall_rating",
+        "goldenRowCount": 5,
+        "predictedRowCount": 5,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "count"
+          },
+          {
+            "type": "missing",
+            "column": "overall_rating"
+          },
+          {
+            "type": "extra",
+            "column": "percentage"
+          },
+          {
+            "type": "extra",
+            "column": "rating"
+          },
+          {
+            "type": "extra",
+            "column": "rating_count"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=3"
+      }
+    },
+    {
+      "caseId": "evaluation-ratings-comparison",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT ROUND(AVG(overall_rating), 2) AS avg_overall, ROUND(AVG(professor_rating), 2) AS avg_professor, ROUND(AVG(content_rating), 2) AS avg_content, ROUND(AVG(difficulty_rating), 2) AS avg_difficulty FROM course_evaluations",
+        "goldenRowCount": 1,
+        "predictedRowCount": 1,
+        "columnDiffs": [
+          {
+            "type": "extra",
+            "column": "evaluations_count"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=4, predicted=5"
+      }
+    },
+    {
+      "caseId": "evaluation-recommendation-by-department",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT d.name AS department, ROUND(100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / COUNT(*), 1) AS recommend_pct FROM course_evaluations ce JOIN enrollments e ON e.id = ce.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN courses co ON co.id = cs.course_id JOIN departments d ON d.id = co.department_id GROUP BY d.name ORDER BY recommend_pct DESC",
+        "goldenRowCount": 6,
+        "predictedRowCount": 6,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "department"
+          },
+          {
+            "type": "extra",
+            "column": "department_id"
+          },
+          {
+            "type": "extra",
+            "column": "department_name"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=3"
+      }
+    },
+    {
+      "caseId": "exam-vs-project-score-avg",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT d.name AS department, ROUND(AVG(g.exam_score), 2) AS avg_exam, ROUND(AVG(g.project_score), 2) AS avg_project FROM grades g JOIN enrollments e ON e.id = g.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN courses co ON co.id = cs.course_id JOIN departments d ON d.id = co.department_id WHERE g.exam_score IS NOT NULL OR g.project_score IS NOT NULL GROUP BY d.name ORDER BY d.name",
+        "goldenRowCount": 6,
+        "predictedRowCount": 6,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "avg_exam"
+          },
+          {
+            "type": "missing",
+            "column": "avg_project"
+          },
+          {
+            "type": "missing",
+            "column": "department"
+          },
+          {
+            "type": "extra",
+            "column": "avg_exam_score"
+          },
+          {
+            "type": "extra",
+            "column": "avg_project_score"
+          },
+          {
+            "type": "extra",
+            "column": "department_id"
+          },
+          {
+            "type": "extra",
+            "column": "department_name"
+          },
+          {
+            "type": "extra",
+            "column": "exam_minus_project_diff"
+          },
+          {
+            "type": "extra",
+            "column": "exam_vs_project"
+          },
+          {
+            "type": "extra",
+            "column": "score_count"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=3, predicted=7"
+      }
+    },
+    {
+      "caseId": "fail-rate-by-course",
+      "repeatIndex": 1,
+      "result": {
+        "status": "skipped",
+        "goldenSql": "SELECT co.name AS course, COUNT(g.id) AS total_grades, SUM(CASE WHEN g.grade_value = '2.0' THEN 1 ELSE 0 END) AS fail_count, ROUND(100.0 * SUM(CASE WHEN g.grade_value = '2.0' THEN 1 ELSE 0 END) / COUNT(g.id), 1) AS fail_rate_pct FROM grades g JOIN enrollments e ON e.id = g.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN courses co ON co.id = cs.course_id WHERE g.grade_value IS NOT NULL GROUP BY co.name HAVING COUNT(g.id) >= 5 ORDER BY fail_rate_pct DESC",
+        "details": "No predicted data in run.json"
+      }
+    },
+    {
+      "caseId": "gpa-vs-scholarship-type",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT sc.scholarship_type, ROUND(AVG(s.gpa), 2) AS avg_gpa FROM scholarships sc JOIN students s ON s.id = sc.student_id WHERE s.gpa IS NOT NULL GROUP BY sc.scholarship_type ORDER BY avg_gpa DESC",
+        "goldenRowCount": 3,
+        "predictedRowCount": 3,
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Row 3, column \"avg_gpa\": golden=\"4.30\" vs predicted=\"4.4\""
+      }
+    },
+    {
+      "caseId": "grade-by-professor-title",
+      "repeatIndex": 1,
+      "result": {
+        "status": "error",
+        "goldenSql": "SELECT COALESCE(p.academic_title, 'No title') AS academic_title, ROUND(AVG(g.grade_value::numeric), 2) AS avg_grade, COUNT(g.id) AS grade_count FROM grades g JOIN enrollments e ON e.id = g.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN professors p ON p.id = cs.professor_id WHERE g.grade_value IS NOT NULL GROUP BY p.academic_title ORDER BY avg_grade DESC",
+        "details": "Golden SQL execution failed: cannot cast type grade_value to numeric"
+      }
+    },
+    {
+      "caseId": "grade-by-semester-type-and-course-type",
+      "repeatIndex": 1,
+      "result": {
+        "status": "error",
+        "goldenSql": "SELECT cs.semester_type, co.course_type, ROUND(AVG(g.grade_value::numeric), 2) AS avg_grade FROM grades g JOIN enrollments e ON e.id = g.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN courses co ON co.id = cs.course_id WHERE g.grade_value IS NOT NULL GROUP BY cs.semester_type, co.course_type ORDER BY cs.semester_type, co.course_type",
+        "details": "Golden SQL execution failed: cannot cast type grade_value to numeric"
+      }
+    },
+    {
+      "caseId": "grade-distribution",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT g.grade_value, COUNT(*) AS count FROM grades g WHERE g.grade_value IS NOT NULL GROUP BY g.grade_value ORDER BY g.grade_value",
+        "goldenRowCount": 6,
+        "predictedRowCount": 6,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "grade_value"
+          },
+          {
+            "type": "extra",
+            "column": "grade"
+          },
+          {
+            "type": "extra",
+            "column": "percent"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=3"
+      }
+    },
+    {
+      "caseId": "grade-distribution-by-department",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT d.name AS department, g.grade_value, COUNT(*) AS count FROM grades g JOIN enrollments e ON e.id = g.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN courses co ON co.id = cs.course_id JOIN departments d ON d.id = co.department_id WHERE g.grade_value IS NOT NULL GROUP BY d.name, g.grade_value ORDER BY d.name, g.grade_value",
+        "goldenRowCount": 26,
+        "predictedRowCount": 26,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "count"
+          },
+          {
+            "type": "missing",
+            "column": "department"
+          },
+          {
+            "type": "extra",
+            "column": "department_id"
+          },
+          {
+            "type": "extra",
+            "column": "department_name"
+          },
+          {
+            "type": "extra",
+            "column": "grade_count"
+          },
+          {
+            "type": "extra",
+            "column": "pct_of_department"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=3, predicted=5"
+      }
+    },
+    {
+      "caseId": "grade-trend-by-year-and-semester",
+      "repeatIndex": 1,
+      "result": {
+        "status": "error",
+        "goldenSql": "SELECT cs.academic_year, cs.semester_type, ROUND(AVG(g.grade_value::numeric), 2) AS avg_grade, COUNT(g.id) AS grade_count FROM grades g JOIN enrollments e ON e.id = g.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id WHERE g.grade_value IS NOT NULL GROUP BY cs.academic_year, cs.semester_type ORDER BY cs.academic_year, cs.semester_type",
+        "details": "Golden SQL execution failed: cannot cast type grade_value to numeric"
+      }
+    },
+    {
+      "caseId": "grade-vs-exam-score-correlation",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT g.grade_value, ROUND(AVG(g.exam_score), 2) AS avg_exam_score, COUNT(*) AS count FROM grades g WHERE g.grade_value IS NOT NULL AND g.exam_score IS NOT NULL GROUP BY g.grade_value ORDER BY g.grade_value",
+        "goldenRowCount": 6,
+        "predictedRowCount": 6,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "count"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=3, predicted=2"
+      }
+    },
+    {
+      "caseId": "highest-scholarship-departments-per-year",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT DISTINCT ON (sc.academic_year) sc.academic_year, d.name AS department, SUM(sc.amount) AS total_scholarship FROM scholarships sc JOIN students s ON s.id = sc.student_id JOIN departments d ON d.id = s.department_id GROUP BY sc.academic_year, d.name ORDER BY sc.academic_year, total_scholarship DESC",
+        "goldenRowCount": 4,
+        "predictedRowCount": 4,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "department"
+          },
+          {
+            "type": "missing",
+            "column": "total_scholarship"
+          },
+          {
+            "type": "extra",
+            "column": "department_id"
+          },
+          {
+            "type": "extra",
+            "column": "department_name"
+          },
+          {
+            "type": "extra",
+            "column": "total_amount"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=3, predicted=4"
+      }
+    },
+    {
+      "caseId": "highest-workload-courses",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT co.name AS course, ROUND(AVG(ce.workload_hours), 1) AS avg_workload_hours, COUNT(ce.id) AS evaluation_count FROM course_evaluations ce JOIN enrollments e ON e.id = ce.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN courses co ON co.id = cs.course_id WHERE ce.workload_hours IS NOT NULL GROUP BY co.name HAVING COUNT(ce.id) >= 3 ORDER BY avg_workload_hours DESC LIMIT 10",
+        "goldenRowCount": 7,
+        "predictedRowCount": 10,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "avg_workload_hours"
+          },
+          {
+            "type": "missing",
+            "column": "course"
+          },
+          {
+            "type": "missing",
+            "column": "evaluation_count"
+          },
+          {
+            "type": "extra",
+            "column": "average_workload_hours"
+          },
+          {
+            "type": "extra",
+            "column": "course_code"
+          },
+          {
+            "type": "extra",
+            "column": "course_id"
+          },
+          {
+            "type": "extra",
+            "column": "course_name"
+          },
+          {
+            "type": "extra",
+            "column": "evaluations_count"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=3, predicted=5"
+      }
+    },
+    {
+      "caseId": "largest-classrooms",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT building, room_number, capacity, has_projector, has_computers FROM classrooms ORDER BY capacity DESC LIMIT 10",
+        "goldenRowCount": 10,
+        "predictedRowCount": 10,
+        "columnDiffs": [
+          {
+            "type": "extra",
+            "column": "id"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=5, predicted=6"
+      }
+    },
+    {
+      "caseId": "low-capacity-high-enrollment",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT co.name AS course, cs.section_number, cs.academic_year, cs.semester_type, cs.max_students, COUNT(e.id) AS enrolled, ROUND(COUNT(e.id)::numeric / cs.max_students, 2) AS fill_ratio FROM course_sections cs JOIN courses co ON co.id = cs.course_id JOIN enrollments e ON e.course_section_id = cs.id GROUP BY co.name, cs.id, cs.section_number, cs.academic_year, cs.semester_type, cs.max_students HAVING COUNT(e.id) > cs.max_students ORDER BY fill_ratio DESC LIMIT 10",
+        "goldenRowCount": 0,
+        "predictedRowCount": 10,
+        "columnDiffs": [
+          {
+            "type": "extra",
+            "column": "academic_year"
+          },
+          {
+            "type": "extra",
+            "column": "course_id"
+          },
+          {
+            "type": "extra",
+            "column": "enrolled_count"
+          },
+          {
+            "type": "extra",
+            "column": "max_students"
+          },
+          {
+            "type": "extra",
+            "column": "overbooked_ratio"
+          },
+          {
+            "type": "extra",
+            "column": "section_id"
+          },
+          {
+            "type": "extra",
+            "column": "section_number"
+          },
+          {
+            "type": "extra",
+            "column": "semester_type"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=0, predicted=8"
+      }
+    },
+    {
+      "caseId": "mandatory-vs-optional-prerequisites",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT CASE WHEN is_mandatory THEN 'Mandatory' ELSE 'Optional' END AS prerequisite_type, COUNT(*) AS count FROM prerequisites GROUP BY is_mandatory",
+        "goldenRowCount": 2,
+        "predictedRowCount": 2,
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Row 1 values differ (positional comparison, column names ignored)"
+      }
+    },
+    {
+      "caseId": "pass-fail-rate-overall",
+      "repeatIndex": 1,
+      "result": {
+        "status": "skipped",
+        "goldenSql": "SELECT CASE WHEN grade_value = '2.0' THEN 'Fail' ELSE 'Pass' END AS result, COUNT(*) AS count, ROUND(100.0 * COUNT(*) / SUM(COUNT(*)) OVER (), 2) AS percentage FROM grades WHERE grade_value IS NOT NULL GROUP BY result",
+        "details": "No predicted data in run.json"
+      }
+    },
+    {
+      "caseId": "prerequisite-chain-length",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT c.name AS prerequisite_course, c.code, COUNT(p.course_id) AS required_by_count FROM prerequisites p JOIN courses c ON c.id = p.prerequisite_course_id GROUP BY c.id, c.name, c.code ORDER BY required_by_count DESC",
+        "goldenRowCount": 20,
+        "predictedRowCount": 1,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "code"
+          },
+          {
+            "type": "missing",
+            "column": "prerequisite_course"
+          },
+          {
+            "type": "missing",
+            "column": "required_by_count"
+          },
+          {
+            "type": "extra",
+            "column": "course_code"
+          },
+          {
+            "type": "extra",
+            "column": "course_id"
+          },
+          {
+            "type": "extra",
+            "column": "course_name"
+          },
+          {
+            "type": "extra",
+            "column": "num_dependent_courses"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=3, predicted=4"
+      }
+    },
+    {
+      "caseId": "professor-avg-grade",
+      "repeatIndex": 1,
+      "result": {
+        "status": "error",
+        "goldenSql": "SELECT p.first_name || ' ' || p.last_name AS professor, ROUND(AVG(g.grade_value::numeric), 2) AS avg_grade, COUNT(g.id) AS grades_given FROM grades g JOIN enrollments e ON e.id = g.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN professors p ON p.id = cs.professor_id WHERE g.grade_value IS NOT NULL GROUP BY p.id, p.first_name, p.last_name ORDER BY avg_grade DESC",
+        "details": "Golden SQL execution failed: cannot cast type grade_value to numeric"
+      }
+    },
+    {
+      "caseId": "professor-content-vs-professor-rating",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT p.first_name || ' ' || p.last_name AS professor, ROUND(AVG(ce.content_rating), 2) AS avg_content_rating, ROUND(AVG(ce.professor_rating), 2) AS avg_professor_rating FROM course_evaluations ce JOIN enrollments e ON e.id = ce.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN professors p ON p.id = cs.professor_id GROUP BY p.id, p.first_name, p.last_name HAVING COUNT(ce.id) >= 5 ORDER BY avg_professor_rating DESC",
+        "goldenRowCount": 1,
+        "predictedRowCount": 20,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "avg_content_rating"
+          },
+          {
+            "type": "missing",
+            "column": "avg_professor_rating"
+          },
+          {
+            "type": "missing",
+            "column": "professor"
+          },
+          {
+            "type": "extra",
+            "column": "average_content_rating"
+          },
+          {
+            "type": "extra",
+            "column": "average_professor_rating"
+          },
+          {
+            "type": "extra",
+            "column": "evaluation_count"
+          },
+          {
+            "type": "extra",
+            "column": "professor_id"
+          },
+          {
+            "type": "extra",
+            "column": "professor_name"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=3, predicted=5"
+      }
+    },
+    {
+      "caseId": "professor-course-load",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT p.first_name || ' ' || p.last_name AS professor, COUNT(cs.id) AS section_count FROM professors p LEFT JOIN course_sections cs ON cs.professor_id = p.id GROUP BY p.id, p.first_name, p.last_name ORDER BY section_count DESC",
+        "goldenRowCount": 50,
+        "predictedRowCount": 50,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "professor"
+          },
+          {
+            "type": "extra",
+            "column": "first_name"
+          },
+          {
+            "type": "extra",
+            "column": "last_name"
+          },
+          {
+            "type": "extra",
+            "column": "professor_id"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=4"
+      }
+    },
+    {
+      "caseId": "professor-evaluation-trend-by-year",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT cs.academic_year, ROUND(AVG(ce.professor_rating), 2) AS avg_professor_rating FROM course_evaluations ce JOIN enrollments e ON e.id = ce.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id GROUP BY cs.academic_year ORDER BY cs.academic_year",
+        "goldenRowCount": 6,
+        "predictedRowCount": 6,
+        "columnDiffs": [
+          {
+            "type": "extra",
+            "column": "evaluation_count"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=3"
+      }
+    },
+    {
+      "caseId": "professor-experience-vs-rating",
+      "repeatIndex": 1,
+      "result": {
+        "status": "skipped",
+        "goldenSql": "SELECT EXTRACT(YEAR FROM p.hire_date)::int AS hire_year, ROUND(AVG(ce.professor_rating), 2) AS avg_rating, COUNT(DISTINCT p.id) AS professor_count FROM professors p JOIN course_sections cs ON cs.professor_id = p.id JOIN enrollments e ON e.course_section_id = cs.id JOIN course_evaluations ce ON ce.enrollment_id = e.id WHERE p.hire_date IS NOT NULL GROUP BY hire_year ORDER BY hire_year",
+        "details": "No predicted data in run.json"
+      }
+    },
+    {
+      "caseId": "professor-grade-strictness",
+      "repeatIndex": 1,
+      "result": {
+        "status": "error",
+        "goldenSql": "SELECT p.first_name || ' ' || p.last_name AS professor, p.academic_title, ROUND(AVG(g.grade_value::numeric), 2) AS avg_grade, COUNT(g.id) AS grade_count FROM grades g JOIN enrollments e ON e.id = g.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN professors p ON p.id = cs.professor_id WHERE g.grade_value IS NOT NULL GROUP BY p.id, p.first_name, p.last_name, p.academic_title HAVING COUNT(g.id) >= 10 ORDER BY avg_grade ASC LIMIT 10",
+        "details": "Golden SQL execution failed: cannot cast type grade_value to numeric"
+      }
+    },
+    {
+      "caseId": "professor-hire-year-trend",
+      "repeatIndex": 1,
+      "result": {
+        "status": "match",
+        "goldenSql": "SELECT EXTRACT(YEAR FROM hire_date)::int AS hire_year, COUNT(*) AS hired_count FROM professors WHERE hire_date IS NOT NULL GROUP BY hire_year ORDER BY hire_year",
+        "goldenRowCount": 19,
+        "predictedRowCount": 19,
+        "rowCountMatch": true,
+        "contentMatch": true
+      }
+    },
+    {
+      "caseId": "professor-title-distribution",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT COALESCE(academic_title, 'No title') AS academic_title, COUNT(*) AS professor_count FROM professors GROUP BY academic_title ORDER BY professor_count DESC",
+        "goldenRowCount": 12,
+        "predictedRowCount": 12,
+        "columnDiffs": [
+          {
+            "type": "extra",
+            "column": "percentage"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=3"
+      }
+    },
+    {
+      "caseId": "professor-workload-comparison",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT p.first_name || ' ' || p.last_name AS professor, COUNT(DISTINCT cs.course_id) AS distinct_courses FROM professors p JOIN course_sections cs ON cs.professor_id = p.id GROUP BY p.id, p.first_name, p.last_name ORDER BY distinct_courses DESC LIMIT 15",
+        "goldenRowCount": 15,
+        "predictedRowCount": 50,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "distinct_courses"
+          },
+          {
+            "type": "missing",
+            "column": "professor"
+          },
+          {
+            "type": "extra",
+            "column": "distinct_course_count"
+          },
+          {
+            "type": "extra",
+            "column": "professor_id"
+          },
+          {
+            "type": "extra",
+            "column": "professor_name"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=3"
+      }
+    },
+    {
+      "caseId": "professors-per-department",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT d.name AS department, COUNT(p.id) AS professor_count FROM departments d LEFT JOIN professors p ON p.department_id = d.id GROUP BY d.name ORDER BY professor_count DESC",
+        "goldenRowCount": 6,
+        "predictedRowCount": 6,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "department"
+          },
+          {
+            "type": "extra",
+            "column": "department_id"
+          },
+          {
+            "type": "extra",
+            "column": "department_name"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=3"
+      }
+    },
+    {
+      "caseId": "professors-with-no-sections",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT CASE WHEN cs.professor_id IS NOT NULL THEN 'Has Sections' ELSE 'No Sections' END AS status, COUNT(DISTINCT p.id) AS professor_count FROM professors p LEFT JOIN course_sections cs ON cs.professor_id = p.id GROUP BY status",
+        "goldenRowCount": 2,
+        "predictedRowCount": 1,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "professor_count"
+          },
+          {
+            "type": "missing",
+            "column": "status"
+          },
+          {
+            "type": "extra",
+            "column": "never_taught_count"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=1"
+      }
+    },
+    {
+      "caseId": "recommend-rate-by-course",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT co.name AS course, ROUND(100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / COUNT(*), 1) AS recommend_pct FROM course_evaluations ce JOIN enrollments e ON e.id = ce.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN courses co ON co.id = cs.course_id GROUP BY co.name ORDER BY recommend_pct DESC",
+        "goldenRowCount": 12,
+        "predictedRowCount": 16,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "course"
+          },
+          {
+            "type": "extra",
+            "column": "course_code"
+          },
+          {
+            "type": "extra",
+            "column": "course_id"
+          },
+          {
+            "type": "extra",
+            "column": "course_name"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=4"
+      }
+    },
+    {
+      "caseId": "room-utilization-by-building",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT cl.building, COUNT(cs.id) AS section_count FROM course_sections cs JOIN classrooms cl ON cl.id = cs.classroom_id GROUP BY cl.building ORDER BY section_count DESC",
+        "goldenRowCount": 16,
+        "predictedRowCount": 20,
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Row count mismatch: golden=16, predicted=20"
+      }
+    },
+    {
+      "caseId": "scholarship-amount-by-year",
+      "repeatIndex": 1,
+      "result": {
+        "status": "match",
+        "goldenSql": "SELECT academic_year, SUM(amount) AS total_amount FROM scholarships GROUP BY academic_year ORDER BY academic_year",
+        "goldenRowCount": 4,
+        "predictedRowCount": 4,
+        "rowCountMatch": true,
+        "contentMatch": true
+      }
+    },
+    {
+      "caseId": "scholarship-amount-distribution",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT CASE WHEN amount < 500 THEN 'Under 500' WHEN amount < 1000 THEN '500-999' WHEN amount < 2000 THEN '1000-1999' WHEN amount < 3000 THEN '2000-2999' ELSE '3000+' END AS amount_range, COUNT(*) AS count FROM scholarships GROUP BY amount_range ORDER BY MIN(amount)",
+        "goldenRowCount": 3,
+        "predictedRowCount": 7,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "amount_range"
+          },
+          {
+            "type": "extra",
+            "column": "bucket_max"
+          },
+          {
+            "type": "extra",
+            "column": "bucket_min"
+          },
+          {
+            "type": "extra",
+            "column": "bucket_number"
+          },
+          {
+            "type": "extra",
+            "column": "cumulative_pct"
+          },
+          {
+            "type": "extra",
+            "column": "pct"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=6"
+      }
+    },
+    {
+      "caseId": "scholarship-amount-vs-gpa",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT CASE WHEN sc.amount < 500 THEN 'Under 500' WHEN sc.amount < 1000 THEN '500-999' WHEN sc.amount < 2000 THEN '1000-1999' ELSE '2000+' END AS amount_range, ROUND(AVG(s.gpa), 2) AS avg_gpa, COUNT(*) AS count FROM scholarships sc JOIN students s ON s.id = sc.student_id WHERE s.gpa IS NOT NULL GROUP BY amount_range ORDER BY MIN(sc.amount)",
+        "goldenRowCount": 2,
+        "predictedRowCount": 3,
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Row count mismatch: golden=2, predicted=3"
+      }
+    },
+    {
+      "caseId": "scholarship-avg-amount-by-type",
+      "repeatIndex": 1,
+      "result": {
+        "status": "match",
+        "goldenSql": "SELECT scholarship_type, ROUND(AVG(amount), 2) AS avg_amount FROM scholarships GROUP BY scholarship_type ORDER BY avg_amount DESC",
+        "goldenRowCount": 3,
+        "predictedRowCount": 3,
+        "rowCountMatch": true,
+        "contentMatch": true
+      }
+    },
+    {
+      "caseId": "scholarship-by-department",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT d.name AS department, SUM(sc.amount) AS total_scholarship FROM scholarships sc JOIN students s ON s.id = sc.student_id JOIN departments d ON d.id = s.department_id GROUP BY d.name ORDER BY total_scholarship DESC",
+        "goldenRowCount": 5,
+        "predictedRowCount": 5,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "department"
+          },
+          {
+            "type": "missing",
+            "column": "total_scholarship"
+          },
+          {
+            "type": "extra",
+            "column": "dept_code"
+          },
+          {
+            "type": "extra",
+            "column": "dept_id"
+          },
+          {
+            "type": "extra",
+            "column": "dept_name"
+          },
+          {
+            "type": "extra",
+            "column": "scholarship_count"
+          },
+          {
+            "type": "extra",
+            "column": "student_count"
+          },
+          {
+            "type": "extra",
+            "column": "total_amount"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=6"
+      }
+    },
+    {
+      "caseId": "scholarship-paid-vs-unpaid",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT CASE WHEN paid_date IS NOT NULL THEN 'Paid' ELSE 'Not Paid' END AS payment_status, COUNT(*) AS count, SUM(amount) AS total_amount FROM scholarships GROUP BY payment_status",
+        "goldenRowCount": 1,
+        "predictedRowCount": 1,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "count"
+          },
+          {
+            "type": "missing",
+            "column": "payment_status"
+          },
+          {
+            "type": "missing",
+            "column": "total_amount"
+          },
+          {
+            "type": "extra",
+            "column": "scholarships_count"
+          },
+          {
+            "type": "extra",
+            "column": "status"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=3, predicted=2"
+      }
+    },
+    {
+      "caseId": "scholarship-per-student-by-dept",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT d.name AS department, ROUND(AVG(sc.amount), 2) AS avg_scholarship_per_award FROM scholarships sc JOIN students s ON s.id = sc.student_id JOIN departments d ON d.id = s.department_id GROUP BY d.name ORDER BY avg_scholarship_per_award DESC",
+        "goldenRowCount": 5,
+        "predictedRowCount": 6,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "avg_scholarship_per_award"
+          },
+          {
+            "type": "missing",
+            "column": "department"
+          },
+          {
+            "type": "extra",
+            "column": "avg_scholarship_amount"
+          },
+          {
+            "type": "extra",
+            "column": "department_id"
+          },
+          {
+            "type": "extra",
+            "column": "department_name"
+          },
+          {
+            "type": "extra",
+            "column": "student_count"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=4"
+      }
+    },
+    {
+      "caseId": "scholarship-recipients-count",
+      "repeatIndex": 1,
+      "result": {
+        "status": "match",
+        "goldenSql": "SELECT scholarship_type, COUNT(DISTINCT student_id) AS recipient_count FROM scholarships GROUP BY scholarship_type ORDER BY recipient_count DESC",
+        "goldenRowCount": 3,
+        "predictedRowCount": 3,
+        "rowCountMatch": true,
+        "contentMatch": true
+      }
+    },
+    {
+      "caseId": "scholarship-total-by-type",
+      "repeatIndex": 1,
+      "result": {
+        "status": "match",
+        "goldenSql": "SELECT scholarship_type, SUM(amount) AS total_amount FROM scholarships GROUP BY scholarship_type ORDER BY total_amount DESC",
+        "goldenRowCount": 3,
+        "predictedRowCount": 3,
+        "rowCountMatch": true,
+        "contentMatch": true
+      }
+    },
+    {
+      "caseId": "scholarship-type-by-semester",
+      "repeatIndex": 1,
+      "result": {
+        "status": "match",
+        "goldenSql": "SELECT semester_type, scholarship_type, COUNT(*) AS count FROM scholarships GROUP BY semester_type, scholarship_type ORDER BY semester_type, scholarship_type",
+        "goldenRowCount": 6,
+        "predictedRowCount": 6,
+        "rowCountMatch": true,
+        "contentMatch": true
+      }
+    },
+    {
+      "caseId": "section-fill-rate",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT co.name AS course, cs.academic_year, cs.semester_type, cs.max_students, COUNT(e.id) AS enrolled, ROUND(100.0 * COUNT(e.id) / cs.max_students, 1) AS fill_rate_pct FROM course_sections cs JOIN courses co ON co.id = cs.course_id LEFT JOIN enrollments e ON e.course_section_id = cs.id AND e.is_active = true GROUP BY co.name, cs.id, cs.academic_year, cs.semester_type, cs.max_students ORDER BY fill_rate_pct DESC",
+        "goldenRowCount": 34,
+        "predictedRowCount": 1,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "academic_year"
+          },
+          {
+            "type": "missing",
+            "column": "course"
+          },
+          {
+            "type": "missing",
+            "column": "enrolled"
+          },
+          {
+            "type": "missing",
+            "column": "fill_rate_pct"
+          },
+          {
+            "type": "missing",
+            "column": "max_students"
+          },
+          {
+            "type": "missing",
+            "column": "semester_type"
+          },
+          {
+            "type": "extra",
+            "column": "avg_fill_rate"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=6, predicted=1"
+      }
+    },
+    {
+      "caseId": "sections-per-semester",
+      "repeatIndex": 1,
+      "result": {
+        "status": "match",
+        "goldenSql": "SELECT academic_year, semester_type, COUNT(*) AS section_count FROM course_sections GROUP BY academic_year, semester_type ORDER BY academic_year, semester_type",
+        "goldenRowCount": 11,
+        "predictedRowCount": 11,
+        "rowCountMatch": true,
+        "contentMatch": true
+      }
+    },
+    {
+      "caseId": "student-age-distribution",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT EXTRACT(YEAR FROM AGE(CURRENT_DATE, date_of_birth))::int AS age, COUNT(*) AS student_count FROM students WHERE date_of_birth IS NOT NULL GROUP BY age ORDER BY age",
+        "goldenRowCount": 13,
+        "predictedRowCount": 14,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "age"
+          },
+          {
+            "type": "extra",
+            "column": "age_label"
+          },
+          {
+            "type": "extra",
+            "column": "age_years"
+          },
+          {
+            "type": "extra",
+            "column": "percentage"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=4"
+      }
+    },
+    {
+      "caseId": "student-enrollment-date-trend",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT EXTRACT(YEAR FROM enrollment_date)::int AS enrollment_year, COUNT(*) AS student_count FROM students GROUP BY enrollment_year ORDER BY enrollment_year",
+        "goldenRowCount": 8,
+        "predictedRowCount": 3,
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Row count mismatch: golden=8, predicted=3"
+      }
+    },
+    {
+      "caseId": "student-to-professor-ratio",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT d.name AS department, COUNT(DISTINCT s.id) AS student_count, COUNT(DISTINCT p.id) AS professor_count, ROUND(COUNT(DISTINCT s.id)::numeric / NULLIF(COUNT(DISTINCT p.id), 0), 1) AS student_professor_ratio FROM departments d LEFT JOIN students s ON s.department_id = d.id LEFT JOIN professors p ON p.department_id = d.id GROUP BY d.name ORDER BY student_professor_ratio DESC",
+        "goldenRowCount": 6,
+        "predictedRowCount": 6,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "department"
+          },
+          {
+            "type": "missing",
+            "column": "professor_count"
+          },
+          {
+            "type": "missing",
+            "column": "student_count"
+          },
+          {
+            "type": "missing",
+            "column": "student_professor_ratio"
+          },
+          {
+            "type": "extra",
+            "column": "department_code"
+          },
+          {
+            "type": "extra",
+            "column": "department_id"
+          },
+          {
+            "type": "extra",
+            "column": "department_name"
+          },
+          {
+            "type": "extra",
+            "column": "professors_count"
+          },
+          {
+            "type": "extra",
+            "column": "student_to_professor_ratio"
+          },
+          {
+            "type": "extra",
+            "column": "students_count"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=4, predicted=6"
+      }
+    },
+    {
+      "caseId": "students-born-per-year",
+      "repeatIndex": 1,
+      "result": {
+        "status": "match",
+        "goldenSql": "SELECT EXTRACT(YEAR FROM date_of_birth)::int AS birth_year, COUNT(*) AS student_count FROM students WHERE date_of_birth IS NOT NULL GROUP BY birth_year ORDER BY birth_year",
+        "goldenRowCount": 14,
+        "predictedRowCount": 14,
+        "rowCountMatch": true,
+        "contentMatch": true
+      }
+    },
+    {
+      "caseId": "students-enrolled-per-course",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT co.name AS course, COUNT(DISTINCT e.student_id) AS student_count FROM enrollments e JOIN course_sections cs ON cs.id = e.course_section_id JOIN courses co ON co.id = cs.course_id WHERE e.is_active = true GROUP BY co.name ORDER BY student_count DESC",
+        "goldenRowCount": 14,
+        "predictedRowCount": 26,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "course"
+          },
+          {
+            "type": "missing",
+            "column": "student_count"
+          },
+          {
+            "type": "extra",
+            "column": "course_code"
+          },
+          {
+            "type": "extra",
+            "column": "course_id"
+          },
+          {
+            "type": "extra",
+            "column": "course_name"
+          },
+          {
+            "type": "extra",
+            "column": "enrolled_students"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=4"
+      }
+    },
+    {
+      "caseId": "students-gpa-histogram",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT CASE WHEN gpa < 2.5 THEN '2.0 - 2.49' WHEN gpa < 3.0 THEN '2.5 - 2.99' WHEN gpa < 3.5 THEN '3.0 - 3.49' WHEN gpa < 4.0 THEN '3.5 - 3.99' WHEN gpa < 4.5 THEN '4.0 - 4.49' ELSE '4.5 - 5.0' END AS gpa_range, COUNT(*) AS student_count FROM students WHERE gpa IS NOT NULL GROUP BY gpa_range ORDER BY MIN(gpa)",
+        "goldenRowCount": 4,
+        "predictedRowCount": 3,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "gpa_range"
+          },
+          {
+            "type": "extra",
+            "column": "gpa_bin"
+          },
+          {
+            "type": "extra",
+            "column": "max_gpa"
+          },
+          {
+            "type": "extra",
+            "column": "min_gpa"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=4"
+      }
+    },
+    {
+      "caseId": "students-multiple-scholarships",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT scholarship_count, COUNT(*) AS student_count FROM (SELECT student_id, COUNT(*) AS scholarship_count FROM scholarships GROUP BY student_id) sub GROUP BY scholarship_count ORDER BY scholarship_count",
+        "goldenRowCount": 2,
+        "predictedRowCount": 1,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "scholarship_count"
+          },
+          {
+            "type": "missing",
+            "column": "student_count"
+          },
+          {
+            "type": "extra",
+            "column": "students_with_multiple_scholarships"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=1"
+      }
+    },
+    {
+      "caseId": "students-per-department",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT d.name AS department, COUNT(s.id) AS student_count FROM departments d LEFT JOIN students s ON s.department_id = d.id GROUP BY d.name ORDER BY student_count DESC",
+        "goldenRowCount": 6,
+        "predictedRowCount": 6,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "department"
+          },
+          {
+            "type": "extra",
+            "column": "department_code"
+          },
+          {
+            "type": "extra",
+            "column": "department_id"
+          },
+          {
+            "type": "extra",
+            "column": "department_name"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=2, predicted=4"
+      }
+    },
+    {
+      "caseId": "students-per-department-semester",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT d.name AS department, s.current_semester, COUNT(*) AS student_count FROM students s JOIN departments d ON d.id = s.department_id GROUP BY d.name, s.current_semester ORDER BY d.name, s.current_semester",
+        "goldenRowCount": 41,
+        "predictedRowCount": 41,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "department"
+          },
+          {
+            "type": "extra",
+            "column": "department_id"
+          },
+          {
+            "type": "extra",
+            "column": "department_name"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=3, predicted=4"
+      }
+    },
+    {
+      "caseId": "students-per-semester",
+      "repeatIndex": 1,
+      "result": {
+        "status": "match",
+        "goldenSql": "SELECT current_semester, COUNT(*) AS student_count FROM students GROUP BY current_semester ORDER BY current_semester",
+        "goldenRowCount": 7,
+        "predictedRowCount": 7,
+        "rowCountMatch": true,
+        "contentMatch": true
+      }
+    },
+    {
+      "caseId": "top-courses-by-enrollment",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT co.name AS course, co.code, COUNT(e.id) AS total_enrollments FROM enrollments e JOIN course_sections cs ON cs.id = e.course_section_id JOIN courses co ON co.id = cs.course_id GROUP BY co.id, co.name, co.code ORDER BY total_enrollments DESC LIMIT 15",
+        "goldenRowCount": 15,
+        "predictedRowCount": 15,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "code"
+          },
+          {
+            "type": "missing",
+            "column": "course"
+          },
+          {
+            "type": "extra",
+            "column": "course_code"
+          },
+          {
+            "type": "extra",
+            "column": "course_id"
+          },
+          {
+            "type": "extra",
+            "column": "course_name"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=3, predicted=4"
+      }
+    },
+    {
+      "caseId": "top-rated-professors",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT p.first_name || ' ' || p.last_name AS professor, p.academic_title, ROUND(AVG(ce.professor_rating), 2) AS avg_professor_rating, COUNT(ce.id) AS evaluation_count FROM course_evaluations ce JOIN enrollments e ON e.id = ce.enrollment_id JOIN course_sections cs ON cs.id = e.course_section_id JOIN professors p ON p.id = cs.professor_id GROUP BY p.id, p.first_name, p.last_name, p.academic_title HAVING COUNT(ce.id) >= 5 ORDER BY avg_professor_rating DESC LIMIT 10",
+        "goldenRowCount": 1,
+        "predictedRowCount": 10,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "academic_title"
+          },
+          {
+            "type": "missing",
+            "column": "evaluation_count"
+          },
+          {
+            "type": "missing",
+            "column": "professor"
+          },
+          {
+            "type": "extra",
+            "column": "eval_count"
+          },
+          {
+            "type": "extra",
+            "column": "first_name"
+          },
+          {
+            "type": "extra",
+            "column": "last_name"
+          },
+          {
+            "type": "extra",
+            "column": "professor_id"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=4, predicted=5"
+      }
+    },
+    {
+      "caseId": "top-scholarship-students",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT s.first_name || ' ' || s.last_name AS student, s.index_number, SUM(sc.amount) AS total_scholarship FROM scholarships sc JOIN students s ON s.id = sc.student_id GROUP BY s.id, s.first_name, s.last_name, s.index_number ORDER BY total_scholarship DESC LIMIT 10",
+        "goldenRowCount": 9,
+        "predictedRowCount": 1,
+        "columnDiffs": [
+          {
+            "type": "missing",
+            "column": "index_number"
+          },
+          {
+            "type": "missing",
+            "column": "student"
+          },
+          {
+            "type": "missing",
+            "column": "total_scholarship"
+          },
+          {
+            "type": "extra",
+            "column": "first_name"
+          },
+          {
+            "type": "extra",
+            "column": "last_name"
+          },
+          {
+            "type": "extra",
+            "column": "student_id"
+          },
+          {
+            "type": "extra",
+            "column": "total_amount"
+          }
+        ],
+        "rowCountMatch": false,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=3, predicted=4"
+      }
+    },
+    {
+      "caseId": "top10-students-by-gpa",
+      "repeatIndex": 1,
+      "result": {
+        "status": "mismatch",
+        "goldenSql": "SELECT s.first_name, s.last_name, s.index_number, s.gpa FROM students s WHERE s.gpa IS NOT NULL ORDER BY s.gpa DESC LIMIT 10",
+        "goldenRowCount": 10,
+        "predictedRowCount": 10,
+        "columnDiffs": [
+          {
+            "type": "extra",
+            "column": "email"
+          },
+          {
+            "type": "extra",
+            "column": "student_id"
+          }
+        ],
+        "rowCountMatch": true,
+        "contentMatch": false,
+        "details": "Column count mismatch: golden=4, predicted=6"
+      }
+    }
+  ]
+}

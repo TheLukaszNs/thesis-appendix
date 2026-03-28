@@ -1,0 +1,328 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "credits-per-department",
+  "caseDirectory": "credits-per-department",
+  "repeatIndex": 1,
+  "prompt": "What is the total number of credits offered by each department?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the total number of credits offered by each department?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:05:01.867Z",
+    "endedAtUtc": "2026-02-23T14:05:38.312Z",
+    "durationMs": 36445
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "11057",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:05:38 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the total number of credits offered by each department?\"},\"sql\":{\"payload\":{\"question\":\"What is the total number of credits offered by each department?\"},\"startedAt\":1771855501902,\"status\":\"success\",\"output\":{\"reasoning\":\"The question asks for the total number of credits offered by each department. I need to join the departments table with the courses table on department_id, then group by department and sum the credits. The departments table has id, code, and name columns. The courses table has department_id and credits columns. I'll group by department and order by total credits descending for clarity.\",\"sql\":\"SELECT \\n  d.id,\\n  d.code,\\n  d.name,\\n  SUM(c.credits) AS total_credits\\nFROM departments d\\nLEFT JOIN courses c ON d.id = c.department_id\\nGROUP BY d.id, d.code, d.name\\nORDER BY total_credits DESC NULLS LAST, d.name ASC\",\"assumptions\":[\"Departments may not have any courses, so LEFT JOIN is used to include all departments\",\"Credits are summed across all courses in each department\",\"Results are ordered by total credits descending, with departments having no courses appearing last\"]},\"endedAt\":1771855534771},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT \\n  d.id,\\n  d.code,\\n  d.name,\\n  SUM(c.credits) AS total_credits\\nFROM departments d\\nLEFT JOIN courses c ON d.id = c.department_id\\nGROUP BY d.id, d.code, d.name\\nORDER BY total_credits DESC NULLS LAST, d.name ASC\"},\"startedAt\":1771855534776,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  d.id,\\n  d.code,\\n  d.name,\\n  SUM(c.credits) AS total_credits\\nFROM departments d\\nLEFT JOIN courses c ON d.id = c.department_id\\nGROUP BY d.id, d.code, d.name\\nORDER BY total_credits DESC NULLS LAST, d.name ASC\",\"metadata\":{\"columns\":[\"id\",\"code\",\"name\",\"total_credits\"],\"rowCount\":6,\"sample\":[{\"id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"code\":\"AEI\",\"name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"total_credits\":\"26\"},{\"id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"code\":\"MTR\",\"name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_credits\":\"25\"}]},\"data\":[{\"id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"code\":\"AEI\",\"name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"total_credits\":\"26\"},{\"id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"code\":\"MTR\",\"name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_credits\":\"25\"},{\"id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"code\":\"IBM\",\"name\":\"Wydział Inżynierii Biomedycznej\",\"total_credits\":\"19\"},{\"id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"code\":\"TCH\",\"name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"total_credits\":\"16\"},{\"id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"code\":\"WIP\",\"name\":\"Wydział Inżynierii Produkcji\",\"total_credits\":\"15\"},{\"id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"code\":\"INF\",\"name\":\"Wydział Informatyki i Nauki o Materiałach\",\"total_credits\":\"12\"}]},\"endedAt\":1771855534788},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  d.id,\\n  d.code,\\n  d.name,\\n  SUM(c.credits) AS total_credits\\nFROM departments d\\nLEFT JOIN courses c ON d.id = c.department_id\\nGROUP BY d.id, d.code, d.name\\nORDER BY total_credits DESC NULLS LAST, d.name ASC\",\"metadata\":{\"columns\":[\"id\",\"code\",\"name\",\"total_credits\"],\"rowCount\":6,\"sample\":[{\"id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"code\":\"AEI\",\"name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"total_credits\":\"26\"},{\"id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"code\":\"MTR\",\"name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_credits\":\"25\"}]},\"data\":[{\"id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"code\":\"AEI\",\"name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"total_credits\":\"26\"},{\"id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"code\":\"MTR\",\"name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_credits\":\"25\"},{\"id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"code\":\"IBM\",\"name\":\"Wydział Inżynierii Biomedycznej\",\"total_credits\":\"19\"},{\"id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"code\":\"TCH\",\"name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"total_credits\":\"16\"},{\"id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"code\":\"WIP\",\"name\":\"Wydział Inżynierii Produkcji\",\"total_credits\":\"15\"},{\"id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"code\":\"INF\",\"name\":\"Wydział Informatyki i Nauki o Materiałach\",\"total_credits\":\"12\"}]},\"startedAt\":1771855534791,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Total Credits Offered by Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Department\"},\"y\":{\"field\":\"total_credits\",\"type\":\"quantitative\",\"title\":\"Total Credits\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Department Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Department Name\"},{\"field\":\"total_credits\",\"type\":\"quantitative\",\"title\":\"Total Credits\"}],\"color\":{\"field\":\"total_credits\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Total Credits\"}},\"width\":600,\"height\":400},\"reasoning\":\"Bar chart showing total credits per department, sorted by credits descending. Color intensity represents credit volume. Tooltip includes department code, full name, and total credits for detailed inspection. Angled x-axis labels improve readability for longer department names.\"},\"endedAt\":1771855538290},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Total Credits Offered by Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Department\"},\"y\":{\"field\":\"total_credits\",\"type\":\"quantitative\",\"title\":\"Total Credits\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Department Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Department Name\"},{\"field\":\"total_credits\",\"type\":\"quantitative\",\"title\":\"Total Credits\"}],\"color\":{\"field\":\"total_credits\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Total Credits\"}},\"width\":600,\"height\":400},\"reasoning\":\"Bar chart showing total credits per department, sorted by credits descending. Color intensity represents credit volume. Tooltip includes department code, full name, and total credits for detailed inspection. Angled x-axis labels improve readability for longer department names.\"},\"startedAt\":1771855538295,\"status\":\"success\",\"output\":{\"sql\":\"SELECT \\n  d.id,\\n  d.code,\\n  d.name,\\n  SUM(c.credits) AS total_credits\\nFROM departments d\\nLEFT JOIN courses c ON d.id = c.department_id\\nGROUP BY d.id, d.code, d.name\\nORDER BY total_credits DESC NULLS LAST, d.name ASC\",\"data\":[{\"id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"code\":\"AEI\",\"name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"total_credits\":\"26\"},{\"id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"code\":\"MTR\",\"name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_credits\":\"25\"},{\"id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"code\":\"IBM\",\"name\":\"Wydział Inżynierii Biomedycznej\",\"total_credits\":\"19\"},{\"id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"code\":\"TCH\",\"name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"total_credits\":\"16\"},{\"id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"code\":\"WIP\",\"name\":\"Wydział Inżynierii Produkcji\",\"total_credits\":\"15\"},{\"id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"code\":\"INF\",\"name\":\"Wydział Informatyki i Nauki o Materiałach\",\"total_credits\":\"12\"}],\"metadata\":{\"columns\":[\"id\",\"code\",\"name\",\"total_credits\"],\"rowCount\":6,\"sample\":[{\"id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"code\":\"AEI\",\"name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"total_credits\":\"26\"},{\"id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"code\":\"MTR\",\"name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_credits\":\"25\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Total Credits Offered by Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Department\"},\"y\":{\"field\":\"total_credits\",\"type\":\"quantitative\",\"title\":\"Total Credits\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Department Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Department Name\"},{\"field\":\"total_credits\",\"type\":\"quantitative\",\"title\":\"Total Credits\"}],\"color\":{\"field\":\"total_credits\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Total Credits\"}},\"width\":600,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855538298}},\"input\":{\"question\":\"What is the total number of credits offered by each department?\"},\"result\":{\"sql\":\"SELECT \\n  d.id,\\n  d.code,\\n  d.name,\\n  SUM(c.credits) AS total_credits\\nFROM departments d\\nLEFT JOIN courses c ON d.id = c.department_id\\nGROUP BY d.id, d.code, d.name\\nORDER BY total_credits DESC NULLS LAST, d.name ASC\",\"data\":[{\"id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"code\":\"AEI\",\"name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"total_credits\":\"26\"},{\"id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"code\":\"MTR\",\"name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_credits\":\"25\"},{\"id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"code\":\"IBM\",\"name\":\"Wydział Inżynierii Biomedycznej\",\"total_credits\":\"19\"},{\"id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"code\":\"TCH\",\"name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"total_credits\":\"16\"},{\"id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"code\":\"WIP\",\"name\":\"Wydział Inżynierii Produkcji\",\"total_credits\":\"15\"},{\"id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"code\":\"INF\",\"name\":\"Wydział Informatyki i Nauki o Materiałach\",\"total_credits\":\"12\"}],\"metadata\":{\"columns\":[\"id\",\"code\",\"name\",\"total_credits\"],\"rowCount\":6,\"sample\":[{\"id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"code\":\"AEI\",\"name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"total_credits\":\"26\"},{\"id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"code\":\"MTR\",\"name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_credits\":\"25\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Total Credits Offered by Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Department\"},\"y\":{\"field\":\"total_credits\",\"type\":\"quantitative\",\"title\":\"Total Credits\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Department Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Department Name\"},{\"field\":\"total_credits\",\"type\":\"quantitative\",\"title\":\"Total Credits\"}],\"color\":{\"field\":\"total_credits\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\"},\"title\":\"Total Credits\"}},\"width\":600,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"b566e6a27c249d066a57d68d7f674d48\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/credits-per-department/run-0001/run.json",
+    "queryPath": "runs/credits-per-department/run-0001/query.sql",
+    "vegaRawPath": "runs/credits-per-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/credits-per-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/credits-per-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:05:38.688Z",
+  "traceId": "b566e6a27c249d066a57d68d7f674d48",
+  "success": true,
+  "durationMs": 36821,
+  "resultRaw": {
+    "data": [
+      {
+        "id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "code": "AEI",
+        "name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "total_credits": "26"
+      },
+      {
+        "id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "code": "MTR",
+        "name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "total_credits": "25"
+      },
+      {
+        "id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "code": "IBM",
+        "name": "Wydział Inżynierii Biomedycznej",
+        "total_credits": "19"
+      },
+      {
+        "id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "code": "TCH",
+        "name": "Wydział Technologii i Inżynierii Chemicznej",
+        "total_credits": "16"
+      },
+      {
+        "id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "code": "WIP",
+        "name": "Wydział Inżynierii Produkcji",
+        "total_credits": "15"
+      },
+      {
+        "id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "code": "INF",
+        "name": "Wydział Informatyki i Nauki o Materiałach",
+        "total_credits": "12"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Total Credits Offered by Department",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "name",
+          "type": "nominal",
+          "axis": {
+            "labelAngle": -45,
+            "labelAlign": "right"
+          },
+          "title": "Department"
+        },
+        "y": {
+          "field": "total_credits",
+          "type": "quantitative",
+          "title": "Total Credits"
+        },
+        "tooltip": [
+          {
+            "field": "code",
+            "type": "nominal",
+            "title": "Department Code"
+          },
+          {
+            "field": "name",
+            "type": "nominal",
+            "title": "Department Name"
+          },
+          {
+            "field": "total_credits",
+            "type": "quantitative",
+            "title": "Total Credits"
+          }
+        ],
+        "color": {
+          "field": "total_credits",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "blues"
+          },
+          "title": "Total Credits"
+        }
+      },
+      "width": 600,
+      "height": 400
+    },
+    "sql": "SELECT \n  d.id,\n  d.code,\n  d.name,\n  SUM(c.credits) AS total_credits\nFROM departments d\nLEFT JOIN courses c ON d.id = c.department_id\nGROUP BY d.id, d.code, d.name\nORDER BY total_credits DESC NULLS LAST, d.name ASC",
+    "metadata": {
+      "columns": [
+        "id",
+        "code",
+        "name",
+        "total_credits"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "code": "AEI",
+          "name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "total_credits": "26"
+        },
+        {
+          "id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+          "code": "MTR",
+          "name": "Wydział Metalurgii i Inżynierii Materiałowej",
+          "total_credits": "25"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "code": "AEI",
+        "name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "total_credits": "26"
+      },
+      {
+        "id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "code": "MTR",
+        "name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "total_credits": "25"
+      },
+      {
+        "id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "code": "IBM",
+        "name": "Wydział Inżynierii Biomedycznej",
+        "total_credits": "19"
+      },
+      {
+        "id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "code": "TCH",
+        "name": "Wydział Technologii i Inżynierii Chemicznej",
+        "total_credits": "16"
+      },
+      {
+        "id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "code": "WIP",
+        "name": "Wydział Inżynierii Produkcji",
+        "total_credits": "15"
+      },
+      {
+        "id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "code": "INF",
+        "name": "Wydział Informatyki i Nauki o Materiałach",
+        "total_credits": "12"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Total Credits Offered by Department",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "name",
+          "type": "nominal",
+          "axis": {
+            "labelAngle": -45,
+            "labelAlign": "right"
+          },
+          "title": "Department"
+        },
+        "y": {
+          "field": "total_credits",
+          "type": "quantitative",
+          "title": "Total Credits"
+        },
+        "tooltip": [
+          {
+            "field": "code",
+            "type": "nominal",
+            "title": "Department Code"
+          },
+          {
+            "field": "name",
+            "type": "nominal",
+            "title": "Department Name"
+          },
+          {
+            "field": "total_credits",
+            "type": "quantitative",
+            "title": "Total Credits"
+          }
+        ],
+        "color": {
+          "field": "total_credits",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "blues"
+          },
+          "title": "Total Credits"
+        }
+      },
+      "width": 600,
+      "height": 400
+    },
+    "sql": "SELECT \n  d.id,\n  d.code,\n  d.name,\n  SUM(c.credits) AS total_credits\nFROM departments d\nLEFT JOIN courses c ON d.id = c.department_id\nGROUP BY d.id, d.code, d.name\nORDER BY total_credits DESC NULLS LAST, d.name ASC",
+    "metadata": {
+      "columns": [
+        "id",
+        "code",
+        "name",
+        "total_credits"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "code": "AEI",
+          "name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "total_credits": "26"
+        },
+        {
+          "id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+          "code": "MTR",
+          "name": "Wydział Metalurgii i Inżynierii Materiałowej",
+          "total_credits": "25"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.313Z",
+    "traceId": "b566e6a27c249d066a57d68d7f674d48",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 13376,
+      "outputTokens": 883,
+      "totalTokens": 14259,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.017791
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 13376,
+        "outputTokens": 883,
+        "totalTokens": 14259,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.017791
+      }
+    ],
+    "warnings": []
+  }
+}

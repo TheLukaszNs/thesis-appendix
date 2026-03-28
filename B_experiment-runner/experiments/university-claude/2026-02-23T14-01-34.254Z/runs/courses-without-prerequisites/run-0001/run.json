@@ -1,0 +1,252 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "courses-without-prerequisites",
+  "caseDirectory": "courses-without-prerequisites",
+  "repeatIndex": 1,
+  "prompt": "How many courses have no prerequisites vs at least one?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many courses have no prerequisites vs at least one?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:09:18.093Z",
+    "endedAtUtc": "2026-02-23T14:10:01.975Z",
+    "durationMs": 43882
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "8338",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:10:01 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How many courses have no prerequisites vs at least one?\"},\"sql\":{\"payload\":{\"question\":\"How many courses have no prerequisites vs at least one?\"},\"startedAt\":1771855758101,\"status\":\"success\",\"output\":{\"reasoning\":\"The question asks for a count of courses with no prerequisites vs at least one prerequisite. I need to:\\n1. Count all courses\\n2. Count courses that appear in the prerequisites table (have at least one prerequisite)\\n3. Calculate courses with no prerequisites by subtraction or by using a LEFT JOIN with aggregation\\n\\nThe most straightforward approach is to use a LEFT JOIN between courses and prerequisites, group by whether a prerequisite exists, and count. I'll use a CASE statement to categorize courses as \\\"no prerequisites\\\" or \\\"at least one prerequisite\\\".\",\"sql\":\"\\nSELECT\\n  CASE WHEN p.course_id IS NULL THEN 'No prerequisites' ELSE 'At least one prerequisite' END AS prerequisite_status,\\n  COUNT(DISTINCT c.id) AS course_count\\nFROM courses c\\nLEFT JOIN prerequisites p ON c.id = p.course_id\\nGROUP BY prerequisite_status\\nORDER BY prerequisite_status DESC\\n\",\"assumptions\":[\"The prerequisites table contains all prerequisite relationships\",\"A course with no rows in the prerequisites table (where course_id matches) has no prerequisites\",\"We're counting distinct courses to avoid duplicates when a course has multiple prerequisites\"]},\"endedAt\":1771855798386},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT\\n  CASE WHEN p.course_id IS NULL THEN 'No prerequisites' ELSE 'At least one prerequisite' END AS prerequisite_status,\\n  COUNT(DISTINCT c.id) AS course_count\\nFROM courses c\\nLEFT JOIN prerequisites p ON c.id = p.course_id\\nGROUP BY prerequisite_status\\nORDER BY prerequisite_status DESC\\n\"},\"startedAt\":1771855798397,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT\\n  CASE WHEN p.course_id IS NULL THEN 'No prerequisites' ELSE 'At least one prerequisite' END AS prerequisite_status,\\n  COUNT(DISTINCT c.id) AS course_count\\nFROM courses c\\nLEFT JOIN prerequisites p ON c.id = p.course_id\\nGROUP BY prerequisite_status\\nORDER BY prerequisite_status DESC\",\"metadata\":{\"columns\":[\"prerequisite_status\",\"course_count\"],\"rowCount\":2,\"sample\":[{\"prerequisite_status\":\"No prerequisites\",\"course_count\":\"6\"},{\"prerequisite_status\":\"At least one prerequisite\",\"course_count\":\"20\"}]},\"data\":[{\"prerequisite_status\":\"No prerequisites\",\"course_count\":\"6\"},{\"prerequisite_status\":\"At least one prerequisite\",\"course_count\":\"20\"}]},\"endedAt\":1771855798404},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT\\n  CASE WHEN p.course_id IS NULL THEN 'No prerequisites' ELSE 'At least one prerequisite' END AS prerequisite_status,\\n  COUNT(DISTINCT c.id) AS course_count\\nFROM courses c\\nLEFT JOIN prerequisites p ON c.id = p.course_id\\nGROUP BY prerequisite_status\\nORDER BY prerequisite_status DESC\",\"metadata\":{\"columns\":[\"prerequisite_status\",\"course_count\"],\"rowCount\":2,\"sample\":[{\"prerequisite_status\":\"No prerequisites\",\"course_count\":\"6\"},{\"prerequisite_status\":\"At least one prerequisite\",\"course_count\":\"20\"}]},\"data\":[{\"prerequisite_status\":\"No prerequisites\",\"course_count\":\"6\"},{\"prerequisite_status\":\"At least one prerequisite\",\"course_count\":\"20\"}]},\"startedAt\":1771855798407,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Courses by Prerequisite Status\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"prerequisite_status\",\"type\":\"nominal\",\"title\":\"Prerequisite Status\"},\"y\":{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Number of Courses\"},\"color\":{\"field\":\"prerequisite_status\",\"type\":\"nominal\",\"scale\":{\"domain\":[\"No prerequisites\",\"At least one prerequisite\"],\"range\":[\"#2ecc71\",\"#e74c3c\"]},\"legend\":false},\"tooltip\":[{\"field\":\"prerequisite_status\",\"type\":\"nominal\",\"title\":\"Status\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Course Count\"}]}},\"reasoning\":\"Bar chart comparing courses with no prerequisites (6) vs at least one prerequisite (20). Green represents courses without prerequisites, red represents those with prerequisites. The chart clearly shows that the majority of courses have at least one prerequisite requirement.\"},\"endedAt\":1771855801950},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Courses by Prerequisite Status\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"prerequisite_status\",\"type\":\"nominal\",\"title\":\"Prerequisite Status\"},\"y\":{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Number of Courses\"},\"color\":{\"field\":\"prerequisite_status\",\"type\":\"nominal\",\"scale\":{\"domain\":[\"No prerequisites\",\"At least one prerequisite\"],\"range\":[\"#2ecc71\",\"#e74c3c\"]},\"legend\":false},\"tooltip\":[{\"field\":\"prerequisite_status\",\"type\":\"nominal\",\"title\":\"Status\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Course Count\"}]}},\"reasoning\":\"Bar chart comparing courses with no prerequisites (6) vs at least one prerequisite (20). Green represents courses without prerequisites, red represents those with prerequisites. The chart clearly shows that the majority of courses have at least one prerequisite requirement.\"},\"startedAt\":1771855801957,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT\\n  CASE WHEN p.course_id IS NULL THEN 'No prerequisites' ELSE 'At least one prerequisite' END AS prerequisite_status,\\n  COUNT(DISTINCT c.id) AS course_count\\nFROM courses c\\nLEFT JOIN prerequisites p ON c.id = p.course_id\\nGROUP BY prerequisite_status\\nORDER BY prerequisite_status DESC\\n\",\"data\":[{\"prerequisite_status\":\"No prerequisites\",\"course_count\":\"6\"},{\"prerequisite_status\":\"At least one prerequisite\",\"course_count\":\"20\"}],\"metadata\":{\"columns\":[\"prerequisite_status\",\"course_count\"],\"rowCount\":2,\"sample\":[{\"prerequisite_status\":\"No prerequisites\",\"course_count\":\"6\"},{\"prerequisite_status\":\"At least one prerequisite\",\"course_count\":\"20\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Courses by Prerequisite Status\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"prerequisite_status\",\"type\":\"nominal\",\"title\":\"Prerequisite Status\"},\"y\":{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Number of Courses\"},\"color\":{\"field\":\"prerequisite_status\",\"type\":\"nominal\",\"scale\":{\"domain\":[\"No prerequisites\",\"At least one prerequisite\"],\"range\":[\"#2ecc71\",\"#e74c3c\"]},\"legend\":false},\"tooltip\":[{\"field\":\"prerequisite_status\",\"type\":\"nominal\",\"title\":\"Status\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Course Count\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855801960}},\"input\":{\"question\":\"How many courses have no prerequisites vs at least one?\"},\"result\":{\"sql\":\"\\nSELECT\\n  CASE WHEN p.course_id IS NULL THEN 'No prerequisites' ELSE 'At least one prerequisite' END AS prerequisite_status,\\n  COUNT(DISTINCT c.id) AS course_count\\nFROM courses c\\nLEFT JOIN prerequisites p ON c.id = p.course_id\\nGROUP BY prerequisite_status\\nORDER BY prerequisite_status DESC\\n\",\"data\":[{\"prerequisite_status\":\"No prerequisites\",\"course_count\":\"6\"},{\"prerequisite_status\":\"At least one prerequisite\",\"course_count\":\"20\"}],\"metadata\":{\"columns\":[\"prerequisite_status\",\"course_count\"],\"rowCount\":2,\"sample\":[{\"prerequisite_status\":\"No prerequisites\",\"course_count\":\"6\"},{\"prerequisite_status\":\"At least one prerequisite\",\"course_count\":\"20\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Courses by Prerequisite Status\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"prerequisite_status\",\"type\":\"nominal\",\"title\":\"Prerequisite Status\"},\"y\":{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Number of Courses\"},\"color\":{\"field\":\"prerequisite_status\",\"type\":\"nominal\",\"scale\":{\"domain\":[\"No prerequisites\",\"At least one prerequisite\"],\"range\":[\"#2ecc71\",\"#e74c3c\"]},\"legend\":false},\"tooltip\":[{\"field\":\"prerequisite_status\",\"type\":\"nominal\",\"title\":\"Status\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Course Count\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"d483c29924ffbfcd61e17896000a0ecc\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/courses-without-prerequisites/run-0001/run.json",
+    "queryPath": "runs/courses-without-prerequisites/run-0001/query.sql",
+    "vegaRawPath": "runs/courses-without-prerequisites/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/courses-without-prerequisites/run-0001/vega.resolved.json",
+    "imagePath": "runs/courses-without-prerequisites/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:10:02.408Z",
+  "traceId": "d483c29924ffbfcd61e17896000a0ecc",
+  "success": true,
+  "durationMs": 44315,
+  "resultRaw": {
+    "data": [
+      {
+        "prerequisite_status": "No prerequisites",
+        "course_count": "6"
+      },
+      {
+        "prerequisite_status": "At least one prerequisite",
+        "course_count": "20"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Courses by Prerequisite Status",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "prerequisite_status",
+          "type": "nominal",
+          "title": "Prerequisite Status"
+        },
+        "y": {
+          "field": "course_count",
+          "type": "quantitative",
+          "title": "Number of Courses"
+        },
+        "color": {
+          "field": "prerequisite_status",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "No prerequisites",
+              "At least one prerequisite"
+            ],
+            "range": [
+              "#2ecc71",
+              "#e74c3c"
+            ]
+          },
+          "legend": false
+        },
+        "tooltip": [
+          {
+            "field": "prerequisite_status",
+            "type": "nominal",
+            "title": "Status"
+          },
+          {
+            "field": "course_count",
+            "type": "quantitative",
+            "title": "Course Count"
+          }
+        ]
+      }
+    },
+    "sql": "\nSELECT\n  CASE WHEN p.course_id IS NULL THEN 'No prerequisites' ELSE 'At least one prerequisite' END AS prerequisite_status,\n  COUNT(DISTINCT c.id) AS course_count\nFROM courses c\nLEFT JOIN prerequisites p ON c.id = p.course_id\nGROUP BY prerequisite_status\nORDER BY prerequisite_status DESC\n",
+    "metadata": {
+      "columns": [
+        "prerequisite_status",
+        "course_count"
+      ],
+      "rowCount": 2,
+      "sample": [
+        {
+          "prerequisite_status": "No prerequisites",
+          "course_count": "6"
+        },
+        {
+          "prerequisite_status": "At least one prerequisite",
+          "course_count": "20"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "prerequisite_status": "No prerequisites",
+        "course_count": "6"
+      },
+      {
+        "prerequisite_status": "At least one prerequisite",
+        "course_count": "20"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Courses by Prerequisite Status",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "prerequisite_status",
+          "type": "nominal",
+          "title": "Prerequisite Status"
+        },
+        "y": {
+          "field": "course_count",
+          "type": "quantitative",
+          "title": "Number of Courses"
+        },
+        "color": {
+          "field": "prerequisite_status",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "No prerequisites",
+              "At least one prerequisite"
+            ],
+            "range": [
+              "#2ecc71",
+              "#e74c3c"
+            ]
+          },
+          "legend": false
+        },
+        "tooltip": [
+          {
+            "field": "prerequisite_status",
+            "type": "nominal",
+            "title": "Status"
+          },
+          {
+            "field": "course_count",
+            "type": "quantitative",
+            "title": "Course Count"
+          }
+        ]
+      }
+    },
+    "sql": "\nSELECT\n  CASE WHEN p.course_id IS NULL THEN 'No prerequisites' ELSE 'At least one prerequisite' END AS prerequisite_status,\n  COUNT(DISTINCT c.id) AS course_count\nFROM courses c\nLEFT JOIN prerequisites p ON c.id = p.course_id\nGROUP BY prerequisite_status\nORDER BY prerequisite_status DESC\n",
+    "metadata": {
+      "columns": [
+        "prerequisite_status",
+        "course_count"
+      ],
+      "rowCount": 2,
+      "sample": [
+        {
+          "prerequisite_status": "No prerequisites",
+          "course_count": "6"
+        },
+        {
+          "prerequisite_status": "At least one prerequisite",
+          "course_count": "20"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.310Z",
+    "traceId": "d483c29924ffbfcd61e17896000a0ecc",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 13435,
+      "outputTokens": 887,
+      "totalTokens": 14322,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.01787
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 13435,
+        "outputTokens": 887,
+        "totalTokens": 14322,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.01787
+      }
+    ],
+    "warnings": []
+  }
+}

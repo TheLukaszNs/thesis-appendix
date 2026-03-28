@@ -1,0 +1,276 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "avg-gpa-by-department",
+  "caseDirectory": "avg-gpa-by-department",
+  "repeatIndex": 1,
+  "prompt": "What is the average GPA per department?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average GPA per department?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:01:34.267Z",
+    "endedAtUtc": "2026-02-23T14:01:49.882Z",
+    "durationMs": 15615
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "8965",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:01:49 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the average GPA per department?\"},\"sql\":{\"payload\":{\"question\":\"What is the average GPA per department?\"},\"startedAt\":1771855294323,\"status\":\"success\",\"output\":{\"reasoning\":\"The question asks for average GPA per department. I have confirmed the schema contains a 'students' table with 'gpa' and 'department_id' columns, and a 'departments' table with 'name' and 'id' columns. I can join these tables and group by department to calculate the average GPA. The student_gpa_summary view also has department_name and calculated_gpa, but using the base tables directly is more straightforward for this aggregation.\",\"sql\":\"SELECT d.name AS department, AVG(s.gpa) AS average_gpa FROM students s JOIN departments d ON s.department_id = d.id WHERE s.gpa IS NOT NULL GROUP BY d.id, d.name ORDER BY d.name\",\"assumptions\":[\"GPA values are stored in the students.gpa column and may contain NULL values which are excluded from the average calculation\",\"Each student has exactly one department_id that references the departments table\",\"The result is ordered alphabetically by department name for consistency\"]},\"endedAt\":1771855306583},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT d.name AS department, AVG(s.gpa) AS average_gpa FROM students s JOIN departments d ON s.department_id = d.id WHERE s.gpa IS NOT NULL GROUP BY d.id, d.name ORDER BY d.name\"},\"startedAt\":1771855306587,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT d.name AS department, AVG(s.gpa) AS average_gpa FROM students s JOIN departments d ON s.department_id = d.id WHERE s.gpa IS NOT NULL GROUP BY d.id, d.name ORDER BY d.name\",\"metadata\":{\"columns\":[\"department\",\"average_gpa\"],\"rowCount\":6,\"sample\":[{\"department\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"average_gpa\":\"3.9735000000000000\"},{\"department\":\"Wydział Informatyki i Nauki o Materiałach\",\"average_gpa\":\"3.9690909090909091\"}]},\"data\":[{\"department\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"average_gpa\":\"3.9735000000000000\"},{\"department\":\"Wydział Informatyki i Nauki o Materiałach\",\"average_gpa\":\"3.9690909090909091\"},{\"department\":\"Wydział Inżynierii Biomedycznej\",\"average_gpa\":\"3.8910526315789474\"},{\"department\":\"Wydział Inżynierii Produkcji\",\"average_gpa\":\"4.0663157894736842\"},{\"department\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"average_gpa\":\"4.1927777777777778\"},{\"department\":\"Wydział Technologii i Inżynierii Chemicznej\",\"average_gpa\":\"3.9280000000000000\"}]},\"endedAt\":1771855306597},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT d.name AS department, AVG(s.gpa) AS average_gpa FROM students s JOIN departments d ON s.department_id = d.id WHERE s.gpa IS NOT NULL GROUP BY d.id, d.name ORDER BY d.name\",\"metadata\":{\"columns\":[\"department\",\"average_gpa\"],\"rowCount\":6,\"sample\":[{\"department\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"average_gpa\":\"3.9735000000000000\"},{\"department\":\"Wydział Informatyki i Nauki o Materiałach\",\"average_gpa\":\"3.9690909090909091\"}]},\"data\":[{\"department\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"average_gpa\":\"3.9735000000000000\"},{\"department\":\"Wydział Informatyki i Nauki o Materiałach\",\"average_gpa\":\"3.9690909090909091\"},{\"department\":\"Wydział Inżynierii Biomedycznej\",\"average_gpa\":\"3.8910526315789474\"},{\"department\":\"Wydział Inżynierii Produkcji\",\"average_gpa\":\"4.0663157894736842\"},{\"department\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"average_gpa\":\"4.1927777777777778\"},{\"department\":\"Wydział Technologii i Inżynierii Chemicznej\",\"average_gpa\":\"3.9280000000000000\"}]},\"startedAt\":1771855306599,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average GPA per Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"department\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Department\"},\"y\":{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"scale\":{\"domain\":[3.9,4]}},\"tooltip\":[{\"field\":\"department\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"format\":\".4f\"}]}},\"reasoning\":\"Bar chart showing average GPA by department. The x-axis displays department names (rotated for readability), and the y-axis shows average GPA values. A focused scale (3.9-4.0) highlights differences between departments. Tooltips provide precise GPA values to 4 decimal places for detailed inspection.\"},\"endedAt\":1771855309855},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average GPA per Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"department\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Department\"},\"y\":{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"scale\":{\"domain\":[3.9,4]}},\"tooltip\":[{\"field\":\"department\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"format\":\".4f\"}]}},\"reasoning\":\"Bar chart showing average GPA by department. The x-axis displays department names (rotated for readability), and the y-axis shows average GPA values. A focused scale (3.9-4.0) highlights differences between departments. Tooltips provide precise GPA values to 4 decimal places for detailed inspection.\"},\"startedAt\":1771855309859,\"status\":\"success\",\"output\":{\"sql\":\"SELECT d.name AS department, AVG(s.gpa) AS average_gpa FROM students s JOIN departments d ON s.department_id = d.id WHERE s.gpa IS NOT NULL GROUP BY d.id, d.name ORDER BY d.name\",\"data\":[{\"department\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"average_gpa\":\"3.9735000000000000\"},{\"department\":\"Wydział Informatyki i Nauki o Materiałach\",\"average_gpa\":\"3.9690909090909091\"},{\"department\":\"Wydział Inżynierii Biomedycznej\",\"average_gpa\":\"3.8910526315789474\"},{\"department\":\"Wydział Inżynierii Produkcji\",\"average_gpa\":\"4.0663157894736842\"},{\"department\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"average_gpa\":\"4.1927777777777778\"},{\"department\":\"Wydział Technologii i Inżynierii Chemicznej\",\"average_gpa\":\"3.9280000000000000\"}],\"metadata\":{\"columns\":[\"department\",\"average_gpa\"],\"rowCount\":6,\"sample\":[{\"department\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"average_gpa\":\"3.9735000000000000\"},{\"department\":\"Wydział Informatyki i Nauki o Materiałach\",\"average_gpa\":\"3.9690909090909091\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average GPA per Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"department\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Department\"},\"y\":{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"scale\":{\"domain\":[3.9,4]}},\"tooltip\":[{\"field\":\"department\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"format\":\".4f\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855309863}},\"input\":{\"question\":\"What is the average GPA per department?\"},\"result\":{\"sql\":\"SELECT d.name AS department, AVG(s.gpa) AS average_gpa FROM students s JOIN departments d ON s.department_id = d.id WHERE s.gpa IS NOT NULL GROUP BY d.id, d.name ORDER BY d.name\",\"data\":[{\"department\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"average_gpa\":\"3.9735000000000000\"},{\"department\":\"Wydział Informatyki i Nauki o Materiałach\",\"average_gpa\":\"3.9690909090909091\"},{\"department\":\"Wydział Inżynierii Biomedycznej\",\"average_gpa\":\"3.8910526315789474\"},{\"department\":\"Wydział Inżynierii Produkcji\",\"average_gpa\":\"4.0663157894736842\"},{\"department\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"average_gpa\":\"4.1927777777777778\"},{\"department\":\"Wydział Technologii i Inżynierii Chemicznej\",\"average_gpa\":\"3.9280000000000000\"}],\"metadata\":{\"columns\":[\"department\",\"average_gpa\"],\"rowCount\":6,\"sample\":[{\"department\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"average_gpa\":\"3.9735000000000000\"},{\"department\":\"Wydział Informatyki i Nauki o Materiałach\",\"average_gpa\":\"3.9690909090909091\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average GPA per Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"department\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Department\"},\"y\":{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"scale\":{\"domain\":[3.9,4]}},\"tooltip\":[{\"field\":\"department\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"format\":\".4f\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"f0cb4f212706d4727cb0ae0152dfb209\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-gpa-by-department/run-0001/run.json",
+    "queryPath": "runs/avg-gpa-by-department/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-gpa-by-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-gpa-by-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-gpa-by-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:01:50.611Z",
+  "traceId": "f0cb4f212706d4727cb0ae0152dfb209",
+  "success": true,
+  "durationMs": 16344,
+  "resultRaw": {
+    "data": [
+      {
+        "department": "Wydział Automatyki, Elektroniki i Informatyki",
+        "average_gpa": "3.9735000000000000"
+      },
+      {
+        "department": "Wydział Informatyki i Nauki o Materiałach",
+        "average_gpa": "3.9690909090909091"
+      },
+      {
+        "department": "Wydział Inżynierii Biomedycznej",
+        "average_gpa": "3.8910526315789474"
+      },
+      {
+        "department": "Wydział Inżynierii Produkcji",
+        "average_gpa": "4.0663157894736842"
+      },
+      {
+        "department": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "average_gpa": "4.1927777777777778"
+      },
+      {
+        "department": "Wydział Technologii i Inżynierii Chemicznej",
+        "average_gpa": "3.9280000000000000"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average GPA per Department",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "department",
+          "type": "nominal",
+          "axis": {
+            "labelAngle": -45,
+            "labelAlign": "right"
+          },
+          "title": "Department"
+        },
+        "y": {
+          "field": "average_gpa",
+          "type": "quantitative",
+          "title": "Average GPA",
+          "scale": {
+            "domain": [
+              3.9,
+              4
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "department",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "average_gpa",
+            "type": "quantitative",
+            "title": "Average GPA",
+            "format": ".4f"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT d.name AS department, AVG(s.gpa) AS average_gpa FROM students s JOIN departments d ON s.department_id = d.id WHERE s.gpa IS NOT NULL GROUP BY d.id, d.name ORDER BY d.name",
+    "metadata": {
+      "columns": [
+        "department",
+        "average_gpa"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department": "Wydział Automatyki, Elektroniki i Informatyki",
+          "average_gpa": "3.9735000000000000"
+        },
+        {
+          "department": "Wydział Informatyki i Nauki o Materiałach",
+          "average_gpa": "3.9690909090909091"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "department": "Wydział Automatyki, Elektroniki i Informatyki",
+        "average_gpa": "3.9735000000000000"
+      },
+      {
+        "department": "Wydział Informatyki i Nauki o Materiałach",
+        "average_gpa": "3.9690909090909091"
+      },
+      {
+        "department": "Wydział Inżynierii Biomedycznej",
+        "average_gpa": "3.8910526315789474"
+      },
+      {
+        "department": "Wydział Inżynierii Produkcji",
+        "average_gpa": "4.0663157894736842"
+      },
+      {
+        "department": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "average_gpa": "4.1927777777777778"
+      },
+      {
+        "department": "Wydział Technologii i Inżynierii Chemicznej",
+        "average_gpa": "3.9280000000000000"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average GPA per Department",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "department",
+          "type": "nominal",
+          "axis": {
+            "labelAngle": -45,
+            "labelAlign": "right"
+          },
+          "title": "Department"
+        },
+        "y": {
+          "field": "average_gpa",
+          "type": "quantitative",
+          "title": "Average GPA",
+          "scale": {
+            "domain": [
+              3.9,
+              4
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "department",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "average_gpa",
+            "type": "quantitative",
+            "title": "Average GPA",
+            "format": ".4f"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT d.name AS department, AVG(s.gpa) AS average_gpa FROM students s JOIN departments d ON s.department_id = d.id WHERE s.gpa IS NOT NULL GROUP BY d.id, d.name ORDER BY d.name",
+    "metadata": {
+      "columns": [
+        "department",
+        "average_gpa"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department": "Wydział Automatyki, Elektroniki i Informatyki",
+          "average_gpa": "3.9735000000000000"
+        },
+        {
+          "department": "Wydział Informatyki i Nauki o Materiałach",
+          "average_gpa": "3.9690909090909091"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.271Z",
+    "traceId": "f0cb4f212706d4727cb0ae0152dfb209",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 11210,
+      "outputTokens": 964,
+      "totalTokens": 12174,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.01603
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 11210,
+        "outputTokens": 964,
+        "totalTokens": 12174,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.01603
+      }
+    ],
+    "warnings": []
+  }
+}

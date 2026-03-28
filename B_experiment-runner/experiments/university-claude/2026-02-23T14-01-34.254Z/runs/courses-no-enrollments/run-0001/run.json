@@ -1,0 +1,203 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "courses-no-enrollments",
+  "caseDirectory": "courses-no-enrollments",
+  "repeatIndex": 1,
+  "prompt": "Which courses have no enrollments at all?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which courses have no enrollments at all?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:12:41.640Z",
+    "endedAtUtc": "2026-02-23T14:13:11.638Z",
+    "durationMs": 29998
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "9907",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:13:11 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Which courses have no enrollments at all?\"},\"sql\":{\"payload\":{\"question\":\"Which courses have no enrollments at all?\"},\"startedAt\":1771855961654,\"status\":\"success\",\"output\":{\"reasoning\":\"To find courses with no enrollments, I need to identify courses that have no associated enrollments. The relationship chain is: courses → course_sections → enrollments. A course has no enrollments if none of its sections have any enrollments. I'll use a LEFT JOIN from courses to course_sections to enrollments and filter for NULL enrollment records, then select distinct courses.\",\"sql\":\"\\nSELECT DISTINCT\\n  c.id,\\n  c.code,\\n  c.name,\\n  c.credits\\nFROM courses c\\nLEFT JOIN course_sections cs ON c.id = cs.course_id\\nLEFT JOIN enrollments e ON cs.id = e.course_section_id\\nWHERE e.id IS NULL\\nORDER BY c.code\\n\",\"assumptions\":[\"A course is considered to have no enrollments if none of its sections have any enrollments\",\"The query includes all courses regardless of semester or academic year\"]},\"endedAt\":1771855987409},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT DISTINCT\\n  c.id,\\n  c.code,\\n  c.name,\\n  c.credits\\nFROM courses c\\nLEFT JOIN course_sections cs ON c.id = cs.course_id\\nLEFT JOIN enrollments e ON cs.id = e.course_section_id\\nWHERE e.id IS NULL\\nORDER BY c.code\\n\"},\"startedAt\":1771855987414,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT DISTINCT\\n  c.id,\\n  c.code,\\n  c.name,\\n  c.credits\\nFROM courses c\\nLEFT JOIN course_sections cs ON c.id = cs.course_id\\nLEFT JOIN enrollments e ON cs.id = e.course_section_id\\nWHERE e.id IS NULL\\nORDER BY c.code\",\"metadata\":{\"columns\":[\"id\",\"code\",\"name\",\"credits\"],\"rowCount\":5,\"sample\":[{\"id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"code\":\"FPW-573\",\"name\":\"Programowanie Obiektowe\",\"credits\":5},{\"id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"code\":\"FWJ-758\",\"name\":\"Bezpieczeństwo Systemów Komputerowych\",\"credits\":2}]},\"data\":[{\"id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"code\":\"FPW-573\",\"name\":\"Programowanie Obiektowe\",\"credits\":5},{\"id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"code\":\"FWJ-758\",\"name\":\"Bezpieczeństwo Systemów Komputerowych\",\"credits\":2},{\"id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"code\":\"LUO-736\",\"name\":\"Grafika Komputerowa\",\"credits\":4},{\"id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"code\":\"NWG-686\",\"name\":\"Programowanie Funkcyjne\",\"credits\":2},{\"id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"code\":\"SBW-955\",\"name\":\"Sieci Komputerowe\",\"credits\":4}]},\"endedAt\":1771855987430},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT DISTINCT\\n  c.id,\\n  c.code,\\n  c.name,\\n  c.credits\\nFROM courses c\\nLEFT JOIN course_sections cs ON c.id = cs.course_id\\nLEFT JOIN enrollments e ON cs.id = e.course_section_id\\nWHERE e.id IS NULL\\nORDER BY c.code\",\"metadata\":{\"columns\":[\"id\",\"code\",\"name\",\"credits\"],\"rowCount\":5,\"sample\":[{\"id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"code\":\"FPW-573\",\"name\":\"Programowanie Obiektowe\",\"credits\":5},{\"id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"code\":\"FWJ-758\",\"name\":\"Bezpieczeństwo Systemów Komputerowych\",\"credits\":2}]},\"data\":[{\"id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"code\":\"FPW-573\",\"name\":\"Programowanie Obiektowe\",\"credits\":5},{\"id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"code\":\"FWJ-758\",\"name\":\"Bezpieczeństwo Systemów Komputerowych\",\"credits\":2},{\"id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"code\":\"LUO-736\",\"name\":\"Grafika Komputerowa\",\"credits\":4},{\"id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"code\":\"NWG-686\",\"name\":\"Programowanie Funkcyjne\",\"credits\":2},{\"id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"code\":\"SBW-955\",\"name\":\"Sieci Komputerowe\",\"credits\":4}]},\"startedAt\":1771855987433,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Courses with No Enrollments\",\"description\":\"List of courses that have no student enrollments\",\"data\":{\"name\":\"query_result\"},\"mark\":\"table\",\"encoding\":{\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"credits\",\"type\":\"quantitative\",\"title\":\"Credits\"}]},\"transform\":[{\"calculate\":\"datum.code\",\"as\":\"Course Code\"},{\"calculate\":\"datum.name\",\"as\":\"Course Name\"},{\"calculate\":\"datum.credits\",\"as\":\"Credits\"}],\"project\":[\"code\",\"name\",\"credits\"],\"selection\":{\"grid\":{\"type\":\"interval\",\"bind\":\"scales\"}}},\"reasoning\":\"This query identifies courses with zero enrollments. A table visualization is most appropriate for displaying the detailed course information (code, name, credits) in a clear, scannable format. The tooltip provides additional context on hover. The result shows 5 courses with no enrollments, including examples like \\\"FPW-573 Programowanie Obiektowe\\\" and \\\"FWJ-758 Bezpieczeństwo Systemów Komputerowych\\\".\"},\"endedAt\":1771855991600},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Courses with No Enrollments\",\"description\":\"List of courses that have no student enrollments\",\"data\":{\"name\":\"query_result\"},\"mark\":\"table\",\"encoding\":{\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"credits\",\"type\":\"quantitative\",\"title\":\"Credits\"}]},\"transform\":[{\"calculate\":\"datum.code\",\"as\":\"Course Code\"},{\"calculate\":\"datum.name\",\"as\":\"Course Name\"},{\"calculate\":\"datum.credits\",\"as\":\"Credits\"}],\"project\":[\"code\",\"name\",\"credits\"],\"selection\":{\"grid\":{\"type\":\"interval\",\"bind\":\"scales\"}}},\"reasoning\":\"This query identifies courses with zero enrollments. A table visualization is most appropriate for displaying the detailed course information (code, name, credits) in a clear, scannable format. The tooltip provides additional context on hover. The result shows 5 courses with no enrollments, including examples like \\\"FPW-573 Programowanie Obiektowe\\\" and \\\"FWJ-758 Bezpieczeństwo Systemów Komputerowych\\\".\"},\"startedAt\":1771855991613,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT DISTINCT\\n  c.id,\\n  c.code,\\n  c.name,\\n  c.credits\\nFROM courses c\\nLEFT JOIN course_sections cs ON c.id = cs.course_id\\nLEFT JOIN enrollments e ON cs.id = e.course_section_id\\nWHERE e.id IS NULL\\nORDER BY c.code\\n\",\"data\":[{\"id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"code\":\"FPW-573\",\"name\":\"Programowanie Obiektowe\",\"credits\":5},{\"id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"code\":\"FWJ-758\",\"name\":\"Bezpieczeństwo Systemów Komputerowych\",\"credits\":2},{\"id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"code\":\"LUO-736\",\"name\":\"Grafika Komputerowa\",\"credits\":4},{\"id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"code\":\"NWG-686\",\"name\":\"Programowanie Funkcyjne\",\"credits\":2},{\"id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"code\":\"SBW-955\",\"name\":\"Sieci Komputerowe\",\"credits\":4}],\"metadata\":{\"columns\":[\"id\",\"code\",\"name\",\"credits\"],\"rowCount\":5,\"sample\":[{\"id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"code\":\"FPW-573\",\"name\":\"Programowanie Obiektowe\",\"credits\":5},{\"id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"code\":\"FWJ-758\",\"name\":\"Bezpieczeństwo Systemów Komputerowych\",\"credits\":2}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Courses with No Enrollments\",\"description\":\"List of courses that have no student enrollments\",\"data\":{\"name\":\"query_result\"},\"mark\":\"table\",\"encoding\":{\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"credits\",\"type\":\"quantitative\",\"title\":\"Credits\"}]},\"transform\":[{\"calculate\":\"datum.code\",\"as\":\"Course Code\"},{\"calculate\":\"datum.name\",\"as\":\"Course Name\"},{\"calculate\":\"datum.credits\",\"as\":\"Credits\"}],\"project\":[\"code\",\"name\",\"credits\"],\"selection\":{\"grid\":{\"type\":\"interval\",\"bind\":\"scales\"}}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855991624}},\"input\":{\"question\":\"Which courses have no enrollments at all?\"},\"result\":{\"sql\":\"\\nSELECT DISTINCT\\n  c.id,\\n  c.code,\\n  c.name,\\n  c.credits\\nFROM courses c\\nLEFT JOIN course_sections cs ON c.id = cs.course_id\\nLEFT JOIN enrollments e ON cs.id = e.course_section_id\\nWHERE e.id IS NULL\\nORDER BY c.code\\n\",\"data\":[{\"id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"code\":\"FPW-573\",\"name\":\"Programowanie Obiektowe\",\"credits\":5},{\"id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"code\":\"FWJ-758\",\"name\":\"Bezpieczeństwo Systemów Komputerowych\",\"credits\":2},{\"id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"code\":\"LUO-736\",\"name\":\"Grafika Komputerowa\",\"credits\":4},{\"id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"code\":\"NWG-686\",\"name\":\"Programowanie Funkcyjne\",\"credits\":2},{\"id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"code\":\"SBW-955\",\"name\":\"Sieci Komputerowe\",\"credits\":4}],\"metadata\":{\"columns\":[\"id\",\"code\",\"name\",\"credits\"],\"rowCount\":5,\"sample\":[{\"id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"code\":\"FPW-573\",\"name\":\"Programowanie Obiektowe\",\"credits\":5},{\"id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"code\":\"FWJ-758\",\"name\":\"Bezpieczeństwo Systemów Komputerowych\",\"credits\":2}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Courses with No Enrollments\",\"description\":\"List of courses that have no student enrollments\",\"data\":{\"name\":\"query_result\"},\"mark\":\"table\",\"encoding\":{\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"credits\",\"type\":\"quantitative\",\"title\":\"Credits\"}]},\"transform\":[{\"calculate\":\"datum.code\",\"as\":\"Course Code\"},{\"calculate\":\"datum.name\",\"as\":\"Course Name\"},{\"calculate\":\"datum.credits\",\"as\":\"Credits\"}],\"project\":[\"code\",\"name\",\"credits\"],\"selection\":{\"grid\":{\"type\":\"interval\",\"bind\":\"scales\"}}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"985d6e5e602aa41aafe257de1decb643\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/courses-no-enrollments/run-0001/run.json",
+    "queryPath": "runs/courses-no-enrollments/run-0001/query.sql",
+    "vegaRawPath": "runs/courses-no-enrollments/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/courses-no-enrollments/run-0001/vega.resolved.json",
+    "imagePath": "runs/courses-no-enrollments/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:13:11.975Z",
+  "traceId": "985d6e5e602aa41aafe257de1decb643",
+  "success": false,
+  "durationMs": 30335,
+  "resultRaw": {
+    "data": [
+      {
+        "id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+        "code": "FPW-573",
+        "name": "Programowanie Obiektowe",
+        "credits": 5
+      },
+      {
+        "id": "410a9134-116d-41eb-84bc-1b5144736995",
+        "code": "FWJ-758",
+        "name": "Bezpieczeństwo Systemów Komputerowych",
+        "credits": 2
+      },
+      {
+        "id": "6002cfac-f371-4c9b-a048-8aaf1aae450a",
+        "code": "LUO-736",
+        "name": "Grafika Komputerowa",
+        "credits": 4
+      },
+      {
+        "id": "e89877df-7199-4b1f-a8e8-8e5c0872fe23",
+        "code": "NWG-686",
+        "name": "Programowanie Funkcyjne",
+        "credits": 2
+      },
+      {
+        "id": "32619ee8-5d87-49a4-9ca1-c94668909e2e",
+        "code": "SBW-955",
+        "name": "Sieci Komputerowe",
+        "credits": 4
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Courses with No Enrollments",
+      "description": "List of courses that have no student enrollments",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "table",
+      "encoding": {
+        "tooltip": [
+          {
+            "field": "code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "credits",
+            "type": "quantitative",
+            "title": "Credits"
+          }
+        ]
+      },
+      "transform": [
+        {
+          "calculate": "datum.code",
+          "as": "Course Code"
+        },
+        {
+          "calculate": "datum.name",
+          "as": "Course Name"
+        },
+        {
+          "calculate": "datum.credits",
+          "as": "Credits"
+        }
+      ],
+      "project": [
+        "code",
+        "name",
+        "credits"
+      ],
+      "selection": {
+        "grid": {
+          "type": "interval",
+          "bind": "scales"
+        }
+      }
+    },
+    "sql": "\nSELECT DISTINCT\n  c.id,\n  c.code,\n  c.name,\n  c.credits\nFROM courses c\nLEFT JOIN course_sections cs ON c.id = cs.course_id\nLEFT JOIN enrollments e ON cs.id = e.course_section_id\nWHERE e.id IS NULL\nORDER BY c.code\n",
+    "metadata": {
+      "columns": [
+        "id",
+        "code",
+        "name",
+        "credits"
+      ],
+      "rowCount": 5,
+      "sample": [
+        {
+          "id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+          "code": "FPW-573",
+          "name": "Programowanie Obiektowe",
+          "credits": 5
+        },
+        {
+          "id": "410a9134-116d-41eb-84bc-1b5144736995",
+          "code": "FWJ-758",
+          "name": "Bezpieczeństwo Systemów Komputerowych",
+          "credits": 2
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "failureStage": "viz",
+  "error": {
+    "kind": "viz_failure",
+    "message": "Failed with exit code 1"
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.306Z",
+    "traceId": "985d6e5e602aa41aafe257de1decb643",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 17990,
+      "outputTokens": 916,
+      "totalTokens": 18906,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.02257
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 17990,
+        "outputTokens": 916,
+        "totalTokens": 18906,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.02257
+      }
+    ],
+    "warnings": []
+  }
+}

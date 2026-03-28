@@ -1,0 +1,250 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "students-multiple-scholarships",
+  "caseDirectory": "students-multiple-scholarships",
+  "repeatIndex": 1,
+  "prompt": "How many students have received more than one scholarship?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many students have received more than one scholarship?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:37:19.206Z",
+    "endedAtUtc": "2026-02-23T11:38:32.299Z",
+    "durationMs": 73093
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "23840",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:38:32 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How many students have received more than one scholarship?\"},\"planner\":{\"payload\":{\"question\":\"How many students have received more than one scholarship?\"},\"startedAt\":1771846639212,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"(SELECT COUNT(*) FROM (SELECT scholarships.student_id FROM public.scholarships AS scholarships GROUP BY scholarships.student_id HAVING COUNT(*) > 1) AS t) AS students_with_multiple_scholarships\"],\"dimensions\":[\"'Students with >1 scholarships'::text AS label\"],\"filters\":[],\"grain\":\"overall (single summary row)\",\"aliases\":{\"'Students with >1 scholarships'::text\":\"label\",\"(SELECT COUNT(*) FROM (SELECT scholarships.student_id FROM public.scholarships AS scholarships GROUP BY scholarships.student_id HAVING COUNT(*) > 1) AS t)\":\"students_with_multiple_scholarships\"},\"output_fields\":[\"label\",\"students_with_multiple_scholarships\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"label\",\"y_axis\":\"students_with_multiple_scholarships\",\"title\":\"Number of students who received more than one scholarship\"},\"assumptions\":[\"Tables and columns used were verified in the preflight: public.scholarships (column: student_id) and public.students (table exists).\",\"A student 'received more than one scholarship' if there are more than one rows in public.scholarships with the same student_id (COUNT(*) > 1).\",\"We count scholarship rows as recorded awards; no deduplication by scholarship_type, amount, or awarded_date is applied.\",\"All scholarships in the scholarships table are considered (no filters by academic_year, semester_type, paid_date, or other attributes). If you want to restrict (e.g., by year or paid status), add the appropriate filters.\",\"No join to public.students is required to answer the question; the foreign-key relationship exists but was not necessary for the count. If you want to ensure only currently-active students are counted, add a join and filter to students.\",\"For visualization, a synthetic 'label' column is added so the single scalar can be shown as a single bar. Downstream agents must produce SQL that returns exactly the aliases listed in output_fields.\"]}},\"endedAt\":1771846672868},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"(SELECT COUNT(*) FROM (SELECT scholarships.student_id FROM public.scholarships AS scholarships GROUP BY scholarships.student_id HAVING COUNT(*) > 1) AS t) AS students_with_multiple_scholarships\"],\"dimensions\":[\"'Students with >1 scholarships'::text AS label\"],\"filters\":[],\"grain\":\"overall (single summary row)\",\"aliases\":{\"'Students with >1 scholarships'::text\":\"label\",\"(SELECT COUNT(*) FROM (SELECT scholarships.student_id FROM public.scholarships AS scholarships GROUP BY scholarships.student_id HAVING COUNT(*) > 1) AS t)\":\"students_with_multiple_scholarships\"},\"output_fields\":[\"label\",\"students_with_multiple_scholarships\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"label\",\"y_axis\":\"students_with_multiple_scholarships\",\"title\":\"Number of students who received more than one scholarship\"},\"assumptions\":[\"Tables and columns used were verified in the preflight: public.scholarships (column: student_id) and public.students (table exists).\",\"A student 'received more than one scholarship' if there are more than one rows in public.scholarships with the same student_id (COUNT(*) > 1).\",\"We count scholarship rows as recorded awards; no deduplication by scholarship_type, amount, or awarded_date is applied.\",\"All scholarships in the scholarships table are considered (no filters by academic_year, semester_type, paid_date, or other attributes). If you want to restrict (e.g., by year or paid status), add the appropriate filters.\",\"No join to public.students is required to answer the question; the foreign-key relationship exists but was not necessary for the count. If you want to ensure only currently-active students are counted, add a join and filter to students.\",\"For visualization, a synthetic 'label' column is added so the single scalar can be shown as a single bar. Downstream agents must produce SQL that returns exactly the aliases listed in output_fields.\"]}},\"startedAt\":1771846672882,\"status\":\"success\",\"output\":{\"question\":\"How many students have received more than one scholarship?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"(SELECT COUNT(*) FROM (SELECT scholarships.student_id FROM public.scholarships AS scholarships GROUP BY scholarships.student_id HAVING COUNT(*) > 1) AS t) AS students_with_multiple_scholarships\"],\"dimensions\":[\"'Students with >1 scholarships'::text AS label\"],\"filters\":[],\"grain\":\"overall (single summary row)\",\"aliases\":{\"'Students with >1 scholarships'::text\":\"label\",\"(SELECT COUNT(*) FROM (SELECT scholarships.student_id FROM public.scholarships AS scholarships GROUP BY scholarships.student_id HAVING COUNT(*) > 1) AS t)\":\"students_with_multiple_scholarships\"},\"output_fields\":[\"label\",\"students_with_multiple_scholarships\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"label\",\"y_axis\":\"students_with_multiple_scholarships\",\"title\":\"Number of students who received more than one scholarship\"},\"assumptions\":[\"Tables and columns used were verified in the preflight: public.scholarships (column: student_id) and public.students (table exists).\",\"A student 'received more than one scholarship' if there are more than one rows in public.scholarships with the same student_id (COUNT(*) > 1).\",\"We count scholarship rows as recorded awards; no deduplication by scholarship_type, amount, or awarded_date is applied.\",\"All scholarships in the scholarships table are considered (no filters by academic_year, semester_type, paid_date, or other attributes). If you want to restrict (e.g., by year or paid status), add the appropriate filters.\",\"No join to public.students is required to answer the question; the foreign-key relationship exists but was not necessary for the count. If you want to ensure only currently-active students are counted, add a join and filter to students.\",\"For visualization, a synthetic 'label' column is added so the single scalar can be shown as a single bar. Downstream agents must produce SQL that returns exactly the aliases listed in output_fields.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771846672887},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"How many students have received more than one scholarship?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"(SELECT COUNT(*) FROM (SELECT scholarships.student_id FROM public.scholarships AS scholarships GROUP BY scholarships.student_id HAVING COUNT(*) > 1) AS t) AS students_with_multiple_scholarships\"],\"dimensions\":[\"'Students with >1 scholarships'::text AS label\"],\"filters\":[],\"grain\":\"overall (single summary row)\",\"aliases\":{\"'Students with >1 scholarships'::text\":\"label\",\"(SELECT COUNT(*) FROM (SELECT scholarships.student_id FROM public.scholarships AS scholarships GROUP BY scholarships.student_id HAVING COUNT(*) > 1) AS t)\":\"students_with_multiple_scholarships\"},\"output_fields\":[\"label\",\"students_with_multiple_scholarships\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"label\",\"y_axis\":\"students_with_multiple_scholarships\",\"title\":\"Number of students who received more than one scholarship\"},\"assumptions\":[\"Tables and columns used were verified in the preflight: public.scholarships (column: student_id) and public.students (table exists).\",\"A student 'received more than one scholarship' if there are more than one rows in public.scholarships with the same student_id (COUNT(*) > 1).\",\"We count scholarship rows as recorded awards; no deduplication by scholarship_type, amount, or awarded_date is applied.\",\"All scholarships in the scholarships table are considered (no filters by academic_year, semester_type, paid_date, or other attributes). If you want to restrict (e.g., by year or paid status), add the appropriate filters.\",\"No join to public.students is required to answer the question; the foreign-key relationship exists but was not necessary for the count. If you want to ensure only currently-active students are counted, add a join and filter to students.\",\"For visualization, a synthetic 'label' column is added so the single scalar can be shown as a single bar. Downstream agents must produce SQL that returns exactly the aliases listed in output_fields.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771846672891,\"status\":\"success\",\"output\":{\"question\":\"How many students have received more than one scholarship?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"(SELECT COUNT(*) FROM (SELECT scholarships.student_id FROM public.scholarships AS scholarships GROUP BY scholarships.student_id HAVING COUNT(*) > 1) AS t) AS students_with_multiple_scholarships\"],\"dimensions\":[\"'Students with >1 scholarships'::text AS label\"],\"filters\":[],\"grain\":\"overall (single summary row)\",\"aliases\":{\"'Students with >1 scholarships'::text\":\"label\",\"(SELECT COUNT(*) FROM (SELECT scholarships.student_id FROM public.scholarships AS scholarships GROUP BY scholarships.student_id HAVING COUNT(*) > 1) AS t)\":\"students_with_multiple_scholarships\"},\"output_fields\":[\"label\",\"students_with_multiple_scholarships\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"label\",\"y_axis\":\"students_with_multiple_scholarships\",\"title\":\"Number of students who received more than one scholarship\"},\"assumptions\":[\"Tables and columns used were verified in the preflight: public.scholarships (column: student_id) and public.students (table exists).\",\"A student 'received more than one scholarship' if there are more than one rows in public.scholarships with the same student_id (COUNT(*) > 1).\",\"We count scholarship rows as recorded awards; no deduplication by scholarship_type, amount, or awarded_date is applied.\",\"All scholarships in the scholarships table are considered (no filters by academic_year, semester_type, paid_date, or other attributes). If you want to restrict (e.g., by year or paid status), add the appropriate filters.\",\"No join to public.students is required to answer the question; the foreign-key relationship exists but was not necessary for the count. If you want to ensure only currently-active students are counted, add a join and filter to students.\",\"For visualization, a synthetic 'label' column is added so the single scalar can be shown as a single bar. Downstream agents must produce SQL that returns exactly the aliases listed in output_fields.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT\\n  'Students with >1 scholarships'::text AS label,\\n  (\\n    SELECT COUNT(*)\\n    FROM (\\n      SELECT scholarships.student_id\\n      FROM public.scholarships AS scholarships\\n      GROUP BY scholarships.student_id\\n      HAVING COUNT(*) > 1\\n    ) AS t\\n  ) AS students_with_multiple_scholarships;\",\"validationIssues\":[\"The visualization uses a synthetic single-category 'label' column to render one bar; consider a KPI/text display instead of a bar for a single scalar.\",\"The SQL applies no filters (e.g., year, paid status); if you intended to restrict the count, add appropriate WHERE clauses.\",\"X-axis has no title (axis.title is null); the single category label is visible but the axis label could be made explicit for clarity.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Count distinct student_id values that appear more than once in public.scholarships; return a single labeled summary row as requested.\",\"sql\":\"SELECT\\n  'Students with >1 scholarships'::text AS label,\\n  (\\n    SELECT COUNT(*)\\n    FROM (\\n      SELECT scholarships.student_id\\n      FROM public.scholarships AS scholarships\\n      GROUP BY scholarships.student_id\\n      HAVING COUNT(*) > 1\\n    ) AS t\\n  ) AS students_with_multiple_scholarships;\",\"assumptions\":[\"public.scholarships exists and has column student_id (verified via preflight).\",\"A student 'received more than one scholarship' if there are more than one rows in public.scholarships with the same student_id (COUNT(*) > 1).\",\"No additional filters (academic_year, paid status, etc.) are applied; all rows in scholarships are considered.\",\"The output should be a single summary row with columns aliased exactly as: label, students_with_multiple_scholarships.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT\\n  'Students with >1 scholarships'::text AS label,\\n  (\\n    SELECT COUNT(*)\\n    FROM (\\n      SELECT scholarships.student_id\\n      FROM public.scholarships AS scholarships\\n      GROUP BY scholarships.student_id\\n      HAVING COUNT(*) > 1\\n    ) AS t\\n  ) AS students_with_multiple_scholarships\",\"metadata\":{\"columns\":[\"label\",\"students_with_multiple_scholarships\"],\"rowCount\":1,\"sample\":[{\"label\":\"Students with >1 scholarships\",\"students_with_multiple_scholarships\":1}]},\"data\":[{\"label\":\"Students with >1 scholarships\",\"students_with_multiple_scholarships\":1}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of students who received more than one scholarship\",\"width\":360,\"height\":240,\"mark\":{\"type\":\"bar\",\"cornerRadius\":4},\"encoding\":{\"x\":{\"field\":\"label\",\"type\":\"nominal\",\"axis\":{\"title\":null,\"labelAngle\":0}},\"y\":{\"field\":\"students_with_multiple_scholarships\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Count of students\"},\"scale\":{\"nice\":true}},\"color\":{\"value\":\"#4C78A8\"},\"tooltip\":[{\"field\":\"label\",\"type\":\"nominal\",\"title\":\"Category\"},{\"field\":\"students_with_multiple_scholarships\",\"type\":\"quantitative\",\"title\":\"Students with >1 scholarship\"}]}},\"reasoning\":\"Single-summary bar chart showing the count of students who have more than one scholarship. Uses the provided label and aggregated count fields from the query_result.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"The visualization uses a synthetic single-category 'label' column to render one bar; consider a KPI/text display instead of a bar for a single scalar.\",\"The SQL applies no filters (e.g., year, paid status); if you intended to restrict the count, add appropriate WHERE clauses.\",\"X-axis has no title (axis.title is null); the single category label is visible but the axis label could be made explicit for clarity.\"]}}},\"endedAt\":1771846712273,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"How many students have received more than one scholarship?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"(SELECT COUNT(*) FROM (SELECT scholarships.student_id FROM public.scholarships AS scholarships GROUP BY scholarships.student_id HAVING COUNT(*) > 1) AS t) AS students_with_multiple_scholarships\"],\"dimensions\":[\"'Students with >1 scholarships'::text AS label\"],\"filters\":[],\"grain\":\"overall (single summary row)\",\"aliases\":{\"'Students with >1 scholarships'::text\":\"label\",\"(SELECT COUNT(*) FROM (SELECT scholarships.student_id FROM public.scholarships AS scholarships GROUP BY scholarships.student_id HAVING COUNT(*) > 1) AS t)\":\"students_with_multiple_scholarships\"},\"output_fields\":[\"label\",\"students_with_multiple_scholarships\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"label\",\"y_axis\":\"students_with_multiple_scholarships\",\"title\":\"Number of students who received more than one scholarship\"},\"assumptions\":[\"Tables and columns used were verified in the preflight: public.scholarships (column: student_id) and public.students (table exists).\",\"A student 'received more than one scholarship' if there are more than one rows in public.scholarships with the same student_id (COUNT(*) > 1).\",\"We count scholarship rows as recorded awards; no deduplication by scholarship_type, amount, or awarded_date is applied.\",\"All scholarships in the scholarships table are considered (no filters by academic_year, semester_type, paid_date, or other attributes). If you want to restrict (e.g., by year or paid status), add the appropriate filters.\",\"No join to public.students is required to answer the question; the foreign-key relationship exists but was not necessary for the count. If you want to ensure only currently-active students are counted, add a join and filter to students.\",\"For visualization, a synthetic 'label' column is added so the single scalar can be shown as a single bar. Downstream agents must produce SQL that returns exactly the aliases listed in output_fields.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT\\n  'Students with >1 scholarships'::text AS label,\\n  (\\n    SELECT COUNT(*)\\n    FROM (\\n      SELECT scholarships.student_id\\n      FROM public.scholarships AS scholarships\\n      GROUP BY scholarships.student_id\\n      HAVING COUNT(*) > 1\\n    ) AS t\\n  ) AS students_with_multiple_scholarships;\",\"validationIssues\":[\"The visualization uses a synthetic single-category 'label' column to render one bar; consider a KPI/text display instead of a bar for a single scalar.\",\"The SQL applies no filters (e.g., year, paid status); if you intended to restrict the count, add appropriate WHERE clauses.\",\"X-axis has no title (axis.title is null); the single category label is visible but the axis label could be made explicit for clarity.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Count distinct student_id values that appear more than once in public.scholarships; return a single labeled summary row as requested.\",\"sql\":\"SELECT\\n  'Students with >1 scholarships'::text AS label,\\n  (\\n    SELECT COUNT(*)\\n    FROM (\\n      SELECT scholarships.student_id\\n      FROM public.scholarships AS scholarships\\n      GROUP BY scholarships.student_id\\n      HAVING COUNT(*) > 1\\n    ) AS t\\n  ) AS students_with_multiple_scholarships;\",\"assumptions\":[\"public.scholarships exists and has column student_id (verified via preflight).\",\"A student 'received more than one scholarship' if there are more than one rows in public.scholarships with the same student_id (COUNT(*) > 1).\",\"No additional filters (academic_year, paid status, etc.) are applied; all rows in scholarships are considered.\",\"The output should be a single summary row with columns aliased exactly as: label, students_with_multiple_scholarships.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT\\n  'Students with >1 scholarships'::text AS label,\\n  (\\n    SELECT COUNT(*)\\n    FROM (\\n      SELECT scholarships.student_id\\n      FROM public.scholarships AS scholarships\\n      GROUP BY scholarships.student_id\\n      HAVING COUNT(*) > 1\\n    ) AS t\\n  ) AS students_with_multiple_scholarships\",\"metadata\":{\"columns\":[\"label\",\"students_with_multiple_scholarships\"],\"rowCount\":1,\"sample\":[{\"label\":\"Students with >1 scholarships\",\"students_with_multiple_scholarships\":1}]},\"data\":[{\"label\":\"Students with >1 scholarships\",\"students_with_multiple_scholarships\":1}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of students who received more than one scholarship\",\"width\":360,\"height\":240,\"mark\":{\"type\":\"bar\",\"cornerRadius\":4},\"encoding\":{\"x\":{\"field\":\"label\",\"type\":\"nominal\",\"axis\":{\"title\":null,\"labelAngle\":0}},\"y\":{\"field\":\"students_with_multiple_scholarships\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Count of students\"},\"scale\":{\"nice\":true}},\"color\":{\"value\":\"#4C78A8\"},\"tooltip\":[{\"field\":\"label\",\"type\":\"nominal\",\"title\":\"Category\"},{\"field\":\"students_with_multiple_scholarships\",\"type\":\"quantitative\",\"title\":\"Students with >1 scholarship\"}]}},\"reasoning\":\"Single-summary bar chart showing the count of students who have more than one scholarship. Uses the provided label and aggregated count fields from the query_result.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"The visualization uses a synthetic single-category 'label' column to render one bar; consider a KPI/text display instead of a bar for a single scalar.\",\"The SQL applies no filters (e.g., year, paid status); if you intended to restrict the count, add appropriate WHERE clauses.\",\"X-axis has no title (axis.title is null); the single category label is visible but the axis label could be made explicit for clarity.\"]}}},\"startedAt\":1771846712278,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  'Students with >1 scholarships'::text AS label,\\n  (\\n    SELECT COUNT(*)\\n    FROM (\\n      SELECT scholarships.student_id\\n      FROM public.scholarships AS scholarships\\n      GROUP BY scholarships.student_id\\n      HAVING COUNT(*) > 1\\n    ) AS t\\n  ) AS students_with_multiple_scholarships;\",\"data\":[{\"label\":\"Students with >1 scholarships\",\"students_with_multiple_scholarships\":1}],\"metadata\":{\"columns\":[\"label\",\"students_with_multiple_scholarships\"],\"rowCount\":1,\"sample\":[{\"label\":\"Students with >1 scholarships\",\"students_with_multiple_scholarships\":1}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of students who received more than one scholarship\",\"width\":360,\"height\":240,\"mark\":{\"type\":\"bar\",\"cornerRadius\":4},\"encoding\":{\"x\":{\"field\":\"label\",\"type\":\"nominal\",\"axis\":{\"title\":null,\"labelAngle\":0}},\"y\":{\"field\":\"students_with_multiple_scholarships\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Count of students\"},\"scale\":{\"nice\":true}},\"color\":{\"value\":\"#4C78A8\"},\"tooltip\":[{\"field\":\"label\",\"type\":\"nominal\",\"title\":\"Category\"},{\"field\":\"students_with_multiple_scholarships\",\"type\":\"quantitative\",\"title\":\"Students with >1 scholarship\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"The visualization uses a synthetic single-category 'label' column to render one bar; consider a KPI/text display instead of a bar for a single scalar.\",\"The SQL applies no filters (e.g., year, paid status); if you intended to restrict the count, add appropriate WHERE clauses.\",\"X-axis has no title (axis.title is null); the single category label is visible but the axis label could be made explicit for clarity.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771846712282}},\"input\":{\"question\":\"How many students have received more than one scholarship?\"},\"result\":{\"sql\":\"SELECT\\n  'Students with >1 scholarships'::text AS label,\\n  (\\n    SELECT COUNT(*)\\n    FROM (\\n      SELECT scholarships.student_id\\n      FROM public.scholarships AS scholarships\\n      GROUP BY scholarships.student_id\\n      HAVING COUNT(*) > 1\\n    ) AS t\\n  ) AS students_with_multiple_scholarships;\",\"data\":[{\"label\":\"Students with >1 scholarships\",\"students_with_multiple_scholarships\":1}],\"metadata\":{\"columns\":[\"label\",\"students_with_multiple_scholarships\"],\"rowCount\":1,\"sample\":[{\"label\":\"Students with >1 scholarships\",\"students_with_multiple_scholarships\":1}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of students who received more than one scholarship\",\"width\":360,\"height\":240,\"mark\":{\"type\":\"bar\",\"cornerRadius\":4},\"encoding\":{\"x\":{\"field\":\"label\",\"type\":\"nominal\",\"axis\":{\"title\":null,\"labelAngle\":0}},\"y\":{\"field\":\"students_with_multiple_scholarships\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Count of students\"},\"scale\":{\"nice\":true}},\"color\":{\"value\":\"#4C78A8\"},\"tooltip\":[{\"field\":\"label\",\"type\":\"nominal\",\"title\":\"Category\"},{\"field\":\"students_with_multiple_scholarships\",\"type\":\"quantitative\",\"title\":\"Students with >1 scholarship\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"The visualization uses a synthetic single-category 'label' column to render one bar; consider a KPI/text display instead of a bar for a single scalar.\",\"The SQL applies no filters (e.g., year, paid status); if you intended to restrict the count, add appropriate WHERE clauses.\",\"X-axis has no title (axis.title is null); the single category label is visible but the axis label could be made explicit for clarity.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"496f63b09e093a67c20eae5d34409f98\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/students-multiple-scholarships/run-0001/run.json",
+    "queryPath": "runs/students-multiple-scholarships/run-0001/query.sql",
+    "vegaRawPath": "runs/students-multiple-scholarships/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/students-multiple-scholarships/run-0001/vega.resolved.json",
+    "imagePath": "runs/students-multiple-scholarships/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:38:32.698Z",
+  "traceId": "496f63b09e093a67c20eae5d34409f98",
+  "success": true,
+  "durationMs": 73492,
+  "resultRaw": {
+    "data": [
+      {
+        "label": "Students with >1 scholarships",
+        "students_with_multiple_scholarships": 1
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Number of students who received more than one scholarship",
+      "width": 360,
+      "height": 240,
+      "mark": {
+        "type": "bar",
+        "cornerRadius": 4
+      },
+      "encoding": {
+        "x": {
+          "field": "label",
+          "type": "nominal",
+          "axis": {
+            "title": null,
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "students_with_multiple_scholarships",
+          "type": "quantitative",
+          "axis": {
+            "title": "Count of students"
+          },
+          "scale": {
+            "nice": true
+          }
+        },
+        "color": {
+          "value": "#4C78A8"
+        },
+        "tooltip": [
+          {
+            "field": "label",
+            "type": "nominal",
+            "title": "Category"
+          },
+          {
+            "field": "students_with_multiple_scholarships",
+            "type": "quantitative",
+            "title": "Students with >1 scholarship"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT\n  'Students with >1 scholarships'::text AS label,\n  (\n    SELECT COUNT(*)\n    FROM (\n      SELECT scholarships.student_id\n      FROM public.scholarships AS scholarships\n      GROUP BY scholarships.student_id\n      HAVING COUNT(*) > 1\n    ) AS t\n  ) AS students_with_multiple_scholarships;",
+    "metadata": {
+      "columns": [
+        "label",
+        "students_with_multiple_scholarships"
+      ],
+      "rowCount": 1,
+      "sample": [
+        {
+          "label": "Students with >1 scholarships",
+          "students_with_multiple_scholarships": 1
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "The visualization uses a synthetic single-category 'label' column to render one bar; consider a KPI/text display instead of a bar for a single scalar.",
+        "The SQL applies no filters (e.g., year, paid status); if you intended to restrict the count, add appropriate WHERE clauses.",
+        "X-axis has no title (axis.title is null); the single category label is visible but the axis label could be made explicit for clarity."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "label": "Students with >1 scholarships",
+        "students_with_multiple_scholarships": 1
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Number of students who received more than one scholarship",
+      "width": 360,
+      "height": 240,
+      "mark": {
+        "type": "bar",
+        "cornerRadius": 4
+      },
+      "encoding": {
+        "x": {
+          "field": "label",
+          "type": "nominal",
+          "axis": {
+            "title": null,
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "students_with_multiple_scholarships",
+          "type": "quantitative",
+          "axis": {
+            "title": "Count of students"
+          },
+          "scale": {
+            "nice": true
+          }
+        },
+        "color": {
+          "value": "#4C78A8"
+        },
+        "tooltip": [
+          {
+            "field": "label",
+            "type": "nominal",
+            "title": "Category"
+          },
+          {
+            "field": "students_with_multiple_scholarships",
+            "type": "quantitative",
+            "title": "Students with >1 scholarship"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT\n  'Students with >1 scholarships'::text AS label,\n  (\n    SELECT COUNT(*)\n    FROM (\n      SELECT scholarships.student_id\n      FROM public.scholarships AS scholarships\n      GROUP BY scholarships.student_id\n      HAVING COUNT(*) > 1\n    ) AS t\n  ) AS students_with_multiple_scholarships;",
+    "metadata": {
+      "columns": [
+        "label",
+        "students_with_multiple_scholarships"
+      ],
+      "rowCount": 1,
+      "sample": [
+        {
+          "label": "Students with >1 scholarships",
+          "students_with_multiple_scholarships": 1
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "The visualization uses a synthetic single-category 'label' column to render one bar; consider a KPI/text display instead of a bar for a single scalar.",
+        "The SQL applies no filters (e.g., year, paid status); if you intended to restrict the count, add appropriate WHERE clauses.",
+        "X-axis has no title (axis.title is null); the single category label is visible but the axis label could be made explicit for clarity."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:38:32.698Z",
+    "traceId": "496f63b09e093a67c20eae5d34409f98",
+    "attempts": 6,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 16859,
+      "outputTokens": 5110,
+      "totalTokens": 21969,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 3520,
+      "costUsd": 0.01443475
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 16859,
+        "outputTokens": 5110,
+        "totalTokens": 21969,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 3520,
+        "costUsd": 0.01443475
+      }
+    ],
+    "warnings": []
+  }
+}

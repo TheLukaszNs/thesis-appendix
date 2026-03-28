@@ -1,0 +1,164 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "department-building-map",
+  "caseDirectory": "department-building-map",
+  "repeatIndex": 1,
+  "prompt": "Which buildings are used by which departments?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which buildings are used by which departments?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:54:30.917Z",
+    "endedAtUtc": "2026-02-23T10:54:49.450Z",
+    "durationMs": 18533
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "1957",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:54:49 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Which buildings are used by which departments?\"},\"agent\":{\"payload\":{\"question\":\"Which buildings are used by which departments?\"},\"startedAt\":1771844070925,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  b.id AS building_id,\\n  b.name AS building_name,\\n  COALESCE(STRING_AGG(d.name, ', ' ORDER BY d.name), '') AS department_list,\\n  COUNT(d.id) AS department_count\\nFROM buildings b\\nLEFT JOIN departments d ON d.building_id = b.id\\nGROUP BY b.id, b.name\\nORDER BY b.name;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Which buildings are used by which departments\",\"data\":{\"name\":\"query_result\"},\"title\":\"Departments per Building\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"building_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Building\"}},\"x\":{\"field\":\"department_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of Departments\"}},\"tooltip\":[{\"field\":\"building_name\",\"type\":\"nominal\",\"title\":\"Building\"},{\"field\":\"department_count\",\"type\":\"quantitative\",\"title\":\"Department Count\"},{\"field\":\"department_list\",\"type\":\"nominal\",\"title\":\"Departments\"}]}}},\"endedAt\":1771844089395},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  b.id AS building_id,\\n  b.name AS building_name,\\n  COALESCE(STRING_AGG(d.name, ', ' ORDER BY d.name), '') AS department_list,\\n  COUNT(d.id) AS department_count\\nFROM buildings b\\nLEFT JOIN departments d ON d.building_id = b.id\\nGROUP BY b.id, b.name\\nORDER BY b.name;\"},\"startedAt\":1771844089401,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: relation \\\"buildings\\\" does not exist\\nLINE 7: FROM buildings b\\n             ^\",\"name\":\"Error\"},\"endedAt\":1771844089446}},\"input\":{\"question\":\"Which buildings are used by which departments?\"},\"error\":{\"message\":\"SQL execution failed: relation \\\"buildings\\\" does not exist\\nLINE 7: FROM buildings b\\n             ^\",\"name\":\"Error\"},\"traceId\":\"ae9bf5bc3ed260402eecce5e572e8ad1\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/department-building-map/run-0001/run.json",
+    "queryPath": "runs/department-building-map/run-0001/query.sql",
+    "vegaRawPath": "runs/department-building-map/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/department-building-map/run-0001/vega.resolved.json",
+    "imagePath": "runs/department-building-map/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:54:49.450Z",
+  "traceId": "ae9bf5bc3ed260402eecce5e572e8ad1",
+  "success": false,
+  "durationMs": 18533,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Which buildings are used by which departments?"
+      },
+      "agent": {
+        "payload": {
+          "question": "Which buildings are used by which departments?"
+        },
+        "startedAt": 1771844070925,
+        "status": "success",
+        "output": {
+          "sql": "SELECT\n  b.id AS building_id,\n  b.name AS building_name,\n  COALESCE(STRING_AGG(d.name, ', ' ORDER BY d.name), '') AS department_list,\n  COUNT(d.id) AS department_count\nFROM buildings b\nLEFT JOIN departments d ON d.building_id = b.id\nGROUP BY b.id, b.name\nORDER BY b.name;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Which buildings are used by which departments",
+            "data": {
+              "name": "query_result"
+            },
+            "title": "Departments per Building",
+            "mark": {
+              "type": "bar"
+            },
+            "encoding": {
+              "y": {
+                "field": "building_name",
+                "type": "nominal",
+                "axis": {
+                  "title": "Building"
+                }
+              },
+              "x": {
+                "field": "department_count",
+                "type": "quantitative",
+                "axis": {
+                  "title": "Number of Departments"
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "building_name",
+                  "type": "nominal",
+                  "title": "Building"
+                },
+                {
+                  "field": "department_count",
+                  "type": "quantitative",
+                  "title": "Department Count"
+                },
+                {
+                  "field": "department_list",
+                  "type": "nominal",
+                  "title": "Departments"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771844089395
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT\n  b.id AS building_id,\n  b.name AS building_name,\n  COALESCE(STRING_AGG(d.name, ', ' ORDER BY d.name), '') AS department_list,\n  COUNT(d.id) AS department_count\nFROM buildings b\nLEFT JOIN departments d ON d.building_id = b.id\nGROUP BY b.id, b.name\nORDER BY b.name;"
+        },
+        "startedAt": 1771844089401,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: relation \"buildings\" does not exist\nLINE 7: FROM buildings b\n             ^",
+          "name": "Error"
+        },
+        "endedAt": 1771844089446
+      }
+    },
+    "input": {
+      "question": "Which buildings are used by which departments?"
+    },
+    "error": {
+      "message": "SQL execution failed: relation \"buildings\" does not exist\nLINE 7: FROM buildings b\n             ^",
+      "name": "Error"
+    },
+    "traceId": "ae9bf5bc3ed260402eecce5e572e8ad1"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:54:49.450Z",
+    "traceId": "ae9bf5bc3ed260402eecce5e572e8ad1",
+    "attempts": 4,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 264,
+      "outputTokens": 1218,
+      "totalTokens": 1482,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 896,
+      "costUsd": 0.002502
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 264,
+        "outputTokens": 1218,
+        "totalTokens": 1482,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 896,
+        "costUsd": 0.002502
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,168 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "gpa-vs-scholarship-type",
+  "caseDirectory": "gpa-vs-scholarship-type",
+  "repeatIndex": 1,
+  "prompt": "What is the average GPA of students by scholarship type received?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average GPA of students by scholarship type received?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:50:58.432Z",
+    "endedAtUtc": "2026-02-23T10:51:15.854Z",
+    "durationMs": 17422
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2187",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:51:15 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"What is the average GPA of students by scholarship type received?\"},\"agent\":{\"payload\":{\"question\":\"What is the average GPA of students by scholarship type received?\"},\"startedAt\":1771843858439,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  s.scholarship_type AS scholarship_type,\\n  AVG(st.gpa) AS avg_gpa,\\n  COUNT(DISTINCT st.student_id) AS student_count\\nFROM scholarships s\\nJOIN students st ON s.student_id = st.student_id\\nGROUP BY s.scholarship_type;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average GPA by Scholarship Type\",\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\",\"axis\":{\"labelAngle\":-40}},\"y\":{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},\"color\":{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Students\"}]}}},\"endedAt\":1771843875813},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  s.scholarship_type AS scholarship_type,\\n  AVG(st.gpa) AS avg_gpa,\\n  COUNT(DISTINCT st.student_id) AS student_count\\nFROM scholarships s\\nJOIN students st ON s.student_id = st.student_id\\nGROUP BY s.scholarship_type;\"},\"startedAt\":1771843875815,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column st.student_id does not exist\\nLINE 7: JOIN students st ON s.student_id = st.student_id\\n                                           ^\\nHINT:  Perhaps you meant to reference the column \\\"s.student_id\\\".\",\"name\":\"Error\"},\"endedAt\":1771843875850}},\"input\":{\"question\":\"What is the average GPA of students by scholarship type received?\"},\"error\":{\"message\":\"SQL execution failed: column st.student_id does not exist\\nLINE 7: JOIN students st ON s.student_id = st.student_id\\n                                           ^\\nHINT:  Perhaps you meant to reference the column \\\"s.student_id\\\".\",\"name\":\"Error\"},\"traceId\":\"4d63b00ebdec1aa5f9ae864f8a82c148\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/gpa-vs-scholarship-type/run-0001/run.json",
+    "queryPath": "runs/gpa-vs-scholarship-type/run-0001/query.sql",
+    "vegaRawPath": "runs/gpa-vs-scholarship-type/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/gpa-vs-scholarship-type/run-0001/vega.resolved.json",
+    "imagePath": "runs/gpa-vs-scholarship-type/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:51:15.855Z",
+  "traceId": "4d63b00ebdec1aa5f9ae864f8a82c148",
+  "success": false,
+  "durationMs": 17423,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "What is the average GPA of students by scholarship type received?"
+      },
+      "agent": {
+        "payload": {
+          "question": "What is the average GPA of students by scholarship type received?"
+        },
+        "startedAt": 1771843858439,
+        "status": "success",
+        "output": {
+          "sql": "SELECT\n  s.scholarship_type AS scholarship_type,\n  AVG(st.gpa) AS avg_gpa,\n  COUNT(DISTINCT st.student_id) AS student_count\nFROM scholarships s\nJOIN students st ON s.student_id = st.student_id\nGROUP BY s.scholarship_type;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "data": {
+              "name": "query_result"
+            },
+            "title": "Average GPA by Scholarship Type",
+            "mark": {
+              "type": "bar",
+              "tooltip": true
+            },
+            "encoding": {
+              "x": {
+                "field": "scholarship_type",
+                "type": "nominal",
+                "title": "Scholarship Type",
+                "axis": {
+                  "labelAngle": -40
+                }
+              },
+              "y": {
+                "field": "avg_gpa",
+                "type": "quantitative",
+                "title": "Average GPA"
+              },
+              "color": {
+                "field": "avg_gpa",
+                "type": "quantitative",
+                "legend": null
+              },
+              "tooltip": [
+                {
+                  "field": "scholarship_type",
+                  "type": "nominal",
+                  "title": "Scholarship Type"
+                },
+                {
+                  "field": "avg_gpa",
+                  "type": "quantitative",
+                  "title": "Average GPA"
+                },
+                {
+                  "field": "student_count",
+                  "type": "quantitative",
+                  "title": "Students"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843875813
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT\n  s.scholarship_type AS scholarship_type,\n  AVG(st.gpa) AS avg_gpa,\n  COUNT(DISTINCT st.student_id) AS student_count\nFROM scholarships s\nJOIN students st ON s.student_id = st.student_id\nGROUP BY s.scholarship_type;"
+        },
+        "startedAt": 1771843875815,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column st.student_id does not exist\nLINE 7: JOIN students st ON s.student_id = st.student_id\n                                           ^\nHINT:  Perhaps you meant to reference the column \"s.student_id\".",
+          "name": "Error"
+        },
+        "endedAt": 1771843875850
+      }
+    },
+    "input": {
+      "question": "What is the average GPA of students by scholarship type received?"
+    },
+    "error": {
+      "message": "SQL execution failed: column st.student_id does not exist\nLINE 7: JOIN students st ON s.student_id = st.student_id\n                                           ^\nHINT:  Perhaps you meant to reference the column \"s.student_id\".",
+      "name": "Error"
+    },
+    "traceId": "4d63b00ebdec1aa5f9ae864f8a82c148"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:51:15.855Z",
+    "traceId": "4d63b00ebdec1aa5f9ae864f8a82c148",
+    "attempts": 6,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 268,
+      "outputTokens": 1290,
+      "totalTokens": 1558,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1024,
+      "costUsd": 0.002647
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 268,
+        "outputTokens": 1290,
+        "totalTokens": 1558,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1024,
+        "costUsd": 0.002647
+      }
+    ],
+    "warnings": []
+  }
+}

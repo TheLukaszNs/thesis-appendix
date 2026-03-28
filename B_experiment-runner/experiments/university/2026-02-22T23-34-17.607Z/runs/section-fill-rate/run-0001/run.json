@@ -1,0 +1,298 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "section-fill-rate",
+  "caseDirectory": "section-fill-rate",
+  "repeatIndex": 1,
+  "prompt": "What is the average fill rate of course sections?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average fill rate of course sections?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:39:08.533Z",
+    "endedAtUtc": "2026-02-22T23:39:59.034Z",
+    "durationMs": 50501
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "8872",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:39:59 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the average fill rate of course sections?\"},\"sql\":{\"payload\":{\"question\":\"What is the average fill rate of course sections?\"},\"startedAt\":1771803548539,\"status\":\"success\",\"output\":{\"reasoning\":\"Compute per-section active enrollment counts joined to course_sections, calculate fill rate as active_enrollments / max_students for sections with max_students > 0, and return the average fill rate across sections.\",\"sql\":\"WITH section_enrollments AS (\\n  SELECT\\n    cs.id AS section_id,\\n    cs.max_students AS max_students,\\n    COUNT(e.id) FILTER (WHERE e.is_active) AS enrolled_count\\n  FROM public.course_sections cs\\n  LEFT JOIN public.enrollments e\\n    ON e.course_section_id = cs.id\\n  GROUP BY cs.id, cs.max_students\\n)\\nSELECT\\n  AVG(se.enrolled_count::numeric / se.max_students) AS avg_fill_rate\\nFROM section_enrollments se\\nWHERE se.max_students > 0;\",\"assumptions\":[\"Fill rate is defined as active enrollments divided by course_sections.max_students\",\"Exclude sections where max_students is NULL or <= 0 to avoid division by zero\",\"Do not cap fill rate at 100% (over-enrollment may produce values > 1)\"]},\"endedAt\":1771803573615},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH section_enrollments AS (\\n  SELECT\\n    cs.id AS section_id,\\n    cs.max_students AS max_students,\\n    COUNT(e.id) FILTER (WHERE e.is_active) AS enrolled_count\\n  FROM public.course_sections cs\\n  LEFT JOIN public.enrollments e\\n    ON e.course_section_id = cs.id\\n  GROUP BY cs.id, cs.max_students\\n)\\nSELECT\\n  AVG(se.enrolled_count::numeric / se.max_students) AS avg_fill_rate\\nFROM section_enrollments se\\nWHERE se.max_students > 0;\"},\"startedAt\":1771803573618,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH section_enrollments AS (\\n  SELECT\\n    cs.id AS section_id,\\n    cs.max_students AS max_students,\\n    COUNT(e.id) FILTER (WHERE e.is_active) AS enrolled_count\\n  FROM public.course_sections cs\\n  LEFT JOIN public.enrollments e\\n    ON e.course_section_id = cs.id\\n  GROUP BY cs.id, cs.max_students\\n)\\nSELECT\\n  AVG(se.enrolled_count::numeric / se.max_students) AS avg_fill_rate\\nFROM section_enrollments se\\nWHERE se.max_students > 0\",\"metadata\":{\"columns\":[\"avg_fill_rate\"],\"rowCount\":1,\"sample\":[{\"avg_fill_rate\":0.04263305322128851}]},\"data\":[{\"avg_fill_rate\":0.04263305322128851}]},\"endedAt\":1771803573638},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"WITH section_enrollments AS (\\n  SELECT\\n    cs.id AS section_id,\\n    cs.max_students AS max_students,\\n    COUNT(e.id) FILTER (WHERE e.is_active) AS enrolled_count\\n  FROM public.course_sections cs\\n  LEFT JOIN public.enrollments e\\n    ON e.course_section_id = cs.id\\n  GROUP BY cs.id, cs.max_students\\n)\\nSELECT\\n  AVG(se.enrolled_count::numeric / se.max_students) AS avg_fill_rate\\nFROM section_enrollments se\\nWHERE se.max_students > 0\",\"metadata\":{\"columns\":[\"avg_fill_rate\"],\"rowCount\":1,\"sample\":[{\"avg_fill_rate\":0.04263305322128851}]},\"data\":[{\"avg_fill_rate\":0.04263305322128851}]},\"startedAt\":1771803573640,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average fill rate of course sections\",\"width\":480,\"height\":100,\"layer\":[{\"mark\":{\"type\":\"bar\",\"color\":\"#4C78A8\"},\"encoding\":{\"y\":{\"value\":\"All sections\",\"type\":\"nominal\"},\"x\":{\"field\":\"avg_fill_rate\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average fill rate\",\"format\":\"%\"},\"scale\":{\"domain\":[0,1]}},\"tooltip\":[{\"field\":\"avg_fill_rate\",\"type\":\"quantitative\",\"format\":\".1%\"}]}},{\"mark\":{\"type\":\"text\",\"align\":\"left\",\"dx\":6,\"dy\":0,\"fontWeight\":\"bold\"},\"encoding\":{\"y\":{\"value\":\"All sections\",\"type\":\"nominal\"},\"x\":{\"field\":\"avg_fill_rate\",\"type\":\"quantitative\",\"scale\":{\"domain\":[0,1]}},\"text\":{\"field\":\"avg_fill_rate\",\"type\":\"quantitative\",\"format\":\".1%\"}}}]},\"reasoning\":\"A single horizontal bar shows the average fill rate (0–100%) relative to full capacity. The percentage is displayed as a text label on the bar and included in the tooltip for precise reading.\"},\"endedAt\":1771803599016},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average fill rate of course sections\",\"width\":480,\"height\":100,\"layer\":[{\"mark\":{\"type\":\"bar\",\"color\":\"#4C78A8\"},\"encoding\":{\"y\":{\"value\":\"All sections\",\"type\":\"nominal\"},\"x\":{\"field\":\"avg_fill_rate\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average fill rate\",\"format\":\"%\"},\"scale\":{\"domain\":[0,1]}},\"tooltip\":[{\"field\":\"avg_fill_rate\",\"type\":\"quantitative\",\"format\":\".1%\"}]}},{\"mark\":{\"type\":\"text\",\"align\":\"left\",\"dx\":6,\"dy\":0,\"fontWeight\":\"bold\"},\"encoding\":{\"y\":{\"value\":\"All sections\",\"type\":\"nominal\"},\"x\":{\"field\":\"avg_fill_rate\",\"type\":\"quantitative\",\"scale\":{\"domain\":[0,1]}},\"text\":{\"field\":\"avg_fill_rate\",\"type\":\"quantitative\",\"format\":\".1%\"}}}]},\"reasoning\":\"A single horizontal bar shows the average fill rate (0–100%) relative to full capacity. The percentage is displayed as a text label on the bar and included in the tooltip for precise reading.\"},\"startedAt\":1771803599019,\"status\":\"success\",\"output\":{\"sql\":\"WITH section_enrollments AS (\\n  SELECT\\n    cs.id AS section_id,\\n    cs.max_students AS max_students,\\n    COUNT(e.id) FILTER (WHERE e.is_active) AS enrolled_count\\n  FROM public.course_sections cs\\n  LEFT JOIN public.enrollments e\\n    ON e.course_section_id = cs.id\\n  GROUP BY cs.id, cs.max_students\\n)\\nSELECT\\n  AVG(se.enrolled_count::numeric / se.max_students) AS avg_fill_rate\\nFROM section_enrollments se\\nWHERE se.max_students > 0;\",\"data\":[{\"avg_fill_rate\":0.04263305322128851}],\"metadata\":{\"columns\":[\"avg_fill_rate\"],\"rowCount\":1,\"sample\":[{\"avg_fill_rate\":0.04263305322128851}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average fill rate of course sections\",\"width\":480,\"height\":100,\"layer\":[{\"mark\":{\"type\":\"bar\",\"color\":\"#4C78A8\"},\"encoding\":{\"y\":{\"value\":\"All sections\",\"type\":\"nominal\"},\"x\":{\"field\":\"avg_fill_rate\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average fill rate\",\"format\":\"%\"},\"scale\":{\"domain\":[0,1]}},\"tooltip\":[{\"field\":\"avg_fill_rate\",\"type\":\"quantitative\",\"format\":\".1%\"}]}},{\"mark\":{\"type\":\"text\",\"align\":\"left\",\"dx\":6,\"dy\":0,\"fontWeight\":\"bold\"},\"encoding\":{\"y\":{\"value\":\"All sections\",\"type\":\"nominal\"},\"x\":{\"field\":\"avg_fill_rate\",\"type\":\"quantitative\",\"scale\":{\"domain\":[0,1]}},\"text\":{\"field\":\"avg_fill_rate\",\"type\":\"quantitative\",\"format\":\".1%\"}}}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"]}},\"endedAt\":1771803599022}},\"input\":{\"question\":\"What is the average fill rate of course sections?\"},\"result\":{\"sql\":\"WITH section_enrollments AS (\\n  SELECT\\n    cs.id AS section_id,\\n    cs.max_students AS max_students,\\n    COUNT(e.id) FILTER (WHERE e.is_active) AS enrolled_count\\n  FROM public.course_sections cs\\n  LEFT JOIN public.enrollments e\\n    ON e.course_section_id = cs.id\\n  GROUP BY cs.id, cs.max_students\\n)\\nSELECT\\n  AVG(se.enrolled_count::numeric / se.max_students) AS avg_fill_rate\\nFROM section_enrollments se\\nWHERE se.max_students > 0;\",\"data\":[{\"avg_fill_rate\":0.04263305322128851}],\"metadata\":{\"columns\":[\"avg_fill_rate\"],\"rowCount\":1,\"sample\":[{\"avg_fill_rate\":0.04263305322128851}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average fill rate of course sections\",\"width\":480,\"height\":100,\"layer\":[{\"mark\":{\"type\":\"bar\",\"color\":\"#4C78A8\"},\"encoding\":{\"y\":{\"value\":\"All sections\",\"type\":\"nominal\"},\"x\":{\"field\":\"avg_fill_rate\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average fill rate\",\"format\":\"%\"},\"scale\":{\"domain\":[0,1]}},\"tooltip\":[{\"field\":\"avg_fill_rate\",\"type\":\"quantitative\",\"format\":\".1%\"}]}},{\"mark\":{\"type\":\"text\",\"align\":\"left\",\"dx\":6,\"dy\":0,\"fontWeight\":\"bold\"},\"encoding\":{\"y\":{\"value\":\"All sections\",\"type\":\"nominal\"},\"x\":{\"field\":\"avg_fill_rate\",\"type\":\"quantitative\",\"scale\":{\"domain\":[0,1]}},\"text\":{\"field\":\"avg_fill_rate\",\"type\":\"quantitative\",\"format\":\".1%\"}}}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"]}},\"traceId\":\"5d25629468cc9de562cfd0f7d70ab97c\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/section-fill-rate/run-0001/run.json",
+    "queryPath": "runs/section-fill-rate/run-0001/query.sql",
+    "vegaRawPath": "runs/section-fill-rate/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/section-fill-rate/run-0001/vega.resolved.json",
+    "imagePath": "runs/section-fill-rate/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:39:59.430Z",
+  "traceId": "5d25629468cc9de562cfd0f7d70ab97c",
+  "success": true,
+  "durationMs": 50897,
+  "resultRaw": {
+    "data": [
+      {
+        "avg_fill_rate": 0.04263305322128851
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average fill rate of course sections",
+      "width": 480,
+      "height": 100,
+      "layer": [
+        {
+          "mark": {
+            "type": "bar",
+            "color": "#4C78A8"
+          },
+          "encoding": {
+            "y": {
+              "value": "All sections",
+              "type": "nominal"
+            },
+            "x": {
+              "field": "avg_fill_rate",
+              "type": "quantitative",
+              "axis": {
+                "title": "Average fill rate",
+                "format": "%"
+              },
+              "scale": {
+                "domain": [
+                  0,
+                  1
+                ]
+              }
+            },
+            "tooltip": [
+              {
+                "field": "avg_fill_rate",
+                "type": "quantitative",
+                "format": ".1%"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dx": 6,
+            "dy": 0,
+            "fontWeight": "bold"
+          },
+          "encoding": {
+            "y": {
+              "value": "All sections",
+              "type": "nominal"
+            },
+            "x": {
+              "field": "avg_fill_rate",
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  0,
+                  1
+                ]
+              }
+            },
+            "text": {
+              "field": "avg_fill_rate",
+              "type": "quantitative",
+              "format": ".1%"
+            }
+          }
+        }
+      ]
+    },
+    "sql": "WITH section_enrollments AS (\n  SELECT\n    cs.id AS section_id,\n    cs.max_students AS max_students,\n    COUNT(e.id) FILTER (WHERE e.is_active) AS enrolled_count\n  FROM public.course_sections cs\n  LEFT JOIN public.enrollments e\n    ON e.course_section_id = cs.id\n  GROUP BY cs.id, cs.max_students\n)\nSELECT\n  AVG(se.enrolled_count::numeric / se.max_students) AS avg_fill_rate\nFROM section_enrollments se\nWHERE se.max_students > 0;",
+    "metadata": {
+      "columns": [
+        "avg_fill_rate"
+      ],
+      "rowCount": 1,
+      "sample": [
+        {
+          "avg_fill_rate": 0.04263305322128851
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "avg_fill_rate": 0.04263305322128851
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average fill rate of course sections",
+      "width": 480,
+      "height": 100,
+      "layer": [
+        {
+          "mark": {
+            "type": "bar",
+            "color": "#4C78A8"
+          },
+          "encoding": {
+            "y": {
+              "value": "All sections",
+              "type": "nominal"
+            },
+            "x": {
+              "field": "avg_fill_rate",
+              "type": "quantitative",
+              "axis": {
+                "title": "Average fill rate",
+                "format": "%"
+              },
+              "scale": {
+                "domain": [
+                  0,
+                  1
+                ]
+              }
+            },
+            "tooltip": [
+              {
+                "field": "avg_fill_rate",
+                "type": "quantitative",
+                "format": ".1%"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dx": 6,
+            "dy": 0,
+            "fontWeight": "bold"
+          },
+          "encoding": {
+            "y": {
+              "value": "All sections",
+              "type": "nominal"
+            },
+            "x": {
+              "field": "avg_fill_rate",
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  0,
+                  1
+                ]
+              }
+            },
+            "text": {
+              "field": "avg_fill_rate",
+              "type": "quantitative",
+              "format": ".1%"
+            }
+          }
+        }
+      ]
+    },
+    "sql": "WITH section_enrollments AS (\n  SELECT\n    cs.id AS section_id,\n    cs.max_students AS max_students,\n    COUNT(e.id) FILTER (WHERE e.is_active) AS enrolled_count\n  FROM public.course_sections cs\n  LEFT JOIN public.enrollments e\n    ON e.course_section_id = cs.id\n  GROUP BY cs.id, cs.max_students\n)\nSELECT\n  AVG(se.enrolled_count::numeric / se.max_students) AS avg_fill_rate\nFROM section_enrollments se\nWHERE se.max_students > 0;",
+    "metadata": {
+      "columns": [
+        "avg_fill_rate"
+      ],
+      "rowCount": 1,
+      "sample": [
+        {
+          "avg_fill_rate": 0.04263305322128851
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:39:59.430Z",
+    "traceId": "5d25629468cc9de562cfd0f7d70ab97c",
+    "attempts": 3,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 8790,
+      "outputTokens": 3380,
+      "totalTokens": 12170,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2496,
+      "costUsd": 0.0089575
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 8790,
+        "outputTokens": 3380,
+        "totalTokens": 12170,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2496,
+        "costUsd": 0.0089575
+      }
+    ],
+    "warnings": []
+  }
+}

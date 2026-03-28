@@ -1,0 +1,1 @@
+SELECT prerequisites.is_mandatory AS is_mandatory, COUNT(*) AS prerequisite_count FROM public.prerequisites AS prerequisites GROUP BY prerequisites.is_mandatory ORDER BY prerequisites.is_mandatory DESC;

@@ -1,0 +1,410 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "avg-workload-by-course",
+  "caseDirectory": "avg-workload-by-course",
+  "repeatIndex": 1,
+  "prompt": "What is the average reported workload hours for each course?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average reported workload hours for each course?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:10:43.996Z",
+    "endedAtUtc": "2026-02-23T11:12:08.240Z",
+    "durationMs": 84244
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "28224",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:12:08 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the average reported workload hours for each course?\"},\"planner\":{\"payload\":{\"question\":\"What is the average reported workload hours for each course?\"},\"startedAt\":1771845044001,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(ce.workload_hours)\"],\"dimensions\":[\"c.code\",\"c.name\"],\"filters\":[\"ce.workload_hours IS NOT NULL\"],\"grain\":\"one row per course (course-level)\",\"aliases\":{\"c.code\":\"course_code\",\"c.name\":\"course_name\",\"AVG(ce.workload_hours)\":\"avg_workload_hours\"},\"output_fields\":[\"course_code\",\"course_name\",\"avg_workload_hours\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_code\",\"y_axis\":\"avg_workload_hours\",\"title\":\"Average Reported Workload Hours per Course\"},\"assumptions\":[\"The relationship path used is: course_evaluations (ce) -> enrollments (e) via ce.enrollment_id = e.id -> course_sections (cs) via e.course_section_id = cs.id -> courses (c) via cs.course_id = c.id. Foreign key constraints for these links were observed in the schema metadata.\",\"We aggregate across all semesters/years (the user did not request filtering by semester or year).\",\"Exclude evaluations where workload_hours IS NULL; include all non-null reported workload_hours.\",\"Use courses.code as the primary course label on the x-axis and include courses.name as an additional output field for display or tooltip. The courses.code column is unique per schema metadata.\",\"avg_workload_hours is the arithmetic mean of the numeric workload_hours values and may be fractional.\",\"If you want a different grouping (e.g., by course section, semester, or academic_year) or to restrict to active enrollments, specify that and the plan will be adapted.\"]}},\"endedAt\":1771845081936},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(ce.workload_hours)\"],\"dimensions\":[\"c.code\",\"c.name\"],\"filters\":[\"ce.workload_hours IS NOT NULL\"],\"grain\":\"one row per course (course-level)\",\"aliases\":{\"c.code\":\"course_code\",\"c.name\":\"course_name\",\"AVG(ce.workload_hours)\":\"avg_workload_hours\"},\"output_fields\":[\"course_code\",\"course_name\",\"avg_workload_hours\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_code\",\"y_axis\":\"avg_workload_hours\",\"title\":\"Average Reported Workload Hours per Course\"},\"assumptions\":[\"The relationship path used is: course_evaluations (ce) -> enrollments (e) via ce.enrollment_id = e.id -> course_sections (cs) via e.course_section_id = cs.id -> courses (c) via cs.course_id = c.id. Foreign key constraints for these links were observed in the schema metadata.\",\"We aggregate across all semesters/years (the user did not request filtering by semester or year).\",\"Exclude evaluations where workload_hours IS NULL; include all non-null reported workload_hours.\",\"Use courses.code as the primary course label on the x-axis and include courses.name as an additional output field for display or tooltip. The courses.code column is unique per schema metadata.\",\"avg_workload_hours is the arithmetic mean of the numeric workload_hours values and may be fractional.\",\"If you want a different grouping (e.g., by course section, semester, or academic_year) or to restrict to active enrollments, specify that and the plan will be adapted.\"]}},\"startedAt\":1771845081950,\"status\":\"success\",\"output\":{\"question\":\"What is the average reported workload hours for each course?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(ce.workload_hours)\"],\"dimensions\":[\"c.code\",\"c.name\"],\"filters\":[\"ce.workload_hours IS NOT NULL\"],\"grain\":\"one row per course (course-level)\",\"aliases\":{\"c.code\":\"course_code\",\"c.name\":\"course_name\",\"AVG(ce.workload_hours)\":\"avg_workload_hours\"},\"output_fields\":[\"course_code\",\"course_name\",\"avg_workload_hours\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_code\",\"y_axis\":\"avg_workload_hours\",\"title\":\"Average Reported Workload Hours per Course\"},\"assumptions\":[\"The relationship path used is: course_evaluations (ce) -> enrollments (e) via ce.enrollment_id = e.id -> course_sections (cs) via e.course_section_id = cs.id -> courses (c) via cs.course_id = c.id. Foreign key constraints for these links were observed in the schema metadata.\",\"We aggregate across all semesters/years (the user did not request filtering by semester or year).\",\"Exclude evaluations where workload_hours IS NULL; include all non-null reported workload_hours.\",\"Use courses.code as the primary course label on the x-axis and include courses.name as an additional output field for display or tooltip. The courses.code column is unique per schema metadata.\",\"avg_workload_hours is the arithmetic mean of the numeric workload_hours values and may be fractional.\",\"If you want a different grouping (e.g., by course section, semester, or academic_year) or to restrict to active enrollments, specify that and the plan will be adapted.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771845081953},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"What is the average reported workload hours for each course?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(ce.workload_hours)\"],\"dimensions\":[\"c.code\",\"c.name\"],\"filters\":[\"ce.workload_hours IS NOT NULL\"],\"grain\":\"one row per course (course-level)\",\"aliases\":{\"c.code\":\"course_code\",\"c.name\":\"course_name\",\"AVG(ce.workload_hours)\":\"avg_workload_hours\"},\"output_fields\":[\"course_code\",\"course_name\",\"avg_workload_hours\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_code\",\"y_axis\":\"avg_workload_hours\",\"title\":\"Average Reported Workload Hours per Course\"},\"assumptions\":[\"The relationship path used is: course_evaluations (ce) -> enrollments (e) via ce.enrollment_id = e.id -> course_sections (cs) via e.course_section_id = cs.id -> courses (c) via cs.course_id = c.id. Foreign key constraints for these links were observed in the schema metadata.\",\"We aggregate across all semesters/years (the user did not request filtering by semester or year).\",\"Exclude evaluations where workload_hours IS NULL; include all non-null reported workload_hours.\",\"Use courses.code as the primary course label on the x-axis and include courses.name as an additional output field for display or tooltip. The courses.code column is unique per schema metadata.\",\"avg_workload_hours is the arithmetic mean of the numeric workload_hours values and may be fractional.\",\"If you want a different grouping (e.g., by course section, semester, or academic_year) or to restrict to active enrollments, specify that and the plan will be adapted.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771845081958,\"status\":\"success\",\"output\":{\"question\":\"What is the average reported workload hours for each course?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(ce.workload_hours)\"],\"dimensions\":[\"c.code\",\"c.name\"],\"filters\":[\"ce.workload_hours IS NOT NULL\"],\"grain\":\"one row per course (course-level)\",\"aliases\":{\"c.code\":\"course_code\",\"c.name\":\"course_name\",\"AVG(ce.workload_hours)\":\"avg_workload_hours\"},\"output_fields\":[\"course_code\",\"course_name\",\"avg_workload_hours\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_code\",\"y_axis\":\"avg_workload_hours\",\"title\":\"Average Reported Workload Hours per Course\"},\"assumptions\":[\"The relationship path used is: course_evaluations (ce) -> enrollments (e) via ce.enrollment_id = e.id -> course_sections (cs) via e.course_section_id = cs.id -> courses (c) via cs.course_id = c.id. Foreign key constraints for these links were observed in the schema metadata.\",\"We aggregate across all semesters/years (the user did not request filtering by semester or year).\",\"Exclude evaluations where workload_hours IS NULL; include all non-null reported workload_hours.\",\"Use courses.code as the primary course label on the x-axis and include courses.name as an additional output field for display or tooltip. The courses.code column is unique per schema metadata.\",\"avg_workload_hours is the arithmetic mean of the numeric workload_hours values and may be fractional.\",\"If you want a different grouping (e.g., by course section, semester, or academic_year) or to restrict to active enrollments, specify that and the plan will be adapted.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT c.code AS course_code,\\n       c.name AS course_name,\\n       AVG(ce.workload_hours) AS avg_workload_hours\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nJOIN public.courses AS c ON cs.course_id = c.id\\nWHERE ce.workload_hours IS NOT NULL\\nGROUP BY c.code, c.name\\nORDER BY c.code ASC;\",\"validationIssues\":[\"SQL GROUP BY includes both course_code and course_name; if course_code is guaranteed unique this is redundant (harmless) but could be simplified to group by course_code only.\",\"The Vega-Lite spec does not explicitly set sort on the x axis; it likely preserves the SQL ORDER BY, but adding an explicit sort in the x encoding would ensure consistent ordering.\",\"avg_workload_hours values are high-precision in the sample (many decimals); consider applying numeric formatting/rounding for improved readability on the y axis or tooltip.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Join course_evaluations -> enrollments -> course_sections -> courses (all FKs confirmed) and compute the average of non-null workload_hours per course. Order by course_code for deterministic output.\",\"sql\":\"SELECT c.code AS course_code,\\n       c.name AS course_name,\\n       AVG(ce.workload_hours) AS avg_workload_hours\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nJOIN public.courses AS c ON cs.course_id = c.id\\nWHERE ce.workload_hours IS NOT NULL\\nGROUP BY c.code, c.name\\nORDER BY c.code ASC;\",\"assumptions\":[\"Foreign key relationships confirmed: course_evaluations.enrollment_id -> enrollments.id, enrollments.course_section_id -> course_sections.id, course_sections.course_id -> courses.id.\",\"Aggregate across all semesters/years (no additional filtering).\",\"Exclude evaluations where workload_hours IS NULL per request.\",\"courses.code is unique and is a suitable label for ordering and display.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT c.code AS course_code,\\n       c.name AS course_name,\\n       AVG(ce.workload_hours) AS avg_workload_hours\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nJOIN public.courses AS c ON cs.course_id = c.id\\nWHERE ce.workload_hours IS NOT NULL\\nGROUP BY c.code, c.name\\nORDER BY c.code ASC\",\"metadata\":{\"columns\":[\"course_code\",\"course_name\",\"avg_workload_hours\"],\"rowCount\":16,\"sample\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"avg_workload_hours\":6.25},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"avg_workload_hours\":12.466666666666667}]},\"data\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"avg_workload_hours\":6.25},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"avg_workload_hours\":12.466666666666667},{\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"avg_workload_hours\":7.4},{\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"avg_workload_hours\":7.625},{\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"avg_workload_hours\":13.45},{\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"avg_workload_hours\":8.7},{\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"avg_workload_hours\":7.9},{\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"avg_workload_hours\":4.8},{\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"avg_workload_hours\":8.85},{\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"avg_workload_hours\":6.2},{\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"avg_workload_hours\":8.8},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"avg_workload_hours\":8.125},{\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"avg_workload_hours\":10.7},{\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"avg_workload_hours\":13.125},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"avg_workload_hours\":13.35},{\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"avg_workload_hours\":7.7}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Reported Workload Hours per Course\",\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"course_code\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course Code\",\"labelAngle\":-40}},\"y\":{\"field\":\"avg_workload_hours\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Workload Hours\"}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"avg_workload_hours\",\"type\":\"quantitative\",\"title\":\"Avg Workload Hours\"}]}},\"reasoning\":\"Bar chart mapping each course_code (x) to its average reported workload_hours (y); course_name included in the tooltip for context. X labels are angled for readability with ~16 courses.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"SQL GROUP BY includes both course_code and course_name; if course_code is guaranteed unique this is redundant (harmless) but could be simplified to group by course_code only.\",\"The Vega-Lite spec does not explicitly set sort on the x axis; it likely preserves the SQL ORDER BY, but adding an explicit sort in the x encoding would ensure consistent ordering.\",\"avg_workload_hours values are high-precision in the sample (many decimals); consider applying numeric formatting/rounding for improved readability on the y axis or tooltip.\"]}}},\"endedAt\":1771845128210,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"What is the average reported workload hours for each course?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(ce.workload_hours)\"],\"dimensions\":[\"c.code\",\"c.name\"],\"filters\":[\"ce.workload_hours IS NOT NULL\"],\"grain\":\"one row per course (course-level)\",\"aliases\":{\"c.code\":\"course_code\",\"c.name\":\"course_name\",\"AVG(ce.workload_hours)\":\"avg_workload_hours\"},\"output_fields\":[\"course_code\",\"course_name\",\"avg_workload_hours\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_code\",\"y_axis\":\"avg_workload_hours\",\"title\":\"Average Reported Workload Hours per Course\"},\"assumptions\":[\"The relationship path used is: course_evaluations (ce) -> enrollments (e) via ce.enrollment_id = e.id -> course_sections (cs) via e.course_section_id = cs.id -> courses (c) via cs.course_id = c.id. Foreign key constraints for these links were observed in the schema metadata.\",\"We aggregate across all semesters/years (the user did not request filtering by semester or year).\",\"Exclude evaluations where workload_hours IS NULL; include all non-null reported workload_hours.\",\"Use courses.code as the primary course label on the x-axis and include courses.name as an additional output field for display or tooltip. The courses.code column is unique per schema metadata.\",\"avg_workload_hours is the arithmetic mean of the numeric workload_hours values and may be fractional.\",\"If you want a different grouping (e.g., by course section, semester, or academic_year) or to restrict to active enrollments, specify that and the plan will be adapted.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT c.code AS course_code,\\n       c.name AS course_name,\\n       AVG(ce.workload_hours) AS avg_workload_hours\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nJOIN public.courses AS c ON cs.course_id = c.id\\nWHERE ce.workload_hours IS NOT NULL\\nGROUP BY c.code, c.name\\nORDER BY c.code ASC;\",\"validationIssues\":[\"SQL GROUP BY includes both course_code and course_name; if course_code is guaranteed unique this is redundant (harmless) but could be simplified to group by course_code only.\",\"The Vega-Lite spec does not explicitly set sort on the x axis; it likely preserves the SQL ORDER BY, but adding an explicit sort in the x encoding would ensure consistent ordering.\",\"avg_workload_hours values are high-precision in the sample (many decimals); consider applying numeric formatting/rounding for improved readability on the y axis or tooltip.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Join course_evaluations -> enrollments -> course_sections -> courses (all FKs confirmed) and compute the average of non-null workload_hours per course. Order by course_code for deterministic output.\",\"sql\":\"SELECT c.code AS course_code,\\n       c.name AS course_name,\\n       AVG(ce.workload_hours) AS avg_workload_hours\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nJOIN public.courses AS c ON cs.course_id = c.id\\nWHERE ce.workload_hours IS NOT NULL\\nGROUP BY c.code, c.name\\nORDER BY c.code ASC;\",\"assumptions\":[\"Foreign key relationships confirmed: course_evaluations.enrollment_id -> enrollments.id, enrollments.course_section_id -> course_sections.id, course_sections.course_id -> courses.id.\",\"Aggregate across all semesters/years (no additional filtering).\",\"Exclude evaluations where workload_hours IS NULL per request.\",\"courses.code is unique and is a suitable label for ordering and display.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT c.code AS course_code,\\n       c.name AS course_name,\\n       AVG(ce.workload_hours) AS avg_workload_hours\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nJOIN public.courses AS c ON cs.course_id = c.id\\nWHERE ce.workload_hours IS NOT NULL\\nGROUP BY c.code, c.name\\nORDER BY c.code ASC\",\"metadata\":{\"columns\":[\"course_code\",\"course_name\",\"avg_workload_hours\"],\"rowCount\":16,\"sample\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"avg_workload_hours\":6.25},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"avg_workload_hours\":12.466666666666667}]},\"data\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"avg_workload_hours\":6.25},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"avg_workload_hours\":12.466666666666667},{\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"avg_workload_hours\":7.4},{\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"avg_workload_hours\":7.625},{\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"avg_workload_hours\":13.45},{\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"avg_workload_hours\":8.7},{\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"avg_workload_hours\":7.9},{\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"avg_workload_hours\":4.8},{\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"avg_workload_hours\":8.85},{\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"avg_workload_hours\":6.2},{\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"avg_workload_hours\":8.8},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"avg_workload_hours\":8.125},{\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"avg_workload_hours\":10.7},{\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"avg_workload_hours\":13.125},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"avg_workload_hours\":13.35},{\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"avg_workload_hours\":7.7}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Reported Workload Hours per Course\",\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"course_code\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course Code\",\"labelAngle\":-40}},\"y\":{\"field\":\"avg_workload_hours\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Workload Hours\"}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"avg_workload_hours\",\"type\":\"quantitative\",\"title\":\"Avg Workload Hours\"}]}},\"reasoning\":\"Bar chart mapping each course_code (x) to its average reported workload_hours (y); course_name included in the tooltip for context. X labels are angled for readability with ~16 courses.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"SQL GROUP BY includes both course_code and course_name; if course_code is guaranteed unique this is redundant (harmless) but could be simplified to group by course_code only.\",\"The Vega-Lite spec does not explicitly set sort on the x axis; it likely preserves the SQL ORDER BY, but adding an explicit sort in the x encoding would ensure consistent ordering.\",\"avg_workload_hours values are high-precision in the sample (many decimals); consider applying numeric formatting/rounding for improved readability on the y axis or tooltip.\"]}}},\"startedAt\":1771845128214,\"status\":\"success\",\"output\":{\"sql\":\"SELECT c.code AS course_code,\\n       c.name AS course_name,\\n       AVG(ce.workload_hours) AS avg_workload_hours\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nJOIN public.courses AS c ON cs.course_id = c.id\\nWHERE ce.workload_hours IS NOT NULL\\nGROUP BY c.code, c.name\\nORDER BY c.code ASC;\",\"data\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"avg_workload_hours\":6.25},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"avg_workload_hours\":12.466666666666667},{\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"avg_workload_hours\":7.4},{\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"avg_workload_hours\":7.625},{\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"avg_workload_hours\":13.45},{\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"avg_workload_hours\":8.7},{\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"avg_workload_hours\":7.9},{\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"avg_workload_hours\":4.8},{\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"avg_workload_hours\":8.85},{\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"avg_workload_hours\":6.2},{\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"avg_workload_hours\":8.8},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"avg_workload_hours\":8.125},{\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"avg_workload_hours\":10.7},{\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"avg_workload_hours\":13.125},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"avg_workload_hours\":13.35},{\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"avg_workload_hours\":7.7}],\"metadata\":{\"columns\":[\"course_code\",\"course_name\",\"avg_workload_hours\"],\"rowCount\":16,\"sample\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"avg_workload_hours\":6.25},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"avg_workload_hours\":12.466666666666667}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Reported Workload Hours per Course\",\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"course_code\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course Code\",\"labelAngle\":-40}},\"y\":{\"field\":\"avg_workload_hours\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Workload Hours\"}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"avg_workload_hours\",\"type\":\"quantitative\",\"title\":\"Avg Workload Hours\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"SQL GROUP BY includes both course_code and course_name; if course_code is guaranteed unique this is redundant (harmless) but could be simplified to group by course_code only.\",\"The Vega-Lite spec does not explicitly set sort on the x axis; it likely preserves the SQL ORDER BY, but adding an explicit sort in the x encoding would ensure consistent ordering.\",\"avg_workload_hours values are high-precision in the sample (many decimals); consider applying numeric formatting/rounding for improved readability on the y axis or tooltip.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771845128218}},\"input\":{\"question\":\"What is the average reported workload hours for each course?\"},\"result\":{\"sql\":\"SELECT c.code AS course_code,\\n       c.name AS course_name,\\n       AVG(ce.workload_hours) AS avg_workload_hours\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nJOIN public.courses AS c ON cs.course_id = c.id\\nWHERE ce.workload_hours IS NOT NULL\\nGROUP BY c.code, c.name\\nORDER BY c.code ASC;\",\"data\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"avg_workload_hours\":6.25},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"avg_workload_hours\":12.466666666666667},{\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"avg_workload_hours\":7.4},{\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"avg_workload_hours\":7.625},{\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"avg_workload_hours\":13.45},{\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"avg_workload_hours\":8.7},{\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"avg_workload_hours\":7.9},{\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"avg_workload_hours\":4.8},{\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"avg_workload_hours\":8.85},{\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"avg_workload_hours\":6.2},{\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"avg_workload_hours\":8.8},{\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"avg_workload_hours\":8.125},{\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"avg_workload_hours\":10.7},{\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"avg_workload_hours\":13.125},{\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"avg_workload_hours\":13.35},{\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"avg_workload_hours\":7.7}],\"metadata\":{\"columns\":[\"course_code\",\"course_name\",\"avg_workload_hours\"],\"rowCount\":16,\"sample\":[{\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"avg_workload_hours\":6.25},{\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"avg_workload_hours\":12.466666666666667}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Reported Workload Hours per Course\",\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"course_code\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course Code\",\"labelAngle\":-40}},\"y\":{\"field\":\"avg_workload_hours\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Workload Hours\"}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"avg_workload_hours\",\"type\":\"quantitative\",\"title\":\"Avg Workload Hours\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"SQL GROUP BY includes both course_code and course_name; if course_code is guaranteed unique this is redundant (harmless) but could be simplified to group by course_code only.\",\"The Vega-Lite spec does not explicitly set sort on the x axis; it likely preserves the SQL ORDER BY, but adding an explicit sort in the x encoding would ensure consistent ordering.\",\"avg_workload_hours values are high-precision in the sample (many decimals); consider applying numeric formatting/rounding for improved readability on the y axis or tooltip.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"363d68014937f0264909f109a207ecfb\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-workload-by-course/run-0001/run.json",
+    "queryPath": "runs/avg-workload-by-course/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-workload-by-course/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-workload-by-course/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-workload-by-course/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:12:08.728Z",
+  "traceId": "363d68014937f0264909f109a207ecfb",
+  "success": true,
+  "durationMs": 84732,
+  "resultRaw": {
+    "data": [
+      {
+        "course_code": "AAX-989",
+        "course_name": "Elektronika",
+        "avg_workload_hours": 6.25
+      },
+      {
+        "course_code": "AFI-682",
+        "course_name": "Matematyka Dyskretna",
+        "avg_workload_hours": 12.466666666666667
+      },
+      {
+        "course_code": "BEW-951",
+        "course_name": "Fizyka",
+        "avg_workload_hours": 7.4
+      },
+      {
+        "course_code": "FCL-532",
+        "course_name": "Uczenie Maszynowe",
+        "avg_workload_hours": 7.625
+      },
+      {
+        "course_code": "FEO-908",
+        "course_name": "Analiza Matematyczna",
+        "avg_workload_hours": 13.45
+      },
+      {
+        "course_code": "HPF-845",
+        "course_name": "Systemy Wbudowane",
+        "avg_workload_hours": 8.7
+      },
+      {
+        "course_code": "PSC-614",
+        "course_name": "Architektura Komputerów",
+        "avg_workload_hours": 7.9
+      },
+      {
+        "course_code": "RZR-301",
+        "course_name": "Sieci Komputerowe",
+        "avg_workload_hours": 4.8
+      },
+      {
+        "course_code": "TAU-627",
+        "course_name": "Analiza Matematyczna",
+        "avg_workload_hours": 8.85
+      },
+      {
+        "course_code": "TJJ-354",
+        "course_name": "Projektowanie Aplikacji Webowych",
+        "avg_workload_hours": 6.2
+      },
+      {
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "avg_workload_hours": 8.8
+      },
+      {
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "avg_workload_hours": 8.125
+      },
+      {
+        "course_code": "WZC-570",
+        "course_name": "Programowanie Obiektowe",
+        "avg_workload_hours": 10.7
+      },
+      {
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "avg_workload_hours": 13.125
+      },
+      {
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "avg_workload_hours": 13.35
+      },
+      {
+        "course_code": "ZUQ-127",
+        "course_name": "Fizyka",
+        "avg_workload_hours": 7.7
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Reported Workload Hours per Course",
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "course_code",
+          "type": "nominal",
+          "axis": {
+            "title": "Course Code",
+            "labelAngle": -40
+          }
+        },
+        "y": {
+          "field": "avg_workload_hours",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average Workload Hours"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "course_code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "course_name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "avg_workload_hours",
+            "type": "quantitative",
+            "title": "Avg Workload Hours"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT c.code AS course_code,\n       c.name AS course_name,\n       AVG(ce.workload_hours) AS avg_workload_hours\nFROM public.course_evaluations AS ce\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\nJOIN public.courses AS c ON cs.course_id = c.id\nWHERE ce.workload_hours IS NOT NULL\nGROUP BY c.code, c.name\nORDER BY c.code ASC;",
+    "metadata": {
+      "columns": [
+        "course_code",
+        "course_name",
+        "avg_workload_hours"
+      ],
+      "rowCount": 16,
+      "sample": [
+        {
+          "course_code": "AAX-989",
+          "course_name": "Elektronika",
+          "avg_workload_hours": 6.25
+        },
+        {
+          "course_code": "AFI-682",
+          "course_name": "Matematyka Dyskretna",
+          "avg_workload_hours": 12.466666666666667
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "SQL GROUP BY includes both course_code and course_name; if course_code is guaranteed unique this is redundant (harmless) but could be simplified to group by course_code only.",
+        "The Vega-Lite spec does not explicitly set sort on the x axis; it likely preserves the SQL ORDER BY, but adding an explicit sort in the x encoding would ensure consistent ordering.",
+        "avg_workload_hours values are high-precision in the sample (many decimals); consider applying numeric formatting/rounding for improved readability on the y axis or tooltip."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "course_code": "AAX-989",
+        "course_name": "Elektronika",
+        "avg_workload_hours": 6.25
+      },
+      {
+        "course_code": "AFI-682",
+        "course_name": "Matematyka Dyskretna",
+        "avg_workload_hours": 12.466666666666667
+      },
+      {
+        "course_code": "BEW-951",
+        "course_name": "Fizyka",
+        "avg_workload_hours": 7.4
+      },
+      {
+        "course_code": "FCL-532",
+        "course_name": "Uczenie Maszynowe",
+        "avg_workload_hours": 7.625
+      },
+      {
+        "course_code": "FEO-908",
+        "course_name": "Analiza Matematyczna",
+        "avg_workload_hours": 13.45
+      },
+      {
+        "course_code": "HPF-845",
+        "course_name": "Systemy Wbudowane",
+        "avg_workload_hours": 8.7
+      },
+      {
+        "course_code": "PSC-614",
+        "course_name": "Architektura Komputerów",
+        "avg_workload_hours": 7.9
+      },
+      {
+        "course_code": "RZR-301",
+        "course_name": "Sieci Komputerowe",
+        "avg_workload_hours": 4.8
+      },
+      {
+        "course_code": "TAU-627",
+        "course_name": "Analiza Matematyczna",
+        "avg_workload_hours": 8.85
+      },
+      {
+        "course_code": "TJJ-354",
+        "course_name": "Projektowanie Aplikacji Webowych",
+        "avg_workload_hours": 6.2
+      },
+      {
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "avg_workload_hours": 8.8
+      },
+      {
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "avg_workload_hours": 8.125
+      },
+      {
+        "course_code": "WZC-570",
+        "course_name": "Programowanie Obiektowe",
+        "avg_workload_hours": 10.7
+      },
+      {
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "avg_workload_hours": 13.125
+      },
+      {
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "avg_workload_hours": 13.35
+      },
+      {
+        "course_code": "ZUQ-127",
+        "course_name": "Fizyka",
+        "avg_workload_hours": 7.7
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Reported Workload Hours per Course",
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "course_code",
+          "type": "nominal",
+          "axis": {
+            "title": "Course Code",
+            "labelAngle": -40
+          }
+        },
+        "y": {
+          "field": "avg_workload_hours",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average Workload Hours"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "course_code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "course_name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "avg_workload_hours",
+            "type": "quantitative",
+            "title": "Avg Workload Hours"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT c.code AS course_code,\n       c.name AS course_name,\n       AVG(ce.workload_hours) AS avg_workload_hours\nFROM public.course_evaluations AS ce\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\nJOIN public.courses AS c ON cs.course_id = c.id\nWHERE ce.workload_hours IS NOT NULL\nGROUP BY c.code, c.name\nORDER BY c.code ASC;",
+    "metadata": {
+      "columns": [
+        "course_code",
+        "course_name",
+        "avg_workload_hours"
+      ],
+      "rowCount": 16,
+      "sample": [
+        {
+          "course_code": "AAX-989",
+          "course_name": "Elektronika",
+          "avg_workload_hours": 6.25
+        },
+        {
+          "course_code": "AFI-682",
+          "course_name": "Matematyka Dyskretna",
+          "avg_workload_hours": 12.466666666666667
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "SQL GROUP BY includes both course_code and course_name; if course_code is guaranteed unique this is redundant (harmless) but could be simplified to group by course_code only.",
+        "The Vega-Lite spec does not explicitly set sort on the x axis; it likely preserves the SQL ORDER BY, but adding an explicit sort in the x encoding would ensure consistent ordering.",
+        "avg_workload_hours values are high-precision in the sample (many decimals); consider applying numeric formatting/rounding for improved readability on the y axis or tooltip."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:12:08.728Z",
+    "traceId": "363d68014937f0264909f109a207ecfb",
+    "attempts": 2,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 36454,
+      "outputTokens": 4978,
+      "totalTokens": 41432,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 3072,
+      "costUsd": 0.0190695
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 36454,
+        "outputTokens": 4978,
+        "totalTokens": 41432,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 3072,
+        "costUsd": 0.0190695
+      }
+    ],
+    "warnings": []
+  }
+}

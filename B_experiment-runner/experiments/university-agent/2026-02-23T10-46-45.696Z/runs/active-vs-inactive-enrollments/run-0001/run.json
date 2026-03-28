@@ -1,0 +1,168 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "active-vs-inactive-enrollments",
+  "caseDirectory": "active-vs-inactive-enrollments",
+  "repeatIndex": 1,
+  "prompt": "What is the ratio of active to inactive enrollments?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the ratio of active to inactive enrollments?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:50:00.396Z",
+    "endedAtUtc": "2026-02-23T10:50:41.319Z",
+    "durationMs": 40923
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "3162",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:50:41 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"What is the ratio of active to inactive enrollments?\"},\"agent\":{\"payload\":{\"question\":\"What is the ratio of active to inactive enrollments?\"},\"startedAt\":1771843800406,\"status\":\"success\",\"output\":{\"sql\":\"WITH counts AS (\\n  SELECT\\n    SUM(CASE WHEN LOWER(status) = 'active' THEN 1 ELSE 0 END) AS active_count,\\n    SUM(CASE WHEN LOWER(status) = 'inactive' THEN 1 ELSE 0 END) AS inactive_count\\n  FROM enrollments\\n)\\nSELECT\\n  'active' AS status,\\n  active_count AS count,\\n  active_count AS active_count,\\n  inactive_count AS inactive_count,\\n  CASE WHEN inactive_count = 0 THEN NULL ELSE ROUND(1.0 * active_count / inactive_count, 2) END AS active_to_inactive_ratio\\nFROM counts\\nUNION ALL\\nSELECT\\n  'inactive' AS status,\\n  inactive_count AS count,\\n  active_count AS active_count,\\n  inactive_count AS inactive_count,\\n  CASE WHEN inactive_count = 0 THEN NULL ELSE ROUND(1.0 * active_count / inactive_count, 2) END AS active_to_inactive_ratio\\nFROM counts;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Counts of active vs inactive enrollments and the active/inactive ratio\",\"data\":{\"name\":\"query_result\"},\"title\":\"Active vs Inactive Enrollments and Ratio (active / inactive)\",\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"status\",\"type\":\"nominal\",\"title\":\"Enrollment status\"},\"y\":{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Number of enrollments\"},\"color\":{\"field\":\"status\",\"type\":\"nominal\",\"legend\":null},\"tooltip\":[{\"field\":\"status\",\"type\":\"nominal\"},{\"field\":\"count\",\"type\":\"quantitative\"},{\"field\":\"active_count\",\"type\":\"quantitative\"},{\"field\":\"inactive_count\",\"type\":\"quantitative\"},{\"field\":\"active_to_inactive_ratio\",\"type\":\"quantitative\"}]}}},\"endedAt\":1771843841252},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH counts AS (\\n  SELECT\\n    SUM(CASE WHEN LOWER(status) = 'active' THEN 1 ELSE 0 END) AS active_count,\\n    SUM(CASE WHEN LOWER(status) = 'inactive' THEN 1 ELSE 0 END) AS inactive_count\\n  FROM enrollments\\n)\\nSELECT\\n  'active' AS status,\\n  active_count AS count,\\n  active_count AS active_count,\\n  inactive_count AS inactive_count,\\n  CASE WHEN inactive_count = 0 THEN NULL ELSE ROUND(1.0 * active_count / inactive_count, 2) END AS active_to_inactive_ratio\\nFROM counts\\nUNION ALL\\nSELECT\\n  'inactive' AS status,\\n  inactive_count AS count,\\n  active_count AS active_count,\\n  inactive_count AS inactive_count,\\n  CASE WHEN inactive_count = 0 THEN NULL ELSE ROUND(1.0 * active_count / inactive_count, 2) END AS active_to_inactive_ratio\\nFROM counts;\"},\"startedAt\":1771843841257,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column \\\"status\\\" does not exist\\nLINE 4:     SUM(CASE WHEN LOWER(status) = 'active' THEN 1 ELSE 0 END...\\n                                ^\",\"name\":\"Error\"},\"endedAt\":1771843841314}},\"input\":{\"question\":\"What is the ratio of active to inactive enrollments?\"},\"error\":{\"message\":\"SQL execution failed: column \\\"status\\\" does not exist\\nLINE 4:     SUM(CASE WHEN LOWER(status) = 'active' THEN 1 ELSE 0 END...\\n                                ^\",\"name\":\"Error\"},\"traceId\":\"ede9fbc22c562cf91b2e199b232ccd02\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/active-vs-inactive-enrollments/run-0001/run.json",
+    "queryPath": "runs/active-vs-inactive-enrollments/run-0001/query.sql",
+    "vegaRawPath": "runs/active-vs-inactive-enrollments/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/active-vs-inactive-enrollments/run-0001/vega.resolved.json",
+    "imagePath": "runs/active-vs-inactive-enrollments/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:50:41.320Z",
+  "traceId": "ede9fbc22c562cf91b2e199b232ccd02",
+  "success": false,
+  "durationMs": 40924,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "What is the ratio of active to inactive enrollments?"
+      },
+      "agent": {
+        "payload": {
+          "question": "What is the ratio of active to inactive enrollments?"
+        },
+        "startedAt": 1771843800406,
+        "status": "success",
+        "output": {
+          "sql": "WITH counts AS (\n  SELECT\n    SUM(CASE WHEN LOWER(status) = 'active' THEN 1 ELSE 0 END) AS active_count,\n    SUM(CASE WHEN LOWER(status) = 'inactive' THEN 1 ELSE 0 END) AS inactive_count\n  FROM enrollments\n)\nSELECT\n  'active' AS status,\n  active_count AS count,\n  active_count AS active_count,\n  inactive_count AS inactive_count,\n  CASE WHEN inactive_count = 0 THEN NULL ELSE ROUND(1.0 * active_count / inactive_count, 2) END AS active_to_inactive_ratio\nFROM counts\nUNION ALL\nSELECT\n  'inactive' AS status,\n  inactive_count AS count,\n  active_count AS active_count,\n  inactive_count AS inactive_count,\n  CASE WHEN inactive_count = 0 THEN NULL ELSE ROUND(1.0 * active_count / inactive_count, 2) END AS active_to_inactive_ratio\nFROM counts;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Counts of active vs inactive enrollments and the active/inactive ratio",
+            "data": {
+              "name": "query_result"
+            },
+            "title": "Active vs Inactive Enrollments and Ratio (active / inactive)",
+            "mark": "bar",
+            "encoding": {
+              "x": {
+                "field": "status",
+                "type": "nominal",
+                "title": "Enrollment status"
+              },
+              "y": {
+                "field": "count",
+                "type": "quantitative",
+                "title": "Number of enrollments"
+              },
+              "color": {
+                "field": "status",
+                "type": "nominal",
+                "legend": null
+              },
+              "tooltip": [
+                {
+                  "field": "status",
+                  "type": "nominal"
+                },
+                {
+                  "field": "count",
+                  "type": "quantitative"
+                },
+                {
+                  "field": "active_count",
+                  "type": "quantitative"
+                },
+                {
+                  "field": "inactive_count",
+                  "type": "quantitative"
+                },
+                {
+                  "field": "active_to_inactive_ratio",
+                  "type": "quantitative"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843841252
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH counts AS (\n  SELECT\n    SUM(CASE WHEN LOWER(status) = 'active' THEN 1 ELSE 0 END) AS active_count,\n    SUM(CASE WHEN LOWER(status) = 'inactive' THEN 1 ELSE 0 END) AS inactive_count\n  FROM enrollments\n)\nSELECT\n  'active' AS status,\n  active_count AS count,\n  active_count AS active_count,\n  inactive_count AS inactive_count,\n  CASE WHEN inactive_count = 0 THEN NULL ELSE ROUND(1.0 * active_count / inactive_count, 2) END AS active_to_inactive_ratio\nFROM counts\nUNION ALL\nSELECT\n  'inactive' AS status,\n  inactive_count AS count,\n  active_count AS active_count,\n  inactive_count AS inactive_count,\n  CASE WHEN inactive_count = 0 THEN NULL ELSE ROUND(1.0 * active_count / inactive_count, 2) END AS active_to_inactive_ratio\nFROM counts;"
+        },
+        "startedAt": 1771843841257,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column \"status\" does not exist\nLINE 4:     SUM(CASE WHEN LOWER(status) = 'active' THEN 1 ELSE 0 END...\n                                ^",
+          "name": "Error"
+        },
+        "endedAt": 1771843841314
+      }
+    },
+    "input": {
+      "question": "What is the ratio of active to inactive enrollments?"
+    },
+    "error": {
+      "message": "SQL execution failed: column \"status\" does not exist\nLINE 4:     SUM(CASE WHEN LOWER(status) = 'active' THEN 1 ELSE 0 END...\n                                ^",
+      "name": "Error"
+    },
+    "traceId": "ede9fbc22c562cf91b2e199b232ccd02"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:50:41.320Z",
+    "traceId": "ede9fbc22c562cf91b2e199b232ccd02",
+    "attempts": 5,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 267,
+      "outputTokens": 3125,
+      "totalTokens": 3392,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2688,
+      "costUsd": 0.00631675
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 267,
+        "outputTokens": 3125,
+        "totalTokens": 3392,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2688,
+        "costUsd": 0.00631675
+      }
+    ],
+    "warnings": []
+  }
+}

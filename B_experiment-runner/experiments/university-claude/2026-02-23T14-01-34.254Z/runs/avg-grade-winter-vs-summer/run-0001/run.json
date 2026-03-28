@@ -1,0 +1,228 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "avg-grade-winter-vs-summer",
+  "caseDirectory": "avg-grade-winter-vs-summer",
+  "repeatIndex": 1,
+  "prompt": "Compare average grades between winter and summer semesters",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Compare average grades between winter and summer semesters"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:07:53.886Z",
+    "endedAtUtc": "2026-02-23T14:08:44.834Z",
+    "durationMs": 50948
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "14497",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:08:44 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Compare average grades between winter and summer semesters\"},\"sql\":{\"payload\":{\"question\":\"Compare average grades between winter and summer semesters\"},\"startedAt\":1771855673892,\"status\":\"success\",\"output\":{\"reasoning\":\"The user wants to compare average grades between winter and summer semesters. I've confirmed the schema has:\\n- grades table with exam_score, project_score, attendance_score columns\\n- enrollments table linking students to course_sections\\n- course_sections table with semester_type (WINTER or SUMMER)\\n\\nI'll calculate the average of the three score components (exam, project, attendance) for each semester type. Since these are numeric scores, I'll compute their mean and group by semester_type from course_sections.\",\"sql\":\"SELECT \\n  cs.semester_type,\\n  ROUND(AVG(g.exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(g.project_score)::numeric, 2) AS avg_project_score,\\n  ROUND(AVG(g.attendance_score)::numeric, 2) AS avg_attendance_score,\\n  ROUND(AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / 3)::numeric, 2) AS avg_overall_score\\nFROM grades g\\nINNER JOIN enrollments e ON g.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.semester_type\\nORDER BY cs.semester_type;\",\"assumptions\":[\"Grades are composed of exam_score, project_score, and attendance_score\",\"Overall average is calculated as the mean of the three score components\",\"NULL scores are treated as 0 in the overall calculation\",\"Semester types are WINTER and SUMMER as confirmed in the database\"]},\"endedAt\":1771855719663},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT \\n  cs.semester_type,\\n  ROUND(AVG(g.exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(g.project_score)::numeric, 2) AS avg_project_score,\\n  ROUND(AVG(g.attendance_score)::numeric, 2) AS avg_attendance_score,\\n  ROUND(AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / 3)::numeric, 2) AS avg_overall_score\\nFROM grades g\\nINNER JOIN enrollments e ON g.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.semester_type\\nORDER BY cs.semester_type;\"},\"startedAt\":1771855719666,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  cs.semester_type,\\n  ROUND(AVG(g.exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(g.project_score)::numeric, 2) AS avg_project_score,\\n  ROUND(AVG(g.attendance_score)::numeric, 2) AS avg_attendance_score,\\n  ROUND(AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / 3)::numeric, 2) AS avg_overall_score\\nFROM grades g\\nINNER JOIN enrollments e ON g.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.semester_type\\nORDER BY cs.semester_type\",\"metadata\":{\"columns\":[\"semester_type\",\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\",\"avg_overall_score\"],\"rowCount\":2,\"sample\":[{\"semester_type\":\"WINTER\",\"avg_exam_score\":\"47.73\",\"avg_project_score\":\"49.98\",\"avg_attendance_score\":\"57.56\",\"avg_overall_score\":\"43.26\"},{\"semester_type\":\"SUMMER\",\"avg_exam_score\":\"51.79\",\"avg_project_score\":\"44.97\",\"avg_attendance_score\":\"55.65\",\"avg_overall_score\":\"45.34\"}]},\"data\":[{\"semester_type\":\"WINTER\",\"avg_exam_score\":\"47.73\",\"avg_project_score\":\"49.98\",\"avg_attendance_score\":\"57.56\",\"avg_overall_score\":\"43.26\"},{\"semester_type\":\"SUMMER\",\"avg_exam_score\":\"51.79\",\"avg_project_score\":\"44.97\",\"avg_attendance_score\":\"55.65\",\"avg_overall_score\":\"45.34\"}]},\"endedAt\":1771855719674},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  cs.semester_type,\\n  ROUND(AVG(g.exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(g.project_score)::numeric, 2) AS avg_project_score,\\n  ROUND(AVG(g.attendance_score)::numeric, 2) AS avg_attendance_score,\\n  ROUND(AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / 3)::numeric, 2) AS avg_overall_score\\nFROM grades g\\nINNER JOIN enrollments e ON g.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.semester_type\\nORDER BY cs.semester_type\",\"metadata\":{\"columns\":[\"semester_type\",\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\",\"avg_overall_score\"],\"rowCount\":2,\"sample\":[{\"semester_type\":\"WINTER\",\"avg_exam_score\":\"47.73\",\"avg_project_score\":\"49.98\",\"avg_attendance_score\":\"57.56\",\"avg_overall_score\":\"43.26\"},{\"semester_type\":\"SUMMER\",\"avg_exam_score\":\"51.79\",\"avg_project_score\":\"44.97\",\"avg_attendance_score\":\"55.65\",\"avg_overall_score\":\"45.34\"}]},\"data\":[{\"semester_type\":\"WINTER\",\"avg_exam_score\":\"47.73\",\"avg_project_score\":\"49.98\",\"avg_attendance_score\":\"57.56\",\"avg_overall_score\":\"43.26\"},{\"semester_type\":\"SUMMER\",\"avg_exam_score\":\"51.79\",\"avg_project_score\":\"44.97\",\"avg_attendance_score\":\"55.65\",\"avg_overall_score\":\"45.34\"}]},\"startedAt\":1771855719677,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Grades Comparison: Winter vs Summer Semesters\",\"data\":{\"name\":\"query_result\"},\"transform\":[{\"fold\":[\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\",\"avg_overall_score\"],\"as\":[\"score_type\",\"score_value\"]}],\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester Type\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"score_value\",\"type\":\"quantitative\",\"title\":\"Average Score\"},\"color\":{\"field\":\"score_type\",\"type\":\"nominal\",\"title\":\"Score Type\",\"scale\":{\"domain\":[\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\",\"avg_overall_score\"],\"range\":[\"#e41a1c\",\"#377eb8\",\"#4daf4a\",\"#984ea3\"]},\"legend\":{\"labelExpr\":\"datum.label === 'avg_exam_score' ? 'Exam' : datum.label === 'avg_project_score' ? 'Project' : datum.label === 'avg_attendance_score' ? 'Attendance' : 'Overall'\"}},\"xOffset\":{\"field\":\"score_type\"},\"tooltip\":[{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"score_type\",\"type\":\"nominal\",\"title\":\"Score Type\",\"format\":\"\",\"formatType\":\"json\"},{\"field\":\"score_value\",\"type\":\"quantitative\",\"title\":\"Average Score\",\"format\":\".2f\"}]},\"width\":600,\"height\":400},\"reasoning\":\"This grouped bar chart compares four score metrics (exam, project, attendance, and overall) across winter and summer semesters. The fold transform reshapes the data to enable side-by-side comparison. Color encoding distinguishes score types, making it easy to see that summer has higher exam scores (51.79 vs 47.73) while winter has higher project scores (49.98 vs 44.97). The overall scores are similar but summer slightly edges winter (45.34 vs 43.26).\"},\"endedAt\":1771855724778},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Grades Comparison: Winter vs Summer Semesters\",\"data\":{\"name\":\"query_result\"},\"transform\":[{\"fold\":[\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\",\"avg_overall_score\"],\"as\":[\"score_type\",\"score_value\"]}],\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester Type\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"score_value\",\"type\":\"quantitative\",\"title\":\"Average Score\"},\"color\":{\"field\":\"score_type\",\"type\":\"nominal\",\"title\":\"Score Type\",\"scale\":{\"domain\":[\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\",\"avg_overall_score\"],\"range\":[\"#e41a1c\",\"#377eb8\",\"#4daf4a\",\"#984ea3\"]},\"legend\":{\"labelExpr\":\"datum.label === 'avg_exam_score' ? 'Exam' : datum.label === 'avg_project_score' ? 'Project' : datum.label === 'avg_attendance_score' ? 'Attendance' : 'Overall'\"}},\"xOffset\":{\"field\":\"score_type\"},\"tooltip\":[{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"score_type\",\"type\":\"nominal\",\"title\":\"Score Type\",\"format\":\"\",\"formatType\":\"json\"},{\"field\":\"score_value\",\"type\":\"quantitative\",\"title\":\"Average Score\",\"format\":\".2f\"}]},\"width\":600,\"height\":400},\"reasoning\":\"This grouped bar chart compares four score metrics (exam, project, attendance, and overall) across winter and summer semesters. The fold transform reshapes the data to enable side-by-side comparison. Color encoding distinguishes score types, making it easy to see that summer has higher exam scores (51.79 vs 47.73) while winter has higher project scores (49.98 vs 44.97). The overall scores are similar but summer slightly edges winter (45.34 vs 43.26).\"},\"startedAt\":1771855724802,\"status\":\"success\",\"output\":{\"sql\":\"SELECT \\n  cs.semester_type,\\n  ROUND(AVG(g.exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(g.project_score)::numeric, 2) AS avg_project_score,\\n  ROUND(AVG(g.attendance_score)::numeric, 2) AS avg_attendance_score,\\n  ROUND(AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / 3)::numeric, 2) AS avg_overall_score\\nFROM grades g\\nINNER JOIN enrollments e ON g.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.semester_type\\nORDER BY cs.semester_type;\",\"data\":[{\"semester_type\":\"WINTER\",\"avg_exam_score\":\"47.73\",\"avg_project_score\":\"49.98\",\"avg_attendance_score\":\"57.56\",\"avg_overall_score\":\"43.26\"},{\"semester_type\":\"SUMMER\",\"avg_exam_score\":\"51.79\",\"avg_project_score\":\"44.97\",\"avg_attendance_score\":\"55.65\",\"avg_overall_score\":\"45.34\"}],\"metadata\":{\"columns\":[\"semester_type\",\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\",\"avg_overall_score\"],\"rowCount\":2,\"sample\":[{\"semester_type\":\"WINTER\",\"avg_exam_score\":\"47.73\",\"avg_project_score\":\"49.98\",\"avg_attendance_score\":\"57.56\",\"avg_overall_score\":\"43.26\"},{\"semester_type\":\"SUMMER\",\"avg_exam_score\":\"51.79\",\"avg_project_score\":\"44.97\",\"avg_attendance_score\":\"55.65\",\"avg_overall_score\":\"45.34\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Grades Comparison: Winter vs Summer Semesters\",\"data\":{\"name\":\"query_result\"},\"transform\":[{\"fold\":[\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\",\"avg_overall_score\"],\"as\":[\"score_type\",\"score_value\"]}],\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester Type\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"score_value\",\"type\":\"quantitative\",\"title\":\"Average Score\"},\"color\":{\"field\":\"score_type\",\"type\":\"nominal\",\"title\":\"Score Type\",\"scale\":{\"domain\":[\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\",\"avg_overall_score\"],\"range\":[\"#e41a1c\",\"#377eb8\",\"#4daf4a\",\"#984ea3\"]},\"legend\":{\"labelExpr\":\"datum.label === 'avg_exam_score' ? 'Exam' : datum.label === 'avg_project_score' ? 'Project' : datum.label === 'avg_attendance_score' ? 'Attendance' : 'Overall'\"}},\"xOffset\":{\"field\":\"score_type\"},\"tooltip\":[{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"score_type\",\"type\":\"nominal\",\"title\":\"Score Type\",\"format\":\"\",\"formatType\":\"json\"},{\"field\":\"score_value\",\"type\":\"quantitative\",\"title\":\"Average Score\",\"format\":\".2f\"}]},\"width\":600,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Encoding field 'score_value' is missing in SQL output columns.\",\"Encoding field 'score_type' is missing in SQL output columns.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Encoding field 'score_value' is missing in SQL output columns.\",\"Encoding field 'score_type' is missing in SQL output columns.\"]}},\"endedAt\":1771855724809}},\"input\":{\"question\":\"Compare average grades between winter and summer semesters\"},\"result\":{\"sql\":\"SELECT \\n  cs.semester_type,\\n  ROUND(AVG(g.exam_score)::numeric, 2) AS avg_exam_score,\\n  ROUND(AVG(g.project_score)::numeric, 2) AS avg_project_score,\\n  ROUND(AVG(g.attendance_score)::numeric, 2) AS avg_attendance_score,\\n  ROUND(AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / 3)::numeric, 2) AS avg_overall_score\\nFROM grades g\\nINNER JOIN enrollments e ON g.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.semester_type\\nORDER BY cs.semester_type;\",\"data\":[{\"semester_type\":\"WINTER\",\"avg_exam_score\":\"47.73\",\"avg_project_score\":\"49.98\",\"avg_attendance_score\":\"57.56\",\"avg_overall_score\":\"43.26\"},{\"semester_type\":\"SUMMER\",\"avg_exam_score\":\"51.79\",\"avg_project_score\":\"44.97\",\"avg_attendance_score\":\"55.65\",\"avg_overall_score\":\"45.34\"}],\"metadata\":{\"columns\":[\"semester_type\",\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\",\"avg_overall_score\"],\"rowCount\":2,\"sample\":[{\"semester_type\":\"WINTER\",\"avg_exam_score\":\"47.73\",\"avg_project_score\":\"49.98\",\"avg_attendance_score\":\"57.56\",\"avg_overall_score\":\"43.26\"},{\"semester_type\":\"SUMMER\",\"avg_exam_score\":\"51.79\",\"avg_project_score\":\"44.97\",\"avg_attendance_score\":\"55.65\",\"avg_overall_score\":\"45.34\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Grades Comparison: Winter vs Summer Semesters\",\"data\":{\"name\":\"query_result\"},\"transform\":[{\"fold\":[\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\",\"avg_overall_score\"],\"as\":[\"score_type\",\"score_value\"]}],\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester Type\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"score_value\",\"type\":\"quantitative\",\"title\":\"Average Score\"},\"color\":{\"field\":\"score_type\",\"type\":\"nominal\",\"title\":\"Score Type\",\"scale\":{\"domain\":[\"avg_exam_score\",\"avg_project_score\",\"avg_attendance_score\",\"avg_overall_score\"],\"range\":[\"#e41a1c\",\"#377eb8\",\"#4daf4a\",\"#984ea3\"]},\"legend\":{\"labelExpr\":\"datum.label === 'avg_exam_score' ? 'Exam' : datum.label === 'avg_project_score' ? 'Project' : datum.label === 'avg_attendance_score' ? 'Attendance' : 'Overall'\"}},\"xOffset\":{\"field\":\"score_type\"},\"tooltip\":[{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"score_type\",\"type\":\"nominal\",\"title\":\"Score Type\",\"format\":\"\",\"formatType\":\"json\"},{\"field\":\"score_value\",\"type\":\"quantitative\",\"title\":\"Average Score\",\"format\":\".2f\"}]},\"width\":600,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Encoding field 'score_value' is missing in SQL output columns.\",\"Encoding field 'score_type' is missing in SQL output columns.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Encoding field 'score_value' is missing in SQL output columns.\",\"Encoding field 'score_type' is missing in SQL output columns.\"]}},\"traceId\":\"b4da932990a249a21c131d56f1042871\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-grade-winter-vs-summer/run-0001/run.json",
+    "queryPath": "runs/avg-grade-winter-vs-summer/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-grade-winter-vs-summer/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-grade-winter-vs-summer/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-grade-winter-vs-summer/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:08:45.159Z",
+  "traceId": "b4da932990a249a21c131d56f1042871",
+  "success": false,
+  "durationMs": 51273,
+  "resultRaw": {
+    "data": [
+      {
+        "semester_type": "WINTER",
+        "avg_exam_score": "47.73",
+        "avg_project_score": "49.98",
+        "avg_attendance_score": "57.56",
+        "avg_overall_score": "43.26"
+      },
+      {
+        "semester_type": "SUMMER",
+        "avg_exam_score": "51.79",
+        "avg_project_score": "44.97",
+        "avg_attendance_score": "55.65",
+        "avg_overall_score": "45.34"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Grades Comparison: Winter vs Summer Semesters",
+      "data": {
+        "name": "query_result"
+      },
+      "transform": [
+        {
+          "fold": [
+            "avg_exam_score",
+            "avg_project_score",
+            "avg_attendance_score",
+            "avg_overall_score"
+          ],
+          "as": [
+            "score_type",
+            "score_value"
+          ]
+        }
+      ],
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "semester_type",
+          "type": "nominal",
+          "title": "Semester Type",
+          "axis": {
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "score_value",
+          "type": "quantitative",
+          "title": "Average Score"
+        },
+        "color": {
+          "field": "score_type",
+          "type": "nominal",
+          "title": "Score Type",
+          "scale": {
+            "domain": [
+              "avg_exam_score",
+              "avg_project_score",
+              "avg_attendance_score",
+              "avg_overall_score"
+            ],
+            "range": [
+              "#e41a1c",
+              "#377eb8",
+              "#4daf4a",
+              "#984ea3"
+            ]
+          },
+          "legend": {
+            "labelExpr": "datum.label === 'avg_exam_score' ? 'Exam' : datum.label === 'avg_project_score' ? 'Project' : datum.label === 'avg_attendance_score' ? 'Attendance' : 'Overall'"
+          }
+        },
+        "xOffset": {
+          "field": "score_type"
+        },
+        "tooltip": [
+          {
+            "field": "semester_type",
+            "type": "nominal",
+            "title": "Semester"
+          },
+          {
+            "field": "score_type",
+            "type": "nominal",
+            "title": "Score Type",
+            "format": "",
+            "formatType": "json"
+          },
+          {
+            "field": "score_value",
+            "type": "quantitative",
+            "title": "Average Score",
+            "format": ".2f"
+          }
+        ]
+      },
+      "width": 600,
+      "height": 400
+    },
+    "sql": "SELECT \n  cs.semester_type,\n  ROUND(AVG(g.exam_score)::numeric, 2) AS avg_exam_score,\n  ROUND(AVG(g.project_score)::numeric, 2) AS avg_project_score,\n  ROUND(AVG(g.attendance_score)::numeric, 2) AS avg_attendance_score,\n  ROUND(AVG((COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0)) / 3)::numeric, 2) AS avg_overall_score\nFROM grades g\nINNER JOIN enrollments e ON g.enrollment_id = e.id\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\nGROUP BY cs.semester_type\nORDER BY cs.semester_type;",
+    "metadata": {
+      "columns": [
+        "semester_type",
+        "avg_exam_score",
+        "avg_project_score",
+        "avg_attendance_score",
+        "avg_overall_score"
+      ],
+      "rowCount": 2,
+      "sample": [
+        {
+          "semester_type": "WINTER",
+          "avg_exam_score": "47.73",
+          "avg_project_score": "49.98",
+          "avg_attendance_score": "57.56",
+          "avg_overall_score": "43.26"
+        },
+        {
+          "semester_type": "SUMMER",
+          "avg_exam_score": "51.79",
+          "avg_project_score": "44.97",
+          "avg_attendance_score": "55.65",
+          "avg_overall_score": "45.34"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Encoding field 'score_value' is missing in SQL output columns.",
+        "Encoding field 'score_type' is missing in SQL output columns."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Encoding field 'score_value' is missing in SQL output columns.",
+        "Encoding field 'score_type' is missing in SQL output columns."
+      ]
+    }
+  },
+  "failureStage": "viz",
+  "error": {
+    "kind": "viz_failure",
+    "message": "Failed with exit code 1"
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.280Z",
+    "traceId": "b4da932990a249a21c131d56f1042871",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 27842,
+      "outputTokens": 1483,
+      "totalTokens": 29325,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.035257
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 27842,
+        "outputTokens": 1483,
+        "totalTokens": 29325,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.035257
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "students-per-department",
+  "caseDirectory": "students-per-department",
+  "repeatIndex": 1,
+  "prompt": "Show the number of students in each department",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the number of students in each department"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:46:45.718Z",
+    "endedAtUtc": "2026-02-23T10:46:57.714Z",
+    "durationMs": 11996
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2010",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:46:57 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Show the number of students in each department\"},\"agent\":{\"payload\":{\"question\":\"Show the number of students in each department\"},\"startedAt\":1771843605953,\"status\":\"success\",\"output\":{\"sql\":\"SELECT COALESCE(d.name, s.department) AS department_name, COUNT(*) AS student_count\\nFROM students s\\nLEFT JOIN departments d ON d.id = s.department_id\\nGROUP BY COALESCE(d.name, s.department)\\nORDER BY student_count DESC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of Students per Department\",\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\"},\"sort\":\"-y\"},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of Students\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Students\"}]},\"width\":700,\"height\":400}},\"endedAt\":1771843617200},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT COALESCE(d.name, s.department) AS department_name, COUNT(*) AS student_count\\nFROM students s\\nLEFT JOIN departments d ON d.id = s.department_id\\nGROUP BY COALESCE(d.name, s.department)\\nORDER BY student_count DESC;\"},\"startedAt\":1771843617205,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column s.department does not exist\\nLINE 2: SELECT COALESCE(d.name, s.department) AS department_name, CO...\\n                                ^\\nHINT:  Perhaps you meant to reference the column \\\"s.department_id\\\".\",\"name\":\"Error\"},\"endedAt\":1771843617706}},\"input\":{\"question\":\"Show the number of students in each department\"},\"error\":{\"message\":\"SQL execution failed: column s.department does not exist\\nLINE 2: SELECT COALESCE(d.name, s.department) AS department_name, CO...\\n                                ^\\nHINT:  Perhaps you meant to reference the column \\\"s.department_id\\\".\",\"name\":\"Error\"},\"traceId\":\"11df602ff84756e3f2efd4ce1cf435b7\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/students-per-department/run-0001/run.json",
+    "queryPath": "runs/students-per-department/run-0001/query.sql",
+    "vegaRawPath": "runs/students-per-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/students-per-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/students-per-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:46:57.715Z",
+  "traceId": "11df602ff84756e3f2efd4ce1cf435b7",
+  "success": false,
+  "durationMs": 11997,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Show the number of students in each department"
+      },
+      "agent": {
+        "payload": {
+          "question": "Show the number of students in each department"
+        },
+        "startedAt": 1771843605953,
+        "status": "success",
+        "output": {
+          "sql": "SELECT COALESCE(d.name, s.department) AS department_name, COUNT(*) AS student_count\nFROM students s\nLEFT JOIN departments d ON d.id = s.department_id\nGROUP BY COALESCE(d.name, s.department)\nORDER BY student_count DESC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "data": {
+              "name": "query_result"
+            },
+            "title": "Number of Students per Department",
+            "mark": "bar",
+            "encoding": {
+              "x": {
+                "field": "department_name",
+                "type": "nominal",
+                "axis": {
+                  "title": "Department"
+                },
+                "sort": "-y"
+              },
+              "y": {
+                "field": "student_count",
+                "type": "quantitative",
+                "axis": {
+                  "title": "Number of Students"
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "department_name",
+                  "type": "nominal",
+                  "title": "Department"
+                },
+                {
+                  "field": "student_count",
+                  "type": "quantitative",
+                  "title": "Students"
+                }
+              ]
+            },
+            "width": 700,
+            "height": 400
+          }
+        },
+        "endedAt": 1771843617200
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT COALESCE(d.name, s.department) AS department_name, COUNT(*) AS student_count\nFROM students s\nLEFT JOIN departments d ON d.id = s.department_id\nGROUP BY COALESCE(d.name, s.department)\nORDER BY student_count DESC;"
+        },
+        "startedAt": 1771843617205,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column s.department does not exist\nLINE 2: SELECT COALESCE(d.name, s.department) AS department_name, CO...\n                                ^\nHINT:  Perhaps you meant to reference the column \"s.department_id\".",
+          "name": "Error"
+        },
+        "endedAt": 1771843617706
+      }
+    },
+    "input": {
+      "question": "Show the number of students in each department"
+    },
+    "error": {
+      "message": "SQL execution failed: column s.department does not exist\nLINE 2: SELECT COALESCE(d.name, s.department) AS department_name, CO...\n                                ^\nHINT:  Perhaps you meant to reference the column \"s.department_id\".",
+      "name": "Error"
+    },
+    "traceId": "11df602ff84756e3f2efd4ce1cf435b7"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:46:57.716Z",
+    "traceId": "11df602ff84756e3f2efd4ce1cf435b7",
+    "attempts": 6,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 264,
+      "outputTokens": 805,
+      "totalTokens": 1069,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 512,
+      "costUsd": 0.001676
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 264,
+        "outputTokens": 805,
+        "totalTokens": 1069,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 512,
+        "costUsd": 0.001676
+      }
+    ],
+    "warnings": []
+  }
+}

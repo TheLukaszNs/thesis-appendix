@@ -1,0 +1,256 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "grade-vs-exam-score-correlation",
+  "caseDirectory": "grade-vs-exam-score-correlation",
+  "repeatIndex": 1,
+  "prompt": "Show average exam score for each grade value",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show average exam score for each grade value"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:10:59.264Z",
+    "endedAtUtc": "2026-02-23T14:11:23.293Z",
+    "durationMs": 24029
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "7463",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:11:23 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show average exam score for each grade value\"},\"sql\":{\"payload\":{\"question\":\"Show average exam score for each grade value\"},\"startedAt\":1771855859269,\"status\":\"success\",\"output\":{\"reasoning\":\"The question asks for average exam score grouped by grade value. The grades table contains both grade_value (a custom enum type) and exam_score (numeric) columns. I'll group by grade_value and calculate the average of exam_score, ordering by grade_value for deterministic output.\",\"sql\":\"SELECT \\n  grade_value,\\n  AVG(exam_score) AS average_exam_score\\nFROM public.grades\\nWHERE exam_score IS NOT NULL\\nGROUP BY grade_value\\nORDER BY grade_value;\",\"assumptions\":[\"exam_score is the exam score column to average\",\"grade_value is the grade classification to group by\",\"NULL exam_score values should be excluded from the average calculation\"]},\"endedAt\":1771855880348},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT \\n  grade_value,\\n  AVG(exam_score) AS average_exam_score\\nFROM public.grades\\nWHERE exam_score IS NOT NULL\\nGROUP BY grade_value\\nORDER BY grade_value;\"},\"startedAt\":1771855880350,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  grade_value,\\n  AVG(exam_score) AS average_exam_score\\nFROM public.grades\\nWHERE exam_score IS NOT NULL\\nGROUP BY grade_value\\nORDER BY grade_value\",\"metadata\":{\"columns\":[\"grade_value\",\"average_exam_score\"],\"rowCount\":6,\"sample\":[{\"grade_value\":\"2.0\",\"average_exam_score\":\"54.0716666666666667\"},{\"grade_value\":\"3.0\",\"average_exam_score\":\"44.0342857142857143\"}]},\"data\":[{\"grade_value\":\"2.0\",\"average_exam_score\":\"54.0716666666666667\"},{\"grade_value\":\"3.0\",\"average_exam_score\":\"44.0342857142857143\"},{\"grade_value\":\"3.5\",\"average_exam_score\":\"37.9628571428571429\"},{\"grade_value\":\"4.0\",\"average_exam_score\":\"59.2716666666666667\"},{\"grade_value\":\"4.5\",\"average_exam_score\":\"52.0520000000000000\"},{\"grade_value\":\"5.0\",\"average_exam_score\":\"51.2828571428571429\"}]},\"endedAt\":1771855880359},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  grade_value,\\n  AVG(exam_score) AS average_exam_score\\nFROM public.grades\\nWHERE exam_score IS NOT NULL\\nGROUP BY grade_value\\nORDER BY grade_value\",\"metadata\":{\"columns\":[\"grade_value\",\"average_exam_score\"],\"rowCount\":6,\"sample\":[{\"grade_value\":\"2.0\",\"average_exam_score\":\"54.0716666666666667\"},{\"grade_value\":\"3.0\",\"average_exam_score\":\"44.0342857142857143\"}]},\"data\":[{\"grade_value\":\"2.0\",\"average_exam_score\":\"54.0716666666666667\"},{\"grade_value\":\"3.0\",\"average_exam_score\":\"44.0342857142857143\"},{\"grade_value\":\"3.5\",\"average_exam_score\":\"37.9628571428571429\"},{\"grade_value\":\"4.0\",\"average_exam_score\":\"59.2716666666666667\"},{\"grade_value\":\"4.5\",\"average_exam_score\":\"52.0520000000000000\"},{\"grade_value\":\"5.0\",\"average_exam_score\":\"51.2828571428571429\"}]},\"startedAt\":1771855880361,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Exam Score by Grade Value\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade Value\"},\"y\":{\"field\":\"average_exam_score\",\"type\":\"quantitative\",\"title\":\"Average Exam Score\"},\"tooltip\":[{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade Value\"},{\"field\":\"average_exam_score\",\"type\":\"quantitative\",\"title\":\"Average Exam Score\",\"format\":\".2f\"}]}},\"reasoning\":\"Bar chart is ideal for comparing average exam scores across discrete grade values. The x-axis shows grade values (nominal), y-axis shows average exam scores (quantitative). Tooltip provides detailed values on hover with 2 decimal precision for readability.\"},\"endedAt\":1771855883275},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Exam Score by Grade Value\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade Value\"},\"y\":{\"field\":\"average_exam_score\",\"type\":\"quantitative\",\"title\":\"Average Exam Score\"},\"tooltip\":[{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade Value\"},{\"field\":\"average_exam_score\",\"type\":\"quantitative\",\"title\":\"Average Exam Score\",\"format\":\".2f\"}]}},\"reasoning\":\"Bar chart is ideal for comparing average exam scores across discrete grade values. The x-axis shows grade values (nominal), y-axis shows average exam scores (quantitative). Tooltip provides detailed values on hover with 2 decimal precision for readability.\"},\"startedAt\":1771855883278,\"status\":\"success\",\"output\":{\"sql\":\"SELECT \\n  grade_value,\\n  AVG(exam_score) AS average_exam_score\\nFROM public.grades\\nWHERE exam_score IS NOT NULL\\nGROUP BY grade_value\\nORDER BY grade_value;\",\"data\":[{\"grade_value\":\"2.0\",\"average_exam_score\":\"54.0716666666666667\"},{\"grade_value\":\"3.0\",\"average_exam_score\":\"44.0342857142857143\"},{\"grade_value\":\"3.5\",\"average_exam_score\":\"37.9628571428571429\"},{\"grade_value\":\"4.0\",\"average_exam_score\":\"59.2716666666666667\"},{\"grade_value\":\"4.5\",\"average_exam_score\":\"52.0520000000000000\"},{\"grade_value\":\"5.0\",\"average_exam_score\":\"51.2828571428571429\"}],\"metadata\":{\"columns\":[\"grade_value\",\"average_exam_score\"],\"rowCount\":6,\"sample\":[{\"grade_value\":\"2.0\",\"average_exam_score\":\"54.0716666666666667\"},{\"grade_value\":\"3.0\",\"average_exam_score\":\"44.0342857142857143\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Exam Score by Grade Value\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade Value\"},\"y\":{\"field\":\"average_exam_score\",\"type\":\"quantitative\",\"title\":\"Average Exam Score\"},\"tooltip\":[{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade Value\"},{\"field\":\"average_exam_score\",\"type\":\"quantitative\",\"title\":\"Average Exam Score\",\"format\":\".2f\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855883281}},\"input\":{\"question\":\"Show average exam score for each grade value\"},\"result\":{\"sql\":\"SELECT \\n  grade_value,\\n  AVG(exam_score) AS average_exam_score\\nFROM public.grades\\nWHERE exam_score IS NOT NULL\\nGROUP BY grade_value\\nORDER BY grade_value;\",\"data\":[{\"grade_value\":\"2.0\",\"average_exam_score\":\"54.0716666666666667\"},{\"grade_value\":\"3.0\",\"average_exam_score\":\"44.0342857142857143\"},{\"grade_value\":\"3.5\",\"average_exam_score\":\"37.9628571428571429\"},{\"grade_value\":\"4.0\",\"average_exam_score\":\"59.2716666666666667\"},{\"grade_value\":\"4.5\",\"average_exam_score\":\"52.0520000000000000\"},{\"grade_value\":\"5.0\",\"average_exam_score\":\"51.2828571428571429\"}],\"metadata\":{\"columns\":[\"grade_value\",\"average_exam_score\"],\"rowCount\":6,\"sample\":[{\"grade_value\":\"2.0\",\"average_exam_score\":\"54.0716666666666667\"},{\"grade_value\":\"3.0\",\"average_exam_score\":\"44.0342857142857143\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Exam Score by Grade Value\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade Value\"},\"y\":{\"field\":\"average_exam_score\",\"type\":\"quantitative\",\"title\":\"Average Exam Score\"},\"tooltip\":[{\"field\":\"grade_value\",\"type\":\"nominal\",\"title\":\"Grade Value\"},{\"field\":\"average_exam_score\",\"type\":\"quantitative\",\"title\":\"Average Exam Score\",\"format\":\".2f\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"d8ffa48cc8ea2d729aedc88c254aa4b9\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/grade-vs-exam-score-correlation/run-0001/run.json",
+    "queryPath": "runs/grade-vs-exam-score-correlation/run-0001/query.sql",
+    "vegaRawPath": "runs/grade-vs-exam-score-correlation/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/grade-vs-exam-score-correlation/run-0001/vega.resolved.json",
+    "imagePath": "runs/grade-vs-exam-score-correlation/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:11:23.677Z",
+  "traceId": "d8ffa48cc8ea2d729aedc88c254aa4b9",
+  "success": true,
+  "durationMs": 24413,
+  "resultRaw": {
+    "data": [
+      {
+        "grade_value": "2.0",
+        "average_exam_score": "54.0716666666666667"
+      },
+      {
+        "grade_value": "3.0",
+        "average_exam_score": "44.0342857142857143"
+      },
+      {
+        "grade_value": "3.5",
+        "average_exam_score": "37.9628571428571429"
+      },
+      {
+        "grade_value": "4.0",
+        "average_exam_score": "59.2716666666666667"
+      },
+      {
+        "grade_value": "4.5",
+        "average_exam_score": "52.0520000000000000"
+      },
+      {
+        "grade_value": "5.0",
+        "average_exam_score": "51.2828571428571429"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Exam Score by Grade Value",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "grade_value",
+          "type": "nominal",
+          "title": "Grade Value"
+        },
+        "y": {
+          "field": "average_exam_score",
+          "type": "quantitative",
+          "title": "Average Exam Score"
+        },
+        "tooltip": [
+          {
+            "field": "grade_value",
+            "type": "nominal",
+            "title": "Grade Value"
+          },
+          {
+            "field": "average_exam_score",
+            "type": "quantitative",
+            "title": "Average Exam Score",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT \n  grade_value,\n  AVG(exam_score) AS average_exam_score\nFROM public.grades\nWHERE exam_score IS NOT NULL\nGROUP BY grade_value\nORDER BY grade_value;",
+    "metadata": {
+      "columns": [
+        "grade_value",
+        "average_exam_score"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "grade_value": "2.0",
+          "average_exam_score": "54.0716666666666667"
+        },
+        {
+          "grade_value": "3.0",
+          "average_exam_score": "44.0342857142857143"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "grade_value": "2.0",
+        "average_exam_score": "54.0716666666666667"
+      },
+      {
+        "grade_value": "3.0",
+        "average_exam_score": "44.0342857142857143"
+      },
+      {
+        "grade_value": "3.5",
+        "average_exam_score": "37.9628571428571429"
+      },
+      {
+        "grade_value": "4.0",
+        "average_exam_score": "59.2716666666666667"
+      },
+      {
+        "grade_value": "4.5",
+        "average_exam_score": "52.0520000000000000"
+      },
+      {
+        "grade_value": "5.0",
+        "average_exam_score": "51.2828571428571429"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Exam Score by Grade Value",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "grade_value",
+          "type": "nominal",
+          "title": "Grade Value"
+        },
+        "y": {
+          "field": "average_exam_score",
+          "type": "quantitative",
+          "title": "Average Exam Score"
+        },
+        "tooltip": [
+          {
+            "field": "grade_value",
+            "type": "nominal",
+            "title": "Grade Value"
+          },
+          {
+            "field": "average_exam_score",
+            "type": "quantitative",
+            "title": "Average Exam Score",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT \n  grade_value,\n  AVG(exam_score) AS average_exam_score\nFROM public.grades\nWHERE exam_score IS NOT NULL\nGROUP BY grade_value\nORDER BY grade_value;",
+    "metadata": {
+      "columns": [
+        "grade_value",
+        "average_exam_score"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "grade_value": "2.0",
+          "average_exam_score": "54.0716666666666667"
+        },
+        {
+          "grade_value": "3.0",
+          "average_exam_score": "44.0342857142857143"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.352Z",
+    "traceId": "d8ffa48cc8ea2d729aedc88c254aa4b9",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 10125,
+      "outputTokens": 671,
+      "totalTokens": 10796,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.01348
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 10125,
+        "outputTokens": 671,
+        "totalTokens": 10796,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.01348
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,376 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "evaluation-recommendation-by-department",
+  "caseDirectory": "evaluation-recommendation-by-department",
+  "repeatIndex": 1,
+  "prompt": "What percentage of students would recommend courses in each department?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What percentage of students would recommend courses in each department?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:14:07.337Z",
+    "endedAtUtc": "2026-02-23T14:14:46.891Z",
+    "durationMs": 39554
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "16518",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:14:46 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What percentage of students would recommend courses in each department?\"},\"sql\":{\"payload\":{\"question\":\"What percentage of students would recommend courses in each department?\"},\"startedAt\":1771856047341,\"status\":\"success\",\"output\":{\"reasoning\":\"\\nThe question asks for the percentage of students who would recommend courses in each department. I need to:\\n1. Join course_evaluations (which has the would_recommend boolean) with enrollments\\n2. Join enrollments with course_sections\\n3. Join course_sections with courses\\n4. Join courses with departments\\n5. Group by department and calculate the percentage of students with would_recommend = true\\n\\nThe key metric is the would_recommend column in course_evaluations. I'll calculate the percentage as (count of true recommendations / total evaluations) * 100 for each department.\\n\",\"sql\":\"\\nSELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  COUNT(ce.id) AS total_evaluations,\\n  SUM(CASE WHEN ce.would_recommend = true THEN 1 ELSE 0 END) AS recommend_count,\\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend = true THEN 1 ELSE 0 END) / COUNT(ce.id), 2) AS recommend_percentage\\nFROM course_evaluations ce\\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nINNER JOIN courses c ON cs.course_id = c.id\\nINNER JOIN departments d ON c.department_id = d.id\\nGROUP BY d.id, d.name, d.code\\nORDER BY recommend_percentage DESC, d.name ASC\\n\",\"assumptions\":[\"would_recommend is a boolean column indicating whether a student would recommend the course\",\"Each course_evaluation represents one student's evaluation of a course\",\"We are counting all evaluations regardless of submission date\",\"Percentage is calculated as (count of true recommendations / total evaluations) * 100\"]},\"endedAt\":1771856081101},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  COUNT(ce.id) AS total_evaluations,\\n  SUM(CASE WHEN ce.would_recommend = true THEN 1 ELSE 0 END) AS recommend_count,\\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend = true THEN 1 ELSE 0 END) / COUNT(ce.id), 2) AS recommend_percentage\\nFROM course_evaluations ce\\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nINNER JOIN courses c ON cs.course_id = c.id\\nINNER JOIN departments d ON c.department_id = d.id\\nGROUP BY d.id, d.name, d.code\\nORDER BY recommend_percentage DESC, d.name ASC\\n\"},\"startedAt\":1771856081104,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  COUNT(ce.id) AS total_evaluations,\\n  SUM(CASE WHEN ce.would_recommend = true THEN 1 ELSE 0 END) AS recommend_count,\\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend = true THEN 1 ELSE 0 END) / COUNT(ce.id), 2) AS recommend_percentage\\nFROM course_evaluations ce\\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nINNER JOIN courses c ON cs.course_id = c.id\\nINNER JOIN departments d ON c.department_id = d.id\\nGROUP BY d.id, d.name, d.code\\nORDER BY recommend_percentage DESC, d.name ASC\",\"metadata\":{\"columns\":[\"department_name\",\"department_code\",\"total_evaluations\",\"recommend_count\",\"recommend_percentage\"],\"rowCount\":6,\"sample\":[{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"department_code\":\"IBM\",\"total_evaluations\":\"5\",\"recommend_count\":\"4\",\"recommend_percentage\":\"80.00\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"department_code\":\"INF\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"}]},\"data\":[{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"department_code\":\"IBM\",\"total_evaluations\":\"5\",\"recommend_count\":\"4\",\"recommend_percentage\":\"80.00\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"department_code\":\"INF\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"department_code\":\"TCH\",\"total_evaluations\":\"8\",\"recommend_count\":\"4\",\"recommend_percentage\":\"50.00\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"department_code\":\"AEI\",\"total_evaluations\":\"7\",\"recommend_count\":\"3\",\"recommend_percentage\":\"42.86\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"department_code\":\"WIP\",\"total_evaluations\":\"7\",\"recommend_count\":\"3\",\"recommend_percentage\":\"42.86\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"total_evaluations\":\"10\",\"recommend_count\":\"1\",\"recommend_percentage\":\"10.00\"}]},\"endedAt\":1771856081118},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  COUNT(ce.id) AS total_evaluations,\\n  SUM(CASE WHEN ce.would_recommend = true THEN 1 ELSE 0 END) AS recommend_count,\\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend = true THEN 1 ELSE 0 END) / COUNT(ce.id), 2) AS recommend_percentage\\nFROM course_evaluations ce\\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nINNER JOIN courses c ON cs.course_id = c.id\\nINNER JOIN departments d ON c.department_id = d.id\\nGROUP BY d.id, d.name, d.code\\nORDER BY recommend_percentage DESC, d.name ASC\",\"metadata\":{\"columns\":[\"department_name\",\"department_code\",\"total_evaluations\",\"recommend_count\",\"recommend_percentage\"],\"rowCount\":6,\"sample\":[{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"department_code\":\"IBM\",\"total_evaluations\":\"5\",\"recommend_count\":\"4\",\"recommend_percentage\":\"80.00\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"department_code\":\"INF\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"}]},\"data\":[{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"department_code\":\"IBM\",\"total_evaluations\":\"5\",\"recommend_count\":\"4\",\"recommend_percentage\":\"80.00\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"department_code\":\"INF\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"department_code\":\"TCH\",\"total_evaluations\":\"8\",\"recommend_count\":\"4\",\"recommend_percentage\":\"50.00\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"department_code\":\"AEI\",\"total_evaluations\":\"7\",\"recommend_count\":\"3\",\"recommend_percentage\":\"42.86\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"department_code\":\"WIP\",\"total_evaluations\":\"7\",\"recommend_count\":\"3\",\"recommend_percentage\":\"42.86\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"total_evaluations\":\"10\",\"recommend_count\":\"1\",\"recommend_percentage\":\"10.00\"}]},\"startedAt\":1771856081120,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Percentage of Students Who Would Recommend Courses by Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"title\":\"Recommendation Percentage (%)\",\"scale\":{\"domain\":[0,100]}},\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\",\"sort\":{\"field\":\"recommend_percentage\",\"order\":\"descending\"}},\"color\":{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"greens\"},\"title\":\"Recommendation %\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"title\":\"Recommendation %\",\"format\":\".2f\"},{\"field\":\"recommend_count\",\"type\":\"quantitative\",\"title\":\"Recommending Students\"},{\"field\":\"total_evaluations\",\"type\":\"quantitative\",\"title\":\"Total Evaluations\"}]}},\"reasoning\":\"This horizontal bar chart displays the recommendation percentage for each department, sorted in descending order. The color gradient (greens) provides visual emphasis on higher recommendation rates. The tooltip includes all relevant metrics: department name, code, recommendation percentage, count of recommending students, and total evaluations for context. The x-axis is fixed at 0-100% to provide a meaningful scale for percentage comparison.\"},\"endedAt\":1771856086876},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Percentage of Students Who Would Recommend Courses by Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"title\":\"Recommendation Percentage (%)\",\"scale\":{\"domain\":[0,100]}},\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\",\"sort\":{\"field\":\"recommend_percentage\",\"order\":\"descending\"}},\"color\":{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"greens\"},\"title\":\"Recommendation %\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"title\":\"Recommendation %\",\"format\":\".2f\"},{\"field\":\"recommend_count\",\"type\":\"quantitative\",\"title\":\"Recommending Students\"},{\"field\":\"total_evaluations\",\"type\":\"quantitative\",\"title\":\"Total Evaluations\"}]}},\"reasoning\":\"This horizontal bar chart displays the recommendation percentage for each department, sorted in descending order. The color gradient (greens) provides visual emphasis on higher recommendation rates. The tooltip includes all relevant metrics: department name, code, recommendation percentage, count of recommending students, and total evaluations for context. The x-axis is fixed at 0-100% to provide a meaningful scale for percentage comparison.\"},\"startedAt\":1771856086878,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  COUNT(ce.id) AS total_evaluations,\\n  SUM(CASE WHEN ce.would_recommend = true THEN 1 ELSE 0 END) AS recommend_count,\\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend = true THEN 1 ELSE 0 END) / COUNT(ce.id), 2) AS recommend_percentage\\nFROM course_evaluations ce\\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nINNER JOIN courses c ON cs.course_id = c.id\\nINNER JOIN departments d ON c.department_id = d.id\\nGROUP BY d.id, d.name, d.code\\nORDER BY recommend_percentage DESC, d.name ASC\\n\",\"data\":[{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"department_code\":\"IBM\",\"total_evaluations\":\"5\",\"recommend_count\":\"4\",\"recommend_percentage\":\"80.00\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"department_code\":\"INF\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"department_code\":\"TCH\",\"total_evaluations\":\"8\",\"recommend_count\":\"4\",\"recommend_percentage\":\"50.00\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"department_code\":\"AEI\",\"total_evaluations\":\"7\",\"recommend_count\":\"3\",\"recommend_percentage\":\"42.86\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"department_code\":\"WIP\",\"total_evaluations\":\"7\",\"recommend_count\":\"3\",\"recommend_percentage\":\"42.86\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"total_evaluations\":\"10\",\"recommend_count\":\"1\",\"recommend_percentage\":\"10.00\"}],\"metadata\":{\"columns\":[\"department_name\",\"department_code\",\"total_evaluations\",\"recommend_count\",\"recommend_percentage\"],\"rowCount\":6,\"sample\":[{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"department_code\":\"IBM\",\"total_evaluations\":\"5\",\"recommend_count\":\"4\",\"recommend_percentage\":\"80.00\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"department_code\":\"INF\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Percentage of Students Who Would Recommend Courses by Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"title\":\"Recommendation Percentage (%)\",\"scale\":{\"domain\":[0,100]}},\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\",\"sort\":{\"field\":\"recommend_percentage\",\"order\":\"descending\"}},\"color\":{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"greens\"},\"title\":\"Recommendation %\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"title\":\"Recommendation %\",\"format\":\".2f\"},{\"field\":\"recommend_count\",\"type\":\"quantitative\",\"title\":\"Recommending Students\"},{\"field\":\"total_evaluations\",\"type\":\"quantitative\",\"title\":\"Total Evaluations\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771856086880}},\"input\":{\"question\":\"What percentage of students would recommend courses in each department?\"},\"result\":{\"sql\":\"\\nSELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  COUNT(ce.id) AS total_evaluations,\\n  SUM(CASE WHEN ce.would_recommend = true THEN 1 ELSE 0 END) AS recommend_count,\\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend = true THEN 1 ELSE 0 END) / COUNT(ce.id), 2) AS recommend_percentage\\nFROM course_evaluations ce\\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nINNER JOIN courses c ON cs.course_id = c.id\\nINNER JOIN departments d ON c.department_id = d.id\\nGROUP BY d.id, d.name, d.code\\nORDER BY recommend_percentage DESC, d.name ASC\\n\",\"data\":[{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"department_code\":\"IBM\",\"total_evaluations\":\"5\",\"recommend_count\":\"4\",\"recommend_percentage\":\"80.00\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"department_code\":\"INF\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"department_code\":\"TCH\",\"total_evaluations\":\"8\",\"recommend_count\":\"4\",\"recommend_percentage\":\"50.00\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"department_code\":\"AEI\",\"total_evaluations\":\"7\",\"recommend_count\":\"3\",\"recommend_percentage\":\"42.86\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"department_code\":\"WIP\",\"total_evaluations\":\"7\",\"recommend_count\":\"3\",\"recommend_percentage\":\"42.86\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"total_evaluations\":\"10\",\"recommend_count\":\"1\",\"recommend_percentage\":\"10.00\"}],\"metadata\":{\"columns\":[\"department_name\",\"department_code\",\"total_evaluations\",\"recommend_count\",\"recommend_percentage\"],\"rowCount\":6,\"sample\":[{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"department_code\":\"IBM\",\"total_evaluations\":\"5\",\"recommend_count\":\"4\",\"recommend_percentage\":\"80.00\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"department_code\":\"INF\",\"total_evaluations\":\"4\",\"recommend_count\":\"2\",\"recommend_percentage\":\"50.00\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Percentage of Students Who Would Recommend Courses by Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"title\":\"Recommendation Percentage (%)\",\"scale\":{\"domain\":[0,100]}},\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\",\"sort\":{\"field\":\"recommend_percentage\",\"order\":\"descending\"}},\"color\":{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"greens\"},\"title\":\"Recommendation %\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"title\":\"Recommendation %\",\"format\":\".2f\"},{\"field\":\"recommend_count\",\"type\":\"quantitative\",\"title\":\"Recommending Students\"},{\"field\":\"total_evaluations\",\"type\":\"quantitative\",\"title\":\"Total Evaluations\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"034b5b66568d57851b1d7d81a88c22ba\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/evaluation-recommendation-by-department/run-0001/run.json",
+    "queryPath": "runs/evaluation-recommendation-by-department/run-0001/query.sql",
+    "vegaRawPath": "runs/evaluation-recommendation-by-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/evaluation-recommendation-by-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/evaluation-recommendation-by-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:14:47.304Z",
+  "traceId": "034b5b66568d57851b1d7d81a88c22ba",
+  "success": true,
+  "durationMs": 39967,
+  "resultRaw": {
+    "data": [
+      {
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "department_code": "IBM",
+        "total_evaluations": "5",
+        "recommend_count": "4",
+        "recommend_percentage": "80.00"
+      },
+      {
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "department_code": "INF",
+        "total_evaluations": "4",
+        "recommend_count": "2",
+        "recommend_percentage": "50.00"
+      },
+      {
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "department_code": "TCH",
+        "total_evaluations": "8",
+        "recommend_count": "4",
+        "recommend_percentage": "50.00"
+      },
+      {
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "department_code": "AEI",
+        "total_evaluations": "7",
+        "recommend_count": "3",
+        "recommend_percentage": "42.86"
+      },
+      {
+        "department_name": "Wydział Inżynierii Produkcji",
+        "department_code": "WIP",
+        "total_evaluations": "7",
+        "recommend_count": "3",
+        "recommend_percentage": "42.86"
+      },
+      {
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "department_code": "MTR",
+        "total_evaluations": "10",
+        "recommend_count": "1",
+        "recommend_percentage": "10.00"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Percentage of Students Who Would Recommend Courses by Department",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "recommend_percentage",
+          "type": "quantitative",
+          "title": "Recommendation Percentage (%)",
+          "scale": {
+            "domain": [
+              0,
+              100
+            ]
+          }
+        },
+        "y": {
+          "field": "department_name",
+          "type": "nominal",
+          "title": "Department",
+          "sort": {
+            "field": "recommend_percentage",
+            "order": "descending"
+          }
+        },
+        "color": {
+          "field": "recommend_percentage",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "greens"
+          },
+          "title": "Recommendation %"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "department_code",
+            "type": "nominal",
+            "title": "Code"
+          },
+          {
+            "field": "recommend_percentage",
+            "type": "quantitative",
+            "title": "Recommendation %",
+            "format": ".2f"
+          },
+          {
+            "field": "recommend_count",
+            "type": "quantitative",
+            "title": "Recommending Students"
+          },
+          {
+            "field": "total_evaluations",
+            "type": "quantitative",
+            "title": "Total Evaluations"
+          }
+        ]
+      }
+    },
+    "sql": "\nSELECT \n  d.name AS department_name,\n  d.code AS department_code,\n  COUNT(ce.id) AS total_evaluations,\n  SUM(CASE WHEN ce.would_recommend = true THEN 1 ELSE 0 END) AS recommend_count,\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend = true THEN 1 ELSE 0 END) / COUNT(ce.id), 2) AS recommend_percentage\nFROM course_evaluations ce\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\nINNER JOIN courses c ON cs.course_id = c.id\nINNER JOIN departments d ON c.department_id = d.id\nGROUP BY d.id, d.name, d.code\nORDER BY recommend_percentage DESC, d.name ASC\n",
+    "metadata": {
+      "columns": [
+        "department_name",
+        "department_code",
+        "total_evaluations",
+        "recommend_count",
+        "recommend_percentage"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_name": "Wydział Inżynierii Biomedycznej",
+          "department_code": "IBM",
+          "total_evaluations": "5",
+          "recommend_count": "4",
+          "recommend_percentage": "80.00"
+        },
+        {
+          "department_name": "Wydział Informatyki i Nauki o Materiałach",
+          "department_code": "INF",
+          "total_evaluations": "4",
+          "recommend_count": "2",
+          "recommend_percentage": "50.00"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "department_code": "IBM",
+        "total_evaluations": "5",
+        "recommend_count": "4",
+        "recommend_percentage": "80.00"
+      },
+      {
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "department_code": "INF",
+        "total_evaluations": "4",
+        "recommend_count": "2",
+        "recommend_percentage": "50.00"
+      },
+      {
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "department_code": "TCH",
+        "total_evaluations": "8",
+        "recommend_count": "4",
+        "recommend_percentage": "50.00"
+      },
+      {
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "department_code": "AEI",
+        "total_evaluations": "7",
+        "recommend_count": "3",
+        "recommend_percentage": "42.86"
+      },
+      {
+        "department_name": "Wydział Inżynierii Produkcji",
+        "department_code": "WIP",
+        "total_evaluations": "7",
+        "recommend_count": "3",
+        "recommend_percentage": "42.86"
+      },
+      {
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "department_code": "MTR",
+        "total_evaluations": "10",
+        "recommend_count": "1",
+        "recommend_percentage": "10.00"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Percentage of Students Who Would Recommend Courses by Department",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "recommend_percentage",
+          "type": "quantitative",
+          "title": "Recommendation Percentage (%)",
+          "scale": {
+            "domain": [
+              0,
+              100
+            ]
+          }
+        },
+        "y": {
+          "field": "department_name",
+          "type": "nominal",
+          "title": "Department",
+          "sort": {
+            "field": "recommend_percentage",
+            "order": "descending"
+          }
+        },
+        "color": {
+          "field": "recommend_percentage",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "greens"
+          },
+          "title": "Recommendation %"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "department_code",
+            "type": "nominal",
+            "title": "Code"
+          },
+          {
+            "field": "recommend_percentage",
+            "type": "quantitative",
+            "title": "Recommendation %",
+            "format": ".2f"
+          },
+          {
+            "field": "recommend_count",
+            "type": "quantitative",
+            "title": "Recommending Students"
+          },
+          {
+            "field": "total_evaluations",
+            "type": "quantitative",
+            "title": "Total Evaluations"
+          }
+        ]
+      }
+    },
+    "sql": "\nSELECT \n  d.name AS department_name,\n  d.code AS department_code,\n  COUNT(ce.id) AS total_evaluations,\n  SUM(CASE WHEN ce.would_recommend = true THEN 1 ELSE 0 END) AS recommend_count,\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend = true THEN 1 ELSE 0 END) / COUNT(ce.id), 2) AS recommend_percentage\nFROM course_evaluations ce\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\nINNER JOIN courses c ON cs.course_id = c.id\nINNER JOIN departments d ON c.department_id = d.id\nGROUP BY d.id, d.name, d.code\nORDER BY recommend_percentage DESC, d.name ASC\n",
+    "metadata": {
+      "columns": [
+        "department_name",
+        "department_code",
+        "total_evaluations",
+        "recommend_count",
+        "recommend_percentage"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_name": "Wydział Inżynierii Biomedycznej",
+          "department_code": "IBM",
+          "total_evaluations": "5",
+          "recommend_count": "4",
+          "recommend_percentage": "80.00"
+        },
+        {
+          "department_name": "Wydział Informatyki i Nauki o Materiałach",
+          "department_code": "INF",
+          "total_evaluations": "4",
+          "recommend_count": "2",
+          "recommend_percentage": "50.00"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.336Z",
+    "traceId": "034b5b66568d57851b1d7d81a88c22ba",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 29067,
+      "outputTokens": 1403,
+      "totalTokens": 30470,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.036082
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 29067,
+        "outputTokens": 1403,
+        "totalTokens": 30470,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.036082
+      }
+    ],
+    "warnings": []
+  }
+}

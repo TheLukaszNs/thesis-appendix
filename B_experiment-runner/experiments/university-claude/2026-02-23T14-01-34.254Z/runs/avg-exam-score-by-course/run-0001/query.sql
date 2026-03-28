@@ -1,0 +1,1 @@
+SELECT c.id, c.code, c.name, AVG(g.exam_score) AS average_exam_score FROM courses c JOIN course_sections cs ON c.id = cs.course_id JOIN enrollments e ON cs.id = e.course_section_id JOIN grades g ON e.id = g.enrollment_id WHERE g.exam_score IS NOT NULL GROUP BY c.id, c.code, c.name ORDER BY c.code

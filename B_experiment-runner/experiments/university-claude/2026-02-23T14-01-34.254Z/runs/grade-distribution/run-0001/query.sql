@@ -1,0 +1,1 @@
+SELECT c.code AS course_code, c.name AS course_name, g.grade_value AS final_grade, COUNT(*) AS student_count FROM grades g JOIN enrollments e ON g.enrollment_id = e.id JOIN course_sections cs ON e.course_section_id = cs.id JOIN courses c ON cs.course_id = c.id WHERE g.grade_value IS NOT NULL GROUP BY c.id, c.code, c.name, g.grade_value ORDER BY c.code, g.grade_value

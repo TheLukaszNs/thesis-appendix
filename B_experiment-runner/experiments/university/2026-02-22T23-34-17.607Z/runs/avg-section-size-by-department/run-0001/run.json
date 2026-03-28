@@ -1,0 +1,328 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "avg-section-size-by-department",
+  "caseDirectory": "avg-section-size-by-department",
+  "repeatIndex": 1,
+  "prompt": "What is the average maximum section size per department?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average maximum section size per department?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:44:06.198Z",
+    "endedAtUtc": "2026-02-22T23:44:58.293Z",
+    "durationMs": 52095
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "14407",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:44:58 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the average maximum section size per department?\"},\"sql\":{\"payload\":{\"question\":\"What is the average maximum section size per department?\"},\"startedAt\":1771803846213,\"status\":\"success\",\"output\":{\"reasoning\":\"Join departments -> courses -> course_sections and compute the average of section max_students per department (only departments that have at least one section). Results ordered deterministically by department_name.\",\"sql\":\"WITH dept_section_max AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.code AS department_code,\\n    d.name AS department_name,\\n    cs.max_students AS section_max_students\\n  FROM public.departments d\\n  JOIN public.courses c ON c.department_id = d.id\\n  JOIN public.course_sections cs ON cs.course_id = c.id\\n)\\nSELECT\\n  department_id AS department_id,\\n  department_code AS department_code,\\n  department_name AS department_name,\\n  ROUND(AVG(section_max_students)::numeric, 2) AS avg_max_section_size\\nFROM dept_section_max\\nGROUP BY department_id, department_code, department_name\\nORDER BY department_name ASC;\",\"assumptions\":[\"Only departments with at least one course section are included (inner joins).\",\"course_sections.max_students is the per-section maximum capacity to average.\",\"All referenced tables are in the public schema as discovered.\"]},\"endedAt\":1771803879999},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH dept_section_max AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.code AS department_code,\\n    d.name AS department_name,\\n    cs.max_students AS section_max_students\\n  FROM public.departments d\\n  JOIN public.courses c ON c.department_id = d.id\\n  JOIN public.course_sections cs ON cs.course_id = c.id\\n)\\nSELECT\\n  department_id AS department_id,\\n  department_code AS department_code,\\n  department_name AS department_name,\\n  ROUND(AVG(section_max_students)::numeric, 2) AS avg_max_section_size\\nFROM dept_section_max\\nGROUP BY department_id, department_code, department_name\\nORDER BY department_name ASC;\"},\"startedAt\":1771803880002,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH dept_section_max AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.code AS department_code,\\n    d.name AS department_name,\\n    cs.max_students AS section_max_students\\n  FROM public.departments d\\n  JOIN public.courses c ON c.department_id = d.id\\n  JOIN public.course_sections cs ON cs.course_id = c.id\\n)\\nSELECT\\n  department_id AS department_id,\\n  department_code AS department_code,\\n  department_name AS department_name,\\n  ROUND(AVG(section_max_students)::numeric, 2) AS avg_max_section_size\\nFROM dept_section_max\\nGROUP BY department_id, department_code, department_name\\nORDER BY department_name ASC\",\"metadata\":{\"columns\":[\"department_id\",\"department_code\",\"department_name\",\"avg_max_section_size\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"avg_max_section_size\":52.5},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"avg_max_section_size\":51.25}]},\"data\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"avg_max_section_size\":52.5},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"avg_max_section_size\":51.25},{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"avg_max_section_size\":31.43},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"avg_max_section_size\":63.75},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"avg_max_section_size\":54.38},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"avg_max_section_size\":51}]},\"endedAt\":1771803880022},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"WITH dept_section_max AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.code AS department_code,\\n    d.name AS department_name,\\n    cs.max_students AS section_max_students\\n  FROM public.departments d\\n  JOIN public.courses c ON c.department_id = d.id\\n  JOIN public.course_sections cs ON cs.course_id = c.id\\n)\\nSELECT\\n  department_id AS department_id,\\n  department_code AS department_code,\\n  department_name AS department_name,\\n  ROUND(AVG(section_max_students)::numeric, 2) AS avg_max_section_size\\nFROM dept_section_max\\nGROUP BY department_id, department_code, department_name\\nORDER BY department_name ASC\",\"metadata\":{\"columns\":[\"department_id\",\"department_code\",\"department_name\",\"avg_max_section_size\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"avg_max_section_size\":52.5},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"avg_max_section_size\":51.25}]},\"data\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"avg_max_section_size\":52.5},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"avg_max_section_size\":51.25},{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"avg_max_section_size\":31.43},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"avg_max_section_size\":63.75},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"avg_max_section_size\":54.38},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"avg_max_section_size\":51}]},\"startedAt\":1771803880031,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average maximum section size per department\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\"},\"sort\":\"ascending\"},\"x\":{\"field\":\"avg_max_section_size\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average max section size\"}},\"color\":{\"field\":\"department_code\",\"type\":\"nominal\",\"legend\":{\"title\":\"Department code\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"avg_max_section_size\",\"type\":\"quantitative\",\"title\":\"Avg max size\"}]}},\"reasoning\":\"Horizontal bar chart shows average max section size (x) for each department (y). Department code is used as color and tooltip provides exact values.\"},\"endedAt\":1771803898273},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average maximum section size per department\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\"},\"sort\":\"ascending\"},\"x\":{\"field\":\"avg_max_section_size\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average max section size\"}},\"color\":{\"field\":\"department_code\",\"type\":\"nominal\",\"legend\":{\"title\":\"Department code\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"avg_max_section_size\",\"type\":\"quantitative\",\"title\":\"Avg max size\"}]}},\"reasoning\":\"Horizontal bar chart shows average max section size (x) for each department (y). Department code is used as color and tooltip provides exact values.\"},\"startedAt\":1771803898276,\"status\":\"success\",\"output\":{\"sql\":\"WITH dept_section_max AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.code AS department_code,\\n    d.name AS department_name,\\n    cs.max_students AS section_max_students\\n  FROM public.departments d\\n  JOIN public.courses c ON c.department_id = d.id\\n  JOIN public.course_sections cs ON cs.course_id = c.id\\n)\\nSELECT\\n  department_id AS department_id,\\n  department_code AS department_code,\\n  department_name AS department_name,\\n  ROUND(AVG(section_max_students)::numeric, 2) AS avg_max_section_size\\nFROM dept_section_max\\nGROUP BY department_id, department_code, department_name\\nORDER BY department_name ASC;\",\"data\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"avg_max_section_size\":52.5},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"avg_max_section_size\":51.25},{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"avg_max_section_size\":31.43},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"avg_max_section_size\":63.75},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"avg_max_section_size\":54.38},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"avg_max_section_size\":51}],\"metadata\":{\"columns\":[\"department_id\",\"department_code\",\"department_name\",\"avg_max_section_size\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"avg_max_section_size\":52.5},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"avg_max_section_size\":51.25}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average maximum section size per department\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\"},\"sort\":\"ascending\"},\"x\":{\"field\":\"avg_max_section_size\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average max section size\"}},\"color\":{\"field\":\"department_code\",\"type\":\"nominal\",\"legend\":{\"title\":\"Department code\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"avg_max_section_size\",\"type\":\"quantitative\",\"title\":\"Avg max size\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771803898279}},\"input\":{\"question\":\"What is the average maximum section size per department?\"},\"result\":{\"sql\":\"WITH dept_section_max AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.code AS department_code,\\n    d.name AS department_name,\\n    cs.max_students AS section_max_students\\n  FROM public.departments d\\n  JOIN public.courses c ON c.department_id = d.id\\n  JOIN public.course_sections cs ON cs.course_id = c.id\\n)\\nSELECT\\n  department_id AS department_id,\\n  department_code AS department_code,\\n  department_name AS department_name,\\n  ROUND(AVG(section_max_students)::numeric, 2) AS avg_max_section_size\\nFROM dept_section_max\\nGROUP BY department_id, department_code, department_name\\nORDER BY department_name ASC;\",\"data\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"avg_max_section_size\":52.5},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"avg_max_section_size\":51.25},{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"avg_max_section_size\":31.43},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"avg_max_section_size\":63.75},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"avg_max_section_size\":54.38},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"avg_max_section_size\":51}],\"metadata\":{\"columns\":[\"department_id\",\"department_code\",\"department_name\",\"avg_max_section_size\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"avg_max_section_size\":52.5},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"avg_max_section_size\":51.25}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average maximum section size per department\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\"},\"sort\":\"ascending\"},\"x\":{\"field\":\"avg_max_section_size\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average max section size\"}},\"color\":{\"field\":\"department_code\",\"type\":\"nominal\",\"legend\":{\"title\":\"Department code\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"avg_max_section_size\",\"type\":\"quantitative\",\"title\":\"Avg max size\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"55466cc0ba6c9403e79d203a39b16819\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-section-size-by-department/run-0001/run.json",
+    "queryPath": "runs/avg-section-size-by-department/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-section-size-by-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-section-size-by-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-section-size-by-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:44:58.689Z",
+  "traceId": "55466cc0ba6c9403e79d203a39b16819",
+  "success": true,
+  "durationMs": 52491,
+  "resultRaw": {
+    "data": [
+      {
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_code": "AEI",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "avg_max_section_size": 52.5
+      },
+      {
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_code": "INF",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "avg_max_section_size": 51.25
+      },
+      {
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_code": "IBM",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "avg_max_section_size": 31.43
+      },
+      {
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_code": "WIP",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "avg_max_section_size": 63.75
+      },
+      {
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "avg_max_section_size": 54.38
+      },
+      {
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_code": "TCH",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "avg_max_section_size": 51
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average maximum section size per department",
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "y": {
+          "field": "department_name",
+          "type": "nominal",
+          "axis": {
+            "title": "Department"
+          },
+          "sort": "ascending"
+        },
+        "x": {
+          "field": "avg_max_section_size",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average max section size"
+          }
+        },
+        "color": {
+          "field": "department_code",
+          "type": "nominal",
+          "legend": {
+            "title": "Department code"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "department_code",
+            "type": "nominal",
+            "title": "Code"
+          },
+          {
+            "field": "avg_max_section_size",
+            "type": "quantitative",
+            "title": "Avg max size"
+          }
+        ]
+      }
+    },
+    "sql": "WITH dept_section_max AS (\n  SELECT\n    d.id AS department_id,\n    d.code AS department_code,\n    d.name AS department_name,\n    cs.max_students AS section_max_students\n  FROM public.departments d\n  JOIN public.courses c ON c.department_id = d.id\n  JOIN public.course_sections cs ON cs.course_id = c.id\n)\nSELECT\n  department_id AS department_id,\n  department_code AS department_code,\n  department_name AS department_name,\n  ROUND(AVG(section_max_students)::numeric, 2) AS avg_max_section_size\nFROM dept_section_max\nGROUP BY department_id, department_code, department_name\nORDER BY department_name ASC;",
+    "metadata": {
+      "columns": [
+        "department_id",
+        "department_code",
+        "department_name",
+        "avg_max_section_size"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "department_code": "AEI",
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "avg_max_section_size": 52.5
+        },
+        {
+          "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+          "department_code": "INF",
+          "department_name": "Wydział Informatyki i Nauki o Materiałach",
+          "avg_max_section_size": 51.25
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_code": "AEI",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "avg_max_section_size": 52.5
+      },
+      {
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_code": "INF",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "avg_max_section_size": 51.25
+      },
+      {
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_code": "IBM",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "avg_max_section_size": 31.43
+      },
+      {
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_code": "WIP",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "avg_max_section_size": 63.75
+      },
+      {
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "avg_max_section_size": 54.38
+      },
+      {
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_code": "TCH",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "avg_max_section_size": 51
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average maximum section size per department",
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "y": {
+          "field": "department_name",
+          "type": "nominal",
+          "axis": {
+            "title": "Department"
+          },
+          "sort": "ascending"
+        },
+        "x": {
+          "field": "avg_max_section_size",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average max section size"
+          }
+        },
+        "color": {
+          "field": "department_code",
+          "type": "nominal",
+          "legend": {
+            "title": "Department code"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "department_code",
+            "type": "nominal",
+            "title": "Code"
+          },
+          {
+            "field": "avg_max_section_size",
+            "type": "quantitative",
+            "title": "Avg max size"
+          }
+        ]
+      }
+    },
+    "sql": "WITH dept_section_max AS (\n  SELECT\n    d.id AS department_id,\n    d.code AS department_code,\n    d.name AS department_name,\n    cs.max_students AS section_max_students\n  FROM public.departments d\n  JOIN public.courses c ON c.department_id = d.id\n  JOIN public.course_sections cs ON cs.course_id = c.id\n)\nSELECT\n  department_id AS department_id,\n  department_code AS department_code,\n  department_name AS department_name,\n  ROUND(AVG(section_max_students)::numeric, 2) AS avg_max_section_size\nFROM dept_section_max\nGROUP BY department_id, department_code, department_name\nORDER BY department_name ASC;",
+    "metadata": {
+      "columns": [
+        "department_id",
+        "department_code",
+        "department_name",
+        "avg_max_section_size"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "department_code": "AEI",
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "avg_max_section_size": 52.5
+        },
+        {
+          "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+          "department_code": "INF",
+          "department_name": "Wydział Informatyki i Nauki o Materiałach",
+          "avg_max_section_size": 51.25
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:44:58.689Z",
+    "traceId": "55466cc0ba6c9403e79d203a39b16819",
+    "attempts": 5,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 12296,
+      "outputTokens": 3062,
+      "totalTokens": 15358,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2112,
+      "costUsd": 0.009198
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 12296,
+        "outputTokens": 3062,
+        "totalTokens": 15358,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2112,
+        "costUsd": 0.009198
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,256 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "gpa-vs-scholarship-type",
+  "caseDirectory": "gpa-vs-scholarship-type",
+  "repeatIndex": 1,
+  "prompt": "What is the average GPA of students by scholarship type received?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average GPA of students by scholarship type received?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:44:06.753Z",
+    "endedAtUtc": "2026-02-22T23:44:52.511Z",
+    "durationMs": 45758
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "8215",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:44:52 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the average GPA of students by scholarship type received?\"},\"sql\":{\"payload\":{\"question\":\"What is the average GPA of students by scholarship type received?\"},\"startedAt\":1771803846758,\"status\":\"success\",\"output\":{\"reasoning\":\"Compute average GPA per scholarship type by first deduplicating (student_id, scholarship_type) so each student counts once per type, join to students, exclude NULL GPAs, and order by scholarship_type for determinism.\",\"sql\":\"WITH recipients AS (\\n  SELECT\\n    scholarship_type AS scholarship_type,\\n    student_id AS student_id\\n  FROM public.scholarships\\n  GROUP BY scholarship_type, student_id\\n)\\nSELECT\\n  r.scholarship_type AS scholarship_type,\\n  ROUND(AVG(st.gpa)::numeric, 2) AS avg_gpa\\nFROM recipients r\\nJOIN public.students st\\n  ON st.id = r.student_id\\nWHERE st.gpa IS NOT NULL\\nGROUP BY r.scholarship_type\\nORDER BY r.scholarship_type;\",\"assumptions\":[\"Each row in scholarships links to students via scholarships.student_id -> students.id (foreign key confirmed).\",\"If a student received multiple scholarships of the same scholarship_type, they should be counted only once for that type (deduplicated).\",\"Students with NULL gpa are excluded from the average calculation.\",\"scholarship_type is treated as a displayable value (enum/text) suitable for grouping.\"]},\"endedAt\":1771803877346},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH recipients AS (\\n  SELECT\\n    scholarship_type AS scholarship_type,\\n    student_id AS student_id\\n  FROM public.scholarships\\n  GROUP BY scholarship_type, student_id\\n)\\nSELECT\\n  r.scholarship_type AS scholarship_type,\\n  ROUND(AVG(st.gpa)::numeric, 2) AS avg_gpa\\nFROM recipients r\\nJOIN public.students st\\n  ON st.id = r.student_id\\nWHERE st.gpa IS NOT NULL\\nGROUP BY r.scholarship_type\\nORDER BY r.scholarship_type;\"},\"startedAt\":1771803877354,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH recipients AS (\\n  SELECT\\n    scholarship_type AS scholarship_type,\\n    student_id AS student_id\\n  FROM public.scholarships\\n  GROUP BY scholarship_type, student_id\\n)\\nSELECT\\n  r.scholarship_type AS scholarship_type,\\n  ROUND(AVG(st.gpa)::numeric, 2) AS avg_gpa\\nFROM recipients r\\nJOIN public.students st\\n  ON st.id = r.student_id\\nWHERE st.gpa IS NOT NULL\\nGROUP BY r.scholarship_type\\nORDER BY r.scholarship_type\",\"metadata\":{\"columns\":[\"avg_gpa\",\"scholarship_type\"],\"rowCount\":3,\"sample\":[{\"avg_gpa\":4.4,\"scholarship_type\":\"MERIT\"},{\"avg_gpa\":3.56,\"scholarship_type\":\"SOCIAL\"}]},\"data\":[{\"avg_gpa\":4.4,\"scholarship_type\":\"MERIT\"},{\"avg_gpa\":3.56,\"scholarship_type\":\"SOCIAL\"},{\"avg_gpa\":4.08,\"scholarship_type\":\"SPECIAL\"}]},\"endedAt\":1771803877376},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"WITH recipients AS (\\n  SELECT\\n    scholarship_type AS scholarship_type,\\n    student_id AS student_id\\n  FROM public.scholarships\\n  GROUP BY scholarship_type, student_id\\n)\\nSELECT\\n  r.scholarship_type AS scholarship_type,\\n  ROUND(AVG(st.gpa)::numeric, 2) AS avg_gpa\\nFROM recipients r\\nJOIN public.students st\\n  ON st.id = r.student_id\\nWHERE st.gpa IS NOT NULL\\nGROUP BY r.scholarship_type\\nORDER BY r.scholarship_type\",\"metadata\":{\"columns\":[\"avg_gpa\",\"scholarship_type\"],\"rowCount\":3,\"sample\":[{\"avg_gpa\":4.4,\"scholarship_type\":\"MERIT\"},{\"avg_gpa\":3.56,\"scholarship_type\":\"SOCIAL\"}]},\"data\":[{\"avg_gpa\":4.4,\"scholarship_type\":\"MERIT\"},{\"avg_gpa\":3.56,\"scholarship_type\":\"SOCIAL\"},{\"avg_gpa\":4.08,\"scholarship_type\":\"SPECIAL\"}]},\"startedAt\":1771803877379,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average GPA by Scholarship Type\",\"data\":{\"name\":\"query_result\"},\"width\":500,\"height\":300,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"axis\":{\"title\":\"Scholarship Type\"}},\"y\":{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average GPA\"}},\"color\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"legend\":null},\"tooltip\":[{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"}]}},\"reasoning\":\"Bar chart compares average GPA (avg_gpa) across scholarship types (scholarship_type). Tooltip shows exact values; color differentiates categories.\"},\"endedAt\":1771803892481},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average GPA by Scholarship Type\",\"data\":{\"name\":\"query_result\"},\"width\":500,\"height\":300,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"axis\":{\"title\":\"Scholarship Type\"}},\"y\":{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average GPA\"}},\"color\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"legend\":null},\"tooltip\":[{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"}]}},\"reasoning\":\"Bar chart compares average GPA (avg_gpa) across scholarship types (scholarship_type). Tooltip shows exact values; color differentiates categories.\"},\"startedAt\":1771803892489,\"status\":\"success\",\"output\":{\"sql\":\"WITH recipients AS (\\n  SELECT\\n    scholarship_type AS scholarship_type,\\n    student_id AS student_id\\n  FROM public.scholarships\\n  GROUP BY scholarship_type, student_id\\n)\\nSELECT\\n  r.scholarship_type AS scholarship_type,\\n  ROUND(AVG(st.gpa)::numeric, 2) AS avg_gpa\\nFROM recipients r\\nJOIN public.students st\\n  ON st.id = r.student_id\\nWHERE st.gpa IS NOT NULL\\nGROUP BY r.scholarship_type\\nORDER BY r.scholarship_type;\",\"data\":[{\"avg_gpa\":4.4,\"scholarship_type\":\"MERIT\"},{\"avg_gpa\":3.56,\"scholarship_type\":\"SOCIAL\"},{\"avg_gpa\":4.08,\"scholarship_type\":\"SPECIAL\"}],\"metadata\":{\"columns\":[\"avg_gpa\",\"scholarship_type\"],\"rowCount\":3,\"sample\":[{\"avg_gpa\":4.4,\"scholarship_type\":\"MERIT\"},{\"avg_gpa\":3.56,\"scholarship_type\":\"SOCIAL\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average GPA by Scholarship Type\",\"data\":{\"name\":\"query_result\"},\"width\":500,\"height\":300,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"axis\":{\"title\":\"Scholarship Type\"}},\"y\":{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average GPA\"}},\"color\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"legend\":null},\"tooltip\":[{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771803892492}},\"input\":{\"question\":\"What is the average GPA of students by scholarship type received?\"},\"result\":{\"sql\":\"WITH recipients AS (\\n  SELECT\\n    scholarship_type AS scholarship_type,\\n    student_id AS student_id\\n  FROM public.scholarships\\n  GROUP BY scholarship_type, student_id\\n)\\nSELECT\\n  r.scholarship_type AS scholarship_type,\\n  ROUND(AVG(st.gpa)::numeric, 2) AS avg_gpa\\nFROM recipients r\\nJOIN public.students st\\n  ON st.id = r.student_id\\nWHERE st.gpa IS NOT NULL\\nGROUP BY r.scholarship_type\\nORDER BY r.scholarship_type;\",\"data\":[{\"avg_gpa\":4.4,\"scholarship_type\":\"MERIT\"},{\"avg_gpa\":3.56,\"scholarship_type\":\"SOCIAL\"},{\"avg_gpa\":4.08,\"scholarship_type\":\"SPECIAL\"}],\"metadata\":{\"columns\":[\"avg_gpa\",\"scholarship_type\"],\"rowCount\":3,\"sample\":[{\"avg_gpa\":4.4,\"scholarship_type\":\"MERIT\"},{\"avg_gpa\":3.56,\"scholarship_type\":\"SOCIAL\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average GPA by Scholarship Type\",\"data\":{\"name\":\"query_result\"},\"width\":500,\"height\":300,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"axis\":{\"title\":\"Scholarship Type\"}},\"y\":{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average GPA\"}},\"color\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"legend\":null},\"tooltip\":[{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"c9d0ba59f6657e2bf547853339a8f11b\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/gpa-vs-scholarship-type/run-0001/run.json",
+    "queryPath": "runs/gpa-vs-scholarship-type/run-0001/query.sql",
+    "vegaRawPath": "runs/gpa-vs-scholarship-type/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/gpa-vs-scholarship-type/run-0001/vega.resolved.json",
+    "imagePath": "runs/gpa-vs-scholarship-type/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:44:52.925Z",
+  "traceId": "c9d0ba59f6657e2bf547853339a8f11b",
+  "success": true,
+  "durationMs": 46172,
+  "resultRaw": {
+    "data": [
+      {
+        "avg_gpa": 4.4,
+        "scholarship_type": "MERIT"
+      },
+      {
+        "avg_gpa": 3.56,
+        "scholarship_type": "SOCIAL"
+      },
+      {
+        "avg_gpa": 4.08,
+        "scholarship_type": "SPECIAL"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average GPA by Scholarship Type",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 500,
+      "height": 300,
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "scholarship_type",
+          "type": "nominal",
+          "axis": {
+            "title": "Scholarship Type"
+          }
+        },
+        "y": {
+          "field": "avg_gpa",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average GPA"
+          }
+        },
+        "color": {
+          "field": "scholarship_type",
+          "type": "nominal",
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "scholarship_type",
+            "type": "nominal",
+            "title": "Scholarship Type"
+          },
+          {
+            "field": "avg_gpa",
+            "type": "quantitative",
+            "title": "Average GPA"
+          }
+        ]
+      }
+    },
+    "sql": "WITH recipients AS (\n  SELECT\n    scholarship_type AS scholarship_type,\n    student_id AS student_id\n  FROM public.scholarships\n  GROUP BY scholarship_type, student_id\n)\nSELECT\n  r.scholarship_type AS scholarship_type,\n  ROUND(AVG(st.gpa)::numeric, 2) AS avg_gpa\nFROM recipients r\nJOIN public.students st\n  ON st.id = r.student_id\nWHERE st.gpa IS NOT NULL\nGROUP BY r.scholarship_type\nORDER BY r.scholarship_type;",
+    "metadata": {
+      "columns": [
+        "avg_gpa",
+        "scholarship_type"
+      ],
+      "rowCount": 3,
+      "sample": [
+        {
+          "avg_gpa": 4.4,
+          "scholarship_type": "MERIT"
+        },
+        {
+          "avg_gpa": 3.56,
+          "scholarship_type": "SOCIAL"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "avg_gpa": 4.4,
+        "scholarship_type": "MERIT"
+      },
+      {
+        "avg_gpa": 3.56,
+        "scholarship_type": "SOCIAL"
+      },
+      {
+        "avg_gpa": 4.08,
+        "scholarship_type": "SPECIAL"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average GPA by Scholarship Type",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 500,
+      "height": 300,
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "scholarship_type",
+          "type": "nominal",
+          "axis": {
+            "title": "Scholarship Type"
+          }
+        },
+        "y": {
+          "field": "avg_gpa",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average GPA"
+          }
+        },
+        "color": {
+          "field": "scholarship_type",
+          "type": "nominal",
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "scholarship_type",
+            "type": "nominal",
+            "title": "Scholarship Type"
+          },
+          {
+            "field": "avg_gpa",
+            "type": "quantitative",
+            "title": "Average GPA"
+          }
+        ]
+      }
+    },
+    "sql": "WITH recipients AS (\n  SELECT\n    scholarship_type AS scholarship_type,\n    student_id AS student_id\n  FROM public.scholarships\n  GROUP BY scholarship_type, student_id\n)\nSELECT\n  r.scholarship_type AS scholarship_type,\n  ROUND(AVG(st.gpa)::numeric, 2) AS avg_gpa\nFROM recipients r\nJOIN public.students st\n  ON st.id = r.student_id\nWHERE st.gpa IS NOT NULL\nGROUP BY r.scholarship_type\nORDER BY r.scholarship_type;",
+    "metadata": {
+      "columns": [
+        "avg_gpa",
+        "scholarship_type"
+      ],
+      "rowCount": 3,
+      "sample": [
+        {
+          "avg_gpa": 4.4,
+          "scholarship_type": "MERIT"
+        },
+        {
+          "avg_gpa": 3.56,
+          "scholarship_type": "SOCIAL"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:44:52.925Z",
+    "traceId": "c9d0ba59f6657e2bf547853339a8f11b",
+    "attempts": 6,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 9072,
+      "outputTokens": 2391,
+      "totalTokens": 11463,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1536,
+      "costUsd": 0.00705
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 9072,
+        "outputTokens": 2391,
+        "totalTokens": 11463,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1536,
+        "costUsd": 0.00705
+      }
+    ],
+    "warnings": []
+  }
+}

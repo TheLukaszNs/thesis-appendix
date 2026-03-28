@@ -1,0 +1,266 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "evaluation-overall-histogram",
+  "caseDirectory": "evaluation-overall-histogram",
+  "repeatIndex": 1,
+  "prompt": "Show the distribution of overall course evaluation ratings (1-5)",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the distribution of overall course evaluation ratings (1-5)"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:52:10.829Z",
+    "endedAtUtc": "2026-02-23T10:52:29.330Z",
+    "durationMs": 18501
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "6105",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:52:29 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show the distribution of overall course evaluation ratings (1-5)\"},\"agent\":{\"payload\":{\"question\":\"Show the distribution of overall course evaluation ratings (1-5)\"},\"startedAt\":1771843930835,\"status\":\"success\",\"output\":{\"sql\":\"SELECT r.rating AS rating, COALESCE(c.count, 0) AS count\\nFROM (VALUES (1),(2),(3),(4),(5)) AS r(rating)\\nLEFT JOIN (\\n  SELECT CAST(overall_rating AS INTEGER) AS rating, COUNT(*) AS count\\n  FROM course_evaluations\\n  WHERE overall_rating IS NOT NULL\\n    AND CAST(overall_rating AS INTEGER) BETWEEN 1 AND 5\\n  GROUP BY CAST(overall_rating AS INTEGER)\\n) c USING (rating)\\nORDER BY r.rating ASC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Distribution of overall course evaluation ratings (1-5)\",\"title\":\"Overall Course Evaluation Ratings (1–5)\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"rating\",\"type\":\"ordinal\",\"title\":\"Rating\"},\"y\":{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count of Responses\"},\"tooltip\":[{\"field\":\"rating\",\"type\":\"ordinal\",\"title\":\"Rating\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"}],\"color\":{\"field\":\"rating\",\"type\":\"ordinal\",\"legend\":null}},\"width\":480,\"height\":320}},\"endedAt\":1771843949265},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT r.rating AS rating, COALESCE(c.count, 0) AS count\\nFROM (VALUES (1),(2),(3),(4),(5)) AS r(rating)\\nLEFT JOIN (\\n  SELECT CAST(overall_rating AS INTEGER) AS rating, COUNT(*) AS count\\n  FROM course_evaluations\\n  WHERE overall_rating IS NOT NULL\\n    AND CAST(overall_rating AS INTEGER) BETWEEN 1 AND 5\\n  GROUP BY CAST(overall_rating AS INTEGER)\\n) c USING (rating)\\nORDER BY r.rating ASC;\"},\"startedAt\":1771843949268,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT r.rating AS rating, COALESCE(c.count, 0) AS count\\nFROM (VALUES (1),(2),(3),(4),(5)) AS r(rating)\\nLEFT JOIN (\\n  SELECT CAST(overall_rating AS INTEGER) AS rating, COUNT(*) AS count\\n  FROM course_evaluations\\n  WHERE overall_rating IS NOT NULL\\n    AND CAST(overall_rating AS INTEGER) BETWEEN 1 AND 5\\n  GROUP BY CAST(overall_rating AS INTEGER)\\n) c USING (rating)\\nORDER BY r.rating ASC\",\"metadata\":{\"columns\":[\"count\",\"rating\"],\"rowCount\":5,\"sample\":[{\"count\":12,\"rating\":1},{\"count\":5,\"rating\":2}]},\"data\":[{\"count\":12,\"rating\":1},{\"count\":5,\"rating\":2},{\"count\":5,\"rating\":3},{\"count\":9,\"rating\":4},{\"count\":10,\"rating\":5}]},\"endedAt\":1771843949303},\"final-data\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT r.rating AS rating, COALESCE(c.count, 0) AS count\\nFROM (VALUES (1),(2),(3),(4),(5)) AS r(rating)\\nLEFT JOIN (\\n  SELECT CAST(overall_rating AS INTEGER) AS rating, COUNT(*) AS count\\n  FROM course_evaluations\\n  WHERE overall_rating IS NOT NULL\\n    AND CAST(overall_rating AS INTEGER) BETWEEN 1 AND 5\\n  GROUP BY CAST(overall_rating AS INTEGER)\\n) c USING (rating)\\nORDER BY r.rating ASC\",\"metadata\":{\"columns\":[\"count\",\"rating\"],\"rowCount\":5,\"sample\":[{\"count\":12,\"rating\":1},{\"count\":5,\"rating\":2}]},\"data\":[{\"count\":12,\"rating\":1},{\"count\":5,\"rating\":2},{\"count\":5,\"rating\":3},{\"count\":9,\"rating\":4},{\"count\":10,\"rating\":5}]},\"startedAt\":1771843949305,\"status\":\"success\",\"output\":{\"sql\":\"SELECT r.rating AS rating, COALESCE(c.count, 0) AS count\\nFROM (VALUES (1),(2),(3),(4),(5)) AS r(rating)\\nLEFT JOIN (\\n  SELECT CAST(overall_rating AS INTEGER) AS rating, COUNT(*) AS count\\n  FROM course_evaluations\\n  WHERE overall_rating IS NOT NULL\\n    AND CAST(overall_rating AS INTEGER) BETWEEN 1 AND 5\\n  GROUP BY CAST(overall_rating AS INTEGER)\\n) c USING (rating)\\nORDER BY r.rating ASC;\",\"data\":[{\"count\":12,\"rating\":1},{\"count\":5,\"rating\":2},{\"count\":5,\"rating\":3},{\"count\":9,\"rating\":4},{\"count\":10,\"rating\":5}],\"metadata\":{\"columns\":[\"count\",\"rating\"],\"rowCount\":5,\"sample\":[{\"count\":12,\"rating\":1},{\"count\":5,\"rating\":2}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Distribution of overall course evaluation ratings (1-5)\",\"title\":\"Overall Course Evaluation Ratings (1–5)\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"rating\",\"type\":\"ordinal\",\"title\":\"Rating\"},\"y\":{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count of Responses\"},\"tooltip\":[{\"field\":\"rating\",\"type\":\"ordinal\",\"title\":\"Rating\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"}],\"color\":{\"field\":\"rating\",\"type\":\"ordinal\",\"legend\":null}},\"width\":480,\"height\":320},\"quality\":{\"workflow\":\"agent-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771843949307}},\"input\":{\"question\":\"Show the distribution of overall course evaluation ratings (1-5)\"},\"result\":{\"sql\":\"SELECT r.rating AS rating, COALESCE(c.count, 0) AS count\\nFROM (VALUES (1),(2),(3),(4),(5)) AS r(rating)\\nLEFT JOIN (\\n  SELECT CAST(overall_rating AS INTEGER) AS rating, COUNT(*) AS count\\n  FROM course_evaluations\\n  WHERE overall_rating IS NOT NULL\\n    AND CAST(overall_rating AS INTEGER) BETWEEN 1 AND 5\\n  GROUP BY CAST(overall_rating AS INTEGER)\\n) c USING (rating)\\nORDER BY r.rating ASC;\",\"data\":[{\"count\":12,\"rating\":1},{\"count\":5,\"rating\":2},{\"count\":5,\"rating\":3},{\"count\":9,\"rating\":4},{\"count\":10,\"rating\":5}],\"metadata\":{\"columns\":[\"count\",\"rating\"],\"rowCount\":5,\"sample\":[{\"count\":12,\"rating\":1},{\"count\":5,\"rating\":2}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Distribution of overall course evaluation ratings (1-5)\",\"title\":\"Overall Course Evaluation Ratings (1–5)\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"rating\",\"type\":\"ordinal\",\"title\":\"Rating\"},\"y\":{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count of Responses\"},\"tooltip\":[{\"field\":\"rating\",\"type\":\"ordinal\",\"title\":\"Rating\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"}],\"color\":{\"field\":\"rating\",\"type\":\"ordinal\",\"legend\":null}},\"width\":480,\"height\":320},\"quality\":{\"workflow\":\"agent-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"e0e561cd0c6359e51eea685371ef9c6d\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/evaluation-overall-histogram/run-0001/run.json",
+    "queryPath": "runs/evaluation-overall-histogram/run-0001/query.sql",
+    "vegaRawPath": "runs/evaluation-overall-histogram/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/evaluation-overall-histogram/run-0001/vega.resolved.json",
+    "imagePath": "runs/evaluation-overall-histogram/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:52:29.776Z",
+  "traceId": "e0e561cd0c6359e51eea685371ef9c6d",
+  "success": true,
+  "durationMs": 18947,
+  "resultRaw": {
+    "data": [
+      {
+        "count": 12,
+        "rating": 1
+      },
+      {
+        "count": 5,
+        "rating": 2
+      },
+      {
+        "count": 5,
+        "rating": 3
+      },
+      {
+        "count": 9,
+        "rating": 4
+      },
+      {
+        "count": 10,
+        "rating": 5
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "description": "Distribution of overall course evaluation ratings (1-5)",
+      "title": "Overall Course Evaluation Ratings (1–5)",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "rating",
+          "type": "ordinal",
+          "title": "Rating"
+        },
+        "y": {
+          "field": "count",
+          "type": "quantitative",
+          "title": "Count of Responses"
+        },
+        "tooltip": [
+          {
+            "field": "rating",
+            "type": "ordinal",
+            "title": "Rating"
+          },
+          {
+            "field": "count",
+            "type": "quantitative",
+            "title": "Count"
+          }
+        ],
+        "color": {
+          "field": "rating",
+          "type": "ordinal",
+          "legend": null
+        }
+      },
+      "width": 480,
+      "height": 320
+    },
+    "sql": "SELECT r.rating AS rating, COALESCE(c.count, 0) AS count\nFROM (VALUES (1),(2),(3),(4),(5)) AS r(rating)\nLEFT JOIN (\n  SELECT CAST(overall_rating AS INTEGER) AS rating, COUNT(*) AS count\n  FROM course_evaluations\n  WHERE overall_rating IS NOT NULL\n    AND CAST(overall_rating AS INTEGER) BETWEEN 1 AND 5\n  GROUP BY CAST(overall_rating AS INTEGER)\n) c USING (rating)\nORDER BY r.rating ASC;",
+    "metadata": {
+      "columns": [
+        "count",
+        "rating"
+      ],
+      "rowCount": 5,
+      "sample": [
+        {
+          "count": 12,
+          "rating": 1
+        },
+        {
+          "count": 5,
+          "rating": 2
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "agent-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "count": 12,
+        "rating": 1
+      },
+      {
+        "count": 5,
+        "rating": 2
+      },
+      {
+        "count": 5,
+        "rating": 3
+      },
+      {
+        "count": 9,
+        "rating": 4
+      },
+      {
+        "count": 10,
+        "rating": 5
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "description": "Distribution of overall course evaluation ratings (1-5)",
+      "title": "Overall Course Evaluation Ratings (1–5)",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "rating",
+          "type": "ordinal",
+          "title": "Rating"
+        },
+        "y": {
+          "field": "count",
+          "type": "quantitative",
+          "title": "Count of Responses"
+        },
+        "tooltip": [
+          {
+            "field": "rating",
+            "type": "ordinal",
+            "title": "Rating"
+          },
+          {
+            "field": "count",
+            "type": "quantitative",
+            "title": "Count"
+          }
+        ],
+        "color": {
+          "field": "rating",
+          "type": "ordinal",
+          "legend": null
+        }
+      },
+      "width": 480,
+      "height": 320
+    },
+    "sql": "SELECT r.rating AS rating, COALESCE(c.count, 0) AS count\nFROM (VALUES (1),(2),(3),(4),(5)) AS r(rating)\nLEFT JOIN (\n  SELECT CAST(overall_rating AS INTEGER) AS rating, COUNT(*) AS count\n  FROM course_evaluations\n  WHERE overall_rating IS NOT NULL\n    AND CAST(overall_rating AS INTEGER) BETWEEN 1 AND 5\n  GROUP BY CAST(overall_rating AS INTEGER)\n) c USING (rating)\nORDER BY r.rating ASC;",
+    "metadata": {
+      "columns": [
+        "count",
+        "rating"
+      ],
+      "rowCount": 5,
+      "sample": [
+        {
+          "count": 12,
+          "rating": 1
+        },
+        {
+          "count": 5,
+          "rating": 2
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "agent-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:52:29.776Z",
+    "traceId": "e0e561cd0c6359e51eea685371ef9c6d",
+    "attempts": 4,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 269,
+      "outputTokens": 1278,
+      "totalTokens": 1547,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 896,
+      "costUsd": 0.00262325
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 269,
+        "outputTokens": 1278,
+        "totalTokens": 1547,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 896,
+        "costUsd": 0.00262325
+      }
+    ],
+    "warnings": []
+  }
+}

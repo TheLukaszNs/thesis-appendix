@@ -1,0 +1,1 @@
+SELECT scholarship_type AS scholarship_type, ROUND(AVG(amount), 2) AS average_amount FROM public.scholarships GROUP BY scholarship_type ORDER BY scholarship_type;

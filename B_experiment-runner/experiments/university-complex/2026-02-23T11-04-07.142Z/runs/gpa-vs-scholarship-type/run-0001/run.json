@@ -1,0 +1,286 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "gpa-vs-scholarship-type",
+  "caseDirectory": "gpa-vs-scholarship-type",
+  "repeatIndex": 1,
+  "prompt": "What is the average GPA of students by scholarship type received?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average GPA of students by scholarship type received?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:23:58.977Z",
+    "endedAtUtc": "2026-02-23T11:25:37.183Z",
+    "durationMs": 98206
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "26705",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:25:37 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the average GPA of students by scholarship type received?\"},\"planner\":{\"payload\":{\"question\":\"What is the average GPA of students by scholarship type received?\"},\"startedAt\":1771845838984,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(students.gpa) -- alias avg_gpa\",\"COUNT(DISTINCT students.id) -- alias student_count\"],\"dimensions\":[\"scholarships.scholarship_type\"],\"filters\":[\"students.gpa IS NOT NULL\"],\"grain\":\"one row per scholarship_type (student counted once per scholarship_type)\",\"aliases\":{\"scholarships.scholarship_type::text\":\"scholarship_type\",\"AVG(students.gpa)\":\"avg_gpa\",\"COUNT(DISTINCT students.id)\":\"student_count\"},\"output_fields\":[\"scholarship_type\",\"avg_gpa\",\"student_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"scholarship_type\",\"y_axis\":\"avg_gpa\",\"color_group\":\"student_count\",\"title\":\"Average GPA by Scholarship Type\"},\"assumptions\":[\"There is a foreign key from scholarships.student_id -> students.id (confirmed in schema).\",\"scholarships.scholarship_type is a user-defined/enum type; it will be cast to text for grouping and display (scholarships.scholarship_type::text).\",\"A student may have multiple scholarship records. To avoid counting the same student's GPA multiple times for the same scholarship type, the plan deduplicates by (student_id, scholarship_type) so each student is counted at most once per scholarship type.\",\"Students with NULL gpa are excluded from the average (filter: students.gpa IS NOT NULL).\",\"The requested output fields exactly match the SQL aliases listed in aliases/output_fields and should be returned in the query in that order.\",\"If you prefer a different counting method (e.g., count each scholarship record rather than distinct students), update the requirement and the SQL accordingly.\"]}},\"endedAt\":1771845876991},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(students.gpa) -- alias avg_gpa\",\"COUNT(DISTINCT students.id) -- alias student_count\"],\"dimensions\":[\"scholarships.scholarship_type\"],\"filters\":[\"students.gpa IS NOT NULL\"],\"grain\":\"one row per scholarship_type (student counted once per scholarship_type)\",\"aliases\":{\"scholarships.scholarship_type::text\":\"scholarship_type\",\"AVG(students.gpa)\":\"avg_gpa\",\"COUNT(DISTINCT students.id)\":\"student_count\"},\"output_fields\":[\"scholarship_type\",\"avg_gpa\",\"student_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"scholarship_type\",\"y_axis\":\"avg_gpa\",\"color_group\":\"student_count\",\"title\":\"Average GPA by Scholarship Type\"},\"assumptions\":[\"There is a foreign key from scholarships.student_id -> students.id (confirmed in schema).\",\"scholarships.scholarship_type is a user-defined/enum type; it will be cast to text for grouping and display (scholarships.scholarship_type::text).\",\"A student may have multiple scholarship records. To avoid counting the same student's GPA multiple times for the same scholarship type, the plan deduplicates by (student_id, scholarship_type) so each student is counted at most once per scholarship type.\",\"Students with NULL gpa are excluded from the average (filter: students.gpa IS NOT NULL).\",\"The requested output fields exactly match the SQL aliases listed in aliases/output_fields and should be returned in the query in that order.\",\"If you prefer a different counting method (e.g., count each scholarship record rather than distinct students), update the requirement and the SQL accordingly.\"]}},\"startedAt\":1771845876995,\"status\":\"success\",\"output\":{\"question\":\"What is the average GPA of students by scholarship type received?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(students.gpa) -- alias avg_gpa\",\"COUNT(DISTINCT students.id) -- alias student_count\"],\"dimensions\":[\"scholarships.scholarship_type\"],\"filters\":[\"students.gpa IS NOT NULL\"],\"grain\":\"one row per scholarship_type (student counted once per scholarship_type)\",\"aliases\":{\"scholarships.scholarship_type::text\":\"scholarship_type\",\"AVG(students.gpa)\":\"avg_gpa\",\"COUNT(DISTINCT students.id)\":\"student_count\"},\"output_fields\":[\"scholarship_type\",\"avg_gpa\",\"student_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"scholarship_type\",\"y_axis\":\"avg_gpa\",\"color_group\":\"student_count\",\"title\":\"Average GPA by Scholarship Type\"},\"assumptions\":[\"There is a foreign key from scholarships.student_id -> students.id (confirmed in schema).\",\"scholarships.scholarship_type is a user-defined/enum type; it will be cast to text for grouping and display (scholarships.scholarship_type::text).\",\"A student may have multiple scholarship records. To avoid counting the same student's GPA multiple times for the same scholarship type, the plan deduplicates by (student_id, scholarship_type) so each student is counted at most once per scholarship type.\",\"Students with NULL gpa are excluded from the average (filter: students.gpa IS NOT NULL).\",\"The requested output fields exactly match the SQL aliases listed in aliases/output_fields and should be returned in the query in that order.\",\"If you prefer a different counting method (e.g., count each scholarship record rather than distinct students), update the requirement and the SQL accordingly.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771845876996},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"What is the average GPA of students by scholarship type received?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(students.gpa) -- alias avg_gpa\",\"COUNT(DISTINCT students.id) -- alias student_count\"],\"dimensions\":[\"scholarships.scholarship_type\"],\"filters\":[\"students.gpa IS NOT NULL\"],\"grain\":\"one row per scholarship_type (student counted once per scholarship_type)\",\"aliases\":{\"scholarships.scholarship_type::text\":\"scholarship_type\",\"AVG(students.gpa)\":\"avg_gpa\",\"COUNT(DISTINCT students.id)\":\"student_count\"},\"output_fields\":[\"scholarship_type\",\"avg_gpa\",\"student_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"scholarship_type\",\"y_axis\":\"avg_gpa\",\"color_group\":\"student_count\",\"title\":\"Average GPA by Scholarship Type\"},\"assumptions\":[\"There is a foreign key from scholarships.student_id -> students.id (confirmed in schema).\",\"scholarships.scholarship_type is a user-defined/enum type; it will be cast to text for grouping and display (scholarships.scholarship_type::text).\",\"A student may have multiple scholarship records. To avoid counting the same student's GPA multiple times for the same scholarship type, the plan deduplicates by (student_id, scholarship_type) so each student is counted at most once per scholarship type.\",\"Students with NULL gpa are excluded from the average (filter: students.gpa IS NOT NULL).\",\"The requested output fields exactly match the SQL aliases listed in aliases/output_fields and should be returned in the query in that order.\",\"If you prefer a different counting method (e.g., count each scholarship record rather than distinct students), update the requirement and the SQL accordingly.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771845876998,\"status\":\"success\",\"output\":{\"question\":\"What is the average GPA of students by scholarship type received?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(students.gpa) -- alias avg_gpa\",\"COUNT(DISTINCT students.id) -- alias student_count\"],\"dimensions\":[\"scholarships.scholarship_type\"],\"filters\":[\"students.gpa IS NOT NULL\"],\"grain\":\"one row per scholarship_type (student counted once per scholarship_type)\",\"aliases\":{\"scholarships.scholarship_type::text\":\"scholarship_type\",\"AVG(students.gpa)\":\"avg_gpa\",\"COUNT(DISTINCT students.id)\":\"student_count\"},\"output_fields\":[\"scholarship_type\",\"avg_gpa\",\"student_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"scholarship_type\",\"y_axis\":\"avg_gpa\",\"color_group\":\"student_count\",\"title\":\"Average GPA by Scholarship Type\"},\"assumptions\":[\"There is a foreign key from scholarships.student_id -> students.id (confirmed in schema).\",\"scholarships.scholarship_type is a user-defined/enum type; it will be cast to text for grouping and display (scholarships.scholarship_type::text).\",\"A student may have multiple scholarship records. To avoid counting the same student's GPA multiple times for the same scholarship type, the plan deduplicates by (student_id, scholarship_type) so each student is counted at most once per scholarship type.\",\"Students with NULL gpa are excluded from the average (filter: students.gpa IS NOT NULL).\",\"The requested output fields exactly match the SQL aliases listed in aliases/output_fields and should be returned in the query in that order.\",\"If you prefer a different counting method (e.g., count each scholarship record rather than distinct students), update the requirement and the SQL accordingly.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"WITH per_student_type AS (\\n  SELECT\\n    s.student_id,\\n    s.scholarship_type::text AS scholarship_type,\\n    MAX(st.gpa) AS gpa\\n  FROM public.scholarships s\\n  JOIN public.students st ON s.student_id = st.id\\n  WHERE st.gpa IS NOT NULL\\n  GROUP BY s.student_id, s.scholarship_type\\n)\\nSELECT\\n  scholarship_type AS scholarship_type,\\n  AVG(gpa) AS avg_gpa,\\n  COUNT(student_id) AS student_count\\nFROM per_student_type\\nGROUP BY scholarship_type\\nORDER BY scholarship_type;\",\"validationIssues\":[\"All encoded fields (scholarship_type, avg_gpa, student_count) exist in metadata.columns — OK.\",\"The SQL groups by scholarship_type and returns one row per scholarship_type; the bar chart uses scholarship_type on the nominal x-axis and avg_gpa on the quantitative y-axis — matches aggregation/grain.\",\"Color encodes student_count (quantitative) which is valid, but using color for a quantitative measure can be misleading; consider using a separate size/label or sorting bars and keeping a single color.\",\"The y-axis includes scale.zero: true. For GPA (typically in a narrow high range), forcing zero may visually compress differences; consider removing zero baseline to better show variation.\",\"If you prefer bars ordered by avg_gpa (or student_count) rather than alphabetical scholarship_type, add an explicit sort to the visualization.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Deduplicate scholarship rows to one row per (student_id, scholarship_type) first, then compute the average GPA and distinct student count per scholarship_type. Use a deterministic ORDER BY on scholarship_type.\",\"sql\":\"WITH per_student_type AS (\\n  SELECT\\n    s.student_id,\\n    s.scholarship_type::text AS scholarship_type,\\n    MAX(st.gpa) AS gpa\\n  FROM public.scholarships s\\n  JOIN public.students st ON s.student_id = st.id\\n  WHERE st.gpa IS NOT NULL\\n  GROUP BY s.student_id, s.scholarship_type\\n)\\nSELECT\\n  scholarship_type AS scholarship_type,\\n  AVG(gpa) AS avg_gpa,\\n  COUNT(student_id) AS student_count\\nFROM per_student_type\\nGROUP BY scholarship_type\\nORDER BY scholarship_type;\",\"assumptions\":[\"public.scholarships.student_id -> public.students.id foreign key exists (confirmed in schema).\",\"Exclude students with NULL gpa (filter applied).\",\"A student may have multiple scholarships of the same type; the query deduplicates by (student_id, scholarship_type) so each student contributes at most once per scholarship type.\",\"scholarships.scholarship_type is user-defined and is cast to text for grouping/display.\",\"AVG(gpa) is computed over one gpa value per student per scholarship_type (we use MAX(st.gpa) when collapsing duplicates).\"]},\"execution\":{\"ok\":true,\"sql\":\"WITH per_student_type AS (\\n  SELECT\\n    s.student_id,\\n    s.scholarship_type::text AS scholarship_type,\\n    MAX(st.gpa) AS gpa\\n  FROM public.scholarships s\\n  JOIN public.students st ON s.student_id = st.id\\n  WHERE st.gpa IS NOT NULL\\n  GROUP BY s.student_id, s.scholarship_type\\n)\\nSELECT\\n  scholarship_type AS scholarship_type,\\n  AVG(gpa) AS avg_gpa,\\n  COUNT(student_id) AS student_count\\nFROM per_student_type\\nGROUP BY scholarship_type\\nORDER BY scholarship_type\",\"metadata\":{\"columns\":[\"avg_gpa\",\"student_count\",\"scholarship_type\"],\"rowCount\":3,\"sample\":[{\"avg_gpa\":4.3966666666666665,\"student_count\":3,\"scholarship_type\":\"MERIT\"},{\"avg_gpa\":3.56,\"student_count\":2,\"scholarship_type\":\"SOCIAL\"}]},\"data\":[{\"avg_gpa\":4.3966666666666665,\"student_count\":3,\"scholarship_type\":\"MERIT\"},{\"avg_gpa\":3.56,\"student_count\":2,\"scholarship_type\":\"SOCIAL\"},{\"avg_gpa\":4.08,\"student_count\":4,\"scholarship_type\":\"SPECIAL\"}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average GPA by Scholarship Type\",\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},\"y\":{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"scale\":{\"zero\":true}},\"color\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"},\"tooltip\":[{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Avg GPA\",\"format\":\".2f\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"reasoning\":\"Bar chart shows average GPA (y) by scholarship type (x); bar color encodes the number of distinct students per scholarship type. Tooltip provides exact values.\"},\"validation\":{\"passed\":true,\"score\":0.65,\"issues\":[\"All encoded fields (scholarship_type, avg_gpa, student_count) exist in metadata.columns — OK.\",\"The SQL groups by scholarship_type and returns one row per scholarship_type; the bar chart uses scholarship_type on the nominal x-axis and avg_gpa on the quantitative y-axis — matches aggregation/grain.\",\"Color encodes student_count (quantitative) which is valid, but using color for a quantitative measure can be misleading; consider using a separate size/label or sorting bars and keeping a single color.\",\"The y-axis includes scale.zero: true. For GPA (typically in a narrow high range), forcing zero may visually compress differences; consider removing zero baseline to better show variation.\",\"If you prefer bars ordered by avg_gpa (or student_count) rather than alphabetical scholarship_type, add an explicit sort to the visualization.\"]}}},\"endedAt\":1771845937138,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"What is the average GPA of students by scholarship type received?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(students.gpa) -- alias avg_gpa\",\"COUNT(DISTINCT students.id) -- alias student_count\"],\"dimensions\":[\"scholarships.scholarship_type\"],\"filters\":[\"students.gpa IS NOT NULL\"],\"grain\":\"one row per scholarship_type (student counted once per scholarship_type)\",\"aliases\":{\"scholarships.scholarship_type::text\":\"scholarship_type\",\"AVG(students.gpa)\":\"avg_gpa\",\"COUNT(DISTINCT students.id)\":\"student_count\"},\"output_fields\":[\"scholarship_type\",\"avg_gpa\",\"student_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"scholarship_type\",\"y_axis\":\"avg_gpa\",\"color_group\":\"student_count\",\"title\":\"Average GPA by Scholarship Type\"},\"assumptions\":[\"There is a foreign key from scholarships.student_id -> students.id (confirmed in schema).\",\"scholarships.scholarship_type is a user-defined/enum type; it will be cast to text for grouping and display (scholarships.scholarship_type::text).\",\"A student may have multiple scholarship records. To avoid counting the same student's GPA multiple times for the same scholarship type, the plan deduplicates by (student_id, scholarship_type) so each student is counted at most once per scholarship type.\",\"Students with NULL gpa are excluded from the average (filter: students.gpa IS NOT NULL).\",\"The requested output fields exactly match the SQL aliases listed in aliases/output_fields and should be returned in the query in that order.\",\"If you prefer a different counting method (e.g., count each scholarship record rather than distinct students), update the requirement and the SQL accordingly.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"WITH per_student_type AS (\\n  SELECT\\n    s.student_id,\\n    s.scholarship_type::text AS scholarship_type,\\n    MAX(st.gpa) AS gpa\\n  FROM public.scholarships s\\n  JOIN public.students st ON s.student_id = st.id\\n  WHERE st.gpa IS NOT NULL\\n  GROUP BY s.student_id, s.scholarship_type\\n)\\nSELECT\\n  scholarship_type AS scholarship_type,\\n  AVG(gpa) AS avg_gpa,\\n  COUNT(student_id) AS student_count\\nFROM per_student_type\\nGROUP BY scholarship_type\\nORDER BY scholarship_type;\",\"validationIssues\":[\"All encoded fields (scholarship_type, avg_gpa, student_count) exist in metadata.columns — OK.\",\"The SQL groups by scholarship_type and returns one row per scholarship_type; the bar chart uses scholarship_type on the nominal x-axis and avg_gpa on the quantitative y-axis — matches aggregation/grain.\",\"Color encodes student_count (quantitative) which is valid, but using color for a quantitative measure can be misleading; consider using a separate size/label or sorting bars and keeping a single color.\",\"The y-axis includes scale.zero: true. For GPA (typically in a narrow high range), forcing zero may visually compress differences; consider removing zero baseline to better show variation.\",\"If you prefer bars ordered by avg_gpa (or student_count) rather than alphabetical scholarship_type, add an explicit sort to the visualization.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Deduplicate scholarship rows to one row per (student_id, scholarship_type) first, then compute the average GPA and distinct student count per scholarship_type. Use a deterministic ORDER BY on scholarship_type.\",\"sql\":\"WITH per_student_type AS (\\n  SELECT\\n    s.student_id,\\n    s.scholarship_type::text AS scholarship_type,\\n    MAX(st.gpa) AS gpa\\n  FROM public.scholarships s\\n  JOIN public.students st ON s.student_id = st.id\\n  WHERE st.gpa IS NOT NULL\\n  GROUP BY s.student_id, s.scholarship_type\\n)\\nSELECT\\n  scholarship_type AS scholarship_type,\\n  AVG(gpa) AS avg_gpa,\\n  COUNT(student_id) AS student_count\\nFROM per_student_type\\nGROUP BY scholarship_type\\nORDER BY scholarship_type;\",\"assumptions\":[\"public.scholarships.student_id -> public.students.id foreign key exists (confirmed in schema).\",\"Exclude students with NULL gpa (filter applied).\",\"A student may have multiple scholarships of the same type; the query deduplicates by (student_id, scholarship_type) so each student contributes at most once per scholarship type.\",\"scholarships.scholarship_type is user-defined and is cast to text for grouping/display.\",\"AVG(gpa) is computed over one gpa value per student per scholarship_type (we use MAX(st.gpa) when collapsing duplicates).\"]},\"execution\":{\"ok\":true,\"sql\":\"WITH per_student_type AS (\\n  SELECT\\n    s.student_id,\\n    s.scholarship_type::text AS scholarship_type,\\n    MAX(st.gpa) AS gpa\\n  FROM public.scholarships s\\n  JOIN public.students st ON s.student_id = st.id\\n  WHERE st.gpa IS NOT NULL\\n  GROUP BY s.student_id, s.scholarship_type\\n)\\nSELECT\\n  scholarship_type AS scholarship_type,\\n  AVG(gpa) AS avg_gpa,\\n  COUNT(student_id) AS student_count\\nFROM per_student_type\\nGROUP BY scholarship_type\\nORDER BY scholarship_type\",\"metadata\":{\"columns\":[\"avg_gpa\",\"student_count\",\"scholarship_type\"],\"rowCount\":3,\"sample\":[{\"avg_gpa\":4.3966666666666665,\"student_count\":3,\"scholarship_type\":\"MERIT\"},{\"avg_gpa\":3.56,\"student_count\":2,\"scholarship_type\":\"SOCIAL\"}]},\"data\":[{\"avg_gpa\":4.3966666666666665,\"student_count\":3,\"scholarship_type\":\"MERIT\"},{\"avg_gpa\":3.56,\"student_count\":2,\"scholarship_type\":\"SOCIAL\"},{\"avg_gpa\":4.08,\"student_count\":4,\"scholarship_type\":\"SPECIAL\"}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average GPA by Scholarship Type\",\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},\"y\":{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"scale\":{\"zero\":true}},\"color\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"},\"tooltip\":[{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Avg GPA\",\"format\":\".2f\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"reasoning\":\"Bar chart shows average GPA (y) by scholarship type (x); bar color encodes the number of distinct students per scholarship type. Tooltip provides exact values.\"},\"validation\":{\"passed\":true,\"score\":0.65,\"issues\":[\"All encoded fields (scholarship_type, avg_gpa, student_count) exist in metadata.columns — OK.\",\"The SQL groups by scholarship_type and returns one row per scholarship_type; the bar chart uses scholarship_type on the nominal x-axis and avg_gpa on the quantitative y-axis — matches aggregation/grain.\",\"Color encodes student_count (quantitative) which is valid, but using color for a quantitative measure can be misleading; consider using a separate size/label or sorting bars and keeping a single color.\",\"The y-axis includes scale.zero: true. For GPA (typically in a narrow high range), forcing zero may visually compress differences; consider removing zero baseline to better show variation.\",\"If you prefer bars ordered by avg_gpa (or student_count) rather than alphabetical scholarship_type, add an explicit sort to the visualization.\"]}}},\"startedAt\":1771845937154,\"status\":\"success\",\"output\":{\"sql\":\"WITH per_student_type AS (\\n  SELECT\\n    s.student_id,\\n    s.scholarship_type::text AS scholarship_type,\\n    MAX(st.gpa) AS gpa\\n  FROM public.scholarships s\\n  JOIN public.students st ON s.student_id = st.id\\n  WHERE st.gpa IS NOT NULL\\n  GROUP BY s.student_id, s.scholarship_type\\n)\\nSELECT\\n  scholarship_type AS scholarship_type,\\n  AVG(gpa) AS avg_gpa,\\n  COUNT(student_id) AS student_count\\nFROM per_student_type\\nGROUP BY scholarship_type\\nORDER BY scholarship_type;\",\"data\":[{\"avg_gpa\":4.3966666666666665,\"student_count\":3,\"scholarship_type\":\"MERIT\"},{\"avg_gpa\":3.56,\"student_count\":2,\"scholarship_type\":\"SOCIAL\"},{\"avg_gpa\":4.08,\"student_count\":4,\"scholarship_type\":\"SPECIAL\"}],\"metadata\":{\"columns\":[\"avg_gpa\",\"student_count\",\"scholarship_type\"],\"rowCount\":3,\"sample\":[{\"avg_gpa\":4.3966666666666665,\"student_count\":3,\"scholarship_type\":\"MERIT\"},{\"avg_gpa\":3.56,\"student_count\":2,\"scholarship_type\":\"SOCIAL\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average GPA by Scholarship Type\",\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},\"y\":{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"scale\":{\"zero\":true}},\"color\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"},\"tooltip\":[{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Avg GPA\",\"format\":\".2f\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.65,\"issues\":[\"All encoded fields (scholarship_type, avg_gpa, student_count) exist in metadata.columns — OK.\",\"The SQL groups by scholarship_type and returns one row per scholarship_type; the bar chart uses scholarship_type on the nominal x-axis and avg_gpa on the quantitative y-axis — matches aggregation/grain.\",\"Color encodes student_count (quantitative) which is valid, but using color for a quantitative measure can be misleading; consider using a separate size/label or sorting bars and keeping a single color.\",\"The y-axis includes scale.zero: true. For GPA (typically in a narrow high range), forcing zero may visually compress differences; consider removing zero baseline to better show variation.\",\"If you prefer bars ordered by avg_gpa (or student_count) rather than alphabetical scholarship_type, add an explicit sort to the visualization.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771845937160}},\"input\":{\"question\":\"What is the average GPA of students by scholarship type received?\"},\"result\":{\"sql\":\"WITH per_student_type AS (\\n  SELECT\\n    s.student_id,\\n    s.scholarship_type::text AS scholarship_type,\\n    MAX(st.gpa) AS gpa\\n  FROM public.scholarships s\\n  JOIN public.students st ON s.student_id = st.id\\n  WHERE st.gpa IS NOT NULL\\n  GROUP BY s.student_id, s.scholarship_type\\n)\\nSELECT\\n  scholarship_type AS scholarship_type,\\n  AVG(gpa) AS avg_gpa,\\n  COUNT(student_id) AS student_count\\nFROM per_student_type\\nGROUP BY scholarship_type\\nORDER BY scholarship_type;\",\"data\":[{\"avg_gpa\":4.3966666666666665,\"student_count\":3,\"scholarship_type\":\"MERIT\"},{\"avg_gpa\":3.56,\"student_count\":2,\"scholarship_type\":\"SOCIAL\"},{\"avg_gpa\":4.08,\"student_count\":4,\"scholarship_type\":\"SPECIAL\"}],\"metadata\":{\"columns\":[\"avg_gpa\",\"student_count\",\"scholarship_type\"],\"rowCount\":3,\"sample\":[{\"avg_gpa\":4.3966666666666665,\"student_count\":3,\"scholarship_type\":\"MERIT\"},{\"avg_gpa\":3.56,\"student_count\":2,\"scholarship_type\":\"SOCIAL\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average GPA by Scholarship Type\",\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},\"y\":{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"scale\":{\"zero\":true}},\"color\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"},\"tooltip\":[{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Avg GPA\",\"format\":\".2f\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.65,\"issues\":[\"All encoded fields (scholarship_type, avg_gpa, student_count) exist in metadata.columns — OK.\",\"The SQL groups by scholarship_type and returns one row per scholarship_type; the bar chart uses scholarship_type on the nominal x-axis and avg_gpa on the quantitative y-axis — matches aggregation/grain.\",\"Color encodes student_count (quantitative) which is valid, but using color for a quantitative measure can be misleading; consider using a separate size/label or sorting bars and keeping a single color.\",\"The y-axis includes scale.zero: true. For GPA (typically in a narrow high range), forcing zero may visually compress differences; consider removing zero baseline to better show variation.\",\"If you prefer bars ordered by avg_gpa (or student_count) rather than alphabetical scholarship_type, add an explicit sort to the visualization.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"d7347c6d623d692ad56cfe13be31d4ee\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/gpa-vs-scholarship-type/run-0001/run.json",
+    "queryPath": "runs/gpa-vs-scholarship-type/run-0001/query.sql",
+    "vegaRawPath": "runs/gpa-vs-scholarship-type/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/gpa-vs-scholarship-type/run-0001/vega.resolved.json",
+    "imagePath": "runs/gpa-vs-scholarship-type/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:25:37.650Z",
+  "traceId": "d7347c6d623d692ad56cfe13be31d4ee",
+  "success": true,
+  "durationMs": 98673,
+  "resultRaw": {
+    "data": [
+      {
+        "avg_gpa": 4.3966666666666665,
+        "student_count": 3,
+        "scholarship_type": "MERIT"
+      },
+      {
+        "avg_gpa": 3.56,
+        "student_count": 2,
+        "scholarship_type": "SOCIAL"
+      },
+      {
+        "avg_gpa": 4.08,
+        "student_count": 4,
+        "scholarship_type": "SPECIAL"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average GPA by Scholarship Type",
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "scholarship_type",
+          "type": "nominal",
+          "title": "Scholarship Type"
+        },
+        "y": {
+          "field": "avg_gpa",
+          "type": "quantitative",
+          "title": "Average GPA",
+          "scale": {
+            "zero": true
+          }
+        },
+        "color": {
+          "field": "student_count",
+          "type": "quantitative",
+          "title": "Student Count"
+        },
+        "tooltip": [
+          {
+            "field": "scholarship_type",
+            "type": "nominal",
+            "title": "Scholarship Type"
+          },
+          {
+            "field": "avg_gpa",
+            "type": "quantitative",
+            "title": "Avg GPA",
+            "format": ".2f"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Student Count"
+          }
+        ]
+      }
+    },
+    "sql": "WITH per_student_type AS (\n  SELECT\n    s.student_id,\n    s.scholarship_type::text AS scholarship_type,\n    MAX(st.gpa) AS gpa\n  FROM public.scholarships s\n  JOIN public.students st ON s.student_id = st.id\n  WHERE st.gpa IS NOT NULL\n  GROUP BY s.student_id, s.scholarship_type\n)\nSELECT\n  scholarship_type AS scholarship_type,\n  AVG(gpa) AS avg_gpa,\n  COUNT(student_id) AS student_count\nFROM per_student_type\nGROUP BY scholarship_type\nORDER BY scholarship_type;",
+    "metadata": {
+      "columns": [
+        "avg_gpa",
+        "student_count",
+        "scholarship_type"
+      ],
+      "rowCount": 3,
+      "sample": [
+        {
+          "avg_gpa": 4.3966666666666665,
+          "student_count": 3,
+          "scholarship_type": "MERIT"
+        },
+        {
+          "avg_gpa": 3.56,
+          "student_count": 2,
+          "scholarship_type": "SOCIAL"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.65,
+      "issues": [
+        "All encoded fields (scholarship_type, avg_gpa, student_count) exist in metadata.columns — OK.",
+        "The SQL groups by scholarship_type and returns one row per scholarship_type; the bar chart uses scholarship_type on the nominal x-axis and avg_gpa on the quantitative y-axis — matches aggregation/grain.",
+        "Color encodes student_count (quantitative) which is valid, but using color for a quantitative measure can be misleading; consider using a separate size/label or sorting bars and keeping a single color.",
+        "The y-axis includes scale.zero: true. For GPA (typically in a narrow high range), forcing zero may visually compress differences; consider removing zero baseline to better show variation.",
+        "If you prefer bars ordered by avg_gpa (or student_count) rather than alphabetical scholarship_type, add an explicit sort to the visualization."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "avg_gpa": 4.3966666666666665,
+        "student_count": 3,
+        "scholarship_type": "MERIT"
+      },
+      {
+        "avg_gpa": 3.56,
+        "student_count": 2,
+        "scholarship_type": "SOCIAL"
+      },
+      {
+        "avg_gpa": 4.08,
+        "student_count": 4,
+        "scholarship_type": "SPECIAL"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average GPA by Scholarship Type",
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "scholarship_type",
+          "type": "nominal",
+          "title": "Scholarship Type"
+        },
+        "y": {
+          "field": "avg_gpa",
+          "type": "quantitative",
+          "title": "Average GPA",
+          "scale": {
+            "zero": true
+          }
+        },
+        "color": {
+          "field": "student_count",
+          "type": "quantitative",
+          "title": "Student Count"
+        },
+        "tooltip": [
+          {
+            "field": "scholarship_type",
+            "type": "nominal",
+            "title": "Scholarship Type"
+          },
+          {
+            "field": "avg_gpa",
+            "type": "quantitative",
+            "title": "Avg GPA",
+            "format": ".2f"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Student Count"
+          }
+        ]
+      }
+    },
+    "sql": "WITH per_student_type AS (\n  SELECT\n    s.student_id,\n    s.scholarship_type::text AS scholarship_type,\n    MAX(st.gpa) AS gpa\n  FROM public.scholarships s\n  JOIN public.students st ON s.student_id = st.id\n  WHERE st.gpa IS NOT NULL\n  GROUP BY s.student_id, s.scholarship_type\n)\nSELECT\n  scholarship_type AS scholarship_type,\n  AVG(gpa) AS avg_gpa,\n  COUNT(student_id) AS student_count\nFROM per_student_type\nGROUP BY scholarship_type\nORDER BY scholarship_type;",
+    "metadata": {
+      "columns": [
+        "avg_gpa",
+        "student_count",
+        "scholarship_type"
+      ],
+      "rowCount": 3,
+      "sample": [
+        {
+          "avg_gpa": 4.3966666666666665,
+          "student_count": 3,
+          "scholarship_type": "MERIT"
+        },
+        {
+          "avg_gpa": 3.56,
+          "student_count": 2,
+          "scholarship_type": "SOCIAL"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.65,
+      "issues": [
+        "All encoded fields (scholarship_type, avg_gpa, student_count) exist in metadata.columns — OK.",
+        "The SQL groups by scholarship_type and returns one row per scholarship_type; the bar chart uses scholarship_type on the nominal x-axis and avg_gpa on the quantitative y-axis — matches aggregation/grain.",
+        "Color encodes student_count (quantitative) which is valid, but using color for a quantitative measure can be misleading; consider using a separate size/label or sorting bars and keeping a single color.",
+        "The y-axis includes scale.zero: true. For GPA (typically in a narrow high range), forcing zero may visually compress differences; consider removing zero baseline to better show variation.",
+        "If you prefer bars ordered by avg_gpa (or student_count) rather than alphabetical scholarship_type, add an explicit sort to the visualization."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:25:37.650Z",
+    "traceId": "d7347c6d623d692ad56cfe13be31d4ee",
+    "attempts": 2,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 20433,
+      "outputTokens": 5283,
+      "totalTokens": 25716,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 3456,
+      "costUsd": 0.01567425
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 20433,
+        "outputTokens": 5283,
+        "totalTokens": 25716,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 3456,
+        "costUsd": 0.01567425
+      }
+    ],
+    "warnings": []
+  }
+}

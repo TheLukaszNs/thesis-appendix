@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "avg-grade-by-credits",
+  "caseDirectory": "avg-grade-by-credits",
+  "repeatIndex": 1,
+  "prompt": "Is there a relationship between course credits and average grade?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Is there a relationship between course credits and average grade?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:50:07.103Z",
+    "endedAtUtc": "2026-02-22T23:50:54.175Z",
+    "durationMs": 47072
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "7840",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:50:54 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Is there a relationship between course credits and average grade?\"},\"sql\":{\"payload\":{\"question\":\"Is there a relationship between course credits and average grade?\"},\"startedAt\":1771804207114,\"status\":\"success\",\"output\":{\"reasoning\":\"Compute per-student numeric score from available numeric grade components, aggregate to per-course average, then report overall correlation between course credits and those per-course average grades (Pearson). Excludes grades with no numeric components and ignores non-numeric grade_value. Assumptions listed.\",\"sql\":\"WITH student_scores AS (\\n  SELECT\\n    c.id AS course_id,\\n    c.credits AS credits,\\n    g.id AS grade_id,\\n    (\\n      (COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0))\\n      / NULLIF(\\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\\n          + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\\n          + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\\n        , 0)\\n    )::numeric AS student_score\\n  FROM public.courses c\\n  JOIN public.course_sections cs ON cs.course_id = c.id\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  JOIN public.grades g ON g.enrollment_id = e.id\\n  WHERE (\\n    (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\\n    + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\\n    + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\\n  ) > 0\\n),\\nper_course AS (\\n  SELECT\\n    course_id,\\n    credits,\\n    AVG(student_score) AS avg_grade,\\n    STDDEV_POP(student_score) AS stddev_grade,\\n    COUNT(*) AS n_grades\\n  FROM student_scores\\n  GROUP BY course_id, credits\\n)\\nSELECT\\n  COUNT(*) AS courses_with_numeric_grades,\\n  AVG(avg_grade) AS overall_avg_grade,\\n  STDDEV_POP(avg_grade) AS overall_stddev_avg_grade,\\n  CORR(avg_grade, credits) AS pearson_corr_credits_avg_grade,\\n  (SELECT COUNT(*) FROM public.courses) AS total_courses\\nFROM per_course;\",\"assumptions\":[\"Numeric relationship is measured using available numeric components (exam_score, project_score, attendance_score); letter/enum grade_value is ignored.\",\"Per-student score is the mean of the non-null numeric components for that student in the course.\",\"Courses with no numeric-grade-bearing enrollments are excluded from the correlation calculation.\",\"If you prefer using grade_value (letters) or different weighting, provide mapping or weights and I will adjust the query.\"]},\"endedAt\":1771804254134},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH student_scores AS (\\n  SELECT\\n    c.id AS course_id,\\n    c.credits AS credits,\\n    g.id AS grade_id,\\n    (\\n      (COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0))\\n      / NULLIF(\\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\\n          + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\\n          + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\\n        , 0)\\n    )::numeric AS student_score\\n  FROM public.courses c\\n  JOIN public.course_sections cs ON cs.course_id = c.id\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  JOIN public.grades g ON g.enrollment_id = e.id\\n  WHERE (\\n    (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\\n    + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\\n    + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\\n  ) > 0\\n),\\nper_course AS (\\n  SELECT\\n    course_id,\\n    credits,\\n    AVG(student_score) AS avg_grade,\\n    STDDEV_POP(student_score) AS stddev_grade,\\n    COUNT(*) AS n_grades\\n  FROM student_scores\\n  GROUP BY course_id, credits\\n)\\nSELECT\\n  COUNT(*) AS courses_with_numeric_grades,\\n  AVG(avg_grade) AS overall_avg_grade,\\n  STDDEV_POP(avg_grade) AS overall_stddev_avg_grade,\\n  CORR(avg_grade, credits) AS pearson_corr_credits_avg_grade,\\n  (SELECT COUNT(*) FROM public.courses) AS total_courses\\nFROM per_course;\"},\"startedAt\":1771804254147,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: Error validating query: WITH __query_result AS (\\nWITH student_scores AS (\\n  SELECT\\n    c.id AS course_id,\\n    c.credits AS credits,\\n    g.id AS grade_id,\\n    (\\n      (COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0))\\n      / NULLIF(\\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\\n          + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\\n          + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\\n        , 0)\\n    )::numeric AS student_score\\n  FROM public.courses c\\n  JOIN public.course_sections cs ON cs.course_id = c.id\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  JOIN public.grades g ON g.enrollment_id = e.id\\n  WHERE (\\n    (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\\n    + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\\n    + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\\n  ) > 0\\n),\\nper_course AS (\\n  SELECT\\n    course_id,\\n    credits,\\n    AVG(student_score) AS avg_grade,\\n    STDDEV_POP(student_score) AS stddev_grade,\\n    COUNT(*) AS n_grades\\n  FROM student_scores\\n  GROUP BY course_id, credits\\n)\\nSELECT\\n  COUNT(*) AS courses_with_numeric_grades,\\n  AVG(avg_grade) AS overall_avg_grade,\\n  STDDEV_POP(avg_grade) AS overall_stddev_avg_grade,\\n  CORR(avg_grade, credits) AS pearson_corr_credits_avg_grade,\\n  (SELECT COUNT(*) FROM public.courses) AS total_courses\\nFROM per_course\\n),\\n__limited AS (\\n  SELECT * FROM __query_result LIMIT 501\\n),\\n__payload AS (\\n  SELECT json_build_object(\\n    'rows', COALESCE((SELECT json_agg(to_jsonb(__limited)) FROM __limited), '[]'::json)\\n  ) AS data\\n)\\nSELECT encode(convert_to((SELECT data::text FROM __payload), 'UTF8'), 'hex') AS __payload_hex\",\"name\":\"Error\"},\"endedAt\":1771804254169}},\"input\":{\"question\":\"Is there a relationship between course credits and average grade?\"},\"error\":{\"message\":\"SQL execution failed: Error validating query: WITH __query_result AS (\\nWITH student_scores AS (\\n  SELECT\\n    c.id AS course_id,\\n    c.credits AS credits,\\n    g.id AS grade_id,\\n    (\\n      (COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0))\\n      / NULLIF(\\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\\n          + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\\n          + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\\n        , 0)\\n    )::numeric AS student_score\\n  FROM public.courses c\\n  JOIN public.course_sections cs ON cs.course_id = c.id\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  JOIN public.grades g ON g.enrollment_id = e.id\\n  WHERE (\\n    (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\\n    + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\\n    + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\\n  ) > 0\\n),\\nper_course AS (\\n  SELECT\\n    course_id,\\n    credits,\\n    AVG(student_score) AS avg_grade,\\n    STDDEV_POP(student_score) AS stddev_grade,\\n    COUNT(*) AS n_grades\\n  FROM student_scores\\n  GROUP BY course_id, credits\\n)\\nSELECT\\n  COUNT(*) AS courses_with_numeric_grades,\\n  AVG(avg_grade) AS overall_avg_grade,\\n  STDDEV_POP(avg_grade) AS overall_stddev_avg_grade,\\n  CORR(avg_grade, credits) AS pearson_corr_credits_avg_grade,\\n  (SELECT COUNT(*) FROM public.courses) AS total_courses\\nFROM per_course\\n),\\n__limited AS (\\n  SELECT * FROM __query_result LIMIT 501\\n),\\n__payload AS (\\n  SELECT json_build_object(\\n    'rows', COALESCE((SELECT json_agg(to_jsonb(__limited)) FROM __limited), '[]'::json)\\n  ) AS data\\n)\\nSELECT encode(convert_to((SELECT data::text FROM __payload), 'UTF8'), 'hex') AS __payload_hex\",\"name\":\"Error\"},\"traceId\":\"7fa4786a47552e9c930788bff0199128\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-grade-by-credits/run-0001/run.json",
+    "queryPath": "runs/avg-grade-by-credits/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-grade-by-credits/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-grade-by-credits/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-grade-by-credits/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:50:54.176Z",
+  "traceId": "7fa4786a47552e9c930788bff0199128",
+  "success": false,
+  "durationMs": 47073,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Is there a relationship between course credits and average grade?"
+      },
+      "sql": {
+        "payload": {
+          "question": "Is there a relationship between course credits and average grade?"
+        },
+        "startedAt": 1771804207114,
+        "status": "success",
+        "output": {
+          "reasoning": "Compute per-student numeric score from available numeric grade components, aggregate to per-course average, then report overall correlation between course credits and those per-course average grades (Pearson). Excludes grades with no numeric components and ignores non-numeric grade_value. Assumptions listed.",
+          "sql": "WITH student_scores AS (\n  SELECT\n    c.id AS course_id,\n    c.credits AS credits,\n    g.id AS grade_id,\n    (\n      (COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0))\n      / NULLIF(\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\n          + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\n          + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\n        , 0)\n    )::numeric AS student_score\n  FROM public.courses c\n  JOIN public.course_sections cs ON cs.course_id = c.id\n  JOIN public.enrollments e ON e.course_section_id = cs.id\n  JOIN public.grades g ON g.enrollment_id = e.id\n  WHERE (\n    (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\n    + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\n    + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\n  ) > 0\n),\nper_course AS (\n  SELECT\n    course_id,\n    credits,\n    AVG(student_score) AS avg_grade,\n    STDDEV_POP(student_score) AS stddev_grade,\n    COUNT(*) AS n_grades\n  FROM student_scores\n  GROUP BY course_id, credits\n)\nSELECT\n  COUNT(*) AS courses_with_numeric_grades,\n  AVG(avg_grade) AS overall_avg_grade,\n  STDDEV_POP(avg_grade) AS overall_stddev_avg_grade,\n  CORR(avg_grade, credits) AS pearson_corr_credits_avg_grade,\n  (SELECT COUNT(*) FROM public.courses) AS total_courses\nFROM per_course;",
+          "assumptions": [
+            "Numeric relationship is measured using available numeric components (exam_score, project_score, attendance_score); letter/enum grade_value is ignored.",
+            "Per-student score is the mean of the non-null numeric components for that student in the course.",
+            "Courses with no numeric-grade-bearing enrollments are excluded from the correlation calculation.",
+            "If you prefer using grade_value (letters) or different weighting, provide mapping or weights and I will adjust the query."
+          ]
+        },
+        "endedAt": 1771804254134
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH student_scores AS (\n  SELECT\n    c.id AS course_id,\n    c.credits AS credits,\n    g.id AS grade_id,\n    (\n      (COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0))\n      / NULLIF(\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\n          + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\n          + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\n        , 0)\n    )::numeric AS student_score\n  FROM public.courses c\n  JOIN public.course_sections cs ON cs.course_id = c.id\n  JOIN public.enrollments e ON e.course_section_id = cs.id\n  JOIN public.grades g ON g.enrollment_id = e.id\n  WHERE (\n    (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\n    + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\n    + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\n  ) > 0\n),\nper_course AS (\n  SELECT\n    course_id,\n    credits,\n    AVG(student_score) AS avg_grade,\n    STDDEV_POP(student_score) AS stddev_grade,\n    COUNT(*) AS n_grades\n  FROM student_scores\n  GROUP BY course_id, credits\n)\nSELECT\n  COUNT(*) AS courses_with_numeric_grades,\n  AVG(avg_grade) AS overall_avg_grade,\n  STDDEV_POP(avg_grade) AS overall_stddev_avg_grade,\n  CORR(avg_grade, credits) AS pearson_corr_credits_avg_grade,\n  (SELECT COUNT(*) FROM public.courses) AS total_courses\nFROM per_course;"
+        },
+        "startedAt": 1771804254147,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: Error validating query: WITH __query_result AS (\nWITH student_scores AS (\n  SELECT\n    c.id AS course_id,\n    c.credits AS credits,\n    g.id AS grade_id,\n    (\n      (COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0))\n      / NULLIF(\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\n          + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\n          + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\n        , 0)\n    )::numeric AS student_score\n  FROM public.courses c\n  JOIN public.course_sections cs ON cs.course_id = c.id\n  JOIN public.enrollments e ON e.course_section_id = cs.id\n  JOIN public.grades g ON g.enrollment_id = e.id\n  WHERE (\n    (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\n    + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\n    + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\n  ) > 0\n),\nper_course AS (\n  SELECT\n    course_id,\n    credits,\n    AVG(student_score) AS avg_grade,\n    STDDEV_POP(student_score) AS stddev_grade,\n    COUNT(*) AS n_grades\n  FROM student_scores\n  GROUP BY course_id, credits\n)\nSELECT\n  COUNT(*) AS courses_with_numeric_grades,\n  AVG(avg_grade) AS overall_avg_grade,\n  STDDEV_POP(avg_grade) AS overall_stddev_avg_grade,\n  CORR(avg_grade, credits) AS pearson_corr_credits_avg_grade,\n  (SELECT COUNT(*) FROM public.courses) AS total_courses\nFROM per_course\n),\n__limited AS (\n  SELECT * FROM __query_result LIMIT 501\n),\n__payload AS (\n  SELECT json_build_object(\n    'rows', COALESCE((SELECT json_agg(to_jsonb(__limited)) FROM __limited), '[]'::json)\n  ) AS data\n)\nSELECT encode(convert_to((SELECT data::text FROM __payload), 'UTF8'), 'hex') AS __payload_hex",
+          "name": "Error"
+        },
+        "endedAt": 1771804254169
+      }
+    },
+    "input": {
+      "question": "Is there a relationship between course credits and average grade?"
+    },
+    "error": {
+      "message": "SQL execution failed: Error validating query: WITH __query_result AS (\nWITH student_scores AS (\n  SELECT\n    c.id AS course_id,\n    c.credits AS credits,\n    g.id AS grade_id,\n    (\n      (COALESCE(g.exam_score, 0) + COALESCE(g.project_score, 0) + COALESCE(g.attendance_score, 0))\n      / NULLIF(\n          (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\n          + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\n          + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\n        , 0)\n    )::numeric AS student_score\n  FROM public.courses c\n  JOIN public.course_sections cs ON cs.course_id = c.id\n  JOIN public.enrollments e ON e.course_section_id = cs.id\n  JOIN public.grades g ON g.enrollment_id = e.id\n  WHERE (\n    (CASE WHEN g.exam_score IS NOT NULL THEN 1 ELSE 0 END)\n    + (CASE WHEN g.project_score IS NOT NULL THEN 1 ELSE 0 END)\n    + (CASE WHEN g.attendance_score IS NOT NULL THEN 1 ELSE 0 END)\n  ) > 0\n),\nper_course AS (\n  SELECT\n    course_id,\n    credits,\n    AVG(student_score) AS avg_grade,\n    STDDEV_POP(student_score) AS stddev_grade,\n    COUNT(*) AS n_grades\n  FROM student_scores\n  GROUP BY course_id, credits\n)\nSELECT\n  COUNT(*) AS courses_with_numeric_grades,\n  AVG(avg_grade) AS overall_avg_grade,\n  STDDEV_POP(avg_grade) AS overall_stddev_avg_grade,\n  CORR(avg_grade, credits) AS pearson_corr_credits_avg_grade,\n  (SELECT COUNT(*) FROM public.courses) AS total_courses\nFROM per_course\n),\n__limited AS (\n  SELECT * FROM __query_result LIMIT 501\n),\n__payload AS (\n  SELECT json_build_object(\n    'rows', COALESCE((SELECT json_agg(to_jsonb(__limited)) FROM __limited), '[]'::json)\n  ) AS data\n)\nSELECT encode(convert_to((SELECT data::text FROM __payload), 'UTF8'), 'hex') AS __payload_hex",
+      "name": "Error"
+    },
+    "traceId": "7fa4786a47552e9c930788bff0199128"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:50:54.176Z",
+    "traceId": "7fa4786a47552e9c930788bff0199128",
+    "attempts": 3,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 15893,
+      "outputTokens": 3066,
+      "totalTokens": 18959,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2048,
+      "costUsd": 0.01010525
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 15893,
+        "outputTokens": 3066,
+        "totalTokens": 18959,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2048,
+        "costUsd": 0.01010525
+      }
+    ],
+    "warnings": []
+  }
+}

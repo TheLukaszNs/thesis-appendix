@@ -1,0 +1,322 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "student-age-distribution",
+  "caseDirectory": "student-age-distribution",
+  "repeatIndex": 1,
+  "prompt": "Show the age distribution of students",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the age distribution of students"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:07:53.682Z",
+    "endedAtUtc": "2026-02-23T14:08:10.269Z",
+    "durationMs": 16587
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "8002",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:08:10 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show the age distribution of students\"},\"sql\":{\"payload\":{\"question\":\"Show the age distribution of students\"},\"startedAt\":1771855673691,\"status\":\"success\",\"output\":{\"reasoning\":\"The students table has a date_of_birth column. To show age distribution, I'll calculate age from date_of_birth (using CURRENT_DATE) and group students by age ranges to show the distribution. This provides a clear view of how students are distributed across different age groups.\",\"sql\":\"\\nSELECT \\n  EXTRACT(YEAR FROM AGE(CURRENT_DATE, date_of_birth))::INTEGER AS age,\\n  COUNT(*) AS student_count\\nFROM students\\nWHERE date_of_birth IS NOT NULL\\nGROUP BY EXTRACT(YEAR FROM AGE(CURRENT_DATE, date_of_birth))::INTEGER\\nORDER BY age ASC\\n\",\"assumptions\":[\"date_of_birth is available and populated for students\",\"Age is calculated as the difference in years between current date and date of birth\",\"Only students with non-null date_of_birth are included in the distribution\"]},\"endedAt\":1771855687214},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  EXTRACT(YEAR FROM AGE(CURRENT_DATE, date_of_birth))::INTEGER AS age,\\n  COUNT(*) AS student_count\\nFROM students\\nWHERE date_of_birth IS NOT NULL\\nGROUP BY EXTRACT(YEAR FROM AGE(CURRENT_DATE, date_of_birth))::INTEGER\\nORDER BY age ASC\\n\"},\"startedAt\":1771855687218,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  EXTRACT(YEAR FROM AGE(CURRENT_DATE, date_of_birth))::INTEGER AS age,\\n  COUNT(*) AS student_count\\nFROM students\\nWHERE date_of_birth IS NOT NULL\\nGROUP BY EXTRACT(YEAR FROM AGE(CURRENT_DATE, date_of_birth))::INTEGER\\nORDER BY age ASC\",\"metadata\":{\"columns\":[\"age\",\"student_count\"],\"rowCount\":13,\"sample\":[{\"age\":18,\"student_count\":\"7\"},{\"age\":19,\"student_count\":\"9\"}]},\"data\":[{\"age\":18,\"student_count\":\"7\"},{\"age\":19,\"student_count\":\"9\"},{\"age\":20,\"student_count\":\"2\"},{\"age\":21,\"student_count\":\"7\"},{\"age\":22,\"student_count\":\"7\"},{\"age\":23,\"student_count\":\"12\"},{\"age\":24,\"student_count\":\"14\"},{\"age\":25,\"student_count\":\"8\"},{\"age\":26,\"student_count\":\"6\"},{\"age\":27,\"student_count\":\"10\"},{\"age\":28,\"student_count\":\"6\"},{\"age\":29,\"student_count\":\"7\"},{\"age\":30,\"student_count\":\"10\"}]},\"endedAt\":1771855687225},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  EXTRACT(YEAR FROM AGE(CURRENT_DATE, date_of_birth))::INTEGER AS age,\\n  COUNT(*) AS student_count\\nFROM students\\nWHERE date_of_birth IS NOT NULL\\nGROUP BY EXTRACT(YEAR FROM AGE(CURRENT_DATE, date_of_birth))::INTEGER\\nORDER BY age ASC\",\"metadata\":{\"columns\":[\"age\",\"student_count\"],\"rowCount\":13,\"sample\":[{\"age\":18,\"student_count\":\"7\"},{\"age\":19,\"student_count\":\"9\"}]},\"data\":[{\"age\":18,\"student_count\":\"7\"},{\"age\":19,\"student_count\":\"9\"},{\"age\":20,\"student_count\":\"2\"},{\"age\":21,\"student_count\":\"7\"},{\"age\":22,\"student_count\":\"7\"},{\"age\":23,\"student_count\":\"12\"},{\"age\":24,\"student_count\":\"14\"},{\"age\":25,\"student_count\":\"8\"},{\"age\":26,\"student_count\":\"6\"},{\"age\":27,\"student_count\":\"10\"},{\"age\":28,\"student_count\":\"6\"},{\"age\":29,\"student_count\":\"7\"},{\"age\":30,\"student_count\":\"10\"}]},\"startedAt\":1771855687227,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Age Distribution of Students\",\"description\":\"Distribution of students by age\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"age\",\"type\":\"ordinal\",\"title\":\"Age (years)\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Number of Students\"},\"tooltip\":[{\"field\":\"age\",\"type\":\"ordinal\",\"title\":\"Age\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]},\"width\":600,\"height\":400},\"reasoning\":\"A bar chart is ideal for showing the age distribution of students. Each bar represents an age group with its corresponding student count. The ordinal x-axis displays ages in ascending order, while the quantitative y-axis shows the number of students. Tooltips provide detailed information on hover.\"},\"endedAt\":1771855690247},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Age Distribution of Students\",\"description\":\"Distribution of students by age\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"age\",\"type\":\"ordinal\",\"title\":\"Age (years)\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Number of Students\"},\"tooltip\":[{\"field\":\"age\",\"type\":\"ordinal\",\"title\":\"Age\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]},\"width\":600,\"height\":400},\"reasoning\":\"A bar chart is ideal for showing the age distribution of students. Each bar represents an age group with its corresponding student count. The ordinal x-axis displays ages in ascending order, while the quantitative y-axis shows the number of students. Tooltips provide detailed information on hover.\"},\"startedAt\":1771855690251,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT \\n  EXTRACT(YEAR FROM AGE(CURRENT_DATE, date_of_birth))::INTEGER AS age,\\n  COUNT(*) AS student_count\\nFROM students\\nWHERE date_of_birth IS NOT NULL\\nGROUP BY EXTRACT(YEAR FROM AGE(CURRENT_DATE, date_of_birth))::INTEGER\\nORDER BY age ASC\\n\",\"data\":[{\"age\":18,\"student_count\":\"7\"},{\"age\":19,\"student_count\":\"9\"},{\"age\":20,\"student_count\":\"2\"},{\"age\":21,\"student_count\":\"7\"},{\"age\":22,\"student_count\":\"7\"},{\"age\":23,\"student_count\":\"12\"},{\"age\":24,\"student_count\":\"14\"},{\"age\":25,\"student_count\":\"8\"},{\"age\":26,\"student_count\":\"6\"},{\"age\":27,\"student_count\":\"10\"},{\"age\":28,\"student_count\":\"6\"},{\"age\":29,\"student_count\":\"7\"},{\"age\":30,\"student_count\":\"10\"}],\"metadata\":{\"columns\":[\"age\",\"student_count\"],\"rowCount\":13,\"sample\":[{\"age\":18,\"student_count\":\"7\"},{\"age\":19,\"student_count\":\"9\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Age Distribution of Students\",\"description\":\"Distribution of students by age\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"age\",\"type\":\"ordinal\",\"title\":\"Age (years)\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Number of Students\"},\"tooltip\":[{\"field\":\"age\",\"type\":\"ordinal\",\"title\":\"Age\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]},\"width\":600,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855690254}},\"input\":{\"question\":\"Show the age distribution of students\"},\"result\":{\"sql\":\"\\nSELECT \\n  EXTRACT(YEAR FROM AGE(CURRENT_DATE, date_of_birth))::INTEGER AS age,\\n  COUNT(*) AS student_count\\nFROM students\\nWHERE date_of_birth IS NOT NULL\\nGROUP BY EXTRACT(YEAR FROM AGE(CURRENT_DATE, date_of_birth))::INTEGER\\nORDER BY age ASC\\n\",\"data\":[{\"age\":18,\"student_count\":\"7\"},{\"age\":19,\"student_count\":\"9\"},{\"age\":20,\"student_count\":\"2\"},{\"age\":21,\"student_count\":\"7\"},{\"age\":22,\"student_count\":\"7\"},{\"age\":23,\"student_count\":\"12\"},{\"age\":24,\"student_count\":\"14\"},{\"age\":25,\"student_count\":\"8\"},{\"age\":26,\"student_count\":\"6\"},{\"age\":27,\"student_count\":\"10\"},{\"age\":28,\"student_count\":\"6\"},{\"age\":29,\"student_count\":\"7\"},{\"age\":30,\"student_count\":\"10\"}],\"metadata\":{\"columns\":[\"age\",\"student_count\"],\"rowCount\":13,\"sample\":[{\"age\":18,\"student_count\":\"7\"},{\"age\":19,\"student_count\":\"9\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Age Distribution of Students\",\"description\":\"Distribution of students by age\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"age\",\"type\":\"ordinal\",\"title\":\"Age (years)\",\"axis\":{\"labelAngle\":0}},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Number of Students\"},\"tooltip\":[{\"field\":\"age\",\"type\":\"ordinal\",\"title\":\"Age\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]},\"width\":600,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"f734af1f19d53f4d6cd0c8d08f771eab\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/student-age-distribution/run-0001/run.json",
+    "queryPath": "runs/student-age-distribution/run-0001/query.sql",
+    "vegaRawPath": "runs/student-age-distribution/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/student-age-distribution/run-0001/vega.resolved.json",
+    "imagePath": "runs/student-age-distribution/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:08:10.685Z",
+  "traceId": "f734af1f19d53f4d6cd0c8d08f771eab",
+  "success": true,
+  "durationMs": 17003,
+  "resultRaw": {
+    "data": [
+      {
+        "age": 18,
+        "student_count": "7"
+      },
+      {
+        "age": 19,
+        "student_count": "9"
+      },
+      {
+        "age": 20,
+        "student_count": "2"
+      },
+      {
+        "age": 21,
+        "student_count": "7"
+      },
+      {
+        "age": 22,
+        "student_count": "7"
+      },
+      {
+        "age": 23,
+        "student_count": "12"
+      },
+      {
+        "age": 24,
+        "student_count": "14"
+      },
+      {
+        "age": 25,
+        "student_count": "8"
+      },
+      {
+        "age": 26,
+        "student_count": "6"
+      },
+      {
+        "age": 27,
+        "student_count": "10"
+      },
+      {
+        "age": 28,
+        "student_count": "6"
+      },
+      {
+        "age": 29,
+        "student_count": "7"
+      },
+      {
+        "age": 30,
+        "student_count": "10"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Age Distribution of Students",
+      "description": "Distribution of students by age",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "age",
+          "type": "ordinal",
+          "title": "Age (years)",
+          "axis": {
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "student_count",
+          "type": "quantitative",
+          "title": "Number of Students"
+        },
+        "tooltip": [
+          {
+            "field": "age",
+            "type": "ordinal",
+            "title": "Age"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Student Count"
+          }
+        ]
+      },
+      "width": 600,
+      "height": 400
+    },
+    "sql": "\nSELECT \n  EXTRACT(YEAR FROM AGE(CURRENT_DATE, date_of_birth))::INTEGER AS age,\n  COUNT(*) AS student_count\nFROM students\nWHERE date_of_birth IS NOT NULL\nGROUP BY EXTRACT(YEAR FROM AGE(CURRENT_DATE, date_of_birth))::INTEGER\nORDER BY age ASC\n",
+    "metadata": {
+      "columns": [
+        "age",
+        "student_count"
+      ],
+      "rowCount": 13,
+      "sample": [
+        {
+          "age": 18,
+          "student_count": "7"
+        },
+        {
+          "age": 19,
+          "student_count": "9"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "age": 18,
+        "student_count": "7"
+      },
+      {
+        "age": 19,
+        "student_count": "9"
+      },
+      {
+        "age": 20,
+        "student_count": "2"
+      },
+      {
+        "age": 21,
+        "student_count": "7"
+      },
+      {
+        "age": 22,
+        "student_count": "7"
+      },
+      {
+        "age": 23,
+        "student_count": "12"
+      },
+      {
+        "age": 24,
+        "student_count": "14"
+      },
+      {
+        "age": 25,
+        "student_count": "8"
+      },
+      {
+        "age": 26,
+        "student_count": "6"
+      },
+      {
+        "age": 27,
+        "student_count": "10"
+      },
+      {
+        "age": 28,
+        "student_count": "6"
+      },
+      {
+        "age": 29,
+        "student_count": "7"
+      },
+      {
+        "age": 30,
+        "student_count": "10"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Age Distribution of Students",
+      "description": "Distribution of students by age",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "age",
+          "type": "ordinal",
+          "title": "Age (years)",
+          "axis": {
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "student_count",
+          "type": "quantitative",
+          "title": "Number of Students"
+        },
+        "tooltip": [
+          {
+            "field": "age",
+            "type": "ordinal",
+            "title": "Age"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Student Count"
+          }
+        ]
+      },
+      "width": 600,
+      "height": 400
+    },
+    "sql": "\nSELECT \n  EXTRACT(YEAR FROM AGE(CURRENT_DATE, date_of_birth))::INTEGER AS age,\n  COUNT(*) AS student_count\nFROM students\nWHERE date_of_birth IS NOT NULL\nGROUP BY EXTRACT(YEAR FROM AGE(CURRENT_DATE, date_of_birth))::INTEGER\nORDER BY age ASC\n",
+    "metadata": {
+      "columns": [
+        "age",
+        "student_count"
+      ],
+      "rowCount": 13,
+      "sample": [
+        {
+          "age": 18,
+          "student_count": "7"
+        },
+        {
+          "age": 19,
+          "student_count": "9"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.424Z",
+    "traceId": "f734af1f19d53f4d6cd0c8d08f771eab",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 10250,
+      "outputTokens": 738,
+      "totalTokens": 10988,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.01394
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 10250,
+        "outputTokens": 738,
+        "totalTokens": 10988,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.01394
+      }
+    ],
+    "warnings": []
+  }
+}

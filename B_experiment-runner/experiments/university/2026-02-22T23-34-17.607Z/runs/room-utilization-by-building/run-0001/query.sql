@@ -1,0 +1,1 @@
+SELECT b.building AS building, COUNT(cs.id) AS section_count FROM public.classrooms b LEFT JOIN public.course_sections cs ON cs.classroom_id = b.id GROUP BY b.building ORDER BY section_count DESC, b.building ASC;

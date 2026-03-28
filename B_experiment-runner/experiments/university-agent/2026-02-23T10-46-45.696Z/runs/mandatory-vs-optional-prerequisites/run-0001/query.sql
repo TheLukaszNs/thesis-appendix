@@ -1,0 +1,1 @@
+SELECT CASE WHEN is_mandatory = TRUE THEN 'Mandatory' WHEN is_mandatory = FALSE THEN 'Optional' ELSE 'Unknown' END AS prerequisite_kind, COUNT(*) AS prerequisite_count FROM prerequisites GROUP BY 1 ORDER BY prerequisite_count DESC;

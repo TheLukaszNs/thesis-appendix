@@ -1,0 +1,179 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "course-type-per-department",
+  "caseDirectory": "course-type-per-department",
+  "repeatIndex": 1,
+  "prompt": "Show the breakdown of course types for each department",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the breakdown of course types for each department"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:53:43.928Z",
+    "endedAtUtc": "2026-02-23T10:54:11.801Z",
+    "durationMs": 27873
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2599",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:54:11 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Show the breakdown of course types for each department\"},\"agent\":{\"payload\":{\"question\":\"Show the breakdown of course types for each department\"},\"startedAt\":1771844023933,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  department AS department,\\n  course_type AS course_type,\\n  COUNT(course_id) AS course_count,\\n  SUM(COUNT(course_id)) OVER (PARTITION BY department) AS dept_total,\\n  ROUND(100.0 * COUNT(course_id) / SUM(COUNT(course_id)) OVER (PARTITION BY department), 1) AS percent_of_department\\nFROM courses\\nGROUP BY department, course_type\\nORDER BY department, course_count DESC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Stacked normalized bar chart showing the breakdown of course types within each department.\",\"title\":\"Course Type Breakdown by Department\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"department\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\"}},\"y\":{\"field\":\"course_count\",\"type\":\"quantitative\",\"stack\":\"normalize\",\"axis\":{\"title\":\"Percentage of Department\",\"format\":\"%\"}},\"color\":{\"field\":\"course_type\",\"type\":\"nominal\",\"legend\":{\"title\":\"Course Type\"}},\"tooltip\":[{\"field\":\"department\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"percent_of_department\",\"type\":\"quantitative\",\"title\":\"% of Department\",\"format\":\".1f\"}]}}},\"endedAt\":1771844051736},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  department AS department,\\n  course_type AS course_type,\\n  COUNT(course_id) AS course_count,\\n  SUM(COUNT(course_id)) OVER (PARTITION BY department) AS dept_total,\\n  ROUND(100.0 * COUNT(course_id) / SUM(COUNT(course_id)) OVER (PARTITION BY department), 1) AS percent_of_department\\nFROM courses\\nGROUP BY department, course_type\\nORDER BY department, course_count DESC;\"},\"startedAt\":1771844051738,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column \\\"department\\\" does not exist\\nLINE 3:   department AS department,\\n          ^\\nHINT:  Perhaps you meant to reference the column \\\"courses.department_id\\\".\",\"name\":\"Error\"},\"endedAt\":1771844051796}},\"input\":{\"question\":\"Show the breakdown of course types for each department\"},\"error\":{\"message\":\"SQL execution failed: column \\\"department\\\" does not exist\\nLINE 3:   department AS department,\\n          ^\\nHINT:  Perhaps you meant to reference the column \\\"courses.department_id\\\".\",\"name\":\"Error\"},\"traceId\":\"7cf882dd2ecb62c2f35b8309df7b9f38\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/course-type-per-department/run-0001/run.json",
+    "queryPath": "runs/course-type-per-department/run-0001/query.sql",
+    "vegaRawPath": "runs/course-type-per-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/course-type-per-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/course-type-per-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:54:11.801Z",
+  "traceId": "7cf882dd2ecb62c2f35b8309df7b9f38",
+  "success": false,
+  "durationMs": 27873,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Show the breakdown of course types for each department"
+      },
+      "agent": {
+        "payload": {
+          "question": "Show the breakdown of course types for each department"
+        },
+        "startedAt": 1771844023933,
+        "status": "success",
+        "output": {
+          "sql": "SELECT\n  department AS department,\n  course_type AS course_type,\n  COUNT(course_id) AS course_count,\n  SUM(COUNT(course_id)) OVER (PARTITION BY department) AS dept_total,\n  ROUND(100.0 * COUNT(course_id) / SUM(COUNT(course_id)) OVER (PARTITION BY department), 1) AS percent_of_department\nFROM courses\nGROUP BY department, course_type\nORDER BY department, course_count DESC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Stacked normalized bar chart showing the breakdown of course types within each department.",
+            "title": "Course Type Breakdown by Department",
+            "data": {
+              "name": "query_result"
+            },
+            "mark": {
+              "type": "bar"
+            },
+            "encoding": {
+              "x": {
+                "field": "department",
+                "type": "nominal",
+                "axis": {
+                  "title": "Department"
+                }
+              },
+              "y": {
+                "field": "course_count",
+                "type": "quantitative",
+                "stack": "normalize",
+                "axis": {
+                  "title": "Percentage of Department",
+                  "format": "%"
+                }
+              },
+              "color": {
+                "field": "course_type",
+                "type": "nominal",
+                "legend": {
+                  "title": "Course Type"
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "department",
+                  "type": "nominal",
+                  "title": "Department"
+                },
+                {
+                  "field": "course_type",
+                  "type": "nominal",
+                  "title": "Course Type"
+                },
+                {
+                  "field": "course_count",
+                  "type": "quantitative",
+                  "title": "Count"
+                },
+                {
+                  "field": "percent_of_department",
+                  "type": "quantitative",
+                  "title": "% of Department",
+                  "format": ".1f"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771844051736
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT\n  department AS department,\n  course_type AS course_type,\n  COUNT(course_id) AS course_count,\n  SUM(COUNT(course_id)) OVER (PARTITION BY department) AS dept_total,\n  ROUND(100.0 * COUNT(course_id) / SUM(COUNT(course_id)) OVER (PARTITION BY department), 1) AS percent_of_department\nFROM courses\nGROUP BY department, course_type\nORDER BY department, course_count DESC;"
+        },
+        "startedAt": 1771844051738,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column \"department\" does not exist\nLINE 3:   department AS department,\n          ^\nHINT:  Perhaps you meant to reference the column \"courses.department_id\".",
+          "name": "Error"
+        },
+        "endedAt": 1771844051796
+      }
+    },
+    "input": {
+      "question": "Show the breakdown of course types for each department"
+    },
+    "error": {
+      "message": "SQL execution failed: column \"department\" does not exist\nLINE 3:   department AS department,\n          ^\nHINT:  Perhaps you meant to reference the column \"courses.department_id\".",
+      "name": "Error"
+    },
+    "traceId": "7cf882dd2ecb62c2f35b8309df7b9f38"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:54:11.801Z",
+    "traceId": "7cf882dd2ecb62c2f35b8309df7b9f38",
+    "attempts": 6,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 265,
+      "outputTokens": 1798,
+      "totalTokens": 2063,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1344,
+      "costUsd": 0.00366225
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 265,
+        "outputTokens": 1798,
+        "totalTokens": 2063,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1344,
+        "costUsd": 0.00366225
+      }
+    ],
+    "warnings": []
+  }
+}

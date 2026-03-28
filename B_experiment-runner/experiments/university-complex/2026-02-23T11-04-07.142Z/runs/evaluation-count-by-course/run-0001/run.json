@@ -1,0 +1,376 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "evaluation-count-by-course",
+  "caseDirectory": "evaluation-count-by-course",
+  "repeatIndex": 1,
+  "prompt": "How many evaluations were submitted for each course?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many evaluations were submitted for each course?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:24:34.144Z",
+    "endedAtUtc": "2026-02-23T11:26:04.902Z",
+    "durationMs": 90758
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "28168",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:26:04 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How many evaluations were submitted for each course?\"},\"planner\":{\"payload\":{\"question\":\"How many evaluations were submitted for each course?\"},\"startedAt\":1771845874153,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(course_evaluations.id)\"],\"dimensions\":[\"course_sections.course_id\"],\"filters\":[],\"grain\":\"per course (grouped by course_id)\",\"aliases\":{\"course_sections.course_id\":\"course_id\",\"COUNT(course_evaluations.id)\":\"evaluations_count\"},\"output_fields\":[\"course_id\",\"evaluations_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_id\",\"y_axis\":\"evaluations_count\",\"title\":\"Evaluations submitted per course\"},\"assumptions\":[\"Traversal used to associate an evaluation to a course: course_evaluations.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id. These columns and FKs were confirmed in the preflight schema inspection.\",\"The plan groups counts by course_sections.course_id (course_id). I did not include course names because the courses table structure/columns were not inspected in this run; if a human-readable course title is required, the courses table should be inspected and joined.\",\"All rows in course_evaluations represent one submitted evaluation. The metric COUNT(course_evaluations.id) counts each evaluation row; if multiple evaluations per enrollment are present they will be counted separately.\",\"Use inner joins in SQL so only evaluations connected through enrollments and course_sections are counted; any evaluation records with missing or broken foreign keys will be excluded.\",\"Aggregation is across all sections, semesters, and academic years (no further time or section filters applied).\"]}},\"endedAt\":1771845917081},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(course_evaluations.id)\"],\"dimensions\":[\"course_sections.course_id\"],\"filters\":[],\"grain\":\"per course (grouped by course_id)\",\"aliases\":{\"course_sections.course_id\":\"course_id\",\"COUNT(course_evaluations.id)\":\"evaluations_count\"},\"output_fields\":[\"course_id\",\"evaluations_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_id\",\"y_axis\":\"evaluations_count\",\"title\":\"Evaluations submitted per course\"},\"assumptions\":[\"Traversal used to associate an evaluation to a course: course_evaluations.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id. These columns and FKs were confirmed in the preflight schema inspection.\",\"The plan groups counts by course_sections.course_id (course_id). I did not include course names because the courses table structure/columns were not inspected in this run; if a human-readable course title is required, the courses table should be inspected and joined.\",\"All rows in course_evaluations represent one submitted evaluation. The metric COUNT(course_evaluations.id) counts each evaluation row; if multiple evaluations per enrollment are present they will be counted separately.\",\"Use inner joins in SQL so only evaluations connected through enrollments and course_sections are counted; any evaluation records with missing or broken foreign keys will be excluded.\",\"Aggregation is across all sections, semesters, and academic years (no further time or section filters applied).\"]}},\"startedAt\":1771845917091,\"status\":\"success\",\"output\":{\"question\":\"How many evaluations were submitted for each course?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(course_evaluations.id)\"],\"dimensions\":[\"course_sections.course_id\"],\"filters\":[],\"grain\":\"per course (grouped by course_id)\",\"aliases\":{\"course_sections.course_id\":\"course_id\",\"COUNT(course_evaluations.id)\":\"evaluations_count\"},\"output_fields\":[\"course_id\",\"evaluations_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_id\",\"y_axis\":\"evaluations_count\",\"title\":\"Evaluations submitted per course\"},\"assumptions\":[\"Traversal used to associate an evaluation to a course: course_evaluations.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id. These columns and FKs were confirmed in the preflight schema inspection.\",\"The plan groups counts by course_sections.course_id (course_id). I did not include course names because the courses table structure/columns were not inspected in this run; if a human-readable course title is required, the courses table should be inspected and joined.\",\"All rows in course_evaluations represent one submitted evaluation. The metric COUNT(course_evaluations.id) counts each evaluation row; if multiple evaluations per enrollment are present they will be counted separately.\",\"Use inner joins in SQL so only evaluations connected through enrollments and course_sections are counted; any evaluation records with missing or broken foreign keys will be excluded.\",\"Aggregation is across all sections, semesters, and academic years (no further time or section filters applied).\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771845917093},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"How many evaluations were submitted for each course?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(course_evaluations.id)\"],\"dimensions\":[\"course_sections.course_id\"],\"filters\":[],\"grain\":\"per course (grouped by course_id)\",\"aliases\":{\"course_sections.course_id\":\"course_id\",\"COUNT(course_evaluations.id)\":\"evaluations_count\"},\"output_fields\":[\"course_id\",\"evaluations_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_id\",\"y_axis\":\"evaluations_count\",\"title\":\"Evaluations submitted per course\"},\"assumptions\":[\"Traversal used to associate an evaluation to a course: course_evaluations.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id. These columns and FKs were confirmed in the preflight schema inspection.\",\"The plan groups counts by course_sections.course_id (course_id). I did not include course names because the courses table structure/columns were not inspected in this run; if a human-readable course title is required, the courses table should be inspected and joined.\",\"All rows in course_evaluations represent one submitted evaluation. The metric COUNT(course_evaluations.id) counts each evaluation row; if multiple evaluations per enrollment are present they will be counted separately.\",\"Use inner joins in SQL so only evaluations connected through enrollments and course_sections are counted; any evaluation records with missing or broken foreign keys will be excluded.\",\"Aggregation is across all sections, semesters, and academic years (no further time or section filters applied).\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771845917099,\"status\":\"success\",\"output\":{\"question\":\"How many evaluations were submitted for each course?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(course_evaluations.id)\"],\"dimensions\":[\"course_sections.course_id\"],\"filters\":[],\"grain\":\"per course (grouped by course_id)\",\"aliases\":{\"course_sections.course_id\":\"course_id\",\"COUNT(course_evaluations.id)\":\"evaluations_count\"},\"output_fields\":[\"course_id\",\"evaluations_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_id\",\"y_axis\":\"evaluations_count\",\"title\":\"Evaluations submitted per course\"},\"assumptions\":[\"Traversal used to associate an evaluation to a course: course_evaluations.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id. These columns and FKs were confirmed in the preflight schema inspection.\",\"The plan groups counts by course_sections.course_id (course_id). I did not include course names because the courses table structure/columns were not inspected in this run; if a human-readable course title is required, the courses table should be inspected and joined.\",\"All rows in course_evaluations represent one submitted evaluation. The metric COUNT(course_evaluations.id) counts each evaluation row; if multiple evaluations per enrollment are present they will be counted separately.\",\"Use inner joins in SQL so only evaluations connected through enrollments and course_sections are counted; any evaluation records with missing or broken foreign keys will be excluded.\",\"Aggregation is across all sections, semesters, and academic years (no further time or section filters applied).\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT\\n  cs.course_id AS course_id,\\n  COUNT(ce.id) AS evaluations_count\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.course_id\\nORDER BY cs.course_id ASC;\",\"validationIssues\":[\"course_id values appear to be UUIDs (metadata sample). Using raw course_id is correct per SQL but not human-friendly — consider joining courses to show course names/titles.\",\"The Vega-Lite encoding does not declare any aggregate — this is OK because the query returns pre-aggregated rows, but ensure the visualization layer treats the data as already-aggregated to avoid double-aggregation.\",\"Color is mapped to evaluations_count (quantitative) with the legend disabled; this is redundant with the y-axis and adds little information — consider removing color encoding or enabling a legend if intended.\",\"If there are many courses (rowCount=16 in metadata), the chart may become crowded; consider sorting bars (e.g., by evaluations_count) or limiting to top N courses for readability.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Preflight confirmed the required tables and columns (course_evaluations.enrollment_id, enrollments.course_section_id, course_sections.course_id). Use inner joins and group by course_id; order deterministically by course_id.\",\"sql\":\"SELECT\\n  cs.course_id AS course_id,\\n  COUNT(ce.id) AS evaluations_count\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.course_id\\nORDER BY cs.course_id ASC;\",\"assumptions\":[\"course_evaluations.enrollment_id -> enrollments.id, enrollments.course_section_id -> course_sections.id, and course_sections.course_id exist (confirmed in preflight).\",\"Each row in course_evaluations represents one submitted evaluation; COUNT(ce.id) counts evaluations.\",\"Inner joins are intentional so evaluations without matching enrollment or course_section are excluded.\",\"Aggregation spans all sections/semesters/years (no time or section filters applied).\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT\\n  cs.course_id AS course_id,\\n  COUNT(ce.id) AS evaluations_count\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.course_id\\nORDER BY cs.course_id ASC\",\"metadata\":{\"columns\":[\"course_id\",\"evaluations_count\"],\"rowCount\":16,\"sample\":[{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"evaluations_count\":2},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"evaluations_count\":1}]},\"data\":[{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"evaluations_count\":2},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"evaluations_count\":1},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"evaluations_count\":2},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"evaluations_count\":4},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"evaluations_count\":2},{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"evaluations_count\":1},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"evaluations_count\":3},{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"evaluations_count\":2},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"evaluations_count\":4},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"evaluations_count\":4},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"evaluations_count\":3},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"evaluations_count\":4},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"evaluations_count\":2},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"evaluations_count\":1},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"evaluations_count\":1},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"evaluations_count\":5}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Evaluations submitted per course\",\"width\":700,\"height\":360,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"course_id\",\"type\":\"nominal\",\"axis\":{\"title\":\"course_id\",\"labelAngle\":-40}},\"y\":{\"field\":\"evaluations_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"evaluations_count\"}},\"color\":{\"field\":\"evaluations_count\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"course_id\"},{\"field\":\"evaluations_count\",\"type\":\"quantitative\",\"title\":\"evaluations_count\"}]}},\"reasoning\":\"Bar chart showing the count of evaluation records grouped by course_id. course_id and evaluations_count are taken directly from the query result; tooltip provides exact values.\"},\"validation\":{\"passed\":true,\"score\":0.7,\"issues\":[\"course_id values appear to be UUIDs (metadata sample). Using raw course_id is correct per SQL but not human-friendly — consider joining courses to show course names/titles.\",\"The Vega-Lite encoding does not declare any aggregate — this is OK because the query returns pre-aggregated rows, but ensure the visualization layer treats the data as already-aggregated to avoid double-aggregation.\",\"Color is mapped to evaluations_count (quantitative) with the legend disabled; this is redundant with the y-axis and adds little information — consider removing color encoding or enabling a legend if intended.\",\"If there are many courses (rowCount=16 in metadata), the chart may become crowded; consider sorting bars (e.g., by evaluations_count) or limiting to top N courses for readability.\"]}}},\"endedAt\":1771845964876,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"How many evaluations were submitted for each course?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(course_evaluations.id)\"],\"dimensions\":[\"course_sections.course_id\"],\"filters\":[],\"grain\":\"per course (grouped by course_id)\",\"aliases\":{\"course_sections.course_id\":\"course_id\",\"COUNT(course_evaluations.id)\":\"evaluations_count\"},\"output_fields\":[\"course_id\",\"evaluations_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_id\",\"y_axis\":\"evaluations_count\",\"title\":\"Evaluations submitted per course\"},\"assumptions\":[\"Traversal used to associate an evaluation to a course: course_evaluations.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id. These columns and FKs were confirmed in the preflight schema inspection.\",\"The plan groups counts by course_sections.course_id (course_id). I did not include course names because the courses table structure/columns were not inspected in this run; if a human-readable course title is required, the courses table should be inspected and joined.\",\"All rows in course_evaluations represent one submitted evaluation. The metric COUNT(course_evaluations.id) counts each evaluation row; if multiple evaluations per enrollment are present they will be counted separately.\",\"Use inner joins in SQL so only evaluations connected through enrollments and course_sections are counted; any evaluation records with missing or broken foreign keys will be excluded.\",\"Aggregation is across all sections, semesters, and academic years (no further time or section filters applied).\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT\\n  cs.course_id AS course_id,\\n  COUNT(ce.id) AS evaluations_count\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.course_id\\nORDER BY cs.course_id ASC;\",\"validationIssues\":[\"course_id values appear to be UUIDs (metadata sample). Using raw course_id is correct per SQL but not human-friendly — consider joining courses to show course names/titles.\",\"The Vega-Lite encoding does not declare any aggregate — this is OK because the query returns pre-aggregated rows, but ensure the visualization layer treats the data as already-aggregated to avoid double-aggregation.\",\"Color is mapped to evaluations_count (quantitative) with the legend disabled; this is redundant with the y-axis and adds little information — consider removing color encoding or enabling a legend if intended.\",\"If there are many courses (rowCount=16 in metadata), the chart may become crowded; consider sorting bars (e.g., by evaluations_count) or limiting to top N courses for readability.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Preflight confirmed the required tables and columns (course_evaluations.enrollment_id, enrollments.course_section_id, course_sections.course_id). Use inner joins and group by course_id; order deterministically by course_id.\",\"sql\":\"SELECT\\n  cs.course_id AS course_id,\\n  COUNT(ce.id) AS evaluations_count\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.course_id\\nORDER BY cs.course_id ASC;\",\"assumptions\":[\"course_evaluations.enrollment_id -> enrollments.id, enrollments.course_section_id -> course_sections.id, and course_sections.course_id exist (confirmed in preflight).\",\"Each row in course_evaluations represents one submitted evaluation; COUNT(ce.id) counts evaluations.\",\"Inner joins are intentional so evaluations without matching enrollment or course_section are excluded.\",\"Aggregation spans all sections/semesters/years (no time or section filters applied).\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT\\n  cs.course_id AS course_id,\\n  COUNT(ce.id) AS evaluations_count\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.course_id\\nORDER BY cs.course_id ASC\",\"metadata\":{\"columns\":[\"course_id\",\"evaluations_count\"],\"rowCount\":16,\"sample\":[{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"evaluations_count\":2},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"evaluations_count\":1}]},\"data\":[{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"evaluations_count\":2},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"evaluations_count\":1},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"evaluations_count\":2},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"evaluations_count\":4},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"evaluations_count\":2},{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"evaluations_count\":1},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"evaluations_count\":3},{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"evaluations_count\":2},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"evaluations_count\":4},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"evaluations_count\":4},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"evaluations_count\":3},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"evaluations_count\":4},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"evaluations_count\":2},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"evaluations_count\":1},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"evaluations_count\":1},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"evaluations_count\":5}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Evaluations submitted per course\",\"width\":700,\"height\":360,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"course_id\",\"type\":\"nominal\",\"axis\":{\"title\":\"course_id\",\"labelAngle\":-40}},\"y\":{\"field\":\"evaluations_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"evaluations_count\"}},\"color\":{\"field\":\"evaluations_count\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"course_id\"},{\"field\":\"evaluations_count\",\"type\":\"quantitative\",\"title\":\"evaluations_count\"}]}},\"reasoning\":\"Bar chart showing the count of evaluation records grouped by course_id. course_id and evaluations_count are taken directly from the query result; tooltip provides exact values.\"},\"validation\":{\"passed\":true,\"score\":0.7,\"issues\":[\"course_id values appear to be UUIDs (metadata sample). Using raw course_id is correct per SQL but not human-friendly — consider joining courses to show course names/titles.\",\"The Vega-Lite encoding does not declare any aggregate — this is OK because the query returns pre-aggregated rows, but ensure the visualization layer treats the data as already-aggregated to avoid double-aggregation.\",\"Color is mapped to evaluations_count (quantitative) with the legend disabled; this is redundant with the y-axis and adds little information — consider removing color encoding or enabling a legend if intended.\",\"If there are many courses (rowCount=16 in metadata), the chart may become crowded; consider sorting bars (e.g., by evaluations_count) or limiting to top N courses for readability.\"]}}},\"startedAt\":1771845964880,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  cs.course_id AS course_id,\\n  COUNT(ce.id) AS evaluations_count\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.course_id\\nORDER BY cs.course_id ASC;\",\"data\":[{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"evaluations_count\":2},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"evaluations_count\":1},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"evaluations_count\":2},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"evaluations_count\":4},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"evaluations_count\":2},{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"evaluations_count\":1},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"evaluations_count\":3},{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"evaluations_count\":2},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"evaluations_count\":4},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"evaluations_count\":4},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"evaluations_count\":3},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"evaluations_count\":4},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"evaluations_count\":2},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"evaluations_count\":1},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"evaluations_count\":1},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"evaluations_count\":5}],\"metadata\":{\"columns\":[\"course_id\",\"evaluations_count\"],\"rowCount\":16,\"sample\":[{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"evaluations_count\":2},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"evaluations_count\":1}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Evaluations submitted per course\",\"width\":700,\"height\":360,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"course_id\",\"type\":\"nominal\",\"axis\":{\"title\":\"course_id\",\"labelAngle\":-40}},\"y\":{\"field\":\"evaluations_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"evaluations_count\"}},\"color\":{\"field\":\"evaluations_count\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"course_id\"},{\"field\":\"evaluations_count\",\"type\":\"quantitative\",\"title\":\"evaluations_count\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.7,\"issues\":[\"course_id values appear to be UUIDs (metadata sample). Using raw course_id is correct per SQL but not human-friendly — consider joining courses to show course names/titles.\",\"The Vega-Lite encoding does not declare any aggregate — this is OK because the query returns pre-aggregated rows, but ensure the visualization layer treats the data as already-aggregated to avoid double-aggregation.\",\"Color is mapped to evaluations_count (quantitative) with the legend disabled; this is redundant with the y-axis and adds little information — consider removing color encoding or enabling a legend if intended.\",\"If there are many courses (rowCount=16 in metadata), the chart may become crowded; consider sorting bars (e.g., by evaluations_count) or limiting to top N courses for readability.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771845964882}},\"input\":{\"question\":\"How many evaluations were submitted for each course?\"},\"result\":{\"sql\":\"SELECT\\n  cs.course_id AS course_id,\\n  COUNT(ce.id) AS evaluations_count\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.course_id\\nORDER BY cs.course_id ASC;\",\"data\":[{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"evaluations_count\":2},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"evaluations_count\":1},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"evaluations_count\":2},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"evaluations_count\":4},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"evaluations_count\":2},{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"evaluations_count\":1},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"evaluations_count\":3},{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"evaluations_count\":2},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"evaluations_count\":4},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"evaluations_count\":4},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"evaluations_count\":3},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"evaluations_count\":4},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"evaluations_count\":2},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"evaluations_count\":1},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"evaluations_count\":1},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"evaluations_count\":5}],\"metadata\":{\"columns\":[\"course_id\",\"evaluations_count\"],\"rowCount\":16,\"sample\":[{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"evaluations_count\":2},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"evaluations_count\":1}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Evaluations submitted per course\",\"width\":700,\"height\":360,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"course_id\",\"type\":\"nominal\",\"axis\":{\"title\":\"course_id\",\"labelAngle\":-40}},\"y\":{\"field\":\"evaluations_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"evaluations_count\"}},\"color\":{\"field\":\"evaluations_count\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"course_id\"},{\"field\":\"evaluations_count\",\"type\":\"quantitative\",\"title\":\"evaluations_count\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.7,\"issues\":[\"course_id values appear to be UUIDs (metadata sample). Using raw course_id is correct per SQL but not human-friendly — consider joining courses to show course names/titles.\",\"The Vega-Lite encoding does not declare any aggregate — this is OK because the query returns pre-aggregated rows, but ensure the visualization layer treats the data as already-aggregated to avoid double-aggregation.\",\"Color is mapped to evaluations_count (quantitative) with the legend disabled; this is redundant with the y-axis and adds little information — consider removing color encoding or enabling a legend if intended.\",\"If there are many courses (rowCount=16 in metadata), the chart may become crowded; consider sorting bars (e.g., by evaluations_count) or limiting to top N courses for readability.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"d30ce2a8470431306727926110221c8f\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/evaluation-count-by-course/run-0001/run.json",
+    "queryPath": "runs/evaluation-count-by-course/run-0001/query.sql",
+    "vegaRawPath": "runs/evaluation-count-by-course/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/evaluation-count-by-course/run-0001/vega.resolved.json",
+    "imagePath": "runs/evaluation-count-by-course/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:26:05.359Z",
+  "traceId": "d30ce2a8470431306727926110221c8f",
+  "success": true,
+  "durationMs": 91216,
+  "resultRaw": {
+    "data": [
+      {
+        "course_id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+        "evaluations_count": 2
+      },
+      {
+        "course_id": "0b97f1bf-8c86-431a-a583-563354b1e01f",
+        "evaluations_count": 1
+      },
+      {
+        "course_id": "0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca",
+        "evaluations_count": 2
+      },
+      {
+        "course_id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "evaluations_count": 4
+      },
+      {
+        "course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "evaluations_count": 2
+      },
+      {
+        "course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+        "evaluations_count": 1
+      },
+      {
+        "course_id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+        "evaluations_count": 3
+      },
+      {
+        "course_id": "91922683-9cba-47f2-bb00-babfbce3866f",
+        "evaluations_count": 2
+      },
+      {
+        "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "evaluations_count": 4
+      },
+      {
+        "course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "evaluations_count": 4
+      },
+      {
+        "course_id": "b18a39cf-8a1b-471c-b67a-94aa04eccfae",
+        "evaluations_count": 3
+      },
+      {
+        "course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+        "evaluations_count": 4
+      },
+      {
+        "course_id": "c0e00b1c-84d6-4ccd-999d-7c9197625f2e",
+        "evaluations_count": 2
+      },
+      {
+        "course_id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+        "evaluations_count": 1
+      },
+      {
+        "course_id": "d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5",
+        "evaluations_count": 1
+      },
+      {
+        "course_id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "evaluations_count": 5
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Evaluations submitted per course",
+      "width": 700,
+      "height": 360,
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "course_id",
+          "type": "nominal",
+          "axis": {
+            "title": "course_id",
+            "labelAngle": -40
+          }
+        },
+        "y": {
+          "field": "evaluations_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "evaluations_count"
+          }
+        },
+        "color": {
+          "field": "evaluations_count",
+          "type": "quantitative",
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "course_id",
+            "type": "nominal",
+            "title": "course_id"
+          },
+          {
+            "field": "evaluations_count",
+            "type": "quantitative",
+            "title": "evaluations_count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT\n  cs.course_id AS course_id,\n  COUNT(ce.id) AS evaluations_count\nFROM public.course_evaluations ce\nJOIN public.enrollments e ON ce.enrollment_id = e.id\nJOIN public.course_sections cs ON e.course_section_id = cs.id\nGROUP BY cs.course_id\nORDER BY cs.course_id ASC;",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "evaluations_count"
+      ],
+      "rowCount": 16,
+      "sample": [
+        {
+          "course_id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+          "evaluations_count": 2
+        },
+        {
+          "course_id": "0b97f1bf-8c86-431a-a583-563354b1e01f",
+          "evaluations_count": 1
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.7,
+      "issues": [
+        "course_id values appear to be UUIDs (metadata sample). Using raw course_id is correct per SQL but not human-friendly — consider joining courses to show course names/titles.",
+        "The Vega-Lite encoding does not declare any aggregate — this is OK because the query returns pre-aggregated rows, but ensure the visualization layer treats the data as already-aggregated to avoid double-aggregation.",
+        "Color is mapped to evaluations_count (quantitative) with the legend disabled; this is redundant with the y-axis and adds little information — consider removing color encoding or enabling a legend if intended.",
+        "If there are many courses (rowCount=16 in metadata), the chart may become crowded; consider sorting bars (e.g., by evaluations_count) or limiting to top N courses for readability."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "course_id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+        "evaluations_count": 2
+      },
+      {
+        "course_id": "0b97f1bf-8c86-431a-a583-563354b1e01f",
+        "evaluations_count": 1
+      },
+      {
+        "course_id": "0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca",
+        "evaluations_count": 2
+      },
+      {
+        "course_id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "evaluations_count": 4
+      },
+      {
+        "course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "evaluations_count": 2
+      },
+      {
+        "course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+        "evaluations_count": 1
+      },
+      {
+        "course_id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+        "evaluations_count": 3
+      },
+      {
+        "course_id": "91922683-9cba-47f2-bb00-babfbce3866f",
+        "evaluations_count": 2
+      },
+      {
+        "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "evaluations_count": 4
+      },
+      {
+        "course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "evaluations_count": 4
+      },
+      {
+        "course_id": "b18a39cf-8a1b-471c-b67a-94aa04eccfae",
+        "evaluations_count": 3
+      },
+      {
+        "course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+        "evaluations_count": 4
+      },
+      {
+        "course_id": "c0e00b1c-84d6-4ccd-999d-7c9197625f2e",
+        "evaluations_count": 2
+      },
+      {
+        "course_id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+        "evaluations_count": 1
+      },
+      {
+        "course_id": "d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5",
+        "evaluations_count": 1
+      },
+      {
+        "course_id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "evaluations_count": 5
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Evaluations submitted per course",
+      "width": 700,
+      "height": 360,
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "course_id",
+          "type": "nominal",
+          "axis": {
+            "title": "course_id",
+            "labelAngle": -40
+          }
+        },
+        "y": {
+          "field": "evaluations_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "evaluations_count"
+          }
+        },
+        "color": {
+          "field": "evaluations_count",
+          "type": "quantitative",
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "course_id",
+            "type": "nominal",
+            "title": "course_id"
+          },
+          {
+            "field": "evaluations_count",
+            "type": "quantitative",
+            "title": "evaluations_count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT\n  cs.course_id AS course_id,\n  COUNT(ce.id) AS evaluations_count\nFROM public.course_evaluations ce\nJOIN public.enrollments e ON ce.enrollment_id = e.id\nJOIN public.course_sections cs ON e.course_section_id = cs.id\nGROUP BY cs.course_id\nORDER BY cs.course_id ASC;",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "evaluations_count"
+      ],
+      "rowCount": 16,
+      "sample": [
+        {
+          "course_id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+          "evaluations_count": 2
+        },
+        {
+          "course_id": "0b97f1bf-8c86-431a-a583-563354b1e01f",
+          "evaluations_count": 1
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.7,
+      "issues": [
+        "course_id values appear to be UUIDs (metadata sample). Using raw course_id is correct per SQL but not human-friendly — consider joining courses to show course names/titles.",
+        "The Vega-Lite encoding does not declare any aggregate — this is OK because the query returns pre-aggregated rows, but ensure the visualization layer treats the data as already-aggregated to avoid double-aggregation.",
+        "Color is mapped to evaluations_count (quantitative) with the legend disabled; this is redundant with the y-axis and adds little information — consider removing color encoding or enabling a legend if intended.",
+        "If there are many courses (rowCount=16 in metadata), the chart may become crowded; consider sorting bars (e.g., by evaluations_count) or limiting to top N courses for readability."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:26:05.359Z",
+    "traceId": "d30ce2a8470431306727926110221c8f",
+    "attempts": 2,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 26967,
+      "outputTokens": 4998,
+      "totalTokens": 31965,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 3136,
+      "costUsd": 0.01673775
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 26967,
+        "outputTokens": 4998,
+        "totalTokens": 31965,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 3136,
+        "costUsd": 0.01673775
+      }
+    ],
+    "warnings": []
+  }
+}

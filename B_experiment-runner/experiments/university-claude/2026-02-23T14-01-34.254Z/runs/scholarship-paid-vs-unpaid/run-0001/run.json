@@ -1,0 +1,236 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "scholarship-paid-vs-unpaid",
+  "caseDirectory": "scholarship-paid-vs-unpaid",
+  "repeatIndex": 1,
+  "prompt": "How many scholarships have been paid vs not yet paid?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many scholarships have been paid vs not yet paid?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:08:22.765Z",
+    "endedAtUtc": "2026-02-23T14:08:41.177Z",
+    "durationMs": 18412
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "6914",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:08:41 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How many scholarships have been paid vs not yet paid?\"},\"sql\":{\"payload\":{\"question\":\"How many scholarships have been paid vs not yet paid?\"},\"startedAt\":1771855702777,\"status\":\"success\",\"output\":{\"reasoning\":\"The scholarships table has a paid_date column that is nullable. Scholarships with a non-null paid_date have been paid, while those with a null paid_date have not yet been paid. I'll count scholarships grouped by payment status.\",\"sql\":\"\\nSELECT \\n  CASE WHEN paid_date IS NOT NULL THEN 'Paid' ELSE 'Not Yet Paid' END AS payment_status,\\n  COUNT(*) AS scholarship_count\\nFROM public.scholarships\\nGROUP BY CASE WHEN paid_date IS NOT NULL THEN 'Paid' ELSE 'Not Yet Paid' END\\nORDER BY payment_status DESC\\n\",\"assumptions\":[\"The paid_date column indicates when a scholarship was paid; NULL values indicate scholarships not yet paid\",\"Scholarships are counted by their payment status based on whether paid_date is null or not\"]},\"endedAt\":1771855717937},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  CASE WHEN paid_date IS NOT NULL THEN 'Paid' ELSE 'Not Yet Paid' END AS payment_status,\\n  COUNT(*) AS scholarship_count\\nFROM public.scholarships\\nGROUP BY CASE WHEN paid_date IS NOT NULL THEN 'Paid' ELSE 'Not Yet Paid' END\\nORDER BY payment_status DESC\\n\"},\"startedAt\":1771855717944,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  CASE WHEN paid_date IS NOT NULL THEN 'Paid' ELSE 'Not Yet Paid' END AS payment_status,\\n  COUNT(*) AS scholarship_count\\nFROM public.scholarships\\nGROUP BY CASE WHEN paid_date IS NOT NULL THEN 'Paid' ELSE 'Not Yet Paid' END\\nORDER BY payment_status DESC\",\"metadata\":{\"columns\":[\"payment_status\",\"scholarship_count\"],\"rowCount\":1,\"sample\":[{\"payment_status\":\"Paid\",\"scholarship_count\":\"10\"}]},\"data\":[{\"payment_status\":\"Paid\",\"scholarship_count\":\"10\"}]},\"endedAt\":1771855717948},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  CASE WHEN paid_date IS NOT NULL THEN 'Paid' ELSE 'Not Yet Paid' END AS payment_status,\\n  COUNT(*) AS scholarship_count\\nFROM public.scholarships\\nGROUP BY CASE WHEN paid_date IS NOT NULL THEN 'Paid' ELSE 'Not Yet Paid' END\\nORDER BY payment_status DESC\",\"metadata\":{\"columns\":[\"payment_status\",\"scholarship_count\"],\"rowCount\":1,\"sample\":[{\"payment_status\":\"Paid\",\"scholarship_count\":\"10\"}]},\"data\":[{\"payment_status\":\"Paid\",\"scholarship_count\":\"10\"}]},\"startedAt\":1771855717950,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Scholarships: Paid vs Not Yet Paid\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"payment_status\",\"type\":\"nominal\",\"title\":\"Payment Status\"},\"y\":{\"field\":\"scholarship_count\",\"type\":\"quantitative\",\"title\":\"Number of Scholarships\"},\"color\":{\"field\":\"payment_status\",\"type\":\"nominal\",\"scale\":{\"domain\":[\"Paid\",\"Not Yet Paid\"],\"range\":[\"#2ecc71\",\"#e74c3c\"]},\"legend\":null},\"tooltip\":[{\"field\":\"payment_status\",\"type\":\"nominal\",\"title\":\"Status\"},{\"field\":\"scholarship_count\",\"type\":\"quantitative\",\"title\":\"Count\"}]}},\"reasoning\":\"Bar chart comparing paid vs unpaid scholarships. Green indicates paid scholarships, red indicates not yet paid. The categorical x-axis shows payment status while the quantitative y-axis displays the count. Tooltip provides detailed information on hover.\"},\"endedAt\":1771855721159},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Scholarships: Paid vs Not Yet Paid\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"payment_status\",\"type\":\"nominal\",\"title\":\"Payment Status\"},\"y\":{\"field\":\"scholarship_count\",\"type\":\"quantitative\",\"title\":\"Number of Scholarships\"},\"color\":{\"field\":\"payment_status\",\"type\":\"nominal\",\"scale\":{\"domain\":[\"Paid\",\"Not Yet Paid\"],\"range\":[\"#2ecc71\",\"#e74c3c\"]},\"legend\":null},\"tooltip\":[{\"field\":\"payment_status\",\"type\":\"nominal\",\"title\":\"Status\"},{\"field\":\"scholarship_count\",\"type\":\"quantitative\",\"title\":\"Count\"}]}},\"reasoning\":\"Bar chart comparing paid vs unpaid scholarships. Green indicates paid scholarships, red indicates not yet paid. The categorical x-axis shows payment status while the quantitative y-axis displays the count. Tooltip provides detailed information on hover.\"},\"startedAt\":1771855721164,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT \\n  CASE WHEN paid_date IS NOT NULL THEN 'Paid' ELSE 'Not Yet Paid' END AS payment_status,\\n  COUNT(*) AS scholarship_count\\nFROM public.scholarships\\nGROUP BY CASE WHEN paid_date IS NOT NULL THEN 'Paid' ELSE 'Not Yet Paid' END\\nORDER BY payment_status DESC\\n\",\"data\":[{\"payment_status\":\"Paid\",\"scholarship_count\":\"10\"}],\"metadata\":{\"columns\":[\"payment_status\",\"scholarship_count\"],\"rowCount\":1,\"sample\":[{\"payment_status\":\"Paid\",\"scholarship_count\":\"10\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Scholarships: Paid vs Not Yet Paid\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"payment_status\",\"type\":\"nominal\",\"title\":\"Payment Status\"},\"y\":{\"field\":\"scholarship_count\",\"type\":\"quantitative\",\"title\":\"Number of Scholarships\"},\"color\":{\"field\":\"payment_status\",\"type\":\"nominal\",\"scale\":{\"domain\":[\"Paid\",\"Not Yet Paid\"],\"range\":[\"#2ecc71\",\"#e74c3c\"]},\"legend\":null},\"tooltip\":[{\"field\":\"payment_status\",\"type\":\"nominal\",\"title\":\"Status\"},{\"field\":\"scholarship_count\",\"type\":\"quantitative\",\"title\":\"Count\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855721167}},\"input\":{\"question\":\"How many scholarships have been paid vs not yet paid?\"},\"result\":{\"sql\":\"\\nSELECT \\n  CASE WHEN paid_date IS NOT NULL THEN 'Paid' ELSE 'Not Yet Paid' END AS payment_status,\\n  COUNT(*) AS scholarship_count\\nFROM public.scholarships\\nGROUP BY CASE WHEN paid_date IS NOT NULL THEN 'Paid' ELSE 'Not Yet Paid' END\\nORDER BY payment_status DESC\\n\",\"data\":[{\"payment_status\":\"Paid\",\"scholarship_count\":\"10\"}],\"metadata\":{\"columns\":[\"payment_status\",\"scholarship_count\"],\"rowCount\":1,\"sample\":[{\"payment_status\":\"Paid\",\"scholarship_count\":\"10\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Scholarships: Paid vs Not Yet Paid\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"payment_status\",\"type\":\"nominal\",\"title\":\"Payment Status\"},\"y\":{\"field\":\"scholarship_count\",\"type\":\"quantitative\",\"title\":\"Number of Scholarships\"},\"color\":{\"field\":\"payment_status\",\"type\":\"nominal\",\"scale\":{\"domain\":[\"Paid\",\"Not Yet Paid\"],\"range\":[\"#2ecc71\",\"#e74c3c\"]},\"legend\":null},\"tooltip\":[{\"field\":\"payment_status\",\"type\":\"nominal\",\"title\":\"Status\"},{\"field\":\"scholarship_count\",\"type\":\"quantitative\",\"title\":\"Count\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"d018fff933916eef937d208f03e375fa\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/scholarship-paid-vs-unpaid/run-0001/run.json",
+    "queryPath": "runs/scholarship-paid-vs-unpaid/run-0001/query.sql",
+    "vegaRawPath": "runs/scholarship-paid-vs-unpaid/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/scholarship-paid-vs-unpaid/run-0001/vega.resolved.json",
+    "imagePath": "runs/scholarship-paid-vs-unpaid/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:08:41.543Z",
+  "traceId": "d018fff933916eef937d208f03e375fa",
+  "success": true,
+  "durationMs": 18778,
+  "resultRaw": {
+    "data": [
+      {
+        "payment_status": "Paid",
+        "scholarship_count": "10"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Scholarships: Paid vs Not Yet Paid",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "payment_status",
+          "type": "nominal",
+          "title": "Payment Status"
+        },
+        "y": {
+          "field": "scholarship_count",
+          "type": "quantitative",
+          "title": "Number of Scholarships"
+        },
+        "color": {
+          "field": "payment_status",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Paid",
+              "Not Yet Paid"
+            ],
+            "range": [
+              "#2ecc71",
+              "#e74c3c"
+            ]
+          },
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "payment_status",
+            "type": "nominal",
+            "title": "Status"
+          },
+          {
+            "field": "scholarship_count",
+            "type": "quantitative",
+            "title": "Count"
+          }
+        ]
+      }
+    },
+    "sql": "\nSELECT \n  CASE WHEN paid_date IS NOT NULL THEN 'Paid' ELSE 'Not Yet Paid' END AS payment_status,\n  COUNT(*) AS scholarship_count\nFROM public.scholarships\nGROUP BY CASE WHEN paid_date IS NOT NULL THEN 'Paid' ELSE 'Not Yet Paid' END\nORDER BY payment_status DESC\n",
+    "metadata": {
+      "columns": [
+        "payment_status",
+        "scholarship_count"
+      ],
+      "rowCount": 1,
+      "sample": [
+        {
+          "payment_status": "Paid",
+          "scholarship_count": "10"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "payment_status": "Paid",
+        "scholarship_count": "10"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Scholarships: Paid vs Not Yet Paid",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "payment_status",
+          "type": "nominal",
+          "title": "Payment Status"
+        },
+        "y": {
+          "field": "scholarship_count",
+          "type": "quantitative",
+          "title": "Number of Scholarships"
+        },
+        "color": {
+          "field": "payment_status",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Paid",
+              "Not Yet Paid"
+            ],
+            "range": [
+              "#2ecc71",
+              "#e74c3c"
+            ]
+          },
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "payment_status",
+            "type": "nominal",
+            "title": "Status"
+          },
+          {
+            "field": "scholarship_count",
+            "type": "quantitative",
+            "title": "Count"
+          }
+        ]
+      }
+    },
+    "sql": "\nSELECT \n  CASE WHEN paid_date IS NOT NULL THEN 'Paid' ELSE 'Not Yet Paid' END AS payment_status,\n  COUNT(*) AS scholarship_count\nFROM public.scholarships\nGROUP BY CASE WHEN paid_date IS NOT NULL THEN 'Paid' ELSE 'Not Yet Paid' END\nORDER BY payment_status DESC\n",
+    "metadata": {
+      "columns": [
+        "payment_status",
+        "scholarship_count"
+      ],
+      "rowCount": 1,
+      "sample": [
+        {
+          "payment_status": "Paid",
+          "scholarship_count": "10"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.391Z",
+    "traceId": "d018fff933916eef937d208f03e375fa",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 10195,
+      "outputTokens": 763,
+      "totalTokens": 10958,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.01401
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 10195,
+        "outputTokens": 763,
+        "totalTokens": 10958,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.01401
+      }
+    ],
+    "warnings": []
+  }
+}

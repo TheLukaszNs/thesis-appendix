@@ -1,0 +1,384 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "scholarship-by-department",
+  "caseDirectory": "scholarship-by-department",
+  "repeatIndex": 1,
+  "prompt": "Which departments have students receiving the most scholarship money?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which departments have students receiving the most scholarship money?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:41:51.614Z",
+    "endedAtUtc": "2026-02-22T23:42:31.583Z",
+    "durationMs": 39969
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "15043",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:42:31 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Which departments have students receiving the most scholarship money?\"},\"sql\":{\"payload\":{\"question\":\"Which departments have students receiving the most scholarship money?\"},\"startedAt\":1771803711623,\"status\":\"success\",\"output\":{\"reasoning\":\"Sum scholarship amounts per department by joining scholarships -> students -> departments; return departments ordered by total scholarship amount (descending) with deterministic tie-breaker.\",\"sql\":\"WITH dept_totals AS (\\n  SELECT\\n    d.id AS dept_id,\\n    d.code AS dept_code,\\n    d.name AS dept_name,\\n    SUM(sch.amount) AS total_amount,\\n    COUNT(sch.id) AS scholarship_count,\\n    COUNT(DISTINCT sch.student_id) AS student_count\\n  FROM public.departments d\\n  JOIN public.students st ON st.department_id = d.id\\n  JOIN public.scholarships sch ON sch.student_id = st.id\\n  GROUP BY d.id, d.code, d.name\\n)\\nSELECT\\n  dept_id,\\n  dept_code,\\n  dept_name,\\n  total_amount,\\n  scholarship_count,\\n  student_count\\nFROM dept_totals\\nORDER BY total_amount DESC, dept_name ASC;\",\"assumptions\":[\"Include scholarships from all academic years and semesters (no date/semester filter applied).\",\"Sum uses scholarships.amount (numeric) and includes all scholarship records regardless of paid_date.\",\"Departments with no scholarship-receiving students are excluded from the result.\"]},\"endedAt\":1771803732057},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH dept_totals AS (\\n  SELECT\\n    d.id AS dept_id,\\n    d.code AS dept_code,\\n    d.name AS dept_name,\\n    SUM(sch.amount) AS total_amount,\\n    COUNT(sch.id) AS scholarship_count,\\n    COUNT(DISTINCT sch.student_id) AS student_count\\n  FROM public.departments d\\n  JOIN public.students st ON st.department_id = d.id\\n  JOIN public.scholarships sch ON sch.student_id = st.id\\n  GROUP BY d.id, d.code, d.name\\n)\\nSELECT\\n  dept_id,\\n  dept_code,\\n  dept_name,\\n  total_amount,\\n  scholarship_count,\\n  student_count\\nFROM dept_totals\\nORDER BY total_amount DESC, dept_name ASC;\"},\"startedAt\":1771803732062,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH dept_totals AS (\\n  SELECT\\n    d.id AS dept_id,\\n    d.code AS dept_code,\\n    d.name AS dept_name,\\n    SUM(sch.amount) AS total_amount,\\n    COUNT(sch.id) AS scholarship_count,\\n    COUNT(DISTINCT sch.student_id) AS student_count\\n  FROM public.departments d\\n  JOIN public.students st ON st.department_id = d.id\\n  JOIN public.scholarships sch ON sch.student_id = st.id\\n  GROUP BY d.id, d.code, d.name\\n)\\nSELECT\\n  dept_id,\\n  dept_code,\\n  dept_name,\\n  total_amount,\\n  scholarship_count,\\n  student_count\\nFROM dept_totals\\nORDER BY total_amount DESC, dept_name ASC\",\"metadata\":{\"columns\":[\"dept_id\",\"dept_code\",\"dept_name\",\"total_amount\",\"student_count\",\"scholarship_count\"],\"rowCount\":5,\"sample\":[{\"dept_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"dept_code\":\"MTR\",\"dept_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_amount\":12000,\"student_count\":3,\"scholarship_count\":3},{\"dept_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"dept_code\":\"WIP\",\"dept_name\":\"Wydział Inżynierii Produkcji\",\"total_amount\":6000,\"student_count\":3,\"scholarship_count\":4}]},\"data\":[{\"dept_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"dept_code\":\"MTR\",\"dept_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_amount\":12000,\"student_count\":3,\"scholarship_count\":3},{\"dept_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"dept_code\":\"WIP\",\"dept_name\":\"Wydział Inżynierii Produkcji\",\"total_amount\":6000,\"student_count\":3,\"scholarship_count\":4},{\"dept_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"dept_code\":\"TCH\",\"dept_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"total_amount\":3000,\"student_count\":1,\"scholarship_count\":1},{\"dept_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"dept_code\":\"AEI\",\"dept_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"total_amount\":2500,\"student_count\":1,\"scholarship_count\":1},{\"dept_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"dept_code\":\"IBM\",\"dept_name\":\"Wydział Inżynierii Biomedycznej\",\"total_amount\":2000,\"student_count\":1,\"scholarship_count\":1}]},\"endedAt\":1771803732151},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"WITH dept_totals AS (\\n  SELECT\\n    d.id AS dept_id,\\n    d.code AS dept_code,\\n    d.name AS dept_name,\\n    SUM(sch.amount) AS total_amount,\\n    COUNT(sch.id) AS scholarship_count,\\n    COUNT(DISTINCT sch.student_id) AS student_count\\n  FROM public.departments d\\n  JOIN public.students st ON st.department_id = d.id\\n  JOIN public.scholarships sch ON sch.student_id = st.id\\n  GROUP BY d.id, d.code, d.name\\n)\\nSELECT\\n  dept_id,\\n  dept_code,\\n  dept_name,\\n  total_amount,\\n  scholarship_count,\\n  student_count\\nFROM dept_totals\\nORDER BY total_amount DESC, dept_name ASC\",\"metadata\":{\"columns\":[\"dept_id\",\"dept_code\",\"dept_name\",\"total_amount\",\"student_count\",\"scholarship_count\"],\"rowCount\":5,\"sample\":[{\"dept_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"dept_code\":\"MTR\",\"dept_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_amount\":12000,\"student_count\":3,\"scholarship_count\":3},{\"dept_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"dept_code\":\"WIP\",\"dept_name\":\"Wydział Inżynierii Produkcji\",\"total_amount\":6000,\"student_count\":3,\"scholarship_count\":4}]},\"data\":[{\"dept_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"dept_code\":\"MTR\",\"dept_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_amount\":12000,\"student_count\":3,\"scholarship_count\":3},{\"dept_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"dept_code\":\"WIP\",\"dept_name\":\"Wydział Inżynierii Produkcji\",\"total_amount\":6000,\"student_count\":3,\"scholarship_count\":4},{\"dept_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"dept_code\":\"TCH\",\"dept_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"total_amount\":3000,\"student_count\":1,\"scholarship_count\":1},{\"dept_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"dept_code\":\"AEI\",\"dept_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"total_amount\":2500,\"student_count\":1,\"scholarship_count\":1},{\"dept_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"dept_code\":\"IBM\",\"dept_name\":\"Wydział Inżynierii Biomedycznej\",\"total_amount\":2000,\"student_count\":1,\"scholarship_count\":1}]},\"startedAt\":1771803732154,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Departments by total scholarship amount\",\"width\":700,\"height\":{\"step\":30},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"dept_name\",\"type\":\"nominal\",\"title\":\"Department\",\"sort\":{\"field\":\"total_amount\",\"order\":\"descending\"}},\"x\":{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total scholarship amount (PLN)\",\"axis\":{\"format\":\",\"}},\"color\":{\"field\":\"scholarship_count\",\"type\":\"quantitative\",\"title\":\"Number of scholarships\",\"scale\":{\"scheme\":\"blues\"}},\"tooltip\":[{\"field\":\"dept_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"dept_code\",\"type\":\"nominal\",\"title\":\"Dept code\"},{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total amount\",\"format\":\",\"},{\"field\":\"scholarship_count\",\"type\":\"quantitative\",\"title\":\"Scholarship count\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Students receiving scholarships\"}]}},\"reasoning\":\"Horizontal bar chart ranks departments by total scholarship amount (x). Color encodes number of scholarships to provide additional context; tooltip shows dept code, amounts, and counts.\"},\"endedAt\":1771803751549},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Departments by total scholarship amount\",\"width\":700,\"height\":{\"step\":30},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"dept_name\",\"type\":\"nominal\",\"title\":\"Department\",\"sort\":{\"field\":\"total_amount\",\"order\":\"descending\"}},\"x\":{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total scholarship amount (PLN)\",\"axis\":{\"format\":\",\"}},\"color\":{\"field\":\"scholarship_count\",\"type\":\"quantitative\",\"title\":\"Number of scholarships\",\"scale\":{\"scheme\":\"blues\"}},\"tooltip\":[{\"field\":\"dept_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"dept_code\",\"type\":\"nominal\",\"title\":\"Dept code\"},{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total amount\",\"format\":\",\"},{\"field\":\"scholarship_count\",\"type\":\"quantitative\",\"title\":\"Scholarship count\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Students receiving scholarships\"}]}},\"reasoning\":\"Horizontal bar chart ranks departments by total scholarship amount (x). Color encodes number of scholarships to provide additional context; tooltip shows dept code, amounts, and counts.\"},\"startedAt\":1771803751556,\"status\":\"success\",\"output\":{\"sql\":\"WITH dept_totals AS (\\n  SELECT\\n    d.id AS dept_id,\\n    d.code AS dept_code,\\n    d.name AS dept_name,\\n    SUM(sch.amount) AS total_amount,\\n    COUNT(sch.id) AS scholarship_count,\\n    COUNT(DISTINCT sch.student_id) AS student_count\\n  FROM public.departments d\\n  JOIN public.students st ON st.department_id = d.id\\n  JOIN public.scholarships sch ON sch.student_id = st.id\\n  GROUP BY d.id, d.code, d.name\\n)\\nSELECT\\n  dept_id,\\n  dept_code,\\n  dept_name,\\n  total_amount,\\n  scholarship_count,\\n  student_count\\nFROM dept_totals\\nORDER BY total_amount DESC, dept_name ASC;\",\"data\":[{\"dept_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"dept_code\":\"MTR\",\"dept_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_amount\":12000,\"student_count\":3,\"scholarship_count\":3},{\"dept_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"dept_code\":\"WIP\",\"dept_name\":\"Wydział Inżynierii Produkcji\",\"total_amount\":6000,\"student_count\":3,\"scholarship_count\":4},{\"dept_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"dept_code\":\"TCH\",\"dept_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"total_amount\":3000,\"student_count\":1,\"scholarship_count\":1},{\"dept_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"dept_code\":\"AEI\",\"dept_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"total_amount\":2500,\"student_count\":1,\"scholarship_count\":1},{\"dept_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"dept_code\":\"IBM\",\"dept_name\":\"Wydział Inżynierii Biomedycznej\",\"total_amount\":2000,\"student_count\":1,\"scholarship_count\":1}],\"metadata\":{\"columns\":[\"dept_id\",\"dept_code\",\"dept_name\",\"total_amount\",\"student_count\",\"scholarship_count\"],\"rowCount\":5,\"sample\":[{\"dept_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"dept_code\":\"MTR\",\"dept_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_amount\":12000,\"student_count\":3,\"scholarship_count\":3},{\"dept_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"dept_code\":\"WIP\",\"dept_name\":\"Wydział Inżynierii Produkcji\",\"total_amount\":6000,\"student_count\":3,\"scholarship_count\":4}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Departments by total scholarship amount\",\"width\":700,\"height\":{\"step\":30},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"dept_name\",\"type\":\"nominal\",\"title\":\"Department\",\"sort\":{\"field\":\"total_amount\",\"order\":\"descending\"}},\"x\":{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total scholarship amount (PLN)\",\"axis\":{\"format\":\",\"}},\"color\":{\"field\":\"scholarship_count\",\"type\":\"quantitative\",\"title\":\"Number of scholarships\",\"scale\":{\"scheme\":\"blues\"}},\"tooltip\":[{\"field\":\"dept_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"dept_code\",\"type\":\"nominal\",\"title\":\"Dept code\"},{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total amount\",\"format\":\",\"},{\"field\":\"scholarship_count\",\"type\":\"quantitative\",\"title\":\"Scholarship count\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Students receiving scholarships\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771803751559}},\"input\":{\"question\":\"Which departments have students receiving the most scholarship money?\"},\"result\":{\"sql\":\"WITH dept_totals AS (\\n  SELECT\\n    d.id AS dept_id,\\n    d.code AS dept_code,\\n    d.name AS dept_name,\\n    SUM(sch.amount) AS total_amount,\\n    COUNT(sch.id) AS scholarship_count,\\n    COUNT(DISTINCT sch.student_id) AS student_count\\n  FROM public.departments d\\n  JOIN public.students st ON st.department_id = d.id\\n  JOIN public.scholarships sch ON sch.student_id = st.id\\n  GROUP BY d.id, d.code, d.name\\n)\\nSELECT\\n  dept_id,\\n  dept_code,\\n  dept_name,\\n  total_amount,\\n  scholarship_count,\\n  student_count\\nFROM dept_totals\\nORDER BY total_amount DESC, dept_name ASC;\",\"data\":[{\"dept_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"dept_code\":\"MTR\",\"dept_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_amount\":12000,\"student_count\":3,\"scholarship_count\":3},{\"dept_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"dept_code\":\"WIP\",\"dept_name\":\"Wydział Inżynierii Produkcji\",\"total_amount\":6000,\"student_count\":3,\"scholarship_count\":4},{\"dept_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"dept_code\":\"TCH\",\"dept_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"total_amount\":3000,\"student_count\":1,\"scholarship_count\":1},{\"dept_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"dept_code\":\"AEI\",\"dept_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"total_amount\":2500,\"student_count\":1,\"scholarship_count\":1},{\"dept_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"dept_code\":\"IBM\",\"dept_name\":\"Wydział Inżynierii Biomedycznej\",\"total_amount\":2000,\"student_count\":1,\"scholarship_count\":1}],\"metadata\":{\"columns\":[\"dept_id\",\"dept_code\",\"dept_name\",\"total_amount\",\"student_count\",\"scholarship_count\"],\"rowCount\":5,\"sample\":[{\"dept_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"dept_code\":\"MTR\",\"dept_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"total_amount\":12000,\"student_count\":3,\"scholarship_count\":3},{\"dept_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"dept_code\":\"WIP\",\"dept_name\":\"Wydział Inżynierii Produkcji\",\"total_amount\":6000,\"student_count\":3,\"scholarship_count\":4}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Departments by total scholarship amount\",\"width\":700,\"height\":{\"step\":30},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"dept_name\",\"type\":\"nominal\",\"title\":\"Department\",\"sort\":{\"field\":\"total_amount\",\"order\":\"descending\"}},\"x\":{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total scholarship amount (PLN)\",\"axis\":{\"format\":\",\"}},\"color\":{\"field\":\"scholarship_count\",\"type\":\"quantitative\",\"title\":\"Number of scholarships\",\"scale\":{\"scheme\":\"blues\"}},\"tooltip\":[{\"field\":\"dept_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"dept_code\",\"type\":\"nominal\",\"title\":\"Dept code\"},{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total amount\",\"format\":\",\"},{\"field\":\"scholarship_count\",\"type\":\"quantitative\",\"title\":\"Scholarship count\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Students receiving scholarships\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"4f9a193724ffe9061eb5440a95792367\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/scholarship-by-department/run-0001/run.json",
+    "queryPath": "runs/scholarship-by-department/run-0001/query.sql",
+    "vegaRawPath": "runs/scholarship-by-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/scholarship-by-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/scholarship-by-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:42:32.066Z",
+  "traceId": "4f9a193724ffe9061eb5440a95792367",
+  "success": true,
+  "durationMs": 40452,
+  "resultRaw": {
+    "data": [
+      {
+        "dept_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "dept_code": "MTR",
+        "dept_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "total_amount": 12000,
+        "student_count": 3,
+        "scholarship_count": 3
+      },
+      {
+        "dept_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "dept_code": "WIP",
+        "dept_name": "Wydział Inżynierii Produkcji",
+        "total_amount": 6000,
+        "student_count": 3,
+        "scholarship_count": 4
+      },
+      {
+        "dept_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "dept_code": "TCH",
+        "dept_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "total_amount": 3000,
+        "student_count": 1,
+        "scholarship_count": 1
+      },
+      {
+        "dept_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "dept_code": "AEI",
+        "dept_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "total_amount": 2500,
+        "student_count": 1,
+        "scholarship_count": 1
+      },
+      {
+        "dept_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "dept_code": "IBM",
+        "dept_name": "Wydział Inżynierii Biomedycznej",
+        "total_amount": 2000,
+        "student_count": 1,
+        "scholarship_count": 1
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Departments by total scholarship amount",
+      "width": 700,
+      "height": {
+        "step": 30
+      },
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "y": {
+          "field": "dept_name",
+          "type": "nominal",
+          "title": "Department",
+          "sort": {
+            "field": "total_amount",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "total_amount",
+          "type": "quantitative",
+          "title": "Total scholarship amount (PLN)",
+          "axis": {
+            "format": ","
+          }
+        },
+        "color": {
+          "field": "scholarship_count",
+          "type": "quantitative",
+          "title": "Number of scholarships",
+          "scale": {
+            "scheme": "blues"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "dept_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "dept_code",
+            "type": "nominal",
+            "title": "Dept code"
+          },
+          {
+            "field": "total_amount",
+            "type": "quantitative",
+            "title": "Total amount",
+            "format": ","
+          },
+          {
+            "field": "scholarship_count",
+            "type": "quantitative",
+            "title": "Scholarship count"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Students receiving scholarships"
+          }
+        ]
+      }
+    },
+    "sql": "WITH dept_totals AS (\n  SELECT\n    d.id AS dept_id,\n    d.code AS dept_code,\n    d.name AS dept_name,\n    SUM(sch.amount) AS total_amount,\n    COUNT(sch.id) AS scholarship_count,\n    COUNT(DISTINCT sch.student_id) AS student_count\n  FROM public.departments d\n  JOIN public.students st ON st.department_id = d.id\n  JOIN public.scholarships sch ON sch.student_id = st.id\n  GROUP BY d.id, d.code, d.name\n)\nSELECT\n  dept_id,\n  dept_code,\n  dept_name,\n  total_amount,\n  scholarship_count,\n  student_count\nFROM dept_totals\nORDER BY total_amount DESC, dept_name ASC;",
+    "metadata": {
+      "columns": [
+        "dept_id",
+        "dept_code",
+        "dept_name",
+        "total_amount",
+        "student_count",
+        "scholarship_count"
+      ],
+      "rowCount": 5,
+      "sample": [
+        {
+          "dept_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+          "dept_code": "MTR",
+          "dept_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+          "total_amount": 12000,
+          "student_count": 3,
+          "scholarship_count": 3
+        },
+        {
+          "dept_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+          "dept_code": "WIP",
+          "dept_name": "Wydział Inżynierii Produkcji",
+          "total_amount": 6000,
+          "student_count": 3,
+          "scholarship_count": 4
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "dept_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "dept_code": "MTR",
+        "dept_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "total_amount": 12000,
+        "student_count": 3,
+        "scholarship_count": 3
+      },
+      {
+        "dept_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "dept_code": "WIP",
+        "dept_name": "Wydział Inżynierii Produkcji",
+        "total_amount": 6000,
+        "student_count": 3,
+        "scholarship_count": 4
+      },
+      {
+        "dept_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "dept_code": "TCH",
+        "dept_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "total_amount": 3000,
+        "student_count": 1,
+        "scholarship_count": 1
+      },
+      {
+        "dept_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "dept_code": "AEI",
+        "dept_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "total_amount": 2500,
+        "student_count": 1,
+        "scholarship_count": 1
+      },
+      {
+        "dept_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "dept_code": "IBM",
+        "dept_name": "Wydział Inżynierii Biomedycznej",
+        "total_amount": 2000,
+        "student_count": 1,
+        "scholarship_count": 1
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Departments by total scholarship amount",
+      "width": 700,
+      "height": {
+        "step": 30
+      },
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "y": {
+          "field": "dept_name",
+          "type": "nominal",
+          "title": "Department",
+          "sort": {
+            "field": "total_amount",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "total_amount",
+          "type": "quantitative",
+          "title": "Total scholarship amount (PLN)",
+          "axis": {
+            "format": ","
+          }
+        },
+        "color": {
+          "field": "scholarship_count",
+          "type": "quantitative",
+          "title": "Number of scholarships",
+          "scale": {
+            "scheme": "blues"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "dept_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "dept_code",
+            "type": "nominal",
+            "title": "Dept code"
+          },
+          {
+            "field": "total_amount",
+            "type": "quantitative",
+            "title": "Total amount",
+            "format": ","
+          },
+          {
+            "field": "scholarship_count",
+            "type": "quantitative",
+            "title": "Scholarship count"
+          },
+          {
+            "field": "student_count",
+            "type": "quantitative",
+            "title": "Students receiving scholarships"
+          }
+        ]
+      }
+    },
+    "sql": "WITH dept_totals AS (\n  SELECT\n    d.id AS dept_id,\n    d.code AS dept_code,\n    d.name AS dept_name,\n    SUM(sch.amount) AS total_amount,\n    COUNT(sch.id) AS scholarship_count,\n    COUNT(DISTINCT sch.student_id) AS student_count\n  FROM public.departments d\n  JOIN public.students st ON st.department_id = d.id\n  JOIN public.scholarships sch ON sch.student_id = st.id\n  GROUP BY d.id, d.code, d.name\n)\nSELECT\n  dept_id,\n  dept_code,\n  dept_name,\n  total_amount,\n  scholarship_count,\n  student_count\nFROM dept_totals\nORDER BY total_amount DESC, dept_name ASC;",
+    "metadata": {
+      "columns": [
+        "dept_id",
+        "dept_code",
+        "dept_name",
+        "total_amount",
+        "student_count",
+        "scholarship_count"
+      ],
+      "rowCount": 5,
+      "sample": [
+        {
+          "dept_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+          "dept_code": "MTR",
+          "dept_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+          "total_amount": 12000,
+          "student_count": 3,
+          "scholarship_count": 3
+        },
+        {
+          "dept_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+          "dept_code": "WIP",
+          "dept_name": "Wydział Inżynierii Produkcji",
+          "total_amount": 6000,
+          "student_count": 3,
+          "scholarship_count": 4
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:42:32.067Z",
+    "traceId": "4f9a193724ffe9061eb5440a95792367",
+    "attempts": 6,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 12821,
+      "outputTokens": 2799,
+      "totalTokens": 15620,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1728,
+      "costUsd": 0.00880325
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 12821,
+        "outputTokens": 2799,
+        "totalTokens": 15620,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1728,
+        "costUsd": 0.00880325
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,580 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "department-credit-weight",
+  "caseDirectory": "department-credit-weight",
+  "repeatIndex": 1,
+  "prompt": "Show the distribution of credit values for courses in each department",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the distribution of credit values for courses in each department"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:54:51.426Z",
+    "endedAtUtc": "2026-02-22T23:55:34.024Z",
+    "durationMs": 42598
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "25744",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:55:34 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show the distribution of credit values for courses in each department\"},\"sql\":{\"payload\":{\"question\":\"Show the distribution of credit values for courses in each department\"},\"startedAt\":1771804491431,\"status\":\"success\",\"output\":{\"reasoning\":\"Count courses per credit value grouped by department, compute each credit-bin's share of that department's courses, and order by department code then credit value. Verified tables and columns (public.courses: credits, department_id; public.departments: id, code, name).\",\"sql\":\"WITH dept_credit_counts AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.code AS department_code,\\n    d.name AS department_name,\\n    c.credits AS credits,\\n    COUNT(*) AS course_count\\n  FROM public.departments d\\n  JOIN public.courses c ON c.department_id = d.id\\n  GROUP BY d.id, d.code, d.name, c.credits\\n)\\nSELECT\\n  department_id,\\n  department_code,\\n  department_name,\\n  credits,\\n  course_count,\\n  ROUND(100.0 * course_count::numeric / SUM(course_count) OVER (PARTITION BY department_id), 2) AS percent_of_department\\nFROM dept_credit_counts\\nORDER BY department_code, credits;\",\"assumptions\":[\"Only departments that have at least one course are shown (inner JOIN).\",\"credits is an integer column on public.courses representing course credit value.\",\"department_id on courses references departments.id as discovered in the schema.\"]},\"endedAt\":1771804511534},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH dept_credit_counts AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.code AS department_code,\\n    d.name AS department_name,\\n    c.credits AS credits,\\n    COUNT(*) AS course_count\\n  FROM public.departments d\\n  JOIN public.courses c ON c.department_id = d.id\\n  GROUP BY d.id, d.code, d.name, c.credits\\n)\\nSELECT\\n  department_id,\\n  department_code,\\n  department_name,\\n  credits,\\n  course_count,\\n  ROUND(100.0 * course_count::numeric / SUM(course_count) OVER (PARTITION BY department_id), 2) AS percent_of_department\\nFROM dept_credit_counts\\nORDER BY department_code, credits;\"},\"startedAt\":1771804511540,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH dept_credit_counts AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.code AS department_code,\\n    d.name AS department_name,\\n    c.credits AS credits,\\n    COUNT(*) AS course_count\\n  FROM public.departments d\\n  JOIN public.courses c ON c.department_id = d.id\\n  GROUP BY d.id, d.code, d.name, c.credits\\n)\\nSELECT\\n  department_id,\\n  department_code,\\n  department_name,\\n  credits,\\n  course_count,\\n  ROUND(100.0 * course_count::numeric / SUM(course_count) OVER (PARTITION BY department_id), 2) AS percent_of_department\\nFROM dept_credit_counts\\nORDER BY department_code, credits\",\"metadata\":{\"columns\":[\"credits\",\"course_count\",\"department_id\",\"department_code\",\"department_name\",\"percent_of_department\"],\"rowCount\":18,\"sample\":[{\"credits\":2,\"course_count\":1,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":16.67},{\"credits\":4,\"course_count\":2,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":33.33}]},\"data\":[{\"credits\":2,\"course_count\":1,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":16.67},{\"credits\":4,\"course_count\":2,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":33.33},{\"credits\":5,\"course_count\":2,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":33.33},{\"credits\":6,\"course_count\":1,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":16.67},{\"credits\":3,\"course_count\":1,\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"percent_of_department\":25},{\"credits\":4,\"course_count\":1,\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"percent_of_department\":25},{\"credits\":6,\"course_count\":2,\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"percent_of_department\":50},{\"credits\":6,\"course_count\":2,\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"percent_of_department\":100},{\"credits\":2,\"course_count\":1,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"percent_of_department\":16.67},{\"credits\":3,\"course_count\":1,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"percent_of_department\":16.67},{\"credits\":4,\"course_count\":1,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"percent_of_department\":16.67},{\"credits\":5,\"course_count\":2,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"percent_of_department\":33.33},{\"credits\":6,\"course_count\":1,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"percent_of_department\":16.67},{\"credits\":5,\"course_count\":2,\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"percent_of_department\":66.67},{\"credits\":6,\"course_count\":1,\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"percent_of_department\":33.33},{\"credits\":2,\"course_count\":2,\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"percent_of_department\":40},{\"credits\":3,\"course_count\":1,\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"percent_of_department\":20},{\"credits\":4,\"course_count\":2,\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"percent_of_department\":40}]},\"endedAt\":1771804511551},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"WITH dept_credit_counts AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.code AS department_code,\\n    d.name AS department_name,\\n    c.credits AS credits,\\n    COUNT(*) AS course_count\\n  FROM public.departments d\\n  JOIN public.courses c ON c.department_id = d.id\\n  GROUP BY d.id, d.code, d.name, c.credits\\n)\\nSELECT\\n  department_id,\\n  department_code,\\n  department_name,\\n  credits,\\n  course_count,\\n  ROUND(100.0 * course_count::numeric / SUM(course_count) OVER (PARTITION BY department_id), 2) AS percent_of_department\\nFROM dept_credit_counts\\nORDER BY department_code, credits\",\"metadata\":{\"columns\":[\"credits\",\"course_count\",\"department_id\",\"department_code\",\"department_name\",\"percent_of_department\"],\"rowCount\":18,\"sample\":[{\"credits\":2,\"course_count\":1,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":16.67},{\"credits\":4,\"course_count\":2,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":33.33}]},\"data\":[{\"credits\":2,\"course_count\":1,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":16.67},{\"credits\":4,\"course_count\":2,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":33.33},{\"credits\":5,\"course_count\":2,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":33.33},{\"credits\":6,\"course_count\":1,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":16.67},{\"credits\":3,\"course_count\":1,\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"percent_of_department\":25},{\"credits\":4,\"course_count\":1,\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"percent_of_department\":25},{\"credits\":6,\"course_count\":2,\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"percent_of_department\":50},{\"credits\":6,\"course_count\":2,\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"percent_of_department\":100},{\"credits\":2,\"course_count\":1,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"percent_of_department\":16.67},{\"credits\":3,\"course_count\":1,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"percent_of_department\":16.67},{\"credits\":4,\"course_count\":1,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"percent_of_department\":16.67},{\"credits\":5,\"course_count\":2,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"percent_of_department\":33.33},{\"credits\":6,\"course_count\":1,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"percent_of_department\":16.67},{\"credits\":5,\"course_count\":2,\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"percent_of_department\":66.67},{\"credits\":6,\"course_count\":1,\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"percent_of_department\":33.33},{\"credits\":2,\"course_count\":2,\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"percent_of_department\":40},{\"credits\":3,\"course_count\":1,\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"percent_of_department\":20},{\"credits\":4,\"course_count\":2,\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"percent_of_department\":40}]},\"startedAt\":1771804511553,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Distribution of course credit values by department\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"department_code\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Department\",\"labelAngle\":-40}},\"y\":{\"aggregate\":\"sum\",\"field\":\"course_count\",\"type\":\"quantitative\",\"stack\":\"normalize\",\"axis\":{\"title\":\"Percent of department\",\"format\":\"%\"}},\"color\":{\"field\":\"credits\",\"type\":\"nominal\",\"legend\":{\"title\":\"Credits\"}},\"order\":{\"field\":\"credits\",\"type\":\"ordinal\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"credits\",\"type\":\"nominal\",\"title\":\"Credits\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Course count\"},{\"field\":\"percent_of_department\",\"type\":\"quantitative\",\"title\":\"Percent of department (%)\"}]}},\"reasoning\":\"Stacked normalized bars show each department as a 100% column with segments for credit values; tooltips include raw counts and the precomputed percent per department.\"},\"endedAt\":1771804533992},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Distribution of course credit values by department\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"department_code\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Department\",\"labelAngle\":-40}},\"y\":{\"aggregate\":\"sum\",\"field\":\"course_count\",\"type\":\"quantitative\",\"stack\":\"normalize\",\"axis\":{\"title\":\"Percent of department\",\"format\":\"%\"}},\"color\":{\"field\":\"credits\",\"type\":\"nominal\",\"legend\":{\"title\":\"Credits\"}},\"order\":{\"field\":\"credits\",\"type\":\"ordinal\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"credits\",\"type\":\"nominal\",\"title\":\"Credits\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Course count\"},{\"field\":\"percent_of_department\",\"type\":\"quantitative\",\"title\":\"Percent of department (%)\"}]}},\"reasoning\":\"Stacked normalized bars show each department as a 100% column with segments for credit values; tooltips include raw counts and the precomputed percent per department.\"},\"startedAt\":1771804533999,\"status\":\"success\",\"output\":{\"sql\":\"WITH dept_credit_counts AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.code AS department_code,\\n    d.name AS department_name,\\n    c.credits AS credits,\\n    COUNT(*) AS course_count\\n  FROM public.departments d\\n  JOIN public.courses c ON c.department_id = d.id\\n  GROUP BY d.id, d.code, d.name, c.credits\\n)\\nSELECT\\n  department_id,\\n  department_code,\\n  department_name,\\n  credits,\\n  course_count,\\n  ROUND(100.0 * course_count::numeric / SUM(course_count) OVER (PARTITION BY department_id), 2) AS percent_of_department\\nFROM dept_credit_counts\\nORDER BY department_code, credits;\",\"data\":[{\"credits\":2,\"course_count\":1,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":16.67},{\"credits\":4,\"course_count\":2,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":33.33},{\"credits\":5,\"course_count\":2,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":33.33},{\"credits\":6,\"course_count\":1,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":16.67},{\"credits\":3,\"course_count\":1,\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"percent_of_department\":25},{\"credits\":4,\"course_count\":1,\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"percent_of_department\":25},{\"credits\":6,\"course_count\":2,\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"percent_of_department\":50},{\"credits\":6,\"course_count\":2,\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"percent_of_department\":100},{\"credits\":2,\"course_count\":1,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"percent_of_department\":16.67},{\"credits\":3,\"course_count\":1,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"percent_of_department\":16.67},{\"credits\":4,\"course_count\":1,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"percent_of_department\":16.67},{\"credits\":5,\"course_count\":2,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"percent_of_department\":33.33},{\"credits\":6,\"course_count\":1,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"percent_of_department\":16.67},{\"credits\":5,\"course_count\":2,\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"percent_of_department\":66.67},{\"credits\":6,\"course_count\":1,\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"percent_of_department\":33.33},{\"credits\":2,\"course_count\":2,\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"percent_of_department\":40},{\"credits\":3,\"course_count\":1,\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"percent_of_department\":20},{\"credits\":4,\"course_count\":2,\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"percent_of_department\":40}],\"metadata\":{\"columns\":[\"credits\",\"course_count\",\"department_id\",\"department_code\",\"department_name\",\"percent_of_department\"],\"rowCount\":18,\"sample\":[{\"credits\":2,\"course_count\":1,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":16.67},{\"credits\":4,\"course_count\":2,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":33.33}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Distribution of course credit values by department\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"department_code\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Department\",\"labelAngle\":-40}},\"y\":{\"aggregate\":\"sum\",\"field\":\"course_count\",\"type\":\"quantitative\",\"stack\":\"normalize\",\"axis\":{\"title\":\"Percent of department\",\"format\":\"%\"}},\"color\":{\"field\":\"credits\",\"type\":\"nominal\",\"legend\":{\"title\":\"Credits\"}},\"order\":{\"field\":\"credits\",\"type\":\"ordinal\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"credits\",\"type\":\"nominal\",\"title\":\"Credits\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Course count\"},{\"field\":\"percent_of_department\",\"type\":\"quantitative\",\"title\":\"Percent of department (%)\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771804534003}},\"input\":{\"question\":\"Show the distribution of credit values for courses in each department\"},\"result\":{\"sql\":\"WITH dept_credit_counts AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.code AS department_code,\\n    d.name AS department_name,\\n    c.credits AS credits,\\n    COUNT(*) AS course_count\\n  FROM public.departments d\\n  JOIN public.courses c ON c.department_id = d.id\\n  GROUP BY d.id, d.code, d.name, c.credits\\n)\\nSELECT\\n  department_id,\\n  department_code,\\n  department_name,\\n  credits,\\n  course_count,\\n  ROUND(100.0 * course_count::numeric / SUM(course_count) OVER (PARTITION BY department_id), 2) AS percent_of_department\\nFROM dept_credit_counts\\nORDER BY department_code, credits;\",\"data\":[{\"credits\":2,\"course_count\":1,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":16.67},{\"credits\":4,\"course_count\":2,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":33.33},{\"credits\":5,\"course_count\":2,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":33.33},{\"credits\":6,\"course_count\":1,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":16.67},{\"credits\":3,\"course_count\":1,\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"percent_of_department\":25},{\"credits\":4,\"course_count\":1,\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"percent_of_department\":25},{\"credits\":6,\"course_count\":2,\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"percent_of_department\":50},{\"credits\":6,\"course_count\":2,\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"percent_of_department\":100},{\"credits\":2,\"course_count\":1,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"percent_of_department\":16.67},{\"credits\":3,\"course_count\":1,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"percent_of_department\":16.67},{\"credits\":4,\"course_count\":1,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"percent_of_department\":16.67},{\"credits\":5,\"course_count\":2,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"percent_of_department\":33.33},{\"credits\":6,\"course_count\":1,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"percent_of_department\":16.67},{\"credits\":5,\"course_count\":2,\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"percent_of_department\":66.67},{\"credits\":6,\"course_count\":1,\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"percent_of_department\":33.33},{\"credits\":2,\"course_count\":2,\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"percent_of_department\":40},{\"credits\":3,\"course_count\":1,\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"percent_of_department\":20},{\"credits\":4,\"course_count\":2,\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"percent_of_department\":40}],\"metadata\":{\"columns\":[\"credits\",\"course_count\",\"department_id\",\"department_code\",\"department_name\",\"percent_of_department\"],\"rowCount\":18,\"sample\":[{\"credits\":2,\"course_count\":1,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":16.67},{\"credits\":4,\"course_count\":2,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"percent_of_department\":33.33}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Distribution of course credit values by department\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"department_code\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Department\",\"labelAngle\":-40}},\"y\":{\"aggregate\":\"sum\",\"field\":\"course_count\",\"type\":\"quantitative\",\"stack\":\"normalize\",\"axis\":{\"title\":\"Percent of department\",\"format\":\"%\"}},\"color\":{\"field\":\"credits\",\"type\":\"nominal\",\"legend\":{\"title\":\"Credits\"}},\"order\":{\"field\":\"credits\",\"type\":\"ordinal\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"credits\",\"type\":\"nominal\",\"title\":\"Credits\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Course count\"},{\"field\":\"percent_of_department\",\"type\":\"quantitative\",\"title\":\"Percent of department (%)\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"fe6234b2c8dd4b5890141ece81d244ca\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/department-credit-weight/run-0001/run.json",
+    "queryPath": "runs/department-credit-weight/run-0001/query.sql",
+    "vegaRawPath": "runs/department-credit-weight/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/department-credit-weight/run-0001/vega.resolved.json",
+    "imagePath": "runs/department-credit-weight/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:55:34.436Z",
+  "traceId": "fe6234b2c8dd4b5890141ece81d244ca",
+  "success": true,
+  "durationMs": 43010,
+  "resultRaw": {
+    "data": [
+      {
+        "credits": 2,
+        "course_count": 1,
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_code": "AEI",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "percent_of_department": 16.67
+      },
+      {
+        "credits": 4,
+        "course_count": 2,
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_code": "AEI",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "percent_of_department": 33.33
+      },
+      {
+        "credits": 5,
+        "course_count": 2,
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_code": "AEI",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "percent_of_department": 33.33
+      },
+      {
+        "credits": 6,
+        "course_count": 1,
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_code": "AEI",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "percent_of_department": 16.67
+      },
+      {
+        "credits": 3,
+        "course_count": 1,
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_code": "IBM",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "percent_of_department": 25
+      },
+      {
+        "credits": 4,
+        "course_count": 1,
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_code": "IBM",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "percent_of_department": 25
+      },
+      {
+        "credits": 6,
+        "course_count": 2,
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_code": "IBM",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "percent_of_department": 50
+      },
+      {
+        "credits": 6,
+        "course_count": 2,
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_code": "INF",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "percent_of_department": 100
+      },
+      {
+        "credits": 2,
+        "course_count": 1,
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "percent_of_department": 16.67
+      },
+      {
+        "credits": 3,
+        "course_count": 1,
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "percent_of_department": 16.67
+      },
+      {
+        "credits": 4,
+        "course_count": 1,
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "percent_of_department": 16.67
+      },
+      {
+        "credits": 5,
+        "course_count": 2,
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "percent_of_department": 33.33
+      },
+      {
+        "credits": 6,
+        "course_count": 1,
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "percent_of_department": 16.67
+      },
+      {
+        "credits": 5,
+        "course_count": 2,
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_code": "TCH",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "percent_of_department": 66.67
+      },
+      {
+        "credits": 6,
+        "course_count": 1,
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_code": "TCH",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "percent_of_department": 33.33
+      },
+      {
+        "credits": 2,
+        "course_count": 2,
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_code": "WIP",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "percent_of_department": 40
+      },
+      {
+        "credits": 3,
+        "course_count": 1,
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_code": "WIP",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "percent_of_department": 20
+      },
+      {
+        "credits": 4,
+        "course_count": 2,
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_code": "WIP",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "percent_of_department": 40
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Distribution of course credit values by department",
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "department_code",
+          "type": "ordinal",
+          "axis": {
+            "title": "Department",
+            "labelAngle": -40
+          }
+        },
+        "y": {
+          "aggregate": "sum",
+          "field": "course_count",
+          "type": "quantitative",
+          "stack": "normalize",
+          "axis": {
+            "title": "Percent of department",
+            "format": "%"
+          }
+        },
+        "color": {
+          "field": "credits",
+          "type": "nominal",
+          "legend": {
+            "title": "Credits"
+          }
+        },
+        "order": {
+          "field": "credits",
+          "type": "ordinal"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "credits",
+            "type": "nominal",
+            "title": "Credits"
+          },
+          {
+            "field": "course_count",
+            "type": "quantitative",
+            "title": "Course count"
+          },
+          {
+            "field": "percent_of_department",
+            "type": "quantitative",
+            "title": "Percent of department (%)"
+          }
+        ]
+      }
+    },
+    "sql": "WITH dept_credit_counts AS (\n  SELECT\n    d.id AS department_id,\n    d.code AS department_code,\n    d.name AS department_name,\n    c.credits AS credits,\n    COUNT(*) AS course_count\n  FROM public.departments d\n  JOIN public.courses c ON c.department_id = d.id\n  GROUP BY d.id, d.code, d.name, c.credits\n)\nSELECT\n  department_id,\n  department_code,\n  department_name,\n  credits,\n  course_count,\n  ROUND(100.0 * course_count::numeric / SUM(course_count) OVER (PARTITION BY department_id), 2) AS percent_of_department\nFROM dept_credit_counts\nORDER BY department_code, credits;",
+    "metadata": {
+      "columns": [
+        "credits",
+        "course_count",
+        "department_id",
+        "department_code",
+        "department_name",
+        "percent_of_department"
+      ],
+      "rowCount": 18,
+      "sample": [
+        {
+          "credits": 2,
+          "course_count": 1,
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "department_code": "AEI",
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "percent_of_department": 16.67
+        },
+        {
+          "credits": 4,
+          "course_count": 2,
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "department_code": "AEI",
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "percent_of_department": 33.33
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "credits": 2,
+        "course_count": 1,
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_code": "AEI",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "percent_of_department": 16.67
+      },
+      {
+        "credits": 4,
+        "course_count": 2,
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_code": "AEI",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "percent_of_department": 33.33
+      },
+      {
+        "credits": 5,
+        "course_count": 2,
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_code": "AEI",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "percent_of_department": 33.33
+      },
+      {
+        "credits": 6,
+        "course_count": 1,
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_code": "AEI",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "percent_of_department": 16.67
+      },
+      {
+        "credits": 3,
+        "course_count": 1,
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_code": "IBM",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "percent_of_department": 25
+      },
+      {
+        "credits": 4,
+        "course_count": 1,
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_code": "IBM",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "percent_of_department": 25
+      },
+      {
+        "credits": 6,
+        "course_count": 2,
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_code": "IBM",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "percent_of_department": 50
+      },
+      {
+        "credits": 6,
+        "course_count": 2,
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_code": "INF",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "percent_of_department": 100
+      },
+      {
+        "credits": 2,
+        "course_count": 1,
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "percent_of_department": 16.67
+      },
+      {
+        "credits": 3,
+        "course_count": 1,
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "percent_of_department": 16.67
+      },
+      {
+        "credits": 4,
+        "course_count": 1,
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "percent_of_department": 16.67
+      },
+      {
+        "credits": 5,
+        "course_count": 2,
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "percent_of_department": 33.33
+      },
+      {
+        "credits": 6,
+        "course_count": 1,
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "percent_of_department": 16.67
+      },
+      {
+        "credits": 5,
+        "course_count": 2,
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_code": "TCH",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "percent_of_department": 66.67
+      },
+      {
+        "credits": 6,
+        "course_count": 1,
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_code": "TCH",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "percent_of_department": 33.33
+      },
+      {
+        "credits": 2,
+        "course_count": 2,
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_code": "WIP",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "percent_of_department": 40
+      },
+      {
+        "credits": 3,
+        "course_count": 1,
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_code": "WIP",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "percent_of_department": 20
+      },
+      {
+        "credits": 4,
+        "course_count": 2,
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_code": "WIP",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "percent_of_department": 40
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Distribution of course credit values by department",
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "department_code",
+          "type": "ordinal",
+          "axis": {
+            "title": "Department",
+            "labelAngle": -40
+          }
+        },
+        "y": {
+          "aggregate": "sum",
+          "field": "course_count",
+          "type": "quantitative",
+          "stack": "normalize",
+          "axis": {
+            "title": "Percent of department",
+            "format": "%"
+          }
+        },
+        "color": {
+          "field": "credits",
+          "type": "nominal",
+          "legend": {
+            "title": "Credits"
+          }
+        },
+        "order": {
+          "field": "credits",
+          "type": "ordinal"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "credits",
+            "type": "nominal",
+            "title": "Credits"
+          },
+          {
+            "field": "course_count",
+            "type": "quantitative",
+            "title": "Course count"
+          },
+          {
+            "field": "percent_of_department",
+            "type": "quantitative",
+            "title": "Percent of department (%)"
+          }
+        ]
+      }
+    },
+    "sql": "WITH dept_credit_counts AS (\n  SELECT\n    d.id AS department_id,\n    d.code AS department_code,\n    d.name AS department_name,\n    c.credits AS credits,\n    COUNT(*) AS course_count\n  FROM public.departments d\n  JOIN public.courses c ON c.department_id = d.id\n  GROUP BY d.id, d.code, d.name, c.credits\n)\nSELECT\n  department_id,\n  department_code,\n  department_name,\n  credits,\n  course_count,\n  ROUND(100.0 * course_count::numeric / SUM(course_count) OVER (PARTITION BY department_id), 2) AS percent_of_department\nFROM dept_credit_counts\nORDER BY department_code, credits;",
+    "metadata": {
+      "columns": [
+        "credits",
+        "course_count",
+        "department_id",
+        "department_code",
+        "department_name",
+        "percent_of_department"
+      ],
+      "rowCount": 18,
+      "sample": [
+        {
+          "credits": 2,
+          "course_count": 1,
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "department_code": "AEI",
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "percent_of_department": 16.67
+        },
+        {
+          "credits": 4,
+          "course_count": 2,
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "department_code": "AEI",
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "percent_of_department": 33.33
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:55:34.436Z",
+    "traceId": "fe6234b2c8dd4b5890141ece81d244ca",
+    "attempts": 3,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 8452,
+      "outputTokens": 3526,
+      "totalTokens": 11978,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2560,
+      "costUsd": 0.009165
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 8452,
+        "outputTokens": 3526,
+        "totalTokens": 11978,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2560,
+        "costUsd": 0.009165
+      }
+    ],
+    "warnings": []
+  }
+}

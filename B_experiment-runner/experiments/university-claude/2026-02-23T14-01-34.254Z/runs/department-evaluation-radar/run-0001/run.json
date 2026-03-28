@@ -1,0 +1,500 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "department-evaluation-radar",
+  "caseDirectory": "department-evaluation-radar",
+  "repeatIndex": 1,
+  "prompt": "Compare departments across all evaluation dimensions",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Compare departments across all evaluation dimensions"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:11:14.862Z",
+    "endedAtUtc": "2026-02-23T14:12:15.240Z",
+    "durationMs": 60378
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "25505",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:12:15 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Compare departments across all evaluation dimensions\"},\"sql\":{\"payload\":{\"question\":\"Compare departments across all evaluation dimensions\"},\"startedAt\":1771855874877,\"status\":\"success\",\"output\":{\"reasoning\":\"The query compares all departments across multiple evaluation dimensions by aggregating course evaluation metrics. It joins departments through courses, course sections, enrollments, and course evaluations to calculate average ratings (overall, professor, content, difficulty), workload hours, and recommendation percentage for each department. Results are ordered alphabetically by department name for easy comparison.\",\"sql\":\"SELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  COUNT(DISTINCT e.id) AS total_enrollments,\\n  COUNT(DISTINCT ce.id) AS total_evaluations,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating,\\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\\n  ROUND(AVG(ce.content_rating)::numeric, 2) AS avg_content_rating,\\n  ROUND(AVG(ce.difficulty_rating)::numeric, 2) AS avg_difficulty_rating,\\n  ROUND(AVG(ce.workload_hours)::numeric, 2) AS avg_workload_hours,\\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(DISTINCT ce.id), 0), 2) AS recommend_percentage\\nFROM departments d\\nLEFT JOIN courses c ON d.id = c.department_id\\nLEFT JOIN course_sections cs ON c.id = cs.course_id\\nLEFT JOIN enrollments e ON cs.id = e.course_section_id\\nLEFT JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY d.id, d.name, d.code\\nORDER BY d.name\",\"assumptions\":[\"Evaluation dimensions include: overall rating, professor rating, content rating, difficulty rating, workload hours, and recommendation percentage\",\"All departments should be included even if they have no evaluations (using LEFT JOINs)\",\"Recommendation percentage is calculated as the proportion of evaluations where would_recommend is true\"]},\"endedAt\":1771855929684},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  COUNT(DISTINCT e.id) AS total_enrollments,\\n  COUNT(DISTINCT ce.id) AS total_evaluations,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating,\\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\\n  ROUND(AVG(ce.content_rating)::numeric, 2) AS avg_content_rating,\\n  ROUND(AVG(ce.difficulty_rating)::numeric, 2) AS avg_difficulty_rating,\\n  ROUND(AVG(ce.workload_hours)::numeric, 2) AS avg_workload_hours,\\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(DISTINCT ce.id), 0), 2) AS recommend_percentage\\nFROM departments d\\nLEFT JOIN courses c ON d.id = c.department_id\\nLEFT JOIN course_sections cs ON c.id = cs.course_id\\nLEFT JOIN enrollments e ON cs.id = e.course_section_id\\nLEFT JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY d.id, d.name, d.code\\nORDER BY d.name\"},\"startedAt\":1771855929688,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  COUNT(DISTINCT e.id) AS total_enrollments,\\n  COUNT(DISTINCT ce.id) AS total_evaluations,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating,\\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\\n  ROUND(AVG(ce.content_rating)::numeric, 2) AS avg_content_rating,\\n  ROUND(AVG(ce.difficulty_rating)::numeric, 2) AS avg_difficulty_rating,\\n  ROUND(AVG(ce.workload_hours)::numeric, 2) AS avg_workload_hours,\\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(DISTINCT ce.id), 0), 2) AS recommend_percentage\\nFROM departments d\\nLEFT JOIN courses c ON d.id = c.department_id\\nLEFT JOIN course_sections cs ON c.id = cs.course_id\\nLEFT JOIN enrollments e ON cs.id = e.course_section_id\\nLEFT JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY d.id, d.name, d.code\\nORDER BY d.name\",\"metadata\":{\"columns\":[\"department_name\",\"department_code\",\"total_enrollments\",\"total_evaluations\",\"avg_overall_rating\",\"avg_professor_rating\",\"avg_content_rating\",\"avg_difficulty_rating\",\"avg_workload_hours\",\"recommend_percentage\"],\"rowCount\":6,\"sample\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"department_code\":\"AEI\",\"total_enrollments\":\"28\",\"total_evaluations\":\"7\",\"avg_overall_rating\":\"2.86\",\"avg_professor_rating\":\"2.71\",\"avg_content_rating\":\"2.86\",\"avg_difficulty_rating\":\"3.43\",\"avg_workload_hours\":\"10.07\",\"recommend_percentage\":\"42.86\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"department_code\":\"INF\",\"total_enrollments\":\"18\",\"total_evaluations\":\"4\",\"avg_overall_rating\":\"2.75\",\"avg_professor_rating\":\"2.50\",\"avg_content_rating\":\"3.25\",\"avg_difficulty_rating\":\"2.75\",\"avg_workload_hours\":\"12.47\",\"recommend_percentage\":\"50.00\"}]},\"data\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"department_code\":\"AEI\",\"total_enrollments\":\"28\",\"total_evaluations\":\"7\",\"avg_overall_rating\":\"2.86\",\"avg_professor_rating\":\"2.71\",\"avg_content_rating\":\"2.86\",\"avg_difficulty_rating\":\"3.43\",\"avg_workload_hours\":\"10.07\",\"recommend_percentage\":\"42.86\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"department_code\":\"INF\",\"total_enrollments\":\"18\",\"total_evaluations\":\"4\",\"avg_overall_rating\":\"2.75\",\"avg_professor_rating\":\"2.50\",\"avg_content_rating\":\"3.25\",\"avg_difficulty_rating\":\"2.75\",\"avg_workload_hours\":\"12.47\",\"recommend_percentage\":\"50.00\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"department_code\":\"IBM\",\"total_enrollments\":\"20\",\"total_evaluations\":\"5\",\"avg_overall_rating\":\"3.60\",\"avg_professor_rating\":\"2.80\",\"avg_content_rating\":\"3.00\",\"avg_difficulty_rating\":\"3.00\",\"avg_workload_hours\":\"8.86\",\"recommend_percentage\":\"80.00\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"department_code\":\"WIP\",\"total_enrollments\":\"17\",\"total_evaluations\":\"7\",\"avg_overall_rating\":\"3.43\",\"avg_professor_rating\":\"3.43\",\"avg_content_rating\":\"3.57\",\"avg_difficulty_rating\":\"3.43\",\"avg_workload_hours\":\"8.09\",\"recommend_percentage\":\"42.86\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"total_enrollments\":\"33\",\"total_evaluations\":\"10\",\"avg_overall_rating\":\"2.70\",\"avg_professor_rating\":\"3.00\",\"avg_content_rating\":\"3.40\",\"avg_difficulty_rating\":\"2.90\",\"avg_workload_hours\":\"10.88\",\"recommend_percentage\":\"10.00\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"department_code\":\"TCH\",\"total_enrollments\":\"17\",\"total_evaluations\":\"8\",\"avg_overall_rating\":\"2.88\",\"avg_professor_rating\":\"3.50\",\"avg_content_rating\":\"3.25\",\"avg_difficulty_rating\":\"3.38\",\"avg_workload_hours\":\"8.21\",\"recommend_percentage\":\"50.00\"}]},\"endedAt\":1771855929693},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  COUNT(DISTINCT e.id) AS total_enrollments,\\n  COUNT(DISTINCT ce.id) AS total_evaluations,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating,\\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\\n  ROUND(AVG(ce.content_rating)::numeric, 2) AS avg_content_rating,\\n  ROUND(AVG(ce.difficulty_rating)::numeric, 2) AS avg_difficulty_rating,\\n  ROUND(AVG(ce.workload_hours)::numeric, 2) AS avg_workload_hours,\\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(DISTINCT ce.id), 0), 2) AS recommend_percentage\\nFROM departments d\\nLEFT JOIN courses c ON d.id = c.department_id\\nLEFT JOIN course_sections cs ON c.id = cs.course_id\\nLEFT JOIN enrollments e ON cs.id = e.course_section_id\\nLEFT JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY d.id, d.name, d.code\\nORDER BY d.name\",\"metadata\":{\"columns\":[\"department_name\",\"department_code\",\"total_enrollments\",\"total_evaluations\",\"avg_overall_rating\",\"avg_professor_rating\",\"avg_content_rating\",\"avg_difficulty_rating\",\"avg_workload_hours\",\"recommend_percentage\"],\"rowCount\":6,\"sample\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"department_code\":\"AEI\",\"total_enrollments\":\"28\",\"total_evaluations\":\"7\",\"avg_overall_rating\":\"2.86\",\"avg_professor_rating\":\"2.71\",\"avg_content_rating\":\"2.86\",\"avg_difficulty_rating\":\"3.43\",\"avg_workload_hours\":\"10.07\",\"recommend_percentage\":\"42.86\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"department_code\":\"INF\",\"total_enrollments\":\"18\",\"total_evaluations\":\"4\",\"avg_overall_rating\":\"2.75\",\"avg_professor_rating\":\"2.50\",\"avg_content_rating\":\"3.25\",\"avg_difficulty_rating\":\"2.75\",\"avg_workload_hours\":\"12.47\",\"recommend_percentage\":\"50.00\"}]},\"data\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"department_code\":\"AEI\",\"total_enrollments\":\"28\",\"total_evaluations\":\"7\",\"avg_overall_rating\":\"2.86\",\"avg_professor_rating\":\"2.71\",\"avg_content_rating\":\"2.86\",\"avg_difficulty_rating\":\"3.43\",\"avg_workload_hours\":\"10.07\",\"recommend_percentage\":\"42.86\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"department_code\":\"INF\",\"total_enrollments\":\"18\",\"total_evaluations\":\"4\",\"avg_overall_rating\":\"2.75\",\"avg_professor_rating\":\"2.50\",\"avg_content_rating\":\"3.25\",\"avg_difficulty_rating\":\"2.75\",\"avg_workload_hours\":\"12.47\",\"recommend_percentage\":\"50.00\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"department_code\":\"IBM\",\"total_enrollments\":\"20\",\"total_evaluations\":\"5\",\"avg_overall_rating\":\"3.60\",\"avg_professor_rating\":\"2.80\",\"avg_content_rating\":\"3.00\",\"avg_difficulty_rating\":\"3.00\",\"avg_workload_hours\":\"8.86\",\"recommend_percentage\":\"80.00\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"department_code\":\"WIP\",\"total_enrollments\":\"17\",\"total_evaluations\":\"7\",\"avg_overall_rating\":\"3.43\",\"avg_professor_rating\":\"3.43\",\"avg_content_rating\":\"3.57\",\"avg_difficulty_rating\":\"3.43\",\"avg_workload_hours\":\"8.09\",\"recommend_percentage\":\"42.86\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"total_enrollments\":\"33\",\"total_evaluations\":\"10\",\"avg_overall_rating\":\"2.70\",\"avg_professor_rating\":\"3.00\",\"avg_content_rating\":\"3.40\",\"avg_difficulty_rating\":\"2.90\",\"avg_workload_hours\":\"10.88\",\"recommend_percentage\":\"10.00\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"department_code\":\"TCH\",\"total_enrollments\":\"17\",\"total_evaluations\":\"8\",\"avg_overall_rating\":\"2.88\",\"avg_professor_rating\":\"3.50\",\"avg_content_rating\":\"3.25\",\"avg_difficulty_rating\":\"3.38\",\"avg_workload_hours\":\"8.21\",\"recommend_percentage\":\"50.00\"}]},\"startedAt\":1771855929697,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Department Comparison Across All Evaluation Dimensions\",\"data\":{\"name\":\"query_result\"},\"width\":1000,\"height\":500,\"transform\":[{\"fold\":[\"avg_overall_rating\",\"avg_professor_rating\",\"avg_content_rating\",\"avg_difficulty_rating\",\"avg_workload_hours\",\"recommend_percentage\"],\"as\":[\"dimension\",\"value\"]}],\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"dimension\",\"type\":\"nominal\",\"title\":\"Evaluation Dimension\",\"axis\":{\"labelAngle\":-45,\"labelExpr\":\"datum.label === 'avg_overall_rating' ? 'Overall Rating' : datum.label === 'avg_professor_rating' ? 'Professor Rating' : datum.label === 'avg_content_rating' ? 'Content Rating' : datum.label === 'avg_difficulty_rating' ? 'Difficulty Rating' : datum.label === 'avg_workload_hours' ? 'Avg Workload (hrs)' : 'Recommend %'\"}},\"y\":{\"field\":\"value\",\"type\":\"quantitative\",\"title\":\"Score / Percentage\"},\"color\":{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Department\",\"scale\":{\"scheme\":\"category10\"}},\"xOffset\":{\"field\":\"department_code\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"dimension\",\"type\":\"nominal\",\"title\":\"Dimension\"},{\"field\":\"value\",\"type\":\"quantitative\",\"title\":\"Value\",\"format\":\".2f\"}]}},\"reasoning\":\"This grouped bar chart enables direct comparison of all 6 evaluation dimensions across departments. The fold transform reshapes the data to show each dimension as a separate group, with bars colored by department code. The x-offset encoding groups bars by dimension while maintaining department distinction through color. This design allows viewers to easily compare how departments perform on each metric (ratings, workload, recommendation rate) and identify relative strengths and weaknesses across the institution.\"},\"endedAt\":1771855935220},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Department Comparison Across All Evaluation Dimensions\",\"data\":{\"name\":\"query_result\"},\"width\":1000,\"height\":500,\"transform\":[{\"fold\":[\"avg_overall_rating\",\"avg_professor_rating\",\"avg_content_rating\",\"avg_difficulty_rating\",\"avg_workload_hours\",\"recommend_percentage\"],\"as\":[\"dimension\",\"value\"]}],\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"dimension\",\"type\":\"nominal\",\"title\":\"Evaluation Dimension\",\"axis\":{\"labelAngle\":-45,\"labelExpr\":\"datum.label === 'avg_overall_rating' ? 'Overall Rating' : datum.label === 'avg_professor_rating' ? 'Professor Rating' : datum.label === 'avg_content_rating' ? 'Content Rating' : datum.label === 'avg_difficulty_rating' ? 'Difficulty Rating' : datum.label === 'avg_workload_hours' ? 'Avg Workload (hrs)' : 'Recommend %'\"}},\"y\":{\"field\":\"value\",\"type\":\"quantitative\",\"title\":\"Score / Percentage\"},\"color\":{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Department\",\"scale\":{\"scheme\":\"category10\"}},\"xOffset\":{\"field\":\"department_code\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"dimension\",\"type\":\"nominal\",\"title\":\"Dimension\"},{\"field\":\"value\",\"type\":\"quantitative\",\"title\":\"Value\",\"format\":\".2f\"}]}},\"reasoning\":\"This grouped bar chart enables direct comparison of all 6 evaluation dimensions across departments. The fold transform reshapes the data to show each dimension as a separate group, with bars colored by department code. The x-offset encoding groups bars by dimension while maintaining department distinction through color. This design allows viewers to easily compare how departments perform on each metric (ratings, workload, recommendation rate) and identify relative strengths and weaknesses across the institution.\"},\"startedAt\":1771855935224,\"status\":\"success\",\"output\":{\"sql\":\"SELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  COUNT(DISTINCT e.id) AS total_enrollments,\\n  COUNT(DISTINCT ce.id) AS total_evaluations,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating,\\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\\n  ROUND(AVG(ce.content_rating)::numeric, 2) AS avg_content_rating,\\n  ROUND(AVG(ce.difficulty_rating)::numeric, 2) AS avg_difficulty_rating,\\n  ROUND(AVG(ce.workload_hours)::numeric, 2) AS avg_workload_hours,\\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(DISTINCT ce.id), 0), 2) AS recommend_percentage\\nFROM departments d\\nLEFT JOIN courses c ON d.id = c.department_id\\nLEFT JOIN course_sections cs ON c.id = cs.course_id\\nLEFT JOIN enrollments e ON cs.id = e.course_section_id\\nLEFT JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY d.id, d.name, d.code\\nORDER BY d.name\",\"data\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"department_code\":\"AEI\",\"total_enrollments\":\"28\",\"total_evaluations\":\"7\",\"avg_overall_rating\":\"2.86\",\"avg_professor_rating\":\"2.71\",\"avg_content_rating\":\"2.86\",\"avg_difficulty_rating\":\"3.43\",\"avg_workload_hours\":\"10.07\",\"recommend_percentage\":\"42.86\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"department_code\":\"INF\",\"total_enrollments\":\"18\",\"total_evaluations\":\"4\",\"avg_overall_rating\":\"2.75\",\"avg_professor_rating\":\"2.50\",\"avg_content_rating\":\"3.25\",\"avg_difficulty_rating\":\"2.75\",\"avg_workload_hours\":\"12.47\",\"recommend_percentage\":\"50.00\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"department_code\":\"IBM\",\"total_enrollments\":\"20\",\"total_evaluations\":\"5\",\"avg_overall_rating\":\"3.60\",\"avg_professor_rating\":\"2.80\",\"avg_content_rating\":\"3.00\",\"avg_difficulty_rating\":\"3.00\",\"avg_workload_hours\":\"8.86\",\"recommend_percentage\":\"80.00\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"department_code\":\"WIP\",\"total_enrollments\":\"17\",\"total_evaluations\":\"7\",\"avg_overall_rating\":\"3.43\",\"avg_professor_rating\":\"3.43\",\"avg_content_rating\":\"3.57\",\"avg_difficulty_rating\":\"3.43\",\"avg_workload_hours\":\"8.09\",\"recommend_percentage\":\"42.86\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"total_enrollments\":\"33\",\"total_evaluations\":\"10\",\"avg_overall_rating\":\"2.70\",\"avg_professor_rating\":\"3.00\",\"avg_content_rating\":\"3.40\",\"avg_difficulty_rating\":\"2.90\",\"avg_workload_hours\":\"10.88\",\"recommend_percentage\":\"10.00\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"department_code\":\"TCH\",\"total_enrollments\":\"17\",\"total_evaluations\":\"8\",\"avg_overall_rating\":\"2.88\",\"avg_professor_rating\":\"3.50\",\"avg_content_rating\":\"3.25\",\"avg_difficulty_rating\":\"3.38\",\"avg_workload_hours\":\"8.21\",\"recommend_percentage\":\"50.00\"}],\"metadata\":{\"columns\":[\"department_name\",\"department_code\",\"total_enrollments\",\"total_evaluations\",\"avg_overall_rating\",\"avg_professor_rating\",\"avg_content_rating\",\"avg_difficulty_rating\",\"avg_workload_hours\",\"recommend_percentage\"],\"rowCount\":6,\"sample\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"department_code\":\"AEI\",\"total_enrollments\":\"28\",\"total_evaluations\":\"7\",\"avg_overall_rating\":\"2.86\",\"avg_professor_rating\":\"2.71\",\"avg_content_rating\":\"2.86\",\"avg_difficulty_rating\":\"3.43\",\"avg_workload_hours\":\"10.07\",\"recommend_percentage\":\"42.86\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"department_code\":\"INF\",\"total_enrollments\":\"18\",\"total_evaluations\":\"4\",\"avg_overall_rating\":\"2.75\",\"avg_professor_rating\":\"2.50\",\"avg_content_rating\":\"3.25\",\"avg_difficulty_rating\":\"2.75\",\"avg_workload_hours\":\"12.47\",\"recommend_percentage\":\"50.00\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Department Comparison Across All Evaluation Dimensions\",\"data\":{\"name\":\"query_result\"},\"width\":1000,\"height\":500,\"transform\":[{\"fold\":[\"avg_overall_rating\",\"avg_professor_rating\",\"avg_content_rating\",\"avg_difficulty_rating\",\"avg_workload_hours\",\"recommend_percentage\"],\"as\":[\"dimension\",\"value\"]}],\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"dimension\",\"type\":\"nominal\",\"title\":\"Evaluation Dimension\",\"axis\":{\"labelAngle\":-45,\"labelExpr\":\"datum.label === 'avg_overall_rating' ? 'Overall Rating' : datum.label === 'avg_professor_rating' ? 'Professor Rating' : datum.label === 'avg_content_rating' ? 'Content Rating' : datum.label === 'avg_difficulty_rating' ? 'Difficulty Rating' : datum.label === 'avg_workload_hours' ? 'Avg Workload (hrs)' : 'Recommend %'\"}},\"y\":{\"field\":\"value\",\"type\":\"quantitative\",\"title\":\"Score / Percentage\"},\"color\":{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Department\",\"scale\":{\"scheme\":\"category10\"}},\"xOffset\":{\"field\":\"department_code\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"dimension\",\"type\":\"nominal\",\"title\":\"Dimension\"},{\"field\":\"value\",\"type\":\"quantitative\",\"title\":\"Value\",\"format\":\".2f\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Encoding field 'dimension' is missing in SQL output columns.\",\"Encoding field 'value' is missing in SQL output columns.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Encoding field 'dimension' is missing in SQL output columns.\",\"Encoding field 'value' is missing in SQL output columns.\"]}},\"endedAt\":1771855935228}},\"input\":{\"question\":\"Compare departments across all evaluation dimensions\"},\"result\":{\"sql\":\"SELECT \\n  d.name AS department_name,\\n  d.code AS department_code,\\n  COUNT(DISTINCT e.id) AS total_enrollments,\\n  COUNT(DISTINCT ce.id) AS total_evaluations,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating,\\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\\n  ROUND(AVG(ce.content_rating)::numeric, 2) AS avg_content_rating,\\n  ROUND(AVG(ce.difficulty_rating)::numeric, 2) AS avg_difficulty_rating,\\n  ROUND(AVG(ce.workload_hours)::numeric, 2) AS avg_workload_hours,\\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(DISTINCT ce.id), 0), 2) AS recommend_percentage\\nFROM departments d\\nLEFT JOIN courses c ON d.id = c.department_id\\nLEFT JOIN course_sections cs ON c.id = cs.course_id\\nLEFT JOIN enrollments e ON cs.id = e.course_section_id\\nLEFT JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY d.id, d.name, d.code\\nORDER BY d.name\",\"data\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"department_code\":\"AEI\",\"total_enrollments\":\"28\",\"total_evaluations\":\"7\",\"avg_overall_rating\":\"2.86\",\"avg_professor_rating\":\"2.71\",\"avg_content_rating\":\"2.86\",\"avg_difficulty_rating\":\"3.43\",\"avg_workload_hours\":\"10.07\",\"recommend_percentage\":\"42.86\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"department_code\":\"INF\",\"total_enrollments\":\"18\",\"total_evaluations\":\"4\",\"avg_overall_rating\":\"2.75\",\"avg_professor_rating\":\"2.50\",\"avg_content_rating\":\"3.25\",\"avg_difficulty_rating\":\"2.75\",\"avg_workload_hours\":\"12.47\",\"recommend_percentage\":\"50.00\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"department_code\":\"IBM\",\"total_enrollments\":\"20\",\"total_evaluations\":\"5\",\"avg_overall_rating\":\"3.60\",\"avg_professor_rating\":\"2.80\",\"avg_content_rating\":\"3.00\",\"avg_difficulty_rating\":\"3.00\",\"avg_workload_hours\":\"8.86\",\"recommend_percentage\":\"80.00\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"department_code\":\"WIP\",\"total_enrollments\":\"17\",\"total_evaluations\":\"7\",\"avg_overall_rating\":\"3.43\",\"avg_professor_rating\":\"3.43\",\"avg_content_rating\":\"3.57\",\"avg_difficulty_rating\":\"3.43\",\"avg_workload_hours\":\"8.09\",\"recommend_percentage\":\"42.86\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"department_code\":\"MTR\",\"total_enrollments\":\"33\",\"total_evaluations\":\"10\",\"avg_overall_rating\":\"2.70\",\"avg_professor_rating\":\"3.00\",\"avg_content_rating\":\"3.40\",\"avg_difficulty_rating\":\"2.90\",\"avg_workload_hours\":\"10.88\",\"recommend_percentage\":\"10.00\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"department_code\":\"TCH\",\"total_enrollments\":\"17\",\"total_evaluations\":\"8\",\"avg_overall_rating\":\"2.88\",\"avg_professor_rating\":\"3.50\",\"avg_content_rating\":\"3.25\",\"avg_difficulty_rating\":\"3.38\",\"avg_workload_hours\":\"8.21\",\"recommend_percentage\":\"50.00\"}],\"metadata\":{\"columns\":[\"department_name\",\"department_code\",\"total_enrollments\",\"total_evaluations\",\"avg_overall_rating\",\"avg_professor_rating\",\"avg_content_rating\",\"avg_difficulty_rating\",\"avg_workload_hours\",\"recommend_percentage\"],\"rowCount\":6,\"sample\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"department_code\":\"AEI\",\"total_enrollments\":\"28\",\"total_evaluations\":\"7\",\"avg_overall_rating\":\"2.86\",\"avg_professor_rating\":\"2.71\",\"avg_content_rating\":\"2.86\",\"avg_difficulty_rating\":\"3.43\",\"avg_workload_hours\":\"10.07\",\"recommend_percentage\":\"42.86\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"department_code\":\"INF\",\"total_enrollments\":\"18\",\"total_evaluations\":\"4\",\"avg_overall_rating\":\"2.75\",\"avg_professor_rating\":\"2.50\",\"avg_content_rating\":\"3.25\",\"avg_difficulty_rating\":\"2.75\",\"avg_workload_hours\":\"12.47\",\"recommend_percentage\":\"50.00\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Department Comparison Across All Evaluation Dimensions\",\"data\":{\"name\":\"query_result\"},\"width\":1000,\"height\":500,\"transform\":[{\"fold\":[\"avg_overall_rating\",\"avg_professor_rating\",\"avg_content_rating\",\"avg_difficulty_rating\",\"avg_workload_hours\",\"recommend_percentage\"],\"as\":[\"dimension\",\"value\"]}],\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"dimension\",\"type\":\"nominal\",\"title\":\"Evaluation Dimension\",\"axis\":{\"labelAngle\":-45,\"labelExpr\":\"datum.label === 'avg_overall_rating' ? 'Overall Rating' : datum.label === 'avg_professor_rating' ? 'Professor Rating' : datum.label === 'avg_content_rating' ? 'Content Rating' : datum.label === 'avg_difficulty_rating' ? 'Difficulty Rating' : datum.label === 'avg_workload_hours' ? 'Avg Workload (hrs)' : 'Recommend %'\"}},\"y\":{\"field\":\"value\",\"type\":\"quantitative\",\"title\":\"Score / Percentage\"},\"color\":{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Department\",\"scale\":{\"scheme\":\"category10\"}},\"xOffset\":{\"field\":\"department_code\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Code\"},{\"field\":\"dimension\",\"type\":\"nominal\",\"title\":\"Dimension\"},{\"field\":\"value\",\"type\":\"quantitative\",\"title\":\"Value\",\"format\":\".2f\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Encoding field 'dimension' is missing in SQL output columns.\",\"Encoding field 'value' is missing in SQL output columns.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Encoding field 'dimension' is missing in SQL output columns.\",\"Encoding field 'value' is missing in SQL output columns.\"]}},\"traceId\":\"2f6e007ccd9a0ff0876112c4f24aac52\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/department-evaluation-radar/run-0001/run.json",
+    "queryPath": "runs/department-evaluation-radar/run-0001/query.sql",
+    "vegaRawPath": "runs/department-evaluation-radar/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/department-evaluation-radar/run-0001/vega.resolved.json",
+    "imagePath": "runs/department-evaluation-radar/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:12:15.653Z",
+  "traceId": "2f6e007ccd9a0ff0876112c4f24aac52",
+  "success": true,
+  "durationMs": 60791,
+  "resultRaw": {
+    "data": [
+      {
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "department_code": "AEI",
+        "total_enrollments": "28",
+        "total_evaluations": "7",
+        "avg_overall_rating": "2.86",
+        "avg_professor_rating": "2.71",
+        "avg_content_rating": "2.86",
+        "avg_difficulty_rating": "3.43",
+        "avg_workload_hours": "10.07",
+        "recommend_percentage": "42.86"
+      },
+      {
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "department_code": "INF",
+        "total_enrollments": "18",
+        "total_evaluations": "4",
+        "avg_overall_rating": "2.75",
+        "avg_professor_rating": "2.50",
+        "avg_content_rating": "3.25",
+        "avg_difficulty_rating": "2.75",
+        "avg_workload_hours": "12.47",
+        "recommend_percentage": "50.00"
+      },
+      {
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "department_code": "IBM",
+        "total_enrollments": "20",
+        "total_evaluations": "5",
+        "avg_overall_rating": "3.60",
+        "avg_professor_rating": "2.80",
+        "avg_content_rating": "3.00",
+        "avg_difficulty_rating": "3.00",
+        "avg_workload_hours": "8.86",
+        "recommend_percentage": "80.00"
+      },
+      {
+        "department_name": "Wydział Inżynierii Produkcji",
+        "department_code": "WIP",
+        "total_enrollments": "17",
+        "total_evaluations": "7",
+        "avg_overall_rating": "3.43",
+        "avg_professor_rating": "3.43",
+        "avg_content_rating": "3.57",
+        "avg_difficulty_rating": "3.43",
+        "avg_workload_hours": "8.09",
+        "recommend_percentage": "42.86"
+      },
+      {
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "department_code": "MTR",
+        "total_enrollments": "33",
+        "total_evaluations": "10",
+        "avg_overall_rating": "2.70",
+        "avg_professor_rating": "3.00",
+        "avg_content_rating": "3.40",
+        "avg_difficulty_rating": "2.90",
+        "avg_workload_hours": "10.88",
+        "recommend_percentage": "10.00"
+      },
+      {
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "department_code": "TCH",
+        "total_enrollments": "17",
+        "total_evaluations": "8",
+        "avg_overall_rating": "2.88",
+        "avg_professor_rating": "3.50",
+        "avg_content_rating": "3.25",
+        "avg_difficulty_rating": "3.38",
+        "avg_workload_hours": "8.21",
+        "recommend_percentage": "50.00"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Department Comparison Across All Evaluation Dimensions",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 1000,
+      "height": 500,
+      "transform": [
+        {
+          "fold": [
+            "avg_overall_rating",
+            "avg_professor_rating",
+            "avg_content_rating",
+            "avg_difficulty_rating",
+            "avg_workload_hours",
+            "recommend_percentage"
+          ],
+          "as": [
+            "dimension",
+            "value"
+          ]
+        }
+      ],
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "dimension",
+          "type": "nominal",
+          "title": "Evaluation Dimension",
+          "axis": {
+            "labelAngle": -45,
+            "labelExpr": "datum.label === 'avg_overall_rating' ? 'Overall Rating' : datum.label === 'avg_professor_rating' ? 'Professor Rating' : datum.label === 'avg_content_rating' ? 'Content Rating' : datum.label === 'avg_difficulty_rating' ? 'Difficulty Rating' : datum.label === 'avg_workload_hours' ? 'Avg Workload (hrs)' : 'Recommend %'"
+          }
+        },
+        "y": {
+          "field": "value",
+          "type": "quantitative",
+          "title": "Score / Percentage"
+        },
+        "color": {
+          "field": "department_code",
+          "type": "nominal",
+          "title": "Department",
+          "scale": {
+            "scheme": "category10"
+          }
+        },
+        "xOffset": {
+          "field": "department_code"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "department_code",
+            "type": "nominal",
+            "title": "Code"
+          },
+          {
+            "field": "dimension",
+            "type": "nominal",
+            "title": "Dimension"
+          },
+          {
+            "field": "value",
+            "type": "quantitative",
+            "title": "Value",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT \n  d.name AS department_name,\n  d.code AS department_code,\n  COUNT(DISTINCT e.id) AS total_enrollments,\n  COUNT(DISTINCT ce.id) AS total_evaluations,\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating,\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\n  ROUND(AVG(ce.content_rating)::numeric, 2) AS avg_content_rating,\n  ROUND(AVG(ce.difficulty_rating)::numeric, 2) AS avg_difficulty_rating,\n  ROUND(AVG(ce.workload_hours)::numeric, 2) AS avg_workload_hours,\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(DISTINCT ce.id), 0), 2) AS recommend_percentage\nFROM departments d\nLEFT JOIN courses c ON d.id = c.department_id\nLEFT JOIN course_sections cs ON c.id = cs.course_id\nLEFT JOIN enrollments e ON cs.id = e.course_section_id\nLEFT JOIN course_evaluations ce ON e.id = ce.enrollment_id\nGROUP BY d.id, d.name, d.code\nORDER BY d.name",
+    "metadata": {
+      "columns": [
+        "department_name",
+        "department_code",
+        "total_enrollments",
+        "total_evaluations",
+        "avg_overall_rating",
+        "avg_professor_rating",
+        "avg_content_rating",
+        "avg_difficulty_rating",
+        "avg_workload_hours",
+        "recommend_percentage"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "department_code": "AEI",
+          "total_enrollments": "28",
+          "total_evaluations": "7",
+          "avg_overall_rating": "2.86",
+          "avg_professor_rating": "2.71",
+          "avg_content_rating": "2.86",
+          "avg_difficulty_rating": "3.43",
+          "avg_workload_hours": "10.07",
+          "recommend_percentage": "42.86"
+        },
+        {
+          "department_name": "Wydział Informatyki i Nauki o Materiałach",
+          "department_code": "INF",
+          "total_enrollments": "18",
+          "total_evaluations": "4",
+          "avg_overall_rating": "2.75",
+          "avg_professor_rating": "2.50",
+          "avg_content_rating": "3.25",
+          "avg_difficulty_rating": "2.75",
+          "avg_workload_hours": "12.47",
+          "recommend_percentage": "50.00"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Encoding field 'dimension' is missing in SQL output columns.",
+        "Encoding field 'value' is missing in SQL output columns."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Encoding field 'dimension' is missing in SQL output columns.",
+        "Encoding field 'value' is missing in SQL output columns."
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "department_code": "AEI",
+        "total_enrollments": "28",
+        "total_evaluations": "7",
+        "avg_overall_rating": "2.86",
+        "avg_professor_rating": "2.71",
+        "avg_content_rating": "2.86",
+        "avg_difficulty_rating": "3.43",
+        "avg_workload_hours": "10.07",
+        "recommend_percentage": "42.86"
+      },
+      {
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "department_code": "INF",
+        "total_enrollments": "18",
+        "total_evaluations": "4",
+        "avg_overall_rating": "2.75",
+        "avg_professor_rating": "2.50",
+        "avg_content_rating": "3.25",
+        "avg_difficulty_rating": "2.75",
+        "avg_workload_hours": "12.47",
+        "recommend_percentage": "50.00"
+      },
+      {
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "department_code": "IBM",
+        "total_enrollments": "20",
+        "total_evaluations": "5",
+        "avg_overall_rating": "3.60",
+        "avg_professor_rating": "2.80",
+        "avg_content_rating": "3.00",
+        "avg_difficulty_rating": "3.00",
+        "avg_workload_hours": "8.86",
+        "recommend_percentage": "80.00"
+      },
+      {
+        "department_name": "Wydział Inżynierii Produkcji",
+        "department_code": "WIP",
+        "total_enrollments": "17",
+        "total_evaluations": "7",
+        "avg_overall_rating": "3.43",
+        "avg_professor_rating": "3.43",
+        "avg_content_rating": "3.57",
+        "avg_difficulty_rating": "3.43",
+        "avg_workload_hours": "8.09",
+        "recommend_percentage": "42.86"
+      },
+      {
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "department_code": "MTR",
+        "total_enrollments": "33",
+        "total_evaluations": "10",
+        "avg_overall_rating": "2.70",
+        "avg_professor_rating": "3.00",
+        "avg_content_rating": "3.40",
+        "avg_difficulty_rating": "2.90",
+        "avg_workload_hours": "10.88",
+        "recommend_percentage": "10.00"
+      },
+      {
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "department_code": "TCH",
+        "total_enrollments": "17",
+        "total_evaluations": "8",
+        "avg_overall_rating": "2.88",
+        "avg_professor_rating": "3.50",
+        "avg_content_rating": "3.25",
+        "avg_difficulty_rating": "3.38",
+        "avg_workload_hours": "8.21",
+        "recommend_percentage": "50.00"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Department Comparison Across All Evaluation Dimensions",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 1000,
+      "height": 500,
+      "transform": [
+        {
+          "fold": [
+            "avg_overall_rating",
+            "avg_professor_rating",
+            "avg_content_rating",
+            "avg_difficulty_rating",
+            "avg_workload_hours",
+            "recommend_percentage"
+          ],
+          "as": [
+            "dimension",
+            "value"
+          ]
+        }
+      ],
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "dimension",
+          "type": "nominal",
+          "title": "Evaluation Dimension",
+          "axis": {
+            "labelAngle": -45,
+            "labelExpr": "datum.label === 'avg_overall_rating' ? 'Overall Rating' : datum.label === 'avg_professor_rating' ? 'Professor Rating' : datum.label === 'avg_content_rating' ? 'Content Rating' : datum.label === 'avg_difficulty_rating' ? 'Difficulty Rating' : datum.label === 'avg_workload_hours' ? 'Avg Workload (hrs)' : 'Recommend %'"
+          }
+        },
+        "y": {
+          "field": "value",
+          "type": "quantitative",
+          "title": "Score / Percentage"
+        },
+        "color": {
+          "field": "department_code",
+          "type": "nominal",
+          "title": "Department",
+          "scale": {
+            "scheme": "category10"
+          }
+        },
+        "xOffset": {
+          "field": "department_code"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "department_code",
+            "type": "nominal",
+            "title": "Code"
+          },
+          {
+            "field": "dimension",
+            "type": "nominal",
+            "title": "Dimension"
+          },
+          {
+            "field": "value",
+            "type": "quantitative",
+            "title": "Value",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT \n  d.name AS department_name,\n  d.code AS department_code,\n  COUNT(DISTINCT e.id) AS total_enrollments,\n  COUNT(DISTINCT ce.id) AS total_evaluations,\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating,\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\n  ROUND(AVG(ce.content_rating)::numeric, 2) AS avg_content_rating,\n  ROUND(AVG(ce.difficulty_rating)::numeric, 2) AS avg_difficulty_rating,\n  ROUND(AVG(ce.workload_hours)::numeric, 2) AS avg_workload_hours,\n  ROUND(100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(DISTINCT ce.id), 0), 2) AS recommend_percentage\nFROM departments d\nLEFT JOIN courses c ON d.id = c.department_id\nLEFT JOIN course_sections cs ON c.id = cs.course_id\nLEFT JOIN enrollments e ON cs.id = e.course_section_id\nLEFT JOIN course_evaluations ce ON e.id = ce.enrollment_id\nGROUP BY d.id, d.name, d.code\nORDER BY d.name",
+    "metadata": {
+      "columns": [
+        "department_name",
+        "department_code",
+        "total_enrollments",
+        "total_evaluations",
+        "avg_overall_rating",
+        "avg_professor_rating",
+        "avg_content_rating",
+        "avg_difficulty_rating",
+        "avg_workload_hours",
+        "recommend_percentage"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "department_code": "AEI",
+          "total_enrollments": "28",
+          "total_evaluations": "7",
+          "avg_overall_rating": "2.86",
+          "avg_professor_rating": "2.71",
+          "avg_content_rating": "2.86",
+          "avg_difficulty_rating": "3.43",
+          "avg_workload_hours": "10.07",
+          "recommend_percentage": "42.86"
+        },
+        {
+          "department_name": "Wydział Informatyki i Nauki o Materiałach",
+          "department_code": "INF",
+          "total_enrollments": "18",
+          "total_evaluations": "4",
+          "avg_overall_rating": "2.75",
+          "avg_professor_rating": "2.50",
+          "avg_content_rating": "3.25",
+          "avg_difficulty_rating": "2.75",
+          "avg_workload_hours": "12.47",
+          "recommend_percentage": "50.00"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Encoding field 'dimension' is missing in SQL output columns.",
+        "Encoding field 'value' is missing in SQL output columns."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Encoding field 'dimension' is missing in SQL output columns.",
+        "Encoding field 'value' is missing in SQL output columns."
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.319Z",
+    "traceId": "2f6e007ccd9a0ff0876112c4f24aac52",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 35579,
+      "outputTokens": 2009,
+      "totalTokens": 37588,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.045624
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 35579,
+        "outputTokens": 2009,
+        "totalTokens": 37588,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.045624
+      }
+    ],
+    "warnings": []
+  }
+}

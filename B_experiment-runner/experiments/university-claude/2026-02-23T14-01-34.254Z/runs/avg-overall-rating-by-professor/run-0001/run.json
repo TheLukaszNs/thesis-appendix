@@ -1,0 +1,518 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "avg-overall-rating-by-professor",
+  "caseDirectory": "avg-overall-rating-by-professor",
+  "repeatIndex": 1,
+  "prompt": "Show the average overall course evaluation rating for each professor",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the average overall course evaluation rating for each professor"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:02:18.554Z",
+    "endedAtUtc": "2026-02-23T14:02:57.499Z",
+    "durationMs": 38945
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "21129",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:02:57 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show the average overall course evaluation rating for each professor\"},\"sql\":{\"payload\":{\"question\":\"Show the average overall course evaluation rating for each professor\"},\"startedAt\":1771855338568,\"status\":\"success\",\"output\":{\"reasoning\":\"The user wants the average overall course evaluation rating for each professor. I need to join course_evaluations → enrollments → course_sections → professors, then group by professor and calculate the average of overall_rating. The professor name should be constructed from first_name and last_name.\",\"sql\":\"\\nSELECT \\n  p.id AS professor_id,\\n  p.first_name,\\n  p.last_name,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS average_overall_rating\\nFROM professors p\\nINNER JOIN course_sections cs ON p.id = cs.professor_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY average_overall_rating DESC, p.last_name ASC, p.first_name ASC\\n\",\"assumptions\":[\"Assumes overall_rating in course_evaluations is the metric for 'overall course evaluation rating'\",\"Joins through enrollments and course_sections to connect evaluations to professors\",\"Rounds the average to 2 decimal places for readability\",\"Orders results by average rating descending, then by professor name for deterministic output\"]},\"endedAt\":1771855371990},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  p.id AS professor_id,\\n  p.first_name,\\n  p.last_name,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS average_overall_rating\\nFROM professors p\\nINNER JOIN course_sections cs ON p.id = cs.professor_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY average_overall_rating DESC, p.last_name ASC, p.first_name ASC\\n\"},\"startedAt\":1771855371994,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  p.id AS professor_id,\\n  p.first_name,\\n  p.last_name,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS average_overall_rating\\nFROM professors p\\nINNER JOIN course_sections cs ON p.id = cs.professor_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY average_overall_rating DESC, p.last_name ASC, p.first_name ASC\",\"metadata\":{\"columns\":[\"professor_id\",\"first_name\",\"last_name\",\"average_overall_rating\"],\"rowCount\":20,\"sample\":[{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"first_name\":\"Magdalena\",\"last_name\":\"Piotrowski\",\"average_overall_rating\":\"5.00\"},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"first_name\":\"Katarzyna\",\"last_name\":\"Szymański\",\"average_overall_rating\":\"5.00\"}]},\"data\":[{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"first_name\":\"Magdalena\",\"last_name\":\"Piotrowski\",\"average_overall_rating\":\"5.00\"},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"first_name\":\"Katarzyna\",\"last_name\":\"Szymański\",\"average_overall_rating\":\"5.00\"},{\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"first_name\":\"Agnieszka\",\"last_name\":\"Kozłowski\",\"average_overall_rating\":\"4.50\"},{\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"first_name\":\"Tomasz\",\"last_name\":\"Wieczorek\",\"average_overall_rating\":\"4.00\"},{\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"first_name\":\"Ryszard\",\"last_name\":\"Woźniak\",\"average_overall_rating\":\"3.75\"},{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"first_name\":\"Jacek\",\"last_name\":\"Wojciechowski\",\"average_overall_rating\":\"3.67\"},{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"first_name\":\"Grzegorz\",\"last_name\":\"Jankowski\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"first_name\":\"Katarzyna\",\"last_name\":\"Kozłowski\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"first_name\":\"Ewa\",\"last_name\":\"Krawczyk\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"first_name\":\"Mariusz\",\"last_name\":\"Nowakowski\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"first_name\":\"Małgorzata\",\"last_name\":\"Olszewski\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"first_name\":\"Teresa\",\"last_name\":\"Pawłowski\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"first_name\":\"Ewa\",\"last_name\":\"Michalski\",\"average_overall_rating\":\"2.50\"},{\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"first_name\":\"Marek\",\"last_name\":\"Woźniak\",\"average_overall_rating\":\"2.50\"},{\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"first_name\":\"Teresa\",\"last_name\":\"Woźniak\",\"average_overall_rating\":\"2.50\"},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"first_name\":\"Ryszard\",\"last_name\":\"Kowalczyk\",\"average_overall_rating\":\"2.00\"},{\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"first_name\":\"Marek\",\"last_name\":\"Lewandowski\",\"average_overall_rating\":\"2.00\"},{\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"first_name\":\"Tomasz\",\"last_name\":\"Majewski\",\"average_overall_rating\":\"2.00\"},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"first_name\":\"Adam\",\"last_name\":\"Wieczorek\",\"average_overall_rating\":\"1.50\"},{\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"first_name\":\"Michał\",\"last_name\":\"Nowak\",\"average_overall_rating\":\"1.00\"}]},\"endedAt\":1771855372007},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  p.id AS professor_id,\\n  p.first_name,\\n  p.last_name,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS average_overall_rating\\nFROM professors p\\nINNER JOIN course_sections cs ON p.id = cs.professor_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY average_overall_rating DESC, p.last_name ASC, p.first_name ASC\",\"metadata\":{\"columns\":[\"professor_id\",\"first_name\",\"last_name\",\"average_overall_rating\"],\"rowCount\":20,\"sample\":[{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"first_name\":\"Magdalena\",\"last_name\":\"Piotrowski\",\"average_overall_rating\":\"5.00\"},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"first_name\":\"Katarzyna\",\"last_name\":\"Szymański\",\"average_overall_rating\":\"5.00\"}]},\"data\":[{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"first_name\":\"Magdalena\",\"last_name\":\"Piotrowski\",\"average_overall_rating\":\"5.00\"},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"first_name\":\"Katarzyna\",\"last_name\":\"Szymański\",\"average_overall_rating\":\"5.00\"},{\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"first_name\":\"Agnieszka\",\"last_name\":\"Kozłowski\",\"average_overall_rating\":\"4.50\"},{\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"first_name\":\"Tomasz\",\"last_name\":\"Wieczorek\",\"average_overall_rating\":\"4.00\"},{\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"first_name\":\"Ryszard\",\"last_name\":\"Woźniak\",\"average_overall_rating\":\"3.75\"},{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"first_name\":\"Jacek\",\"last_name\":\"Wojciechowski\",\"average_overall_rating\":\"3.67\"},{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"first_name\":\"Grzegorz\",\"last_name\":\"Jankowski\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"first_name\":\"Katarzyna\",\"last_name\":\"Kozłowski\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"first_name\":\"Ewa\",\"last_name\":\"Krawczyk\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"first_name\":\"Mariusz\",\"last_name\":\"Nowakowski\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"first_name\":\"Małgorzata\",\"last_name\":\"Olszewski\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"first_name\":\"Teresa\",\"last_name\":\"Pawłowski\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"first_name\":\"Ewa\",\"last_name\":\"Michalski\",\"average_overall_rating\":\"2.50\"},{\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"first_name\":\"Marek\",\"last_name\":\"Woźniak\",\"average_overall_rating\":\"2.50\"},{\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"first_name\":\"Teresa\",\"last_name\":\"Woźniak\",\"average_overall_rating\":\"2.50\"},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"first_name\":\"Ryszard\",\"last_name\":\"Kowalczyk\",\"average_overall_rating\":\"2.00\"},{\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"first_name\":\"Marek\",\"last_name\":\"Lewandowski\",\"average_overall_rating\":\"2.00\"},{\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"first_name\":\"Tomasz\",\"last_name\":\"Majewski\",\"average_overall_rating\":\"2.00\"},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"first_name\":\"Adam\",\"last_name\":\"Wieczorek\",\"average_overall_rating\":\"1.50\"},{\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"first_name\":\"Michał\",\"last_name\":\"Nowak\",\"average_overall_rating\":\"1.00\"}]},\"startedAt\":1771855372008,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Overall Course Evaluation Rating by Professor\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"last_name\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Professor (Last Name)\",\"axis\":{\"labelExpr\":\"datum.value + ', ' + data('query_result')[indexof(data('query_result'), datum)].first_name\"}},\"x\":{\"field\":\"average_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"scale\":{\"domain\":[0,5]}},\"color\":{\"field\":\"average_overall_rating\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\",\"domain\":[0,5]},\"title\":\"Rating\"},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First Name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last Name\"},{\"field\":\"average_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"format\":\".2f\"}]},\"width\":600,\"height\":400},\"reasoning\":\"A horizontal bar chart is ideal for comparing average ratings across multiple professors. The bars are sorted by rating (descending) for easy identification of top-rated professors. Color intensity represents the rating value on a 0-5 scale. The tooltip displays full professor names and exact ratings for detailed inspection.\"},\"endedAt\":1771855377478},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Overall Course Evaluation Rating by Professor\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"last_name\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Professor (Last Name)\",\"axis\":{\"labelExpr\":\"datum.value + ', ' + data('query_result')[indexof(data('query_result'), datum)].first_name\"}},\"x\":{\"field\":\"average_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"scale\":{\"domain\":[0,5]}},\"color\":{\"field\":\"average_overall_rating\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\",\"domain\":[0,5]},\"title\":\"Rating\"},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First Name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last Name\"},{\"field\":\"average_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"format\":\".2f\"}]},\"width\":600,\"height\":400},\"reasoning\":\"A horizontal bar chart is ideal for comparing average ratings across multiple professors. The bars are sorted by rating (descending) for easy identification of top-rated professors. Color intensity represents the rating value on a 0-5 scale. The tooltip displays full professor names and exact ratings for detailed inspection.\"},\"startedAt\":1771855377482,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT \\n  p.id AS professor_id,\\n  p.first_name,\\n  p.last_name,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS average_overall_rating\\nFROM professors p\\nINNER JOIN course_sections cs ON p.id = cs.professor_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY average_overall_rating DESC, p.last_name ASC, p.first_name ASC\\n\",\"data\":[{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"first_name\":\"Magdalena\",\"last_name\":\"Piotrowski\",\"average_overall_rating\":\"5.00\"},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"first_name\":\"Katarzyna\",\"last_name\":\"Szymański\",\"average_overall_rating\":\"5.00\"},{\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"first_name\":\"Agnieszka\",\"last_name\":\"Kozłowski\",\"average_overall_rating\":\"4.50\"},{\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"first_name\":\"Tomasz\",\"last_name\":\"Wieczorek\",\"average_overall_rating\":\"4.00\"},{\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"first_name\":\"Ryszard\",\"last_name\":\"Woźniak\",\"average_overall_rating\":\"3.75\"},{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"first_name\":\"Jacek\",\"last_name\":\"Wojciechowski\",\"average_overall_rating\":\"3.67\"},{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"first_name\":\"Grzegorz\",\"last_name\":\"Jankowski\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"first_name\":\"Katarzyna\",\"last_name\":\"Kozłowski\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"first_name\":\"Ewa\",\"last_name\":\"Krawczyk\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"first_name\":\"Mariusz\",\"last_name\":\"Nowakowski\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"first_name\":\"Małgorzata\",\"last_name\":\"Olszewski\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"first_name\":\"Teresa\",\"last_name\":\"Pawłowski\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"first_name\":\"Ewa\",\"last_name\":\"Michalski\",\"average_overall_rating\":\"2.50\"},{\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"first_name\":\"Marek\",\"last_name\":\"Woźniak\",\"average_overall_rating\":\"2.50\"},{\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"first_name\":\"Teresa\",\"last_name\":\"Woźniak\",\"average_overall_rating\":\"2.50\"},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"first_name\":\"Ryszard\",\"last_name\":\"Kowalczyk\",\"average_overall_rating\":\"2.00\"},{\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"first_name\":\"Marek\",\"last_name\":\"Lewandowski\",\"average_overall_rating\":\"2.00\"},{\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"first_name\":\"Tomasz\",\"last_name\":\"Majewski\",\"average_overall_rating\":\"2.00\"},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"first_name\":\"Adam\",\"last_name\":\"Wieczorek\",\"average_overall_rating\":\"1.50\"},{\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"first_name\":\"Michał\",\"last_name\":\"Nowak\",\"average_overall_rating\":\"1.00\"}],\"metadata\":{\"columns\":[\"professor_id\",\"first_name\",\"last_name\",\"average_overall_rating\"],\"rowCount\":20,\"sample\":[{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"first_name\":\"Magdalena\",\"last_name\":\"Piotrowski\",\"average_overall_rating\":\"5.00\"},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"first_name\":\"Katarzyna\",\"last_name\":\"Szymański\",\"average_overall_rating\":\"5.00\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Overall Course Evaluation Rating by Professor\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"last_name\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Professor (Last Name)\",\"axis\":{\"labelExpr\":\"datum.value + ', ' + data('query_result')[indexof(data('query_result'), datum)].first_name\"}},\"x\":{\"field\":\"average_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"scale\":{\"domain\":[0,5]}},\"color\":{\"field\":\"average_overall_rating\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\",\"domain\":[0,5]},\"title\":\"Rating\"},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First Name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last Name\"},{\"field\":\"average_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"format\":\".2f\"}]},\"width\":600,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855377485}},\"input\":{\"question\":\"Show the average overall course evaluation rating for each professor\"},\"result\":{\"sql\":\"\\nSELECT \\n  p.id AS professor_id,\\n  p.first_name,\\n  p.last_name,\\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS average_overall_rating\\nFROM professors p\\nINNER JOIN course_sections cs ON p.id = cs.professor_id\\nINNER JOIN enrollments e ON cs.id = e.course_section_id\\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY average_overall_rating DESC, p.last_name ASC, p.first_name ASC\\n\",\"data\":[{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"first_name\":\"Magdalena\",\"last_name\":\"Piotrowski\",\"average_overall_rating\":\"5.00\"},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"first_name\":\"Katarzyna\",\"last_name\":\"Szymański\",\"average_overall_rating\":\"5.00\"},{\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"first_name\":\"Agnieszka\",\"last_name\":\"Kozłowski\",\"average_overall_rating\":\"4.50\"},{\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"first_name\":\"Tomasz\",\"last_name\":\"Wieczorek\",\"average_overall_rating\":\"4.00\"},{\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"first_name\":\"Ryszard\",\"last_name\":\"Woźniak\",\"average_overall_rating\":\"3.75\"},{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"first_name\":\"Jacek\",\"last_name\":\"Wojciechowski\",\"average_overall_rating\":\"3.67\"},{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"first_name\":\"Grzegorz\",\"last_name\":\"Jankowski\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"first_name\":\"Katarzyna\",\"last_name\":\"Kozłowski\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"first_name\":\"Ewa\",\"last_name\":\"Krawczyk\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"first_name\":\"Mariusz\",\"last_name\":\"Nowakowski\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"first_name\":\"Małgorzata\",\"last_name\":\"Olszewski\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"first_name\":\"Teresa\",\"last_name\":\"Pawłowski\",\"average_overall_rating\":\"3.00\"},{\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"first_name\":\"Ewa\",\"last_name\":\"Michalski\",\"average_overall_rating\":\"2.50\"},{\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"first_name\":\"Marek\",\"last_name\":\"Woźniak\",\"average_overall_rating\":\"2.50\"},{\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"first_name\":\"Teresa\",\"last_name\":\"Woźniak\",\"average_overall_rating\":\"2.50\"},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"first_name\":\"Ryszard\",\"last_name\":\"Kowalczyk\",\"average_overall_rating\":\"2.00\"},{\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"first_name\":\"Marek\",\"last_name\":\"Lewandowski\",\"average_overall_rating\":\"2.00\"},{\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"first_name\":\"Tomasz\",\"last_name\":\"Majewski\",\"average_overall_rating\":\"2.00\"},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"first_name\":\"Adam\",\"last_name\":\"Wieczorek\",\"average_overall_rating\":\"1.50\"},{\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"first_name\":\"Michał\",\"last_name\":\"Nowak\",\"average_overall_rating\":\"1.00\"}],\"metadata\":{\"columns\":[\"professor_id\",\"first_name\",\"last_name\",\"average_overall_rating\"],\"rowCount\":20,\"sample\":[{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"first_name\":\"Magdalena\",\"last_name\":\"Piotrowski\",\"average_overall_rating\":\"5.00\"},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"first_name\":\"Katarzyna\",\"last_name\":\"Szymański\",\"average_overall_rating\":\"5.00\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Overall Course Evaluation Rating by Professor\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"last_name\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Professor (Last Name)\",\"axis\":{\"labelExpr\":\"datum.value + ', ' + data('query_result')[indexof(data('query_result'), datum)].first_name\"}},\"x\":{\"field\":\"average_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"scale\":{\"domain\":[0,5]}},\"color\":{\"field\":\"average_overall_rating\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"blues\",\"domain\":[0,5]},\"title\":\"Rating\"},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First Name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last Name\"},{\"field\":\"average_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"format\":\".2f\"}]},\"width\":600,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"baf098b00dc89a8b643807f9c6434551\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-overall-rating-by-professor/run-0001/run.json",
+    "queryPath": "runs/avg-overall-rating-by-professor/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-overall-rating-by-professor/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-overall-rating-by-professor/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-overall-rating-by-professor/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:02:57.909Z",
+  "traceId": "baf098b00dc89a8b643807f9c6434551",
+  "success": true,
+  "durationMs": 39355,
+  "resultRaw": {
+    "data": [
+      {
+        "professor_id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+        "first_name": "Magdalena",
+        "last_name": "Piotrowski",
+        "average_overall_rating": "5.00"
+      },
+      {
+        "professor_id": "33ba2086-7c0f-4a57-9451-014db3e74209",
+        "first_name": "Katarzyna",
+        "last_name": "Szymański",
+        "average_overall_rating": "5.00"
+      },
+      {
+        "professor_id": "7fbf0e4c-fd08-4312-bb83-087368f81e46",
+        "first_name": "Agnieszka",
+        "last_name": "Kozłowski",
+        "average_overall_rating": "4.50"
+      },
+      {
+        "professor_id": "4050afec-f68c-49bb-9982-4a3c9d1a23d9",
+        "first_name": "Tomasz",
+        "last_name": "Wieczorek",
+        "average_overall_rating": "4.00"
+      },
+      {
+        "professor_id": "5d70abe8-4f1a-44ec-9816-2ec96a2807cb",
+        "first_name": "Ryszard",
+        "last_name": "Woźniak",
+        "average_overall_rating": "3.75"
+      },
+      {
+        "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+        "first_name": "Jacek",
+        "last_name": "Wojciechowski",
+        "average_overall_rating": "3.67"
+      },
+      {
+        "professor_id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+        "first_name": "Grzegorz",
+        "last_name": "Jankowski",
+        "average_overall_rating": "3.00"
+      },
+      {
+        "professor_id": "bcf3a47c-67cf-438d-93de-07c55ab583e0",
+        "first_name": "Katarzyna",
+        "last_name": "Kozłowski",
+        "average_overall_rating": "3.00"
+      },
+      {
+        "professor_id": "a82c40da-e7dc-4e49-9e66-386ea4bb7483",
+        "first_name": "Ewa",
+        "last_name": "Krawczyk",
+        "average_overall_rating": "3.00"
+      },
+      {
+        "professor_id": "d19adcea-56d6-4557-8f93-95ec58fa5d34",
+        "first_name": "Mariusz",
+        "last_name": "Nowakowski",
+        "average_overall_rating": "3.00"
+      },
+      {
+        "professor_id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+        "first_name": "Małgorzata",
+        "last_name": "Olszewski",
+        "average_overall_rating": "3.00"
+      },
+      {
+        "professor_id": "cee911dc-17c4-4395-b173-2af1418983fe",
+        "first_name": "Teresa",
+        "last_name": "Pawłowski",
+        "average_overall_rating": "3.00"
+      },
+      {
+        "professor_id": "dd993c5f-eb62-491f-a783-5ca9a0132ade",
+        "first_name": "Ewa",
+        "last_name": "Michalski",
+        "average_overall_rating": "2.50"
+      },
+      {
+        "professor_id": "2b5262b8-932c-4951-9390-c56d4b69d888",
+        "first_name": "Marek",
+        "last_name": "Woźniak",
+        "average_overall_rating": "2.50"
+      },
+      {
+        "professor_id": "173e49aa-5a27-41e8-b1fa-4d19423bdc0b",
+        "first_name": "Teresa",
+        "last_name": "Woźniak",
+        "average_overall_rating": "2.50"
+      },
+      {
+        "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+        "first_name": "Ryszard",
+        "last_name": "Kowalczyk",
+        "average_overall_rating": "2.00"
+      },
+      {
+        "professor_id": "037011f2-f3d4-406e-9554-a6ffba701e06",
+        "first_name": "Marek",
+        "last_name": "Lewandowski",
+        "average_overall_rating": "2.00"
+      },
+      {
+        "professor_id": "f221aafd-0e9c-4345-aff5-7e290e1a7864",
+        "first_name": "Tomasz",
+        "last_name": "Majewski",
+        "average_overall_rating": "2.00"
+      },
+      {
+        "professor_id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+        "first_name": "Adam",
+        "last_name": "Wieczorek",
+        "average_overall_rating": "1.50"
+      },
+      {
+        "professor_id": "f24d24fc-5446-4d72-bb11-9d9dd1545f97",
+        "first_name": "Michał",
+        "last_name": "Nowak",
+        "average_overall_rating": "1.00"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Overall Course Evaluation Rating by Professor",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "last_name",
+          "type": "nominal",
+          "sort": "-x",
+          "title": "Professor (Last Name)",
+          "axis": {
+            "labelExpr": "datum.value + ', ' + data('query_result')[indexof(data('query_result'), datum)].first_name"
+          }
+        },
+        "x": {
+          "field": "average_overall_rating",
+          "type": "quantitative",
+          "title": "Average Overall Rating",
+          "scale": {
+            "domain": [
+              0,
+              5
+            ]
+          }
+        },
+        "color": {
+          "field": "average_overall_rating",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "blues",
+            "domain": [
+              0,
+              5
+            ]
+          },
+          "title": "Rating"
+        },
+        "tooltip": [
+          {
+            "field": "first_name",
+            "type": "nominal",
+            "title": "First Name"
+          },
+          {
+            "field": "last_name",
+            "type": "nominal",
+            "title": "Last Name"
+          },
+          {
+            "field": "average_overall_rating",
+            "type": "quantitative",
+            "title": "Average Overall Rating",
+            "format": ".2f"
+          }
+        ]
+      },
+      "width": 600,
+      "height": 400
+    },
+    "sql": "\nSELECT \n  p.id AS professor_id,\n  p.first_name,\n  p.last_name,\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS average_overall_rating\nFROM professors p\nINNER JOIN course_sections cs ON p.id = cs.professor_id\nINNER JOIN enrollments e ON cs.id = e.course_section_id\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\nGROUP BY p.id, p.first_name, p.last_name\nORDER BY average_overall_rating DESC, p.last_name ASC, p.first_name ASC\n",
+    "metadata": {
+      "columns": [
+        "professor_id",
+        "first_name",
+        "last_name",
+        "average_overall_rating"
+      ],
+      "rowCount": 20,
+      "sample": [
+        {
+          "professor_id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+          "first_name": "Magdalena",
+          "last_name": "Piotrowski",
+          "average_overall_rating": "5.00"
+        },
+        {
+          "professor_id": "33ba2086-7c0f-4a57-9451-014db3e74209",
+          "first_name": "Katarzyna",
+          "last_name": "Szymański",
+          "average_overall_rating": "5.00"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "professor_id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+        "first_name": "Magdalena",
+        "last_name": "Piotrowski",
+        "average_overall_rating": "5.00"
+      },
+      {
+        "professor_id": "33ba2086-7c0f-4a57-9451-014db3e74209",
+        "first_name": "Katarzyna",
+        "last_name": "Szymański",
+        "average_overall_rating": "5.00"
+      },
+      {
+        "professor_id": "7fbf0e4c-fd08-4312-bb83-087368f81e46",
+        "first_name": "Agnieszka",
+        "last_name": "Kozłowski",
+        "average_overall_rating": "4.50"
+      },
+      {
+        "professor_id": "4050afec-f68c-49bb-9982-4a3c9d1a23d9",
+        "first_name": "Tomasz",
+        "last_name": "Wieczorek",
+        "average_overall_rating": "4.00"
+      },
+      {
+        "professor_id": "5d70abe8-4f1a-44ec-9816-2ec96a2807cb",
+        "first_name": "Ryszard",
+        "last_name": "Woźniak",
+        "average_overall_rating": "3.75"
+      },
+      {
+        "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+        "first_name": "Jacek",
+        "last_name": "Wojciechowski",
+        "average_overall_rating": "3.67"
+      },
+      {
+        "professor_id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+        "first_name": "Grzegorz",
+        "last_name": "Jankowski",
+        "average_overall_rating": "3.00"
+      },
+      {
+        "professor_id": "bcf3a47c-67cf-438d-93de-07c55ab583e0",
+        "first_name": "Katarzyna",
+        "last_name": "Kozłowski",
+        "average_overall_rating": "3.00"
+      },
+      {
+        "professor_id": "a82c40da-e7dc-4e49-9e66-386ea4bb7483",
+        "first_name": "Ewa",
+        "last_name": "Krawczyk",
+        "average_overall_rating": "3.00"
+      },
+      {
+        "professor_id": "d19adcea-56d6-4557-8f93-95ec58fa5d34",
+        "first_name": "Mariusz",
+        "last_name": "Nowakowski",
+        "average_overall_rating": "3.00"
+      },
+      {
+        "professor_id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+        "first_name": "Małgorzata",
+        "last_name": "Olszewski",
+        "average_overall_rating": "3.00"
+      },
+      {
+        "professor_id": "cee911dc-17c4-4395-b173-2af1418983fe",
+        "first_name": "Teresa",
+        "last_name": "Pawłowski",
+        "average_overall_rating": "3.00"
+      },
+      {
+        "professor_id": "dd993c5f-eb62-491f-a783-5ca9a0132ade",
+        "first_name": "Ewa",
+        "last_name": "Michalski",
+        "average_overall_rating": "2.50"
+      },
+      {
+        "professor_id": "2b5262b8-932c-4951-9390-c56d4b69d888",
+        "first_name": "Marek",
+        "last_name": "Woźniak",
+        "average_overall_rating": "2.50"
+      },
+      {
+        "professor_id": "173e49aa-5a27-41e8-b1fa-4d19423bdc0b",
+        "first_name": "Teresa",
+        "last_name": "Woźniak",
+        "average_overall_rating": "2.50"
+      },
+      {
+        "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+        "first_name": "Ryszard",
+        "last_name": "Kowalczyk",
+        "average_overall_rating": "2.00"
+      },
+      {
+        "professor_id": "037011f2-f3d4-406e-9554-a6ffba701e06",
+        "first_name": "Marek",
+        "last_name": "Lewandowski",
+        "average_overall_rating": "2.00"
+      },
+      {
+        "professor_id": "f221aafd-0e9c-4345-aff5-7e290e1a7864",
+        "first_name": "Tomasz",
+        "last_name": "Majewski",
+        "average_overall_rating": "2.00"
+      },
+      {
+        "professor_id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+        "first_name": "Adam",
+        "last_name": "Wieczorek",
+        "average_overall_rating": "1.50"
+      },
+      {
+        "professor_id": "f24d24fc-5446-4d72-bb11-9d9dd1545f97",
+        "first_name": "Michał",
+        "last_name": "Nowak",
+        "average_overall_rating": "1.00"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Overall Course Evaluation Rating by Professor",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "last_name",
+          "type": "nominal",
+          "sort": "-x",
+          "title": "Professor (Last Name)",
+          "axis": {
+            "labelExpr": "datum.value + ', ' + data('query_result')[indexof(data('query_result'), datum)].first_name"
+          }
+        },
+        "x": {
+          "field": "average_overall_rating",
+          "type": "quantitative",
+          "title": "Average Overall Rating",
+          "scale": {
+            "domain": [
+              0,
+              5
+            ]
+          }
+        },
+        "color": {
+          "field": "average_overall_rating",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "blues",
+            "domain": [
+              0,
+              5
+            ]
+          },
+          "title": "Rating"
+        },
+        "tooltip": [
+          {
+            "field": "first_name",
+            "type": "nominal",
+            "title": "First Name"
+          },
+          {
+            "field": "last_name",
+            "type": "nominal",
+            "title": "Last Name"
+          },
+          {
+            "field": "average_overall_rating",
+            "type": "quantitative",
+            "title": "Average Overall Rating",
+            "format": ".2f"
+          }
+        ]
+      },
+      "width": 600,
+      "height": 400
+    },
+    "sql": "\nSELECT \n  p.id AS professor_id,\n  p.first_name,\n  p.last_name,\n  ROUND(AVG(ce.overall_rating)::numeric, 2) AS average_overall_rating\nFROM professors p\nINNER JOIN course_sections cs ON p.id = cs.professor_id\nINNER JOIN enrollments e ON cs.id = e.course_section_id\nINNER JOIN course_evaluations ce ON e.id = ce.enrollment_id\nGROUP BY p.id, p.first_name, p.last_name\nORDER BY average_overall_rating DESC, p.last_name ASC, p.first_name ASC\n",
+    "metadata": {
+      "columns": [
+        "professor_id",
+        "first_name",
+        "last_name",
+        "average_overall_rating"
+      ],
+      "rowCount": 20,
+      "sample": [
+        {
+          "professor_id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+          "first_name": "Magdalena",
+          "last_name": "Piotrowski",
+          "average_overall_rating": "5.00"
+        },
+        {
+          "professor_id": "33ba2086-7c0f-4a57-9451-014db3e74209",
+          "first_name": "Katarzyna",
+          "last_name": "Szymański",
+          "average_overall_rating": "5.00"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.282Z",
+    "traceId": "baf098b00dc89a8b643807f9c6434551",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 23594,
+      "outputTokens": 1172,
+      "totalTokens": 24766,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.029454
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 23594,
+        "outputTokens": 1172,
+        "totalTokens": 24766,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.029454
+      }
+    ],
+    "warnings": []
+  }
+}

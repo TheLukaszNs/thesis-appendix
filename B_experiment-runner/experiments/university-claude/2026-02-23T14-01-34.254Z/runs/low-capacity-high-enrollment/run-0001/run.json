@@ -1,0 +1,1006 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "low-capacity-high-enrollment",
+  "caseDirectory": "low-capacity-high-enrollment",
+  "repeatIndex": 1,
+  "prompt": "Which course sections have the most overbooked ratio (enrolled / max)?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which course sections have the most overbooked ratio (enrolled / max)?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:14:39.211Z",
+    "endedAtUtc": "2026-02-23T14:15:13.265Z",
+    "durationMs": 34054
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "37778",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:15:13 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Which course sections have the most overbooked ratio (enrolled / max)?\"},\"sql\":{\"payload\":{\"question\":\"Which course sections have the most overbooked ratio (enrolled / max)?\"},\"startedAt\":1771856079224,\"status\":\"success\",\"output\":{\"reasoning\":\"The question asks for course sections with the highest overbooked ratio (enrolled / max). I need to:\\n1. Count active enrollments per course_section_id from the enrollments table\\n2. Get max_students from course_sections table\\n3. Calculate the ratio (enrolled / max_students)\\n4. Join with courses to get course code/name for identification\\n5. Order by ratio descending to find the most overbooked sections\\n\\nThe schema confirms:\\n- course_sections has id, course_id, max_students\\n- enrollments has course_section_id and is_active flag\\n- courses has code and name for identification\\n\\nI'll count active enrollments per section, calculate the ratio, and order by ratio descending.\",\"sql\":\"\\nSELECT \\n  c.code,\\n  c.name,\\n  cs.section_number,\\n  cs.academic_year,\\n  cs.semester_type,\\n  COUNT(e.id) AS enrolled_count,\\n  cs.max_students,\\n  ROUND(COUNT(e.id)::numeric / cs.max_students, 4) AS overbooked_ratio\\nFROM course_sections cs\\nJOIN courses c ON cs.course_id = c.id\\nLEFT JOIN enrollments e ON cs.id = e.course_section_id AND e.is_active = true\\nGROUP BY cs.id, c.code, c.name, cs.section_number, cs.academic_year, cs.semester_type, cs.max_students\\nORDER BY overbooked_ratio DESC\\n\",\"assumptions\":[\"Overbooked ratio is calculated as active enrollments divided by max_students\",\"Only active enrollments (is_active = true) are counted\",\"Results are ordered by ratio in descending order to show most overbooked first\"]},\"endedAt\":1771856108595},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  c.code,\\n  c.name,\\n  cs.section_number,\\n  cs.academic_year,\\n  cs.semester_type,\\n  COUNT(e.id) AS enrolled_count,\\n  cs.max_students,\\n  ROUND(COUNT(e.id)::numeric / cs.max_students, 4) AS overbooked_ratio\\nFROM course_sections cs\\nJOIN courses c ON cs.course_id = c.id\\nLEFT JOIN enrollments e ON cs.id = e.course_section_id AND e.is_active = true\\nGROUP BY cs.id, c.code, c.name, cs.section_number, cs.academic_year, cs.semester_type, cs.max_students\\nORDER BY overbooked_ratio DESC\\n\"},\"startedAt\":1771856108600,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  c.code,\\n  c.name,\\n  cs.section_number,\\n  cs.academic_year,\\n  cs.semester_type,\\n  COUNT(e.id) AS enrolled_count,\\n  cs.max_students,\\n  ROUND(COUNT(e.id)::numeric / cs.max_students, 4) AS overbooked_ratio\\nFROM course_sections cs\\nJOIN courses c ON cs.course_id = c.id\\nLEFT JOIN enrollments e ON cs.id = e.course_section_id AND e.is_active = true\\nGROUP BY cs.id, c.code, c.name, cs.section_number, cs.academic_year, cs.semester_type, cs.max_students\\nORDER BY overbooked_ratio DESC\",\"metadata\":{\"columns\":[\"code\",\"name\",\"section_number\",\"academic_year\",\"semester_type\",\"enrolled_count\",\"max_students\",\"overbooked_ratio\"],\"rowCount\":34,\"sample\":[{\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"section_number\":4,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"5\",\"max_students\":35,\"overbooked_ratio\":\"0.1429\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"section_number\":4,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":15,\"overbooked_ratio\":\"0.1333\"}]},\"data\":[{\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"section_number\":4,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"5\",\"max_students\":35,\"overbooked_ratio\":\"0.1429\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"section_number\":4,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":15,\"overbooked_ratio\":\"0.1333\"},{\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"section_number\":2,\"academic_year\":\"2022/2023\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"4\",\"max_students\":35,\"overbooked_ratio\":\"0.1143\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"section_number\":5,\"academic_year\":\"2022/2023\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"3\",\"max_students\":35,\"overbooked_ratio\":\"0.0857\"},{\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"section_number\":5,\"academic_year\":\"2024/2025\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"3\",\"max_students\":35,\"overbooked_ratio\":\"0.0857\"},{\"code\":\"BSS-943\",\"name\":\"Algebra Liniowa\",\"section_number\":2,\"academic_year\":\"2024/2025\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":30,\"overbooked_ratio\":\"0.0667\"},{\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"section_number\":4,\"academic_year\":\"2021/2022\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"4\",\"max_students\":60,\"overbooked_ratio\":\"0.0667\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"section_number\":3,\"academic_year\":\"2020/2021\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":30,\"overbooked_ratio\":\"0.0667\"},{\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"section_number\":5,\"academic_year\":\"2024/2025\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"1\",\"max_students\":15,\"overbooked_ratio\":\"0.0667\"},{\"code\":\"MKO-885\",\"name\":\"Rachunek Prawdopodobieństwa\",\"section_number\":1,\"academic_year\":\"2021/2022\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":35,\"overbooked_ratio\":\"0.0571\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"section_number\":5,\"academic_year\":\"2022/2023\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":35,\"overbooked_ratio\":\"0.0571\"},{\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"section_number\":1,\"academic_year\":\"2023/2024\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"4\",\"max_students\":75,\"overbooked_ratio\":\"0.0533\"},{\"code\":\"MKO-885\",\"name\":\"Rachunek Prawdopodobieństwa\",\"section_number\":2,\"academic_year\":\"2020/2021\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":40,\"overbooked_ratio\":\"0.0500\"},{\"code\":\"JFH-143\",\"name\":\"Architektura Komputerów\",\"section_number\":4,\"academic_year\":\"2023/2024\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"1\",\"max_students\":20,\"overbooked_ratio\":\"0.0500\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"section_number\":1,\"academic_year\":\"2020/2021\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":50,\"overbooked_ratio\":\"0.0400\"},{\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"section_number\":2,\"academic_year\":\"2023/2024\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":50,\"overbooked_ratio\":\"0.0400\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"section_number\":3,\"academic_year\":\"2023/2024\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"1\",\"max_students\":25,\"overbooked_ratio\":\"0.0400\"},{\"code\":\"HMI-889\",\"name\":\"Elektronika\",\"section_number\":3,\"academic_year\":\"2023/2024\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"1\",\"max_students\":30,\"overbooked_ratio\":\"0.0333\"},{\"code\":\"ZUQ-127\",\"name\":\"Fizyka\",\"section_number\":2,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":60,\"overbooked_ratio\":\"0.0333\"},{\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"section_number\":3,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"1\",\"max_students\":30,\"overbooked_ratio\":\"0.0333\"},{\"code\":\"PSC-614\",\"name\":\"Architektura Komputerów\",\"section_number\":1,\"academic_year\":\"2023/2024\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"3\",\"max_students\":100,\"overbooked_ratio\":\"0.0300\"},{\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"section_number\":1,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":75,\"overbooked_ratio\":\"0.0267\"},{\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"section_number\":2,\"academic_year\":\"2024/2025\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":75,\"overbooked_ratio\":\"0.0267\"},{\"code\":\"ARH-232\",\"name\":\"Cloud Computing\",\"section_number\":3,\"academic_year\":\"2021/2022\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":100,\"overbooked_ratio\":\"0.0200\"},{\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"section_number\":2,\"academic_year\":\"2019/2020\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"1\",\"max_students\":60,\"overbooked_ratio\":\"0.0167\"},{\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"section_number\":5,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"1\",\"max_students\":75,\"overbooked_ratio\":\"0.0133\"},{\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"section_number\":1,\"academic_year\":\"2023/2024\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"0\",\"max_students\":30,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"section_number\":4,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"0\",\"max_students\":100,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"section_number\":2,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"0\",\"max_students\":100,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"section_number\":4,\"academic_year\":\"2020/2021\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"0\",\"max_students\":75,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"section_number\":2,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"0\",\"max_students\":25,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"section_number\":4,\"academic_year\":\"2024/2025\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"0\",\"max_students\":30,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"section_number\":4,\"academic_year\":\"2022/2023\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"0\",\"max_students\":60,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"section_number\":3,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"0\",\"max_students\":40,\"overbooked_ratio\":\"0.0000\"}]},\"endedAt\":1771856108619},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  c.code,\\n  c.name,\\n  cs.section_number,\\n  cs.academic_year,\\n  cs.semester_type,\\n  COUNT(e.id) AS enrolled_count,\\n  cs.max_students,\\n  ROUND(COUNT(e.id)::numeric / cs.max_students, 4) AS overbooked_ratio\\nFROM course_sections cs\\nJOIN courses c ON cs.course_id = c.id\\nLEFT JOIN enrollments e ON cs.id = e.course_section_id AND e.is_active = true\\nGROUP BY cs.id, c.code, c.name, cs.section_number, cs.academic_year, cs.semester_type, cs.max_students\\nORDER BY overbooked_ratio DESC\",\"metadata\":{\"columns\":[\"code\",\"name\",\"section_number\",\"academic_year\",\"semester_type\",\"enrolled_count\",\"max_students\",\"overbooked_ratio\"],\"rowCount\":34,\"sample\":[{\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"section_number\":4,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"5\",\"max_students\":35,\"overbooked_ratio\":\"0.1429\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"section_number\":4,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":15,\"overbooked_ratio\":\"0.1333\"}]},\"data\":[{\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"section_number\":4,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"5\",\"max_students\":35,\"overbooked_ratio\":\"0.1429\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"section_number\":4,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":15,\"overbooked_ratio\":\"0.1333\"},{\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"section_number\":2,\"academic_year\":\"2022/2023\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"4\",\"max_students\":35,\"overbooked_ratio\":\"0.1143\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"section_number\":5,\"academic_year\":\"2022/2023\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"3\",\"max_students\":35,\"overbooked_ratio\":\"0.0857\"},{\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"section_number\":5,\"academic_year\":\"2024/2025\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"3\",\"max_students\":35,\"overbooked_ratio\":\"0.0857\"},{\"code\":\"BSS-943\",\"name\":\"Algebra Liniowa\",\"section_number\":2,\"academic_year\":\"2024/2025\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":30,\"overbooked_ratio\":\"0.0667\"},{\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"section_number\":4,\"academic_year\":\"2021/2022\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"4\",\"max_students\":60,\"overbooked_ratio\":\"0.0667\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"section_number\":3,\"academic_year\":\"2020/2021\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":30,\"overbooked_ratio\":\"0.0667\"},{\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"section_number\":5,\"academic_year\":\"2024/2025\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"1\",\"max_students\":15,\"overbooked_ratio\":\"0.0667\"},{\"code\":\"MKO-885\",\"name\":\"Rachunek Prawdopodobieństwa\",\"section_number\":1,\"academic_year\":\"2021/2022\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":35,\"overbooked_ratio\":\"0.0571\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"section_number\":5,\"academic_year\":\"2022/2023\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":35,\"overbooked_ratio\":\"0.0571\"},{\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"section_number\":1,\"academic_year\":\"2023/2024\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"4\",\"max_students\":75,\"overbooked_ratio\":\"0.0533\"},{\"code\":\"MKO-885\",\"name\":\"Rachunek Prawdopodobieństwa\",\"section_number\":2,\"academic_year\":\"2020/2021\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":40,\"overbooked_ratio\":\"0.0500\"},{\"code\":\"JFH-143\",\"name\":\"Architektura Komputerów\",\"section_number\":4,\"academic_year\":\"2023/2024\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"1\",\"max_students\":20,\"overbooked_ratio\":\"0.0500\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"section_number\":1,\"academic_year\":\"2020/2021\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":50,\"overbooked_ratio\":\"0.0400\"},{\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"section_number\":2,\"academic_year\":\"2023/2024\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":50,\"overbooked_ratio\":\"0.0400\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"section_number\":3,\"academic_year\":\"2023/2024\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"1\",\"max_students\":25,\"overbooked_ratio\":\"0.0400\"},{\"code\":\"HMI-889\",\"name\":\"Elektronika\",\"section_number\":3,\"academic_year\":\"2023/2024\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"1\",\"max_students\":30,\"overbooked_ratio\":\"0.0333\"},{\"code\":\"ZUQ-127\",\"name\":\"Fizyka\",\"section_number\":2,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":60,\"overbooked_ratio\":\"0.0333\"},{\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"section_number\":3,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"1\",\"max_students\":30,\"overbooked_ratio\":\"0.0333\"},{\"code\":\"PSC-614\",\"name\":\"Architektura Komputerów\",\"section_number\":1,\"academic_year\":\"2023/2024\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"3\",\"max_students\":100,\"overbooked_ratio\":\"0.0300\"},{\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"section_number\":1,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":75,\"overbooked_ratio\":\"0.0267\"},{\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"section_number\":2,\"academic_year\":\"2024/2025\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":75,\"overbooked_ratio\":\"0.0267\"},{\"code\":\"ARH-232\",\"name\":\"Cloud Computing\",\"section_number\":3,\"academic_year\":\"2021/2022\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":100,\"overbooked_ratio\":\"0.0200\"},{\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"section_number\":2,\"academic_year\":\"2019/2020\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"1\",\"max_students\":60,\"overbooked_ratio\":\"0.0167\"},{\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"section_number\":5,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"1\",\"max_students\":75,\"overbooked_ratio\":\"0.0133\"},{\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"section_number\":1,\"academic_year\":\"2023/2024\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"0\",\"max_students\":30,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"section_number\":4,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"0\",\"max_students\":100,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"section_number\":2,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"0\",\"max_students\":100,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"section_number\":4,\"academic_year\":\"2020/2021\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"0\",\"max_students\":75,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"section_number\":2,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"0\",\"max_students\":25,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"section_number\":4,\"academic_year\":\"2024/2025\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"0\",\"max_students\":30,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"section_number\":4,\"academic_year\":\"2022/2023\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"0\",\"max_students\":60,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"section_number\":3,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"0\",\"max_students\":40,\"overbooked_ratio\":\"0.0000\"}]},\"startedAt\":1771856108626,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Course Sections by Overbooked Ratio (Enrolled / Max Capacity)\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"code\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Course Code\"},\"x\":{\"field\":\"overbooked_ratio\",\"type\":\"quantitative\",\"title\":\"Overbooked Ratio (Enrolled / Max)\"},\"color\":{\"field\":\"overbooked_ratio\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"reds\"},\"title\":\"Ratio\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"section_number\",\"type\":\"ordinal\",\"title\":\"Section\"},{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"enrolled_count\",\"type\":\"quantitative\",\"title\":\"Enrolled\"},{\"field\":\"max_students\",\"type\":\"quantitative\",\"title\":\"Max Capacity\"},{\"field\":\"overbooked_ratio\",\"type\":\"quantitative\",\"title\":\"Overbooked Ratio\",\"format\":\".2%\"}]},\"height\":400,\"width\":600},\"reasoning\":\"This bar chart displays course sections sorted by overbooked ratio in descending order. The color intensity (red scale) emphasizes higher ratios, making it easy to identify the most overbooked sections. The tooltip provides comprehensive details including course name, section number, academic year, semester type, enrollment counts, and capacity information for deeper analysis.\"},\"endedAt\":1771856113231},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Course Sections by Overbooked Ratio (Enrolled / Max Capacity)\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"code\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Course Code\"},\"x\":{\"field\":\"overbooked_ratio\",\"type\":\"quantitative\",\"title\":\"Overbooked Ratio (Enrolled / Max)\"},\"color\":{\"field\":\"overbooked_ratio\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"reds\"},\"title\":\"Ratio\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"section_number\",\"type\":\"ordinal\",\"title\":\"Section\"},{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"enrolled_count\",\"type\":\"quantitative\",\"title\":\"Enrolled\"},{\"field\":\"max_students\",\"type\":\"quantitative\",\"title\":\"Max Capacity\"},{\"field\":\"overbooked_ratio\",\"type\":\"quantitative\",\"title\":\"Overbooked Ratio\",\"format\":\".2%\"}]},\"height\":400,\"width\":600},\"reasoning\":\"This bar chart displays course sections sorted by overbooked ratio in descending order. The color intensity (red scale) emphasizes higher ratios, making it easy to identify the most overbooked sections. The tooltip provides comprehensive details including course name, section number, academic year, semester type, enrollment counts, and capacity information for deeper analysis.\"},\"startedAt\":1771856113239,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT \\n  c.code,\\n  c.name,\\n  cs.section_number,\\n  cs.academic_year,\\n  cs.semester_type,\\n  COUNT(e.id) AS enrolled_count,\\n  cs.max_students,\\n  ROUND(COUNT(e.id)::numeric / cs.max_students, 4) AS overbooked_ratio\\nFROM course_sections cs\\nJOIN courses c ON cs.course_id = c.id\\nLEFT JOIN enrollments e ON cs.id = e.course_section_id AND e.is_active = true\\nGROUP BY cs.id, c.code, c.name, cs.section_number, cs.academic_year, cs.semester_type, cs.max_students\\nORDER BY overbooked_ratio DESC\\n\",\"data\":[{\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"section_number\":4,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"5\",\"max_students\":35,\"overbooked_ratio\":\"0.1429\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"section_number\":4,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":15,\"overbooked_ratio\":\"0.1333\"},{\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"section_number\":2,\"academic_year\":\"2022/2023\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"4\",\"max_students\":35,\"overbooked_ratio\":\"0.1143\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"section_number\":5,\"academic_year\":\"2022/2023\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"3\",\"max_students\":35,\"overbooked_ratio\":\"0.0857\"},{\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"section_number\":5,\"academic_year\":\"2024/2025\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"3\",\"max_students\":35,\"overbooked_ratio\":\"0.0857\"},{\"code\":\"BSS-943\",\"name\":\"Algebra Liniowa\",\"section_number\":2,\"academic_year\":\"2024/2025\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":30,\"overbooked_ratio\":\"0.0667\"},{\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"section_number\":4,\"academic_year\":\"2021/2022\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"4\",\"max_students\":60,\"overbooked_ratio\":\"0.0667\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"section_number\":3,\"academic_year\":\"2020/2021\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":30,\"overbooked_ratio\":\"0.0667\"},{\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"section_number\":5,\"academic_year\":\"2024/2025\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"1\",\"max_students\":15,\"overbooked_ratio\":\"0.0667\"},{\"code\":\"MKO-885\",\"name\":\"Rachunek Prawdopodobieństwa\",\"section_number\":1,\"academic_year\":\"2021/2022\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":35,\"overbooked_ratio\":\"0.0571\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"section_number\":5,\"academic_year\":\"2022/2023\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":35,\"overbooked_ratio\":\"0.0571\"},{\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"section_number\":1,\"academic_year\":\"2023/2024\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"4\",\"max_students\":75,\"overbooked_ratio\":\"0.0533\"},{\"code\":\"MKO-885\",\"name\":\"Rachunek Prawdopodobieństwa\",\"section_number\":2,\"academic_year\":\"2020/2021\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":40,\"overbooked_ratio\":\"0.0500\"},{\"code\":\"JFH-143\",\"name\":\"Architektura Komputerów\",\"section_number\":4,\"academic_year\":\"2023/2024\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"1\",\"max_students\":20,\"overbooked_ratio\":\"0.0500\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"section_number\":1,\"academic_year\":\"2020/2021\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":50,\"overbooked_ratio\":\"0.0400\"},{\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"section_number\":2,\"academic_year\":\"2023/2024\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":50,\"overbooked_ratio\":\"0.0400\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"section_number\":3,\"academic_year\":\"2023/2024\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"1\",\"max_students\":25,\"overbooked_ratio\":\"0.0400\"},{\"code\":\"HMI-889\",\"name\":\"Elektronika\",\"section_number\":3,\"academic_year\":\"2023/2024\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"1\",\"max_students\":30,\"overbooked_ratio\":\"0.0333\"},{\"code\":\"ZUQ-127\",\"name\":\"Fizyka\",\"section_number\":2,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":60,\"overbooked_ratio\":\"0.0333\"},{\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"section_number\":3,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"1\",\"max_students\":30,\"overbooked_ratio\":\"0.0333\"},{\"code\":\"PSC-614\",\"name\":\"Architektura Komputerów\",\"section_number\":1,\"academic_year\":\"2023/2024\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"3\",\"max_students\":100,\"overbooked_ratio\":\"0.0300\"},{\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"section_number\":1,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":75,\"overbooked_ratio\":\"0.0267\"},{\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"section_number\":2,\"academic_year\":\"2024/2025\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":75,\"overbooked_ratio\":\"0.0267\"},{\"code\":\"ARH-232\",\"name\":\"Cloud Computing\",\"section_number\":3,\"academic_year\":\"2021/2022\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":100,\"overbooked_ratio\":\"0.0200\"},{\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"section_number\":2,\"academic_year\":\"2019/2020\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"1\",\"max_students\":60,\"overbooked_ratio\":\"0.0167\"},{\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"section_number\":5,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"1\",\"max_students\":75,\"overbooked_ratio\":\"0.0133\"},{\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"section_number\":1,\"academic_year\":\"2023/2024\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"0\",\"max_students\":30,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"section_number\":4,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"0\",\"max_students\":100,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"section_number\":2,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"0\",\"max_students\":100,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"section_number\":4,\"academic_year\":\"2020/2021\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"0\",\"max_students\":75,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"section_number\":2,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"0\",\"max_students\":25,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"section_number\":4,\"academic_year\":\"2024/2025\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"0\",\"max_students\":30,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"section_number\":4,\"academic_year\":\"2022/2023\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"0\",\"max_students\":60,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"section_number\":3,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"0\",\"max_students\":40,\"overbooked_ratio\":\"0.0000\"}],\"metadata\":{\"columns\":[\"code\",\"name\",\"section_number\",\"academic_year\",\"semester_type\",\"enrolled_count\",\"max_students\",\"overbooked_ratio\"],\"rowCount\":34,\"sample\":[{\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"section_number\":4,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"5\",\"max_students\":35,\"overbooked_ratio\":\"0.1429\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"section_number\":4,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":15,\"overbooked_ratio\":\"0.1333\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Course Sections by Overbooked Ratio (Enrolled / Max Capacity)\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"code\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Course Code\"},\"x\":{\"field\":\"overbooked_ratio\",\"type\":\"quantitative\",\"title\":\"Overbooked Ratio (Enrolled / Max)\"},\"color\":{\"field\":\"overbooked_ratio\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"reds\"},\"title\":\"Ratio\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"section_number\",\"type\":\"ordinal\",\"title\":\"Section\"},{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"enrolled_count\",\"type\":\"quantitative\",\"title\":\"Enrolled\"},{\"field\":\"max_students\",\"type\":\"quantitative\",\"title\":\"Max Capacity\"},{\"field\":\"overbooked_ratio\",\"type\":\"quantitative\",\"title\":\"Overbooked Ratio\",\"format\":\".2%\"}]},\"height\":400,\"width\":600},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771856113245}},\"input\":{\"question\":\"Which course sections have the most overbooked ratio (enrolled / max)?\"},\"result\":{\"sql\":\"\\nSELECT \\n  c.code,\\n  c.name,\\n  cs.section_number,\\n  cs.academic_year,\\n  cs.semester_type,\\n  COUNT(e.id) AS enrolled_count,\\n  cs.max_students,\\n  ROUND(COUNT(e.id)::numeric / cs.max_students, 4) AS overbooked_ratio\\nFROM course_sections cs\\nJOIN courses c ON cs.course_id = c.id\\nLEFT JOIN enrollments e ON cs.id = e.course_section_id AND e.is_active = true\\nGROUP BY cs.id, c.code, c.name, cs.section_number, cs.academic_year, cs.semester_type, cs.max_students\\nORDER BY overbooked_ratio DESC\\n\",\"data\":[{\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"section_number\":4,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"5\",\"max_students\":35,\"overbooked_ratio\":\"0.1429\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"section_number\":4,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":15,\"overbooked_ratio\":\"0.1333\"},{\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"section_number\":2,\"academic_year\":\"2022/2023\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"4\",\"max_students\":35,\"overbooked_ratio\":\"0.1143\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"section_number\":5,\"academic_year\":\"2022/2023\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"3\",\"max_students\":35,\"overbooked_ratio\":\"0.0857\"},{\"code\":\"TAU-627\",\"name\":\"Analiza Matematyczna\",\"section_number\":5,\"academic_year\":\"2024/2025\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"3\",\"max_students\":35,\"overbooked_ratio\":\"0.0857\"},{\"code\":\"BSS-943\",\"name\":\"Algebra Liniowa\",\"section_number\":2,\"academic_year\":\"2024/2025\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":30,\"overbooked_ratio\":\"0.0667\"},{\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"section_number\":4,\"academic_year\":\"2021/2022\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"4\",\"max_students\":60,\"overbooked_ratio\":\"0.0667\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"section_number\":3,\"academic_year\":\"2020/2021\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":30,\"overbooked_ratio\":\"0.0667\"},{\"code\":\"BEW-951\",\"name\":\"Fizyka\",\"section_number\":5,\"academic_year\":\"2024/2025\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"1\",\"max_students\":15,\"overbooked_ratio\":\"0.0667\"},{\"code\":\"MKO-885\",\"name\":\"Rachunek Prawdopodobieństwa\",\"section_number\":1,\"academic_year\":\"2021/2022\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":35,\"overbooked_ratio\":\"0.0571\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"section_number\":5,\"academic_year\":\"2022/2023\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":35,\"overbooked_ratio\":\"0.0571\"},{\"code\":\"FEO-908\",\"name\":\"Analiza Matematyczna\",\"section_number\":1,\"academic_year\":\"2023/2024\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"4\",\"max_students\":75,\"overbooked_ratio\":\"0.0533\"},{\"code\":\"MKO-885\",\"name\":\"Rachunek Prawdopodobieństwa\",\"section_number\":2,\"academic_year\":\"2020/2021\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":40,\"overbooked_ratio\":\"0.0500\"},{\"code\":\"JFH-143\",\"name\":\"Architektura Komputerów\",\"section_number\":4,\"academic_year\":\"2023/2024\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"1\",\"max_students\":20,\"overbooked_ratio\":\"0.0500\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"section_number\":1,\"academic_year\":\"2020/2021\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":50,\"overbooked_ratio\":\"0.0400\"},{\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"section_number\":2,\"academic_year\":\"2023/2024\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":50,\"overbooked_ratio\":\"0.0400\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"section_number\":3,\"academic_year\":\"2023/2024\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"1\",\"max_students\":25,\"overbooked_ratio\":\"0.0400\"},{\"code\":\"HMI-889\",\"name\":\"Elektronika\",\"section_number\":3,\"academic_year\":\"2023/2024\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"1\",\"max_students\":30,\"overbooked_ratio\":\"0.0333\"},{\"code\":\"ZUQ-127\",\"name\":\"Fizyka\",\"section_number\":2,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":60,\"overbooked_ratio\":\"0.0333\"},{\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"section_number\":3,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"1\",\"max_students\":30,\"overbooked_ratio\":\"0.0333\"},{\"code\":\"PSC-614\",\"name\":\"Architektura Komputerów\",\"section_number\":1,\"academic_year\":\"2023/2024\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"3\",\"max_students\":100,\"overbooked_ratio\":\"0.0300\"},{\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"section_number\":1,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":75,\"overbooked_ratio\":\"0.0267\"},{\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"section_number\":2,\"academic_year\":\"2024/2025\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":75,\"overbooked_ratio\":\"0.0267\"},{\"code\":\"ARH-232\",\"name\":\"Cloud Computing\",\"section_number\":3,\"academic_year\":\"2021/2022\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"2\",\"max_students\":100,\"overbooked_ratio\":\"0.0200\"},{\"code\":\"AAX-989\",\"name\":\"Elektronika\",\"section_number\":2,\"academic_year\":\"2019/2020\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"1\",\"max_students\":60,\"overbooked_ratio\":\"0.0167\"},{\"code\":\"VBC-395\",\"name\":\"Sieci Komputerowe\",\"section_number\":5,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"1\",\"max_students\":75,\"overbooked_ratio\":\"0.0133\"},{\"code\":\"RZR-301\",\"name\":\"Sieci Komputerowe\",\"section_number\":1,\"academic_year\":\"2023/2024\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"0\",\"max_students\":30,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"section_number\":4,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"0\",\"max_students\":100,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"YWI-134\",\"name\":\"Metody Numeryczne\",\"section_number\":2,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"0\",\"max_students\":100,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"XQA-597\",\"name\":\"Analiza Matematyczna\",\"section_number\":4,\"academic_year\":\"2020/2021\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"0\",\"max_students\":75,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"WZC-570\",\"name\":\"Programowanie Obiektowe\",\"section_number\":2,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"0\",\"max_students\":25,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"FCL-532\",\"name\":\"Uczenie Maszynowe\",\"section_number\":4,\"academic_year\":\"2024/2025\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"0\",\"max_students\":30,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"HPF-845\",\"name\":\"Systemy Wbudowane\",\"section_number\":4,\"academic_year\":\"2022/2023\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"0\",\"max_students\":60,\"overbooked_ratio\":\"0.0000\"},{\"code\":\"AFI-682\",\"name\":\"Matematyka Dyskretna\",\"section_number\":3,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"0\",\"max_students\":40,\"overbooked_ratio\":\"0.0000\"}],\"metadata\":{\"columns\":[\"code\",\"name\",\"section_number\",\"academic_year\",\"semester_type\",\"enrolled_count\",\"max_students\",\"overbooked_ratio\"],\"rowCount\":34,\"sample\":[{\"code\":\"TJJ-354\",\"name\":\"Projektowanie Aplikacji Webowych\",\"section_number\":4,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":\"5\",\"max_students\":35,\"overbooked_ratio\":\"0.1429\"},{\"code\":\"UQL-274\",\"name\":\"Zarządzanie Projektami IT\",\"section_number\":4,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":\"2\",\"max_students\":15,\"overbooked_ratio\":\"0.1333\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Course Sections by Overbooked Ratio (Enrolled / Max Capacity)\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"code\",\"type\":\"nominal\",\"sort\":\"-x\",\"title\":\"Course Code\"},\"x\":{\"field\":\"overbooked_ratio\",\"type\":\"quantitative\",\"title\":\"Overbooked Ratio (Enrolled / Max)\"},\"color\":{\"field\":\"overbooked_ratio\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"reds\"},\"title\":\"Ratio\"},\"tooltip\":[{\"field\":\"code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"section_number\",\"type\":\"ordinal\",\"title\":\"Section\"},{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"enrolled_count\",\"type\":\"quantitative\",\"title\":\"Enrolled\"},{\"field\":\"max_students\",\"type\":\"quantitative\",\"title\":\"Max Capacity\"},{\"field\":\"overbooked_ratio\",\"type\":\"quantitative\",\"title\":\"Overbooked Ratio\",\"format\":\".2%\"}]},\"height\":400,\"width\":600},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"0575954405aa45f5821faa0343492b10\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/low-capacity-high-enrollment/run-0001/run.json",
+    "queryPath": "runs/low-capacity-high-enrollment/run-0001/query.sql",
+    "vegaRawPath": "runs/low-capacity-high-enrollment/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/low-capacity-high-enrollment/run-0001/vega.resolved.json",
+    "imagePath": "runs/low-capacity-high-enrollment/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:15:13.699Z",
+  "traceId": "0575954405aa45f5821faa0343492b10",
+  "success": true,
+  "durationMs": 34488,
+  "resultRaw": {
+    "data": [
+      {
+        "code": "TJJ-354",
+        "name": "Projektowanie Aplikacji Webowych",
+        "section_number": 4,
+        "academic_year": "2020/2021",
+        "semester_type": "WINTER",
+        "enrolled_count": "5",
+        "max_students": 35,
+        "overbooked_ratio": "0.1429"
+      },
+      {
+        "code": "UQL-274",
+        "name": "Zarządzanie Projektami IT",
+        "section_number": 4,
+        "academic_year": "2019/2020",
+        "semester_type": "SUMMER",
+        "enrolled_count": "2",
+        "max_students": 15,
+        "overbooked_ratio": "0.1333"
+      },
+      {
+        "code": "XQA-597",
+        "name": "Analiza Matematyczna",
+        "section_number": 2,
+        "academic_year": "2022/2023",
+        "semester_type": "SUMMER",
+        "enrolled_count": "4",
+        "max_students": 35,
+        "overbooked_ratio": "0.1143"
+      },
+      {
+        "code": "UQL-274",
+        "name": "Zarządzanie Projektami IT",
+        "section_number": 5,
+        "academic_year": "2022/2023",
+        "semester_type": "WINTER",
+        "enrolled_count": "3",
+        "max_students": 35,
+        "overbooked_ratio": "0.0857"
+      },
+      {
+        "code": "TAU-627",
+        "name": "Analiza Matematyczna",
+        "section_number": 5,
+        "academic_year": "2024/2025",
+        "semester_type": "WINTER",
+        "enrolled_count": "3",
+        "max_students": 35,
+        "overbooked_ratio": "0.0857"
+      },
+      {
+        "code": "BSS-943",
+        "name": "Algebra Liniowa",
+        "section_number": 2,
+        "academic_year": "2024/2025",
+        "semester_type": "SUMMER",
+        "enrolled_count": "2",
+        "max_students": 30,
+        "overbooked_ratio": "0.0667"
+      },
+      {
+        "code": "VBC-395",
+        "name": "Sieci Komputerowe",
+        "section_number": 4,
+        "academic_year": "2021/2022",
+        "semester_type": "WINTER",
+        "enrolled_count": "4",
+        "max_students": 60,
+        "overbooked_ratio": "0.0667"
+      },
+      {
+        "code": "AFI-682",
+        "name": "Matematyka Dyskretna",
+        "section_number": 3,
+        "academic_year": "2020/2021",
+        "semester_type": "SUMMER",
+        "enrolled_count": "2",
+        "max_students": 30,
+        "overbooked_ratio": "0.0667"
+      },
+      {
+        "code": "BEW-951",
+        "name": "Fizyka",
+        "section_number": 5,
+        "academic_year": "2024/2025",
+        "semester_type": "WINTER",
+        "enrolled_count": "1",
+        "max_students": 15,
+        "overbooked_ratio": "0.0667"
+      },
+      {
+        "code": "MKO-885",
+        "name": "Rachunek Prawdopodobieństwa",
+        "section_number": 1,
+        "academic_year": "2021/2022",
+        "semester_type": "WINTER",
+        "enrolled_count": "2",
+        "max_students": 35,
+        "overbooked_ratio": "0.0571"
+      },
+      {
+        "code": "AFI-682",
+        "name": "Matematyka Dyskretna",
+        "section_number": 5,
+        "academic_year": "2022/2023",
+        "semester_type": "SUMMER",
+        "enrolled_count": "2",
+        "max_students": 35,
+        "overbooked_ratio": "0.0571"
+      },
+      {
+        "code": "FEO-908",
+        "name": "Analiza Matematyczna",
+        "section_number": 1,
+        "academic_year": "2023/2024",
+        "semester_type": "SUMMER",
+        "enrolled_count": "4",
+        "max_students": 75,
+        "overbooked_ratio": "0.0533"
+      },
+      {
+        "code": "MKO-885",
+        "name": "Rachunek Prawdopodobieństwa",
+        "section_number": 2,
+        "academic_year": "2020/2021",
+        "semester_type": "SUMMER",
+        "enrolled_count": "2",
+        "max_students": 40,
+        "overbooked_ratio": "0.0500"
+      },
+      {
+        "code": "JFH-143",
+        "name": "Architektura Komputerów",
+        "section_number": 4,
+        "academic_year": "2023/2024",
+        "semester_type": "WINTER",
+        "enrolled_count": "1",
+        "max_students": 20,
+        "overbooked_ratio": "0.0500"
+      },
+      {
+        "code": "YWI-134",
+        "name": "Metody Numeryczne",
+        "section_number": 1,
+        "academic_year": "2020/2021",
+        "semester_type": "SUMMER",
+        "enrolled_count": "2",
+        "max_students": 50,
+        "overbooked_ratio": "0.0400"
+      },
+      {
+        "code": "TJJ-354",
+        "name": "Projektowanie Aplikacji Webowych",
+        "section_number": 2,
+        "academic_year": "2023/2024",
+        "semester_type": "WINTER",
+        "enrolled_count": "2",
+        "max_students": 50,
+        "overbooked_ratio": "0.0400"
+      },
+      {
+        "code": "WZC-570",
+        "name": "Programowanie Obiektowe",
+        "section_number": 3,
+        "academic_year": "2023/2024",
+        "semester_type": "WINTER",
+        "enrolled_count": "1",
+        "max_students": 25,
+        "overbooked_ratio": "0.0400"
+      },
+      {
+        "code": "HMI-889",
+        "name": "Elektronika",
+        "section_number": 3,
+        "academic_year": "2023/2024",
+        "semester_type": "WINTER",
+        "enrolled_count": "1",
+        "max_students": 30,
+        "overbooked_ratio": "0.0333"
+      },
+      {
+        "code": "ZUQ-127",
+        "name": "Fizyka",
+        "section_number": 2,
+        "academic_year": "2020/2021",
+        "semester_type": "WINTER",
+        "enrolled_count": "2",
+        "max_students": 60,
+        "overbooked_ratio": "0.0333"
+      },
+      {
+        "code": "RZR-301",
+        "name": "Sieci Komputerowe",
+        "section_number": 3,
+        "academic_year": "2019/2020",
+        "semester_type": "SUMMER",
+        "enrolled_count": "1",
+        "max_students": 30,
+        "overbooked_ratio": "0.0333"
+      },
+      {
+        "code": "PSC-614",
+        "name": "Architektura Komputerów",
+        "section_number": 1,
+        "academic_year": "2023/2024",
+        "semester_type": "WINTER",
+        "enrolled_count": "3",
+        "max_students": 100,
+        "overbooked_ratio": "0.0300"
+      },
+      {
+        "code": "RZR-301",
+        "name": "Sieci Komputerowe",
+        "section_number": 1,
+        "academic_year": "2020/2021",
+        "semester_type": "WINTER",
+        "enrolled_count": "2",
+        "max_students": 75,
+        "overbooked_ratio": "0.0267"
+      },
+      {
+        "code": "FCL-532",
+        "name": "Uczenie Maszynowe",
+        "section_number": 2,
+        "academic_year": "2024/2025",
+        "semester_type": "WINTER",
+        "enrolled_count": "2",
+        "max_students": 75,
+        "overbooked_ratio": "0.0267"
+      },
+      {
+        "code": "ARH-232",
+        "name": "Cloud Computing",
+        "section_number": 3,
+        "academic_year": "2021/2022",
+        "semester_type": "WINTER",
+        "enrolled_count": "2",
+        "max_students": 100,
+        "overbooked_ratio": "0.0200"
+      },
+      {
+        "code": "AAX-989",
+        "name": "Elektronika",
+        "section_number": 2,
+        "academic_year": "2019/2020",
+        "semester_type": "WINTER",
+        "enrolled_count": "1",
+        "max_students": 60,
+        "overbooked_ratio": "0.0167"
+      },
+      {
+        "code": "VBC-395",
+        "name": "Sieci Komputerowe",
+        "section_number": 5,
+        "academic_year": "2019/2020",
+        "semester_type": "SUMMER",
+        "enrolled_count": "1",
+        "max_students": 75,
+        "overbooked_ratio": "0.0133"
+      },
+      {
+        "code": "RZR-301",
+        "name": "Sieci Komputerowe",
+        "section_number": 1,
+        "academic_year": "2023/2024",
+        "semester_type": "SUMMER",
+        "enrolled_count": "0",
+        "max_students": 30,
+        "overbooked_ratio": "0.0000"
+      },
+      {
+        "code": "FCL-532",
+        "name": "Uczenie Maszynowe",
+        "section_number": 4,
+        "academic_year": "2020/2021",
+        "semester_type": "WINTER",
+        "enrolled_count": "0",
+        "max_students": 100,
+        "overbooked_ratio": "0.0000"
+      },
+      {
+        "code": "YWI-134",
+        "name": "Metody Numeryczne",
+        "section_number": 2,
+        "academic_year": "2019/2020",
+        "semester_type": "SUMMER",
+        "enrolled_count": "0",
+        "max_students": 100,
+        "overbooked_ratio": "0.0000"
+      },
+      {
+        "code": "XQA-597",
+        "name": "Analiza Matematyczna",
+        "section_number": 4,
+        "academic_year": "2020/2021",
+        "semester_type": "SUMMER",
+        "enrolled_count": "0",
+        "max_students": 75,
+        "overbooked_ratio": "0.0000"
+      },
+      {
+        "code": "WZC-570",
+        "name": "Programowanie Obiektowe",
+        "section_number": 2,
+        "academic_year": "2020/2021",
+        "semester_type": "WINTER",
+        "enrolled_count": "0",
+        "max_students": 25,
+        "overbooked_ratio": "0.0000"
+      },
+      {
+        "code": "FCL-532",
+        "name": "Uczenie Maszynowe",
+        "section_number": 4,
+        "academic_year": "2024/2025",
+        "semester_type": "SUMMER",
+        "enrolled_count": "0",
+        "max_students": 30,
+        "overbooked_ratio": "0.0000"
+      },
+      {
+        "code": "HPF-845",
+        "name": "Systemy Wbudowane",
+        "section_number": 4,
+        "academic_year": "2022/2023",
+        "semester_type": "SUMMER",
+        "enrolled_count": "0",
+        "max_students": 60,
+        "overbooked_ratio": "0.0000"
+      },
+      {
+        "code": "AFI-682",
+        "name": "Matematyka Dyskretna",
+        "section_number": 3,
+        "academic_year": "2020/2021",
+        "semester_type": "WINTER",
+        "enrolled_count": "0",
+        "max_students": 40,
+        "overbooked_ratio": "0.0000"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Course Sections by Overbooked Ratio (Enrolled / Max Capacity)",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "code",
+          "type": "nominal",
+          "sort": "-x",
+          "title": "Course Code"
+        },
+        "x": {
+          "field": "overbooked_ratio",
+          "type": "quantitative",
+          "title": "Overbooked Ratio (Enrolled / Max)"
+        },
+        "color": {
+          "field": "overbooked_ratio",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "reds"
+          },
+          "title": "Ratio"
+        },
+        "tooltip": [
+          {
+            "field": "code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "section_number",
+            "type": "ordinal",
+            "title": "Section"
+          },
+          {
+            "field": "academic_year",
+            "type": "nominal",
+            "title": "Academic Year"
+          },
+          {
+            "field": "semester_type",
+            "type": "nominal",
+            "title": "Semester"
+          },
+          {
+            "field": "enrolled_count",
+            "type": "quantitative",
+            "title": "Enrolled"
+          },
+          {
+            "field": "max_students",
+            "type": "quantitative",
+            "title": "Max Capacity"
+          },
+          {
+            "field": "overbooked_ratio",
+            "type": "quantitative",
+            "title": "Overbooked Ratio",
+            "format": ".2%"
+          }
+        ]
+      },
+      "height": 400,
+      "width": 600
+    },
+    "sql": "\nSELECT \n  c.code,\n  c.name,\n  cs.section_number,\n  cs.academic_year,\n  cs.semester_type,\n  COUNT(e.id) AS enrolled_count,\n  cs.max_students,\n  ROUND(COUNT(e.id)::numeric / cs.max_students, 4) AS overbooked_ratio\nFROM course_sections cs\nJOIN courses c ON cs.course_id = c.id\nLEFT JOIN enrollments e ON cs.id = e.course_section_id AND e.is_active = true\nGROUP BY cs.id, c.code, c.name, cs.section_number, cs.academic_year, cs.semester_type, cs.max_students\nORDER BY overbooked_ratio DESC\n",
+    "metadata": {
+      "columns": [
+        "code",
+        "name",
+        "section_number",
+        "academic_year",
+        "semester_type",
+        "enrolled_count",
+        "max_students",
+        "overbooked_ratio"
+      ],
+      "rowCount": 34,
+      "sample": [
+        {
+          "code": "TJJ-354",
+          "name": "Projektowanie Aplikacji Webowych",
+          "section_number": 4,
+          "academic_year": "2020/2021",
+          "semester_type": "WINTER",
+          "enrolled_count": "5",
+          "max_students": 35,
+          "overbooked_ratio": "0.1429"
+        },
+        {
+          "code": "UQL-274",
+          "name": "Zarządzanie Projektami IT",
+          "section_number": 4,
+          "academic_year": "2019/2020",
+          "semester_type": "SUMMER",
+          "enrolled_count": "2",
+          "max_students": 15,
+          "overbooked_ratio": "0.1333"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "code": "TJJ-354",
+        "name": "Projektowanie Aplikacji Webowych",
+        "section_number": 4,
+        "academic_year": "2020/2021",
+        "semester_type": "WINTER",
+        "enrolled_count": "5",
+        "max_students": 35,
+        "overbooked_ratio": "0.1429"
+      },
+      {
+        "code": "UQL-274",
+        "name": "Zarządzanie Projektami IT",
+        "section_number": 4,
+        "academic_year": "2019/2020",
+        "semester_type": "SUMMER",
+        "enrolled_count": "2",
+        "max_students": 15,
+        "overbooked_ratio": "0.1333"
+      },
+      {
+        "code": "XQA-597",
+        "name": "Analiza Matematyczna",
+        "section_number": 2,
+        "academic_year": "2022/2023",
+        "semester_type": "SUMMER",
+        "enrolled_count": "4",
+        "max_students": 35,
+        "overbooked_ratio": "0.1143"
+      },
+      {
+        "code": "UQL-274",
+        "name": "Zarządzanie Projektami IT",
+        "section_number": 5,
+        "academic_year": "2022/2023",
+        "semester_type": "WINTER",
+        "enrolled_count": "3",
+        "max_students": 35,
+        "overbooked_ratio": "0.0857"
+      },
+      {
+        "code": "TAU-627",
+        "name": "Analiza Matematyczna",
+        "section_number": 5,
+        "academic_year": "2024/2025",
+        "semester_type": "WINTER",
+        "enrolled_count": "3",
+        "max_students": 35,
+        "overbooked_ratio": "0.0857"
+      },
+      {
+        "code": "BSS-943",
+        "name": "Algebra Liniowa",
+        "section_number": 2,
+        "academic_year": "2024/2025",
+        "semester_type": "SUMMER",
+        "enrolled_count": "2",
+        "max_students": 30,
+        "overbooked_ratio": "0.0667"
+      },
+      {
+        "code": "VBC-395",
+        "name": "Sieci Komputerowe",
+        "section_number": 4,
+        "academic_year": "2021/2022",
+        "semester_type": "WINTER",
+        "enrolled_count": "4",
+        "max_students": 60,
+        "overbooked_ratio": "0.0667"
+      },
+      {
+        "code": "AFI-682",
+        "name": "Matematyka Dyskretna",
+        "section_number": 3,
+        "academic_year": "2020/2021",
+        "semester_type": "SUMMER",
+        "enrolled_count": "2",
+        "max_students": 30,
+        "overbooked_ratio": "0.0667"
+      },
+      {
+        "code": "BEW-951",
+        "name": "Fizyka",
+        "section_number": 5,
+        "academic_year": "2024/2025",
+        "semester_type": "WINTER",
+        "enrolled_count": "1",
+        "max_students": 15,
+        "overbooked_ratio": "0.0667"
+      },
+      {
+        "code": "MKO-885",
+        "name": "Rachunek Prawdopodobieństwa",
+        "section_number": 1,
+        "academic_year": "2021/2022",
+        "semester_type": "WINTER",
+        "enrolled_count": "2",
+        "max_students": 35,
+        "overbooked_ratio": "0.0571"
+      },
+      {
+        "code": "AFI-682",
+        "name": "Matematyka Dyskretna",
+        "section_number": 5,
+        "academic_year": "2022/2023",
+        "semester_type": "SUMMER",
+        "enrolled_count": "2",
+        "max_students": 35,
+        "overbooked_ratio": "0.0571"
+      },
+      {
+        "code": "FEO-908",
+        "name": "Analiza Matematyczna",
+        "section_number": 1,
+        "academic_year": "2023/2024",
+        "semester_type": "SUMMER",
+        "enrolled_count": "4",
+        "max_students": 75,
+        "overbooked_ratio": "0.0533"
+      },
+      {
+        "code": "MKO-885",
+        "name": "Rachunek Prawdopodobieństwa",
+        "section_number": 2,
+        "academic_year": "2020/2021",
+        "semester_type": "SUMMER",
+        "enrolled_count": "2",
+        "max_students": 40,
+        "overbooked_ratio": "0.0500"
+      },
+      {
+        "code": "JFH-143",
+        "name": "Architektura Komputerów",
+        "section_number": 4,
+        "academic_year": "2023/2024",
+        "semester_type": "WINTER",
+        "enrolled_count": "1",
+        "max_students": 20,
+        "overbooked_ratio": "0.0500"
+      },
+      {
+        "code": "YWI-134",
+        "name": "Metody Numeryczne",
+        "section_number": 1,
+        "academic_year": "2020/2021",
+        "semester_type": "SUMMER",
+        "enrolled_count": "2",
+        "max_students": 50,
+        "overbooked_ratio": "0.0400"
+      },
+      {
+        "code": "TJJ-354",
+        "name": "Projektowanie Aplikacji Webowych",
+        "section_number": 2,
+        "academic_year": "2023/2024",
+        "semester_type": "WINTER",
+        "enrolled_count": "2",
+        "max_students": 50,
+        "overbooked_ratio": "0.0400"
+      },
+      {
+        "code": "WZC-570",
+        "name": "Programowanie Obiektowe",
+        "section_number": 3,
+        "academic_year": "2023/2024",
+        "semester_type": "WINTER",
+        "enrolled_count": "1",
+        "max_students": 25,
+        "overbooked_ratio": "0.0400"
+      },
+      {
+        "code": "HMI-889",
+        "name": "Elektronika",
+        "section_number": 3,
+        "academic_year": "2023/2024",
+        "semester_type": "WINTER",
+        "enrolled_count": "1",
+        "max_students": 30,
+        "overbooked_ratio": "0.0333"
+      },
+      {
+        "code": "ZUQ-127",
+        "name": "Fizyka",
+        "section_number": 2,
+        "academic_year": "2020/2021",
+        "semester_type": "WINTER",
+        "enrolled_count": "2",
+        "max_students": 60,
+        "overbooked_ratio": "0.0333"
+      },
+      {
+        "code": "RZR-301",
+        "name": "Sieci Komputerowe",
+        "section_number": 3,
+        "academic_year": "2019/2020",
+        "semester_type": "SUMMER",
+        "enrolled_count": "1",
+        "max_students": 30,
+        "overbooked_ratio": "0.0333"
+      },
+      {
+        "code": "PSC-614",
+        "name": "Architektura Komputerów",
+        "section_number": 1,
+        "academic_year": "2023/2024",
+        "semester_type": "WINTER",
+        "enrolled_count": "3",
+        "max_students": 100,
+        "overbooked_ratio": "0.0300"
+      },
+      {
+        "code": "RZR-301",
+        "name": "Sieci Komputerowe",
+        "section_number": 1,
+        "academic_year": "2020/2021",
+        "semester_type": "WINTER",
+        "enrolled_count": "2",
+        "max_students": 75,
+        "overbooked_ratio": "0.0267"
+      },
+      {
+        "code": "FCL-532",
+        "name": "Uczenie Maszynowe",
+        "section_number": 2,
+        "academic_year": "2024/2025",
+        "semester_type": "WINTER",
+        "enrolled_count": "2",
+        "max_students": 75,
+        "overbooked_ratio": "0.0267"
+      },
+      {
+        "code": "ARH-232",
+        "name": "Cloud Computing",
+        "section_number": 3,
+        "academic_year": "2021/2022",
+        "semester_type": "WINTER",
+        "enrolled_count": "2",
+        "max_students": 100,
+        "overbooked_ratio": "0.0200"
+      },
+      {
+        "code": "AAX-989",
+        "name": "Elektronika",
+        "section_number": 2,
+        "academic_year": "2019/2020",
+        "semester_type": "WINTER",
+        "enrolled_count": "1",
+        "max_students": 60,
+        "overbooked_ratio": "0.0167"
+      },
+      {
+        "code": "VBC-395",
+        "name": "Sieci Komputerowe",
+        "section_number": 5,
+        "academic_year": "2019/2020",
+        "semester_type": "SUMMER",
+        "enrolled_count": "1",
+        "max_students": 75,
+        "overbooked_ratio": "0.0133"
+      },
+      {
+        "code": "RZR-301",
+        "name": "Sieci Komputerowe",
+        "section_number": 1,
+        "academic_year": "2023/2024",
+        "semester_type": "SUMMER",
+        "enrolled_count": "0",
+        "max_students": 30,
+        "overbooked_ratio": "0.0000"
+      },
+      {
+        "code": "FCL-532",
+        "name": "Uczenie Maszynowe",
+        "section_number": 4,
+        "academic_year": "2020/2021",
+        "semester_type": "WINTER",
+        "enrolled_count": "0",
+        "max_students": 100,
+        "overbooked_ratio": "0.0000"
+      },
+      {
+        "code": "YWI-134",
+        "name": "Metody Numeryczne",
+        "section_number": 2,
+        "academic_year": "2019/2020",
+        "semester_type": "SUMMER",
+        "enrolled_count": "0",
+        "max_students": 100,
+        "overbooked_ratio": "0.0000"
+      },
+      {
+        "code": "XQA-597",
+        "name": "Analiza Matematyczna",
+        "section_number": 4,
+        "academic_year": "2020/2021",
+        "semester_type": "SUMMER",
+        "enrolled_count": "0",
+        "max_students": 75,
+        "overbooked_ratio": "0.0000"
+      },
+      {
+        "code": "WZC-570",
+        "name": "Programowanie Obiektowe",
+        "section_number": 2,
+        "academic_year": "2020/2021",
+        "semester_type": "WINTER",
+        "enrolled_count": "0",
+        "max_students": 25,
+        "overbooked_ratio": "0.0000"
+      },
+      {
+        "code": "FCL-532",
+        "name": "Uczenie Maszynowe",
+        "section_number": 4,
+        "academic_year": "2024/2025",
+        "semester_type": "SUMMER",
+        "enrolled_count": "0",
+        "max_students": 30,
+        "overbooked_ratio": "0.0000"
+      },
+      {
+        "code": "HPF-845",
+        "name": "Systemy Wbudowane",
+        "section_number": 4,
+        "academic_year": "2022/2023",
+        "semester_type": "SUMMER",
+        "enrolled_count": "0",
+        "max_students": 60,
+        "overbooked_ratio": "0.0000"
+      },
+      {
+        "code": "AFI-682",
+        "name": "Matematyka Dyskretna",
+        "section_number": 3,
+        "academic_year": "2020/2021",
+        "semester_type": "WINTER",
+        "enrolled_count": "0",
+        "max_students": 40,
+        "overbooked_ratio": "0.0000"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Course Sections by Overbooked Ratio (Enrolled / Max Capacity)",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "y": {
+          "field": "code",
+          "type": "nominal",
+          "sort": "-x",
+          "title": "Course Code"
+        },
+        "x": {
+          "field": "overbooked_ratio",
+          "type": "quantitative",
+          "title": "Overbooked Ratio (Enrolled / Max)"
+        },
+        "color": {
+          "field": "overbooked_ratio",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "reds"
+          },
+          "title": "Ratio"
+        },
+        "tooltip": [
+          {
+            "field": "code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "section_number",
+            "type": "ordinal",
+            "title": "Section"
+          },
+          {
+            "field": "academic_year",
+            "type": "nominal",
+            "title": "Academic Year"
+          },
+          {
+            "field": "semester_type",
+            "type": "nominal",
+            "title": "Semester"
+          },
+          {
+            "field": "enrolled_count",
+            "type": "quantitative",
+            "title": "Enrolled"
+          },
+          {
+            "field": "max_students",
+            "type": "quantitative",
+            "title": "Max Capacity"
+          },
+          {
+            "field": "overbooked_ratio",
+            "type": "quantitative",
+            "title": "Overbooked Ratio",
+            "format": ".2%"
+          }
+        ]
+      },
+      "height": 400,
+      "width": 600
+    },
+    "sql": "\nSELECT \n  c.code,\n  c.name,\n  cs.section_number,\n  cs.academic_year,\n  cs.semester_type,\n  COUNT(e.id) AS enrolled_count,\n  cs.max_students,\n  ROUND(COUNT(e.id)::numeric / cs.max_students, 4) AS overbooked_ratio\nFROM course_sections cs\nJOIN courses c ON cs.course_id = c.id\nLEFT JOIN enrollments e ON cs.id = e.course_section_id AND e.is_active = true\nGROUP BY cs.id, c.code, c.name, cs.section_number, cs.academic_year, cs.semester_type, cs.max_students\nORDER BY overbooked_ratio DESC\n",
+    "metadata": {
+      "columns": [
+        "code",
+        "name",
+        "section_number",
+        "academic_year",
+        "semester_type",
+        "enrolled_count",
+        "max_students",
+        "overbooked_ratio"
+      ],
+      "rowCount": 34,
+      "sample": [
+        {
+          "code": "TJJ-354",
+          "name": "Projektowanie Aplikacji Webowych",
+          "section_number": 4,
+          "academic_year": "2020/2021",
+          "semester_type": "WINTER",
+          "enrolled_count": "5",
+          "max_students": 35,
+          "overbooked_ratio": "0.1429"
+        },
+        {
+          "code": "UQL-274",
+          "name": "Zarządzanie Projektami IT",
+          "section_number": 4,
+          "academic_year": "2019/2020",
+          "semester_type": "SUMMER",
+          "enrolled_count": "2",
+          "max_students": 15,
+          "overbooked_ratio": "0.1333"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.358Z",
+    "traceId": "0575954405aa45f5821faa0343492b10",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 18686,
+      "outputTokens": 1332,
+      "totalTokens": 20018,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.025346
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 18686,
+        "outputTokens": 1332,
+        "totalTokens": 20018,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.025346
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,264 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "avg-credits-by-course-type",
+  "caseDirectory": "avg-credits-by-course-type",
+  "repeatIndex": 1,
+  "prompt": "What is the average number of credits by course type?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average number of credits by course type?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:41:51.821Z",
+    "endedAtUtc": "2026-02-22T23:42:16.517Z",
+    "durationMs": 24696
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "6614",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:42:16 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the average number of credits by course type?\"},\"sql\":{\"payload\":{\"question\":\"What is the average number of credits by course type?\"},\"startedAt\":1771803711826,\"status\":\"success\",\"output\":{\"reasoning\":\"Compute the average credits per course_type from the confirmed public.courses table; cast and round the average to two decimals and order deterministically by course_type.\",\"sql\":\"SELECT course_type AS course_type, ROUND(AVG(credits)::numeric, 2) AS avg_credits FROM public.courses GROUP BY course_type ORDER BY course_type ASC;\",\"assumptions\":[\"The table public.courses exists (confirmed) and has columns credits (integer) and course_type (user-defined/enum); grouping by the enum column is valid.\",\"Null credits do not exist (credits is NOT NULL per schema) so AVG will consider all rows.\",\"Desired output fields are course_type and avg_credits (rounded to 2 decimal places).\"]},\"endedAt\":1771803724802},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT course_type AS course_type, ROUND(AVG(credits)::numeric, 2) AS avg_credits FROM public.courses GROUP BY course_type ORDER BY course_type ASC;\"},\"startedAt\":1771803724804,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT course_type AS course_type, ROUND(AVG(credits)::numeric, 2) AS avg_credits FROM public.courses GROUP BY course_type ORDER BY course_type ASC\",\"metadata\":{\"columns\":[\"avg_credits\",\"course_type\"],\"rowCount\":5,\"sample\":[{\"avg_credits\":4.71,\"course_type\":\"LECTURE\"},{\"avg_credits\":4,\"course_type\":\"LABORATORY\"}]},\"data\":[{\"avg_credits\":4.71,\"course_type\":\"LECTURE\"},{\"avg_credits\":4,\"course_type\":\"LABORATORY\"},{\"avg_credits\":5,\"course_type\":\"PROJECT\"},{\"avg_credits\":4,\"course_type\":\"SEMINAR\"},{\"avg_credits\":3.88,\"course_type\":\"EXERCISE\"}]},\"endedAt\":1771803724822},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT course_type AS course_type, ROUND(AVG(credits)::numeric, 2) AS avg_credits FROM public.courses GROUP BY course_type ORDER BY course_type ASC\",\"metadata\":{\"columns\":[\"avg_credits\",\"course_type\"],\"rowCount\":5,\"sample\":[{\"avg_credits\":4.71,\"course_type\":\"LECTURE\"},{\"avg_credits\":4,\"course_type\":\"LABORATORY\"}]},\"data\":[{\"avg_credits\":4.71,\"course_type\":\"LECTURE\"},{\"avg_credits\":4,\"course_type\":\"LABORATORY\"},{\"avg_credits\":5,\"course_type\":\"PROJECT\"},{\"avg_credits\":4,\"course_type\":\"SEMINAR\"},{\"avg_credits\":3.88,\"course_type\":\"EXERCISE\"}]},\"startedAt\":1771803724823,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Credits by Course Type\",\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\",\"sort\":\"ascending\"},\"x\":{\"field\":\"avg_credits\",\"type\":\"quantitative\",\"title\":\"Average Credits\"},\"color\":{\"field\":\"course_type\",\"type\":\"nominal\",\"legend\":null}},\"tooltip\":[{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"avg_credits\",\"type\":\"quantitative\",\"title\":\"Average Credits\"}]},\"reasoning\":\"Horizontal bar chart to compare average credits (avg_credits) across course types (course_type); tooltip shows exact values.\"},\"endedAt\":1771803736487},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Credits by Course Type\",\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\",\"sort\":\"ascending\"},\"x\":{\"field\":\"avg_credits\",\"type\":\"quantitative\",\"title\":\"Average Credits\"},\"color\":{\"field\":\"course_type\",\"type\":\"nominal\",\"legend\":null}},\"tooltip\":[{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"avg_credits\",\"type\":\"quantitative\",\"title\":\"Average Credits\"}]},\"reasoning\":\"Horizontal bar chart to compare average credits (avg_credits) across course types (course_type); tooltip shows exact values.\"},\"startedAt\":1771803736492,\"status\":\"success\",\"output\":{\"sql\":\"SELECT course_type AS course_type, ROUND(AVG(credits)::numeric, 2) AS avg_credits FROM public.courses GROUP BY course_type ORDER BY course_type ASC;\",\"data\":[{\"avg_credits\":4.71,\"course_type\":\"LECTURE\"},{\"avg_credits\":4,\"course_type\":\"LABORATORY\"},{\"avg_credits\":5,\"course_type\":\"PROJECT\"},{\"avg_credits\":4,\"course_type\":\"SEMINAR\"},{\"avg_credits\":3.88,\"course_type\":\"EXERCISE\"}],\"metadata\":{\"columns\":[\"avg_credits\",\"course_type\"],\"rowCount\":5,\"sample\":[{\"avg_credits\":4.71,\"course_type\":\"LECTURE\"},{\"avg_credits\":4,\"course_type\":\"LABORATORY\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Credits by Course Type\",\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\",\"sort\":\"ascending\"},\"x\":{\"field\":\"avg_credits\",\"type\":\"quantitative\",\"title\":\"Average Credits\"},\"color\":{\"field\":\"course_type\",\"type\":\"nominal\",\"legend\":null}},\"tooltip\":[{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"avg_credits\",\"type\":\"quantitative\",\"title\":\"Average Credits\"}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771803736498}},\"input\":{\"question\":\"What is the average number of credits by course type?\"},\"result\":{\"sql\":\"SELECT course_type AS course_type, ROUND(AVG(credits)::numeric, 2) AS avg_credits FROM public.courses GROUP BY course_type ORDER BY course_type ASC;\",\"data\":[{\"avg_credits\":4.71,\"course_type\":\"LECTURE\"},{\"avg_credits\":4,\"course_type\":\"LABORATORY\"},{\"avg_credits\":5,\"course_type\":\"PROJECT\"},{\"avg_credits\":4,\"course_type\":\"SEMINAR\"},{\"avg_credits\":3.88,\"course_type\":\"EXERCISE\"}],\"metadata\":{\"columns\":[\"avg_credits\",\"course_type\"],\"rowCount\":5,\"sample\":[{\"avg_credits\":4.71,\"course_type\":\"LECTURE\"},{\"avg_credits\":4,\"course_type\":\"LABORATORY\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Credits by Course Type\",\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\",\"sort\":\"ascending\"},\"x\":{\"field\":\"avg_credits\",\"type\":\"quantitative\",\"title\":\"Average Credits\"},\"color\":{\"field\":\"course_type\",\"type\":\"nominal\",\"legend\":null}},\"tooltip\":[{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"avg_credits\",\"type\":\"quantitative\",\"title\":\"Average Credits\"}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"305bf6f3b88a874de2c36fa5bfc88be0\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-credits-by-course-type/run-0001/run.json",
+    "queryPath": "runs/avg-credits-by-course-type/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-credits-by-course-type/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-credits-by-course-type/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-credits-by-course-type/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:42:16.943Z",
+  "traceId": "305bf6f3b88a874de2c36fa5bfc88be0",
+  "success": true,
+  "durationMs": 25122,
+  "resultRaw": {
+    "data": [
+      {
+        "avg_credits": 4.71,
+        "course_type": "LECTURE"
+      },
+      {
+        "avg_credits": 4,
+        "course_type": "LABORATORY"
+      },
+      {
+        "avg_credits": 5,
+        "course_type": "PROJECT"
+      },
+      {
+        "avg_credits": 4,
+        "course_type": "SEMINAR"
+      },
+      {
+        "avg_credits": 3.88,
+        "course_type": "EXERCISE"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Credits by Course Type",
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "y": {
+          "field": "course_type",
+          "type": "nominal",
+          "title": "Course Type",
+          "sort": "ascending"
+        },
+        "x": {
+          "field": "avg_credits",
+          "type": "quantitative",
+          "title": "Average Credits"
+        },
+        "color": {
+          "field": "course_type",
+          "type": "nominal",
+          "legend": null
+        }
+      },
+      "tooltip": [
+        {
+          "field": "course_type",
+          "type": "nominal",
+          "title": "Course Type"
+        },
+        {
+          "field": "avg_credits",
+          "type": "quantitative",
+          "title": "Average Credits"
+        }
+      ]
+    },
+    "sql": "SELECT course_type AS course_type, ROUND(AVG(credits)::numeric, 2) AS avg_credits FROM public.courses GROUP BY course_type ORDER BY course_type ASC;",
+    "metadata": {
+      "columns": [
+        "avg_credits",
+        "course_type"
+      ],
+      "rowCount": 5,
+      "sample": [
+        {
+          "avg_credits": 4.71,
+          "course_type": "LECTURE"
+        },
+        {
+          "avg_credits": 4,
+          "course_type": "LABORATORY"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "avg_credits": 4.71,
+        "course_type": "LECTURE"
+      },
+      {
+        "avg_credits": 4,
+        "course_type": "LABORATORY"
+      },
+      {
+        "avg_credits": 5,
+        "course_type": "PROJECT"
+      },
+      {
+        "avg_credits": 4,
+        "course_type": "SEMINAR"
+      },
+      {
+        "avg_credits": 3.88,
+        "course_type": "EXERCISE"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Credits by Course Type",
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "y": {
+          "field": "course_type",
+          "type": "nominal",
+          "title": "Course Type",
+          "sort": "ascending"
+        },
+        "x": {
+          "field": "avg_credits",
+          "type": "quantitative",
+          "title": "Average Credits"
+        },
+        "color": {
+          "field": "course_type",
+          "type": "nominal",
+          "legend": null
+        }
+      },
+      "tooltip": [
+        {
+          "field": "course_type",
+          "type": "nominal",
+          "title": "Course Type"
+        },
+        {
+          "field": "avg_credits",
+          "type": "quantitative",
+          "title": "Average Credits"
+        }
+      ]
+    },
+    "sql": "SELECT course_type AS course_type, ROUND(AVG(credits)::numeric, 2) AS avg_credits FROM public.courses GROUP BY course_type ORDER BY course_type ASC;",
+    "metadata": {
+      "columns": [
+        "avg_credits",
+        "course_type"
+      ],
+      "rowCount": 5,
+      "sample": [
+        {
+          "avg_credits": 4.71,
+          "course_type": "LECTURE"
+        },
+        {
+          "avg_credits": 4,
+          "course_type": "LABORATORY"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:42:16.943Z",
+    "traceId": "305bf6f3b88a874de2c36fa5bfc88be0",
+    "attempts": 5,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 5599,
+      "outputTokens": 1926,
+      "totalTokens": 7525,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1344,
+      "costUsd": 0.00525175
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 5599,
+        "outputTokens": 1926,
+        "totalTokens": 7525,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1344,
+        "costUsd": 0.00525175
+      }
+    ],
+    "warnings": []
+  }
+}

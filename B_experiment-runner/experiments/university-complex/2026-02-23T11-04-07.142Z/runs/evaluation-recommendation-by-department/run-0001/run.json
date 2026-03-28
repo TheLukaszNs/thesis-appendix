@@ -1,0 +1,370 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "evaluation-recommendation-by-department",
+  "caseDirectory": "evaluation-recommendation-by-department",
+  "repeatIndex": 1,
+  "prompt": "What percentage of students would recommend courses in each department?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What percentage of students would recommend courses in each department?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:36:32.479Z",
+    "endedAtUtc": "2026-02-23T11:38:20.271Z",
+    "durationMs": 107792
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "33465",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:38:20 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What percentage of students would recommend courses in each department?\"},\"planner\":{\"payload\":{\"question\":\"What percentage of students would recommend courses in each department?\"},\"startedAt\":1771846592487,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(course_evaluations.id)\",\"SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END)\",\"100.0 * SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(course_evaluations.id), 0)\"],\"dimensions\":[\"departments.id\",\"departments.name\"],\"filters\":[],\"grain\":\"department\",\"aliases\":{\"departments.id\":\"department_id\",\"departments.name\":\"department_name\",\"COUNT(course_evaluations.id)\":\"total_evaluations\",\"SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END)\":\"recommended_count\",\"100.0 * SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(course_evaluations.id), 0)\":\"percent_recommended\"},\"output_fields\":[\"department_id\",\"department_name\",\"recommended_count\",\"total_evaluations\",\"percent_recommended\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"percent_recommended\",\"title\":\"Percentage of students who would recommend courses by department\"},\"assumptions\":[\"Tables and columns discovered in preflight are used and joined as: course_evaluations.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id -> courses.department_id -> departments.id.\",\"Each course_evaluation row corresponds to one student evaluation for a single enrollment. The percentage is computed over evaluations (i.e., percent of evaluations where would_recommend = true).\",\"would_recommend is NOT NULL in the schema so no additional NULL filtering is required.\",\"Departments with zero evaluations will be excluded by the aggregation (COUNT = 0); percent_recommended uses NULLIF(...) to avoid division-by-zero.\",\"Percent is returned as a numeric percentage (0-100). If you prefer a 0-1 ratio, divide the expression by 100 or remove the 100.0 multiplier.\"]}},\"endedAt\":1771846626900},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(course_evaluations.id)\",\"SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END)\",\"100.0 * SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(course_evaluations.id), 0)\"],\"dimensions\":[\"departments.id\",\"departments.name\"],\"filters\":[],\"grain\":\"department\",\"aliases\":{\"departments.id\":\"department_id\",\"departments.name\":\"department_name\",\"COUNT(course_evaluations.id)\":\"total_evaluations\",\"SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END)\":\"recommended_count\",\"100.0 * SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(course_evaluations.id), 0)\":\"percent_recommended\"},\"output_fields\":[\"department_id\",\"department_name\",\"recommended_count\",\"total_evaluations\",\"percent_recommended\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"percent_recommended\",\"title\":\"Percentage of students who would recommend courses by department\"},\"assumptions\":[\"Tables and columns discovered in preflight are used and joined as: course_evaluations.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id -> courses.department_id -> departments.id.\",\"Each course_evaluation row corresponds to one student evaluation for a single enrollment. The percentage is computed over evaluations (i.e., percent of evaluations where would_recommend = true).\",\"would_recommend is NOT NULL in the schema so no additional NULL filtering is required.\",\"Departments with zero evaluations will be excluded by the aggregation (COUNT = 0); percent_recommended uses NULLIF(...) to avoid division-by-zero.\",\"Percent is returned as a numeric percentage (0-100). If you prefer a 0-1 ratio, divide the expression by 100 or remove the 100.0 multiplier.\"]}},\"startedAt\":1771846626911,\"status\":\"success\",\"output\":{\"question\":\"What percentage of students would recommend courses in each department?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(course_evaluations.id)\",\"SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END)\",\"100.0 * SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(course_evaluations.id), 0)\"],\"dimensions\":[\"departments.id\",\"departments.name\"],\"filters\":[],\"grain\":\"department\",\"aliases\":{\"departments.id\":\"department_id\",\"departments.name\":\"department_name\",\"COUNT(course_evaluations.id)\":\"total_evaluations\",\"SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END)\":\"recommended_count\",\"100.0 * SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(course_evaluations.id), 0)\":\"percent_recommended\"},\"output_fields\":[\"department_id\",\"department_name\",\"recommended_count\",\"total_evaluations\",\"percent_recommended\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"percent_recommended\",\"title\":\"Percentage of students who would recommend courses by department\"},\"assumptions\":[\"Tables and columns discovered in preflight are used and joined as: course_evaluations.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id -> courses.department_id -> departments.id.\",\"Each course_evaluation row corresponds to one student evaluation for a single enrollment. The percentage is computed over evaluations (i.e., percent of evaluations where would_recommend = true).\",\"would_recommend is NOT NULL in the schema so no additional NULL filtering is required.\",\"Departments with zero evaluations will be excluded by the aggregation (COUNT = 0); percent_recommended uses NULLIF(...) to avoid division-by-zero.\",\"Percent is returned as a numeric percentage (0-100). If you prefer a 0-1 ratio, divide the expression by 100 or remove the 100.0 multiplier.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771846626914},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"What percentage of students would recommend courses in each department?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(course_evaluations.id)\",\"SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END)\",\"100.0 * SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(course_evaluations.id), 0)\"],\"dimensions\":[\"departments.id\",\"departments.name\"],\"filters\":[],\"grain\":\"department\",\"aliases\":{\"departments.id\":\"department_id\",\"departments.name\":\"department_name\",\"COUNT(course_evaluations.id)\":\"total_evaluations\",\"SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END)\":\"recommended_count\",\"100.0 * SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(course_evaluations.id), 0)\":\"percent_recommended\"},\"output_fields\":[\"department_id\",\"department_name\",\"recommended_count\",\"total_evaluations\",\"percent_recommended\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"percent_recommended\",\"title\":\"Percentage of students who would recommend courses by department\"},\"assumptions\":[\"Tables and columns discovered in preflight are used and joined as: course_evaluations.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id -> courses.department_id -> departments.id.\",\"Each course_evaluation row corresponds to one student evaluation for a single enrollment. The percentage is computed over evaluations (i.e., percent of evaluations where would_recommend = true).\",\"would_recommend is NOT NULL in the schema so no additional NULL filtering is required.\",\"Departments with zero evaluations will be excluded by the aggregation (COUNT = 0); percent_recommended uses NULLIF(...) to avoid division-by-zero.\",\"Percent is returned as a numeric percentage (0-100). If you prefer a 0-1 ratio, divide the expression by 100 or remove the 100.0 multiplier.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771846626917,\"status\":\"success\",\"output\":{\"question\":\"What percentage of students would recommend courses in each department?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(course_evaluations.id)\",\"SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END)\",\"100.0 * SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(course_evaluations.id), 0)\"],\"dimensions\":[\"departments.id\",\"departments.name\"],\"filters\":[],\"grain\":\"department\",\"aliases\":{\"departments.id\":\"department_id\",\"departments.name\":\"department_name\",\"COUNT(course_evaluations.id)\":\"total_evaluations\",\"SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END)\":\"recommended_count\",\"100.0 * SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(course_evaluations.id), 0)\":\"percent_recommended\"},\"output_fields\":[\"department_id\",\"department_name\",\"recommended_count\",\"total_evaluations\",\"percent_recommended\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"percent_recommended\",\"title\":\"Percentage of students who would recommend courses by department\"},\"assumptions\":[\"Tables and columns discovered in preflight are used and joined as: course_evaluations.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id -> courses.department_id -> departments.id.\",\"Each course_evaluation row corresponds to one student evaluation for a single enrollment. The percentage is computed over evaluations (i.e., percent of evaluations where would_recommend = true).\",\"would_recommend is NOT NULL in the schema so no additional NULL filtering is required.\",\"Departments with zero evaluations will be excluded by the aggregation (COUNT = 0); percent_recommended uses NULLIF(...) to avoid division-by-zero.\",\"Percent is returned as a numeric percentage (0-100). If you prefer a 0-1 ratio, divide the expression by 100 or remove the 100.0 multiplier.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT d.id AS department_id,\\n       d.name AS department_name,\\n       SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS recommended_count,\\n       COUNT(ce.id) AS total_evaluations,\\n       100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(ce.id), 0) AS percent_recommended\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nJOIN public.departments d ON c.department_id = d.id\\nGROUP BY d.id, d.name\\nORDER BY percent_recommended DESC, department_name ASC;\",\"validationIssues\":[\"department_id is present in the query output but not shown in the chart or tooltip — consider including it for unambiguous identification.\",\"Vega-Lite x.sort uses percent_recommended descending but does not encode the SQL's secondary ordering by department_name for tie-breaks; ordering for ties may differ from the SQL ORDER BY.\",\"Departments with zero evaluations are excluded by the aggregation (percent_recommended would be NULL); this matches the SQL but is a potential data-coverage concern if you expected to display departments with zero responses.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Aggregate course_evaluations up the chain to departments using confirmed foreign keys, compute counts and percent recommended, and order deterministically by percent then name.\",\"sql\":\"SELECT d.id AS department_id,\\n       d.name AS department_name,\\n       SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS recommended_count,\\n       COUNT(ce.id) AS total_evaluations,\\n       100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(ce.id), 0) AS percent_recommended\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nJOIN public.departments d ON c.department_id = d.id\\nGROUP BY d.id, d.name\\nORDER BY percent_recommended DESC, department_name ASC;\",\"assumptions\":[\"Follows confirmed joins: course_evaluations.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id -> courses.department_id -> departments.id.\",\"Each course_evaluations row represents one student evaluation; would_recommend is boolean and NOT NULL as discovered.\",\"Departments with zero evaluations are excluded by the inner joins/aggregation; percent_recommended uses NULLIF(...) to avoid division by zero.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT d.id AS department_id,\\n       d.name AS department_name,\\n       SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS recommended_count,\\n       COUNT(ce.id) AS total_evaluations,\\n       100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(ce.id), 0) AS percent_recommended\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nJOIN public.departments d ON c.department_id = d.id\\nGROUP BY d.id, d.name\\nORDER BY percent_recommended DESC, department_name ASC\",\"metadata\":{\"columns\":[\"department_id\",\"department_name\",\"recommended_count\",\"total_evaluations\",\"percent_recommended\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"recommended_count\":4,\"total_evaluations\":5,\"percent_recommended\":80},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"recommended_count\":2,\"total_evaluations\":4,\"percent_recommended\":50}]},\"data\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"recommended_count\":4,\"total_evaluations\":5,\"percent_recommended\":80},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"recommended_count\":2,\"total_evaluations\":4,\"percent_recommended\":50},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"recommended_count\":4,\"total_evaluations\":8,\"percent_recommended\":50},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"recommended_count\":3,\"total_evaluations\":7,\"percent_recommended\":42.857142857142854},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"recommended_count\":3,\"total_evaluations\":7,\"percent_recommended\":42.857142857142854},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"recommended_count\":1,\"total_evaluations\":10,\"percent_recommended\":10}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Percentage of students who would recommend courses by department\",\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\"},\"sort\":{\"field\":\"percent_recommended\",\"order\":\"descending\"}},\"y\":{\"field\":\"percent_recommended\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Percent Recommended (%)\"},\"scale\":{\"domain\":[0,100]}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"percent_recommended\",\"type\":\"quantitative\",\"title\":\"Percent Recommended (%)\",\"format\":\".1f\"},{\"field\":\"recommended_count\",\"type\":\"quantitative\",\"title\":\"Recommended Count\"},{\"field\":\"total_evaluations\",\"type\":\"quantitative\",\"title\":\"Total Evaluations\"}]}},\"reasoning\":\"Bar chart shows percent_recommended on the y-axis by department_name on the x-axis, sorted by percent_recommended descending. Tooltip includes counts and percent for context.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"department_id is present in the query output but not shown in the chart or tooltip — consider including it for unambiguous identification.\",\"Vega-Lite x.sort uses percent_recommended descending but does not encode the SQL's secondary ordering by department_name for tie-breaks; ordering for ties may differ from the SQL ORDER BY.\",\"Departments with zero evaluations are excluded by the aggregation (percent_recommended would be NULL); this matches the SQL but is a potential data-coverage concern if you expected to display departments with zero responses.\"]}}},\"endedAt\":1771846700204,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"What percentage of students would recommend courses in each department?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(course_evaluations.id)\",\"SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END)\",\"100.0 * SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(course_evaluations.id), 0)\"],\"dimensions\":[\"departments.id\",\"departments.name\"],\"filters\":[],\"grain\":\"department\",\"aliases\":{\"departments.id\":\"department_id\",\"departments.name\":\"department_name\",\"COUNT(course_evaluations.id)\":\"total_evaluations\",\"SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END)\":\"recommended_count\",\"100.0 * SUM(CASE WHEN course_evaluations.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(course_evaluations.id), 0)\":\"percent_recommended\"},\"output_fields\":[\"department_id\",\"department_name\",\"recommended_count\",\"total_evaluations\",\"percent_recommended\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"percent_recommended\",\"title\":\"Percentage of students who would recommend courses by department\"},\"assumptions\":[\"Tables and columns discovered in preflight are used and joined as: course_evaluations.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id -> courses.department_id -> departments.id.\",\"Each course_evaluation row corresponds to one student evaluation for a single enrollment. The percentage is computed over evaluations (i.e., percent of evaluations where would_recommend = true).\",\"would_recommend is NOT NULL in the schema so no additional NULL filtering is required.\",\"Departments with zero evaluations will be excluded by the aggregation (COUNT = 0); percent_recommended uses NULLIF(...) to avoid division-by-zero.\",\"Percent is returned as a numeric percentage (0-100). If you prefer a 0-1 ratio, divide the expression by 100 or remove the 100.0 multiplier.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT d.id AS department_id,\\n       d.name AS department_name,\\n       SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS recommended_count,\\n       COUNT(ce.id) AS total_evaluations,\\n       100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(ce.id), 0) AS percent_recommended\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nJOIN public.departments d ON c.department_id = d.id\\nGROUP BY d.id, d.name\\nORDER BY percent_recommended DESC, department_name ASC;\",\"validationIssues\":[\"department_id is present in the query output but not shown in the chart or tooltip — consider including it for unambiguous identification.\",\"Vega-Lite x.sort uses percent_recommended descending but does not encode the SQL's secondary ordering by department_name for tie-breaks; ordering for ties may differ from the SQL ORDER BY.\",\"Departments with zero evaluations are excluded by the aggregation (percent_recommended would be NULL); this matches the SQL but is a potential data-coverage concern if you expected to display departments with zero responses.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Aggregate course_evaluations up the chain to departments using confirmed foreign keys, compute counts and percent recommended, and order deterministically by percent then name.\",\"sql\":\"SELECT d.id AS department_id,\\n       d.name AS department_name,\\n       SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS recommended_count,\\n       COUNT(ce.id) AS total_evaluations,\\n       100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(ce.id), 0) AS percent_recommended\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nJOIN public.departments d ON c.department_id = d.id\\nGROUP BY d.id, d.name\\nORDER BY percent_recommended DESC, department_name ASC;\",\"assumptions\":[\"Follows confirmed joins: course_evaluations.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id -> courses.department_id -> departments.id.\",\"Each course_evaluations row represents one student evaluation; would_recommend is boolean and NOT NULL as discovered.\",\"Departments with zero evaluations are excluded by the inner joins/aggregation; percent_recommended uses NULLIF(...) to avoid division by zero.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT d.id AS department_id,\\n       d.name AS department_name,\\n       SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS recommended_count,\\n       COUNT(ce.id) AS total_evaluations,\\n       100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(ce.id), 0) AS percent_recommended\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nJOIN public.departments d ON c.department_id = d.id\\nGROUP BY d.id, d.name\\nORDER BY percent_recommended DESC, department_name ASC\",\"metadata\":{\"columns\":[\"department_id\",\"department_name\",\"recommended_count\",\"total_evaluations\",\"percent_recommended\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"recommended_count\":4,\"total_evaluations\":5,\"percent_recommended\":80},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"recommended_count\":2,\"total_evaluations\":4,\"percent_recommended\":50}]},\"data\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"recommended_count\":4,\"total_evaluations\":5,\"percent_recommended\":80},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"recommended_count\":2,\"total_evaluations\":4,\"percent_recommended\":50},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"recommended_count\":4,\"total_evaluations\":8,\"percent_recommended\":50},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"recommended_count\":3,\"total_evaluations\":7,\"percent_recommended\":42.857142857142854},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"recommended_count\":3,\"total_evaluations\":7,\"percent_recommended\":42.857142857142854},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"recommended_count\":1,\"total_evaluations\":10,\"percent_recommended\":10}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Percentage of students who would recommend courses by department\",\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\"},\"sort\":{\"field\":\"percent_recommended\",\"order\":\"descending\"}},\"y\":{\"field\":\"percent_recommended\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Percent Recommended (%)\"},\"scale\":{\"domain\":[0,100]}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"percent_recommended\",\"type\":\"quantitative\",\"title\":\"Percent Recommended (%)\",\"format\":\".1f\"},{\"field\":\"recommended_count\",\"type\":\"quantitative\",\"title\":\"Recommended Count\"},{\"field\":\"total_evaluations\",\"type\":\"quantitative\",\"title\":\"Total Evaluations\"}]}},\"reasoning\":\"Bar chart shows percent_recommended on the y-axis by department_name on the x-axis, sorted by percent_recommended descending. Tooltip includes counts and percent for context.\"},\"validation\":{\"passed\":true,\"score\":0.75,\"issues\":[\"department_id is present in the query output but not shown in the chart or tooltip — consider including it for unambiguous identification.\",\"Vega-Lite x.sort uses percent_recommended descending but does not encode the SQL's secondary ordering by department_name for tie-breaks; ordering for ties may differ from the SQL ORDER BY.\",\"Departments with zero evaluations are excluded by the aggregation (percent_recommended would be NULL); this matches the SQL but is a potential data-coverage concern if you expected to display departments with zero responses.\"]}}},\"startedAt\":1771846700209,\"status\":\"success\",\"output\":{\"sql\":\"SELECT d.id AS department_id,\\n       d.name AS department_name,\\n       SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS recommended_count,\\n       COUNT(ce.id) AS total_evaluations,\\n       100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(ce.id), 0) AS percent_recommended\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nJOIN public.departments d ON c.department_id = d.id\\nGROUP BY d.id, d.name\\nORDER BY percent_recommended DESC, department_name ASC;\",\"data\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"recommended_count\":4,\"total_evaluations\":5,\"percent_recommended\":80},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"recommended_count\":2,\"total_evaluations\":4,\"percent_recommended\":50},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"recommended_count\":4,\"total_evaluations\":8,\"percent_recommended\":50},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"recommended_count\":3,\"total_evaluations\":7,\"percent_recommended\":42.857142857142854},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"recommended_count\":3,\"total_evaluations\":7,\"percent_recommended\":42.857142857142854},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"recommended_count\":1,\"total_evaluations\":10,\"percent_recommended\":10}],\"metadata\":{\"columns\":[\"department_id\",\"department_name\",\"recommended_count\",\"total_evaluations\",\"percent_recommended\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"recommended_count\":4,\"total_evaluations\":5,\"percent_recommended\":80},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"recommended_count\":2,\"total_evaluations\":4,\"percent_recommended\":50}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Percentage of students who would recommend courses by department\",\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\"},\"sort\":{\"field\":\"percent_recommended\",\"order\":\"descending\"}},\"y\":{\"field\":\"percent_recommended\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Percent Recommended (%)\"},\"scale\":{\"domain\":[0,100]}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"percent_recommended\",\"type\":\"quantitative\",\"title\":\"Percent Recommended (%)\",\"format\":\".1f\"},{\"field\":\"recommended_count\",\"type\":\"quantitative\",\"title\":\"Recommended Count\"},{\"field\":\"total_evaluations\",\"type\":\"quantitative\",\"title\":\"Total Evaluations\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"department_id is present in the query output but not shown in the chart or tooltip — consider including it for unambiguous identification.\",\"Vega-Lite x.sort uses percent_recommended descending but does not encode the SQL's secondary ordering by department_name for tie-breaks; ordering for ties may differ from the SQL ORDER BY.\",\"Departments with zero evaluations are excluded by the aggregation (percent_recommended would be NULL); this matches the SQL but is a potential data-coverage concern if you expected to display departments with zero responses.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771846700214}},\"input\":{\"question\":\"What percentage of students would recommend courses in each department?\"},\"result\":{\"sql\":\"SELECT d.id AS department_id,\\n       d.name AS department_name,\\n       SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS recommended_count,\\n       COUNT(ce.id) AS total_evaluations,\\n       100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(ce.id), 0) AS percent_recommended\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nJOIN public.departments d ON c.department_id = d.id\\nGROUP BY d.id, d.name\\nORDER BY percent_recommended DESC, department_name ASC;\",\"data\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"recommended_count\":4,\"total_evaluations\":5,\"percent_recommended\":80},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"recommended_count\":2,\"total_evaluations\":4,\"percent_recommended\":50},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"recommended_count\":4,\"total_evaluations\":8,\"percent_recommended\":50},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"recommended_count\":3,\"total_evaluations\":7,\"percent_recommended\":42.857142857142854},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"recommended_count\":3,\"total_evaluations\":7,\"percent_recommended\":42.857142857142854},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"recommended_count\":1,\"total_evaluations\":10,\"percent_recommended\":10}],\"metadata\":{\"columns\":[\"department_id\",\"department_name\",\"recommended_count\",\"total_evaluations\",\"percent_recommended\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"recommended_count\":4,\"total_evaluations\":5,\"percent_recommended\":80},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"recommended_count\":2,\"total_evaluations\":4,\"percent_recommended\":50}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Percentage of students who would recommend courses by department\",\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\"},\"sort\":{\"field\":\"percent_recommended\",\"order\":\"descending\"}},\"y\":{\"field\":\"percent_recommended\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Percent Recommended (%)\"},\"scale\":{\"domain\":[0,100]}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"percent_recommended\",\"type\":\"quantitative\",\"title\":\"Percent Recommended (%)\",\"format\":\".1f\"},{\"field\":\"recommended_count\",\"type\":\"quantitative\",\"title\":\"Recommended Count\"},{\"field\":\"total_evaluations\",\"type\":\"quantitative\",\"title\":\"Total Evaluations\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.75,\"issues\":[\"department_id is present in the query output but not shown in the chart or tooltip — consider including it for unambiguous identification.\",\"Vega-Lite x.sort uses percent_recommended descending but does not encode the SQL's secondary ordering by department_name for tie-breaks; ordering for ties may differ from the SQL ORDER BY.\",\"Departments with zero evaluations are excluded by the aggregation (percent_recommended would be NULL); this matches the SQL but is a potential data-coverage concern if you expected to display departments with zero responses.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"830d1072787978cd317750ea4305ebf6\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/evaluation-recommendation-by-department/run-0001/run.json",
+    "queryPath": "runs/evaluation-recommendation-by-department/run-0001/query.sql",
+    "vegaRawPath": "runs/evaluation-recommendation-by-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/evaluation-recommendation-by-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/evaluation-recommendation-by-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:38:20.769Z",
+  "traceId": "830d1072787978cd317750ea4305ebf6",
+  "success": true,
+  "durationMs": 108290,
+  "resultRaw": {
+    "data": [
+      {
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "recommended_count": 4,
+        "total_evaluations": 5,
+        "percent_recommended": 80
+      },
+      {
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "recommended_count": 2,
+        "total_evaluations": 4,
+        "percent_recommended": 50
+      },
+      {
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "recommended_count": 4,
+        "total_evaluations": 8,
+        "percent_recommended": 50
+      },
+      {
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "recommended_count": 3,
+        "total_evaluations": 7,
+        "percent_recommended": 42.857142857142854
+      },
+      {
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "recommended_count": 3,
+        "total_evaluations": 7,
+        "percent_recommended": 42.857142857142854
+      },
+      {
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "recommended_count": 1,
+        "total_evaluations": 10,
+        "percent_recommended": 10
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Percentage of students who would recommend courses by department",
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "department_name",
+          "type": "nominal",
+          "axis": {
+            "title": "Department"
+          },
+          "sort": {
+            "field": "percent_recommended",
+            "order": "descending"
+          }
+        },
+        "y": {
+          "field": "percent_recommended",
+          "type": "quantitative",
+          "axis": {
+            "title": "Percent Recommended (%)"
+          },
+          "scale": {
+            "domain": [
+              0,
+              100
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "percent_recommended",
+            "type": "quantitative",
+            "title": "Percent Recommended (%)",
+            "format": ".1f"
+          },
+          {
+            "field": "recommended_count",
+            "type": "quantitative",
+            "title": "Recommended Count"
+          },
+          {
+            "field": "total_evaluations",
+            "type": "quantitative",
+            "title": "Total Evaluations"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT d.id AS department_id,\n       d.name AS department_name,\n       SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS recommended_count,\n       COUNT(ce.id) AS total_evaluations,\n       100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(ce.id), 0) AS percent_recommended\nFROM public.course_evaluations ce\nJOIN public.enrollments e ON ce.enrollment_id = e.id\nJOIN public.course_sections cs ON e.course_section_id = cs.id\nJOIN public.courses c ON cs.course_id = c.id\nJOIN public.departments d ON c.department_id = d.id\nGROUP BY d.id, d.name\nORDER BY percent_recommended DESC, department_name ASC;",
+    "metadata": {
+      "columns": [
+        "department_id",
+        "department_name",
+        "recommended_count",
+        "total_evaluations",
+        "percent_recommended"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+          "department_name": "Wydział Inżynierii Biomedycznej",
+          "recommended_count": 4,
+          "total_evaluations": 5,
+          "percent_recommended": 80
+        },
+        {
+          "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+          "department_name": "Wydział Informatyki i Nauki o Materiałach",
+          "recommended_count": 2,
+          "total_evaluations": 4,
+          "percent_recommended": 50
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "department_id is present in the query output but not shown in the chart or tooltip — consider including it for unambiguous identification.",
+        "Vega-Lite x.sort uses percent_recommended descending but does not encode the SQL's secondary ordering by department_name for tie-breaks; ordering for ties may differ from the SQL ORDER BY.",
+        "Departments with zero evaluations are excluded by the aggregation (percent_recommended would be NULL); this matches the SQL but is a potential data-coverage concern if you expected to display departments with zero responses."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "recommended_count": 4,
+        "total_evaluations": 5,
+        "percent_recommended": 80
+      },
+      {
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "recommended_count": 2,
+        "total_evaluations": 4,
+        "percent_recommended": 50
+      },
+      {
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "recommended_count": 4,
+        "total_evaluations": 8,
+        "percent_recommended": 50
+      },
+      {
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "recommended_count": 3,
+        "total_evaluations": 7,
+        "percent_recommended": 42.857142857142854
+      },
+      {
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "recommended_count": 3,
+        "total_evaluations": 7,
+        "percent_recommended": 42.857142857142854
+      },
+      {
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "recommended_count": 1,
+        "total_evaluations": 10,
+        "percent_recommended": 10
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Percentage of students who would recommend courses by department",
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "department_name",
+          "type": "nominal",
+          "axis": {
+            "title": "Department"
+          },
+          "sort": {
+            "field": "percent_recommended",
+            "order": "descending"
+          }
+        },
+        "y": {
+          "field": "percent_recommended",
+          "type": "quantitative",
+          "axis": {
+            "title": "Percent Recommended (%)"
+          },
+          "scale": {
+            "domain": [
+              0,
+              100
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "percent_recommended",
+            "type": "quantitative",
+            "title": "Percent Recommended (%)",
+            "format": ".1f"
+          },
+          {
+            "field": "recommended_count",
+            "type": "quantitative",
+            "title": "Recommended Count"
+          },
+          {
+            "field": "total_evaluations",
+            "type": "quantitative",
+            "title": "Total Evaluations"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT d.id AS department_id,\n       d.name AS department_name,\n       SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) AS recommended_count,\n       COUNT(ce.id) AS total_evaluations,\n       100.0 * SUM(CASE WHEN ce.would_recommend THEN 1 ELSE 0 END) / NULLIF(COUNT(ce.id), 0) AS percent_recommended\nFROM public.course_evaluations ce\nJOIN public.enrollments e ON ce.enrollment_id = e.id\nJOIN public.course_sections cs ON e.course_section_id = cs.id\nJOIN public.courses c ON cs.course_id = c.id\nJOIN public.departments d ON c.department_id = d.id\nGROUP BY d.id, d.name\nORDER BY percent_recommended DESC, department_name ASC;",
+    "metadata": {
+      "columns": [
+        "department_id",
+        "department_name",
+        "recommended_count",
+        "total_evaluations",
+        "percent_recommended"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+          "department_name": "Wydział Inżynierii Biomedycznej",
+          "recommended_count": 4,
+          "total_evaluations": 5,
+          "percent_recommended": 80
+        },
+        {
+          "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+          "department_name": "Wydział Informatyki i Nauki o Materiałach",
+          "recommended_count": 2,
+          "total_evaluations": 4,
+          "percent_recommended": 50
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.75,
+      "issues": [
+        "department_id is present in the query output but not shown in the chart or tooltip — consider including it for unambiguous identification.",
+        "Vega-Lite x.sort uses percent_recommended descending but does not encode the SQL's secondary ordering by department_name for tie-breaks; ordering for ties may differ from the SQL ORDER BY.",
+        "Departments with zero evaluations are excluded by the aggregation (percent_recommended would be NULL); this matches the SQL but is a potential data-coverage concern if you expected to display departments with zero responses."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:38:20.769Z",
+    "traceId": "830d1072787978cd317750ea4305ebf6",
+    "attempts": 2,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 37320,
+      "outputTokens": 6737,
+      "totalTokens": 44057,
+      "cachedInputTokens": 3968,
+      "reasoningTokens": 4608,
+      "costUsd": 0.022804
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 37320,
+        "outputTokens": 6737,
+        "totalTokens": 44057,
+        "cachedInputTokens": 3968,
+        "reasoningTokens": 4608,
+        "costUsd": 0.022804
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,258 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "section-fill-rate",
+  "caseDirectory": "section-fill-rate",
+  "repeatIndex": 1,
+  "prompt": "What is the average fill rate of course sections?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average fill rate of course sections?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:04:51.470Z",
+    "endedAtUtc": "2026-02-23T14:05:16.534Z",
+    "durationMs": 25064
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "8136",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:05:16 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the average fill rate of course sections?\"},\"sql\":{\"payload\":{\"question\":\"What is the average fill rate of course sections?\"},\"startedAt\":1771855491477,\"status\":\"success\",\"output\":{\"reasoning\":\"The question asks for the average fill rate of course sections. Fill rate is calculated as the ratio of enrolled students to maximum capacity. I need to:\\n1. Count active enrollments per course section\\n2. Get the max_students capacity for each section\\n3. Calculate fill rate as (enrolled_count / max_students)\\n4. Average across all sections\\n\\nThe schema has course_sections (with max_students) and enrollments (with is_active flag). I'll join these tables, count active enrollments per section, calculate individual fill rates, then average them.\",\"sql\":\"\\nSELECT \\n  ROUND(AVG(CAST(enrolled_count AS NUMERIC) / cs.max_students), 4) AS average_fill_rate\\nFROM course_sections cs\\nLEFT JOIN (\\n  SELECT \\n    course_section_id,\\n    COUNT(*) AS enrolled_count\\n  FROM enrollments\\n  WHERE is_active = true\\n  GROUP BY course_section_id\\n) e ON cs.id = e.course_section_id\\nWHERE cs.max_students > 0\\n\",\"assumptions\":[\"Fill rate is calculated as the ratio of active enrollments to max_students capacity\",\"Only active enrollments (is_active = true) are counted\",\"Sections with max_students = 0 are excluded to avoid division issues\",\"Sections with no enrollments are treated as having 0 enrolled students\"]},\"endedAt\":1771855511727},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  ROUND(AVG(CAST(enrolled_count AS NUMERIC) / cs.max_students), 4) AS average_fill_rate\\nFROM course_sections cs\\nLEFT JOIN (\\n  SELECT \\n    course_section_id,\\n    COUNT(*) AS enrolled_count\\n  FROM enrollments\\n  WHERE is_active = true\\n  GROUP BY course_section_id\\n) e ON cs.id = e.course_section_id\\nWHERE cs.max_students > 0\\n\"},\"startedAt\":1771855511737,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  ROUND(AVG(CAST(enrolled_count AS NUMERIC) / cs.max_students), 4) AS average_fill_rate\\nFROM course_sections cs\\nLEFT JOIN (\\n  SELECT \\n    course_section_id,\\n    COUNT(*) AS enrolled_count\\n  FROM enrollments\\n  WHERE is_active = true\\n  GROUP BY course_section_id\\n) e ON cs.id = e.course_section_id\\nWHERE cs.max_students > 0\",\"metadata\":{\"columns\":[\"average_fill_rate\"],\"rowCount\":1,\"sample\":[{\"average_fill_rate\":\"0.0558\"}]},\"data\":[{\"average_fill_rate\":\"0.0558\"}]},\"endedAt\":1771855511745},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  ROUND(AVG(CAST(enrolled_count AS NUMERIC) / cs.max_students), 4) AS average_fill_rate\\nFROM course_sections cs\\nLEFT JOIN (\\n  SELECT \\n    course_section_id,\\n    COUNT(*) AS enrolled_count\\n  FROM enrollments\\n  WHERE is_active = true\\n  GROUP BY course_section_id\\n) e ON cs.id = e.course_section_id\\nWHERE cs.max_students > 0\",\"metadata\":{\"columns\":[\"average_fill_rate\"],\"rowCount\":1,\"sample\":[{\"average_fill_rate\":\"0.0558\"}]},\"data\":[{\"average_fill_rate\":\"0.0558\"}]},\"startedAt\":1771855511746,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Fill Rate of Course Sections\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"gauge\",\"innerRadius\":50,\"cornerRadius\":5,\"stroke\":null},\"encoding\":{\"theta\":{\"field\":\"average_fill_rate\",\"type\":\"quantitative\",\"scale\":{\"type\":\"linear\",\"domain\":[0,1]}},\"color\":{\"field\":\"average_fill_rate\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"reds\",\"domain\":[0,1]},\"legend\":null}},\"layer\":[{\"mark\":{\"type\":\"text\",\"radiusOffset\":0,\"fontSize\":32,\"fontWeight\":\"bold\"},\"encoding\":{\"text\":{\"field\":\"average_fill_rate\",\"type\":\"quantitative\",\"format\":\".2%\"}}}],\"config\":{\"view\":{\"continuousWidth\":300,\"continuousHeight\":300}}},\"reasoning\":\"A gauge chart is ideal for displaying a single metric (average fill rate) as a proportion of capacity. The visualization shows that course sections are on average only 5.58% full, with the percentage displayed prominently in the center. The color gradient (red scheme) provides visual feedback on the fill rate level, making it immediately clear that enrollment is quite low relative to available capacity.\"},\"endedAt\":1771855516512},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Fill Rate of Course Sections\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"gauge\",\"innerRadius\":50,\"cornerRadius\":5,\"stroke\":null},\"encoding\":{\"theta\":{\"field\":\"average_fill_rate\",\"type\":\"quantitative\",\"scale\":{\"type\":\"linear\",\"domain\":[0,1]}},\"color\":{\"field\":\"average_fill_rate\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"reds\",\"domain\":[0,1]},\"legend\":null}},\"layer\":[{\"mark\":{\"type\":\"text\",\"radiusOffset\":0,\"fontSize\":32,\"fontWeight\":\"bold\"},\"encoding\":{\"text\":{\"field\":\"average_fill_rate\",\"type\":\"quantitative\",\"format\":\".2%\"}}}],\"config\":{\"view\":{\"continuousWidth\":300,\"continuousHeight\":300}}},\"reasoning\":\"A gauge chart is ideal for displaying a single metric (average fill rate) as a proportion of capacity. The visualization shows that course sections are on average only 5.58% full, with the percentage displayed prominently in the center. The color gradient (red scheme) provides visual feedback on the fill rate level, making it immediately clear that enrollment is quite low relative to available capacity.\"},\"startedAt\":1771855516515,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT \\n  ROUND(AVG(CAST(enrolled_count AS NUMERIC) / cs.max_students), 4) AS average_fill_rate\\nFROM course_sections cs\\nLEFT JOIN (\\n  SELECT \\n    course_section_id,\\n    COUNT(*) AS enrolled_count\\n  FROM enrollments\\n  WHERE is_active = true\\n  GROUP BY course_section_id\\n) e ON cs.id = e.course_section_id\\nWHERE cs.max_students > 0\\n\",\"data\":[{\"average_fill_rate\":\"0.0558\"}],\"metadata\":{\"columns\":[\"average_fill_rate\"],\"rowCount\":1,\"sample\":[{\"average_fill_rate\":\"0.0558\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Fill Rate of Course Sections\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"gauge\",\"innerRadius\":50,\"cornerRadius\":5,\"stroke\":null},\"encoding\":{\"theta\":{\"field\":\"average_fill_rate\",\"type\":\"quantitative\",\"scale\":{\"type\":\"linear\",\"domain\":[0,1]}},\"color\":{\"field\":\"average_fill_rate\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"reds\",\"domain\":[0,1]},\"legend\":null}},\"layer\":[{\"mark\":{\"type\":\"text\",\"radiusOffset\":0,\"fontSize\":32,\"fontWeight\":\"bold\"},\"encoding\":{\"text\":{\"field\":\"average_fill_rate\",\"type\":\"quantitative\",\"format\":\".2%\"}}}],\"config\":{\"view\":{\"continuousWidth\":300,\"continuousHeight\":300}}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855516518}},\"input\":{\"question\":\"What is the average fill rate of course sections?\"},\"result\":{\"sql\":\"\\nSELECT \\n  ROUND(AVG(CAST(enrolled_count AS NUMERIC) / cs.max_students), 4) AS average_fill_rate\\nFROM course_sections cs\\nLEFT JOIN (\\n  SELECT \\n    course_section_id,\\n    COUNT(*) AS enrolled_count\\n  FROM enrollments\\n  WHERE is_active = true\\n  GROUP BY course_section_id\\n) e ON cs.id = e.course_section_id\\nWHERE cs.max_students > 0\\n\",\"data\":[{\"average_fill_rate\":\"0.0558\"}],\"metadata\":{\"columns\":[\"average_fill_rate\"],\"rowCount\":1,\"sample\":[{\"average_fill_rate\":\"0.0558\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Fill Rate of Course Sections\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"gauge\",\"innerRadius\":50,\"cornerRadius\":5,\"stroke\":null},\"encoding\":{\"theta\":{\"field\":\"average_fill_rate\",\"type\":\"quantitative\",\"scale\":{\"type\":\"linear\",\"domain\":[0,1]}},\"color\":{\"field\":\"average_fill_rate\",\"type\":\"quantitative\",\"scale\":{\"scheme\":\"reds\",\"domain\":[0,1]},\"legend\":null}},\"layer\":[{\"mark\":{\"type\":\"text\",\"radiusOffset\":0,\"fontSize\":32,\"fontWeight\":\"bold\"},\"encoding\":{\"text\":{\"field\":\"average_fill_rate\",\"type\":\"quantitative\",\"format\":\".2%\"}}}],\"config\":{\"view\":{\"continuousWidth\":300,\"continuousHeight\":300}}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"a02ec8dd9d1e0784969040f370debb41\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/section-fill-rate/run-0001/run.json",
+    "queryPath": "runs/section-fill-rate/run-0001/query.sql",
+    "vegaRawPath": "runs/section-fill-rate/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/section-fill-rate/run-0001/vega.resolved.json",
+    "imagePath": "runs/section-fill-rate/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:05:16.966Z",
+  "traceId": "a02ec8dd9d1e0784969040f370debb41",
+  "success": true,
+  "durationMs": 25496,
+  "resultRaw": {
+    "data": [
+      {
+        "average_fill_rate": "0.0558"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Fill Rate of Course Sections",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": {
+        "type": "gauge",
+        "innerRadius": 50,
+        "cornerRadius": 5,
+        "stroke": null
+      },
+      "encoding": {
+        "theta": {
+          "field": "average_fill_rate",
+          "type": "quantitative",
+          "scale": {
+            "type": "linear",
+            "domain": [
+              0,
+              1
+            ]
+          }
+        },
+        "color": {
+          "field": "average_fill_rate",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "reds",
+            "domain": [
+              0,
+              1
+            ]
+          },
+          "legend": null
+        }
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "text",
+            "radiusOffset": 0,
+            "fontSize": 32,
+            "fontWeight": "bold"
+          },
+          "encoding": {
+            "text": {
+              "field": "average_fill_rate",
+              "type": "quantitative",
+              "format": ".2%"
+            }
+          }
+        }
+      ],
+      "config": {
+        "view": {
+          "continuousWidth": 300,
+          "continuousHeight": 300
+        }
+      }
+    },
+    "sql": "\nSELECT \n  ROUND(AVG(CAST(enrolled_count AS NUMERIC) / cs.max_students), 4) AS average_fill_rate\nFROM course_sections cs\nLEFT JOIN (\n  SELECT \n    course_section_id,\n    COUNT(*) AS enrolled_count\n  FROM enrollments\n  WHERE is_active = true\n  GROUP BY course_section_id\n) e ON cs.id = e.course_section_id\nWHERE cs.max_students > 0\n",
+    "metadata": {
+      "columns": [
+        "average_fill_rate"
+      ],
+      "rowCount": 1,
+      "sample": [
+        {
+          "average_fill_rate": "0.0558"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "average_fill_rate": "0.0558"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Fill Rate of Course Sections",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": {
+        "type": "gauge",
+        "innerRadius": 50,
+        "cornerRadius": 5,
+        "stroke": null
+      },
+      "encoding": {
+        "theta": {
+          "field": "average_fill_rate",
+          "type": "quantitative",
+          "scale": {
+            "type": "linear",
+            "domain": [
+              0,
+              1
+            ]
+          }
+        },
+        "color": {
+          "field": "average_fill_rate",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "reds",
+            "domain": [
+              0,
+              1
+            ]
+          },
+          "legend": null
+        }
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "text",
+            "radiusOffset": 0,
+            "fontSize": 32,
+            "fontWeight": "bold"
+          },
+          "encoding": {
+            "text": {
+              "field": "average_fill_rate",
+              "type": "quantitative",
+              "format": ".2%"
+            }
+          }
+        }
+      ],
+      "config": {
+        "view": {
+          "continuousWidth": 300,
+          "continuousHeight": 300
+        }
+      }
+    },
+    "sql": "\nSELECT \n  ROUND(AVG(CAST(enrolled_count AS NUMERIC) / cs.max_students), 4) AS average_fill_rate\nFROM course_sections cs\nLEFT JOIN (\n  SELECT \n    course_section_id,\n    COUNT(*) AS enrolled_count\n  FROM enrollments\n  WHERE is_active = true\n  GROUP BY course_section_id\n) e ON cs.id = e.course_section_id\nWHERE cs.max_students > 0\n",
+    "metadata": {
+      "columns": [
+        "average_fill_rate"
+      ],
+      "rowCount": 1,
+      "sample": [
+        {
+          "average_fill_rate": "0.0558"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.412Z",
+    "traceId": "a02ec8dd9d1e0784969040f370debb41",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 14093,
+      "outputTokens": 1036,
+      "totalTokens": 15129,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.019273
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 14093,
+        "outputTokens": 1036,
+        "totalTokens": 15129,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.019273
+      }
+    ],
+    "warnings": []
+  }
+}

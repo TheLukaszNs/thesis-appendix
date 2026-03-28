@@ -1,0 +1,125 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "classrooms-equipment-matrix",
+  "caseDirectory": "classrooms-equipment-matrix",
+  "repeatIndex": 1,
+  "prompt": "Show classrooms grouped by equipment type: projector only, computers only, both, or neither",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show classrooms grouped by equipment type: projector only, computers only, both, or neither"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:14:08.125Z",
+    "endedAtUtc": "2026-02-23T14:14:24.523Z",
+    "durationMs": 16398
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2622",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:14:24 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Show classrooms grouped by equipment type: projector only, computers only, both, or neither\"},\"sql\":{\"payload\":{\"question\":\"Show classrooms grouped by equipment type: projector only, computers only, both, or neither\"},\"startedAt\":1771856048134,\"status\":\"success\",\"output\":{\"reasoning\":\"The classrooms table has has_projector and has_computers boolean columns. I need to group classrooms by equipment type using a CASE statement to categorize them into: projector only, computers only, both, or neither. Then count and list the classrooms in each category.\",\"sql\":\"\\nSELECT\\n  CASE\\n    WHEN has_projector AND has_computers THEN 'Both'\\n    WHEN has_projector AND NOT has_computers THEN 'Projector only'\\n    WHEN NOT has_projector AND has_computers THEN 'Computers only'\\n    ELSE 'Neither'\\n  END AS equipment_type,\\n  COUNT(*) AS classroom_count,\\n  STRING_AGG(building || ' ' || room_number, ', ' ORDER BY building, room_number) AS classrooms\\nFROM public.classrooms\\nGROUP BY equipment_type\\nORDER BY\\n  CASE equipment_type\\n    WHEN 'Both' THEN 1\\n    WHEN 'Projector only' THEN 2\\n    WHEN 'Computers only' THEN 3\\n    WHEN 'Neither' THEN 4\\n  END\\n\",\"assumptions\":[\"The classrooms table contains has_projector and has_computers boolean columns that indicate equipment availability\",\"Equipment type categories are: Both (has both projector and computers), Projector only (has projector but not computers), Computers only (has computers but not projector), and Neither (has neither)\"]},\"endedAt\":1771856064495},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT\\n  CASE\\n    WHEN has_projector AND has_computers THEN 'Both'\\n    WHEN has_projector AND NOT has_computers THEN 'Projector only'\\n    WHEN NOT has_projector AND has_computers THEN 'Computers only'\\n    ELSE 'Neither'\\n  END AS equipment_type,\\n  COUNT(*) AS classroom_count,\\n  STRING_AGG(building || ' ' || room_number, ', ' ORDER BY building, room_number) AS classrooms\\nFROM public.classrooms\\nGROUP BY equipment_type\\nORDER BY\\n  CASE equipment_type\\n    WHEN 'Both' THEN 1\\n    WHEN 'Projector only' THEN 2\\n    WHEN 'Computers only' THEN 3\\n    WHEN 'Neither' THEN 4\\n  END\\n\"},\"startedAt\":1771856064500,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column \\\"equipment_type\\\" does not exist\",\"name\":\"Error\"},\"endedAt\":1771856064512}},\"input\":{\"question\":\"Show classrooms grouped by equipment type: projector only, computers only, both, or neither\"},\"error\":{\"message\":\"SQL execution failed: column \\\"equipment_type\\\" does not exist\",\"name\":\"Error\"},\"traceId\":\"8b405c9492a5b4742b8afa8e07af9e02\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/classrooms-equipment-matrix/run-0001/run.json",
+    "queryPath": "runs/classrooms-equipment-matrix/run-0001/query.sql",
+    "vegaRawPath": "runs/classrooms-equipment-matrix/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/classrooms-equipment-matrix/run-0001/vega.resolved.json",
+    "imagePath": "runs/classrooms-equipment-matrix/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:14:24.524Z",
+  "traceId": "8b405c9492a5b4742b8afa8e07af9e02",
+  "success": false,
+  "durationMs": 16399,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Show classrooms grouped by equipment type: projector only, computers only, both, or neither"
+      },
+      "sql": {
+        "payload": {
+          "question": "Show classrooms grouped by equipment type: projector only, computers only, both, or neither"
+        },
+        "startedAt": 1771856048134,
+        "status": "success",
+        "output": {
+          "reasoning": "The classrooms table has has_projector and has_computers boolean columns. I need to group classrooms by equipment type using a CASE statement to categorize them into: projector only, computers only, both, or neither. Then count and list the classrooms in each category.",
+          "sql": "\nSELECT\n  CASE\n    WHEN has_projector AND has_computers THEN 'Both'\n    WHEN has_projector AND NOT has_computers THEN 'Projector only'\n    WHEN NOT has_projector AND has_computers THEN 'Computers only'\n    ELSE 'Neither'\n  END AS equipment_type,\n  COUNT(*) AS classroom_count,\n  STRING_AGG(building || ' ' || room_number, ', ' ORDER BY building, room_number) AS classrooms\nFROM public.classrooms\nGROUP BY equipment_type\nORDER BY\n  CASE equipment_type\n    WHEN 'Both' THEN 1\n    WHEN 'Projector only' THEN 2\n    WHEN 'Computers only' THEN 3\n    WHEN 'Neither' THEN 4\n  END\n",
+          "assumptions": [
+            "The classrooms table contains has_projector and has_computers boolean columns that indicate equipment availability",
+            "Equipment type categories are: Both (has both projector and computers), Projector only (has projector but not computers), Computers only (has computers but not projector), and Neither (has neither)"
+          ]
+        },
+        "endedAt": 1771856064495
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "\nSELECT\n  CASE\n    WHEN has_projector AND has_computers THEN 'Both'\n    WHEN has_projector AND NOT has_computers THEN 'Projector only'\n    WHEN NOT has_projector AND has_computers THEN 'Computers only'\n    ELSE 'Neither'\n  END AS equipment_type,\n  COUNT(*) AS classroom_count,\n  STRING_AGG(building || ' ' || room_number, ', ' ORDER BY building, room_number) AS classrooms\nFROM public.classrooms\nGROUP BY equipment_type\nORDER BY\n  CASE equipment_type\n    WHEN 'Both' THEN 1\n    WHEN 'Projector only' THEN 2\n    WHEN 'Computers only' THEN 3\n    WHEN 'Neither' THEN 4\n  END\n"
+        },
+        "startedAt": 1771856064500,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column \"equipment_type\" does not exist",
+          "name": "Error"
+        },
+        "endedAt": 1771856064512
+      }
+    },
+    "input": {
+      "question": "Show classrooms grouped by equipment type: projector only, computers only, both, or neither"
+    },
+    "error": {
+      "message": "SQL execution failed: column \"equipment_type\" does not exist",
+      "name": "Error"
+    },
+    "traceId": "8b405c9492a5b4742b8afa8e07af9e02"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.294Z",
+    "traceId": "8b405c9492a5b4742b8afa8e07af9e02",
+    "attempts": 1,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 8947,
+      "outputTokens": 504,
+      "totalTokens": 9451,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.011467
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 1,
+        "inputTokens": 8947,
+        "outputTokens": 504,
+        "totalTokens": 9451,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.011467
+      }
+    ],
+    "warnings": []
+  }
+}

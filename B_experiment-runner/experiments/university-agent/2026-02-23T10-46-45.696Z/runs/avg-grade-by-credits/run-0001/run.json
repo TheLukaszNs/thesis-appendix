@@ -1,0 +1,204 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "avg-grade-by-credits",
+  "caseDirectory": "avg-grade-by-credits",
+  "repeatIndex": 1,
+  "prompt": "Is there a relationship between course credits and average grade?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Is there a relationship between course credits and average grade?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:53:22.169Z",
+    "endedAtUtc": "2026-02-23T10:53:43.139Z",
+    "durationMs": 20970
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "3401",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:53:43 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Is there a relationship between course credits and average grade?\"},\"agent\":{\"payload\":{\"question\":\"Is there a relationship between course credits and average grade?\"},\"startedAt\":1771844002182,\"status\":\"success\",\"output\":{\"sql\":\"SELECT c.credits AS credits, AVG(e.grade) AS avg_grade, COUNT(*) AS enrollment_count, STDDEV_POP(e.grade) AS grade_stddev FROM courses c JOIN enrollments e ON c.id = e.course_id GROUP BY c.credits ORDER BY c.credits;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Scatter of average grade by course credits with a fitted linear trend\",\"title\":\"Average Grade by Course Credits (with linear trend)\",\"data\":{\"name\":\"query_result\"},\"layer\":[{\"mark\":{\"type\":\"point\",\"filled\":true,\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"credits\",\"type\":\"quantitative\",\"title\":\"Course Credits\"},\"y\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},\"size\":{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"title\":\"Enrollment Count\"},\"tooltip\":[{\"field\":\"credits\",\"type\":\"quantitative\",\"title\":\"Credits\"},{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Avg Grade\"},{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"title\":\"Enrollments\"},{\"field\":\"grade_stddev\",\"type\":\"quantitative\",\"title\":\"Grade StdDev\"}]}},{\"transform\":[{\"regression\":\"avg_grade\",\"on\":\"credits\",\"method\":\"linear\",\"as\":[\"credits\",\"predicted_avg_grade\"]}],\"mark\":{\"type\":\"line\",\"color\":\"red\"},\"encoding\":{\"x\":{\"field\":\"credits\",\"type\":\"quantitative\"},\"y\":{\"field\":\"predicted_avg_grade\",\"type\":\"quantitative\",\"title\":\"Predicted Avg Grade (linear)\"}}}]}},\"endedAt\":1771844023119},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT c.credits AS credits, AVG(e.grade) AS avg_grade, COUNT(*) AS enrollment_count, STDDEV_POP(e.grade) AS grade_stddev FROM courses c JOIN enrollments e ON c.id = e.course_id GROUP BY c.credits ORDER BY c.credits;\"},\"startedAt\":1771844023123,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: Error validating query: WITH __query_result AS (\\nSELECT c.credits AS credits, AVG(e.grade) AS avg_grade, COUNT(*) AS enrollment_count, STDDEV_POP(e.grade) AS grade_stddev FROM courses c JOIN enrollments e ON c.id = e.course_id GROUP BY c.credits ORDER BY c.credits\\n),\\n__limited AS (\\n  SELECT * FROM __query_result LIMIT 501\\n),\\n__payload AS (\\n  SELECT json_build_object(\\n    'rows', COALESCE((SELECT json_agg(to_jsonb(__limited)) FROM __limited), '[]'::json)\\n  ) AS data\\n)\\nSELECT encode(convert_to((SELECT data::text FROM __payload), 'UTF8'), 'hex') AS __payload_hex\",\"name\":\"Error\"},\"endedAt\":1771844023136}},\"input\":{\"question\":\"Is there a relationship between course credits and average grade?\"},\"error\":{\"message\":\"SQL execution failed: Error validating query: WITH __query_result AS (\\nSELECT c.credits AS credits, AVG(e.grade) AS avg_grade, COUNT(*) AS enrollment_count, STDDEV_POP(e.grade) AS grade_stddev FROM courses c JOIN enrollments e ON c.id = e.course_id GROUP BY c.credits ORDER BY c.credits\\n),\\n__limited AS (\\n  SELECT * FROM __query_result LIMIT 501\\n),\\n__payload AS (\\n  SELECT json_build_object(\\n    'rows', COALESCE((SELECT json_agg(to_jsonb(__limited)) FROM __limited), '[]'::json)\\n  ) AS data\\n)\\nSELECT encode(convert_to((SELECT data::text FROM __payload), 'UTF8'), 'hex') AS __payload_hex\",\"name\":\"Error\"},\"traceId\":\"825d067b148beef641f0c2764a783292\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-grade-by-credits/run-0001/run.json",
+    "queryPath": "runs/avg-grade-by-credits/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-grade-by-credits/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-grade-by-credits/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-grade-by-credits/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:53:43.139Z",
+  "traceId": "825d067b148beef641f0c2764a783292",
+  "success": false,
+  "durationMs": 20970,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Is there a relationship between course credits and average grade?"
+      },
+      "agent": {
+        "payload": {
+          "question": "Is there a relationship between course credits and average grade?"
+        },
+        "startedAt": 1771844002182,
+        "status": "success",
+        "output": {
+          "sql": "SELECT c.credits AS credits, AVG(e.grade) AS avg_grade, COUNT(*) AS enrollment_count, STDDEV_POP(e.grade) AS grade_stddev FROM courses c JOIN enrollments e ON c.id = e.course_id GROUP BY c.credits ORDER BY c.credits;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Scatter of average grade by course credits with a fitted linear trend",
+            "title": "Average Grade by Course Credits (with linear trend)",
+            "data": {
+              "name": "query_result"
+            },
+            "layer": [
+              {
+                "mark": {
+                  "type": "point",
+                  "filled": true,
+                  "tooltip": true
+                },
+                "encoding": {
+                  "x": {
+                    "field": "credits",
+                    "type": "quantitative",
+                    "title": "Course Credits"
+                  },
+                  "y": {
+                    "field": "avg_grade",
+                    "type": "quantitative",
+                    "title": "Average Grade"
+                  },
+                  "size": {
+                    "field": "enrollment_count",
+                    "type": "quantitative",
+                    "title": "Enrollment Count"
+                  },
+                  "tooltip": [
+                    {
+                      "field": "credits",
+                      "type": "quantitative",
+                      "title": "Credits"
+                    },
+                    {
+                      "field": "avg_grade",
+                      "type": "quantitative",
+                      "title": "Avg Grade"
+                    },
+                    {
+                      "field": "enrollment_count",
+                      "type": "quantitative",
+                      "title": "Enrollments"
+                    },
+                    {
+                      "field": "grade_stddev",
+                      "type": "quantitative",
+                      "title": "Grade StdDev"
+                    }
+                  ]
+                }
+              },
+              {
+                "transform": [
+                  {
+                    "regression": "avg_grade",
+                    "on": "credits",
+                    "method": "linear",
+                    "as": [
+                      "credits",
+                      "predicted_avg_grade"
+                    ]
+                  }
+                ],
+                "mark": {
+                  "type": "line",
+                  "color": "red"
+                },
+                "encoding": {
+                  "x": {
+                    "field": "credits",
+                    "type": "quantitative"
+                  },
+                  "y": {
+                    "field": "predicted_avg_grade",
+                    "type": "quantitative",
+                    "title": "Predicted Avg Grade (linear)"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "endedAt": 1771844023119
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT c.credits AS credits, AVG(e.grade) AS avg_grade, COUNT(*) AS enrollment_count, STDDEV_POP(e.grade) AS grade_stddev FROM courses c JOIN enrollments e ON c.id = e.course_id GROUP BY c.credits ORDER BY c.credits;"
+        },
+        "startedAt": 1771844023123,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: Error validating query: WITH __query_result AS (\nSELECT c.credits AS credits, AVG(e.grade) AS avg_grade, COUNT(*) AS enrollment_count, STDDEV_POP(e.grade) AS grade_stddev FROM courses c JOIN enrollments e ON c.id = e.course_id GROUP BY c.credits ORDER BY c.credits\n),\n__limited AS (\n  SELECT * FROM __query_result LIMIT 501\n),\n__payload AS (\n  SELECT json_build_object(\n    'rows', COALESCE((SELECT json_agg(to_jsonb(__limited)) FROM __limited), '[]'::json)\n  ) AS data\n)\nSELECT encode(convert_to((SELECT data::text FROM __payload), 'UTF8'), 'hex') AS __payload_hex",
+          "name": "Error"
+        },
+        "endedAt": 1771844023136
+      }
+    },
+    "input": {
+      "question": "Is there a relationship between course credits and average grade?"
+    },
+    "error": {
+      "message": "SQL execution failed: Error validating query: WITH __query_result AS (\nSELECT c.credits AS credits, AVG(e.grade) AS avg_grade, COUNT(*) AS enrollment_count, STDDEV_POP(e.grade) AS grade_stddev FROM courses c JOIN enrollments e ON c.id = e.course_id GROUP BY c.credits ORDER BY c.credits\n),\n__limited AS (\n  SELECT * FROM __query_result LIMIT 501\n),\n__payload AS (\n  SELECT json_build_object(\n    'rows', COALESCE((SELECT json_agg(to_jsonb(__limited)) FROM __limited), '[]'::json)\n  ) AS data\n)\nSELECT encode(convert_to((SELECT data::text FROM __payload), 'UTF8'), 'hex') AS __payload_hex",
+      "name": "Error"
+    },
+    "traceId": "825d067b148beef641f0c2764a783292"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:53:43.139Z",
+    "traceId": "825d067b148beef641f0c2764a783292",
+    "attempts": 2,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 267,
+      "outputTokens": 1475,
+      "totalTokens": 1742,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 960,
+      "costUsd": 0.00301675
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 267,
+        "outputTokens": 1475,
+        "totalTokens": 1742,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 960,
+        "costUsd": 0.00301675
+      }
+    ],
+    "warnings": []
+  }
+}

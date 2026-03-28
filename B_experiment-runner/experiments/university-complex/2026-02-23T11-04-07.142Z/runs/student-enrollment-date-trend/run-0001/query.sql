@@ -1,0 +1,1 @@
+SELECT EXTRACT(YEAR FROM e.enrollment_date)::int AS enrollment_year, COUNT(DISTINCT e.student_id) AS students_enrolled FROM public.enrollments AS e WHERE e.enrollment_date IS NOT NULL AND e.is_active = true GROUP BY EXTRACT(YEAR FROM e.enrollment_date)::int ORDER BY enrollment_year ASC;

@@ -1,0 +1,510 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "professor-avg-grade",
+  "caseDirectory": "professor-avg-grade",
+  "repeatIndex": 1,
+  "prompt": "What is the average grade given by each professor?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average grade given by each professor?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:40:17.012Z",
+    "endedAtUtc": "2026-02-22T23:41:09.907Z",
+    "durationMs": 52895
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "20128",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:41:09 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the average grade given by each professor?\"},\"sql\":{\"payload\":{\"question\":\"What is the average grade given by each professor?\"},\"startedAt\":1771803617026,\"status\":\"success\",\"output\":{\"reasoning\":\"Computed per-professor average using the numeric exam_score field (grades.exam_score) following verified joins: professors -> course_sections -> enrollments -> grades. Returned average rounded to 2 decimals and count of exam scores used. Assumptions listed.\",\"sql\":\"WITH professor_grades AS (\\n  SELECT\\n    p.id AS professor_id,\\n    p.first_name AS first_name,\\n    p.last_name AS last_name,\\n    g.exam_score AS exam_score\\n  FROM public.professors p\\n  JOIN public.course_sections cs ON cs.professor_id = p.id\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  JOIN public.grades g ON g.enrollment_id = e.id\\n)\\nSELECT\\n  professor_id,\\n  first_name,\\n  last_name,\\n  ROUND(AVG(exam_score)::numeric, 2) AS average_grade,\\n  COUNT(exam_score) AS grade_count\\nFROM professor_grades\\nWHERE exam_score IS NOT NULL\\nGROUP BY professor_id, first_name, last_name\\nORDER BY last_name, first_name;\",\"assumptions\":[\"Use exam_score as the numeric grade to average (grades.grade_value is a user-defined/likely non-numeric type so it is not averaged).\",\"Only rows where exam_score IS NOT NULL are included in the average and count.\",\"Joins used (professors -> course_sections -> enrollments -> grades) were confirmed from the schema in this run.\",\"Average is rounded to 2 decimal places.\"]},\"endedAt\":1771803652646},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH professor_grades AS (\\n  SELECT\\n    p.id AS professor_id,\\n    p.first_name AS first_name,\\n    p.last_name AS last_name,\\n    g.exam_score AS exam_score\\n  FROM public.professors p\\n  JOIN public.course_sections cs ON cs.professor_id = p.id\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  JOIN public.grades g ON g.enrollment_id = e.id\\n)\\nSELECT\\n  professor_id,\\n  first_name,\\n  last_name,\\n  ROUND(AVG(exam_score)::numeric, 2) AS average_grade,\\n  COUNT(exam_score) AS grade_count\\nFROM professor_grades\\nWHERE exam_score IS NOT NULL\\nGROUP BY professor_id, first_name, last_name\\nORDER BY last_name, first_name;\"},\"startedAt\":1771803652661,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH professor_grades AS (\\n  SELECT\\n    p.id AS professor_id,\\n    p.first_name AS first_name,\\n    p.last_name AS last_name,\\n    g.exam_score AS exam_score\\n  FROM public.professors p\\n  JOIN public.course_sections cs ON cs.professor_id = p.id\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  JOIN public.grades g ON g.enrollment_id = e.id\\n)\\nSELECT\\n  professor_id,\\n  first_name,\\n  last_name,\\n  ROUND(AVG(exam_score)::numeric, 2) AS average_grade,\\n  COUNT(exam_score) AS grade_count\\nFROM professor_grades\\nWHERE exam_score IS NOT NULL\\nGROUP BY professor_id, first_name, last_name\\nORDER BY last_name, first_name\",\"metadata\":{\"columns\":[\"last_name\",\"first_name\",\"grade_count\",\"professor_id\",\"average_grade\"],\"rowCount\":17,\"sample\":[{\"last_name\":\"Jankowski\",\"first_name\":\"Grzegorz\",\"grade_count\":1,\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"average_grade\":47.03},{\"last_name\":\"Jaworski\",\"first_name\":\"Robert\",\"grade_count\":1,\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"average_grade\":35.8}]},\"data\":[{\"last_name\":\"Jankowski\",\"first_name\":\"Grzegorz\",\"grade_count\":1,\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"average_grade\":47.03},{\"last_name\":\"Jaworski\",\"first_name\":\"Robert\",\"grade_count\":1,\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"average_grade\":35.8},{\"last_name\":\"Kowalczyk\",\"first_name\":\"Ryszard\",\"grade_count\":2,\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"average_grade\":48.43},{\"last_name\":\"Krawczyk\",\"first_name\":\"Agnieszka\",\"grade_count\":3,\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"average_grade\":42.5},{\"last_name\":\"Krawczyk\",\"first_name\":\"Ewa\",\"grade_count\":2,\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"average_grade\":35.68},{\"last_name\":\"Lewandowski\",\"first_name\":\"Marek\",\"grade_count\":3,\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"average_grade\":51.42},{\"last_name\":\"Majewski\",\"first_name\":\"Tomasz\",\"grade_count\":8,\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"average_grade\":50.11},{\"last_name\":\"Michalski\",\"first_name\":\"Magdalena\",\"grade_count\":2,\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"average_grade\":20.76},{\"last_name\":\"Nowak\",\"first_name\":\"Michał\",\"grade_count\":1,\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"average_grade\":76.27},{\"last_name\":\"Nowakowski\",\"first_name\":\"Mariusz\",\"grade_count\":1,\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"average_grade\":22.35},{\"last_name\":\"Olszewski\",\"first_name\":\"Małgorzata\",\"grade_count\":3,\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"average_grade\":87.69},{\"last_name\":\"Stępień\",\"first_name\":\"Joanna\",\"grade_count\":2,\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"average_grade\":54.51},{\"last_name\":\"Wieczorek\",\"first_name\":\"Adam\",\"grade_count\":1,\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"average_grade\":50.05},{\"last_name\":\"Wojciechowski\",\"first_name\":\"Jacek\",\"grade_count\":4,\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"average_grade\":78.19},{\"last_name\":\"Woźniak\",\"first_name\":\"Marek\",\"grade_count\":4,\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"average_grade\":40.15},{\"last_name\":\"Woźniak\",\"first_name\":\"Ryszard\",\"grade_count\":4,\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"average_grade\":19.04},{\"last_name\":\"Woźniak\",\"first_name\":\"Teresa\",\"grade_count\":1,\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"average_grade\":88.07}]},\"endedAt\":1771803652706},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"WITH professor_grades AS (\\n  SELECT\\n    p.id AS professor_id,\\n    p.first_name AS first_name,\\n    p.last_name AS last_name,\\n    g.exam_score AS exam_score\\n  FROM public.professors p\\n  JOIN public.course_sections cs ON cs.professor_id = p.id\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  JOIN public.grades g ON g.enrollment_id = e.id\\n)\\nSELECT\\n  professor_id,\\n  first_name,\\n  last_name,\\n  ROUND(AVG(exam_score)::numeric, 2) AS average_grade,\\n  COUNT(exam_score) AS grade_count\\nFROM professor_grades\\nWHERE exam_score IS NOT NULL\\nGROUP BY professor_id, first_name, last_name\\nORDER BY last_name, first_name\",\"metadata\":{\"columns\":[\"last_name\",\"first_name\",\"grade_count\",\"professor_id\",\"average_grade\"],\"rowCount\":17,\"sample\":[{\"last_name\":\"Jankowski\",\"first_name\":\"Grzegorz\",\"grade_count\":1,\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"average_grade\":47.03},{\"last_name\":\"Jaworski\",\"first_name\":\"Robert\",\"grade_count\":1,\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"average_grade\":35.8}]},\"data\":[{\"last_name\":\"Jankowski\",\"first_name\":\"Grzegorz\",\"grade_count\":1,\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"average_grade\":47.03},{\"last_name\":\"Jaworski\",\"first_name\":\"Robert\",\"grade_count\":1,\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"average_grade\":35.8},{\"last_name\":\"Kowalczyk\",\"first_name\":\"Ryszard\",\"grade_count\":2,\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"average_grade\":48.43},{\"last_name\":\"Krawczyk\",\"first_name\":\"Agnieszka\",\"grade_count\":3,\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"average_grade\":42.5},{\"last_name\":\"Krawczyk\",\"first_name\":\"Ewa\",\"grade_count\":2,\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"average_grade\":35.68},{\"last_name\":\"Lewandowski\",\"first_name\":\"Marek\",\"grade_count\":3,\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"average_grade\":51.42},{\"last_name\":\"Majewski\",\"first_name\":\"Tomasz\",\"grade_count\":8,\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"average_grade\":50.11},{\"last_name\":\"Michalski\",\"first_name\":\"Magdalena\",\"grade_count\":2,\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"average_grade\":20.76},{\"last_name\":\"Nowak\",\"first_name\":\"Michał\",\"grade_count\":1,\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"average_grade\":76.27},{\"last_name\":\"Nowakowski\",\"first_name\":\"Mariusz\",\"grade_count\":1,\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"average_grade\":22.35},{\"last_name\":\"Olszewski\",\"first_name\":\"Małgorzata\",\"grade_count\":3,\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"average_grade\":87.69},{\"last_name\":\"Stępień\",\"first_name\":\"Joanna\",\"grade_count\":2,\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"average_grade\":54.51},{\"last_name\":\"Wieczorek\",\"first_name\":\"Adam\",\"grade_count\":1,\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"average_grade\":50.05},{\"last_name\":\"Wojciechowski\",\"first_name\":\"Jacek\",\"grade_count\":4,\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"average_grade\":78.19},{\"last_name\":\"Woźniak\",\"first_name\":\"Marek\",\"grade_count\":4,\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"average_grade\":40.15},{\"last_name\":\"Woźniak\",\"first_name\":\"Ryszard\",\"grade_count\":4,\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"average_grade\":19.04},{\"last_name\":\"Woźniak\",\"first_name\":\"Teresa\",\"grade_count\":1,\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"average_grade\":88.07}]},\"startedAt\":1771803652712,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Grade by Professor\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Professor (last name)\",\"sort\":{\"field\":\"average_grade\",\"order\":\"descending\"}},\"x\":{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last name\"},{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average grade\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Grade count\"},{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"}]},\"height\":{\"step\":25}},\"reasoning\":\"Horizontal bar chart showing each professor's average_grade (x) with the professor identified by last_name (y). Tooltip includes first name, full last name, average grade, count of grades, and professor_id for context.\"},\"endedAt\":1771803669863},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Grade by Professor\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Professor (last name)\",\"sort\":{\"field\":\"average_grade\",\"order\":\"descending\"}},\"x\":{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last name\"},{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average grade\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Grade count\"},{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"}]},\"height\":{\"step\":25}},\"reasoning\":\"Horizontal bar chart showing each professor's average_grade (x) with the professor identified by last_name (y). Tooltip includes first name, full last name, average grade, count of grades, and professor_id for context.\"},\"startedAt\":1771803669877,\"status\":\"success\",\"output\":{\"sql\":\"WITH professor_grades AS (\\n  SELECT\\n    p.id AS professor_id,\\n    p.first_name AS first_name,\\n    p.last_name AS last_name,\\n    g.exam_score AS exam_score\\n  FROM public.professors p\\n  JOIN public.course_sections cs ON cs.professor_id = p.id\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  JOIN public.grades g ON g.enrollment_id = e.id\\n)\\nSELECT\\n  professor_id,\\n  first_name,\\n  last_name,\\n  ROUND(AVG(exam_score)::numeric, 2) AS average_grade,\\n  COUNT(exam_score) AS grade_count\\nFROM professor_grades\\nWHERE exam_score IS NOT NULL\\nGROUP BY professor_id, first_name, last_name\\nORDER BY last_name, first_name;\",\"data\":[{\"last_name\":\"Jankowski\",\"first_name\":\"Grzegorz\",\"grade_count\":1,\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"average_grade\":47.03},{\"last_name\":\"Jaworski\",\"first_name\":\"Robert\",\"grade_count\":1,\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"average_grade\":35.8},{\"last_name\":\"Kowalczyk\",\"first_name\":\"Ryszard\",\"grade_count\":2,\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"average_grade\":48.43},{\"last_name\":\"Krawczyk\",\"first_name\":\"Agnieszka\",\"grade_count\":3,\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"average_grade\":42.5},{\"last_name\":\"Krawczyk\",\"first_name\":\"Ewa\",\"grade_count\":2,\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"average_grade\":35.68},{\"last_name\":\"Lewandowski\",\"first_name\":\"Marek\",\"grade_count\":3,\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"average_grade\":51.42},{\"last_name\":\"Majewski\",\"first_name\":\"Tomasz\",\"grade_count\":8,\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"average_grade\":50.11},{\"last_name\":\"Michalski\",\"first_name\":\"Magdalena\",\"grade_count\":2,\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"average_grade\":20.76},{\"last_name\":\"Nowak\",\"first_name\":\"Michał\",\"grade_count\":1,\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"average_grade\":76.27},{\"last_name\":\"Nowakowski\",\"first_name\":\"Mariusz\",\"grade_count\":1,\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"average_grade\":22.35},{\"last_name\":\"Olszewski\",\"first_name\":\"Małgorzata\",\"grade_count\":3,\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"average_grade\":87.69},{\"last_name\":\"Stępień\",\"first_name\":\"Joanna\",\"grade_count\":2,\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"average_grade\":54.51},{\"last_name\":\"Wieczorek\",\"first_name\":\"Adam\",\"grade_count\":1,\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"average_grade\":50.05},{\"last_name\":\"Wojciechowski\",\"first_name\":\"Jacek\",\"grade_count\":4,\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"average_grade\":78.19},{\"last_name\":\"Woźniak\",\"first_name\":\"Marek\",\"grade_count\":4,\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"average_grade\":40.15},{\"last_name\":\"Woźniak\",\"first_name\":\"Ryszard\",\"grade_count\":4,\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"average_grade\":19.04},{\"last_name\":\"Woźniak\",\"first_name\":\"Teresa\",\"grade_count\":1,\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"average_grade\":88.07}],\"metadata\":{\"columns\":[\"last_name\",\"first_name\",\"grade_count\",\"professor_id\",\"average_grade\"],\"rowCount\":17,\"sample\":[{\"last_name\":\"Jankowski\",\"first_name\":\"Grzegorz\",\"grade_count\":1,\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"average_grade\":47.03},{\"last_name\":\"Jaworski\",\"first_name\":\"Robert\",\"grade_count\":1,\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"average_grade\":35.8}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Grade by Professor\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Professor (last name)\",\"sort\":{\"field\":\"average_grade\",\"order\":\"descending\"}},\"x\":{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last name\"},{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average grade\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Grade count\"},{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"}]},\"height\":{\"step\":25}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771803669883}},\"input\":{\"question\":\"What is the average grade given by each professor?\"},\"result\":{\"sql\":\"WITH professor_grades AS (\\n  SELECT\\n    p.id AS professor_id,\\n    p.first_name AS first_name,\\n    p.last_name AS last_name,\\n    g.exam_score AS exam_score\\n  FROM public.professors p\\n  JOIN public.course_sections cs ON cs.professor_id = p.id\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  JOIN public.grades g ON g.enrollment_id = e.id\\n)\\nSELECT\\n  professor_id,\\n  first_name,\\n  last_name,\\n  ROUND(AVG(exam_score)::numeric, 2) AS average_grade,\\n  COUNT(exam_score) AS grade_count\\nFROM professor_grades\\nWHERE exam_score IS NOT NULL\\nGROUP BY professor_id, first_name, last_name\\nORDER BY last_name, first_name;\",\"data\":[{\"last_name\":\"Jankowski\",\"first_name\":\"Grzegorz\",\"grade_count\":1,\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"average_grade\":47.03},{\"last_name\":\"Jaworski\",\"first_name\":\"Robert\",\"grade_count\":1,\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"average_grade\":35.8},{\"last_name\":\"Kowalczyk\",\"first_name\":\"Ryszard\",\"grade_count\":2,\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"average_grade\":48.43},{\"last_name\":\"Krawczyk\",\"first_name\":\"Agnieszka\",\"grade_count\":3,\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"average_grade\":42.5},{\"last_name\":\"Krawczyk\",\"first_name\":\"Ewa\",\"grade_count\":2,\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"average_grade\":35.68},{\"last_name\":\"Lewandowski\",\"first_name\":\"Marek\",\"grade_count\":3,\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"average_grade\":51.42},{\"last_name\":\"Majewski\",\"first_name\":\"Tomasz\",\"grade_count\":8,\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"average_grade\":50.11},{\"last_name\":\"Michalski\",\"first_name\":\"Magdalena\",\"grade_count\":2,\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"average_grade\":20.76},{\"last_name\":\"Nowak\",\"first_name\":\"Michał\",\"grade_count\":1,\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"average_grade\":76.27},{\"last_name\":\"Nowakowski\",\"first_name\":\"Mariusz\",\"grade_count\":1,\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"average_grade\":22.35},{\"last_name\":\"Olszewski\",\"first_name\":\"Małgorzata\",\"grade_count\":3,\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"average_grade\":87.69},{\"last_name\":\"Stępień\",\"first_name\":\"Joanna\",\"grade_count\":2,\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"average_grade\":54.51},{\"last_name\":\"Wieczorek\",\"first_name\":\"Adam\",\"grade_count\":1,\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"average_grade\":50.05},{\"last_name\":\"Wojciechowski\",\"first_name\":\"Jacek\",\"grade_count\":4,\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"average_grade\":78.19},{\"last_name\":\"Woźniak\",\"first_name\":\"Marek\",\"grade_count\":4,\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"average_grade\":40.15},{\"last_name\":\"Woźniak\",\"first_name\":\"Ryszard\",\"grade_count\":4,\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"average_grade\":19.04},{\"last_name\":\"Woźniak\",\"first_name\":\"Teresa\",\"grade_count\":1,\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"average_grade\":88.07}],\"metadata\":{\"columns\":[\"last_name\",\"first_name\",\"grade_count\",\"professor_id\",\"average_grade\"],\"rowCount\":17,\"sample\":[{\"last_name\":\"Jankowski\",\"first_name\":\"Grzegorz\",\"grade_count\":1,\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"average_grade\":47.03},{\"last_name\":\"Jaworski\",\"first_name\":\"Robert\",\"grade_count\":1,\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"average_grade\":35.8}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Grade by Professor\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"y\":{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Professor (last name)\",\"sort\":{\"field\":\"average_grade\",\"order\":\"descending\"}},\"x\":{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last name\"},{\"field\":\"average_grade\",\"type\":\"quantitative\",\"title\":\"Average grade\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Grade count\"},{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"}]},\"height\":{\"step\":25}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"fc5d7539eac07f36ca9c5eb71bda489a\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/professor-avg-grade/run-0001/run.json",
+    "queryPath": "runs/professor-avg-grade/run-0001/query.sql",
+    "vegaRawPath": "runs/professor-avg-grade/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/professor-avg-grade/run-0001/vega.resolved.json",
+    "imagePath": "runs/professor-avg-grade/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:41:10.273Z",
+  "traceId": "fc5d7539eac07f36ca9c5eb71bda489a",
+  "success": true,
+  "durationMs": 53261,
+  "resultRaw": {
+    "data": [
+      {
+        "last_name": "Jankowski",
+        "first_name": "Grzegorz",
+        "grade_count": 1,
+        "professor_id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+        "average_grade": 47.03
+      },
+      {
+        "last_name": "Jaworski",
+        "first_name": "Robert",
+        "grade_count": 1,
+        "professor_id": "8f0ffcad-1af9-4da5-898a-dc47b8717d83",
+        "average_grade": 35.8
+      },
+      {
+        "last_name": "Kowalczyk",
+        "first_name": "Ryszard",
+        "grade_count": 2,
+        "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+        "average_grade": 48.43
+      },
+      {
+        "last_name": "Krawczyk",
+        "first_name": "Agnieszka",
+        "grade_count": 3,
+        "professor_id": "ff61fe12-d98c-4d43-87db-710f2571c1f2",
+        "average_grade": 42.5
+      },
+      {
+        "last_name": "Krawczyk",
+        "first_name": "Ewa",
+        "grade_count": 2,
+        "professor_id": "a82c40da-e7dc-4e49-9e66-386ea4bb7483",
+        "average_grade": 35.68
+      },
+      {
+        "last_name": "Lewandowski",
+        "first_name": "Marek",
+        "grade_count": 3,
+        "professor_id": "037011f2-f3d4-406e-9554-a6ffba701e06",
+        "average_grade": 51.42
+      },
+      {
+        "last_name": "Majewski",
+        "first_name": "Tomasz",
+        "grade_count": 8,
+        "professor_id": "f221aafd-0e9c-4345-aff5-7e290e1a7864",
+        "average_grade": 50.11
+      },
+      {
+        "last_name": "Michalski",
+        "first_name": "Magdalena",
+        "grade_count": 2,
+        "professor_id": "5b3ae75e-96e7-4a7b-be0f-7375938dcd62",
+        "average_grade": 20.76
+      },
+      {
+        "last_name": "Nowak",
+        "first_name": "Michał",
+        "grade_count": 1,
+        "professor_id": "f24d24fc-5446-4d72-bb11-9d9dd1545f97",
+        "average_grade": 76.27
+      },
+      {
+        "last_name": "Nowakowski",
+        "first_name": "Mariusz",
+        "grade_count": 1,
+        "professor_id": "d19adcea-56d6-4557-8f93-95ec58fa5d34",
+        "average_grade": 22.35
+      },
+      {
+        "last_name": "Olszewski",
+        "first_name": "Małgorzata",
+        "grade_count": 3,
+        "professor_id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+        "average_grade": 87.69
+      },
+      {
+        "last_name": "Stępień",
+        "first_name": "Joanna",
+        "grade_count": 2,
+        "professor_id": "007cb07c-c14f-4824-a62d-d42685252c75",
+        "average_grade": 54.51
+      },
+      {
+        "last_name": "Wieczorek",
+        "first_name": "Adam",
+        "grade_count": 1,
+        "professor_id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+        "average_grade": 50.05
+      },
+      {
+        "last_name": "Wojciechowski",
+        "first_name": "Jacek",
+        "grade_count": 4,
+        "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+        "average_grade": 78.19
+      },
+      {
+        "last_name": "Woźniak",
+        "first_name": "Marek",
+        "grade_count": 4,
+        "professor_id": "2b5262b8-932c-4951-9390-c56d4b69d888",
+        "average_grade": 40.15
+      },
+      {
+        "last_name": "Woźniak",
+        "first_name": "Ryszard",
+        "grade_count": 4,
+        "professor_id": "5d70abe8-4f1a-44ec-9816-2ec96a2807cb",
+        "average_grade": 19.04
+      },
+      {
+        "last_name": "Woźniak",
+        "first_name": "Teresa",
+        "grade_count": 1,
+        "professor_id": "173e49aa-5a27-41e8-b1fa-4d19423bdc0b",
+        "average_grade": 88.07
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Grade by Professor",
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "y": {
+          "field": "last_name",
+          "type": "nominal",
+          "title": "Professor (last name)",
+          "sort": {
+            "field": "average_grade",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "average_grade",
+          "type": "quantitative",
+          "title": "Average Grade"
+        },
+        "tooltip": [
+          {
+            "field": "first_name",
+            "type": "nominal",
+            "title": "First name"
+          },
+          {
+            "field": "last_name",
+            "type": "nominal",
+            "title": "Last name"
+          },
+          {
+            "field": "average_grade",
+            "type": "quantitative",
+            "title": "Average grade"
+          },
+          {
+            "field": "grade_count",
+            "type": "quantitative",
+            "title": "Grade count"
+          },
+          {
+            "field": "professor_id",
+            "type": "nominal",
+            "title": "Professor ID"
+          }
+        ]
+      },
+      "height": {
+        "step": 25
+      }
+    },
+    "sql": "WITH professor_grades AS (\n  SELECT\n    p.id AS professor_id,\n    p.first_name AS first_name,\n    p.last_name AS last_name,\n    g.exam_score AS exam_score\n  FROM public.professors p\n  JOIN public.course_sections cs ON cs.professor_id = p.id\n  JOIN public.enrollments e ON e.course_section_id = cs.id\n  JOIN public.grades g ON g.enrollment_id = e.id\n)\nSELECT\n  professor_id,\n  first_name,\n  last_name,\n  ROUND(AVG(exam_score)::numeric, 2) AS average_grade,\n  COUNT(exam_score) AS grade_count\nFROM professor_grades\nWHERE exam_score IS NOT NULL\nGROUP BY professor_id, first_name, last_name\nORDER BY last_name, first_name;",
+    "metadata": {
+      "columns": [
+        "last_name",
+        "first_name",
+        "grade_count",
+        "professor_id",
+        "average_grade"
+      ],
+      "rowCount": 17,
+      "sample": [
+        {
+          "last_name": "Jankowski",
+          "first_name": "Grzegorz",
+          "grade_count": 1,
+          "professor_id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+          "average_grade": 47.03
+        },
+        {
+          "last_name": "Jaworski",
+          "first_name": "Robert",
+          "grade_count": 1,
+          "professor_id": "8f0ffcad-1af9-4da5-898a-dc47b8717d83",
+          "average_grade": 35.8
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "last_name": "Jankowski",
+        "first_name": "Grzegorz",
+        "grade_count": 1,
+        "professor_id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+        "average_grade": 47.03
+      },
+      {
+        "last_name": "Jaworski",
+        "first_name": "Robert",
+        "grade_count": 1,
+        "professor_id": "8f0ffcad-1af9-4da5-898a-dc47b8717d83",
+        "average_grade": 35.8
+      },
+      {
+        "last_name": "Kowalczyk",
+        "first_name": "Ryszard",
+        "grade_count": 2,
+        "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+        "average_grade": 48.43
+      },
+      {
+        "last_name": "Krawczyk",
+        "first_name": "Agnieszka",
+        "grade_count": 3,
+        "professor_id": "ff61fe12-d98c-4d43-87db-710f2571c1f2",
+        "average_grade": 42.5
+      },
+      {
+        "last_name": "Krawczyk",
+        "first_name": "Ewa",
+        "grade_count": 2,
+        "professor_id": "a82c40da-e7dc-4e49-9e66-386ea4bb7483",
+        "average_grade": 35.68
+      },
+      {
+        "last_name": "Lewandowski",
+        "first_name": "Marek",
+        "grade_count": 3,
+        "professor_id": "037011f2-f3d4-406e-9554-a6ffba701e06",
+        "average_grade": 51.42
+      },
+      {
+        "last_name": "Majewski",
+        "first_name": "Tomasz",
+        "grade_count": 8,
+        "professor_id": "f221aafd-0e9c-4345-aff5-7e290e1a7864",
+        "average_grade": 50.11
+      },
+      {
+        "last_name": "Michalski",
+        "first_name": "Magdalena",
+        "grade_count": 2,
+        "professor_id": "5b3ae75e-96e7-4a7b-be0f-7375938dcd62",
+        "average_grade": 20.76
+      },
+      {
+        "last_name": "Nowak",
+        "first_name": "Michał",
+        "grade_count": 1,
+        "professor_id": "f24d24fc-5446-4d72-bb11-9d9dd1545f97",
+        "average_grade": 76.27
+      },
+      {
+        "last_name": "Nowakowski",
+        "first_name": "Mariusz",
+        "grade_count": 1,
+        "professor_id": "d19adcea-56d6-4557-8f93-95ec58fa5d34",
+        "average_grade": 22.35
+      },
+      {
+        "last_name": "Olszewski",
+        "first_name": "Małgorzata",
+        "grade_count": 3,
+        "professor_id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+        "average_grade": 87.69
+      },
+      {
+        "last_name": "Stępień",
+        "first_name": "Joanna",
+        "grade_count": 2,
+        "professor_id": "007cb07c-c14f-4824-a62d-d42685252c75",
+        "average_grade": 54.51
+      },
+      {
+        "last_name": "Wieczorek",
+        "first_name": "Adam",
+        "grade_count": 1,
+        "professor_id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+        "average_grade": 50.05
+      },
+      {
+        "last_name": "Wojciechowski",
+        "first_name": "Jacek",
+        "grade_count": 4,
+        "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+        "average_grade": 78.19
+      },
+      {
+        "last_name": "Woźniak",
+        "first_name": "Marek",
+        "grade_count": 4,
+        "professor_id": "2b5262b8-932c-4951-9390-c56d4b69d888",
+        "average_grade": 40.15
+      },
+      {
+        "last_name": "Woźniak",
+        "first_name": "Ryszard",
+        "grade_count": 4,
+        "professor_id": "5d70abe8-4f1a-44ec-9816-2ec96a2807cb",
+        "average_grade": 19.04
+      },
+      {
+        "last_name": "Woźniak",
+        "first_name": "Teresa",
+        "grade_count": 1,
+        "professor_id": "173e49aa-5a27-41e8-b1fa-4d19423bdc0b",
+        "average_grade": 88.07
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Grade by Professor",
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "y": {
+          "field": "last_name",
+          "type": "nominal",
+          "title": "Professor (last name)",
+          "sort": {
+            "field": "average_grade",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "average_grade",
+          "type": "quantitative",
+          "title": "Average Grade"
+        },
+        "tooltip": [
+          {
+            "field": "first_name",
+            "type": "nominal",
+            "title": "First name"
+          },
+          {
+            "field": "last_name",
+            "type": "nominal",
+            "title": "Last name"
+          },
+          {
+            "field": "average_grade",
+            "type": "quantitative",
+            "title": "Average grade"
+          },
+          {
+            "field": "grade_count",
+            "type": "quantitative",
+            "title": "Grade count"
+          },
+          {
+            "field": "professor_id",
+            "type": "nominal",
+            "title": "Professor ID"
+          }
+        ]
+      },
+      "height": {
+        "step": 25
+      }
+    },
+    "sql": "WITH professor_grades AS (\n  SELECT\n    p.id AS professor_id,\n    p.first_name AS first_name,\n    p.last_name AS last_name,\n    g.exam_score AS exam_score\n  FROM public.professors p\n  JOIN public.course_sections cs ON cs.professor_id = p.id\n  JOIN public.enrollments e ON e.course_section_id = cs.id\n  JOIN public.grades g ON g.enrollment_id = e.id\n)\nSELECT\n  professor_id,\n  first_name,\n  last_name,\n  ROUND(AVG(exam_score)::numeric, 2) AS average_grade,\n  COUNT(exam_score) AS grade_count\nFROM professor_grades\nWHERE exam_score IS NOT NULL\nGROUP BY professor_id, first_name, last_name\nORDER BY last_name, first_name;",
+    "metadata": {
+      "columns": [
+        "last_name",
+        "first_name",
+        "grade_count",
+        "professor_id",
+        "average_grade"
+      ],
+      "rowCount": 17,
+      "sample": [
+        {
+          "last_name": "Jankowski",
+          "first_name": "Grzegorz",
+          "grade_count": 1,
+          "professor_id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+          "average_grade": 47.03
+        },
+        {
+          "last_name": "Jaworski",
+          "first_name": "Robert",
+          "grade_count": 1,
+          "professor_id": "8f0ffcad-1af9-4da5-898a-dc47b8717d83",
+          "average_grade": 35.8
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:41:10.273Z",
+    "traceId": "fc5d7539eac07f36ca9c5eb71bda489a",
+    "attempts": 6,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 16808,
+      "outputTokens": 3545,
+      "totalTokens": 20353,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2496,
+      "costUsd": 0.011292
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 16808,
+        "outputTokens": 3545,
+        "totalTokens": 20353,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2496,
+        "costUsd": 0.011292
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,312 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "professor-evaluation-trend-by-year",
+  "caseDirectory": "professor-evaluation-trend-by-year",
+  "repeatIndex": 1,
+  "prompt": "How have average professor ratings changed over academic years?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How have average professor ratings changed over academic years?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:07:07.388Z",
+    "endedAtUtc": "2026-02-23T14:07:48.199Z",
+    "durationMs": 40811
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "10875",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:07:48 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How have average professor ratings changed over academic years?\"},\"sql\":{\"payload\":{\"question\":\"How have average professor ratings changed over academic years?\"},\"startedAt\":1771855627391,\"status\":\"success\",\"output\":{\"reasoning\":\"The question asks for how average professor ratings have changed over academic years. I need to:\\n1. Join course_evaluations (which has professor_rating) with enrollments (to get course_section_id)\\n2. Join with course_sections (which has academic_year and professor_id)\\n3. Group by academic_year and calculate the average professor_rating\\n4. Order by academic_year to show the trend over time\\n\\nThe key column is professor_rating from course_evaluations, and academic_year from course_sections. I'll aggregate by academic_year and compute the mean rating, ordering chronologically to show the trend.\\n\",\"sql\":\"\\nSELECT \\n  cs.academic_year,\\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\\n  COUNT(ce.id) AS evaluation_count\\nFROM course_evaluations ce\\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.academic_year\\nORDER BY cs.academic_year ASC\\n\",\"assumptions\":[\"Academic year is stored as a string in course_sections.academic_year\",\"Professor ratings are numeric values in course_evaluations.professor_rating\",\"Only evaluations linked to valid enrollments and course sections are included\"]},\"endedAt\":1771855664575},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  cs.academic_year,\\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\\n  COUNT(ce.id) AS evaluation_count\\nFROM course_evaluations ce\\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.academic_year\\nORDER BY cs.academic_year ASC\\n\"},\"startedAt\":1771855664579,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  cs.academic_year,\\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\\n  COUNT(ce.id) AS evaluation_count\\nFROM course_evaluations ce\\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.academic_year\\nORDER BY cs.academic_year ASC\",\"metadata\":{\"columns\":[\"academic_year\",\"avg_professor_rating\",\"evaluation_count\"],\"rowCount\":6,\"sample\":[{\"academic_year\":\"2019/2020\",\"avg_professor_rating\":\"4.13\",\"evaluation_count\":\"8\"},{\"academic_year\":\"2020/2021\",\"avg_professor_rating\":\"2.73\",\"evaluation_count\":\"11\"}]},\"data\":[{\"academic_year\":\"2019/2020\",\"avg_professor_rating\":\"4.13\",\"evaluation_count\":\"8\"},{\"academic_year\":\"2020/2021\",\"avg_professor_rating\":\"2.73\",\"evaluation_count\":\"11\"},{\"academic_year\":\"2021/2022\",\"avg_professor_rating\":\"2.00\",\"evaluation_count\":\"2\"},{\"academic_year\":\"2022/2023\",\"avg_professor_rating\":\"3.13\",\"evaluation_count\":\"8\"},{\"academic_year\":\"2023/2024\",\"avg_professor_rating\":\"3.00\",\"evaluation_count\":\"6\"},{\"academic_year\":\"2024/2025\",\"avg_professor_rating\":\"2.50\",\"evaluation_count\":\"6\"}]},\"endedAt\":1771855664583},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  cs.academic_year,\\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\\n  COUNT(ce.id) AS evaluation_count\\nFROM course_evaluations ce\\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.academic_year\\nORDER BY cs.academic_year ASC\",\"metadata\":{\"columns\":[\"academic_year\",\"avg_professor_rating\",\"evaluation_count\"],\"rowCount\":6,\"sample\":[{\"academic_year\":\"2019/2020\",\"avg_professor_rating\":\"4.13\",\"evaluation_count\":\"8\"},{\"academic_year\":\"2020/2021\",\"avg_professor_rating\":\"2.73\",\"evaluation_count\":\"11\"}]},\"data\":[{\"academic_year\":\"2019/2020\",\"avg_professor_rating\":\"4.13\",\"evaluation_count\":\"8\"},{\"academic_year\":\"2020/2021\",\"avg_professor_rating\":\"2.73\",\"evaluation_count\":\"11\"},{\"academic_year\":\"2021/2022\",\"avg_professor_rating\":\"2.00\",\"evaluation_count\":\"2\"},{\"academic_year\":\"2022/2023\",\"avg_professor_rating\":\"3.13\",\"evaluation_count\":\"8\"},{\"academic_year\":\"2023/2024\",\"avg_professor_rating\":\"3.00\",\"evaluation_count\":\"6\"},{\"academic_year\":\"2024/2025\",\"avg_professor_rating\":\"2.50\",\"evaluation_count\":\"6\"}]},\"startedAt\":1771855664584,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Professor Ratings Over Academic Years\",\"description\":\"Trend of average professor ratings across academic years\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"line\",\"point\":true,\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\",\"axis\":{\"labelAngle\":-45}},\"y\":{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"title\":\"Average Professor Rating\",\"scale\":{\"domain\":[0,5]}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"title\":\"Average Rating\",\"format\":\".2f\"},{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Number of Evaluations\"}]}},\"reasoning\":\"Line chart with points is ideal for showing trends over time (academic years). The x-axis displays academic years nominally, while the y-axis shows average professor ratings on a 0-5 scale. Tooltip includes the evaluation count for context on sample size. The design clearly shows how ratings have changed year-over-year.\"},\"endedAt\":1771855668181},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Professor Ratings Over Academic Years\",\"description\":\"Trend of average professor ratings across academic years\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"line\",\"point\":true,\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\",\"axis\":{\"labelAngle\":-45}},\"y\":{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"title\":\"Average Professor Rating\",\"scale\":{\"domain\":[0,5]}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"title\":\"Average Rating\",\"format\":\".2f\"},{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Number of Evaluations\"}]}},\"reasoning\":\"Line chart with points is ideal for showing trends over time (academic years). The x-axis displays academic years nominally, while the y-axis shows average professor ratings on a 0-5 scale. Tooltip includes the evaluation count for context on sample size. The design clearly shows how ratings have changed year-over-year.\"},\"startedAt\":1771855668189,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT \\n  cs.academic_year,\\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\\n  COUNT(ce.id) AS evaluation_count\\nFROM course_evaluations ce\\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.academic_year\\nORDER BY cs.academic_year ASC\\n\",\"data\":[{\"academic_year\":\"2019/2020\",\"avg_professor_rating\":\"4.13\",\"evaluation_count\":\"8\"},{\"academic_year\":\"2020/2021\",\"avg_professor_rating\":\"2.73\",\"evaluation_count\":\"11\"},{\"academic_year\":\"2021/2022\",\"avg_professor_rating\":\"2.00\",\"evaluation_count\":\"2\"},{\"academic_year\":\"2022/2023\",\"avg_professor_rating\":\"3.13\",\"evaluation_count\":\"8\"},{\"academic_year\":\"2023/2024\",\"avg_professor_rating\":\"3.00\",\"evaluation_count\":\"6\"},{\"academic_year\":\"2024/2025\",\"avg_professor_rating\":\"2.50\",\"evaluation_count\":\"6\"}],\"metadata\":{\"columns\":[\"academic_year\",\"avg_professor_rating\",\"evaluation_count\"],\"rowCount\":6,\"sample\":[{\"academic_year\":\"2019/2020\",\"avg_professor_rating\":\"4.13\",\"evaluation_count\":\"8\"},{\"academic_year\":\"2020/2021\",\"avg_professor_rating\":\"2.73\",\"evaluation_count\":\"11\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Professor Ratings Over Academic Years\",\"description\":\"Trend of average professor ratings across academic years\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"line\",\"point\":true,\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\",\"axis\":{\"labelAngle\":-45}},\"y\":{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"title\":\"Average Professor Rating\",\"scale\":{\"domain\":[0,5]}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"title\":\"Average Rating\",\"format\":\".2f\"},{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Number of Evaluations\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855668190}},\"input\":{\"question\":\"How have average professor ratings changed over academic years?\"},\"result\":{\"sql\":\"\\nSELECT \\n  cs.academic_year,\\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\\n  COUNT(ce.id) AS evaluation_count\\nFROM course_evaluations ce\\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\\nGROUP BY cs.academic_year\\nORDER BY cs.academic_year ASC\\n\",\"data\":[{\"academic_year\":\"2019/2020\",\"avg_professor_rating\":\"4.13\",\"evaluation_count\":\"8\"},{\"academic_year\":\"2020/2021\",\"avg_professor_rating\":\"2.73\",\"evaluation_count\":\"11\"},{\"academic_year\":\"2021/2022\",\"avg_professor_rating\":\"2.00\",\"evaluation_count\":\"2\"},{\"academic_year\":\"2022/2023\",\"avg_professor_rating\":\"3.13\",\"evaluation_count\":\"8\"},{\"academic_year\":\"2023/2024\",\"avg_professor_rating\":\"3.00\",\"evaluation_count\":\"6\"},{\"academic_year\":\"2024/2025\",\"avg_professor_rating\":\"2.50\",\"evaluation_count\":\"6\"}],\"metadata\":{\"columns\":[\"academic_year\",\"avg_professor_rating\",\"evaluation_count\"],\"rowCount\":6,\"sample\":[{\"academic_year\":\"2019/2020\",\"avg_professor_rating\":\"4.13\",\"evaluation_count\":\"8\"},{\"academic_year\":\"2020/2021\",\"avg_professor_rating\":\"2.73\",\"evaluation_count\":\"11\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Professor Ratings Over Academic Years\",\"description\":\"Trend of average professor ratings across academic years\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"line\",\"point\":true,\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\",\"axis\":{\"labelAngle\":-45}},\"y\":{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"title\":\"Average Professor Rating\",\"scale\":{\"domain\":[0,5]}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"title\":\"Average Rating\",\"format\":\".2f\"},{\"field\":\"evaluation_count\",\"type\":\"quantitative\",\"title\":\"Number of Evaluations\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"c87d82e9c3be6437b165abd32f5089ec\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/professor-evaluation-trend-by-year/run-0001/run.json",
+    "queryPath": "runs/professor-evaluation-trend-by-year/run-0001/query.sql",
+    "vegaRawPath": "runs/professor-evaluation-trend-by-year/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/professor-evaluation-trend-by-year/run-0001/vega.resolved.json",
+    "imagePath": "runs/professor-evaluation-trend-by-year/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:07:48.549Z",
+  "traceId": "c87d82e9c3be6437b165abd32f5089ec",
+  "success": true,
+  "durationMs": 41162,
+  "resultRaw": {
+    "data": [
+      {
+        "academic_year": "2019/2020",
+        "avg_professor_rating": "4.13",
+        "evaluation_count": "8"
+      },
+      {
+        "academic_year": "2020/2021",
+        "avg_professor_rating": "2.73",
+        "evaluation_count": "11"
+      },
+      {
+        "academic_year": "2021/2022",
+        "avg_professor_rating": "2.00",
+        "evaluation_count": "2"
+      },
+      {
+        "academic_year": "2022/2023",
+        "avg_professor_rating": "3.13",
+        "evaluation_count": "8"
+      },
+      {
+        "academic_year": "2023/2024",
+        "avg_professor_rating": "3.00",
+        "evaluation_count": "6"
+      },
+      {
+        "academic_year": "2024/2025",
+        "avg_professor_rating": "2.50",
+        "evaluation_count": "6"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Professor Ratings Over Academic Years",
+      "description": "Trend of average professor ratings across academic years",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": {
+        "type": "line",
+        "point": true,
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "academic_year",
+          "type": "nominal",
+          "title": "Academic Year",
+          "axis": {
+            "labelAngle": -45
+          }
+        },
+        "y": {
+          "field": "avg_professor_rating",
+          "type": "quantitative",
+          "title": "Average Professor Rating",
+          "scale": {
+            "domain": [
+              0,
+              5
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "academic_year",
+            "type": "nominal",
+            "title": "Academic Year"
+          },
+          {
+            "field": "avg_professor_rating",
+            "type": "quantitative",
+            "title": "Average Rating",
+            "format": ".2f"
+          },
+          {
+            "field": "evaluation_count",
+            "type": "quantitative",
+            "title": "Number of Evaluations"
+          }
+        ]
+      }
+    },
+    "sql": "\nSELECT \n  cs.academic_year,\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\n  COUNT(ce.id) AS evaluation_count\nFROM course_evaluations ce\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\nGROUP BY cs.academic_year\nORDER BY cs.academic_year ASC\n",
+    "metadata": {
+      "columns": [
+        "academic_year",
+        "avg_professor_rating",
+        "evaluation_count"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "academic_year": "2019/2020",
+          "avg_professor_rating": "4.13",
+          "evaluation_count": "8"
+        },
+        {
+          "academic_year": "2020/2021",
+          "avg_professor_rating": "2.73",
+          "evaluation_count": "11"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "academic_year": "2019/2020",
+        "avg_professor_rating": "4.13",
+        "evaluation_count": "8"
+      },
+      {
+        "academic_year": "2020/2021",
+        "avg_professor_rating": "2.73",
+        "evaluation_count": "11"
+      },
+      {
+        "academic_year": "2021/2022",
+        "avg_professor_rating": "2.00",
+        "evaluation_count": "2"
+      },
+      {
+        "academic_year": "2022/2023",
+        "avg_professor_rating": "3.13",
+        "evaluation_count": "8"
+      },
+      {
+        "academic_year": "2023/2024",
+        "avg_professor_rating": "3.00",
+        "evaluation_count": "6"
+      },
+      {
+        "academic_year": "2024/2025",
+        "avg_professor_rating": "2.50",
+        "evaluation_count": "6"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Professor Ratings Over Academic Years",
+      "description": "Trend of average professor ratings across academic years",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": {
+        "type": "line",
+        "point": true,
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "academic_year",
+          "type": "nominal",
+          "title": "Academic Year",
+          "axis": {
+            "labelAngle": -45
+          }
+        },
+        "y": {
+          "field": "avg_professor_rating",
+          "type": "quantitative",
+          "title": "Average Professor Rating",
+          "scale": {
+            "domain": [
+              0,
+              5
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "academic_year",
+            "type": "nominal",
+            "title": "Academic Year"
+          },
+          {
+            "field": "avg_professor_rating",
+            "type": "quantitative",
+            "title": "Average Rating",
+            "format": ".2f"
+          },
+          {
+            "field": "evaluation_count",
+            "type": "quantitative",
+            "title": "Number of Evaluations"
+          }
+        ]
+      }
+    },
+    "sql": "\nSELECT \n  cs.academic_year,\n  ROUND(AVG(ce.professor_rating)::numeric, 2) AS avg_professor_rating,\n  COUNT(ce.id) AS evaluation_count\nFROM course_evaluations ce\nINNER JOIN enrollments e ON ce.enrollment_id = e.id\nINNER JOIN course_sections cs ON e.course_section_id = cs.id\nGROUP BY cs.academic_year\nORDER BY cs.academic_year ASC\n",
+    "metadata": {
+      "columns": [
+        "academic_year",
+        "avg_professor_rating",
+        "evaluation_count"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "academic_year": "2019/2020",
+          "avg_professor_rating": "4.13",
+          "evaluation_count": "8"
+        },
+        {
+          "academic_year": "2020/2021",
+          "avg_professor_rating": "2.73",
+          "evaluation_count": "11"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.368Z",
+    "traceId": "c87d82e9c3be6437b165abd32f5089ec",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 23480,
+      "outputTokens": 1110,
+      "totalTokens": 24590,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.02903
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 23480,
+        "outputTokens": 1110,
+        "totalTokens": 24590,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.02903
+      }
+    ],
+    "warnings": []
+  }
+}

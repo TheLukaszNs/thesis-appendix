@@ -1,0 +1,126 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "pass-fail-rate-overall",
+  "caseDirectory": "pass-fail-rate-overall",
+  "repeatIndex": 1,
+  "prompt": "What percentage of grades are passing vs failing?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What percentage of grades are passing vs failing?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:02:13.078Z",
+    "endedAtUtc": "2026-02-23T14:02:51.472Z",
+    "durationMs": 38394
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2176",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:02:51 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"What percentage of grades are passing vs failing?\"},\"sql\":{\"payload\":{\"question\":\"What percentage of grades are passing vs failing?\"},\"startedAt\":1771855333110,\"status\":\"success\",\"output\":{\"reasoning\":\"The grades table contains a grade_value column with numeric values (2.0, 3.0, 3.5, 4.0, 4.5, 5.0). To determine passing vs failing, I need to establish a threshold. In most academic systems, grades of 3.0 or higher are typically passing, while below 3.0 are failing. This query calculates the percentage of passing (≥3.0) vs failing (<3.0) grades.\",\"sql\":\"\\nSELECT \\n  ROUND(100.0 * SUM(CASE WHEN grade_value::numeric >= 3.0 THEN 1 ELSE 0 END) / COUNT(*), 2) AS passing_percentage,\\n  ROUND(100.0 * SUM(CASE WHEN grade_value::numeric < 3.0 THEN 1 ELSE 0 END) / COUNT(*), 2) AS failing_percentage,\\n  SUM(CASE WHEN grade_value::numeric >= 3.0 THEN 1 ELSE 0 END) AS passing_count,\\n  SUM(CASE WHEN grade_value::numeric < 3.0 THEN 1 ELSE 0 END) AS failing_count,\\n  COUNT(*) AS total_grades\\nFROM public.grades\\nWHERE grade_value IS NOT NULL\\n\",\"assumptions\":[\"Passing grade threshold is 3.0 or higher\",\"Failing grade threshold is below 3.0\",\"Only non-null grade_value records are considered\"]},\"endedAt\":1771855371454},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  ROUND(100.0 * SUM(CASE WHEN grade_value::numeric >= 3.0 THEN 1 ELSE 0 END) / COUNT(*), 2) AS passing_percentage,\\n  ROUND(100.0 * SUM(CASE WHEN grade_value::numeric < 3.0 THEN 1 ELSE 0 END) / COUNT(*), 2) AS failing_percentage,\\n  SUM(CASE WHEN grade_value::numeric >= 3.0 THEN 1 ELSE 0 END) AS passing_count,\\n  SUM(CASE WHEN grade_value::numeric < 3.0 THEN 1 ELSE 0 END) AS failing_count,\\n  COUNT(*) AS total_grades\\nFROM public.grades\\nWHERE grade_value IS NOT NULL\\n\"},\"startedAt\":1771855371462,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: cannot cast type grade_value to numeric\",\"name\":\"Error\"},\"endedAt\":1771855371467}},\"input\":{\"question\":\"What percentage of grades are passing vs failing?\"},\"error\":{\"message\":\"SQL execution failed: cannot cast type grade_value to numeric\",\"name\":\"Error\"},\"traceId\":\"53927fb0d9413563574ef367e538b148\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/pass-fail-rate-overall/run-0001/run.json",
+    "queryPath": "runs/pass-fail-rate-overall/run-0001/query.sql",
+    "vegaRawPath": "runs/pass-fail-rate-overall/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/pass-fail-rate-overall/run-0001/vega.resolved.json",
+    "imagePath": "runs/pass-fail-rate-overall/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:02:51.472Z",
+  "traceId": "53927fb0d9413563574ef367e538b148",
+  "success": false,
+  "durationMs": 38394,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "What percentage of grades are passing vs failing?"
+      },
+      "sql": {
+        "payload": {
+          "question": "What percentage of grades are passing vs failing?"
+        },
+        "startedAt": 1771855333110,
+        "status": "success",
+        "output": {
+          "reasoning": "The grades table contains a grade_value column with numeric values (2.0, 3.0, 3.5, 4.0, 4.5, 5.0). To determine passing vs failing, I need to establish a threshold. In most academic systems, grades of 3.0 or higher are typically passing, while below 3.0 are failing. This query calculates the percentage of passing (≥3.0) vs failing (<3.0) grades.",
+          "sql": "\nSELECT \n  ROUND(100.0 * SUM(CASE WHEN grade_value::numeric >= 3.0 THEN 1 ELSE 0 END) / COUNT(*), 2) AS passing_percentage,\n  ROUND(100.0 * SUM(CASE WHEN grade_value::numeric < 3.0 THEN 1 ELSE 0 END) / COUNT(*), 2) AS failing_percentage,\n  SUM(CASE WHEN grade_value::numeric >= 3.0 THEN 1 ELSE 0 END) AS passing_count,\n  SUM(CASE WHEN grade_value::numeric < 3.0 THEN 1 ELSE 0 END) AS failing_count,\n  COUNT(*) AS total_grades\nFROM public.grades\nWHERE grade_value IS NOT NULL\n",
+          "assumptions": [
+            "Passing grade threshold is 3.0 or higher",
+            "Failing grade threshold is below 3.0",
+            "Only non-null grade_value records are considered"
+          ]
+        },
+        "endedAt": 1771855371454
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "\nSELECT \n  ROUND(100.0 * SUM(CASE WHEN grade_value::numeric >= 3.0 THEN 1 ELSE 0 END) / COUNT(*), 2) AS passing_percentage,\n  ROUND(100.0 * SUM(CASE WHEN grade_value::numeric < 3.0 THEN 1 ELSE 0 END) / COUNT(*), 2) AS failing_percentage,\n  SUM(CASE WHEN grade_value::numeric >= 3.0 THEN 1 ELSE 0 END) AS passing_count,\n  SUM(CASE WHEN grade_value::numeric < 3.0 THEN 1 ELSE 0 END) AS failing_count,\n  COUNT(*) AS total_grades\nFROM public.grades\nWHERE grade_value IS NOT NULL\n"
+        },
+        "startedAt": 1771855371462,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: cannot cast type grade_value to numeric",
+          "name": "Error"
+        },
+        "endedAt": 1771855371467
+      }
+    },
+    "input": {
+      "question": "What percentage of grades are passing vs failing?"
+    },
+    "error": {
+      "message": "SQL execution failed: cannot cast type grade_value to numeric",
+      "name": "Error"
+    },
+    "traceId": "53927fb0d9413563574ef367e538b148"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.362Z",
+    "traceId": "53927fb0d9413563574ef367e538b148",
+    "attempts": 1,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 19230,
+      "outputTokens": 767,
+      "totalTokens": 19997,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.023065
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 1,
+        "inputTokens": 19230,
+        "outputTokens": 767,
+        "totalTokens": 19997,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.023065
+      }
+    ],
+    "warnings": []
+  }
+}

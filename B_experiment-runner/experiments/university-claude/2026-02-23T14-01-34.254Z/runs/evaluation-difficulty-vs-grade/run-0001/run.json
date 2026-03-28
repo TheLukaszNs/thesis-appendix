@@ -1,0 +1,466 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "evaluation-difficulty-vs-grade",
+  "caseDirectory": "evaluation-difficulty-vs-grade",
+  "repeatIndex": 1,
+  "prompt": "Is there a correlation between difficulty rating and average grade per course?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Is there a correlation between difficulty rating and average grade per course?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:15:57.691Z",
+    "endedAtUtc": "2026-02-23T14:16:56.567Z",
+    "durationMs": 58876
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "20163",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:16:56 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Is there a correlation between difficulty rating and average grade per course?\"},\"sql\":{\"payload\":{\"question\":\"Is there a correlation between difficulty rating and average grade per course?\"},\"startedAt\":1771856157698,\"status\":\"success\",\"output\":{\"reasoning\":\"The user is asking about correlation between difficulty rating and average grade per course. I've confirmed the schema contains courses, grades, course_evaluations, enrollments, and course_sections tables. The query needs to aggregate exam scores (as average grade) and difficulty ratings by course, then present them together to allow correlation analysis. I'll use exam_score from grades table and difficulty_rating from course_evaluations table, joining through enrollments and course_sections.\",\"sql\":\"\\nSELECT \\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(DISTINCT e.id) AS enrollment_count,\\n  ROUND(AVG(g.exam_score)::NUMERIC, 2) AS avg_grade,\\n  ROUND(AVG(ce.difficulty_rating)::NUMERIC, 2) AS avg_difficulty_rating\\nFROM courses c\\nJOIN course_sections cs ON c.id = cs.course_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nJOIN course_evaluations ce ON e.id = ce.enrollment_id\\nWHERE g.exam_score IS NOT NULL \\n  AND ce.difficulty_rating IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY c.code\\n\",\"assumptions\":[\"Difficulty rating is measured on a numeric scale (1-5 based on sample data)\",\"Average grade is calculated from exam_score in the grades table\",\"Only enrollments with both exam scores and difficulty ratings are included\",\"Correlation analysis will be performed by the user on the returned dataset\"]},\"endedAt\":1771856212690},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(DISTINCT e.id) AS enrollment_count,\\n  ROUND(AVG(g.exam_score)::NUMERIC, 2) AS avg_grade,\\n  ROUND(AVG(ce.difficulty_rating)::NUMERIC, 2) AS avg_difficulty_rating\\nFROM courses c\\nJOIN course_sections cs ON c.id = cs.course_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nJOIN course_evaluations ce ON e.id = ce.enrollment_id\\nWHERE g.exam_score IS NOT NULL \\n  AND ce.difficulty_rating IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY c.code\\n\"},\"startedAt\":1771856212692,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(DISTINCT e.id) AS enrollment_count,\\n  ROUND(AVG(g.exam_score)::NUMERIC, 2) AS avg_grade,\\n  ROUND(AVG(ce.difficulty_rating)::NUMERIC, 2) AS avg_difficulty_rating\\nFROM courses c\\nJOIN course_sections cs ON c.id = cs.course_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nJOIN course_evaluations ce ON e.id = ce.enrollment_id\\nWHERE g.exam_score IS NOT NULL \\n  AND ce.difficulty_rating IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY c.code\",\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"enrollment_count\",\"avg_grade\",\"avg_difficulty_rating\"],\"rowCount\":10,\"sample\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"enrollment_count\":\"1\",\"avg_grade\":\"50.05\",\"avg_difficulty_rating\":\"5.00\"},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"enrollment_count\":\"1\",\"avg_grade\":\"96.30\",\"avg_difficulty_rating\":\"1.00\"}]},\"data\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"enrollment_count\":\"1\",\"avg_grade\":\"50.05\",\"avg_difficulty_rating\":\"5.00\"},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"enrollment_count\":\"1\",\"avg_grade\":\"96.30\",\"avg_difficulty_rating\":\"1.00\"},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"enrollment_count\":\"1\",\"avg_grade\":\"17.77\",\"avg_difficulty_rating\":\"3.00\"},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"enrollment_count\":\"1\",\"avg_grade\":\"8.92\",\"avg_difficulty_rating\":\"5.00\"},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"enrollment_count\":\"2\",\"avg_grade\":\"55.21\",\"avg_difficulty_rating\":\"3.00\"},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"enrollment_count\":\"2\",\"avg_grade\":\"22.67\",\"avg_difficulty_rating\":\"5.00\"},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"enrollment_count\":\"1\",\"avg_grade\":\"47.03\",\"avg_difficulty_rating\":\"3.00\"},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"enrollment_count\":\"2\",\"avg_grade\":\"93.93\",\"avg_difficulty_rating\":\"2.67\"},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"enrollment_count\":\"1\",\"avg_grade\":\"2.28\",\"avg_difficulty_rating\":\"2.00\"},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"enrollment_count\":\"1\",\"avg_grade\":\"79.08\",\"avg_difficulty_rating\":\"2.00\"}]},\"endedAt\":1771856212699},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(DISTINCT e.id) AS enrollment_count,\\n  ROUND(AVG(g.exam_score)::NUMERIC, 2) AS avg_grade,\\n  ROUND(AVG(ce.difficulty_rating)::NUMERIC, 2) AS avg_difficulty_rating\\nFROM courses c\\nJOIN course_sections cs ON c.id = cs.course_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nJOIN course_evaluations ce ON e.id = ce.enrollment_id\\nWHERE g.exam_score IS NOT NULL \\n  AND ce.difficulty_rating IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY c.code\",\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"enrollment_count\",\"avg_grade\",\"avg_difficulty_rating\"],\"rowCount\":10,\"sample\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"enrollment_count\":\"1\",\"avg_grade\":\"50.05\",\"avg_difficulty_rating\":\"5.00\"},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"enrollment_count\":\"1\",\"avg_grade\":\"96.30\",\"avg_difficulty_rating\":\"1.00\"}]},\"data\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"enrollment_count\":\"1\",\"avg_grade\":\"50.05\",\"avg_difficulty_rating\":\"5.00\"},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"enrollment_count\":\"1\",\"avg_grade\":\"96.30\",\"avg_difficulty_rating\":\"1.00\"},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"enrollment_count\":\"1\",\"avg_grade\":\"17.77\",\"avg_difficulty_rating\":\"3.00\"},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"enrollment_count\":\"1\",\"avg_grade\":\"8.92\",\"avg_difficulty_rating\":\"5.00\"},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"enrollment_count\":\"2\",\"avg_grade\":\"55.21\",\"avg_difficulty_rating\":\"3.00\"},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"enrollment_count\":\"2\",\"avg_grade\":\"22.67\",\"avg_difficulty_rating\":\"5.00\"},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"enrollment_count\":\"1\",\"avg_grade\":\"47.03\",\"avg_difficulty_rating\":\"3.00\"},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"enrollment_count\":\"2\",\"avg_grade\":\"93.93\",\"avg_difficulty_rating\":\"2.67\"},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"enrollment_count\":\"1\",\"avg_grade\":\"2.28\",\"avg_difficulty_rating\":\"2.00\"},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"enrollment_count\":\"1\",\"avg_grade\":\"79.08\",\"avg_difficulty_rating\":\"2.00\"}]},\"startedAt\":1771856212703,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Correlation between Course Difficulty Rating and Average Grade\",\"description\":\"Scatter plot showing the relationship between average difficulty rating and average grade per course\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"circle\",\"size\":200,\"opacity\":0.7},\"encoding\":{\"x\":{\"field\":\"avg_difficulty_rating\",\"type\":\"quantitative\",\"title\":\"Average Difficulty Rating\",\"scale\":{\"zero\":false}},\"y\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"scale\":{\"zero\":false}},\"color\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\",\"legend\":{\"labelLimit\":200}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"avg_difficulty_rating\",\"type\":\"quantitative\",\"title\":\"Avg Difficulty Rating\",\"format\":\".2f\"},{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Avg Grade\",\"format\":\".2f\"},{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"title\":\"Enrollments\"}]},\"width\":600,\"height\":400},\"reasoning\":\"A scatter plot is ideal for visualizing correlation between two continuous variables (difficulty rating and average grade). Each point represents a course, colored by course code for easy identification. The tooltip provides additional context including course name and enrollment count. The plot allows viewers to visually assess whether there's a negative correlation (harder courses = lower grades), positive correlation, or no clear relationship.\"},\"endedAt\":1771856216544},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Correlation between Course Difficulty Rating and Average Grade\",\"description\":\"Scatter plot showing the relationship between average difficulty rating and average grade per course\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"circle\",\"size\":200,\"opacity\":0.7},\"encoding\":{\"x\":{\"field\":\"avg_difficulty_rating\",\"type\":\"quantitative\",\"title\":\"Average Difficulty Rating\",\"scale\":{\"zero\":false}},\"y\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"scale\":{\"zero\":false}},\"color\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\",\"legend\":{\"labelLimit\":200}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"avg_difficulty_rating\",\"type\":\"quantitative\",\"title\":\"Avg Difficulty Rating\",\"format\":\".2f\"},{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Avg Grade\",\"format\":\".2f\"},{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"title\":\"Enrollments\"}]},\"width\":600,\"height\":400},\"reasoning\":\"A scatter plot is ideal for visualizing correlation between two continuous variables (difficulty rating and average grade). Each point represents a course, colored by course code for easy identification. The tooltip provides additional context including course name and enrollment count. The plot allows viewers to visually assess whether there's a negative correlation (harder courses = lower grades), positive correlation, or no clear relationship.\"},\"startedAt\":1771856216549,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT \\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(DISTINCT e.id) AS enrollment_count,\\n  ROUND(AVG(g.exam_score)::NUMERIC, 2) AS avg_grade,\\n  ROUND(AVG(ce.difficulty_rating)::NUMERIC, 2) AS avg_difficulty_rating\\nFROM courses c\\nJOIN course_sections cs ON c.id = cs.course_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nJOIN course_evaluations ce ON e.id = ce.enrollment_id\\nWHERE g.exam_score IS NOT NULL \\n  AND ce.difficulty_rating IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY c.code\\n\",\"data\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"enrollment_count\":\"1\",\"avg_grade\":\"50.05\",\"avg_difficulty_rating\":\"5.00\"},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"enrollment_count\":\"1\",\"avg_grade\":\"96.30\",\"avg_difficulty_rating\":\"1.00\"},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"enrollment_count\":\"1\",\"avg_grade\":\"17.77\",\"avg_difficulty_rating\":\"3.00\"},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"enrollment_count\":\"1\",\"avg_grade\":\"8.92\",\"avg_difficulty_rating\":\"5.00\"},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"enrollment_count\":\"2\",\"avg_grade\":\"55.21\",\"avg_difficulty_rating\":\"3.00\"},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"enrollment_count\":\"2\",\"avg_grade\":\"22.67\",\"avg_difficulty_rating\":\"5.00\"},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"enrollment_count\":\"1\",\"avg_grade\":\"47.03\",\"avg_difficulty_rating\":\"3.00\"},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"enrollment_count\":\"2\",\"avg_grade\":\"93.93\",\"avg_difficulty_rating\":\"2.67\"},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"enrollment_count\":\"1\",\"avg_grade\":\"2.28\",\"avg_difficulty_rating\":\"2.00\"},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"enrollment_count\":\"1\",\"avg_grade\":\"79.08\",\"avg_difficulty_rating\":\"2.00\"}],\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"enrollment_count\",\"avg_grade\",\"avg_difficulty_rating\"],\"rowCount\":10,\"sample\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"enrollment_count\":\"1\",\"avg_grade\":\"50.05\",\"avg_difficulty_rating\":\"5.00\"},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"enrollment_count\":\"1\",\"avg_grade\":\"96.30\",\"avg_difficulty_rating\":\"1.00\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Correlation between Course Difficulty Rating and Average Grade\",\"description\":\"Scatter plot showing the relationship between average difficulty rating and average grade per course\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"circle\",\"size\":200,\"opacity\":0.7},\"encoding\":{\"x\":{\"field\":\"avg_difficulty_rating\",\"type\":\"quantitative\",\"title\":\"Average Difficulty Rating\",\"scale\":{\"zero\":false}},\"y\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"scale\":{\"zero\":false}},\"color\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\",\"legend\":{\"labelLimit\":200}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"avg_difficulty_rating\",\"type\":\"quantitative\",\"title\":\"Avg Difficulty Rating\",\"format\":\".2f\"},{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Avg Grade\",\"format\":\".2f\"},{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"title\":\"Enrollments\"}]},\"width\":600,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771856216554}},\"input\":{\"question\":\"Is there a correlation between difficulty rating and average grade per course?\"},\"result\":{\"sql\":\"\\nSELECT \\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(DISTINCT e.id) AS enrollment_count,\\n  ROUND(AVG(g.exam_score)::NUMERIC, 2) AS avg_grade,\\n  ROUND(AVG(ce.difficulty_rating)::NUMERIC, 2) AS avg_difficulty_rating\\nFROM courses c\\nJOIN course_sections cs ON c.id = cs.course_id\\nJOIN enrollments e ON cs.id = e.course_section_id\\nJOIN grades g ON e.id = g.enrollment_id\\nJOIN course_evaluations ce ON e.id = ce.enrollment_id\\nWHERE g.exam_score IS NOT NULL \\n  AND ce.difficulty_rating IS NOT NULL\\nGROUP BY c.id, c.code, c.name\\nORDER BY c.code\\n\",\"data\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"enrollment_count\":\"1\",\"avg_grade\":\"50.05\",\"avg_difficulty_rating\":\"5.00\"},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"enrollment_count\":\"1\",\"avg_grade\":\"96.30\",\"avg_difficulty_rating\":\"1.00\"},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"enrollment_count\":\"1\",\"avg_grade\":\"17.77\",\"avg_difficulty_rating\":\"3.00\"},{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"enrollment_count\":\"1\",\"avg_grade\":\"8.92\",\"avg_difficulty_rating\":\"5.00\"},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"enrollment_count\":\"2\",\"avg_grade\":\"55.21\",\"avg_difficulty_rating\":\"3.00\"},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"enrollment_count\":\"2\",\"avg_grade\":\"22.67\",\"avg_difficulty_rating\":\"5.00\"},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"enrollment_count\":\"1\",\"avg_grade\":\"47.03\",\"avg_difficulty_rating\":\"3.00\"},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"enrollment_count\":\"2\",\"avg_grade\":\"93.93\",\"avg_difficulty_rating\":\"2.67\"},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"enrollment_count\":\"1\",\"avg_grade\":\"2.28\",\"avg_difficulty_rating\":\"2.00\"},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"enrollment_count\":\"1\",\"avg_grade\":\"79.08\",\"avg_difficulty_rating\":\"2.00\"}],\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"enrollment_count\",\"avg_grade\",\"avg_difficulty_rating\"],\"rowCount\":10,\"sample\":[{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"enrollment_count\":\"1\",\"avg_grade\":\"50.05\",\"avg_difficulty_rating\":\"5.00\"},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"enrollment_count\":\"1\",\"avg_grade\":\"96.30\",\"avg_difficulty_rating\":\"1.00\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Correlation between Course Difficulty Rating and Average Grade\",\"description\":\"Scatter plot showing the relationship between average difficulty rating and average grade per course\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"circle\",\"size\":200,\"opacity\":0.7},\"encoding\":{\"x\":{\"field\":\"avg_difficulty_rating\",\"type\":\"quantitative\",\"title\":\"Average Difficulty Rating\",\"scale\":{\"zero\":false}},\"y\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\",\"scale\":{\"zero\":false}},\"color\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\",\"legend\":{\"labelLimit\":200}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"avg_difficulty_rating\",\"type\":\"quantitative\",\"title\":\"Avg Difficulty Rating\",\"format\":\".2f\"},{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Avg Grade\",\"format\":\".2f\"},{\"field\":\"enrollment_count\",\"type\":\"quantitative\",\"title\":\"Enrollments\"}]},\"width\":600,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"e166cedf610d24b3a72b4fb328ba832c\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/evaluation-difficulty-vs-grade/run-0001/run.json",
+    "queryPath": "runs/evaluation-difficulty-vs-grade/run-0001/query.sql",
+    "vegaRawPath": "runs/evaluation-difficulty-vs-grade/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/evaluation-difficulty-vs-grade/run-0001/vega.resolved.json",
+    "imagePath": "runs/evaluation-difficulty-vs-grade/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:16:57.025Z",
+  "traceId": "e166cedf610d24b3a72b4fb328ba832c",
+  "success": true,
+  "durationMs": 59334,
+  "resultRaw": {
+    "data": [
+      {
+        "course_id": "91922683-9cba-47f2-bb00-babfbce3866f",
+        "course_code": "AAX-989",
+        "course_name": "Elektronika",
+        "enrollment_count": "1",
+        "avg_grade": "50.05",
+        "avg_difficulty_rating": "5.00"
+      },
+      {
+        "course_id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+        "course_code": "BEW-951",
+        "course_name": "Fizyka",
+        "enrollment_count": "1",
+        "avg_grade": "96.30",
+        "avg_difficulty_rating": "1.00"
+      },
+      {
+        "course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+        "course_code": "FCL-532",
+        "course_name": "Uczenie Maszynowe",
+        "enrollment_count": "1",
+        "avg_grade": "17.77",
+        "avg_difficulty_rating": "3.00"
+      },
+      {
+        "course_id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+        "course_code": "FEO-908",
+        "course_name": "Analiza Matematyczna",
+        "enrollment_count": "1",
+        "avg_grade": "8.92",
+        "avg_difficulty_rating": "5.00"
+      },
+      {
+        "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "enrollment_count": "2",
+        "avg_grade": "55.21",
+        "avg_difficulty_rating": "3.00"
+      },
+      {
+        "course_id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "enrollment_count": "2",
+        "avg_grade": "22.67",
+        "avg_difficulty_rating": "5.00"
+      },
+      {
+        "course_id": "b18a39cf-8a1b-471c-b67a-94aa04eccfae",
+        "course_code": "WZC-570",
+        "course_name": "Programowanie Obiektowe",
+        "enrollment_count": "1",
+        "avg_grade": "47.03",
+        "avg_difficulty_rating": "3.00"
+      },
+      {
+        "course_id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "enrollment_count": "2",
+        "avg_grade": "93.93",
+        "avg_difficulty_rating": "2.67"
+      },
+      {
+        "course_id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "enrollment_count": "1",
+        "avg_grade": "2.28",
+        "avg_difficulty_rating": "2.00"
+      },
+      {
+        "course_id": "c0e00b1c-84d6-4ccd-999d-7c9197625f2e",
+        "course_code": "ZUQ-127",
+        "course_name": "Fizyka",
+        "enrollment_count": "1",
+        "avg_grade": "79.08",
+        "avg_difficulty_rating": "2.00"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Correlation between Course Difficulty Rating and Average Grade",
+      "description": "Scatter plot showing the relationship between average difficulty rating and average grade per course",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": {
+        "type": "circle",
+        "size": 200,
+        "opacity": 0.7
+      },
+      "encoding": {
+        "x": {
+          "field": "avg_difficulty_rating",
+          "type": "quantitative",
+          "title": "Average Difficulty Rating",
+          "scale": {
+            "zero": false
+          }
+        },
+        "y": {
+          "field": "avg_grade",
+          "type": "quantitative",
+          "title": "Average Grade",
+          "scale": {
+            "zero": false
+          }
+        },
+        "color": {
+          "field": "course_code",
+          "type": "nominal",
+          "title": "Course Code",
+          "legend": {
+            "labelLimit": 200
+          }
+        },
+        "tooltip": [
+          {
+            "field": "course_code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "course_name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "avg_difficulty_rating",
+            "type": "quantitative",
+            "title": "Avg Difficulty Rating",
+            "format": ".2f"
+          },
+          {
+            "field": "avg_grade",
+            "type": "quantitative",
+            "title": "Avg Grade",
+            "format": ".2f"
+          },
+          {
+            "field": "enrollment_count",
+            "type": "quantitative",
+            "title": "Enrollments"
+          }
+        ]
+      },
+      "width": 600,
+      "height": 400
+    },
+    "sql": "\nSELECT \n  c.id AS course_id,\n  c.code AS course_code,\n  c.name AS course_name,\n  COUNT(DISTINCT e.id) AS enrollment_count,\n  ROUND(AVG(g.exam_score)::NUMERIC, 2) AS avg_grade,\n  ROUND(AVG(ce.difficulty_rating)::NUMERIC, 2) AS avg_difficulty_rating\nFROM courses c\nJOIN course_sections cs ON c.id = cs.course_id\nJOIN enrollments e ON cs.id = e.course_section_id\nJOIN grades g ON e.id = g.enrollment_id\nJOIN course_evaluations ce ON e.id = ce.enrollment_id\nWHERE g.exam_score IS NOT NULL \n  AND ce.difficulty_rating IS NOT NULL\nGROUP BY c.id, c.code, c.name\nORDER BY c.code\n",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "course_code",
+        "course_name",
+        "enrollment_count",
+        "avg_grade",
+        "avg_difficulty_rating"
+      ],
+      "rowCount": 10,
+      "sample": [
+        {
+          "course_id": "91922683-9cba-47f2-bb00-babfbce3866f",
+          "course_code": "AAX-989",
+          "course_name": "Elektronika",
+          "enrollment_count": "1",
+          "avg_grade": "50.05",
+          "avg_difficulty_rating": "5.00"
+        },
+        {
+          "course_id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+          "course_code": "BEW-951",
+          "course_name": "Fizyka",
+          "enrollment_count": "1",
+          "avg_grade": "96.30",
+          "avg_difficulty_rating": "1.00"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "course_id": "91922683-9cba-47f2-bb00-babfbce3866f",
+        "course_code": "AAX-989",
+        "course_name": "Elektronika",
+        "enrollment_count": "1",
+        "avg_grade": "50.05",
+        "avg_difficulty_rating": "5.00"
+      },
+      {
+        "course_id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+        "course_code": "BEW-951",
+        "course_name": "Fizyka",
+        "enrollment_count": "1",
+        "avg_grade": "96.30",
+        "avg_difficulty_rating": "1.00"
+      },
+      {
+        "course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+        "course_code": "FCL-532",
+        "course_name": "Uczenie Maszynowe",
+        "enrollment_count": "1",
+        "avg_grade": "17.77",
+        "avg_difficulty_rating": "3.00"
+      },
+      {
+        "course_id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+        "course_code": "FEO-908",
+        "course_name": "Analiza Matematyczna",
+        "enrollment_count": "1",
+        "avg_grade": "8.92",
+        "avg_difficulty_rating": "5.00"
+      },
+      {
+        "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "enrollment_count": "2",
+        "avg_grade": "55.21",
+        "avg_difficulty_rating": "3.00"
+      },
+      {
+        "course_id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "enrollment_count": "2",
+        "avg_grade": "22.67",
+        "avg_difficulty_rating": "5.00"
+      },
+      {
+        "course_id": "b18a39cf-8a1b-471c-b67a-94aa04eccfae",
+        "course_code": "WZC-570",
+        "course_name": "Programowanie Obiektowe",
+        "enrollment_count": "1",
+        "avg_grade": "47.03",
+        "avg_difficulty_rating": "3.00"
+      },
+      {
+        "course_id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "enrollment_count": "2",
+        "avg_grade": "93.93",
+        "avg_difficulty_rating": "2.67"
+      },
+      {
+        "course_id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "enrollment_count": "1",
+        "avg_grade": "2.28",
+        "avg_difficulty_rating": "2.00"
+      },
+      {
+        "course_id": "c0e00b1c-84d6-4ccd-999d-7c9197625f2e",
+        "course_code": "ZUQ-127",
+        "course_name": "Fizyka",
+        "enrollment_count": "1",
+        "avg_grade": "79.08",
+        "avg_difficulty_rating": "2.00"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Correlation between Course Difficulty Rating and Average Grade",
+      "description": "Scatter plot showing the relationship between average difficulty rating and average grade per course",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": {
+        "type": "circle",
+        "size": 200,
+        "opacity": 0.7
+      },
+      "encoding": {
+        "x": {
+          "field": "avg_difficulty_rating",
+          "type": "quantitative",
+          "title": "Average Difficulty Rating",
+          "scale": {
+            "zero": false
+          }
+        },
+        "y": {
+          "field": "avg_grade",
+          "type": "quantitative",
+          "title": "Average Grade",
+          "scale": {
+            "zero": false
+          }
+        },
+        "color": {
+          "field": "course_code",
+          "type": "nominal",
+          "title": "Course Code",
+          "legend": {
+            "labelLimit": 200
+          }
+        },
+        "tooltip": [
+          {
+            "field": "course_code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "course_name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "avg_difficulty_rating",
+            "type": "quantitative",
+            "title": "Avg Difficulty Rating",
+            "format": ".2f"
+          },
+          {
+            "field": "avg_grade",
+            "type": "quantitative",
+            "title": "Avg Grade",
+            "format": ".2f"
+          },
+          {
+            "field": "enrollment_count",
+            "type": "quantitative",
+            "title": "Enrollments"
+          }
+        ]
+      },
+      "width": 600,
+      "height": 400
+    },
+    "sql": "\nSELECT \n  c.id AS course_id,\n  c.code AS course_code,\n  c.name AS course_name,\n  COUNT(DISTINCT e.id) AS enrollment_count,\n  ROUND(AVG(g.exam_score)::NUMERIC, 2) AS avg_grade,\n  ROUND(AVG(ce.difficulty_rating)::NUMERIC, 2) AS avg_difficulty_rating\nFROM courses c\nJOIN course_sections cs ON c.id = cs.course_id\nJOIN enrollments e ON cs.id = e.course_section_id\nJOIN grades g ON e.id = g.enrollment_id\nJOIN course_evaluations ce ON e.id = ce.enrollment_id\nWHERE g.exam_score IS NOT NULL \n  AND ce.difficulty_rating IS NOT NULL\nGROUP BY c.id, c.code, c.name\nORDER BY c.code\n",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "course_code",
+        "course_name",
+        "enrollment_count",
+        "avg_grade",
+        "avg_difficulty_rating"
+      ],
+      "rowCount": 10,
+      "sample": [
+        {
+          "course_id": "91922683-9cba-47f2-bb00-babfbce3866f",
+          "course_code": "AAX-989",
+          "course_name": "Elektronika",
+          "enrollment_count": "1",
+          "avg_grade": "50.05",
+          "avg_difficulty_rating": "5.00"
+        },
+        {
+          "course_id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+          "course_code": "BEW-951",
+          "course_name": "Fizyka",
+          "enrollment_count": "1",
+          "avg_grade": "96.30",
+          "avg_difficulty_rating": "1.00"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.330Z",
+    "traceId": "e166cedf610d24b3a72b4fb328ba832c",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 49529,
+      "outputTokens": 1620,
+      "totalTokens": 51149,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.057629
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 49529,
+        "outputTokens": 1620,
+        "totalTokens": 51149,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.057629
+      }
+    ],
+    "warnings": []
+  }
+}

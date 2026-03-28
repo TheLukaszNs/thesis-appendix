@@ -1,0 +1,124 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "courses-without-prerequisites",
+  "caseDirectory": "courses-without-prerequisites",
+  "repeatIndex": 1,
+  "prompt": "How many courses have no prerequisites vs at least one?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many courses have no prerequisites vs at least one?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:44:57.960Z",
+    "endedAtUtc": "2026-02-22T23:45:21.090Z",
+    "durationMs": 23130
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2465",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:45:21 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"How many courses have no prerequisites vs at least one?\"},\"sql\":{\"payload\":{\"question\":\"How many courses have no prerequisites vs at least one?\"},\"startedAt\":1771803897982,\"status\":\"success\",\"output\":{\"reasoning\":\"Count courses grouped by whether they have any prerequisite rows (joined via prerequisites.course_id -> courses.id) and present two labeled buckets with deterministic ordering.\",\"sql\":\"WITH course_pr_counts AS (\\n  SELECT\\n    c.id AS course_id,\\n    COUNT(p.prerequisite_course_id) FILTER (WHERE p.prerequisite_course_id IS NOT NULL) AS prereq_count\\n  FROM public.courses AS c\\n  LEFT JOIN public.prerequisites AS p ON p.course_id = c.id\\n  GROUP BY c.id\\n)\\nSELECT\\n  CASE WHEN prereq_count = 0 THEN 'no_prerequisite' ELSE 'has_prerequisite' END AS prereq_status,\\n  COUNT(*) AS course_count\\nFROM course_pr_counts\\nGROUP BY CASE WHEN prereq_count = 0 THEN 'no_prerequisite' ELSE 'has_prerequisite' END\\nORDER BY CASE WHEN prereq_status = 'no_prerequisite' THEN 0 ELSE 1 END;\",\"assumptions\":[\"prerequisites.course_id references courses.id so a course has at least one prerequisite iff there is ≥1 row in prerequisites with that course_id\"]},\"endedAt\":1771803921027},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH course_pr_counts AS (\\n  SELECT\\n    c.id AS course_id,\\n    COUNT(p.prerequisite_course_id) FILTER (WHERE p.prerequisite_course_id IS NOT NULL) AS prereq_count\\n  FROM public.courses AS c\\n  LEFT JOIN public.prerequisites AS p ON p.course_id = c.id\\n  GROUP BY c.id\\n)\\nSELECT\\n  CASE WHEN prereq_count = 0 THEN 'no_prerequisite' ELSE 'has_prerequisite' END AS prereq_status,\\n  COUNT(*) AS course_count\\nFROM course_pr_counts\\nGROUP BY CASE WHEN prereq_count = 0 THEN 'no_prerequisite' ELSE 'has_prerequisite' END\\nORDER BY CASE WHEN prereq_status = 'no_prerequisite' THEN 0 ELSE 1 END;\"},\"startedAt\":1771803921033,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column \\\"prereq_status\\\" does not exist\\nLINE 15: ORDER BY CASE WHEN prereq_status = 'no_prerequisite' THEN 0 ...\\n                            ^\",\"name\":\"Error\"},\"endedAt\":1771803921077}},\"input\":{\"question\":\"How many courses have no prerequisites vs at least one?\"},\"error\":{\"message\":\"SQL execution failed: column \\\"prereq_status\\\" does not exist\\nLINE 15: ORDER BY CASE WHEN prereq_status = 'no_prerequisite' THEN 0 ...\\n                            ^\",\"name\":\"Error\"},\"traceId\":\"a9dbaea738203b08b78a90ac48359143\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/courses-without-prerequisites/run-0001/run.json",
+    "queryPath": "runs/courses-without-prerequisites/run-0001/query.sql",
+    "vegaRawPath": "runs/courses-without-prerequisites/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/courses-without-prerequisites/run-0001/vega.resolved.json",
+    "imagePath": "runs/courses-without-prerequisites/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:45:21.091Z",
+  "traceId": "a9dbaea738203b08b78a90ac48359143",
+  "success": false,
+  "durationMs": 23131,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "How many courses have no prerequisites vs at least one?"
+      },
+      "sql": {
+        "payload": {
+          "question": "How many courses have no prerequisites vs at least one?"
+        },
+        "startedAt": 1771803897982,
+        "status": "success",
+        "output": {
+          "reasoning": "Count courses grouped by whether they have any prerequisite rows (joined via prerequisites.course_id -> courses.id) and present two labeled buckets with deterministic ordering.",
+          "sql": "WITH course_pr_counts AS (\n  SELECT\n    c.id AS course_id,\n    COUNT(p.prerequisite_course_id) FILTER (WHERE p.prerequisite_course_id IS NOT NULL) AS prereq_count\n  FROM public.courses AS c\n  LEFT JOIN public.prerequisites AS p ON p.course_id = c.id\n  GROUP BY c.id\n)\nSELECT\n  CASE WHEN prereq_count = 0 THEN 'no_prerequisite' ELSE 'has_prerequisite' END AS prereq_status,\n  COUNT(*) AS course_count\nFROM course_pr_counts\nGROUP BY CASE WHEN prereq_count = 0 THEN 'no_prerequisite' ELSE 'has_prerequisite' END\nORDER BY CASE WHEN prereq_status = 'no_prerequisite' THEN 0 ELSE 1 END;",
+          "assumptions": [
+            "prerequisites.course_id references courses.id so a course has at least one prerequisite iff there is ≥1 row in prerequisites with that course_id"
+          ]
+        },
+        "endedAt": 1771803921027
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH course_pr_counts AS (\n  SELECT\n    c.id AS course_id,\n    COUNT(p.prerequisite_course_id) FILTER (WHERE p.prerequisite_course_id IS NOT NULL) AS prereq_count\n  FROM public.courses AS c\n  LEFT JOIN public.prerequisites AS p ON p.course_id = c.id\n  GROUP BY c.id\n)\nSELECT\n  CASE WHEN prereq_count = 0 THEN 'no_prerequisite' ELSE 'has_prerequisite' END AS prereq_status,\n  COUNT(*) AS course_count\nFROM course_pr_counts\nGROUP BY CASE WHEN prereq_count = 0 THEN 'no_prerequisite' ELSE 'has_prerequisite' END\nORDER BY CASE WHEN prereq_status = 'no_prerequisite' THEN 0 ELSE 1 END;"
+        },
+        "startedAt": 1771803921033,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column \"prereq_status\" does not exist\nLINE 15: ORDER BY CASE WHEN prereq_status = 'no_prerequisite' THEN 0 ...\n                            ^",
+          "name": "Error"
+        },
+        "endedAt": 1771803921077
+      }
+    },
+    "input": {
+      "question": "How many courses have no prerequisites vs at least one?"
+    },
+    "error": {
+      "message": "SQL execution failed: column \"prereq_status\" does not exist\nLINE 15: ORDER BY CASE WHEN prereq_status = 'no_prerequisite' THEN 0 ...\n                            ^",
+      "name": "Error"
+    },
+    "traceId": "a9dbaea738203b08b78a90ac48359143"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:45:21.091Z",
+    "traceId": "a9dbaea738203b08b78a90ac48359143",
+    "attempts": 3,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 7860,
+      "outputTokens": 1232,
+      "totalTokens": 9092,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 768,
+      "costUsd": 0.004429
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 7860,
+        "outputTokens": 1232,
+        "totalTokens": 9092,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 768,
+        "costUsd": 0.004429
+      }
+    ],
+    "warnings": []
+  }
+}

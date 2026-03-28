@@ -1,0 +1,1 @@
+SELECT capacity AS capacity FROM classrooms WHERE capacity IS NOT NULL;

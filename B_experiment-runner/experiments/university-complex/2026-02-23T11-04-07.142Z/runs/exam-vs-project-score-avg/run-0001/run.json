@@ -1,0 +1,414 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "exam-vs-project-score-avg",
+  "caseDirectory": "exam-vs-project-score-avg",
+  "repeatIndex": 1,
+  "prompt": "Compare average exam scores vs project scores by department",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Compare average exam scores vs project scores by department"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:26:53.609Z",
+    "endedAtUtc": "2026-02-23T11:28:47.210Z",
+    "durationMs": 113601
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "35339",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:28:47 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Compare average exam scores vs project scores by department\"},\"planner\":{\"payload\":{\"question\":\"Compare average exam scores vs project scores by department\"},\"startedAt\":1771846013620,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\",\"AVG(grades.project_score)\"],\"dimensions\":[\"departments.name\"],\"filters\":[\"grades.exam_score IS NOT NULL OR grades.project_score IS NOT NULL\"],\"grain\":\"department\",\"aliases\":{\"departments.name\":\"department_name\",\"AVG(grades.exam_score)\":\"avg_exam_score\",\"AVG(grades.project_score)\":\"avg_project_score\",\"UNPIVOT(avg_exam_score -> 'Exam', avg_project_score -> 'Project')\":\"metric / avg_score (unpivoted)\"},\"output_fields\":[\"department_name\",\"metric\",\"avg_score\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"avg_score\",\"color_group\":\"metric\",\"title\":\"Average Exam vs Project Scores by Department\"},\"assumptions\":[\"Join path (confirmed from schema): grades.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id -> courses.department_id -> departments.id.\",\"There is at most one grades row per enrollment (grades.enrollment_id is unique) so no additional deduplication is needed.\",\"Averages are computed with SQL AVG(), which ignores NULLs (no additional filtering per-metric required). The provided global filter only excludes rows where both exam_score and project_score are NULL.\",\"Visualization expects an unpivoted result (one row per department × metric). The SQL should produce columns: department_name (departments.name), metric (literal 'Exam' or 'Project'), avg_score (the corresponding average).\",\"All semesters/years and all courses are included unless further filters are requested (no restriction to active enrollments or specific academic_year/semester).\",\"Scores are treated equally (not weighted by course credits or enrollment size beyond the natural averaging).\",\"departments.name is used as the department label; if departments.name is not sufficiently unique, department.id or departments.code could be used instead upon request.\"]}},\"endedAt\":1771846070153},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\",\"AVG(grades.project_score)\"],\"dimensions\":[\"departments.name\"],\"filters\":[\"grades.exam_score IS NOT NULL OR grades.project_score IS NOT NULL\"],\"grain\":\"department\",\"aliases\":{\"departments.name\":\"department_name\",\"AVG(grades.exam_score)\":\"avg_exam_score\",\"AVG(grades.project_score)\":\"avg_project_score\",\"UNPIVOT(avg_exam_score -> 'Exam', avg_project_score -> 'Project')\":\"metric / avg_score (unpivoted)\"},\"output_fields\":[\"department_name\",\"metric\",\"avg_score\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"avg_score\",\"color_group\":\"metric\",\"title\":\"Average Exam vs Project Scores by Department\"},\"assumptions\":[\"Join path (confirmed from schema): grades.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id -> courses.department_id -> departments.id.\",\"There is at most one grades row per enrollment (grades.enrollment_id is unique) so no additional deduplication is needed.\",\"Averages are computed with SQL AVG(), which ignores NULLs (no additional filtering per-metric required). The provided global filter only excludes rows where both exam_score and project_score are NULL.\",\"Visualization expects an unpivoted result (one row per department × metric). The SQL should produce columns: department_name (departments.name), metric (literal 'Exam' or 'Project'), avg_score (the corresponding average).\",\"All semesters/years and all courses are included unless further filters are requested (no restriction to active enrollments or specific academic_year/semester).\",\"Scores are treated equally (not weighted by course credits or enrollment size beyond the natural averaging).\",\"departments.name is used as the department label; if departments.name is not sufficiently unique, department.id or departments.code could be used instead upon request.\"]}},\"startedAt\":1771846070162,\"status\":\"success\",\"output\":{\"question\":\"Compare average exam scores vs project scores by department\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\",\"AVG(grades.project_score)\"],\"dimensions\":[\"departments.name\"],\"filters\":[\"grades.exam_score IS NOT NULL OR grades.project_score IS NOT NULL\"],\"grain\":\"department\",\"aliases\":{\"departments.name\":\"department_name\",\"AVG(grades.exam_score)\":\"avg_exam_score\",\"AVG(grades.project_score)\":\"avg_project_score\",\"UNPIVOT(avg_exam_score -> 'Exam', avg_project_score -> 'Project')\":\"metric / avg_score (unpivoted)\"},\"output_fields\":[\"department_name\",\"metric\",\"avg_score\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"avg_score\",\"color_group\":\"metric\",\"title\":\"Average Exam vs Project Scores by Department\"},\"assumptions\":[\"Join path (confirmed from schema): grades.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id -> courses.department_id -> departments.id.\",\"There is at most one grades row per enrollment (grades.enrollment_id is unique) so no additional deduplication is needed.\",\"Averages are computed with SQL AVG(), which ignores NULLs (no additional filtering per-metric required). The provided global filter only excludes rows where both exam_score and project_score are NULL.\",\"Visualization expects an unpivoted result (one row per department × metric). The SQL should produce columns: department_name (departments.name), metric (literal 'Exam' or 'Project'), avg_score (the corresponding average).\",\"All semesters/years and all courses are included unless further filters are requested (no restriction to active enrollments or specific academic_year/semester).\",\"Scores are treated equally (not weighted by course credits or enrollment size beyond the natural averaging).\",\"departments.name is used as the department label; if departments.name is not sufficiently unique, department.id or departments.code could be used instead upon request.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771846070164},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"Compare average exam scores vs project scores by department\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\",\"AVG(grades.project_score)\"],\"dimensions\":[\"departments.name\"],\"filters\":[\"grades.exam_score IS NOT NULL OR grades.project_score IS NOT NULL\"],\"grain\":\"department\",\"aliases\":{\"departments.name\":\"department_name\",\"AVG(grades.exam_score)\":\"avg_exam_score\",\"AVG(grades.project_score)\":\"avg_project_score\",\"UNPIVOT(avg_exam_score -> 'Exam', avg_project_score -> 'Project')\":\"metric / avg_score (unpivoted)\"},\"output_fields\":[\"department_name\",\"metric\",\"avg_score\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"avg_score\",\"color_group\":\"metric\",\"title\":\"Average Exam vs Project Scores by Department\"},\"assumptions\":[\"Join path (confirmed from schema): grades.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id -> courses.department_id -> departments.id.\",\"There is at most one grades row per enrollment (grades.enrollment_id is unique) so no additional deduplication is needed.\",\"Averages are computed with SQL AVG(), which ignores NULLs (no additional filtering per-metric required). The provided global filter only excludes rows where both exam_score and project_score are NULL.\",\"Visualization expects an unpivoted result (one row per department × metric). The SQL should produce columns: department_name (departments.name), metric (literal 'Exam' or 'Project'), avg_score (the corresponding average).\",\"All semesters/years and all courses are included unless further filters are requested (no restriction to active enrollments or specific academic_year/semester).\",\"Scores are treated equally (not weighted by course credits or enrollment size beyond the natural averaging).\",\"departments.name is used as the department label; if departments.name is not sufficiently unique, department.id or departments.code could be used instead upon request.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771846070167,\"status\":\"success\",\"output\":{\"question\":\"Compare average exam scores vs project scores by department\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\",\"AVG(grades.project_score)\"],\"dimensions\":[\"departments.name\"],\"filters\":[\"grades.exam_score IS NOT NULL OR grades.project_score IS NOT NULL\"],\"grain\":\"department\",\"aliases\":{\"departments.name\":\"department_name\",\"AVG(grades.exam_score)\":\"avg_exam_score\",\"AVG(grades.project_score)\":\"avg_project_score\",\"UNPIVOT(avg_exam_score -> 'Exam', avg_project_score -> 'Project')\":\"metric / avg_score (unpivoted)\"},\"output_fields\":[\"department_name\",\"metric\",\"avg_score\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"avg_score\",\"color_group\":\"metric\",\"title\":\"Average Exam vs Project Scores by Department\"},\"assumptions\":[\"Join path (confirmed from schema): grades.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id -> courses.department_id -> departments.id.\",\"There is at most one grades row per enrollment (grades.enrollment_id is unique) so no additional deduplication is needed.\",\"Averages are computed with SQL AVG(), which ignores NULLs (no additional filtering per-metric required). The provided global filter only excludes rows where both exam_score and project_score are NULL.\",\"Visualization expects an unpivoted result (one row per department × metric). The SQL should produce columns: department_name (departments.name), metric (literal 'Exam' or 'Project'), avg_score (the corresponding average).\",\"All semesters/years and all courses are included unless further filters are requested (no restriction to active enrollments or specific academic_year/semester).\",\"Scores are treated equally (not weighted by course credits or enrollment size beyond the natural averaging).\",\"departments.name is used as the department label; if departments.name is not sufficiently unique, department.id or departments.code could be used instead upon request.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"WITH dept_avgs AS (\\n  SELECT d.name AS department_name,\\n         AVG(g.exam_score) AS avg_exam_score,\\n         AVG(g.project_score) AS avg_project_score\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.courses c ON cs.course_id = c.id\\n  JOIN public.departments d ON c.department_id = d.id\\n  WHERE g.exam_score IS NOT NULL OR g.project_score IS NOT NULL\\n  GROUP BY d.name\\n)\\nSELECT department_name, 'Exam' AS metric, avg_exam_score AS avg_score\\nFROM dept_avgs\\nUNION ALL\\nSELECT department_name, 'Project' AS metric, avg_project_score AS avg_score\\nFROM dept_avgs\\nORDER BY department_name ASC, metric ASC;\",\"validationIssues\":[\"Some departments may have NULL for one metric if no exam or project scores exist there; the query leaves avg_score NULL for that metric so the bar will be absent—consider COALESCE or filtering if you want explicit zeros.\",\"The y-axis scale is fixed to domain [0,100]; if your score range differs this could clip or underrepresent the data—consider using an automatic domain or confirming the 0–100 assumption.\",\"Long department names may overlap despite labelAngle -40; consider truncation or wrapping if readability is an issue.\",\"Averages are unweighted (simple AVG). If you intended to weight by enrollment size or course credit, the SQL would need to change—current behavior matches the stated assumptions.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Aggregates exam and project averages per department using confirmed join path, then unpivots results to one row per department × metric. Filters out grade rows where both scores are NULL as requested. Results ordered deterministically by department_name and metric.\",\"sql\":\"WITH dept_avgs AS (\\n  SELECT d.name AS department_name,\\n         AVG(g.exam_score) AS avg_exam_score,\\n         AVG(g.project_score) AS avg_project_score\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.courses c ON cs.course_id = c.id\\n  JOIN public.departments d ON c.department_id = d.id\\n  WHERE g.exam_score IS NOT NULL OR g.project_score IS NOT NULL\\n  GROUP BY d.name\\n)\\nSELECT department_name, 'Exam' AS metric, avg_exam_score AS avg_score\\nFROM dept_avgs\\nUNION ALL\\nSELECT department_name, 'Project' AS metric, avg_project_score AS avg_score\\nFROM dept_avgs\\nORDER BY department_name ASC, metric ASC;\",\"assumptions\":[\"All referenced tables exist in schema public (confirmed).\",\"Join path confirmed: grades.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id -> courses.department_id -> departments.id.\",\"grades.enrollment_id is unique (one grades row per enrollment) so no additional deduplication was needed.\",\"AVG() ignores NULLs, so per-metric averages will be NULL if no non-NULL values exist for that metric in a department.\"]},\"execution\":{\"ok\":true,\"sql\":\"WITH dept_avgs AS (\\n  SELECT d.name AS department_name,\\n         AVG(g.exam_score) AS avg_exam_score,\\n         AVG(g.project_score) AS avg_project_score\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.courses c ON cs.course_id = c.id\\n  JOIN public.departments d ON c.department_id = d.id\\n  WHERE g.exam_score IS NOT NULL OR g.project_score IS NOT NULL\\n  GROUP BY d.name\\n)\\nSELECT department_name, 'Exam' AS metric, avg_exam_score AS avg_score\\nFROM dept_avgs\\nUNION ALL\\nSELECT department_name, 'Project' AS metric, avg_project_score AS avg_score\\nFROM dept_avgs\\nORDER BY department_name ASC, metric ASC\",\"metadata\":{\"columns\":[\"metric\",\"avg_score\",\"department_name\"],\"rowCount\":12,\"sample\":[{\"metric\":\"Exam\",\"avg_score\":45.96714285714286,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"metric\":\"Project\",\"avg_score\":60.59166666666667,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"}]},\"data\":[{\"metric\":\"Exam\",\"avg_score\":45.96714285714286,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"metric\":\"Project\",\"avg_score\":60.59166666666667,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"metric\":\"Exam\",\"avg_score\":37.4,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"},{\"metric\":\"Project\",\"avg_score\":29.6,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"},{\"metric\":\"Exam\",\"avg_score\":53.99125,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"metric\":\"Project\",\"avg_score\":47.96625,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"metric\":\"Exam\",\"avg_score\":34.6025,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"metric\":\"Project\",\"avg_score\":44.95777777777778,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"metric\":\"Exam\",\"avg_score\":60.002,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"metric\":\"Project\",\"avg_score\":41.77466666666667,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"metric\":\"Exam\",\"avg_score\":42.73,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"metric\":\"Project\",\"avg_score\":60.17666666666667,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Exam vs Project Scores by Department\",\"width\":800,\"height\":420,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\",\"labelAngle\":-40,\"labelLimit\":300}},\"xOffset\":{\"field\":\"metric\",\"type\":\"nominal\"},\"y\":{\"field\":\"avg_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Score\"},\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"metric\",\"type\":\"nominal\",\"legend\":{\"title\":\"Metric\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"metric\",\"type\":\"nominal\",\"title\":\"Metric\"},{\"field\":\"avg_score\",\"type\":\"quantitative\",\"title\":\"Average Score\",\"format\":\".2f\"}]}},\"reasoning\":\"Grouped bar chart: departments on the x-axis with grouped bars (xOffset by metric) showing avg_score for Exam vs Project. Tooltip shows department, metric and the average (formatted). Y domain set to 0–100 assuming score percentages; adjust if scores use a different scale.\"},\"validation\":{\"passed\":true,\"score\":0.7,\"issues\":[\"Some departments may have NULL for one metric if no exam or project scores exist there; the query leaves avg_score NULL for that metric so the bar will be absent—consider COALESCE or filtering if you want explicit zeros.\",\"The y-axis scale is fixed to domain [0,100]; if your score range differs this could clip or underrepresent the data—consider using an automatic domain or confirming the 0–100 assumption.\",\"Long department names may overlap despite labelAngle -40; consider truncation or wrapping if readability is an issue.\",\"Averages are unweighted (simple AVG). If you intended to weight by enrollment size or course credit, the SQL would need to change—current behavior matches the stated assumptions.\"]}}},\"endedAt\":1771846127187,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"Compare average exam scores vs project scores by department\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(grades.exam_score)\",\"AVG(grades.project_score)\"],\"dimensions\":[\"departments.name\"],\"filters\":[\"grades.exam_score IS NOT NULL OR grades.project_score IS NOT NULL\"],\"grain\":\"department\",\"aliases\":{\"departments.name\":\"department_name\",\"AVG(grades.exam_score)\":\"avg_exam_score\",\"AVG(grades.project_score)\":\"avg_project_score\",\"UNPIVOT(avg_exam_score -> 'Exam', avg_project_score -> 'Project')\":\"metric / avg_score (unpivoted)\"},\"output_fields\":[\"department_name\",\"metric\",\"avg_score\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"department_name\",\"y_axis\":\"avg_score\",\"color_group\":\"metric\",\"title\":\"Average Exam vs Project Scores by Department\"},\"assumptions\":[\"Join path (confirmed from schema): grades.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id -> courses.department_id -> departments.id.\",\"There is at most one grades row per enrollment (grades.enrollment_id is unique) so no additional deduplication is needed.\",\"Averages are computed with SQL AVG(), which ignores NULLs (no additional filtering per-metric required). The provided global filter only excludes rows where both exam_score and project_score are NULL.\",\"Visualization expects an unpivoted result (one row per department × metric). The SQL should produce columns: department_name (departments.name), metric (literal 'Exam' or 'Project'), avg_score (the corresponding average).\",\"All semesters/years and all courses are included unless further filters are requested (no restriction to active enrollments or specific academic_year/semester).\",\"Scores are treated equally (not weighted by course credits or enrollment size beyond the natural averaging).\",\"departments.name is used as the department label; if departments.name is not sufficiently unique, department.id or departments.code could be used instead upon request.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"WITH dept_avgs AS (\\n  SELECT d.name AS department_name,\\n         AVG(g.exam_score) AS avg_exam_score,\\n         AVG(g.project_score) AS avg_project_score\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.courses c ON cs.course_id = c.id\\n  JOIN public.departments d ON c.department_id = d.id\\n  WHERE g.exam_score IS NOT NULL OR g.project_score IS NOT NULL\\n  GROUP BY d.name\\n)\\nSELECT department_name, 'Exam' AS metric, avg_exam_score AS avg_score\\nFROM dept_avgs\\nUNION ALL\\nSELECT department_name, 'Project' AS metric, avg_project_score AS avg_score\\nFROM dept_avgs\\nORDER BY department_name ASC, metric ASC;\",\"validationIssues\":[\"Some departments may have NULL for one metric if no exam or project scores exist there; the query leaves avg_score NULL for that metric so the bar will be absent—consider COALESCE or filtering if you want explicit zeros.\",\"The y-axis scale is fixed to domain [0,100]; if your score range differs this could clip or underrepresent the data—consider using an automatic domain or confirming the 0–100 assumption.\",\"Long department names may overlap despite labelAngle -40; consider truncation or wrapping if readability is an issue.\",\"Averages are unweighted (simple AVG). If you intended to weight by enrollment size or course credit, the SQL would need to change—current behavior matches the stated assumptions.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Aggregates exam and project averages per department using confirmed join path, then unpivots results to one row per department × metric. Filters out grade rows where both scores are NULL as requested. Results ordered deterministically by department_name and metric.\",\"sql\":\"WITH dept_avgs AS (\\n  SELECT d.name AS department_name,\\n         AVG(g.exam_score) AS avg_exam_score,\\n         AVG(g.project_score) AS avg_project_score\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.courses c ON cs.course_id = c.id\\n  JOIN public.departments d ON c.department_id = d.id\\n  WHERE g.exam_score IS NOT NULL OR g.project_score IS NOT NULL\\n  GROUP BY d.name\\n)\\nSELECT department_name, 'Exam' AS metric, avg_exam_score AS avg_score\\nFROM dept_avgs\\nUNION ALL\\nSELECT department_name, 'Project' AS metric, avg_project_score AS avg_score\\nFROM dept_avgs\\nORDER BY department_name ASC, metric ASC;\",\"assumptions\":[\"All referenced tables exist in schema public (confirmed).\",\"Join path confirmed: grades.enrollment_id -> enrollments.id -> enrollments.course_section_id -> course_sections.id -> course_sections.course_id -> courses.id -> courses.department_id -> departments.id.\",\"grades.enrollment_id is unique (one grades row per enrollment) so no additional deduplication was needed.\",\"AVG() ignores NULLs, so per-metric averages will be NULL if no non-NULL values exist for that metric in a department.\"]},\"execution\":{\"ok\":true,\"sql\":\"WITH dept_avgs AS (\\n  SELECT d.name AS department_name,\\n         AVG(g.exam_score) AS avg_exam_score,\\n         AVG(g.project_score) AS avg_project_score\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.courses c ON cs.course_id = c.id\\n  JOIN public.departments d ON c.department_id = d.id\\n  WHERE g.exam_score IS NOT NULL OR g.project_score IS NOT NULL\\n  GROUP BY d.name\\n)\\nSELECT department_name, 'Exam' AS metric, avg_exam_score AS avg_score\\nFROM dept_avgs\\nUNION ALL\\nSELECT department_name, 'Project' AS metric, avg_project_score AS avg_score\\nFROM dept_avgs\\nORDER BY department_name ASC, metric ASC\",\"metadata\":{\"columns\":[\"metric\",\"avg_score\",\"department_name\"],\"rowCount\":12,\"sample\":[{\"metric\":\"Exam\",\"avg_score\":45.96714285714286,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"metric\":\"Project\",\"avg_score\":60.59166666666667,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"}]},\"data\":[{\"metric\":\"Exam\",\"avg_score\":45.96714285714286,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"metric\":\"Project\",\"avg_score\":60.59166666666667,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"metric\":\"Exam\",\"avg_score\":37.4,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"},{\"metric\":\"Project\",\"avg_score\":29.6,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"},{\"metric\":\"Exam\",\"avg_score\":53.99125,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"metric\":\"Project\",\"avg_score\":47.96625,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"metric\":\"Exam\",\"avg_score\":34.6025,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"metric\":\"Project\",\"avg_score\":44.95777777777778,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"metric\":\"Exam\",\"avg_score\":60.002,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"metric\":\"Project\",\"avg_score\":41.77466666666667,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"metric\":\"Exam\",\"avg_score\":42.73,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"metric\":\"Project\",\"avg_score\":60.17666666666667,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Exam vs Project Scores by Department\",\"width\":800,\"height\":420,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\",\"labelAngle\":-40,\"labelLimit\":300}},\"xOffset\":{\"field\":\"metric\",\"type\":\"nominal\"},\"y\":{\"field\":\"avg_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Score\"},\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"metric\",\"type\":\"nominal\",\"legend\":{\"title\":\"Metric\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"metric\",\"type\":\"nominal\",\"title\":\"Metric\"},{\"field\":\"avg_score\",\"type\":\"quantitative\",\"title\":\"Average Score\",\"format\":\".2f\"}]}},\"reasoning\":\"Grouped bar chart: departments on the x-axis with grouped bars (xOffset by metric) showing avg_score for Exam vs Project. Tooltip shows department, metric and the average (formatted). Y domain set to 0–100 assuming score percentages; adjust if scores use a different scale.\"},\"validation\":{\"passed\":true,\"score\":0.7,\"issues\":[\"Some departments may have NULL for one metric if no exam or project scores exist there; the query leaves avg_score NULL for that metric so the bar will be absent—consider COALESCE or filtering if you want explicit zeros.\",\"The y-axis scale is fixed to domain [0,100]; if your score range differs this could clip or underrepresent the data—consider using an automatic domain or confirming the 0–100 assumption.\",\"Long department names may overlap despite labelAngle -40; consider truncation or wrapping if readability is an issue.\",\"Averages are unweighted (simple AVG). If you intended to weight by enrollment size or course credit, the SQL would need to change—current behavior matches the stated assumptions.\"]}}},\"startedAt\":1771846127190,\"status\":\"success\",\"output\":{\"sql\":\"WITH dept_avgs AS (\\n  SELECT d.name AS department_name,\\n         AVG(g.exam_score) AS avg_exam_score,\\n         AVG(g.project_score) AS avg_project_score\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.courses c ON cs.course_id = c.id\\n  JOIN public.departments d ON c.department_id = d.id\\n  WHERE g.exam_score IS NOT NULL OR g.project_score IS NOT NULL\\n  GROUP BY d.name\\n)\\nSELECT department_name, 'Exam' AS metric, avg_exam_score AS avg_score\\nFROM dept_avgs\\nUNION ALL\\nSELECT department_name, 'Project' AS metric, avg_project_score AS avg_score\\nFROM dept_avgs\\nORDER BY department_name ASC, metric ASC;\",\"data\":[{\"metric\":\"Exam\",\"avg_score\":45.96714285714286,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"metric\":\"Project\",\"avg_score\":60.59166666666667,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"metric\":\"Exam\",\"avg_score\":37.4,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"},{\"metric\":\"Project\",\"avg_score\":29.6,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"},{\"metric\":\"Exam\",\"avg_score\":53.99125,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"metric\":\"Project\",\"avg_score\":47.96625,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"metric\":\"Exam\",\"avg_score\":34.6025,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"metric\":\"Project\",\"avg_score\":44.95777777777778,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"metric\":\"Exam\",\"avg_score\":60.002,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"metric\":\"Project\",\"avg_score\":41.77466666666667,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"metric\":\"Exam\",\"avg_score\":42.73,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"metric\":\"Project\",\"avg_score\":60.17666666666667,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"}],\"metadata\":{\"columns\":[\"metric\",\"avg_score\",\"department_name\"],\"rowCount\":12,\"sample\":[{\"metric\":\"Exam\",\"avg_score\":45.96714285714286,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"metric\":\"Project\",\"avg_score\":60.59166666666667,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Exam vs Project Scores by Department\",\"width\":800,\"height\":420,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\",\"labelAngle\":-40,\"labelLimit\":300}},\"xOffset\":{\"field\":\"metric\",\"type\":\"nominal\"},\"y\":{\"field\":\"avg_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Score\"},\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"metric\",\"type\":\"nominal\",\"legend\":{\"title\":\"Metric\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"metric\",\"type\":\"nominal\",\"title\":\"Metric\"},{\"field\":\"avg_score\",\"type\":\"quantitative\",\"title\":\"Average Score\",\"format\":\".2f\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.7,\"issues\":[\"Some departments may have NULL for one metric if no exam or project scores exist there; the query leaves avg_score NULL for that metric so the bar will be absent—consider COALESCE or filtering if you want explicit zeros.\",\"The y-axis scale is fixed to domain [0,100]; if your score range differs this could clip or underrepresent the data—consider using an automatic domain or confirming the 0–100 assumption.\",\"Long department names may overlap despite labelAngle -40; consider truncation or wrapping if readability is an issue.\",\"Averages are unweighted (simple AVG). If you intended to weight by enrollment size or course credit, the SQL would need to change—current behavior matches the stated assumptions.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771846127194}},\"input\":{\"question\":\"Compare average exam scores vs project scores by department\"},\"result\":{\"sql\":\"WITH dept_avgs AS (\\n  SELECT d.name AS department_name,\\n         AVG(g.exam_score) AS avg_exam_score,\\n         AVG(g.project_score) AS avg_project_score\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.courses c ON cs.course_id = c.id\\n  JOIN public.departments d ON c.department_id = d.id\\n  WHERE g.exam_score IS NOT NULL OR g.project_score IS NOT NULL\\n  GROUP BY d.name\\n)\\nSELECT department_name, 'Exam' AS metric, avg_exam_score AS avg_score\\nFROM dept_avgs\\nUNION ALL\\nSELECT department_name, 'Project' AS metric, avg_project_score AS avg_score\\nFROM dept_avgs\\nORDER BY department_name ASC, metric ASC;\",\"data\":[{\"metric\":\"Exam\",\"avg_score\":45.96714285714286,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"metric\":\"Project\",\"avg_score\":60.59166666666667,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"metric\":\"Exam\",\"avg_score\":37.4,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"},{\"metric\":\"Project\",\"avg_score\":29.6,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\"},{\"metric\":\"Exam\",\"avg_score\":53.99125,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"metric\":\"Project\",\"avg_score\":47.96625,\"department_name\":\"Wydział Inżynierii Biomedycznej\"},{\"metric\":\"Exam\",\"avg_score\":34.6025,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"metric\":\"Project\",\"avg_score\":44.95777777777778,\"department_name\":\"Wydział Inżynierii Produkcji\"},{\"metric\":\"Exam\",\"avg_score\":60.002,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"metric\":\"Project\",\"avg_score\":41.77466666666667,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\"},{\"metric\":\"Exam\",\"avg_score\":42.73,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"},{\"metric\":\"Project\",\"avg_score\":60.17666666666667,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\"}],\"metadata\":{\"columns\":[\"metric\",\"avg_score\",\"department_name\"],\"rowCount\":12,\"sample\":[{\"metric\":\"Exam\",\"avg_score\":45.96714285714286,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"},{\"metric\":\"Project\",\"avg_score\":60.59166666666667,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Exam vs Project Scores by Department\",\"width\":800,\"height\":420,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Department\",\"labelAngle\":-40,\"labelLimit\":300}},\"xOffset\":{\"field\":\"metric\",\"type\":\"nominal\"},\"y\":{\"field\":\"avg_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Score\"},\"scale\":{\"domain\":[0,100]}},\"color\":{\"field\":\"metric\",\"type\":\"nominal\",\"legend\":{\"title\":\"Metric\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"metric\",\"type\":\"nominal\",\"title\":\"Metric\"},{\"field\":\"avg_score\",\"type\":\"quantitative\",\"title\":\"Average Score\",\"format\":\".2f\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.7,\"issues\":[\"Some departments may have NULL for one metric if no exam or project scores exist there; the query leaves avg_score NULL for that metric so the bar will be absent—consider COALESCE or filtering if you want explicit zeros.\",\"The y-axis scale is fixed to domain [0,100]; if your score range differs this could clip or underrepresent the data—consider using an automatic domain or confirming the 0–100 assumption.\",\"Long department names may overlap despite labelAngle -40; consider truncation or wrapping if readability is an issue.\",\"Averages are unweighted (simple AVG). If you intended to weight by enrollment size or course credit, the SQL would need to change—current behavior matches the stated assumptions.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"f9d8761b2f1ced0f57df4ab9892b2e0d\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/exam-vs-project-score-avg/run-0001/run.json",
+    "queryPath": "runs/exam-vs-project-score-avg/run-0001/query.sql",
+    "vegaRawPath": "runs/exam-vs-project-score-avg/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/exam-vs-project-score-avg/run-0001/vega.resolved.json",
+    "imagePath": "runs/exam-vs-project-score-avg/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:28:47.653Z",
+  "traceId": "f9d8761b2f1ced0f57df4ab9892b2e0d",
+  "success": true,
+  "durationMs": 114044,
+  "resultRaw": {
+    "data": [
+      {
+        "metric": "Exam",
+        "avg_score": 45.96714285714286,
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+      },
+      {
+        "metric": "Project",
+        "avg_score": 60.59166666666667,
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+      },
+      {
+        "metric": "Exam",
+        "avg_score": 37.4,
+        "department_name": "Wydział Informatyki i Nauki o Materiałach"
+      },
+      {
+        "metric": "Project",
+        "avg_score": 29.6,
+        "department_name": "Wydział Informatyki i Nauki o Materiałach"
+      },
+      {
+        "metric": "Exam",
+        "avg_score": 53.99125,
+        "department_name": "Wydział Inżynierii Biomedycznej"
+      },
+      {
+        "metric": "Project",
+        "avg_score": 47.96625,
+        "department_name": "Wydział Inżynierii Biomedycznej"
+      },
+      {
+        "metric": "Exam",
+        "avg_score": 34.6025,
+        "department_name": "Wydział Inżynierii Produkcji"
+      },
+      {
+        "metric": "Project",
+        "avg_score": 44.95777777777778,
+        "department_name": "Wydział Inżynierii Produkcji"
+      },
+      {
+        "metric": "Exam",
+        "avg_score": 60.002,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+      },
+      {
+        "metric": "Project",
+        "avg_score": 41.77466666666667,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+      },
+      {
+        "metric": "Exam",
+        "avg_score": 42.73,
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej"
+      },
+      {
+        "metric": "Project",
+        "avg_score": 60.17666666666667,
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Exam vs Project Scores by Department",
+      "width": 800,
+      "height": 420,
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "department_name",
+          "type": "nominal",
+          "axis": {
+            "title": "Department",
+            "labelAngle": -40,
+            "labelLimit": 300
+          }
+        },
+        "xOffset": {
+          "field": "metric",
+          "type": "nominal"
+        },
+        "y": {
+          "field": "avg_score",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average Score"
+          },
+          "scale": {
+            "domain": [
+              0,
+              100
+            ]
+          }
+        },
+        "color": {
+          "field": "metric",
+          "type": "nominal",
+          "legend": {
+            "title": "Metric"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "metric",
+            "type": "nominal",
+            "title": "Metric"
+          },
+          {
+            "field": "avg_score",
+            "type": "quantitative",
+            "title": "Average Score",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    "sql": "WITH dept_avgs AS (\n  SELECT d.name AS department_name,\n         AVG(g.exam_score) AS avg_exam_score,\n         AVG(g.project_score) AS avg_project_score\n  FROM public.grades g\n  JOIN public.enrollments e ON g.enrollment_id = e.id\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\n  JOIN public.courses c ON cs.course_id = c.id\n  JOIN public.departments d ON c.department_id = d.id\n  WHERE g.exam_score IS NOT NULL OR g.project_score IS NOT NULL\n  GROUP BY d.name\n)\nSELECT department_name, 'Exam' AS metric, avg_exam_score AS avg_score\nFROM dept_avgs\nUNION ALL\nSELECT department_name, 'Project' AS metric, avg_project_score AS avg_score\nFROM dept_avgs\nORDER BY department_name ASC, metric ASC;",
+    "metadata": {
+      "columns": [
+        "metric",
+        "avg_score",
+        "department_name"
+      ],
+      "rowCount": 12,
+      "sample": [
+        {
+          "metric": "Exam",
+          "avg_score": 45.96714285714286,
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+        },
+        {
+          "metric": "Project",
+          "avg_score": 60.59166666666667,
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.7,
+      "issues": [
+        "Some departments may have NULL for one metric if no exam or project scores exist there; the query leaves avg_score NULL for that metric so the bar will be absent—consider COALESCE or filtering if you want explicit zeros.",
+        "The y-axis scale is fixed to domain [0,100]; if your score range differs this could clip or underrepresent the data—consider using an automatic domain or confirming the 0–100 assumption.",
+        "Long department names may overlap despite labelAngle -40; consider truncation or wrapping if readability is an issue.",
+        "Averages are unweighted (simple AVG). If you intended to weight by enrollment size or course credit, the SQL would need to change—current behavior matches the stated assumptions."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "metric": "Exam",
+        "avg_score": 45.96714285714286,
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+      },
+      {
+        "metric": "Project",
+        "avg_score": 60.59166666666667,
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+      },
+      {
+        "metric": "Exam",
+        "avg_score": 37.4,
+        "department_name": "Wydział Informatyki i Nauki o Materiałach"
+      },
+      {
+        "metric": "Project",
+        "avg_score": 29.6,
+        "department_name": "Wydział Informatyki i Nauki o Materiałach"
+      },
+      {
+        "metric": "Exam",
+        "avg_score": 53.99125,
+        "department_name": "Wydział Inżynierii Biomedycznej"
+      },
+      {
+        "metric": "Project",
+        "avg_score": 47.96625,
+        "department_name": "Wydział Inżynierii Biomedycznej"
+      },
+      {
+        "metric": "Exam",
+        "avg_score": 34.6025,
+        "department_name": "Wydział Inżynierii Produkcji"
+      },
+      {
+        "metric": "Project",
+        "avg_score": 44.95777777777778,
+        "department_name": "Wydział Inżynierii Produkcji"
+      },
+      {
+        "metric": "Exam",
+        "avg_score": 60.002,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+      },
+      {
+        "metric": "Project",
+        "avg_score": 41.77466666666667,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej"
+      },
+      {
+        "metric": "Exam",
+        "avg_score": 42.73,
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej"
+      },
+      {
+        "metric": "Project",
+        "avg_score": 60.17666666666667,
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Exam vs Project Scores by Department",
+      "width": 800,
+      "height": 420,
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "department_name",
+          "type": "nominal",
+          "axis": {
+            "title": "Department",
+            "labelAngle": -40,
+            "labelLimit": 300
+          }
+        },
+        "xOffset": {
+          "field": "metric",
+          "type": "nominal"
+        },
+        "y": {
+          "field": "avg_score",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average Score"
+          },
+          "scale": {
+            "domain": [
+              0,
+              100
+            ]
+          }
+        },
+        "color": {
+          "field": "metric",
+          "type": "nominal",
+          "legend": {
+            "title": "Metric"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "metric",
+            "type": "nominal",
+            "title": "Metric"
+          },
+          {
+            "field": "avg_score",
+            "type": "quantitative",
+            "title": "Average Score",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    "sql": "WITH dept_avgs AS (\n  SELECT d.name AS department_name,\n         AVG(g.exam_score) AS avg_exam_score,\n         AVG(g.project_score) AS avg_project_score\n  FROM public.grades g\n  JOIN public.enrollments e ON g.enrollment_id = e.id\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\n  JOIN public.courses c ON cs.course_id = c.id\n  JOIN public.departments d ON c.department_id = d.id\n  WHERE g.exam_score IS NOT NULL OR g.project_score IS NOT NULL\n  GROUP BY d.name\n)\nSELECT department_name, 'Exam' AS metric, avg_exam_score AS avg_score\nFROM dept_avgs\nUNION ALL\nSELECT department_name, 'Project' AS metric, avg_project_score AS avg_score\nFROM dept_avgs\nORDER BY department_name ASC, metric ASC;",
+    "metadata": {
+      "columns": [
+        "metric",
+        "avg_score",
+        "department_name"
+      ],
+      "rowCount": 12,
+      "sample": [
+        {
+          "metric": "Exam",
+          "avg_score": 45.96714285714286,
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+        },
+        {
+          "metric": "Project",
+          "avg_score": 60.59166666666667,
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.7,
+      "issues": [
+        "Some departments may have NULL for one metric if no exam or project scores exist there; the query leaves avg_score NULL for that metric so the bar will be absent—consider COALESCE or filtering if you want explicit zeros.",
+        "The y-axis scale is fixed to domain [0,100]; if your score range differs this could clip or underrepresent the data—consider using an automatic domain or confirming the 0–100 assumption.",
+        "Long department names may overlap despite labelAngle -40; consider truncation or wrapping if readability is an issue.",
+        "Averages are unweighted (simple AVG). If you intended to weight by enrollment size or course credit, the SQL would need to change—current behavior matches the stated assumptions."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:28:47.653Z",
+    "traceId": "f9d8761b2f1ced0f57df4ab9892b2e0d",
+    "attempts": 6,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 46527,
+      "outputTokens": 6944,
+      "totalTokens": 53471,
+      "cachedInputTokens": 1280,
+      "reasoningTokens": 4672,
+      "costUsd": 0.02551975
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 46527,
+        "outputTokens": 6944,
+        "totalTokens": 53471,
+        "cachedInputTokens": 1280,
+        "reasoningTokens": 4672,
+        "costUsd": 0.02551975
+      }
+    ],
+    "warnings": []
+  }
+}

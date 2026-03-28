@@ -1,0 +1,578 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "courses-with-prerequisites",
+  "caseDirectory": "courses-with-prerequisites",
+  "repeatIndex": 1,
+  "prompt": "Which courses have the most prerequisites?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which courses have the most prerequisites?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:15:55.512Z",
+    "endedAtUtc": "2026-02-23T11:17:16.342Z",
+    "durationMs": 80830
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "36118",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:17:16 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Which courses have the most prerequisites?\"},\"planner\":{\"payload\":{\"question\":\"Which courses have the most prerequisites?\"},\"startedAt\":1771845355524,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(prerequisites.prerequisite_course_id)\"],\"dimensions\":[\"courses.id\",\"courses.code\",\"courses.name\"],\"filters\":[\"No WHERE filters — include both mandatory and optional prerequisites\",\"Join rule: prerequisites.course_id = courses.id (use LEFT JOIN to include courses with zero prerequisites)\"],\"grain\":\"one row per course\",\"aliases\":{\"courses.id\":\"course_id\",\"courses.code\":\"course_code\",\"courses.name\":\"course_name\",\"COUNT(prerequisites.prerequisite_course_id)\":\"prereq_count\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"prereq_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_code\",\"y_axis\":\"prereq_count\",\"title\":\"Number of prerequisites per course\"},\"assumptions\":[\"Use the public.courses and public.prerequisites tables discovered during preflight.\",\"Count all prerequisite rows for a course (both mandatory and optional). The prerequisites table has a unique index on (course_id, prerequisite_course_id), so COUNT(prerequisites.prerequisite_course_id) equals distinct prerequisite courses per course.\",\"Include courses that have zero prerequisites by using a LEFT JOIN from courses to prerequisites.\",\"No additional filters (e.g., by department or course_type) were requested; the result returns all courses.\",\"If the requester wants only the top N courses, or to restrict to mandatory prerequisites only (is_mandatory = true), that is a different query — this plan returns counts for all courses so the client can sort or limit as needed.\",\"Output field aliases listed in output_fields are the exact column names expected from the SQL.\"]}},\"endedAt\":1771845386778},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(prerequisites.prerequisite_course_id)\"],\"dimensions\":[\"courses.id\",\"courses.code\",\"courses.name\"],\"filters\":[\"No WHERE filters — include both mandatory and optional prerequisites\",\"Join rule: prerequisites.course_id = courses.id (use LEFT JOIN to include courses with zero prerequisites)\"],\"grain\":\"one row per course\",\"aliases\":{\"courses.id\":\"course_id\",\"courses.code\":\"course_code\",\"courses.name\":\"course_name\",\"COUNT(prerequisites.prerequisite_course_id)\":\"prereq_count\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"prereq_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_code\",\"y_axis\":\"prereq_count\",\"title\":\"Number of prerequisites per course\"},\"assumptions\":[\"Use the public.courses and public.prerequisites tables discovered during preflight.\",\"Count all prerequisite rows for a course (both mandatory and optional). The prerequisites table has a unique index on (course_id, prerequisite_course_id), so COUNT(prerequisites.prerequisite_course_id) equals distinct prerequisite courses per course.\",\"Include courses that have zero prerequisites by using a LEFT JOIN from courses to prerequisites.\",\"No additional filters (e.g., by department or course_type) were requested; the result returns all courses.\",\"If the requester wants only the top N courses, or to restrict to mandatory prerequisites only (is_mandatory = true), that is a different query — this plan returns counts for all courses so the client can sort or limit as needed.\",\"Output field aliases listed in output_fields are the exact column names expected from the SQL.\"]}},\"startedAt\":1771845386788,\"status\":\"success\",\"output\":{\"question\":\"Which courses have the most prerequisites?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(prerequisites.prerequisite_course_id)\"],\"dimensions\":[\"courses.id\",\"courses.code\",\"courses.name\"],\"filters\":[\"No WHERE filters — include both mandatory and optional prerequisites\",\"Join rule: prerequisites.course_id = courses.id (use LEFT JOIN to include courses with zero prerequisites)\"],\"grain\":\"one row per course\",\"aliases\":{\"courses.id\":\"course_id\",\"courses.code\":\"course_code\",\"courses.name\":\"course_name\",\"COUNT(prerequisites.prerequisite_course_id)\":\"prereq_count\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"prereq_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_code\",\"y_axis\":\"prereq_count\",\"title\":\"Number of prerequisites per course\"},\"assumptions\":[\"Use the public.courses and public.prerequisites tables discovered during preflight.\",\"Count all prerequisite rows for a course (both mandatory and optional). The prerequisites table has a unique index on (course_id, prerequisite_course_id), so COUNT(prerequisites.prerequisite_course_id) equals distinct prerequisite courses per course.\",\"Include courses that have zero prerequisites by using a LEFT JOIN from courses to prerequisites.\",\"No additional filters (e.g., by department or course_type) were requested; the result returns all courses.\",\"If the requester wants only the top N courses, or to restrict to mandatory prerequisites only (is_mandatory = true), that is a different query — this plan returns counts for all courses so the client can sort or limit as needed.\",\"Output field aliases listed in output_fields are the exact column names expected from the SQL.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771845386792},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"Which courses have the most prerequisites?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(prerequisites.prerequisite_course_id)\"],\"dimensions\":[\"courses.id\",\"courses.code\",\"courses.name\"],\"filters\":[\"No WHERE filters — include both mandatory and optional prerequisites\",\"Join rule: prerequisites.course_id = courses.id (use LEFT JOIN to include courses with zero prerequisites)\"],\"grain\":\"one row per course\",\"aliases\":{\"courses.id\":\"course_id\",\"courses.code\":\"course_code\",\"courses.name\":\"course_name\",\"COUNT(prerequisites.prerequisite_course_id)\":\"prereq_count\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"prereq_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_code\",\"y_axis\":\"prereq_count\",\"title\":\"Number of prerequisites per course\"},\"assumptions\":[\"Use the public.courses and public.prerequisites tables discovered during preflight.\",\"Count all prerequisite rows for a course (both mandatory and optional). The prerequisites table has a unique index on (course_id, prerequisite_course_id), so COUNT(prerequisites.prerequisite_course_id) equals distinct prerequisite courses per course.\",\"Include courses that have zero prerequisites by using a LEFT JOIN from courses to prerequisites.\",\"No additional filters (e.g., by department or course_type) were requested; the result returns all courses.\",\"If the requester wants only the top N courses, or to restrict to mandatory prerequisites only (is_mandatory = true), that is a different query — this plan returns counts for all courses so the client can sort or limit as needed.\",\"Output field aliases listed in output_fields are the exact column names expected from the SQL.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771845386795,\"status\":\"success\",\"output\":{\"question\":\"Which courses have the most prerequisites?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(prerequisites.prerequisite_course_id)\"],\"dimensions\":[\"courses.id\",\"courses.code\",\"courses.name\"],\"filters\":[\"No WHERE filters — include both mandatory and optional prerequisites\",\"Join rule: prerequisites.course_id = courses.id (use LEFT JOIN to include courses with zero prerequisites)\"],\"grain\":\"one row per course\",\"aliases\":{\"courses.id\":\"course_id\",\"courses.code\":\"course_code\",\"courses.name\":\"course_name\",\"COUNT(prerequisites.prerequisite_course_id)\":\"prereq_count\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"prereq_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_code\",\"y_axis\":\"prereq_count\",\"title\":\"Number of prerequisites per course\"},\"assumptions\":[\"Use the public.courses and public.prerequisites tables discovered during preflight.\",\"Count all prerequisite rows for a course (both mandatory and optional). The prerequisites table has a unique index on (course_id, prerequisite_course_id), so COUNT(prerequisites.prerequisite_course_id) equals distinct prerequisite courses per course.\",\"Include courses that have zero prerequisites by using a LEFT JOIN from courses to prerequisites.\",\"No additional filters (e.g., by department or course_type) were requested; the result returns all courses.\",\"If the requester wants only the top N courses, or to restrict to mandatory prerequisites only (is_mandatory = true), that is a different query — this plan returns counts for all courses so the client can sort or limit as needed.\",\"Output field aliases listed in output_fields are the exact column names expected from the SQL.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(p.prerequisite_course_id) AS prereq_count\\nFROM public.courses AS c\\nLEFT JOIN public.prerequisites AS p\\n  ON p.course_id = c.id\\nGROUP BY c.id, c.code, c.name\\nORDER BY prereq_count DESC, course_code ASC;\",\"validationIssues\":[\"X-axis may become crowded with many courses (26 rows reported); consider rotating labels, using a horizontal bar chart, or showing only the top N courses.\",\"The SQL orders results server-side and the Vega-Lite encoding also sorts the nominal x by prereq_count — they are consistent, but maintain just one source of truth for ordering if you later paginate or filter.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Aggregate prerequisites per course using a LEFT JOIN so courses with zero prerequisites are included; group by course identifiers and order descending by prereq_count (then by course_code) for a deterministic ranking.\",\"sql\":\"SELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(p.prerequisite_course_id) AS prereq_count\\nFROM public.courses AS c\\nLEFT JOIN public.prerequisites AS p\\n  ON p.course_id = c.id\\nGROUP BY c.id, c.code, c.name\\nORDER BY prereq_count DESC, course_code ASC;\",\"assumptions\":[\"Using public.courses and public.prerequisites tables discovered during preflight.\",\"Count includes both mandatory and optional prerequisites (no WHERE filter on is_mandatory).\",\"prerequisites has a unique index on (course_id, prerequisite_course_id) so COUNT(prerequisite_course_id) equals distinct prerequisite courses per course.\",\"Result returns one row per course including those with zero prerequisites.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(p.prerequisite_course_id) AS prereq_count\\nFROM public.courses AS c\\nLEFT JOIN public.prerequisites AS p\\n  ON p.course_id = c.id\\nGROUP BY c.id, c.code, c.name\\nORDER BY prereq_count DESC, course_code ASC\",\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"prereq_count\"],\"rowCount\":26,\"sample\":[{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"prereq_count\":4},{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"prereq_count\":3}]},\"data\":[{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"prereq_count\":4},{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"prereq_count\":3},{\"course_id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"prereq_count\":3},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"prereq_count\":3},{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"prereq_count\":3},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"prereq_count\":2},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"prereq_count\":2},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\",\"prereq_count\":2},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\",\"prereq_count\":2},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"prereq_count\":2},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"prereq_count\":2},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"prereq_count\":2},{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"prereq_count\":1},{\"course_id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"prereq_count\":1},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"prereq_count\":1},{\"course_id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"course_code\":\"HMI-889\",\"course_name\":\"Elektronika\",\"prereq_count\":1},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"prereq_count\":1},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"prereq_count\":1},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"prereq_count\":1},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"prereq_count\":1},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"prereq_count\":0},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"prereq_count\":0},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"prereq_count\":0},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\",\"prereq_count\":0},{\"course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"prereq_count\":0},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"prereq_count\":0}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Bar chart showing number of prerequisites per course.\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of prerequisites per course\",\"width\":700,\"height\":360,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"course_code\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course code\",\"labelAngle\":-40},\"sort\":{\"field\":\"prereq_count\",\"order\":\"descending\"}},\"y\":{\"field\":\"prereq_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of prerequisites\"}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course name\"},{\"field\":\"prereq_count\",\"type\":\"quantitative\",\"title\":\"Prereq count\"}]}},\"reasoning\":\"Vertical bar chart with course_code on the x-axis and prereq_count on the y-axis. Bars are sorted descending by prereq_count so courses with the most prerequisites appear first. Tooltip includes course name for context. Data is read from the provided query_result.\"},\"validation\":{\"passed\":true,\"score\":0.8,\"issues\":[\"X-axis may become crowded with many courses (26 rows reported); consider rotating labels, using a horizontal bar chart, or showing only the top N courses.\",\"The SQL orders results server-side and the Vega-Lite encoding also sorts the nominal x by prereq_count — they are consistent, but maintain just one source of truth for ordering if you later paginate or filter.\"]}}},\"endedAt\":1771845436318,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"Which courses have the most prerequisites?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(prerequisites.prerequisite_course_id)\"],\"dimensions\":[\"courses.id\",\"courses.code\",\"courses.name\"],\"filters\":[\"No WHERE filters — include both mandatory and optional prerequisites\",\"Join rule: prerequisites.course_id = courses.id (use LEFT JOIN to include courses with zero prerequisites)\"],\"grain\":\"one row per course\",\"aliases\":{\"courses.id\":\"course_id\",\"courses.code\":\"course_code\",\"courses.name\":\"course_name\",\"COUNT(prerequisites.prerequisite_course_id)\":\"prereq_count\"},\"output_fields\":[\"course_id\",\"course_code\",\"course_name\",\"prereq_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"course_code\",\"y_axis\":\"prereq_count\",\"title\":\"Number of prerequisites per course\"},\"assumptions\":[\"Use the public.courses and public.prerequisites tables discovered during preflight.\",\"Count all prerequisite rows for a course (both mandatory and optional). The prerequisites table has a unique index on (course_id, prerequisite_course_id), so COUNT(prerequisites.prerequisite_course_id) equals distinct prerequisite courses per course.\",\"Include courses that have zero prerequisites by using a LEFT JOIN from courses to prerequisites.\",\"No additional filters (e.g., by department or course_type) were requested; the result returns all courses.\",\"If the requester wants only the top N courses, or to restrict to mandatory prerequisites only (is_mandatory = true), that is a different query — this plan returns counts for all courses so the client can sort or limit as needed.\",\"Output field aliases listed in output_fields are the exact column names expected from the SQL.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(p.prerequisite_course_id) AS prereq_count\\nFROM public.courses AS c\\nLEFT JOIN public.prerequisites AS p\\n  ON p.course_id = c.id\\nGROUP BY c.id, c.code, c.name\\nORDER BY prereq_count DESC, course_code ASC;\",\"validationIssues\":[\"X-axis may become crowded with many courses (26 rows reported); consider rotating labels, using a horizontal bar chart, or showing only the top N courses.\",\"The SQL orders results server-side and the Vega-Lite encoding also sorts the nominal x by prereq_count — they are consistent, but maintain just one source of truth for ordering if you later paginate or filter.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Aggregate prerequisites per course using a LEFT JOIN so courses with zero prerequisites are included; group by course identifiers and order descending by prereq_count (then by course_code) for a deterministic ranking.\",\"sql\":\"SELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(p.prerequisite_course_id) AS prereq_count\\nFROM public.courses AS c\\nLEFT JOIN public.prerequisites AS p\\n  ON p.course_id = c.id\\nGROUP BY c.id, c.code, c.name\\nORDER BY prereq_count DESC, course_code ASC;\",\"assumptions\":[\"Using public.courses and public.prerequisites tables discovered during preflight.\",\"Count includes both mandatory and optional prerequisites (no WHERE filter on is_mandatory).\",\"prerequisites has a unique index on (course_id, prerequisite_course_id) so COUNT(prerequisite_course_id) equals distinct prerequisite courses per course.\",\"Result returns one row per course including those with zero prerequisites.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(p.prerequisite_course_id) AS prereq_count\\nFROM public.courses AS c\\nLEFT JOIN public.prerequisites AS p\\n  ON p.course_id = c.id\\nGROUP BY c.id, c.code, c.name\\nORDER BY prereq_count DESC, course_code ASC\",\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"prereq_count\"],\"rowCount\":26,\"sample\":[{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"prereq_count\":4},{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"prereq_count\":3}]},\"data\":[{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"prereq_count\":4},{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"prereq_count\":3},{\"course_id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"prereq_count\":3},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"prereq_count\":3},{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"prereq_count\":3},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"prereq_count\":2},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"prereq_count\":2},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\",\"prereq_count\":2},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\",\"prereq_count\":2},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"prereq_count\":2},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"prereq_count\":2},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"prereq_count\":2},{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"prereq_count\":1},{\"course_id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"prereq_count\":1},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"prereq_count\":1},{\"course_id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"course_code\":\"HMI-889\",\"course_name\":\"Elektronika\",\"prereq_count\":1},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"prereq_count\":1},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"prereq_count\":1},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"prereq_count\":1},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"prereq_count\":1},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"prereq_count\":0},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"prereq_count\":0},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"prereq_count\":0},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\",\"prereq_count\":0},{\"course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"prereq_count\":0},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"prereq_count\":0}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Bar chart showing number of prerequisites per course.\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of prerequisites per course\",\"width\":700,\"height\":360,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"course_code\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course code\",\"labelAngle\":-40},\"sort\":{\"field\":\"prereq_count\",\"order\":\"descending\"}},\"y\":{\"field\":\"prereq_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of prerequisites\"}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course name\"},{\"field\":\"prereq_count\",\"type\":\"quantitative\",\"title\":\"Prereq count\"}]}},\"reasoning\":\"Vertical bar chart with course_code on the x-axis and prereq_count on the y-axis. Bars are sorted descending by prereq_count so courses with the most prerequisites appear first. Tooltip includes course name for context. Data is read from the provided query_result.\"},\"validation\":{\"passed\":true,\"score\":0.8,\"issues\":[\"X-axis may become crowded with many courses (26 rows reported); consider rotating labels, using a horizontal bar chart, or showing only the top N courses.\",\"The SQL orders results server-side and the Vega-Lite encoding also sorts the nominal x by prereq_count — they are consistent, but maintain just one source of truth for ordering if you later paginate or filter.\"]}}},\"startedAt\":1771845436322,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(p.prerequisite_course_id) AS prereq_count\\nFROM public.courses AS c\\nLEFT JOIN public.prerequisites AS p\\n  ON p.course_id = c.id\\nGROUP BY c.id, c.code, c.name\\nORDER BY prereq_count DESC, course_code ASC;\",\"data\":[{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"prereq_count\":4},{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"prereq_count\":3},{\"course_id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"prereq_count\":3},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"prereq_count\":3},{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"prereq_count\":3},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"prereq_count\":2},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"prereq_count\":2},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\",\"prereq_count\":2},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\",\"prereq_count\":2},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"prereq_count\":2},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"prereq_count\":2},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"prereq_count\":2},{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"prereq_count\":1},{\"course_id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"prereq_count\":1},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"prereq_count\":1},{\"course_id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"course_code\":\"HMI-889\",\"course_name\":\"Elektronika\",\"prereq_count\":1},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"prereq_count\":1},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"prereq_count\":1},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"prereq_count\":1},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"prereq_count\":1},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"prereq_count\":0},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"prereq_count\":0},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"prereq_count\":0},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\",\"prereq_count\":0},{\"course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"prereq_count\":0},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"prereq_count\":0}],\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"prereq_count\"],\"rowCount\":26,\"sample\":[{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"prereq_count\":4},{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"prereq_count\":3}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Bar chart showing number of prerequisites per course.\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of prerequisites per course\",\"width\":700,\"height\":360,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"course_code\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course code\",\"labelAngle\":-40},\"sort\":{\"field\":\"prereq_count\",\"order\":\"descending\"}},\"y\":{\"field\":\"prereq_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of prerequisites\"}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course name\"},{\"field\":\"prereq_count\",\"type\":\"quantitative\",\"title\":\"Prereq count\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.8,\"issues\":[\"X-axis may become crowded with many courses (26 rows reported); consider rotating labels, using a horizontal bar chart, or showing only the top N courses.\",\"The SQL orders results server-side and the Vega-Lite encoding also sorts the nominal x by prereq_count — they are consistent, but maintain just one source of truth for ordering if you later paginate or filter.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771845436326}},\"input\":{\"question\":\"Which courses have the most prerequisites?\"},\"result\":{\"sql\":\"SELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  COUNT(p.prerequisite_course_id) AS prereq_count\\nFROM public.courses AS c\\nLEFT JOIN public.prerequisites AS p\\n  ON p.course_id = c.id\\nGROUP BY c.id, c.code, c.name\\nORDER BY prereq_count DESC, course_code ASC;\",\"data\":[{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"prereq_count\":4},{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"prereq_count\":3},{\"course_id\":\"e6b62b9f-429a-423d-84c7-77b28a64b9a3\",\"course_code\":\"JFH-143\",\"course_name\":\"Architektura Komputerów\",\"prereq_count\":3},{\"course_id\":\"0b97f1bf-8c86-431a-a583-563354b1e01f\",\"course_code\":\"RZR-301\",\"course_name\":\"Sieci Komputerowe\",\"prereq_count\":3},{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"course_code\":\"TJJ-354\",\"course_name\":\"Projektowanie Aplikacji Webowych\",\"prereq_count\":3},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"course_code\":\"AFI-682\",\"course_name\":\"Matematyka Dyskretna\",\"prereq_count\":2},{\"course_id\":\"d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5\",\"course_code\":\"HPF-845\",\"course_name\":\"Systemy Wbudowane\",\"prereq_count\":2},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\",\"prereq_count\":2},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\",\"prereq_count\":2},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"course_code\":\"VBC-395\",\"course_name\":\"Sieci Komputerowe\",\"prereq_count\":2},{\"course_id\":\"b18a39cf-8a1b-471c-b67a-94aa04eccfae\",\"course_code\":\"WZC-570\",\"course_name\":\"Programowanie Obiektowe\",\"prereq_count\":2},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"course_code\":\"XQA-597\",\"course_name\":\"Analiza Matematyczna\",\"prereq_count\":2},{\"course_id\":\"91922683-9cba-47f2-bb00-babfbce3866f\",\"course_code\":\"AAX-989\",\"course_name\":\"Elektronika\",\"prereq_count\":1},{\"course_id\":\"3d59b771-6ed9-47a0-b46f-f90c188f7863\",\"course_code\":\"ARH-232\",\"course_name\":\"Cloud Computing\",\"prereq_count\":1},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\",\"prereq_count\":1},{\"course_id\":\"47f61e5e-19e7-4b9e-b8d0-153ca7c76090\",\"course_code\":\"HMI-889\",\"course_name\":\"Elektronika\",\"prereq_count\":1},{\"course_id\":\"0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca\",\"course_code\":\"PSC-614\",\"course_name\":\"Architektura Komputerów\",\"prereq_count\":1},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"course_code\":\"UQL-274\",\"course_name\":\"Zarządzanie Projektami IT\",\"prereq_count\":1},{\"course_id\":\"017be87e-c8f4-44d8-aa0d-a2095318b798\",\"course_code\":\"YWI-134\",\"course_name\":\"Metody Numeryczne\",\"prereq_count\":1},{\"course_id\":\"c0e00b1c-84d6-4ccd-999d-7c9197625f2e\",\"course_code\":\"ZUQ-127\",\"course_name\":\"Fizyka\",\"prereq_count\":1},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"course_code\":\"BEW-951\",\"course_name\":\"Fizyka\",\"prereq_count\":0},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"course_code\":\"BSS-943\",\"course_name\":\"Algebra Liniowa\",\"prereq_count\":0},{\"course_id\":\"bebad852-cb8c-4f0d-b99c-fe4291a933fd\",\"course_code\":\"FCL-532\",\"course_name\":\"Uczenie Maszynowe\",\"prereq_count\":0},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\",\"prereq_count\":0},{\"course_id\":\"59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23\",\"course_code\":\"MKO-885\",\"course_name\":\"Rachunek Prawdopodobieństwa\",\"prereq_count\":0},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"prereq_count\":0}],\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"prereq_count\"],\"rowCount\":26,\"sample\":[{\"course_id\":\"76076dd9-4d84-412d-b639-ef7e29f8b404\",\"course_code\":\"FEO-908\",\"course_name\":\"Analiza Matematyczna\",\"prereq_count\":4},{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\",\"prereq_count\":3}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Bar chart showing number of prerequisites per course.\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of prerequisites per course\",\"width\":700,\"height\":360,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"course_code\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course code\",\"labelAngle\":-40},\"sort\":{\"field\":\"prereq_count\",\"order\":\"descending\"}},\"y\":{\"field\":\"prereq_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of prerequisites\"}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course name\"},{\"field\":\"prereq_count\",\"type\":\"quantitative\",\"title\":\"Prereq count\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.8,\"issues\":[\"X-axis may become crowded with many courses (26 rows reported); consider rotating labels, using a horizontal bar chart, or showing only the top N courses.\",\"The SQL orders results server-side and the Vega-Lite encoding also sorts the nominal x by prereq_count — they are consistent, but maintain just one source of truth for ordering if you later paginate or filter.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"e8dd1b5ed73e0b58ed52c76c49a3116d\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/courses-with-prerequisites/run-0001/run.json",
+    "queryPath": "runs/courses-with-prerequisites/run-0001/query.sql",
+    "vegaRawPath": "runs/courses-with-prerequisites/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/courses-with-prerequisites/run-0001/vega.resolved.json",
+    "imagePath": "runs/courses-with-prerequisites/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:17:16.705Z",
+  "traceId": "e8dd1b5ed73e0b58ed52c76c49a3116d",
+  "success": true,
+  "durationMs": 81194,
+  "resultRaw": {
+    "data": [
+      {
+        "course_id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+        "course_code": "FEO-908",
+        "course_name": "Analiza Matematyczna",
+        "prereq_count": 4
+      },
+      {
+        "course_id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+        "course_code": "FPW-573",
+        "course_name": "Programowanie Obiektowe",
+        "prereq_count": 3
+      },
+      {
+        "course_id": "e6b62b9f-429a-423d-84c7-77b28a64b9a3",
+        "course_code": "JFH-143",
+        "course_name": "Architektura Komputerów",
+        "prereq_count": 3
+      },
+      {
+        "course_id": "0b97f1bf-8c86-431a-a583-563354b1e01f",
+        "course_code": "RZR-301",
+        "course_name": "Sieci Komputerowe",
+        "prereq_count": 3
+      },
+      {
+        "course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+        "course_code": "TJJ-354",
+        "course_name": "Projektowanie Aplikacji Webowych",
+        "prereq_count": 3
+      },
+      {
+        "course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "course_code": "AFI-682",
+        "course_name": "Matematyka Dyskretna",
+        "prereq_count": 2
+      },
+      {
+        "course_id": "d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5",
+        "course_code": "HPF-845",
+        "course_name": "Systemy Wbudowane",
+        "prereq_count": 2
+      },
+      {
+        "course_id": "e89877df-7199-4b1f-a8e8-8e5c0872fe23",
+        "course_code": "NWG-686",
+        "course_name": "Programowanie Funkcyjne",
+        "prereq_count": 2
+      },
+      {
+        "course_id": "32619ee8-5d87-49a4-9ca1-c94668909e2e",
+        "course_code": "SBW-955",
+        "course_name": "Sieci Komputerowe",
+        "prereq_count": 2
+      },
+      {
+        "course_id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "prereq_count": 2
+      },
+      {
+        "course_id": "b18a39cf-8a1b-471c-b67a-94aa04eccfae",
+        "course_code": "WZC-570",
+        "course_name": "Programowanie Obiektowe",
+        "prereq_count": 2
+      },
+      {
+        "course_id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "prereq_count": 2
+      },
+      {
+        "course_id": "91922683-9cba-47f2-bb00-babfbce3866f",
+        "course_code": "AAX-989",
+        "course_name": "Elektronika",
+        "prereq_count": 1
+      },
+      {
+        "course_id": "3d59b771-6ed9-47a0-b46f-f90c188f7863",
+        "course_code": "ARH-232",
+        "course_name": "Cloud Computing",
+        "prereq_count": 1
+      },
+      {
+        "course_id": "410a9134-116d-41eb-84bc-1b5144736995",
+        "course_code": "FWJ-758",
+        "course_name": "Bezpieczeństwo Systemów Komputerowych",
+        "prereq_count": 1
+      },
+      {
+        "course_id": "47f61e5e-19e7-4b9e-b8d0-153ca7c76090",
+        "course_code": "HMI-889",
+        "course_name": "Elektronika",
+        "prereq_count": 1
+      },
+      {
+        "course_id": "0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca",
+        "course_code": "PSC-614",
+        "course_name": "Architektura Komputerów",
+        "prereq_count": 1
+      },
+      {
+        "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "prereq_count": 1
+      },
+      {
+        "course_id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "prereq_count": 1
+      },
+      {
+        "course_id": "c0e00b1c-84d6-4ccd-999d-7c9197625f2e",
+        "course_code": "ZUQ-127",
+        "course_name": "Fizyka",
+        "prereq_count": 1
+      },
+      {
+        "course_id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+        "course_code": "BEW-951",
+        "course_name": "Fizyka",
+        "prereq_count": 0
+      },
+      {
+        "course_id": "7dc872b8-c34e-4061-8f34-8b4c099b6325",
+        "course_code": "BSS-943",
+        "course_name": "Algebra Liniowa",
+        "prereq_count": 0
+      },
+      {
+        "course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+        "course_code": "FCL-532",
+        "course_name": "Uczenie Maszynowe",
+        "prereq_count": 0
+      },
+      {
+        "course_id": "6002cfac-f371-4c9b-a048-8aaf1aae450a",
+        "course_code": "LUO-736",
+        "course_name": "Grafika Komputerowa",
+        "prereq_count": 0
+      },
+      {
+        "course_id": "59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23",
+        "course_code": "MKO-885",
+        "course_name": "Rachunek Prawdopodobieństwa",
+        "prereq_count": 0
+      },
+      {
+        "course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "course_code": "TAU-627",
+        "course_name": "Analiza Matematyczna",
+        "prereq_count": 0
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "description": "Bar chart showing number of prerequisites per course.",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Number of prerequisites per course",
+      "width": 700,
+      "height": 360,
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "course_code",
+          "type": "nominal",
+          "axis": {
+            "title": "Course code",
+            "labelAngle": -40
+          },
+          "sort": {
+            "field": "prereq_count",
+            "order": "descending"
+          }
+        },
+        "y": {
+          "field": "prereq_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Number of prerequisites"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "course_code",
+            "type": "nominal",
+            "title": "Course code"
+          },
+          {
+            "field": "course_name",
+            "type": "nominal",
+            "title": "Course name"
+          },
+          {
+            "field": "prereq_count",
+            "type": "quantitative",
+            "title": "Prereq count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT\n  c.id AS course_id,\n  c.code AS course_code,\n  c.name AS course_name,\n  COUNT(p.prerequisite_course_id) AS prereq_count\nFROM public.courses AS c\nLEFT JOIN public.prerequisites AS p\n  ON p.course_id = c.id\nGROUP BY c.id, c.code, c.name\nORDER BY prereq_count DESC, course_code ASC;",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "course_code",
+        "course_name",
+        "prereq_count"
+      ],
+      "rowCount": 26,
+      "sample": [
+        {
+          "course_id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+          "course_code": "FEO-908",
+          "course_name": "Analiza Matematyczna",
+          "prereq_count": 4
+        },
+        {
+          "course_id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+          "course_code": "FPW-573",
+          "course_name": "Programowanie Obiektowe",
+          "prereq_count": 3
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.8,
+      "issues": [
+        "X-axis may become crowded with many courses (26 rows reported); consider rotating labels, using a horizontal bar chart, or showing only the top N courses.",
+        "The SQL orders results server-side and the Vega-Lite encoding also sorts the nominal x by prereq_count — they are consistent, but maintain just one source of truth for ordering if you later paginate or filter."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "course_id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+        "course_code": "FEO-908",
+        "course_name": "Analiza Matematyczna",
+        "prereq_count": 4
+      },
+      {
+        "course_id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+        "course_code": "FPW-573",
+        "course_name": "Programowanie Obiektowe",
+        "prereq_count": 3
+      },
+      {
+        "course_id": "e6b62b9f-429a-423d-84c7-77b28a64b9a3",
+        "course_code": "JFH-143",
+        "course_name": "Architektura Komputerów",
+        "prereq_count": 3
+      },
+      {
+        "course_id": "0b97f1bf-8c86-431a-a583-563354b1e01f",
+        "course_code": "RZR-301",
+        "course_name": "Sieci Komputerowe",
+        "prereq_count": 3
+      },
+      {
+        "course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+        "course_code": "TJJ-354",
+        "course_name": "Projektowanie Aplikacji Webowych",
+        "prereq_count": 3
+      },
+      {
+        "course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "course_code": "AFI-682",
+        "course_name": "Matematyka Dyskretna",
+        "prereq_count": 2
+      },
+      {
+        "course_id": "d9e6f8d3-ccdc-44f9-b81e-b8e8d52046d5",
+        "course_code": "HPF-845",
+        "course_name": "Systemy Wbudowane",
+        "prereq_count": 2
+      },
+      {
+        "course_id": "e89877df-7199-4b1f-a8e8-8e5c0872fe23",
+        "course_code": "NWG-686",
+        "course_name": "Programowanie Funkcyjne",
+        "prereq_count": 2
+      },
+      {
+        "course_id": "32619ee8-5d87-49a4-9ca1-c94668909e2e",
+        "course_code": "SBW-955",
+        "course_name": "Sieci Komputerowe",
+        "prereq_count": 2
+      },
+      {
+        "course_id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "course_code": "VBC-395",
+        "course_name": "Sieci Komputerowe",
+        "prereq_count": 2
+      },
+      {
+        "course_id": "b18a39cf-8a1b-471c-b67a-94aa04eccfae",
+        "course_code": "WZC-570",
+        "course_name": "Programowanie Obiektowe",
+        "prereq_count": 2
+      },
+      {
+        "course_id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "course_code": "XQA-597",
+        "course_name": "Analiza Matematyczna",
+        "prereq_count": 2
+      },
+      {
+        "course_id": "91922683-9cba-47f2-bb00-babfbce3866f",
+        "course_code": "AAX-989",
+        "course_name": "Elektronika",
+        "prereq_count": 1
+      },
+      {
+        "course_id": "3d59b771-6ed9-47a0-b46f-f90c188f7863",
+        "course_code": "ARH-232",
+        "course_name": "Cloud Computing",
+        "prereq_count": 1
+      },
+      {
+        "course_id": "410a9134-116d-41eb-84bc-1b5144736995",
+        "course_code": "FWJ-758",
+        "course_name": "Bezpieczeństwo Systemów Komputerowych",
+        "prereq_count": 1
+      },
+      {
+        "course_id": "47f61e5e-19e7-4b9e-b8d0-153ca7c76090",
+        "course_code": "HMI-889",
+        "course_name": "Elektronika",
+        "prereq_count": 1
+      },
+      {
+        "course_id": "0c80d6c7-60a6-4aa3-9c2a-3af37dbf1bca",
+        "course_code": "PSC-614",
+        "course_name": "Architektura Komputerów",
+        "prereq_count": 1
+      },
+      {
+        "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "course_code": "UQL-274",
+        "course_name": "Zarządzanie Projektami IT",
+        "prereq_count": 1
+      },
+      {
+        "course_id": "017be87e-c8f4-44d8-aa0d-a2095318b798",
+        "course_code": "YWI-134",
+        "course_name": "Metody Numeryczne",
+        "prereq_count": 1
+      },
+      {
+        "course_id": "c0e00b1c-84d6-4ccd-999d-7c9197625f2e",
+        "course_code": "ZUQ-127",
+        "course_name": "Fizyka",
+        "prereq_count": 1
+      },
+      {
+        "course_id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+        "course_code": "BEW-951",
+        "course_name": "Fizyka",
+        "prereq_count": 0
+      },
+      {
+        "course_id": "7dc872b8-c34e-4061-8f34-8b4c099b6325",
+        "course_code": "BSS-943",
+        "course_name": "Algebra Liniowa",
+        "prereq_count": 0
+      },
+      {
+        "course_id": "bebad852-cb8c-4f0d-b99c-fe4291a933fd",
+        "course_code": "FCL-532",
+        "course_name": "Uczenie Maszynowe",
+        "prereq_count": 0
+      },
+      {
+        "course_id": "6002cfac-f371-4c9b-a048-8aaf1aae450a",
+        "course_code": "LUO-736",
+        "course_name": "Grafika Komputerowa",
+        "prereq_count": 0
+      },
+      {
+        "course_id": "59dcbc3d-5dcd-493b-a9c0-a9fdfb325d23",
+        "course_code": "MKO-885",
+        "course_name": "Rachunek Prawdopodobieństwa",
+        "prereq_count": 0
+      },
+      {
+        "course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "course_code": "TAU-627",
+        "course_name": "Analiza Matematyczna",
+        "prereq_count": 0
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "description": "Bar chart showing number of prerequisites per course.",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Number of prerequisites per course",
+      "width": 700,
+      "height": 360,
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "course_code",
+          "type": "nominal",
+          "axis": {
+            "title": "Course code",
+            "labelAngle": -40
+          },
+          "sort": {
+            "field": "prereq_count",
+            "order": "descending"
+          }
+        },
+        "y": {
+          "field": "prereq_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Number of prerequisites"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "course_code",
+            "type": "nominal",
+            "title": "Course code"
+          },
+          {
+            "field": "course_name",
+            "type": "nominal",
+            "title": "Course name"
+          },
+          {
+            "field": "prereq_count",
+            "type": "quantitative",
+            "title": "Prereq count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT\n  c.id AS course_id,\n  c.code AS course_code,\n  c.name AS course_name,\n  COUNT(p.prerequisite_course_id) AS prereq_count\nFROM public.courses AS c\nLEFT JOIN public.prerequisites AS p\n  ON p.course_id = c.id\nGROUP BY c.id, c.code, c.name\nORDER BY prereq_count DESC, course_code ASC;",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "course_code",
+        "course_name",
+        "prereq_count"
+      ],
+      "rowCount": 26,
+      "sample": [
+        {
+          "course_id": "76076dd9-4d84-412d-b639-ef7e29f8b404",
+          "course_code": "FEO-908",
+          "course_name": "Analiza Matematyczna",
+          "prereq_count": 4
+        },
+        {
+          "course_id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+          "course_code": "FPW-573",
+          "course_name": "Programowanie Obiektowe",
+          "prereq_count": 3
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.8,
+      "issues": [
+        "X-axis may become crowded with many courses (26 rows reported); consider rotating labels, using a horizontal bar chart, or showing only the top N courses.",
+        "The SQL orders results server-side and the Vega-Lite encoding also sorts the nominal x by prereq_count — they are consistent, but maintain just one source of truth for ordering if you later paginate or filter."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:17:16.705Z",
+    "traceId": "e8dd1b5ed73e0b58ed52c76c49a3116d",
+    "attempts": 2,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 18678,
+      "outputTokens": 4762,
+      "totalTokens": 23440,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 3072,
+      "costUsd": 0.0141935
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 18678,
+        "outputTokens": 4762,
+        "totalTokens": 23440,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 3072,
+        "costUsd": 0.0141935
+      }
+    ],
+    "warnings": []
+  }
+}

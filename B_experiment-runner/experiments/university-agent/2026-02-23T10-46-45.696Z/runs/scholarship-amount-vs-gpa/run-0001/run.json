@@ -1,0 +1,174 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "scholarship-amount-vs-gpa",
+  "caseDirectory": "scholarship-amount-vs-gpa",
+  "repeatIndex": 1,
+  "prompt": "Show average GPA for different scholarship amount ranges",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show average GPA for different scholarship amount ranges"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:55:26.931Z",
+    "endedAtUtc": "2026-02-23T10:55:45.719Z",
+    "durationMs": 18788
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "3533",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:55:45 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Show average GPA for different scholarship amount ranges\"},\"agent\":{\"payload\":{\"question\":\"Show average GPA for different scholarship amount ranges\"},\"startedAt\":1771844126952,\"status\":\"success\",\"output\":{\"sql\":\"WITH bucketed AS (\\n  SELECT\\n    CASE\\n      WHEN scholarship_amount IS NULL THEN 'Unknown'\\n      WHEN scholarship_amount = 0 THEN '0'\\n      WHEN scholarship_amount BETWEEN 1 AND 1000 THEN '1 - 1,000'\\n      WHEN scholarship_amount BETWEEN 1001 AND 5000 THEN '1,001 - 5,000'\\n      WHEN scholarship_amount BETWEEN 5001 AND 10000 THEN '5,001 - 10,000'\\n      ELSE '> 10,000'\\n    END AS scholarship_range,\\n    CASE\\n      WHEN scholarship_amount IS NULL THEN 0\\n      WHEN scholarship_amount = 0 THEN 1\\n      WHEN scholarship_amount BETWEEN 1 AND 1000 THEN 2\\n      WHEN scholarship_amount BETWEEN 1001 AND 5000 THEN 3\\n      WHEN scholarship_amount BETWEEN 5001 AND 10000 THEN 4\\n      ELSE 5\\n    END AS bucket_order,\\n    gpa\\n  FROM students\\n)\\nSELECT\\n  scholarship_range AS scholarship_range,\\n  bucket_order AS bucket_order,\\n  AVG(gpa) AS avg_gpa,\\n  COUNT(*) AS student_count\\nFROM bucketed\\nGROUP BY scholarship_range, bucket_order\\nORDER BY bucket_order;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average GPA by Scholarship Amount Range\",\"data\":{\"name\":\"query_result\"},\"width\":600,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"scholarship_range\",\"type\":\"nominal\",\"axis\":{\"title\":\"Scholarship Amount Range\"},\"sort\":{\"field\":\"bucket_order\",\"op\":\"min\"}},\"y\":{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average GPA\"},\"scale\":{\"nice\":true}},\"tooltip\":[{\"field\":\"scholarship_range\",\"type\":\"nominal\",\"title\":\"Range\"},{\"field\":\"avg_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"format\":\".2f\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Student Count\"}]}}},\"endedAt\":1771844145685},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH bucketed AS (\\n  SELECT\\n    CASE\\n      WHEN scholarship_amount IS NULL THEN 'Unknown'\\n      WHEN scholarship_amount = 0 THEN '0'\\n      WHEN scholarship_amount BETWEEN 1 AND 1000 THEN '1 - 1,000'\\n      WHEN scholarship_amount BETWEEN 1001 AND 5000 THEN '1,001 - 5,000'\\n      WHEN scholarship_amount BETWEEN 5001 AND 10000 THEN '5,001 - 10,000'\\n      ELSE '> 10,000'\\n    END AS scholarship_range,\\n    CASE\\n      WHEN scholarship_amount IS NULL THEN 0\\n      WHEN scholarship_amount = 0 THEN 1\\n      WHEN scholarship_amount BETWEEN 1 AND 1000 THEN 2\\n      WHEN scholarship_amount BETWEEN 1001 AND 5000 THEN 3\\n      WHEN scholarship_amount BETWEEN 5001 AND 10000 THEN 4\\n      ELSE 5\\n    END AS bucket_order,\\n    gpa\\n  FROM students\\n)\\nSELECT\\n  scholarship_range AS scholarship_range,\\n  bucket_order AS bucket_order,\\n  AVG(gpa) AS avg_gpa,\\n  COUNT(*) AS student_count\\nFROM bucketed\\nGROUP BY scholarship_range, bucket_order\\nORDER BY bucket_order;\"},\"startedAt\":1771844145688,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column \\\"scholarship_amount\\\" does not exist\\nLINE 5:       WHEN scholarship_amount IS NULL THEN 'Unknown'\\n                   ^\",\"name\":\"Error\"},\"endedAt\":1771844145711}},\"input\":{\"question\":\"Show average GPA for different scholarship amount ranges\"},\"error\":{\"message\":\"SQL execution failed: column \\\"scholarship_amount\\\" does not exist\\nLINE 5:       WHEN scholarship_amount IS NULL THEN 'Unknown'\\n                   ^\",\"name\":\"Error\"},\"traceId\":\"ad80d1a2ba153e51d6f47f25a35fb9f9\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/scholarship-amount-vs-gpa/run-0001/run.json",
+    "queryPath": "runs/scholarship-amount-vs-gpa/run-0001/query.sql",
+    "vegaRawPath": "runs/scholarship-amount-vs-gpa/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/scholarship-amount-vs-gpa/run-0001/vega.resolved.json",
+    "imagePath": "runs/scholarship-amount-vs-gpa/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:55:45.719Z",
+  "traceId": "ad80d1a2ba153e51d6f47f25a35fb9f9",
+  "success": false,
+  "durationMs": 18788,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Show average GPA for different scholarship amount ranges"
+      },
+      "agent": {
+        "payload": {
+          "question": "Show average GPA for different scholarship amount ranges"
+        },
+        "startedAt": 1771844126952,
+        "status": "success",
+        "output": {
+          "sql": "WITH bucketed AS (\n  SELECT\n    CASE\n      WHEN scholarship_amount IS NULL THEN 'Unknown'\n      WHEN scholarship_amount = 0 THEN '0'\n      WHEN scholarship_amount BETWEEN 1 AND 1000 THEN '1 - 1,000'\n      WHEN scholarship_amount BETWEEN 1001 AND 5000 THEN '1,001 - 5,000'\n      WHEN scholarship_amount BETWEEN 5001 AND 10000 THEN '5,001 - 10,000'\n      ELSE '> 10,000'\n    END AS scholarship_range,\n    CASE\n      WHEN scholarship_amount IS NULL THEN 0\n      WHEN scholarship_amount = 0 THEN 1\n      WHEN scholarship_amount BETWEEN 1 AND 1000 THEN 2\n      WHEN scholarship_amount BETWEEN 1001 AND 5000 THEN 3\n      WHEN scholarship_amount BETWEEN 5001 AND 10000 THEN 4\n      ELSE 5\n    END AS bucket_order,\n    gpa\n  FROM students\n)\nSELECT\n  scholarship_range AS scholarship_range,\n  bucket_order AS bucket_order,\n  AVG(gpa) AS avg_gpa,\n  COUNT(*) AS student_count\nFROM bucketed\nGROUP BY scholarship_range, bucket_order\nORDER BY bucket_order;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "title": "Average GPA by Scholarship Amount Range",
+            "data": {
+              "name": "query_result"
+            },
+            "width": 600,
+            "height": 400,
+            "mark": {
+              "type": "bar",
+              "tooltip": true
+            },
+            "encoding": {
+              "x": {
+                "field": "scholarship_range",
+                "type": "nominal",
+                "axis": {
+                  "title": "Scholarship Amount Range"
+                },
+                "sort": {
+                  "field": "bucket_order",
+                  "op": "min"
+                }
+              },
+              "y": {
+                "field": "avg_gpa",
+                "type": "quantitative",
+                "axis": {
+                  "title": "Average GPA"
+                },
+                "scale": {
+                  "nice": true
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "scholarship_range",
+                  "type": "nominal",
+                  "title": "Range"
+                },
+                {
+                  "field": "avg_gpa",
+                  "type": "quantitative",
+                  "title": "Average GPA",
+                  "format": ".2f"
+                },
+                {
+                  "field": "student_count",
+                  "type": "quantitative",
+                  "title": "Student Count"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771844145685
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH bucketed AS (\n  SELECT\n    CASE\n      WHEN scholarship_amount IS NULL THEN 'Unknown'\n      WHEN scholarship_amount = 0 THEN '0'\n      WHEN scholarship_amount BETWEEN 1 AND 1000 THEN '1 - 1,000'\n      WHEN scholarship_amount BETWEEN 1001 AND 5000 THEN '1,001 - 5,000'\n      WHEN scholarship_amount BETWEEN 5001 AND 10000 THEN '5,001 - 10,000'\n      ELSE '> 10,000'\n    END AS scholarship_range,\n    CASE\n      WHEN scholarship_amount IS NULL THEN 0\n      WHEN scholarship_amount = 0 THEN 1\n      WHEN scholarship_amount BETWEEN 1 AND 1000 THEN 2\n      WHEN scholarship_amount BETWEEN 1001 AND 5000 THEN 3\n      WHEN scholarship_amount BETWEEN 5001 AND 10000 THEN 4\n      ELSE 5\n    END AS bucket_order,\n    gpa\n  FROM students\n)\nSELECT\n  scholarship_range AS scholarship_range,\n  bucket_order AS bucket_order,\n  AVG(gpa) AS avg_gpa,\n  COUNT(*) AS student_count\nFROM bucketed\nGROUP BY scholarship_range, bucket_order\nORDER BY bucket_order;"
+        },
+        "startedAt": 1771844145688,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column \"scholarship_amount\" does not exist\nLINE 5:       WHEN scholarship_amount IS NULL THEN 'Unknown'\n                   ^",
+          "name": "Error"
+        },
+        "endedAt": 1771844145711
+      }
+    },
+    "input": {
+      "question": "Show average GPA for different scholarship amount ranges"
+    },
+    "error": {
+      "message": "SQL execution failed: column \"scholarship_amount\" does not exist\nLINE 5:       WHEN scholarship_amount IS NULL THEN 'Unknown'\n                   ^",
+      "name": "Error"
+    },
+    "traceId": "ad80d1a2ba153e51d6f47f25a35fb9f9"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:55:45.719Z",
+    "traceId": "ad80d1a2ba153e51d6f47f25a35fb9f9",
+    "attempts": 6,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 264,
+      "outputTokens": 1519,
+      "totalTokens": 1783,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 896,
+      "costUsd": 0.003104
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 264,
+        "outputTokens": 1519,
+        "totalTokens": 1783,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 896,
+        "costUsd": 0.003104
+      }
+    ],
+    "warnings": []
+  }
+}

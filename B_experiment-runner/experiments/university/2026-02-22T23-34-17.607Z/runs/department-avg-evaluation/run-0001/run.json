@@ -1,0 +1,432 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "department-avg-evaluation",
+  "caseDirectory": "department-avg-evaluation",
+  "repeatIndex": 1,
+  "prompt": "What is the average overall evaluation rating per department?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average overall evaluation rating per department?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:42:37.555Z",
+    "endedAtUtc": "2026-02-22T23:43:30.925Z",
+    "durationMs": 53370
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "16277",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:43:30 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the average overall evaluation rating per department?\"},\"sql\":{\"payload\":{\"question\":\"What is the average overall evaluation rating per department?\"},\"startedAt\":1771803757561,\"status\":\"success\",\"output\":{\"reasoning\":\"Join course_evaluations -> enrollments -> course_sections -> courses -> departments and compute average overall_rating per department. Include evaluation count and order deterministically by average (desc) then name.\",\"sql\":\"SELECT d.id AS department_id,\\n       d.name AS department_name,\\n       ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating,\\n       COUNT(ce.id) AS evaluations_count\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nJOIN public.departments d ON c.department_id = d.id\\nGROUP BY d.id, d.name\\nORDER BY avg_overall_rating DESC, d.name ASC;\",\"assumptions\":[\"All evaluations are linked via enrollments -> course_sections -> courses -> departments as modeled in the schema\",\"Departments with zero evaluations are intentionally excluded from the result\",\"overall_rating is an integer scale and averaging as numeric rounded to 2 decimals is acceptable\"]},\"endedAt\":1771803789065},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT d.id AS department_id,\\n       d.name AS department_name,\\n       ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating,\\n       COUNT(ce.id) AS evaluations_count\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nJOIN public.departments d ON c.department_id = d.id\\nGROUP BY d.id, d.name\\nORDER BY avg_overall_rating DESC, d.name ASC;\"},\"startedAt\":1771803789067,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT d.id AS department_id,\\n       d.name AS department_name,\\n       ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating,\\n       COUNT(ce.id) AS evaluations_count\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nJOIN public.departments d ON c.department_id = d.id\\nGROUP BY d.id, d.name\\nORDER BY avg_overall_rating DESC, d.name ASC\",\"metadata\":{\"columns\":[\"department_id\",\"department_name\",\"evaluations_count\",\"avg_overall_rating\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"evaluations_count\":5,\"avg_overall_rating\":3.6},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"evaluations_count\":7,\"avg_overall_rating\":3.43}]},\"data\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"evaluations_count\":5,\"avg_overall_rating\":3.6},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"evaluations_count\":7,\"avg_overall_rating\":3.43},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"evaluations_count\":8,\"avg_overall_rating\":2.88},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"evaluations_count\":7,\"avg_overall_rating\":2.86},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"evaluations_count\":4,\"avg_overall_rating\":2.75},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"evaluations_count\":10,\"avg_overall_rating\":2.7}]},\"endedAt\":1771803789092},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT d.id AS department_id,\\n       d.name AS department_name,\\n       ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating,\\n       COUNT(ce.id) AS evaluations_count\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nJOIN public.departments d ON c.department_id = d.id\\nGROUP BY d.id, d.name\\nORDER BY avg_overall_rating DESC, d.name ASC\",\"metadata\":{\"columns\":[\"department_id\",\"department_name\",\"evaluations_count\",\"avg_overall_rating\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"evaluations_count\":5,\"avg_overall_rating\":3.6},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"evaluations_count\":7,\"avg_overall_rating\":3.43}]},\"data\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"evaluations_count\":5,\"avg_overall_rating\":3.6},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"evaluations_count\":7,\"avg_overall_rating\":3.43},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"evaluations_count\":8,\"avg_overall_rating\":2.88},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"evaluations_count\":7,\"avg_overall_rating\":2.86},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"evaluations_count\":4,\"avg_overall_rating\":2.75},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"evaluations_count\":10,\"avg_overall_rating\":2.7}]},\"startedAt\":1771803789095,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Overall Evaluation Rating per Department\",\"width\":700,\"height\":{\"step\":30},\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"scale\":{\"domain\":[0,5]}},\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":null,\"sort\":{\"field\":\"avg_overall_rating\",\"order\":\"descending\"}},\"color\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Avg Rating\",\"scale\":{\"scheme\":\"blues\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Avg Overall Rating\"},{\"field\":\"evaluations_count\",\"type\":\"quantitative\",\"title\":\"Evaluations Count\"}]}},{\"mark\":{\"type\":\"text\",\"align\":\"left\",\"dx\":4},\"encoding\":{\"x\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\"},\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":{\"field\":\"avg_overall_rating\",\"order\":\"descending\"}},\"text\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"format\":\".2f\"},\"detail\":{\"field\":\"department_id\",\"type\":\"nominal\"}}}]},\"reasoning\":\"Horizontal bars show average rating per department (sorted descending). Tooltip includes department name, avg rating, and evaluation count; labels show the numeric average. All encoded fields come from the query result columns.\"},\"endedAt\":1771803810876},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Overall Evaluation Rating per Department\",\"width\":700,\"height\":{\"step\":30},\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"scale\":{\"domain\":[0,5]}},\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":null,\"sort\":{\"field\":\"avg_overall_rating\",\"order\":\"descending\"}},\"color\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Avg Rating\",\"scale\":{\"scheme\":\"blues\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Avg Overall Rating\"},{\"field\":\"evaluations_count\",\"type\":\"quantitative\",\"title\":\"Evaluations Count\"}]}},{\"mark\":{\"type\":\"text\",\"align\":\"left\",\"dx\":4},\"encoding\":{\"x\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\"},\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":{\"field\":\"avg_overall_rating\",\"order\":\"descending\"}},\"text\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"format\":\".2f\"},\"detail\":{\"field\":\"department_id\",\"type\":\"nominal\"}}}]},\"reasoning\":\"Horizontal bars show average rating per department (sorted descending). Tooltip includes department name, avg rating, and evaluation count; labels show the numeric average. All encoded fields come from the query result columns.\"},\"startedAt\":1771803810888,\"status\":\"success\",\"output\":{\"sql\":\"SELECT d.id AS department_id,\\n       d.name AS department_name,\\n       ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating,\\n       COUNT(ce.id) AS evaluations_count\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nJOIN public.departments d ON c.department_id = d.id\\nGROUP BY d.id, d.name\\nORDER BY avg_overall_rating DESC, d.name ASC;\",\"data\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"evaluations_count\":5,\"avg_overall_rating\":3.6},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"evaluations_count\":7,\"avg_overall_rating\":3.43},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"evaluations_count\":8,\"avg_overall_rating\":2.88},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"evaluations_count\":7,\"avg_overall_rating\":2.86},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"evaluations_count\":4,\"avg_overall_rating\":2.75},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"evaluations_count\":10,\"avg_overall_rating\":2.7}],\"metadata\":{\"columns\":[\"department_id\",\"department_name\",\"evaluations_count\",\"avg_overall_rating\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"evaluations_count\":5,\"avg_overall_rating\":3.6},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"evaluations_count\":7,\"avg_overall_rating\":3.43}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Overall Evaluation Rating per Department\",\"width\":700,\"height\":{\"step\":30},\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"scale\":{\"domain\":[0,5]}},\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":null,\"sort\":{\"field\":\"avg_overall_rating\",\"order\":\"descending\"}},\"color\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Avg Rating\",\"scale\":{\"scheme\":\"blues\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Avg Overall Rating\"},{\"field\":\"evaluations_count\",\"type\":\"quantitative\",\"title\":\"Evaluations Count\"}]}},{\"mark\":{\"type\":\"text\",\"align\":\"left\",\"dx\":4},\"encoding\":{\"x\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\"},\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":{\"field\":\"avg_overall_rating\",\"order\":\"descending\"}},\"text\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"format\":\".2f\"},\"detail\":{\"field\":\"department_id\",\"type\":\"nominal\"}}}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"]}},\"endedAt\":1771803810896}},\"input\":{\"question\":\"What is the average overall evaluation rating per department?\"},\"result\":{\"sql\":\"SELECT d.id AS department_id,\\n       d.name AS department_name,\\n       ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating,\\n       COUNT(ce.id) AS evaluations_count\\nFROM public.course_evaluations ce\\nJOIN public.enrollments e ON ce.enrollment_id = e.id\\nJOIN public.course_sections cs ON e.course_section_id = cs.id\\nJOIN public.courses c ON cs.course_id = c.id\\nJOIN public.departments d ON c.department_id = d.id\\nGROUP BY d.id, d.name\\nORDER BY avg_overall_rating DESC, d.name ASC;\",\"data\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"evaluations_count\":5,\"avg_overall_rating\":3.6},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"evaluations_count\":7,\"avg_overall_rating\":3.43},{\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"evaluations_count\":8,\"avg_overall_rating\":2.88},{\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"evaluations_count\":7,\"avg_overall_rating\":2.86},{\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"evaluations_count\":4,\"avg_overall_rating\":2.75},{\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"evaluations_count\":10,\"avg_overall_rating\":2.7}],\"metadata\":{\"columns\":[\"department_id\",\"department_name\",\"evaluations_count\",\"avg_overall_rating\"],\"rowCount\":6,\"sample\":[{\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"evaluations_count\":5,\"avg_overall_rating\":3.6},{\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"evaluations_count\":7,\"avg_overall_rating\":3.43}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Overall Evaluation Rating per Department\",\"width\":700,\"height\":{\"step\":30},\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Average Overall Rating\",\"scale\":{\"domain\":[0,5]}},\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":null,\"sort\":{\"field\":\"avg_overall_rating\",\"order\":\"descending\"}},\"color\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Avg Rating\",\"scale\":{\"scheme\":\"blues\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"title\":\"Avg Overall Rating\"},{\"field\":\"evaluations_count\",\"type\":\"quantitative\",\"title\":\"Evaluations Count\"}]}},{\"mark\":{\"type\":\"text\",\"align\":\"left\",\"dx\":4},\"encoding\":{\"x\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\"},\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":{\"field\":\"avg_overall_rating\",\"order\":\"descending\"}},\"text\":{\"field\":\"avg_overall_rating\",\"type\":\"quantitative\",\"format\":\".2f\"},\"detail\":{\"field\":\"department_id\",\"type\":\"nominal\"}}}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"]}},\"traceId\":\"8bf36f4f91884bad652347e3f3d5a270\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/department-avg-evaluation/run-0001/run.json",
+    "queryPath": "runs/department-avg-evaluation/run-0001/query.sql",
+    "vegaRawPath": "runs/department-avg-evaluation/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/department-avg-evaluation/run-0001/vega.resolved.json",
+    "imagePath": "runs/department-avg-evaluation/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:43:31.365Z",
+  "traceId": "8bf36f4f91884bad652347e3f3d5a270",
+  "success": true,
+  "durationMs": 53810,
+  "resultRaw": {
+    "data": [
+      {
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "evaluations_count": 5,
+        "avg_overall_rating": 3.6
+      },
+      {
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "evaluations_count": 7,
+        "avg_overall_rating": 3.43
+      },
+      {
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "evaluations_count": 8,
+        "avg_overall_rating": 2.88
+      },
+      {
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "evaluations_count": 7,
+        "avg_overall_rating": 2.86
+      },
+      {
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "evaluations_count": 4,
+        "avg_overall_rating": 2.75
+      },
+      {
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "evaluations_count": 10,
+        "avg_overall_rating": 2.7
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Overall Evaluation Rating per Department",
+      "width": 700,
+      "height": {
+        "step": 30
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "bar",
+            "cornerRadius": 3
+          },
+          "encoding": {
+            "x": {
+              "field": "avg_overall_rating",
+              "type": "quantitative",
+              "title": "Average Overall Rating",
+              "scale": {
+                "domain": [
+                  0,
+                  5
+                ]
+              }
+            },
+            "y": {
+              "field": "department_name",
+              "type": "nominal",
+              "title": null,
+              "sort": {
+                "field": "avg_overall_rating",
+                "order": "descending"
+              }
+            },
+            "color": {
+              "field": "avg_overall_rating",
+              "type": "quantitative",
+              "title": "Avg Rating",
+              "scale": {
+                "scheme": "blues"
+              }
+            },
+            "tooltip": [
+              {
+                "field": "department_name",
+                "type": "nominal",
+                "title": "Department"
+              },
+              {
+                "field": "avg_overall_rating",
+                "type": "quantitative",
+                "title": "Avg Overall Rating"
+              },
+              {
+                "field": "evaluations_count",
+                "type": "quantitative",
+                "title": "Evaluations Count"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dx": 4
+          },
+          "encoding": {
+            "x": {
+              "field": "avg_overall_rating",
+              "type": "quantitative"
+            },
+            "y": {
+              "field": "department_name",
+              "type": "nominal",
+              "sort": {
+                "field": "avg_overall_rating",
+                "order": "descending"
+              }
+            },
+            "text": {
+              "field": "avg_overall_rating",
+              "type": "quantitative",
+              "format": ".2f"
+            },
+            "detail": {
+              "field": "department_id",
+              "type": "nominal"
+            }
+          }
+        }
+      ]
+    },
+    "sql": "SELECT d.id AS department_id,\n       d.name AS department_name,\n       ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating,\n       COUNT(ce.id) AS evaluations_count\nFROM public.course_evaluations ce\nJOIN public.enrollments e ON ce.enrollment_id = e.id\nJOIN public.course_sections cs ON e.course_section_id = cs.id\nJOIN public.courses c ON cs.course_id = c.id\nJOIN public.departments d ON c.department_id = d.id\nGROUP BY d.id, d.name\nORDER BY avg_overall_rating DESC, d.name ASC;",
+    "metadata": {
+      "columns": [
+        "department_id",
+        "department_name",
+        "evaluations_count",
+        "avg_overall_rating"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+          "department_name": "Wydział Inżynierii Biomedycznej",
+          "evaluations_count": 5,
+          "avg_overall_rating": 3.6
+        },
+        {
+          "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+          "department_name": "Wydział Inżynierii Produkcji",
+          "evaluations_count": 7,
+          "avg_overall_rating": 3.43
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "evaluations_count": 5,
+        "avg_overall_rating": 3.6
+      },
+      {
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "evaluations_count": 7,
+        "avg_overall_rating": 3.43
+      },
+      {
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "evaluations_count": 8,
+        "avg_overall_rating": 2.88
+      },
+      {
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "evaluations_count": 7,
+        "avg_overall_rating": 2.86
+      },
+      {
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "evaluations_count": 4,
+        "avg_overall_rating": 2.75
+      },
+      {
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "evaluations_count": 10,
+        "avg_overall_rating": 2.7
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Overall Evaluation Rating per Department",
+      "width": 700,
+      "height": {
+        "step": 30
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "bar",
+            "cornerRadius": 3
+          },
+          "encoding": {
+            "x": {
+              "field": "avg_overall_rating",
+              "type": "quantitative",
+              "title": "Average Overall Rating",
+              "scale": {
+                "domain": [
+                  0,
+                  5
+                ]
+              }
+            },
+            "y": {
+              "field": "department_name",
+              "type": "nominal",
+              "title": null,
+              "sort": {
+                "field": "avg_overall_rating",
+                "order": "descending"
+              }
+            },
+            "color": {
+              "field": "avg_overall_rating",
+              "type": "quantitative",
+              "title": "Avg Rating",
+              "scale": {
+                "scheme": "blues"
+              }
+            },
+            "tooltip": [
+              {
+                "field": "department_name",
+                "type": "nominal",
+                "title": "Department"
+              },
+              {
+                "field": "avg_overall_rating",
+                "type": "quantitative",
+                "title": "Avg Overall Rating"
+              },
+              {
+                "field": "evaluations_count",
+                "type": "quantitative",
+                "title": "Evaluations Count"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dx": 4
+          },
+          "encoding": {
+            "x": {
+              "field": "avg_overall_rating",
+              "type": "quantitative"
+            },
+            "y": {
+              "field": "department_name",
+              "type": "nominal",
+              "sort": {
+                "field": "avg_overall_rating",
+                "order": "descending"
+              }
+            },
+            "text": {
+              "field": "avg_overall_rating",
+              "type": "quantitative",
+              "format": ".2f"
+            },
+            "detail": {
+              "field": "department_id",
+              "type": "nominal"
+            }
+          }
+        }
+      ]
+    },
+    "sql": "SELECT d.id AS department_id,\n       d.name AS department_name,\n       ROUND(AVG(ce.overall_rating)::numeric, 2) AS avg_overall_rating,\n       COUNT(ce.id) AS evaluations_count\nFROM public.course_evaluations ce\nJOIN public.enrollments e ON ce.enrollment_id = e.id\nJOIN public.course_sections cs ON e.course_section_id = cs.id\nJOIN public.courses c ON cs.course_id = c.id\nJOIN public.departments d ON c.department_id = d.id\nGROUP BY d.id, d.name\nORDER BY avg_overall_rating DESC, d.name ASC;",
+    "metadata": {
+      "columns": [
+        "department_id",
+        "department_name",
+        "evaluations_count",
+        "avg_overall_rating"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+          "department_name": "Wydział Inżynierii Biomedycznej",
+          "evaluations_count": 5,
+          "avg_overall_rating": 3.6
+        },
+        {
+          "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+          "department_name": "Wydział Inżynierii Produkcji",
+          "evaluations_count": 7,
+          "avg_overall_rating": 3.43
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:43:31.365Z",
+    "traceId": "8bf36f4f91884bad652347e3f3d5a270",
+    "attempts": 4,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 22130,
+      "outputTokens": 3486,
+      "totalTokens": 25616,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2176,
+      "costUsd": 0.0125045
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 22130,
+        "outputTokens": 3486,
+        "totalTokens": 25616,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2176,
+        "costUsd": 0.0125045
+      }
+    ],
+    "warnings": []
+  }
+}

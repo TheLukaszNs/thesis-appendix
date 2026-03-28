@@ -1,0 +1,126 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "avg-grade-winter-vs-summer",
+  "caseDirectory": "avg-grade-winter-vs-summer",
+  "repeatIndex": 1,
+  "prompt": "Compare average grades between winter and summer semesters",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Compare average grades between winter and summer semesters"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:43:14.093Z",
+    "endedAtUtc": "2026-02-22T23:43:48.059Z",
+    "durationMs": 33966
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2469",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:43:48 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Compare average grades between winter and summer semesters\"},\"sql\":{\"payload\":{\"question\":\"Compare average grades between winter and summer semesters\"},\"startedAt\":1771803794100,\"status\":\"success\",\"output\":{\"reasoning\":\"Compute average numeric grade (exam_score) per semester_type for winter and summer by joining grades -> enrollments -> course_sections; exclude null scores and present counts for context.\",\"sql\":\"WITH grade_links AS (\\n  SELECT\\n    cs.semester_type AS semester_type,\\n    g.exam_score AS exam_score\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  WHERE cs.semester_type IN ('winter', 'summer')\\n    AND g.exam_score IS NOT NULL\\n)\\nSELECT\\n  semester_type AS semester,\\n  ROUND(AVG(exam_score)::numeric, 2) AS avg_exam_score,\\n  COUNT(*) AS grade_count\\nFROM grade_links\\nGROUP BY semester_type\\nORDER BY semester_type;\",\"assumptions\":[\"Using grades.exam_score as the numeric grade to compare (grades.grade_value may be non-numeric).\",\"course_sections.semester_type uses the values 'winter' and 'summer' (case-sensitive match).\",\"Only non-null exam_score values are included in the averages.\"]},\"endedAt\":1771803828013},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH grade_links AS (\\n  SELECT\\n    cs.semester_type AS semester_type,\\n    g.exam_score AS exam_score\\n  FROM public.grades g\\n  JOIN public.enrollments e ON g.enrollment_id = e.id\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  WHERE cs.semester_type IN ('winter', 'summer')\\n    AND g.exam_score IS NOT NULL\\n)\\nSELECT\\n  semester_type AS semester,\\n  ROUND(AVG(exam_score)::numeric, 2) AS avg_exam_score,\\n  COUNT(*) AS grade_count\\nFROM grade_links\\nGROUP BY semester_type\\nORDER BY semester_type;\"},\"startedAt\":1771803828018,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: invalid input value for enum semester_type: \\\"winter\\\"\\nLINE 9:   WHERE cs.semester_type IN ('winter', 'summer')\\n                                     ^\",\"name\":\"Error\"},\"endedAt\":1771803828051}},\"input\":{\"question\":\"Compare average grades between winter and summer semesters\"},\"error\":{\"message\":\"SQL execution failed: invalid input value for enum semester_type: \\\"winter\\\"\\nLINE 9:   WHERE cs.semester_type IN ('winter', 'summer')\\n                                     ^\",\"name\":\"Error\"},\"traceId\":\"497c78a226221346c59ddc12a07de775\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/avg-grade-winter-vs-summer/run-0001/run.json",
+    "queryPath": "runs/avg-grade-winter-vs-summer/run-0001/query.sql",
+    "vegaRawPath": "runs/avg-grade-winter-vs-summer/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/avg-grade-winter-vs-summer/run-0001/vega.resolved.json",
+    "imagePath": "runs/avg-grade-winter-vs-summer/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:43:48.060Z",
+  "traceId": "497c78a226221346c59ddc12a07de775",
+  "success": false,
+  "durationMs": 33967,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Compare average grades between winter and summer semesters"
+      },
+      "sql": {
+        "payload": {
+          "question": "Compare average grades between winter and summer semesters"
+        },
+        "startedAt": 1771803794100,
+        "status": "success",
+        "output": {
+          "reasoning": "Compute average numeric grade (exam_score) per semester_type for winter and summer by joining grades -> enrollments -> course_sections; exclude null scores and present counts for context.",
+          "sql": "WITH grade_links AS (\n  SELECT\n    cs.semester_type AS semester_type,\n    g.exam_score AS exam_score\n  FROM public.grades g\n  JOIN public.enrollments e ON g.enrollment_id = e.id\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\n  WHERE cs.semester_type IN ('winter', 'summer')\n    AND g.exam_score IS NOT NULL\n)\nSELECT\n  semester_type AS semester,\n  ROUND(AVG(exam_score)::numeric, 2) AS avg_exam_score,\n  COUNT(*) AS grade_count\nFROM grade_links\nGROUP BY semester_type\nORDER BY semester_type;",
+          "assumptions": [
+            "Using grades.exam_score as the numeric grade to compare (grades.grade_value may be non-numeric).",
+            "course_sections.semester_type uses the values 'winter' and 'summer' (case-sensitive match).",
+            "Only non-null exam_score values are included in the averages."
+          ]
+        },
+        "endedAt": 1771803828013
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH grade_links AS (\n  SELECT\n    cs.semester_type AS semester_type,\n    g.exam_score AS exam_score\n  FROM public.grades g\n  JOIN public.enrollments e ON g.enrollment_id = e.id\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\n  WHERE cs.semester_type IN ('winter', 'summer')\n    AND g.exam_score IS NOT NULL\n)\nSELECT\n  semester_type AS semester,\n  ROUND(AVG(exam_score)::numeric, 2) AS avg_exam_score,\n  COUNT(*) AS grade_count\nFROM grade_links\nGROUP BY semester_type\nORDER BY semester_type;"
+        },
+        "startedAt": 1771803828018,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: invalid input value for enum semester_type: \"winter\"\nLINE 9:   WHERE cs.semester_type IN ('winter', 'summer')\n                                     ^",
+          "name": "Error"
+        },
+        "endedAt": 1771803828051
+      }
+    },
+    "input": {
+      "question": "Compare average grades between winter and summer semesters"
+    },
+    "error": {
+      "message": "SQL execution failed: invalid input value for enum semester_type: \"winter\"\nLINE 9:   WHERE cs.semester_type IN ('winter', 'summer')\n                                     ^",
+      "name": "Error"
+    },
+    "traceId": "497c78a226221346c59ddc12a07de775"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:43:48.060Z",
+    "traceId": "497c78a226221346c59ddc12a07de775",
+    "attempts": 5,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 11634,
+      "outputTokens": 2020,
+      "totalTokens": 13654,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1472,
+      "costUsd": 0.0069485
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 11634,
+        "outputTokens": 2020,
+        "totalTokens": 13654,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1472,
+        "costUsd": 0.0069485
+      }
+    ],
+    "warnings": []
+  }
+}

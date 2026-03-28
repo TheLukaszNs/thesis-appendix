@@ -1,0 +1,163 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "courses-most-sections",
+  "caseDirectory": "courses-most-sections",
+  "repeatIndex": 1,
+  "prompt": "Which courses have been offered in the most sections overall?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which courses have been offered in the most sections overall?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:55:08.025Z",
+    "endedAtUtc": "2026-02-23T10:55:21.890Z",
+    "durationMs": 13865
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2109",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:55:21 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Which courses have been offered in the most sections overall?\"},\"agent\":{\"payload\":{\"question\":\"Which courses have been offered in the most sections overall?\"},\"startedAt\":1771844108083,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  courses.course_id AS course_id,\\n  courses.course_title AS course_title,\\n  COUNT(sections.section_id) AS section_count\\nFROM courses\\nJOIN sections ON courses.course_id = sections.course_id\\nGROUP BY courses.course_id, courses.course_title\\nORDER BY section_count DESC\\nLIMIT 10;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Top 10 courses by total number of sections offered.\",\"title\":\"Top 10 Courses by Number of Sections Offered\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"course_title\",\"type\":\"nominal\",\"sort\":\"-x\",\"axis\":{\"title\":\"Course\"}},\"x\":{\"field\":\"section_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of Sections\"}},\"tooltip\":[{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"},{\"field\":\"course_title\",\"type\":\"nominal\",\"title\":\"Course Title\"},{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Section Count\"}]}}},\"endedAt\":1771844121775},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  courses.course_id AS course_id,\\n  courses.course_title AS course_title,\\n  COUNT(sections.section_id) AS section_count\\nFROM courses\\nJOIN sections ON courses.course_id = sections.course_id\\nGROUP BY courses.course_id, courses.course_title\\nORDER BY section_count DESC\\nLIMIT 10;\"},\"startedAt\":1771844121780,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: relation \\\"sections\\\" does not exist\\nLINE 7: JOIN sections ON courses.course_id = sections.course_id\\n             ^\",\"name\":\"Error\"},\"endedAt\":1771844121886}},\"input\":{\"question\":\"Which courses have been offered in the most sections overall?\"},\"error\":{\"message\":\"SQL execution failed: relation \\\"sections\\\" does not exist\\nLINE 7: JOIN sections ON courses.course_id = sections.course_id\\n             ^\",\"name\":\"Error\"},\"traceId\":\"420f8753b2fd1e6c796b1a5c7e50f88d\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/courses-most-sections/run-0001/run.json",
+    "queryPath": "runs/courses-most-sections/run-0001/query.sql",
+    "vegaRawPath": "runs/courses-most-sections/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/courses-most-sections/run-0001/vega.resolved.json",
+    "imagePath": "runs/courses-most-sections/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:55:21.891Z",
+  "traceId": "420f8753b2fd1e6c796b1a5c7e50f88d",
+  "success": false,
+  "durationMs": 13866,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Which courses have been offered in the most sections overall?"
+      },
+      "agent": {
+        "payload": {
+          "question": "Which courses have been offered in the most sections overall?"
+        },
+        "startedAt": 1771844108083,
+        "status": "success",
+        "output": {
+          "sql": "SELECT\n  courses.course_id AS course_id,\n  courses.course_title AS course_title,\n  COUNT(sections.section_id) AS section_count\nFROM courses\nJOIN sections ON courses.course_id = sections.course_id\nGROUP BY courses.course_id, courses.course_title\nORDER BY section_count DESC\nLIMIT 10;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Top 10 courses by total number of sections offered.",
+            "title": "Top 10 Courses by Number of Sections Offered",
+            "data": {
+              "name": "query_result"
+            },
+            "mark": "bar",
+            "encoding": {
+              "y": {
+                "field": "course_title",
+                "type": "nominal",
+                "sort": "-x",
+                "axis": {
+                  "title": "Course"
+                }
+              },
+              "x": {
+                "field": "section_count",
+                "type": "quantitative",
+                "axis": {
+                  "title": "Number of Sections"
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "course_id",
+                  "type": "nominal",
+                  "title": "Course ID"
+                },
+                {
+                  "field": "course_title",
+                  "type": "nominal",
+                  "title": "Course Title"
+                },
+                {
+                  "field": "section_count",
+                  "type": "quantitative",
+                  "title": "Section Count"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771844121775
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT\n  courses.course_id AS course_id,\n  courses.course_title AS course_title,\n  COUNT(sections.section_id) AS section_count\nFROM courses\nJOIN sections ON courses.course_id = sections.course_id\nGROUP BY courses.course_id, courses.course_title\nORDER BY section_count DESC\nLIMIT 10;"
+        },
+        "startedAt": 1771844121780,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: relation \"sections\" does not exist\nLINE 7: JOIN sections ON courses.course_id = sections.course_id\n             ^",
+          "name": "Error"
+        },
+        "endedAt": 1771844121886
+      }
+    },
+    "input": {
+      "question": "Which courses have been offered in the most sections overall?"
+    },
+    "error": {
+      "message": "SQL execution failed: relation \"sections\" does not exist\nLINE 7: JOIN sections ON courses.course_id = sections.course_id\n             ^",
+      "name": "Error"
+    },
+    "traceId": "420f8753b2fd1e6c796b1a5c7e50f88d"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:55:21.891Z",
+    "traceId": "420f8753b2fd1e6c796b1a5c7e50f88d",
+    "attempts": 6,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 267,
+      "outputTokens": 947,
+      "totalTokens": 1214,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 576,
+      "costUsd": 0.00196075
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 267,
+        "outputTokens": 947,
+        "totalTokens": 1214,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 576,
+        "costUsd": 0.00196075
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,338 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "computer-rooms-by-building",
+  "caseDirectory": "computer-rooms-by-building",
+  "repeatIndex": 1,
+  "prompt": "How many computer labs are in each building?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many computer labs are in each building?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:06:24.954Z",
+    "endedAtUtc": "2026-02-23T14:06:51.696Z",
+    "durationMs": 26742
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "8583",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:06:51 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How many computer labs are in each building?\"},\"sql\":{\"payload\":{\"question\":\"How many computer labs are in each building?\"},\"startedAt\":1771855584971,\"status\":\"success\",\"output\":{\"reasoning\":\"The question asks for the count of computer labs in each building. The classrooms table has a 'building' column and a 'has_computers' boolean column. A computer lab is a classroom with has_computers = true. I need to group by building and count the classrooms where has_computers is true, ordered by building name for deterministic output.\",\"sql\":\"SELECT building, COUNT(*) AS computer_lab_count FROM classrooms WHERE has_computers = true GROUP BY building ORDER BY building;\",\"assumptions\":[\"A computer lab is defined as a classroom with has_computers = true\",\"The question asks for count of computer labs (classrooms with computers) grouped by building\"]},\"endedAt\":1771855608788},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT building, COUNT(*) AS computer_lab_count FROM classrooms WHERE has_computers = true GROUP BY building ORDER BY building;\"},\"startedAt\":1771855608791,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT building, COUNT(*) AS computer_lab_count FROM classrooms WHERE has_computers = true GROUP BY building ORDER BY building\",\"metadata\":{\"columns\":[\"building\",\"computer_lab_count\"],\"rowCount\":16,\"sample\":[{\"building\":\"A\",\"computer_lab_count\":\"1\"},{\"building\":\"A2\",\"computer_lab_count\":\"2\"}]},\"data\":[{\"building\":\"A\",\"computer_lab_count\":\"1\"},{\"building\":\"A2\",\"computer_lab_count\":\"2\"},{\"building\":\"C\",\"computer_lab_count\":\"2\"},{\"building\":\"D\",\"computer_lab_count\":\"1\"},{\"building\":\"K1\",\"computer_lab_count\":\"2\"},{\"building\":\"K2\",\"computer_lab_count\":\"1\"},{\"building\":\"K3\",\"computer_lab_count\":\"1\"},{\"building\":\"K4\",\"computer_lab_count\":\"1\"},{\"building\":\"RB1\",\"computer_lab_count\":\"5\"},{\"building\":\"RB2\",\"computer_lab_count\":\"1\"},{\"building\":\"RB3\",\"computer_lab_count\":\"3\"},{\"building\":\"RM1\",\"computer_lab_count\":\"1\"},{\"building\":\"RM2\",\"computer_lab_count\":\"2\"},{\"building\":\"RM3\",\"computer_lab_count\":\"1\"},{\"building\":\"RN1\",\"computer_lab_count\":\"1\"},{\"building\":\"RN2\",\"computer_lab_count\":\"2\"}]},\"endedAt\":1771855608796},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT building, COUNT(*) AS computer_lab_count FROM classrooms WHERE has_computers = true GROUP BY building ORDER BY building\",\"metadata\":{\"columns\":[\"building\",\"computer_lab_count\"],\"rowCount\":16,\"sample\":[{\"building\":\"A\",\"computer_lab_count\":\"1\"},{\"building\":\"A2\",\"computer_lab_count\":\"2\"}]},\"data\":[{\"building\":\"A\",\"computer_lab_count\":\"1\"},{\"building\":\"A2\",\"computer_lab_count\":\"2\"},{\"building\":\"C\",\"computer_lab_count\":\"2\"},{\"building\":\"D\",\"computer_lab_count\":\"1\"},{\"building\":\"K1\",\"computer_lab_count\":\"2\"},{\"building\":\"K2\",\"computer_lab_count\":\"1\"},{\"building\":\"K3\",\"computer_lab_count\":\"1\"},{\"building\":\"K4\",\"computer_lab_count\":\"1\"},{\"building\":\"RB1\",\"computer_lab_count\":\"5\"},{\"building\":\"RB2\",\"computer_lab_count\":\"1\"},{\"building\":\"RB3\",\"computer_lab_count\":\"3\"},{\"building\":\"RM1\",\"computer_lab_count\":\"1\"},{\"building\":\"RM2\",\"computer_lab_count\":\"2\"},{\"building\":\"RM3\",\"computer_lab_count\":\"1\"},{\"building\":\"RN1\",\"computer_lab_count\":\"1\"},{\"building\":\"RN2\",\"computer_lab_count\":\"2\"}]},\"startedAt\":1771855608799,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Computer Labs by Building\",\"description\":\"Count of computer labs in each building\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\",\"sort\":\"ascending\"},\"y\":{\"field\":\"computer_lab_count\",\"type\":\"quantitative\",\"title\":\"Number of Computer Labs\"},\"tooltip\":[{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\"},{\"field\":\"computer_lab_count\",\"type\":\"quantitative\",\"title\":\"Computer Labs\"}]}},\"reasoning\":\"A bar chart is ideal for comparing the count of computer labs across different buildings. The x-axis displays building names (nominal), the y-axis shows the count (quantitative), and tooltips provide detailed information on hover. The data is sorted alphabetically by building for easy reference.\"},\"endedAt\":1771855611677},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Computer Labs by Building\",\"description\":\"Count of computer labs in each building\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\",\"sort\":\"ascending\"},\"y\":{\"field\":\"computer_lab_count\",\"type\":\"quantitative\",\"title\":\"Number of Computer Labs\"},\"tooltip\":[{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\"},{\"field\":\"computer_lab_count\",\"type\":\"quantitative\",\"title\":\"Computer Labs\"}]}},\"reasoning\":\"A bar chart is ideal for comparing the count of computer labs across different buildings. The x-axis displays building names (nominal), the y-axis shows the count (quantitative), and tooltips provide detailed information on hover. The data is sorted alphabetically by building for easy reference.\"},\"startedAt\":1771855611681,\"status\":\"success\",\"output\":{\"sql\":\"SELECT building, COUNT(*) AS computer_lab_count FROM classrooms WHERE has_computers = true GROUP BY building ORDER BY building;\",\"data\":[{\"building\":\"A\",\"computer_lab_count\":\"1\"},{\"building\":\"A2\",\"computer_lab_count\":\"2\"},{\"building\":\"C\",\"computer_lab_count\":\"2\"},{\"building\":\"D\",\"computer_lab_count\":\"1\"},{\"building\":\"K1\",\"computer_lab_count\":\"2\"},{\"building\":\"K2\",\"computer_lab_count\":\"1\"},{\"building\":\"K3\",\"computer_lab_count\":\"1\"},{\"building\":\"K4\",\"computer_lab_count\":\"1\"},{\"building\":\"RB1\",\"computer_lab_count\":\"5\"},{\"building\":\"RB2\",\"computer_lab_count\":\"1\"},{\"building\":\"RB3\",\"computer_lab_count\":\"3\"},{\"building\":\"RM1\",\"computer_lab_count\":\"1\"},{\"building\":\"RM2\",\"computer_lab_count\":\"2\"},{\"building\":\"RM3\",\"computer_lab_count\":\"1\"},{\"building\":\"RN1\",\"computer_lab_count\":\"1\"},{\"building\":\"RN2\",\"computer_lab_count\":\"2\"}],\"metadata\":{\"columns\":[\"building\",\"computer_lab_count\"],\"rowCount\":16,\"sample\":[{\"building\":\"A\",\"computer_lab_count\":\"1\"},{\"building\":\"A2\",\"computer_lab_count\":\"2\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Computer Labs by Building\",\"description\":\"Count of computer labs in each building\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\",\"sort\":\"ascending\"},\"y\":{\"field\":\"computer_lab_count\",\"type\":\"quantitative\",\"title\":\"Number of Computer Labs\"},\"tooltip\":[{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\"},{\"field\":\"computer_lab_count\",\"type\":\"quantitative\",\"title\":\"Computer Labs\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855611684}},\"input\":{\"question\":\"How many computer labs are in each building?\"},\"result\":{\"sql\":\"SELECT building, COUNT(*) AS computer_lab_count FROM classrooms WHERE has_computers = true GROUP BY building ORDER BY building;\",\"data\":[{\"building\":\"A\",\"computer_lab_count\":\"1\"},{\"building\":\"A2\",\"computer_lab_count\":\"2\"},{\"building\":\"C\",\"computer_lab_count\":\"2\"},{\"building\":\"D\",\"computer_lab_count\":\"1\"},{\"building\":\"K1\",\"computer_lab_count\":\"2\"},{\"building\":\"K2\",\"computer_lab_count\":\"1\"},{\"building\":\"K3\",\"computer_lab_count\":\"1\"},{\"building\":\"K4\",\"computer_lab_count\":\"1\"},{\"building\":\"RB1\",\"computer_lab_count\":\"5\"},{\"building\":\"RB2\",\"computer_lab_count\":\"1\"},{\"building\":\"RB3\",\"computer_lab_count\":\"3\"},{\"building\":\"RM1\",\"computer_lab_count\":\"1\"},{\"building\":\"RM2\",\"computer_lab_count\":\"2\"},{\"building\":\"RM3\",\"computer_lab_count\":\"1\"},{\"building\":\"RN1\",\"computer_lab_count\":\"1\"},{\"building\":\"RN2\",\"computer_lab_count\":\"2\"}],\"metadata\":{\"columns\":[\"building\",\"computer_lab_count\"],\"rowCount\":16,\"sample\":[{\"building\":\"A\",\"computer_lab_count\":\"1\"},{\"building\":\"A2\",\"computer_lab_count\":\"2\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Computer Labs by Building\",\"description\":\"Count of computer labs in each building\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\",\"sort\":\"ascending\"},\"y\":{\"field\":\"computer_lab_count\",\"type\":\"quantitative\",\"title\":\"Number of Computer Labs\"},\"tooltip\":[{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\"},{\"field\":\"computer_lab_count\",\"type\":\"quantitative\",\"title\":\"Computer Labs\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"32138a0aef7921cb6a8a1d70fbe673e5\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/computer-rooms-by-building/run-0001/run.json",
+    "queryPath": "runs/computer-rooms-by-building/run-0001/query.sql",
+    "vegaRawPath": "runs/computer-rooms-by-building/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/computer-rooms-by-building/run-0001/vega.resolved.json",
+    "imagePath": "runs/computer-rooms-by-building/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:06:52.090Z",
+  "traceId": "32138a0aef7921cb6a8a1d70fbe673e5",
+  "success": true,
+  "durationMs": 27137,
+  "resultRaw": {
+    "data": [
+      {
+        "building": "A",
+        "computer_lab_count": "1"
+      },
+      {
+        "building": "A2",
+        "computer_lab_count": "2"
+      },
+      {
+        "building": "C",
+        "computer_lab_count": "2"
+      },
+      {
+        "building": "D",
+        "computer_lab_count": "1"
+      },
+      {
+        "building": "K1",
+        "computer_lab_count": "2"
+      },
+      {
+        "building": "K2",
+        "computer_lab_count": "1"
+      },
+      {
+        "building": "K3",
+        "computer_lab_count": "1"
+      },
+      {
+        "building": "K4",
+        "computer_lab_count": "1"
+      },
+      {
+        "building": "RB1",
+        "computer_lab_count": "5"
+      },
+      {
+        "building": "RB2",
+        "computer_lab_count": "1"
+      },
+      {
+        "building": "RB3",
+        "computer_lab_count": "3"
+      },
+      {
+        "building": "RM1",
+        "computer_lab_count": "1"
+      },
+      {
+        "building": "RM2",
+        "computer_lab_count": "2"
+      },
+      {
+        "building": "RM3",
+        "computer_lab_count": "1"
+      },
+      {
+        "building": "RN1",
+        "computer_lab_count": "1"
+      },
+      {
+        "building": "RN2",
+        "computer_lab_count": "2"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Computer Labs by Building",
+      "description": "Count of computer labs in each building",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "building",
+          "type": "nominal",
+          "title": "Building",
+          "sort": "ascending"
+        },
+        "y": {
+          "field": "computer_lab_count",
+          "type": "quantitative",
+          "title": "Number of Computer Labs"
+        },
+        "tooltip": [
+          {
+            "field": "building",
+            "type": "nominal",
+            "title": "Building"
+          },
+          {
+            "field": "computer_lab_count",
+            "type": "quantitative",
+            "title": "Computer Labs"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT building, COUNT(*) AS computer_lab_count FROM classrooms WHERE has_computers = true GROUP BY building ORDER BY building;",
+    "metadata": {
+      "columns": [
+        "building",
+        "computer_lab_count"
+      ],
+      "rowCount": 16,
+      "sample": [
+        {
+          "building": "A",
+          "computer_lab_count": "1"
+        },
+        {
+          "building": "A2",
+          "computer_lab_count": "2"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "building": "A",
+        "computer_lab_count": "1"
+      },
+      {
+        "building": "A2",
+        "computer_lab_count": "2"
+      },
+      {
+        "building": "C",
+        "computer_lab_count": "2"
+      },
+      {
+        "building": "D",
+        "computer_lab_count": "1"
+      },
+      {
+        "building": "K1",
+        "computer_lab_count": "2"
+      },
+      {
+        "building": "K2",
+        "computer_lab_count": "1"
+      },
+      {
+        "building": "K3",
+        "computer_lab_count": "1"
+      },
+      {
+        "building": "K4",
+        "computer_lab_count": "1"
+      },
+      {
+        "building": "RB1",
+        "computer_lab_count": "5"
+      },
+      {
+        "building": "RB2",
+        "computer_lab_count": "1"
+      },
+      {
+        "building": "RB3",
+        "computer_lab_count": "3"
+      },
+      {
+        "building": "RM1",
+        "computer_lab_count": "1"
+      },
+      {
+        "building": "RM2",
+        "computer_lab_count": "2"
+      },
+      {
+        "building": "RM3",
+        "computer_lab_count": "1"
+      },
+      {
+        "building": "RN1",
+        "computer_lab_count": "1"
+      },
+      {
+        "building": "RN2",
+        "computer_lab_count": "2"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Computer Labs by Building",
+      "description": "Count of computer labs in each building",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "building",
+          "type": "nominal",
+          "title": "Building",
+          "sort": "ascending"
+        },
+        "y": {
+          "field": "computer_lab_count",
+          "type": "quantitative",
+          "title": "Number of Computer Labs"
+        },
+        "tooltip": [
+          {
+            "field": "building",
+            "type": "nominal",
+            "title": "Building"
+          },
+          {
+            "field": "computer_lab_count",
+            "type": "quantitative",
+            "title": "Computer Labs"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT building, COUNT(*) AS computer_lab_count FROM classrooms WHERE has_computers = true GROUP BY building ORDER BY building;",
+    "metadata": {
+      "columns": [
+        "building",
+        "computer_lab_count"
+      ],
+      "rowCount": 16,
+      "sample": [
+        {
+          "building": "A",
+          "computer_lab_count": "1"
+        },
+        {
+          "building": "A2",
+          "computer_lab_count": "2"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.296Z",
+    "traceId": "32138a0aef7921cb6a8a1d70fbe673e5",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 9896,
+      "outputTokens": 661,
+      "totalTokens": 10557,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.013201
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 9896,
+        "outputTokens": 661,
+        "totalTokens": 10557,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.013201
+      }
+    ],
+    "warnings": []
+  }
+}

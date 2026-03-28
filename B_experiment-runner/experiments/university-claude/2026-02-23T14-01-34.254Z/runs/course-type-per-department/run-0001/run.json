@@ -1,0 +1,426 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "course-type-per-department",
+  "caseDirectory": "course-type-per-department",
+  "repeatIndex": 1,
+  "prompt": "Show the breakdown of course types for each department",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the breakdown of course types for each department"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:13:22.766Z",
+    "endedAtUtc": "2026-02-23T14:14:03.686Z",
+    "durationMs": 40920
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "15692",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:14:03 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show the breakdown of course types for each department\"},\"sql\":{\"payload\":{\"question\":\"Show the breakdown of course types for each department\"},\"startedAt\":1771856002777,\"status\":\"success\",\"output\":{\"reasoning\":\"The user wants a breakdown of course types for each department. I have confirmed that:\\n1. The `departments` table has id and name columns\\n2. The `courses` table has department_id, course_type columns\\n3. There is a foreign key relationship between courses.department_id and departments.id\\n\\nThe query should group courses by department and course_type, counting the number of courses in each combination. I'll use a GROUP BY on both department name and course_type, ordered by department name for clarity.\",\"sql\":\"SELECT \\n  d.name AS department_name,\\n  c.course_type,\\n  COUNT(*) AS course_count\\nFROM departments d\\nINNER JOIN courses c ON d.id = c.department_id\\nGROUP BY d.name, c.course_type\\nORDER BY d.name, c.course_type\",\"assumptions\":[\"The course_type column contains the type classification for each course\",\"A breakdown means counting courses by department and course type\",\"Results should be ordered by department name for readability\"]},\"endedAt\":1771856040208},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT \\n  d.name AS department_name,\\n  c.course_type,\\n  COUNT(*) AS course_count\\nFROM departments d\\nINNER JOIN courses c ON d.id = c.department_id\\nGROUP BY d.name, c.course_type\\nORDER BY d.name, c.course_type\"},\"startedAt\":1771856040213,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  d.name AS department_name,\\n  c.course_type,\\n  COUNT(*) AS course_count\\nFROM departments d\\nINNER JOIN courses c ON d.id = c.department_id\\nGROUP BY d.name, c.course_type\\nORDER BY d.name, c.course_type\",\"metadata\":{\"columns\":[\"department_name\",\"course_type\",\"course_count\"],\"rowCount\":18,\"sample\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"course_type\":\"LECTURE\",\"course_count\":\"3\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"course_type\":\"PROJECT\",\"course_count\":\"2\"}]},\"data\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"course_type\":\"LECTURE\",\"course_count\":\"3\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"course_type\":\"PROJECT\",\"course_count\":\"2\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"course_type\":\"EXERCISE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"course_type\":\"LECTURE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"course_type\":\"LABORATORY\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"course_type\":\"LECTURE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"course_type\":\"PROJECT\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"course_type\":\"EXERCISE\",\"course_count\":\"2\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"course_type\":\"LABORATORY\",\"course_count\":\"2\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"course_type\":\"SEMINAR\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"course_type\":\"EXERCISE\",\"course_count\":\"2\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"course_type\":\"LECTURE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"course_type\":\"LABORATORY\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"course_type\":\"PROJECT\",\"course_count\":\"2\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"course_type\":\"SEMINAR\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"course_type\":\"EXERCISE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"course_type\":\"LECTURE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"course_type\":\"EXERCISE\",\"course_count\":\"2\"}]},\"endedAt\":1771856040230},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  d.name AS department_name,\\n  c.course_type,\\n  COUNT(*) AS course_count\\nFROM departments d\\nINNER JOIN courses c ON d.id = c.department_id\\nGROUP BY d.name, c.course_type\\nORDER BY d.name, c.course_type\",\"metadata\":{\"columns\":[\"department_name\",\"course_type\",\"course_count\"],\"rowCount\":18,\"sample\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"course_type\":\"LECTURE\",\"course_count\":\"3\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"course_type\":\"PROJECT\",\"course_count\":\"2\"}]},\"data\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"course_type\":\"LECTURE\",\"course_count\":\"3\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"course_type\":\"PROJECT\",\"course_count\":\"2\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"course_type\":\"EXERCISE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"course_type\":\"LECTURE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"course_type\":\"LABORATORY\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"course_type\":\"LECTURE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"course_type\":\"PROJECT\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"course_type\":\"EXERCISE\",\"course_count\":\"2\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"course_type\":\"LABORATORY\",\"course_count\":\"2\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"course_type\":\"SEMINAR\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"course_type\":\"EXERCISE\",\"course_count\":\"2\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"course_type\":\"LECTURE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"course_type\":\"LABORATORY\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"course_type\":\"PROJECT\",\"course_count\":\"2\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"course_type\":\"SEMINAR\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"course_type\":\"EXERCISE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"course_type\":\"LECTURE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"course_type\":\"EXERCISE\",\"course_count\":\"2\"}]},\"startedAt\":1771856040258,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Course Type Breakdown by Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Department\"},\"y\":{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Number of Courses\"},\"color\":{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\",\"scale\":{\"scheme\":\"category10\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Course Count\"}]}},\"reasoning\":\"A grouped bar chart effectively shows the breakdown of course types within each department. The x-axis displays departments, the y-axis shows course counts, and colors distinguish between course types (LECTURE, PROJECT, etc.). This allows easy comparison of course type distribution both within and across departments. The tooltip provides detailed information on hover.\"},\"endedAt\":1771856043656},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Course Type Breakdown by Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Department\"},\"y\":{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Number of Courses\"},\"color\":{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\",\"scale\":{\"scheme\":\"category10\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Course Count\"}]}},\"reasoning\":\"A grouped bar chart effectively shows the breakdown of course types within each department. The x-axis displays departments, the y-axis shows course counts, and colors distinguish between course types (LECTURE, PROJECT, etc.). This allows easy comparison of course type distribution both within and across departments. The tooltip provides detailed information on hover.\"},\"startedAt\":1771856043662,\"status\":\"success\",\"output\":{\"sql\":\"SELECT \\n  d.name AS department_name,\\n  c.course_type,\\n  COUNT(*) AS course_count\\nFROM departments d\\nINNER JOIN courses c ON d.id = c.department_id\\nGROUP BY d.name, c.course_type\\nORDER BY d.name, c.course_type\",\"data\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"course_type\":\"LECTURE\",\"course_count\":\"3\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"course_type\":\"PROJECT\",\"course_count\":\"2\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"course_type\":\"EXERCISE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"course_type\":\"LECTURE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"course_type\":\"LABORATORY\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"course_type\":\"LECTURE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"course_type\":\"PROJECT\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"course_type\":\"EXERCISE\",\"course_count\":\"2\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"course_type\":\"LABORATORY\",\"course_count\":\"2\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"course_type\":\"SEMINAR\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"course_type\":\"EXERCISE\",\"course_count\":\"2\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"course_type\":\"LECTURE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"course_type\":\"LABORATORY\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"course_type\":\"PROJECT\",\"course_count\":\"2\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"course_type\":\"SEMINAR\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"course_type\":\"EXERCISE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"course_type\":\"LECTURE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"course_type\":\"EXERCISE\",\"course_count\":\"2\"}],\"metadata\":{\"columns\":[\"department_name\",\"course_type\",\"course_count\"],\"rowCount\":18,\"sample\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"course_type\":\"LECTURE\",\"course_count\":\"3\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"course_type\":\"PROJECT\",\"course_count\":\"2\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Course Type Breakdown by Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Department\"},\"y\":{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Number of Courses\"},\"color\":{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\",\"scale\":{\"scheme\":\"category10\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Course Count\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771856043666}},\"input\":{\"question\":\"Show the breakdown of course types for each department\"},\"result\":{\"sql\":\"SELECT \\n  d.name AS department_name,\\n  c.course_type,\\n  COUNT(*) AS course_count\\nFROM departments d\\nINNER JOIN courses c ON d.id = c.department_id\\nGROUP BY d.name, c.course_type\\nORDER BY d.name, c.course_type\",\"data\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"course_type\":\"LECTURE\",\"course_count\":\"3\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"course_type\":\"PROJECT\",\"course_count\":\"2\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"course_type\":\"EXERCISE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"course_type\":\"LECTURE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"course_type\":\"LABORATORY\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"course_type\":\"LECTURE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"course_type\":\"PROJECT\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"course_type\":\"EXERCISE\",\"course_count\":\"2\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"course_type\":\"LABORATORY\",\"course_count\":\"2\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"course_type\":\"SEMINAR\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"course_type\":\"EXERCISE\",\"course_count\":\"2\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"course_type\":\"LECTURE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"course_type\":\"LABORATORY\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"course_type\":\"PROJECT\",\"course_count\":\"2\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"course_type\":\"SEMINAR\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"course_type\":\"EXERCISE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"course_type\":\"LECTURE\",\"course_count\":\"1\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"course_type\":\"EXERCISE\",\"course_count\":\"2\"}],\"metadata\":{\"columns\":[\"department_name\",\"course_type\",\"course_count\"],\"rowCount\":18,\"sample\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"course_type\":\"LECTURE\",\"course_count\":\"3\"},{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"course_type\":\"PROJECT\",\"course_count\":\"2\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Course Type Breakdown by Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Department\"},\"y\":{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Number of Courses\"},\"color\":{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\",\"scale\":{\"scheme\":\"category10\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"course_type\",\"type\":\"nominal\",\"title\":\"Course Type\"},{\"field\":\"course_count\",\"type\":\"quantitative\",\"title\":\"Course Count\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"0fac981a3d0dc617e96935a278058125\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/course-type-per-department/run-0001/run.json",
+    "queryPath": "runs/course-type-per-department/run-0001/query.sql",
+    "vegaRawPath": "runs/course-type-per-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/course-type-per-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/course-type-per-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:14:04.098Z",
+  "traceId": "0fac981a3d0dc617e96935a278058125",
+  "success": true,
+  "durationMs": 41332,
+  "resultRaw": {
+    "data": [
+      {
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "course_type": "LECTURE",
+        "course_count": "3"
+      },
+      {
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "course_type": "PROJECT",
+        "course_count": "2"
+      },
+      {
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "course_type": "EXERCISE",
+        "course_count": "1"
+      },
+      {
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "course_type": "LECTURE",
+        "course_count": "1"
+      },
+      {
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "course_type": "LABORATORY",
+        "course_count": "1"
+      },
+      {
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "course_type": "LECTURE",
+        "course_count": "1"
+      },
+      {
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "course_type": "PROJECT",
+        "course_count": "1"
+      },
+      {
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "course_type": "EXERCISE",
+        "course_count": "2"
+      },
+      {
+        "department_name": "Wydział Inżynierii Produkcji",
+        "course_type": "LABORATORY",
+        "course_count": "2"
+      },
+      {
+        "department_name": "Wydział Inżynierii Produkcji",
+        "course_type": "SEMINAR",
+        "course_count": "1"
+      },
+      {
+        "department_name": "Wydział Inżynierii Produkcji",
+        "course_type": "EXERCISE",
+        "course_count": "2"
+      },
+      {
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "course_type": "LECTURE",
+        "course_count": "1"
+      },
+      {
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "course_type": "LABORATORY",
+        "course_count": "1"
+      },
+      {
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "course_type": "PROJECT",
+        "course_count": "2"
+      },
+      {
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "course_type": "SEMINAR",
+        "course_count": "1"
+      },
+      {
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "course_type": "EXERCISE",
+        "course_count": "1"
+      },
+      {
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "course_type": "LECTURE",
+        "course_count": "1"
+      },
+      {
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "course_type": "EXERCISE",
+        "course_count": "2"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Course Type Breakdown by Department",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "department_name",
+          "type": "nominal",
+          "axis": {
+            "labelAngle": -45,
+            "labelAlign": "right"
+          },
+          "title": "Department"
+        },
+        "y": {
+          "field": "course_count",
+          "type": "quantitative",
+          "title": "Number of Courses"
+        },
+        "color": {
+          "field": "course_type",
+          "type": "nominal",
+          "title": "Course Type",
+          "scale": {
+            "scheme": "category10"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "course_type",
+            "type": "nominal",
+            "title": "Course Type"
+          },
+          {
+            "field": "course_count",
+            "type": "quantitative",
+            "title": "Course Count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT \n  d.name AS department_name,\n  c.course_type,\n  COUNT(*) AS course_count\nFROM departments d\nINNER JOIN courses c ON d.id = c.department_id\nGROUP BY d.name, c.course_type\nORDER BY d.name, c.course_type",
+    "metadata": {
+      "columns": [
+        "department_name",
+        "course_type",
+        "course_count"
+      ],
+      "rowCount": 18,
+      "sample": [
+        {
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "course_type": "LECTURE",
+          "course_count": "3"
+        },
+        {
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "course_type": "PROJECT",
+          "course_count": "2"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "course_type": "LECTURE",
+        "course_count": "3"
+      },
+      {
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "course_type": "PROJECT",
+        "course_count": "2"
+      },
+      {
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "course_type": "EXERCISE",
+        "course_count": "1"
+      },
+      {
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "course_type": "LECTURE",
+        "course_count": "1"
+      },
+      {
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "course_type": "LABORATORY",
+        "course_count": "1"
+      },
+      {
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "course_type": "LECTURE",
+        "course_count": "1"
+      },
+      {
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "course_type": "PROJECT",
+        "course_count": "1"
+      },
+      {
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "course_type": "EXERCISE",
+        "course_count": "2"
+      },
+      {
+        "department_name": "Wydział Inżynierii Produkcji",
+        "course_type": "LABORATORY",
+        "course_count": "2"
+      },
+      {
+        "department_name": "Wydział Inżynierii Produkcji",
+        "course_type": "SEMINAR",
+        "course_count": "1"
+      },
+      {
+        "department_name": "Wydział Inżynierii Produkcji",
+        "course_type": "EXERCISE",
+        "course_count": "2"
+      },
+      {
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "course_type": "LECTURE",
+        "course_count": "1"
+      },
+      {
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "course_type": "LABORATORY",
+        "course_count": "1"
+      },
+      {
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "course_type": "PROJECT",
+        "course_count": "2"
+      },
+      {
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "course_type": "SEMINAR",
+        "course_count": "1"
+      },
+      {
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "course_type": "EXERCISE",
+        "course_count": "1"
+      },
+      {
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "course_type": "LECTURE",
+        "course_count": "1"
+      },
+      {
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "course_type": "EXERCISE",
+        "course_count": "2"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Course Type Breakdown by Department",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "department_name",
+          "type": "nominal",
+          "axis": {
+            "labelAngle": -45,
+            "labelAlign": "right"
+          },
+          "title": "Department"
+        },
+        "y": {
+          "field": "course_count",
+          "type": "quantitative",
+          "title": "Number of Courses"
+        },
+        "color": {
+          "field": "course_type",
+          "type": "nominal",
+          "title": "Course Type",
+          "scale": {
+            "scheme": "category10"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "course_type",
+            "type": "nominal",
+            "title": "Course Type"
+          },
+          {
+            "field": "course_count",
+            "type": "quantitative",
+            "title": "Course Count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT \n  d.name AS department_name,\n  c.course_type,\n  COUNT(*) AS course_count\nFROM departments d\nINNER JOIN courses c ON d.id = c.department_id\nGROUP BY d.name, c.course_type\nORDER BY d.name, c.course_type",
+    "metadata": {
+      "columns": [
+        "department_name",
+        "course_type",
+        "course_count"
+      ],
+      "rowCount": 18,
+      "sample": [
+        {
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "course_type": "LECTURE",
+          "course_count": "3"
+        },
+        {
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "course_type": "PROJECT",
+          "course_count": "2"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.303Z",
+    "traceId": "0fac981a3d0dc617e96935a278058125",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 13298,
+      "outputTokens": 901,
+      "totalTokens": 14199,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.017803
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 13298,
+        "outputTokens": 901,
+        "totalTokens": 14199,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.017803
+      }
+    ],
+    "warnings": []
+  }
+}

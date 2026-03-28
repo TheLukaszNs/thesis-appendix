@@ -1,0 +1,161 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "pass-fail-rate-overall",
+  "caseDirectory": "pass-fail-rate-overall",
+  "repeatIndex": 1,
+  "prompt": "What percentage of grades are passing vs failing?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What percentage of grades are passing vs failing?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:47:18.122Z",
+    "endedAtUtc": "2026-02-23T10:47:35.102Z",
+    "durationMs": 16980
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2191",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:47:35 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"What percentage of grades are passing vs failing?\"},\"agent\":{\"payload\":{\"question\":\"What percentage of grades are passing vs failing?\"},\"startedAt\":1771843638129,\"status\":\"success\",\"output\":{\"sql\":\"WITH counts AS (\\n  SELECT\\n    CASE WHEN score >= 60 THEN 'Passing' ELSE 'Failing' END AS status,\\n    COUNT(*) AS cnt\\n  FROM grades\\n  WHERE score IS NOT NULL\\n  GROUP BY CASE WHEN score >= 60 THEN 'Passing' ELSE 'Failing' END\\n)\\nSELECT\\n  status AS status,\\n  cnt AS count,\\n  ROUND(100.0 * cnt / SUM(cnt) OVER (), 2) AS percent\\nFROM counts\\nORDER BY percent DESC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Distribution of passing vs failing grades\",\"title\":\"Percentage of Passing vs Failing Grades\",\"data\":{\"name\":\"query_result\"},\"mark\":{\"type\":\"arc\",\"innerRadius\":50},\"encoding\":{\"theta\":{\"field\":\"count\",\"type\":\"quantitative\"},\"color\":{\"field\":\"status\",\"type\":\"nominal\",\"title\":\"Status\"},\"tooltip\":[{\"field\":\"status\",\"type\":\"nominal\",\"title\":\"Status\"},{\"field\":\"count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"percent\",\"type\":\"quantitative\",\"title\":\"Percent\",\"format\":\".2f\"}]}}},\"endedAt\":1771843655054},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH counts AS (\\n  SELECT\\n    CASE WHEN score >= 60 THEN 'Passing' ELSE 'Failing' END AS status,\\n    COUNT(*) AS cnt\\n  FROM grades\\n  WHERE score IS NOT NULL\\n  GROUP BY CASE WHEN score >= 60 THEN 'Passing' ELSE 'Failing' END\\n)\\nSELECT\\n  status AS status,\\n  cnt AS count,\\n  ROUND(100.0 * cnt / SUM(cnt) OVER (), 2) AS percent\\nFROM counts\\nORDER BY percent DESC;\"},\"startedAt\":1771843655056,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column \\\"score\\\" does not exist\\nLINE 4:     CASE WHEN score >= 60 THEN 'Passing' ELSE 'Failing' END ...\\n                      ^\",\"name\":\"Error\"},\"endedAt\":1771843655098}},\"input\":{\"question\":\"What percentage of grades are passing vs failing?\"},\"error\":{\"message\":\"SQL execution failed: column \\\"score\\\" does not exist\\nLINE 4:     CASE WHEN score >= 60 THEN 'Passing' ELSE 'Failing' END ...\\n                      ^\",\"name\":\"Error\"},\"traceId\":\"acde553ec2543afef774f7afc5603bfd\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/pass-fail-rate-overall/run-0001/run.json",
+    "queryPath": "runs/pass-fail-rate-overall/run-0001/query.sql",
+    "vegaRawPath": "runs/pass-fail-rate-overall/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/pass-fail-rate-overall/run-0001/vega.resolved.json",
+    "imagePath": "runs/pass-fail-rate-overall/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:47:35.103Z",
+  "traceId": "acde553ec2543afef774f7afc5603bfd",
+  "success": false,
+  "durationMs": 16981,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "What percentage of grades are passing vs failing?"
+      },
+      "agent": {
+        "payload": {
+          "question": "What percentage of grades are passing vs failing?"
+        },
+        "startedAt": 1771843638129,
+        "status": "success",
+        "output": {
+          "sql": "WITH counts AS (\n  SELECT\n    CASE WHEN score >= 60 THEN 'Passing' ELSE 'Failing' END AS status,\n    COUNT(*) AS cnt\n  FROM grades\n  WHERE score IS NOT NULL\n  GROUP BY CASE WHEN score >= 60 THEN 'Passing' ELSE 'Failing' END\n)\nSELECT\n  status AS status,\n  cnt AS count,\n  ROUND(100.0 * cnt / SUM(cnt) OVER (), 2) AS percent\nFROM counts\nORDER BY percent DESC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Distribution of passing vs failing grades",
+            "title": "Percentage of Passing vs Failing Grades",
+            "data": {
+              "name": "query_result"
+            },
+            "mark": {
+              "type": "arc",
+              "innerRadius": 50
+            },
+            "encoding": {
+              "theta": {
+                "field": "count",
+                "type": "quantitative"
+              },
+              "color": {
+                "field": "status",
+                "type": "nominal",
+                "title": "Status"
+              },
+              "tooltip": [
+                {
+                  "field": "status",
+                  "type": "nominal",
+                  "title": "Status"
+                },
+                {
+                  "field": "count",
+                  "type": "quantitative",
+                  "title": "Count"
+                },
+                {
+                  "field": "percent",
+                  "type": "quantitative",
+                  "title": "Percent",
+                  "format": ".2f"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843655054
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH counts AS (\n  SELECT\n    CASE WHEN score >= 60 THEN 'Passing' ELSE 'Failing' END AS status,\n    COUNT(*) AS cnt\n  FROM grades\n  WHERE score IS NOT NULL\n  GROUP BY CASE WHEN score >= 60 THEN 'Passing' ELSE 'Failing' END\n)\nSELECT\n  status AS status,\n  cnt AS count,\n  ROUND(100.0 * cnt / SUM(cnt) OVER (), 2) AS percent\nFROM counts\nORDER BY percent DESC;"
+        },
+        "startedAt": 1771843655056,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column \"score\" does not exist\nLINE 4:     CASE WHEN score >= 60 THEN 'Passing' ELSE 'Failing' END ...\n                      ^",
+          "name": "Error"
+        },
+        "endedAt": 1771843655098
+      }
+    },
+    "input": {
+      "question": "What percentage of grades are passing vs failing?"
+    },
+    "error": {
+      "message": "SQL execution failed: column \"score\" does not exist\nLINE 4:     CASE WHEN score >= 60 THEN 'Passing' ELSE 'Failing' END ...\n                      ^",
+      "name": "Error"
+    },
+    "traceId": "acde553ec2543afef774f7afc5603bfd"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:47:35.103Z",
+    "traceId": "acde553ec2543afef774f7afc5603bfd",
+    "attempts": 2,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 265,
+      "outputTokens": 1199,
+      "totalTokens": 1464,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 832,
+      "costUsd": 0.00246425
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 265,
+        "outputTokens": 1199,
+        "totalTokens": 1464,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 832,
+        "costUsd": 0.00246425
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,1 @@
+SELECT course_type AS course_type, COUNT(*) AS course_count FROM courses GROUP BY course_type ORDER BY course_count DESC;

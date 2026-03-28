@@ -1,0 +1,250 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "prerequisite-chain-length",
+  "caseDirectory": "prerequisite-chain-length",
+  "repeatIndex": 1,
+  "prompt": "Which courses are prerequisites for the most other courses?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which courses are prerequisites for the most other courses?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:43:34.387Z",
+    "endedAtUtc": "2026-02-22T23:44:15.271Z",
+    "durationMs": 40884
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "9569",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:44:15 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Which courses are prerequisites for the most other courses?\"},\"sql\":{\"payload\":{\"question\":\"Which courses are prerequisites for the most other courses?\"},\"startedAt\":1771803814393,\"status\":\"success\",\"output\":{\"reasoning\":\"Count how many courses list each course as a prerequisite, find the maximum count, and return the course(s) tied for that maximum with identifying fields. Uses public.prerequisites.prerequisite_course_id and joins to public.courses for code/name.\",\"sql\":\"WITH per_prereq AS (\\n  SELECT\\n    prerequisite_course_id AS course_id,\\n    COUNT(*) AS num_dependent_courses\\n  FROM public.prerequisites\\n  GROUP BY prerequisite_course_id\\n), max_count AS (\\n  SELECT MAX(num_dependent_courses) AS max_dep FROM per_prereq\\n)\\nSELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  p.num_dependent_courses AS num_dependent_courses\\nFROM per_prereq p\\nJOIN public.courses c ON c.id = p.course_id\\nJOIN max_count m ON p.num_dependent_courses = m.max_dep\\nORDER BY c.code ASC;\",\"assumptions\":[\"prerequisites.prerequisite_course_id refers to the course that is required (the prerequisite) and prerequisites rows each represent one prerequisite relationship\",\"Return only the course(s) tied for the highest number of dependents (i.e., those that are prerequisites for the most other courses)\"]},\"endedAt\":1771803835835},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH per_prereq AS (\\n  SELECT\\n    prerequisite_course_id AS course_id,\\n    COUNT(*) AS num_dependent_courses\\n  FROM public.prerequisites\\n  GROUP BY prerequisite_course_id\\n), max_count AS (\\n  SELECT MAX(num_dependent_courses) AS max_dep FROM per_prereq\\n)\\nSELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  p.num_dependent_courses AS num_dependent_courses\\nFROM per_prereq p\\nJOIN public.courses c ON c.id = p.course_id\\nJOIN max_count m ON p.num_dependent_courses = m.max_dep\\nORDER BY c.code ASC;\"},\"startedAt\":1771803835841,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH per_prereq AS (\\n  SELECT\\n    prerequisite_course_id AS course_id,\\n    COUNT(*) AS num_dependent_courses\\n  FROM public.prerequisites\\n  GROUP BY prerequisite_course_id\\n), max_count AS (\\n  SELECT MAX(num_dependent_courses) AS max_dep FROM per_prereq\\n)\\nSELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  p.num_dependent_courses AS num_dependent_courses\\nFROM per_prereq p\\nJOIN public.courses c ON c.id = p.course_id\\nJOIN max_count m ON p.num_dependent_courses = m.max_dep\\nORDER BY c.code ASC\",\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"num_dependent_courses\"],\"rowCount\":1,\"sample\":[{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"num_dependent_courses\":4}]},\"data\":[{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"num_dependent_courses\":4}]},\"endedAt\":1771803835870},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"WITH per_prereq AS (\\n  SELECT\\n    prerequisite_course_id AS course_id,\\n    COUNT(*) AS num_dependent_courses\\n  FROM public.prerequisites\\n  GROUP BY prerequisite_course_id\\n), max_count AS (\\n  SELECT MAX(num_dependent_courses) AS max_dep FROM per_prereq\\n)\\nSELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  p.num_dependent_courses AS num_dependent_courses\\nFROM per_prereq p\\nJOIN public.courses c ON c.id = p.course_id\\nJOIN max_count m ON p.num_dependent_courses = m.max_dep\\nORDER BY c.code ASC\",\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"num_dependent_courses\"],\"rowCount\":1,\"sample\":[{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"num_dependent_courses\":4}]},\"data\":[{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"num_dependent_courses\":4}]},\"startedAt\":1771803835875,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Courses that are prerequisites for the most other courses\",\"width\":480,\"height\":120,\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"num_dependent_courses\",\"type\":\"quantitative\",\"title\":\"Number of dependent courses\",\"axis\":{\"grid\":false}},\"y\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\",\"sort\":{\"encoding\":\"x\"}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course name\"},{\"field\":\"num_dependent_courses\",\"type\":\"quantitative\",\"title\":\"Dependent courses\"}]}},\"reasoning\":\"A horizontal bar chart emphasizes which course(s) serve as prerequisites for the most other courses; tooltip provides the course code, name, and dependent count.\"},\"endedAt\":1771803855256},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Courses that are prerequisites for the most other courses\",\"width\":480,\"height\":120,\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"num_dependent_courses\",\"type\":\"quantitative\",\"title\":\"Number of dependent courses\",\"axis\":{\"grid\":false}},\"y\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\",\"sort\":{\"encoding\":\"x\"}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course name\"},{\"field\":\"num_dependent_courses\",\"type\":\"quantitative\",\"title\":\"Dependent courses\"}]}},\"reasoning\":\"A horizontal bar chart emphasizes which course(s) serve as prerequisites for the most other courses; tooltip provides the course code, name, and dependent count.\"},\"startedAt\":1771803855258,\"status\":\"success\",\"output\":{\"sql\":\"WITH per_prereq AS (\\n  SELECT\\n    prerequisite_course_id AS course_id,\\n    COUNT(*) AS num_dependent_courses\\n  FROM public.prerequisites\\n  GROUP BY prerequisite_course_id\\n), max_count AS (\\n  SELECT MAX(num_dependent_courses) AS max_dep FROM per_prereq\\n)\\nSELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  p.num_dependent_courses AS num_dependent_courses\\nFROM per_prereq p\\nJOIN public.courses c ON c.id = p.course_id\\nJOIN max_count m ON p.num_dependent_courses = m.max_dep\\nORDER BY c.code ASC;\",\"data\":[{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"num_dependent_courses\":4}],\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"num_dependent_courses\"],\"rowCount\":1,\"sample\":[{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"num_dependent_courses\":4}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Courses that are prerequisites for the most other courses\",\"width\":480,\"height\":120,\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"num_dependent_courses\",\"type\":\"quantitative\",\"title\":\"Number of dependent courses\",\"axis\":{\"grid\":false}},\"y\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\",\"sort\":{\"encoding\":\"x\"}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course name\"},{\"field\":\"num_dependent_courses\",\"type\":\"quantitative\",\"title\":\"Dependent courses\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771803855259}},\"input\":{\"question\":\"Which courses are prerequisites for the most other courses?\"},\"result\":{\"sql\":\"WITH per_prereq AS (\\n  SELECT\\n    prerequisite_course_id AS course_id,\\n    COUNT(*) AS num_dependent_courses\\n  FROM public.prerequisites\\n  GROUP BY prerequisite_course_id\\n), max_count AS (\\n  SELECT MAX(num_dependent_courses) AS max_dep FROM per_prereq\\n)\\nSELECT\\n  c.id AS course_id,\\n  c.code AS course_code,\\n  c.name AS course_name,\\n  p.num_dependent_courses AS num_dependent_courses\\nFROM per_prereq p\\nJOIN public.courses c ON c.id = p.course_id\\nJOIN max_count m ON p.num_dependent_courses = m.max_dep\\nORDER BY c.code ASC;\",\"data\":[{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"num_dependent_courses\":4}],\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\",\"num_dependent_courses\"],\"rowCount\":1,\"sample\":[{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"course_code\":\"TAU-627\",\"course_name\":\"Analiza Matematyczna\",\"num_dependent_courses\":4}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Courses that are prerequisites for the most other courses\",\"width\":480,\"height\":120,\"mark\":{\"type\":\"bar\",\"cornerRadius\":3},\"encoding\":{\"x\":{\"field\":\"num_dependent_courses\",\"type\":\"quantitative\",\"title\":\"Number of dependent courses\",\"axis\":{\"grid\":false}},\"y\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\",\"sort\":{\"encoding\":\"x\"}},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course name\"},{\"field\":\"num_dependent_courses\",\"type\":\"quantitative\",\"title\":\"Dependent courses\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"68ec92037bd70366d5d092bfc20027dd\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/prerequisite-chain-length/run-0001/run.json",
+    "queryPath": "runs/prerequisite-chain-length/run-0001/query.sql",
+    "vegaRawPath": "runs/prerequisite-chain-length/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/prerequisite-chain-length/run-0001/vega.resolved.json",
+    "imagePath": "runs/prerequisite-chain-length/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:44:15.666Z",
+  "traceId": "68ec92037bd70366d5d092bfc20027dd",
+  "success": true,
+  "durationMs": 41279,
+  "resultRaw": {
+    "data": [
+      {
+        "course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "course_code": "TAU-627",
+        "course_name": "Analiza Matematyczna",
+        "num_dependent_courses": 4
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Courses that are prerequisites for the most other courses",
+      "width": 480,
+      "height": 120,
+      "mark": {
+        "type": "bar",
+        "cornerRadius": 3
+      },
+      "encoding": {
+        "x": {
+          "field": "num_dependent_courses",
+          "type": "quantitative",
+          "title": "Number of dependent courses",
+          "axis": {
+            "grid": false
+          }
+        },
+        "y": {
+          "field": "course_code",
+          "type": "nominal",
+          "title": "Course code",
+          "sort": {
+            "encoding": "x"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "course_code",
+            "type": "nominal",
+            "title": "Course code"
+          },
+          {
+            "field": "course_name",
+            "type": "nominal",
+            "title": "Course name"
+          },
+          {
+            "field": "num_dependent_courses",
+            "type": "quantitative",
+            "title": "Dependent courses"
+          }
+        ]
+      }
+    },
+    "sql": "WITH per_prereq AS (\n  SELECT\n    prerequisite_course_id AS course_id,\n    COUNT(*) AS num_dependent_courses\n  FROM public.prerequisites\n  GROUP BY prerequisite_course_id\n), max_count AS (\n  SELECT MAX(num_dependent_courses) AS max_dep FROM per_prereq\n)\nSELECT\n  c.id AS course_id,\n  c.code AS course_code,\n  c.name AS course_name,\n  p.num_dependent_courses AS num_dependent_courses\nFROM per_prereq p\nJOIN public.courses c ON c.id = p.course_id\nJOIN max_count m ON p.num_dependent_courses = m.max_dep\nORDER BY c.code ASC;",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "course_code",
+        "course_name",
+        "num_dependent_courses"
+      ],
+      "rowCount": 1,
+      "sample": [
+        {
+          "course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+          "course_code": "TAU-627",
+          "course_name": "Analiza Matematyczna",
+          "num_dependent_courses": 4
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "course_code": "TAU-627",
+        "course_name": "Analiza Matematyczna",
+        "num_dependent_courses": 4
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Courses that are prerequisites for the most other courses",
+      "width": 480,
+      "height": 120,
+      "mark": {
+        "type": "bar",
+        "cornerRadius": 3
+      },
+      "encoding": {
+        "x": {
+          "field": "num_dependent_courses",
+          "type": "quantitative",
+          "title": "Number of dependent courses",
+          "axis": {
+            "grid": false
+          }
+        },
+        "y": {
+          "field": "course_code",
+          "type": "nominal",
+          "title": "Course code",
+          "sort": {
+            "encoding": "x"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "course_code",
+            "type": "nominal",
+            "title": "Course code"
+          },
+          {
+            "field": "course_name",
+            "type": "nominal",
+            "title": "Course name"
+          },
+          {
+            "field": "num_dependent_courses",
+            "type": "quantitative",
+            "title": "Dependent courses"
+          }
+        ]
+      }
+    },
+    "sql": "WITH per_prereq AS (\n  SELECT\n    prerequisite_course_id AS course_id,\n    COUNT(*) AS num_dependent_courses\n  FROM public.prerequisites\n  GROUP BY prerequisite_course_id\n), max_count AS (\n  SELECT MAX(num_dependent_courses) AS max_dep FROM per_prereq\n)\nSELECT\n  c.id AS course_id,\n  c.code AS course_code,\n  c.name AS course_name,\n  p.num_dependent_courses AS num_dependent_courses\nFROM per_prereq p\nJOIN public.courses c ON c.id = p.course_id\nJOIN max_count m ON p.num_dependent_courses = m.max_dep\nORDER BY c.code ASC;",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "course_code",
+        "course_name",
+        "num_dependent_courses"
+      ],
+      "rowCount": 1,
+      "sample": [
+        {
+          "course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+          "course_code": "TAU-627",
+          "course_name": "Analiza Matematyczna",
+          "num_dependent_courses": 4
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:44:15.666Z",
+    "traceId": "68ec92037bd70366d5d092bfc20027dd",
+    "attempts": 6,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 8138,
+      "outputTokens": 2739,
+      "totalTokens": 10877,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1856,
+      "costUsd": 0.0075125
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 8138,
+        "outputTokens": 2739,
+        "totalTokens": 10877,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1856,
+        "costUsd": 0.0075125
+      }
+    ],
+    "warnings": []
+  }
+}

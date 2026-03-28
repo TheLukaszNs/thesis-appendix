@@ -1,0 +1,374 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "sections-per-semester",
+  "caseDirectory": "sections-per-semester",
+  "repeatIndex": 1,
+  "prompt": "How many course sections are offered in each semester and academic year?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many course sections are offered in each semester and academic year?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:43:04.768Z",
+    "endedAtUtc": "2026-02-22T23:43:34.255Z",
+    "durationMs": 29487
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "10652",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:43:34 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How many course sections are offered in each semester and academic year?\"},\"sql\":{\"payload\":{\"question\":\"How many course sections are offered in each semester and academic year?\"},\"startedAt\":1771803784782,\"status\":\"success\",\"output\":{\"reasoning\":\"Count course_section rows grouped by academic_year and semester_type (both present on course_sections). Order deterministically by academic_year then semester_type.\",\"sql\":\"SELECT\\n  academic_year AS academic_year,\\n  semester_type AS semester_type,\\n  COUNT(*) AS section_count\\nFROM public.course_sections\\nGROUP BY academic_year, semester_type\\nORDER BY academic_year ASC, semester_type ASC;\",\"assumptions\":[\"Each row in public.course_sections represents one offered course section.\",\"academic_year is stored as a string (e.g., '2023-2024') and semester_type is the term identifier used for grouping.\"]},\"endedAt\":1771803797456},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  academic_year AS academic_year,\\n  semester_type AS semester_type,\\n  COUNT(*) AS section_count\\nFROM public.course_sections\\nGROUP BY academic_year, semester_type\\nORDER BY academic_year ASC, semester_type ASC;\"},\"startedAt\":1771803797461,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT\\n  academic_year AS academic_year,\\n  semester_type AS semester_type,\\n  COUNT(*) AS section_count\\nFROM public.course_sections\\nGROUP BY academic_year, semester_type\\nORDER BY academic_year ASC, semester_type ASC\",\"metadata\":{\"columns\":[\"academic_year\",\"section_count\",\"semester_type\"],\"rowCount\":11,\"sample\":[{\"academic_year\":\"2019/2020\",\"section_count\":1,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2019/2020\",\"section_count\":4,\"semester_type\":\"SUMMER\"}]},\"data\":[{\"academic_year\":\"2019/2020\",\"section_count\":1,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2019/2020\",\"section_count\":4,\"semester_type\":\"SUMMER\"},{\"academic_year\":\"2020/2021\",\"section_count\":6,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2020/2021\",\"section_count\":4,\"semester_type\":\"SUMMER\"},{\"academic_year\":\"2021/2022\",\"section_count\":3,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2022/2023\",\"section_count\":1,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2022/2023\",\"section_count\":3,\"semester_type\":\"SUMMER\"},{\"academic_year\":\"2023/2024\",\"section_count\":5,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2023/2024\",\"section_count\":2,\"semester_type\":\"SUMMER\"},{\"academic_year\":\"2024/2025\",\"section_count\":3,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2024/2025\",\"section_count\":2,\"semester_type\":\"SUMMER\"}]},\"endedAt\":1771803797484},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT\\n  academic_year AS academic_year,\\n  semester_type AS semester_type,\\n  COUNT(*) AS section_count\\nFROM public.course_sections\\nGROUP BY academic_year, semester_type\\nORDER BY academic_year ASC, semester_type ASC\",\"metadata\":{\"columns\":[\"academic_year\",\"section_count\",\"semester_type\"],\"rowCount\":11,\"sample\":[{\"academic_year\":\"2019/2020\",\"section_count\":1,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2019/2020\",\"section_count\":4,\"semester_type\":\"SUMMER\"}]},\"data\":[{\"academic_year\":\"2019/2020\",\"section_count\":1,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2019/2020\",\"section_count\":4,\"semester_type\":\"SUMMER\"},{\"academic_year\":\"2020/2021\",\"section_count\":6,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2020/2021\",\"section_count\":4,\"semester_type\":\"SUMMER\"},{\"academic_year\":\"2021/2022\",\"section_count\":3,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2022/2023\",\"section_count\":1,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2022/2023\",\"section_count\":3,\"semester_type\":\"SUMMER\"},{\"academic_year\":\"2023/2024\",\"section_count\":5,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2023/2024\",\"section_count\":2,\"semester_type\":\"SUMMER\"},{\"academic_year\":\"2024/2025\",\"section_count\":3,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2024/2025\",\"section_count\":2,\"semester_type\":\"SUMMER\"}]},\"startedAt\":1771803797489,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Course sections per semester and academic year\",\"width\":640,\"height\":360,\"mark\":{\"type\":\"bar\",\"cornerRadiusEnd\":3},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Academic Year\"},\"sort\":\"ascending\"},\"xOffset\":{\"field\":\"semester_type\",\"type\":\"nominal\"},\"y\":{\"field\":\"section_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of Sections\"}},\"color\":{\"field\":\"semester_type\",\"type\":\"nominal\",\"legend\":{\"title\":\"Semester\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Section Count\"}]}},\"reasoning\":\"Grouped bar chart: academic_year on the x-axis, section_count on the y-axis, and semester_type used to group/color bars so you can compare sections offered by semester within each academic year. Tooltip includes all query fields.\"},\"endedAt\":1771803814228},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Course sections per semester and academic year\",\"width\":640,\"height\":360,\"mark\":{\"type\":\"bar\",\"cornerRadiusEnd\":3},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Academic Year\"},\"sort\":\"ascending\"},\"xOffset\":{\"field\":\"semester_type\",\"type\":\"nominal\"},\"y\":{\"field\":\"section_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of Sections\"}},\"color\":{\"field\":\"semester_type\",\"type\":\"nominal\",\"legend\":{\"title\":\"Semester\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Section Count\"}]}},\"reasoning\":\"Grouped bar chart: academic_year on the x-axis, section_count on the y-axis, and semester_type used to group/color bars so you can compare sections offered by semester within each academic year. Tooltip includes all query fields.\"},\"startedAt\":1771803814236,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  academic_year AS academic_year,\\n  semester_type AS semester_type,\\n  COUNT(*) AS section_count\\nFROM public.course_sections\\nGROUP BY academic_year, semester_type\\nORDER BY academic_year ASC, semester_type ASC;\",\"data\":[{\"academic_year\":\"2019/2020\",\"section_count\":1,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2019/2020\",\"section_count\":4,\"semester_type\":\"SUMMER\"},{\"academic_year\":\"2020/2021\",\"section_count\":6,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2020/2021\",\"section_count\":4,\"semester_type\":\"SUMMER\"},{\"academic_year\":\"2021/2022\",\"section_count\":3,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2022/2023\",\"section_count\":1,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2022/2023\",\"section_count\":3,\"semester_type\":\"SUMMER\"},{\"academic_year\":\"2023/2024\",\"section_count\":5,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2023/2024\",\"section_count\":2,\"semester_type\":\"SUMMER\"},{\"academic_year\":\"2024/2025\",\"section_count\":3,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2024/2025\",\"section_count\":2,\"semester_type\":\"SUMMER\"}],\"metadata\":{\"columns\":[\"academic_year\",\"section_count\",\"semester_type\"],\"rowCount\":11,\"sample\":[{\"academic_year\":\"2019/2020\",\"section_count\":1,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2019/2020\",\"section_count\":4,\"semester_type\":\"SUMMER\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Course sections per semester and academic year\",\"width\":640,\"height\":360,\"mark\":{\"type\":\"bar\",\"cornerRadiusEnd\":3},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Academic Year\"},\"sort\":\"ascending\"},\"xOffset\":{\"field\":\"semester_type\",\"type\":\"nominal\"},\"y\":{\"field\":\"section_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of Sections\"}},\"color\":{\"field\":\"semester_type\",\"type\":\"nominal\",\"legend\":{\"title\":\"Semester\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Section Count\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771803814240}},\"input\":{\"question\":\"How many course sections are offered in each semester and academic year?\"},\"result\":{\"sql\":\"SELECT\\n  academic_year AS academic_year,\\n  semester_type AS semester_type,\\n  COUNT(*) AS section_count\\nFROM public.course_sections\\nGROUP BY academic_year, semester_type\\nORDER BY academic_year ASC, semester_type ASC;\",\"data\":[{\"academic_year\":\"2019/2020\",\"section_count\":1,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2019/2020\",\"section_count\":4,\"semester_type\":\"SUMMER\"},{\"academic_year\":\"2020/2021\",\"section_count\":6,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2020/2021\",\"section_count\":4,\"semester_type\":\"SUMMER\"},{\"academic_year\":\"2021/2022\",\"section_count\":3,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2022/2023\",\"section_count\":1,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2022/2023\",\"section_count\":3,\"semester_type\":\"SUMMER\"},{\"academic_year\":\"2023/2024\",\"section_count\":5,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2023/2024\",\"section_count\":2,\"semester_type\":\"SUMMER\"},{\"academic_year\":\"2024/2025\",\"section_count\":3,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2024/2025\",\"section_count\":2,\"semester_type\":\"SUMMER\"}],\"metadata\":{\"columns\":[\"academic_year\",\"section_count\",\"semester_type\"],\"rowCount\":11,\"sample\":[{\"academic_year\":\"2019/2020\",\"section_count\":1,\"semester_type\":\"WINTER\"},{\"academic_year\":\"2019/2020\",\"section_count\":4,\"semester_type\":\"SUMMER\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Course sections per semester and academic year\",\"width\":640,\"height\":360,\"mark\":{\"type\":\"bar\",\"cornerRadiusEnd\":3},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Academic Year\"},\"sort\":\"ascending\"},\"xOffset\":{\"field\":\"semester_type\",\"type\":\"nominal\"},\"y\":{\"field\":\"section_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of Sections\"}},\"color\":{\"field\":\"semester_type\",\"type\":\"nominal\",\"legend\":{\"title\":\"Semester\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Section Count\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"9ef58fa67a066d93b75c0fdc9a7bd5aa\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/sections-per-semester/run-0001/run.json",
+    "queryPath": "runs/sections-per-semester/run-0001/query.sql",
+    "vegaRawPath": "runs/sections-per-semester/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/sections-per-semester/run-0001/vega.resolved.json",
+    "imagePath": "runs/sections-per-semester/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:43:34.616Z",
+  "traceId": "9ef58fa67a066d93b75c0fdc9a7bd5aa",
+  "success": true,
+  "durationMs": 29848,
+  "resultRaw": {
+    "data": [
+      {
+        "academic_year": "2019/2020",
+        "section_count": 1,
+        "semester_type": "WINTER"
+      },
+      {
+        "academic_year": "2019/2020",
+        "section_count": 4,
+        "semester_type": "SUMMER"
+      },
+      {
+        "academic_year": "2020/2021",
+        "section_count": 6,
+        "semester_type": "WINTER"
+      },
+      {
+        "academic_year": "2020/2021",
+        "section_count": 4,
+        "semester_type": "SUMMER"
+      },
+      {
+        "academic_year": "2021/2022",
+        "section_count": 3,
+        "semester_type": "WINTER"
+      },
+      {
+        "academic_year": "2022/2023",
+        "section_count": 1,
+        "semester_type": "WINTER"
+      },
+      {
+        "academic_year": "2022/2023",
+        "section_count": 3,
+        "semester_type": "SUMMER"
+      },
+      {
+        "academic_year": "2023/2024",
+        "section_count": 5,
+        "semester_type": "WINTER"
+      },
+      {
+        "academic_year": "2023/2024",
+        "section_count": 2,
+        "semester_type": "SUMMER"
+      },
+      {
+        "academic_year": "2024/2025",
+        "section_count": 3,
+        "semester_type": "WINTER"
+      },
+      {
+        "academic_year": "2024/2025",
+        "section_count": 2,
+        "semester_type": "SUMMER"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Course sections per semester and academic year",
+      "width": 640,
+      "height": 360,
+      "mark": {
+        "type": "bar",
+        "cornerRadiusEnd": 3
+      },
+      "encoding": {
+        "x": {
+          "field": "academic_year",
+          "type": "ordinal",
+          "axis": {
+            "title": "Academic Year"
+          },
+          "sort": "ascending"
+        },
+        "xOffset": {
+          "field": "semester_type",
+          "type": "nominal"
+        },
+        "y": {
+          "field": "section_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Number of Sections"
+          }
+        },
+        "color": {
+          "field": "semester_type",
+          "type": "nominal",
+          "legend": {
+            "title": "Semester"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "academic_year",
+            "type": "nominal",
+            "title": "Academic Year"
+          },
+          {
+            "field": "semester_type",
+            "type": "nominal",
+            "title": "Semester"
+          },
+          {
+            "field": "section_count",
+            "type": "quantitative",
+            "title": "Section Count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT\n  academic_year AS academic_year,\n  semester_type AS semester_type,\n  COUNT(*) AS section_count\nFROM public.course_sections\nGROUP BY academic_year, semester_type\nORDER BY academic_year ASC, semester_type ASC;",
+    "metadata": {
+      "columns": [
+        "academic_year",
+        "section_count",
+        "semester_type"
+      ],
+      "rowCount": 11,
+      "sample": [
+        {
+          "academic_year": "2019/2020",
+          "section_count": 1,
+          "semester_type": "WINTER"
+        },
+        {
+          "academic_year": "2019/2020",
+          "section_count": 4,
+          "semester_type": "SUMMER"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "academic_year": "2019/2020",
+        "section_count": 1,
+        "semester_type": "WINTER"
+      },
+      {
+        "academic_year": "2019/2020",
+        "section_count": 4,
+        "semester_type": "SUMMER"
+      },
+      {
+        "academic_year": "2020/2021",
+        "section_count": 6,
+        "semester_type": "WINTER"
+      },
+      {
+        "academic_year": "2020/2021",
+        "section_count": 4,
+        "semester_type": "SUMMER"
+      },
+      {
+        "academic_year": "2021/2022",
+        "section_count": 3,
+        "semester_type": "WINTER"
+      },
+      {
+        "academic_year": "2022/2023",
+        "section_count": 1,
+        "semester_type": "WINTER"
+      },
+      {
+        "academic_year": "2022/2023",
+        "section_count": 3,
+        "semester_type": "SUMMER"
+      },
+      {
+        "academic_year": "2023/2024",
+        "section_count": 5,
+        "semester_type": "WINTER"
+      },
+      {
+        "academic_year": "2023/2024",
+        "section_count": 2,
+        "semester_type": "SUMMER"
+      },
+      {
+        "academic_year": "2024/2025",
+        "section_count": 3,
+        "semester_type": "WINTER"
+      },
+      {
+        "academic_year": "2024/2025",
+        "section_count": 2,
+        "semester_type": "SUMMER"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Course sections per semester and academic year",
+      "width": 640,
+      "height": 360,
+      "mark": {
+        "type": "bar",
+        "cornerRadiusEnd": 3
+      },
+      "encoding": {
+        "x": {
+          "field": "academic_year",
+          "type": "ordinal",
+          "axis": {
+            "title": "Academic Year"
+          },
+          "sort": "ascending"
+        },
+        "xOffset": {
+          "field": "semester_type",
+          "type": "nominal"
+        },
+        "y": {
+          "field": "section_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Number of Sections"
+          }
+        },
+        "color": {
+          "field": "semester_type",
+          "type": "nominal",
+          "legend": {
+            "title": "Semester"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "academic_year",
+            "type": "nominal",
+            "title": "Academic Year"
+          },
+          {
+            "field": "semester_type",
+            "type": "nominal",
+            "title": "Semester"
+          },
+          {
+            "field": "section_count",
+            "type": "quantitative",
+            "title": "Section Count"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT\n  academic_year AS academic_year,\n  semester_type AS semester_type,\n  COUNT(*) AS section_count\nFROM public.course_sections\nGROUP BY academic_year, semester_type\nORDER BY academic_year ASC, semester_type ASC;",
+    "metadata": {
+      "columns": [
+        "academic_year",
+        "section_count",
+        "semester_type"
+      ],
+      "rowCount": 11,
+      "sample": [
+        {
+          "academic_year": "2019/2020",
+          "section_count": 1,
+          "semester_type": "WINTER"
+        },
+        {
+          "academic_year": "2019/2020",
+          "section_count": 4,
+          "semester_type": "SUMMER"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:43:34.616Z",
+    "traceId": "9ef58fa67a066d93b75c0fdc9a7bd5aa",
+    "attempts": 5,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 5815,
+      "outputTokens": 1942,
+      "totalTokens": 7757,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1152,
+      "costUsd": 0.00533775
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 5815,
+        "outputTokens": 1942,
+        "totalTokens": 7757,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1152,
+        "costUsd": 0.00533775
+      }
+    ],
+    "warnings": []
+  }
+}

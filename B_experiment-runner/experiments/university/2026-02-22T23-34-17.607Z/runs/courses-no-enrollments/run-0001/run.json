@@ -1,0 +1,282 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "courses-no-enrollments",
+  "caseDirectory": "courses-no-enrollments",
+  "repeatIndex": 1,
+  "prompt": "Which courses have no enrollments at all?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which courses have no enrollments at all?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:49:45.303Z",
+    "endedAtUtc": "2026-02-22T23:50:29.279Z",
+    "durationMs": 43976
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "9661",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:50:29 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Which courses have no enrollments at all?\"},\"sql\":{\"payload\":{\"question\":\"Which courses have no enrollments at all?\"},\"startedAt\":1771804185319,\"status\":\"success\",\"output\":{\"reasoning\":\"Find courses that have no enrollments by checking that no enrollments exist for any of their course_sections (uses NOT EXISTS to handle courses with zero sections as well). Results include course id, code and name and are ordered deterministically by code.\",\"sql\":\"SELECT c.id AS course_id, c.code AS course_code, c.name AS course_name\\nFROM public.courses c\\nWHERE NOT EXISTS (\\n  SELECT 1\\n  FROM public.course_sections cs\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  WHERE cs.course_id = c.id\\n)\\nORDER BY c.code ASC\",\"assumptions\":[\"An enrollment counts regardless of the enrollments.is_active flag (any row in enrollments is considered an enrollment).\",\"Courses are linked to enrollments via course_sections: course_sections.course_id -> courses.id and enrollments.course_section_id -> course_sections.id.\"]},\"endedAt\":1771804214475},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT c.id AS course_id, c.code AS course_code, c.name AS course_name\\nFROM public.courses c\\nWHERE NOT EXISTS (\\n  SELECT 1\\n  FROM public.course_sections cs\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  WHERE cs.course_id = c.id\\n)\\nORDER BY c.code ASC\"},\"startedAt\":1771804214480,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT c.id AS course_id, c.code AS course_code, c.name AS course_name\\nFROM public.courses c\\nWHERE NOT EXISTS (\\n  SELECT 1\\n  FROM public.course_sections cs\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  WHERE cs.course_id = c.id\\n)\\nORDER BY c.code ASC\",\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\"],\"rowCount\":5,\"sample\":[{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\"},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\"}]},\"data\":[{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\"},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\"},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\"},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\"},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\"}]},\"endedAt\":1771804214518},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT c.id AS course_id, c.code AS course_code, c.name AS course_name\\nFROM public.courses c\\nWHERE NOT EXISTS (\\n  SELECT 1\\n  FROM public.course_sections cs\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  WHERE cs.course_id = c.id\\n)\\nORDER BY c.code ASC\",\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\"],\"rowCount\":5,\"sample\":[{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\"},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\"}]},\"data\":[{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\"},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\"},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\"},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\"},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\"}]},\"startedAt\":1771804214522,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Courses with No Enrollments\",\"mark\":\"bar\",\"encoding\":{\"x\":{\"aggregate\":\"count\",\"field\":\"course_id\",\"type\":\"quantitative\",\"title\":\"Record count\"},\"y\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\",\"sort\":\"ascending\"},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"}]},\"height\":{\"step\":28}},\"reasoning\":\"A horizontal bar chart lists each course_code that has no enrollments; the bar length is the count of rows (1 per course) to visually enumerate them. Tooltip shows course_name and course_id for detail.\"},\"endedAt\":1771804229254},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Courses with No Enrollments\",\"mark\":\"bar\",\"encoding\":{\"x\":{\"aggregate\":\"count\",\"field\":\"course_id\",\"type\":\"quantitative\",\"title\":\"Record count\"},\"y\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\",\"sort\":\"ascending\"},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"}]},\"height\":{\"step\":28}},\"reasoning\":\"A horizontal bar chart lists each course_code that has no enrollments; the bar length is the count of rows (1 per course) to visually enumerate them. Tooltip shows course_name and course_id for detail.\"},\"startedAt\":1771804229257,\"status\":\"success\",\"output\":{\"sql\":\"SELECT c.id AS course_id, c.code AS course_code, c.name AS course_name\\nFROM public.courses c\\nWHERE NOT EXISTS (\\n  SELECT 1\\n  FROM public.course_sections cs\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  WHERE cs.course_id = c.id\\n)\\nORDER BY c.code ASC\",\"data\":[{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\"},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\"},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\"},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\"},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\"}],\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\"],\"rowCount\":5,\"sample\":[{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\"},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Courses with No Enrollments\",\"mark\":\"bar\",\"encoding\":{\"x\":{\"aggregate\":\"count\",\"field\":\"course_id\",\"type\":\"quantitative\",\"title\":\"Record count\"},\"y\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\",\"sort\":\"ascending\"},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"}]},\"height\":{\"step\":28}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771804229259}},\"input\":{\"question\":\"Which courses have no enrollments at all?\"},\"result\":{\"sql\":\"SELECT c.id AS course_id, c.code AS course_code, c.name AS course_name\\nFROM public.courses c\\nWHERE NOT EXISTS (\\n  SELECT 1\\n  FROM public.course_sections cs\\n  JOIN public.enrollments e ON e.course_section_id = cs.id\\n  WHERE cs.course_id = c.id\\n)\\nORDER BY c.code ASC\",\"data\":[{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\"},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\"},{\"course_id\":\"6002cfac-f371-4c9b-a048-8aaf1aae450a\",\"course_code\":\"LUO-736\",\"course_name\":\"Grafika Komputerowa\"},{\"course_id\":\"e89877df-7199-4b1f-a8e8-8e5c0872fe23\",\"course_code\":\"NWG-686\",\"course_name\":\"Programowanie Funkcyjne\"},{\"course_id\":\"32619ee8-5d87-49a4-9ca1-c94668909e2e\",\"course_code\":\"SBW-955\",\"course_name\":\"Sieci Komputerowe\"}],\"metadata\":{\"columns\":[\"course_id\",\"course_code\",\"course_name\"],\"rowCount\":5,\"sample\":[{\"course_id\":\"81699446-254d-47fd-b64f-6be4d7a661dd\",\"course_code\":\"FPW-573\",\"course_name\":\"Programowanie Obiektowe\"},{\"course_id\":\"410a9134-116d-41eb-84bc-1b5144736995\",\"course_code\":\"FWJ-758\",\"course_name\":\"Bezpieczeństwo Systemów Komputerowych\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Courses with No Enrollments\",\"mark\":\"bar\",\"encoding\":{\"x\":{\"aggregate\":\"count\",\"field\":\"course_id\",\"type\":\"quantitative\",\"title\":\"Record count\"},\"y\":{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\",\"sort\":\"ascending\"},\"tooltip\":[{\"field\":\"course_code\",\"type\":\"nominal\",\"title\":\"Course Code\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"}]},\"height\":{\"step\":28}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"ea7e87290ba4326d7a7dbd6561e4eb9b\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/courses-no-enrollments/run-0001/run.json",
+    "queryPath": "runs/courses-no-enrollments/run-0001/query.sql",
+    "vegaRawPath": "runs/courses-no-enrollments/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/courses-no-enrollments/run-0001/vega.resolved.json",
+    "imagePath": "runs/courses-no-enrollments/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:50:29.707Z",
+  "traceId": "ea7e87290ba4326d7a7dbd6561e4eb9b",
+  "success": true,
+  "durationMs": 44404,
+  "resultRaw": {
+    "data": [
+      {
+        "course_id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+        "course_code": "FPW-573",
+        "course_name": "Programowanie Obiektowe"
+      },
+      {
+        "course_id": "410a9134-116d-41eb-84bc-1b5144736995",
+        "course_code": "FWJ-758",
+        "course_name": "Bezpieczeństwo Systemów Komputerowych"
+      },
+      {
+        "course_id": "6002cfac-f371-4c9b-a048-8aaf1aae450a",
+        "course_code": "LUO-736",
+        "course_name": "Grafika Komputerowa"
+      },
+      {
+        "course_id": "e89877df-7199-4b1f-a8e8-8e5c0872fe23",
+        "course_code": "NWG-686",
+        "course_name": "Programowanie Funkcyjne"
+      },
+      {
+        "course_id": "32619ee8-5d87-49a4-9ca1-c94668909e2e",
+        "course_code": "SBW-955",
+        "course_name": "Sieci Komputerowe"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Courses with No Enrollments",
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "aggregate": "count",
+          "field": "course_id",
+          "type": "quantitative",
+          "title": "Record count"
+        },
+        "y": {
+          "field": "course_code",
+          "type": "nominal",
+          "title": "Course Code",
+          "sort": "ascending"
+        },
+        "tooltip": [
+          {
+            "field": "course_code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "course_name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "course_id",
+            "type": "nominal",
+            "title": "Course ID"
+          }
+        ]
+      },
+      "height": {
+        "step": 28
+      }
+    },
+    "sql": "SELECT c.id AS course_id, c.code AS course_code, c.name AS course_name\nFROM public.courses c\nWHERE NOT EXISTS (\n  SELECT 1\n  FROM public.course_sections cs\n  JOIN public.enrollments e ON e.course_section_id = cs.id\n  WHERE cs.course_id = c.id\n)\nORDER BY c.code ASC",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "course_code",
+        "course_name"
+      ],
+      "rowCount": 5,
+      "sample": [
+        {
+          "course_id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+          "course_code": "FPW-573",
+          "course_name": "Programowanie Obiektowe"
+        },
+        {
+          "course_id": "410a9134-116d-41eb-84bc-1b5144736995",
+          "course_code": "FWJ-758",
+          "course_name": "Bezpieczeństwo Systemów Komputerowych"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "course_id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+        "course_code": "FPW-573",
+        "course_name": "Programowanie Obiektowe"
+      },
+      {
+        "course_id": "410a9134-116d-41eb-84bc-1b5144736995",
+        "course_code": "FWJ-758",
+        "course_name": "Bezpieczeństwo Systemów Komputerowych"
+      },
+      {
+        "course_id": "6002cfac-f371-4c9b-a048-8aaf1aae450a",
+        "course_code": "LUO-736",
+        "course_name": "Grafika Komputerowa"
+      },
+      {
+        "course_id": "e89877df-7199-4b1f-a8e8-8e5c0872fe23",
+        "course_code": "NWG-686",
+        "course_name": "Programowanie Funkcyjne"
+      },
+      {
+        "course_id": "32619ee8-5d87-49a4-9ca1-c94668909e2e",
+        "course_code": "SBW-955",
+        "course_name": "Sieci Komputerowe"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Courses with No Enrollments",
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "aggregate": "count",
+          "field": "course_id",
+          "type": "quantitative",
+          "title": "Record count"
+        },
+        "y": {
+          "field": "course_code",
+          "type": "nominal",
+          "title": "Course Code",
+          "sort": "ascending"
+        },
+        "tooltip": [
+          {
+            "field": "course_code",
+            "type": "nominal",
+            "title": "Course Code"
+          },
+          {
+            "field": "course_name",
+            "type": "nominal",
+            "title": "Course Name"
+          },
+          {
+            "field": "course_id",
+            "type": "nominal",
+            "title": "Course ID"
+          }
+        ]
+      },
+      "height": {
+        "step": 28
+      }
+    },
+    "sql": "SELECT c.id AS course_id, c.code AS course_code, c.name AS course_name\nFROM public.courses c\nWHERE NOT EXISTS (\n  SELECT 1\n  FROM public.course_sections cs\n  JOIN public.enrollments e ON e.course_section_id = cs.id\n  WHERE cs.course_id = c.id\n)\nORDER BY c.code ASC",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "course_code",
+        "course_name"
+      ],
+      "rowCount": 5,
+      "sample": [
+        {
+          "course_id": "81699446-254d-47fd-b64f-6be4d7a661dd",
+          "course_code": "FPW-573",
+          "course_name": "Programowanie Obiektowe"
+        },
+        {
+          "course_id": "410a9134-116d-41eb-84bc-1b5144736995",
+          "course_code": "FWJ-758",
+          "course_name": "Bezpieczeństwo Systemów Komputerowych"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:50:29.707Z",
+    "traceId": "ea7e87290ba4326d7a7dbd6561e4eb9b",
+    "attempts": 5,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 12090,
+      "outputTokens": 2613,
+      "totalTokens": 14703,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1856,
+      "costUsd": 0.0082485
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 12090,
+        "outputTokens": 2613,
+        "totalTokens": 14703,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1856,
+        "costUsd": 0.0082485
+      }
+    ],
+    "warnings": []
+  }
+}

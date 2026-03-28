@@ -1,0 +1,758 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "professor-workload-comparison",
+  "caseDirectory": "professor-workload-comparison",
+  "repeatIndex": 1,
+  "prompt": "Compare the number of distinct courses taught by each professor",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Compare the number of distinct courses taught by each professor"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:35:57.590Z",
+    "endedAtUtc": "2026-02-23T11:37:13.730Z",
+    "durationMs": 76140
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "43785",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:37:13 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Compare the number of distinct courses taught by each professor\"},\"planner\":{\"payload\":{\"question\":\"Compare the number of distinct courses taught by each professor\"},\"startedAt\":1771846557598,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT course_sections.course_id)\"],\"dimensions\":[\"professors.id\",\"professors.first_name\",\"professors.last_name\"],\"filters\":[],\"grain\":\"per professor\",\"aliases\":{\"professors.id\":\"professor_id\",\"professors.first_name || ' ' || professors.last_name\":\"professor_name\",\"COUNT(DISTINCT course_sections.course_id)\":\"distinct_course_count\"},\"output_fields\":[\"professor_id\",\"professor_name\",\"distinct_course_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"professor_name\",\"y_axis\":\"distinct_course_count\",\"title\":\"Distinct courses taught per professor\"},\"assumptions\":[\"Use course_sections.course_id to identify a course (count of distinct course_id = number of distinct courses taught).\",\"Join key is course_sections.professor_id = professors.id (both columns exist in inspected schema).\",\"Count is aggregated across all academic years and semester_type unless the user requests filtering by semester/year.\",\"Include professors with zero taught courses (use a LEFT JOIN from professors to course_sections). If you prefer to exclude professors with zero, change to an INNER JOIN.\",\"Professor display name is constructed by concatenating professors.first_name and professors.last_name with a single space.\"]}},\"endedAt\":1771846587190},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT course_sections.course_id)\"],\"dimensions\":[\"professors.id\",\"professors.first_name\",\"professors.last_name\"],\"filters\":[],\"grain\":\"per professor\",\"aliases\":{\"professors.id\":\"professor_id\",\"professors.first_name || ' ' || professors.last_name\":\"professor_name\",\"COUNT(DISTINCT course_sections.course_id)\":\"distinct_course_count\"},\"output_fields\":[\"professor_id\",\"professor_name\",\"distinct_course_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"professor_name\",\"y_axis\":\"distinct_course_count\",\"title\":\"Distinct courses taught per professor\"},\"assumptions\":[\"Use course_sections.course_id to identify a course (count of distinct course_id = number of distinct courses taught).\",\"Join key is course_sections.professor_id = professors.id (both columns exist in inspected schema).\",\"Count is aggregated across all academic years and semester_type unless the user requests filtering by semester/year.\",\"Include professors with zero taught courses (use a LEFT JOIN from professors to course_sections). If you prefer to exclude professors with zero, change to an INNER JOIN.\",\"Professor display name is constructed by concatenating professors.first_name and professors.last_name with a single space.\"]}},\"startedAt\":1771846587201,\"status\":\"success\",\"output\":{\"question\":\"Compare the number of distinct courses taught by each professor\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT course_sections.course_id)\"],\"dimensions\":[\"professors.id\",\"professors.first_name\",\"professors.last_name\"],\"filters\":[],\"grain\":\"per professor\",\"aliases\":{\"professors.id\":\"professor_id\",\"professors.first_name || ' ' || professors.last_name\":\"professor_name\",\"COUNT(DISTINCT course_sections.course_id)\":\"distinct_course_count\"},\"output_fields\":[\"professor_id\",\"professor_name\",\"distinct_course_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"professor_name\",\"y_axis\":\"distinct_course_count\",\"title\":\"Distinct courses taught per professor\"},\"assumptions\":[\"Use course_sections.course_id to identify a course (count of distinct course_id = number of distinct courses taught).\",\"Join key is course_sections.professor_id = professors.id (both columns exist in inspected schema).\",\"Count is aggregated across all academic years and semester_type unless the user requests filtering by semester/year.\",\"Include professors with zero taught courses (use a LEFT JOIN from professors to course_sections). If you prefer to exclude professors with zero, change to an INNER JOIN.\",\"Professor display name is constructed by concatenating professors.first_name and professors.last_name with a single space.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771846587203},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"Compare the number of distinct courses taught by each professor\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT course_sections.course_id)\"],\"dimensions\":[\"professors.id\",\"professors.first_name\",\"professors.last_name\"],\"filters\":[],\"grain\":\"per professor\",\"aliases\":{\"professors.id\":\"professor_id\",\"professors.first_name || ' ' || professors.last_name\":\"professor_name\",\"COUNT(DISTINCT course_sections.course_id)\":\"distinct_course_count\"},\"output_fields\":[\"professor_id\",\"professor_name\",\"distinct_course_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"professor_name\",\"y_axis\":\"distinct_course_count\",\"title\":\"Distinct courses taught per professor\"},\"assumptions\":[\"Use course_sections.course_id to identify a course (count of distinct course_id = number of distinct courses taught).\",\"Join key is course_sections.professor_id = professors.id (both columns exist in inspected schema).\",\"Count is aggregated across all academic years and semester_type unless the user requests filtering by semester/year.\",\"Include professors with zero taught courses (use a LEFT JOIN from professors to course_sections). If you prefer to exclude professors with zero, change to an INNER JOIN.\",\"Professor display name is constructed by concatenating professors.first_name and professors.last_name with a single space.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771846587205,\"status\":\"success\",\"output\":{\"question\":\"Compare the number of distinct courses taught by each professor\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT course_sections.course_id)\"],\"dimensions\":[\"professors.id\",\"professors.first_name\",\"professors.last_name\"],\"filters\":[],\"grain\":\"per professor\",\"aliases\":{\"professors.id\":\"professor_id\",\"professors.first_name || ' ' || professors.last_name\":\"professor_name\",\"COUNT(DISTINCT course_sections.course_id)\":\"distinct_course_count\"},\"output_fields\":[\"professor_id\",\"professor_name\",\"distinct_course_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"professor_name\",\"y_axis\":\"distinct_course_count\",\"title\":\"Distinct courses taught per professor\"},\"assumptions\":[\"Use course_sections.course_id to identify a course (count of distinct course_id = number of distinct courses taught).\",\"Join key is course_sections.professor_id = professors.id (both columns exist in inspected schema).\",\"Count is aggregated across all academic years and semester_type unless the user requests filtering by semester/year.\",\"Include professors with zero taught courses (use a LEFT JOIN from professors to course_sections). If you prefer to exclude professors with zero, change to an INNER JOIN.\",\"Professor display name is constructed by concatenating professors.first_name and professors.last_name with a single space.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT p.id AS professor_id,\\n       p.first_name || ' ' || p.last_name AS professor_name,\\n       COUNT(DISTINCT cs.course_id) AS distinct_course_count\\nFROM public.professors p\\nLEFT JOIN public.course_sections cs\\n  ON cs.professor_id = p.id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY distinct_course_count DESC, professor_name ASC;\",\"validationIssues\":[\"Visualization will include professors with zero courses due to the LEFT JOIN in the SQL (verify this is intended).\",\"If there are many professors, the nominal x-axis labels may become crowded; consider a horizontal bar chart or pagination/aggregation to improve readability.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Count distinct course_id per professor using a LEFT JOIN so professors with no course sections appear with 0. Verified table/column names from the public schema before building the query.\",\"sql\":\"SELECT p.id AS professor_id,\\n       p.first_name || ' ' || p.last_name AS professor_name,\\n       COUNT(DISTINCT cs.course_id) AS distinct_course_count\\nFROM public.professors p\\nLEFT JOIN public.course_sections cs\\n  ON cs.professor_id = p.id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY distinct_course_count DESC, professor_name ASC;\",\"assumptions\":[\"course_sections.course_id is the identifier for a course (COUNT(DISTINCT course_id) = number of distinct courses taught).\",\"Join key is course_sections.professor_id = professors.id as confirmed in schema inspection.\",\"Aggregation is across all academic years and semester_type (no additional filtering applied).\",\"Professors with zero taught courses should be included (LEFT JOIN).\",\"Professor display name is first_name || ' ' || last_name.\",\"All referenced tables are in the public schema as inspected.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT p.id AS professor_id,\\n       p.first_name || ' ' || p.last_name AS professor_name,\\n       COUNT(DISTINCT cs.course_id) AS distinct_course_count\\nFROM public.professors p\\nLEFT JOIN public.course_sections cs\\n  ON cs.professor_id = p.id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY distinct_course_count DESC, professor_name ASC\",\"metadata\":{\"columns\":[\"professor_id\",\"professor_name\",\"distinct_course_count\"],\"rowCount\":50,\"sample\":[{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"professor_name\":\"Jacek Wojciechowski\",\"distinct_course_count\":3},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"professor_name\":\"Adam Wieczorek\",\"distinct_course_count\":2}]},\"data\":[{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"professor_name\":\"Jacek Wojciechowski\",\"distinct_course_count\":3},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"professor_name\":\"Adam Wieczorek\",\"distinct_course_count\":2},{\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"professor_name\":\"Agnieszka Krawczyk\",\"distinct_course_count\":2},{\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"professor_name\":\"Marek Lewandowski\",\"distinct_course_count\":2},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"professor_name\":\"Ryszard Kowalczyk\",\"distinct_course_count\":2},{\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"professor_name\":\"Ryszard Woźniak\",\"distinct_course_count\":2},{\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"professor_name\":\"Teresa Woźniak\",\"distinct_course_count\":2},{\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"professor_name\":\"Tomasz Majewski\",\"distinct_course_count\":2},{\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"professor_name\":\"Agnieszka Kozłowski\",\"distinct_course_count\":1},{\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"professor_name\":\"Ewa Krawczyk\",\"distinct_course_count\":1},{\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"professor_name\":\"Ewa Michalski\",\"distinct_course_count\":1},{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"professor_name\":\"Grzegorz Jankowski\",\"distinct_course_count\":1},{\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"professor_name\":\"Joanna Stępień\",\"distinct_course_count\":1},{\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"professor_name\":\"Katarzyna Kozłowski\",\"distinct_course_count\":1},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"professor_name\":\"Katarzyna Szymański\",\"distinct_course_count\":1},{\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"professor_name\":\"Magdalena Michalski\",\"distinct_course_count\":1},{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"professor_name\":\"Magdalena Piotrowski\",\"distinct_course_count\":1},{\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"professor_name\":\"Małgorzata Olszewski\",\"distinct_course_count\":1},{\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"professor_name\":\"Marek Woźniak\",\"distinct_course_count\":1},{\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"professor_name\":\"Mariusz Nowakowski\",\"distinct_course_count\":1},{\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"professor_name\":\"Michał Nowak\",\"distinct_course_count\":1},{\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"professor_name\":\"Robert Jaworski\",\"distinct_course_count\":1},{\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"professor_name\":\"Teresa Pawłowski\",\"distinct_course_count\":1},{\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"professor_name\":\"Tomasz Wieczorek\",\"distinct_course_count\":1},{\"professor_id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"professor_name\":\"Zbigniew Majewski\",\"distinct_course_count\":1},{\"professor_id\":\"2dd66040-0bde-416d-b2dc-9faa4ef4cd44\",\"professor_name\":\"Adam Woźniak\",\"distinct_course_count\":0},{\"professor_id\":\"6fbff454-aa38-4740-9c1e-dcaf245581f7\",\"professor_name\":\"Andrzej Kozłowski\",\"distinct_course_count\":0},{\"professor_id\":\"b3caef8a-8a8a-49c7-ae98-0fa38441139a\",\"professor_name\":\"Dariusz Nowak\",\"distinct_course_count\":0},{\"professor_id\":\"7732eb5b-ba0d-4e3f-9b39-205a0771c02a\",\"professor_name\":\"Grzegorz Zieliński\",\"distinct_course_count\":0},{\"professor_id\":\"2adc085d-5924-47a1-9bf3-43472e564355\",\"professor_name\":\"Jacek Wieczorek\",\"distinct_course_count\":0},{\"professor_id\":\"be6b85ea-af27-41f9-9346-32e567c2b4bc\",\"professor_name\":\"Jan Krawczyk\",\"distinct_course_count\":0},{\"professor_id\":\"b84e485c-28ea-42b7-a13e-a02578274226\",\"professor_name\":\"Jan Olszewski\",\"distinct_course_count\":0},{\"professor_id\":\"b2f3236b-6aea-4ddf-9e72-ca1b944344db\",\"professor_name\":\"Jerzy Kwiatkowski\",\"distinct_course_count\":0},{\"professor_id\":\"bdacd65d-0634-47e8-894e-728fc9221207\",\"professor_name\":\"Jerzy Mazur\",\"distinct_course_count\":0},{\"professor_id\":\"ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef\",\"professor_name\":\"Jerzy Nowak\",\"distinct_course_count\":0},{\"professor_id\":\"8e54b65b-4864-47d8-b9b3-9b727991a6d2\",\"professor_name\":\"Magdalena Szymański\",\"distinct_course_count\":0},{\"professor_id\":\"42b2aaed-9cc2-452d-bd55-ce9c8f222b3d\",\"professor_name\":\"Mariusz Król\",\"distinct_course_count\":0},{\"professor_id\":\"69dc12ae-95ba-499f-9d04-5eefc2f2d4bf\",\"professor_name\":\"Mariusz Nowak\",\"distinct_course_count\":0},{\"professor_id\":\"3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8\",\"professor_name\":\"Michał Jaworski\",\"distinct_course_count\":0},{\"professor_id\":\"8247a0e4-17f5-4581-a78b-f33a1a2a518b\",\"professor_name\":\"Paweł Jankowski\",\"distinct_course_count\":0},{\"professor_id\":\"ad35d15d-f7ad-416c-ade2-89853d0729c9\",\"professor_name\":\"Paweł Piotrowski\",\"distinct_course_count\":0},{\"professor_id\":\"fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464\",\"professor_name\":\"Piotr Lewandowski\",\"distinct_course_count\":0},{\"professor_id\":\"cd0c2f92-7721-4952-96be-08e390bdeee5\",\"professor_name\":\"Ryszard Kowalski\",\"distinct_course_count\":0},{\"professor_id\":\"089c913f-8ec7-4162-9a7a-a67e41b3b935\",\"professor_name\":\"Ryszard Szymański\",\"distinct_course_count\":0},{\"professor_id\":\"8711908f-0ab8-4de0-8b45-c2a294d2de1c\",\"professor_name\":\"Stanisław Nowakowski\",\"distinct_course_count\":0},{\"professor_id\":\"9c934df1-9a06-49a7-96f4-351a647012ba\",\"professor_name\":\"Stanisław Stępień\",\"distinct_course_count\":0},{\"professor_id\":\"bdb7d368-ed33-4dd8-99e9-aedea2c36f60\",\"professor_name\":\"Stanisław Wójcik\",\"distinct_course_count\":0},{\"professor_id\":\"88077860-09c6-401b-961d-48f7a7616705\",\"professor_name\":\"Teresa Kozłowski\",\"distinct_course_count\":0},{\"professor_id\":\"1ef09db2-d2f5-46a4-8805-75af1dc6f856\",\"professor_name\":\"Tomasz Kozłowski\",\"distinct_course_count\":0},{\"professor_id\":\"0d79d103-ec28-4ebf-831c-98b3fb34e9b0\",\"professor_name\":\"Zbigniew Górski\",\"distinct_course_count\":0}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Distinct courses taught per professor\",\"width\":900,\"height\":420,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Professor\",\"labelAngle\":-45},\"sort\":{\"field\":\"distinct_course_count\",\"order\":\"descending\"}},\"y\":{\"field\":\"distinct_course_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Distinct course count\"}},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"distinct_course_count\",\"type\":\"quantitative\",\"title\":\"Distinct courses\"},{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"}]}},\"reasoning\":\"Vertical bar chart showing each professor (name on x) and their count of distinct courses (y). Bars are sorted descending by course count; x labels rotated for readability. Tooltip includes professor id for reference.\"},\"validation\":{\"passed\":true,\"score\":0.8,\"issues\":[\"Visualization will include professors with zero courses due to the LEFT JOIN in the SQL (verify this is intended).\",\"If there are many professors, the nominal x-axis labels may become crowded; consider a horizontal bar chart or pagination/aggregation to improve readability.\"]}}},\"endedAt\":1771846633716,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"Compare the number of distinct courses taught by each professor\",\"plan\":{\"data_requirements\":{\"metrics\":[\"COUNT(DISTINCT course_sections.course_id)\"],\"dimensions\":[\"professors.id\",\"professors.first_name\",\"professors.last_name\"],\"filters\":[],\"grain\":\"per professor\",\"aliases\":{\"professors.id\":\"professor_id\",\"professors.first_name || ' ' || professors.last_name\":\"professor_name\",\"COUNT(DISTINCT course_sections.course_id)\":\"distinct_course_count\"},\"output_fields\":[\"professor_id\",\"professor_name\",\"distinct_course_count\"]},\"visual_requirements\":{\"chart_type\":\"bar\",\"x_axis\":\"professor_name\",\"y_axis\":\"distinct_course_count\",\"title\":\"Distinct courses taught per professor\"},\"assumptions\":[\"Use course_sections.course_id to identify a course (count of distinct course_id = number of distinct courses taught).\",\"Join key is course_sections.professor_id = professors.id (both columns exist in inspected schema).\",\"Count is aggregated across all academic years and semester_type unless the user requests filtering by semester/year.\",\"Include professors with zero taught courses (use a LEFT JOIN from professors to course_sections). If you prefer to exclude professors with zero, change to an INNER JOIN.\",\"Professor display name is constructed by concatenating professors.first_name and professors.last_name with a single space.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT p.id AS professor_id,\\n       p.first_name || ' ' || p.last_name AS professor_name,\\n       COUNT(DISTINCT cs.course_id) AS distinct_course_count\\nFROM public.professors p\\nLEFT JOIN public.course_sections cs\\n  ON cs.professor_id = p.id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY distinct_course_count DESC, professor_name ASC;\",\"validationIssues\":[\"Visualization will include professors with zero courses due to the LEFT JOIN in the SQL (verify this is intended).\",\"If there are many professors, the nominal x-axis labels may become crowded; consider a horizontal bar chart or pagination/aggregation to improve readability.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Count distinct course_id per professor using a LEFT JOIN so professors with no course sections appear with 0. Verified table/column names from the public schema before building the query.\",\"sql\":\"SELECT p.id AS professor_id,\\n       p.first_name || ' ' || p.last_name AS professor_name,\\n       COUNT(DISTINCT cs.course_id) AS distinct_course_count\\nFROM public.professors p\\nLEFT JOIN public.course_sections cs\\n  ON cs.professor_id = p.id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY distinct_course_count DESC, professor_name ASC;\",\"assumptions\":[\"course_sections.course_id is the identifier for a course (COUNT(DISTINCT course_id) = number of distinct courses taught).\",\"Join key is course_sections.professor_id = professors.id as confirmed in schema inspection.\",\"Aggregation is across all academic years and semester_type (no additional filtering applied).\",\"Professors with zero taught courses should be included (LEFT JOIN).\",\"Professor display name is first_name || ' ' || last_name.\",\"All referenced tables are in the public schema as inspected.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT p.id AS professor_id,\\n       p.first_name || ' ' || p.last_name AS professor_name,\\n       COUNT(DISTINCT cs.course_id) AS distinct_course_count\\nFROM public.professors p\\nLEFT JOIN public.course_sections cs\\n  ON cs.professor_id = p.id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY distinct_course_count DESC, professor_name ASC\",\"metadata\":{\"columns\":[\"professor_id\",\"professor_name\",\"distinct_course_count\"],\"rowCount\":50,\"sample\":[{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"professor_name\":\"Jacek Wojciechowski\",\"distinct_course_count\":3},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"professor_name\":\"Adam Wieczorek\",\"distinct_course_count\":2}]},\"data\":[{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"professor_name\":\"Jacek Wojciechowski\",\"distinct_course_count\":3},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"professor_name\":\"Adam Wieczorek\",\"distinct_course_count\":2},{\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"professor_name\":\"Agnieszka Krawczyk\",\"distinct_course_count\":2},{\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"professor_name\":\"Marek Lewandowski\",\"distinct_course_count\":2},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"professor_name\":\"Ryszard Kowalczyk\",\"distinct_course_count\":2},{\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"professor_name\":\"Ryszard Woźniak\",\"distinct_course_count\":2},{\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"professor_name\":\"Teresa Woźniak\",\"distinct_course_count\":2},{\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"professor_name\":\"Tomasz Majewski\",\"distinct_course_count\":2},{\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"professor_name\":\"Agnieszka Kozłowski\",\"distinct_course_count\":1},{\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"professor_name\":\"Ewa Krawczyk\",\"distinct_course_count\":1},{\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"professor_name\":\"Ewa Michalski\",\"distinct_course_count\":1},{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"professor_name\":\"Grzegorz Jankowski\",\"distinct_course_count\":1},{\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"professor_name\":\"Joanna Stępień\",\"distinct_course_count\":1},{\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"professor_name\":\"Katarzyna Kozłowski\",\"distinct_course_count\":1},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"professor_name\":\"Katarzyna Szymański\",\"distinct_course_count\":1},{\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"professor_name\":\"Magdalena Michalski\",\"distinct_course_count\":1},{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"professor_name\":\"Magdalena Piotrowski\",\"distinct_course_count\":1},{\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"professor_name\":\"Małgorzata Olszewski\",\"distinct_course_count\":1},{\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"professor_name\":\"Marek Woźniak\",\"distinct_course_count\":1},{\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"professor_name\":\"Mariusz Nowakowski\",\"distinct_course_count\":1},{\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"professor_name\":\"Michał Nowak\",\"distinct_course_count\":1},{\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"professor_name\":\"Robert Jaworski\",\"distinct_course_count\":1},{\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"professor_name\":\"Teresa Pawłowski\",\"distinct_course_count\":1},{\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"professor_name\":\"Tomasz Wieczorek\",\"distinct_course_count\":1},{\"professor_id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"professor_name\":\"Zbigniew Majewski\",\"distinct_course_count\":1},{\"professor_id\":\"2dd66040-0bde-416d-b2dc-9faa4ef4cd44\",\"professor_name\":\"Adam Woźniak\",\"distinct_course_count\":0},{\"professor_id\":\"6fbff454-aa38-4740-9c1e-dcaf245581f7\",\"professor_name\":\"Andrzej Kozłowski\",\"distinct_course_count\":0},{\"professor_id\":\"b3caef8a-8a8a-49c7-ae98-0fa38441139a\",\"professor_name\":\"Dariusz Nowak\",\"distinct_course_count\":0},{\"professor_id\":\"7732eb5b-ba0d-4e3f-9b39-205a0771c02a\",\"professor_name\":\"Grzegorz Zieliński\",\"distinct_course_count\":0},{\"professor_id\":\"2adc085d-5924-47a1-9bf3-43472e564355\",\"professor_name\":\"Jacek Wieczorek\",\"distinct_course_count\":0},{\"professor_id\":\"be6b85ea-af27-41f9-9346-32e567c2b4bc\",\"professor_name\":\"Jan Krawczyk\",\"distinct_course_count\":0},{\"professor_id\":\"b84e485c-28ea-42b7-a13e-a02578274226\",\"professor_name\":\"Jan Olszewski\",\"distinct_course_count\":0},{\"professor_id\":\"b2f3236b-6aea-4ddf-9e72-ca1b944344db\",\"professor_name\":\"Jerzy Kwiatkowski\",\"distinct_course_count\":0},{\"professor_id\":\"bdacd65d-0634-47e8-894e-728fc9221207\",\"professor_name\":\"Jerzy Mazur\",\"distinct_course_count\":0},{\"professor_id\":\"ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef\",\"professor_name\":\"Jerzy Nowak\",\"distinct_course_count\":0},{\"professor_id\":\"8e54b65b-4864-47d8-b9b3-9b727991a6d2\",\"professor_name\":\"Magdalena Szymański\",\"distinct_course_count\":0},{\"professor_id\":\"42b2aaed-9cc2-452d-bd55-ce9c8f222b3d\",\"professor_name\":\"Mariusz Król\",\"distinct_course_count\":0},{\"professor_id\":\"69dc12ae-95ba-499f-9d04-5eefc2f2d4bf\",\"professor_name\":\"Mariusz Nowak\",\"distinct_course_count\":0},{\"professor_id\":\"3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8\",\"professor_name\":\"Michał Jaworski\",\"distinct_course_count\":0},{\"professor_id\":\"8247a0e4-17f5-4581-a78b-f33a1a2a518b\",\"professor_name\":\"Paweł Jankowski\",\"distinct_course_count\":0},{\"professor_id\":\"ad35d15d-f7ad-416c-ade2-89853d0729c9\",\"professor_name\":\"Paweł Piotrowski\",\"distinct_course_count\":0},{\"professor_id\":\"fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464\",\"professor_name\":\"Piotr Lewandowski\",\"distinct_course_count\":0},{\"professor_id\":\"cd0c2f92-7721-4952-96be-08e390bdeee5\",\"professor_name\":\"Ryszard Kowalski\",\"distinct_course_count\":0},{\"professor_id\":\"089c913f-8ec7-4162-9a7a-a67e41b3b935\",\"professor_name\":\"Ryszard Szymański\",\"distinct_course_count\":0},{\"professor_id\":\"8711908f-0ab8-4de0-8b45-c2a294d2de1c\",\"professor_name\":\"Stanisław Nowakowski\",\"distinct_course_count\":0},{\"professor_id\":\"9c934df1-9a06-49a7-96f4-351a647012ba\",\"professor_name\":\"Stanisław Stępień\",\"distinct_course_count\":0},{\"professor_id\":\"bdb7d368-ed33-4dd8-99e9-aedea2c36f60\",\"professor_name\":\"Stanisław Wójcik\",\"distinct_course_count\":0},{\"professor_id\":\"88077860-09c6-401b-961d-48f7a7616705\",\"professor_name\":\"Teresa Kozłowski\",\"distinct_course_count\":0},{\"professor_id\":\"1ef09db2-d2f5-46a4-8805-75af1dc6f856\",\"professor_name\":\"Tomasz Kozłowski\",\"distinct_course_count\":0},{\"professor_id\":\"0d79d103-ec28-4ebf-831c-98b3fb34e9b0\",\"professor_name\":\"Zbigniew Górski\",\"distinct_course_count\":0}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Distinct courses taught per professor\",\"width\":900,\"height\":420,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Professor\",\"labelAngle\":-45},\"sort\":{\"field\":\"distinct_course_count\",\"order\":\"descending\"}},\"y\":{\"field\":\"distinct_course_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Distinct course count\"}},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"distinct_course_count\",\"type\":\"quantitative\",\"title\":\"Distinct courses\"},{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"}]}},\"reasoning\":\"Vertical bar chart showing each professor (name on x) and their count of distinct courses (y). Bars are sorted descending by course count; x labels rotated for readability. Tooltip includes professor id for reference.\"},\"validation\":{\"passed\":true,\"score\":0.8,\"issues\":[\"Visualization will include professors with zero courses due to the LEFT JOIN in the SQL (verify this is intended).\",\"If there are many professors, the nominal x-axis labels may become crowded; consider a horizontal bar chart or pagination/aggregation to improve readability.\"]}}},\"startedAt\":1771846633717,\"status\":\"success\",\"output\":{\"sql\":\"SELECT p.id AS professor_id,\\n       p.first_name || ' ' || p.last_name AS professor_name,\\n       COUNT(DISTINCT cs.course_id) AS distinct_course_count\\nFROM public.professors p\\nLEFT JOIN public.course_sections cs\\n  ON cs.professor_id = p.id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY distinct_course_count DESC, professor_name ASC;\",\"data\":[{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"professor_name\":\"Jacek Wojciechowski\",\"distinct_course_count\":3},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"professor_name\":\"Adam Wieczorek\",\"distinct_course_count\":2},{\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"professor_name\":\"Agnieszka Krawczyk\",\"distinct_course_count\":2},{\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"professor_name\":\"Marek Lewandowski\",\"distinct_course_count\":2},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"professor_name\":\"Ryszard Kowalczyk\",\"distinct_course_count\":2},{\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"professor_name\":\"Ryszard Woźniak\",\"distinct_course_count\":2},{\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"professor_name\":\"Teresa Woźniak\",\"distinct_course_count\":2},{\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"professor_name\":\"Tomasz Majewski\",\"distinct_course_count\":2},{\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"professor_name\":\"Agnieszka Kozłowski\",\"distinct_course_count\":1},{\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"professor_name\":\"Ewa Krawczyk\",\"distinct_course_count\":1},{\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"professor_name\":\"Ewa Michalski\",\"distinct_course_count\":1},{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"professor_name\":\"Grzegorz Jankowski\",\"distinct_course_count\":1},{\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"professor_name\":\"Joanna Stępień\",\"distinct_course_count\":1},{\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"professor_name\":\"Katarzyna Kozłowski\",\"distinct_course_count\":1},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"professor_name\":\"Katarzyna Szymański\",\"distinct_course_count\":1},{\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"professor_name\":\"Magdalena Michalski\",\"distinct_course_count\":1},{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"professor_name\":\"Magdalena Piotrowski\",\"distinct_course_count\":1},{\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"professor_name\":\"Małgorzata Olszewski\",\"distinct_course_count\":1},{\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"professor_name\":\"Marek Woźniak\",\"distinct_course_count\":1},{\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"professor_name\":\"Mariusz Nowakowski\",\"distinct_course_count\":1},{\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"professor_name\":\"Michał Nowak\",\"distinct_course_count\":1},{\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"professor_name\":\"Robert Jaworski\",\"distinct_course_count\":1},{\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"professor_name\":\"Teresa Pawłowski\",\"distinct_course_count\":1},{\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"professor_name\":\"Tomasz Wieczorek\",\"distinct_course_count\":1},{\"professor_id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"professor_name\":\"Zbigniew Majewski\",\"distinct_course_count\":1},{\"professor_id\":\"2dd66040-0bde-416d-b2dc-9faa4ef4cd44\",\"professor_name\":\"Adam Woźniak\",\"distinct_course_count\":0},{\"professor_id\":\"6fbff454-aa38-4740-9c1e-dcaf245581f7\",\"professor_name\":\"Andrzej Kozłowski\",\"distinct_course_count\":0},{\"professor_id\":\"b3caef8a-8a8a-49c7-ae98-0fa38441139a\",\"professor_name\":\"Dariusz Nowak\",\"distinct_course_count\":0},{\"professor_id\":\"7732eb5b-ba0d-4e3f-9b39-205a0771c02a\",\"professor_name\":\"Grzegorz Zieliński\",\"distinct_course_count\":0},{\"professor_id\":\"2adc085d-5924-47a1-9bf3-43472e564355\",\"professor_name\":\"Jacek Wieczorek\",\"distinct_course_count\":0},{\"professor_id\":\"be6b85ea-af27-41f9-9346-32e567c2b4bc\",\"professor_name\":\"Jan Krawczyk\",\"distinct_course_count\":0},{\"professor_id\":\"b84e485c-28ea-42b7-a13e-a02578274226\",\"professor_name\":\"Jan Olszewski\",\"distinct_course_count\":0},{\"professor_id\":\"b2f3236b-6aea-4ddf-9e72-ca1b944344db\",\"professor_name\":\"Jerzy Kwiatkowski\",\"distinct_course_count\":0},{\"professor_id\":\"bdacd65d-0634-47e8-894e-728fc9221207\",\"professor_name\":\"Jerzy Mazur\",\"distinct_course_count\":0},{\"professor_id\":\"ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef\",\"professor_name\":\"Jerzy Nowak\",\"distinct_course_count\":0},{\"professor_id\":\"8e54b65b-4864-47d8-b9b3-9b727991a6d2\",\"professor_name\":\"Magdalena Szymański\",\"distinct_course_count\":0},{\"professor_id\":\"42b2aaed-9cc2-452d-bd55-ce9c8f222b3d\",\"professor_name\":\"Mariusz Król\",\"distinct_course_count\":0},{\"professor_id\":\"69dc12ae-95ba-499f-9d04-5eefc2f2d4bf\",\"professor_name\":\"Mariusz Nowak\",\"distinct_course_count\":0},{\"professor_id\":\"3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8\",\"professor_name\":\"Michał Jaworski\",\"distinct_course_count\":0},{\"professor_id\":\"8247a0e4-17f5-4581-a78b-f33a1a2a518b\",\"professor_name\":\"Paweł Jankowski\",\"distinct_course_count\":0},{\"professor_id\":\"ad35d15d-f7ad-416c-ade2-89853d0729c9\",\"professor_name\":\"Paweł Piotrowski\",\"distinct_course_count\":0},{\"professor_id\":\"fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464\",\"professor_name\":\"Piotr Lewandowski\",\"distinct_course_count\":0},{\"professor_id\":\"cd0c2f92-7721-4952-96be-08e390bdeee5\",\"professor_name\":\"Ryszard Kowalski\",\"distinct_course_count\":0},{\"professor_id\":\"089c913f-8ec7-4162-9a7a-a67e41b3b935\",\"professor_name\":\"Ryszard Szymański\",\"distinct_course_count\":0},{\"professor_id\":\"8711908f-0ab8-4de0-8b45-c2a294d2de1c\",\"professor_name\":\"Stanisław Nowakowski\",\"distinct_course_count\":0},{\"professor_id\":\"9c934df1-9a06-49a7-96f4-351a647012ba\",\"professor_name\":\"Stanisław Stępień\",\"distinct_course_count\":0},{\"professor_id\":\"bdb7d368-ed33-4dd8-99e9-aedea2c36f60\",\"professor_name\":\"Stanisław Wójcik\",\"distinct_course_count\":0},{\"professor_id\":\"88077860-09c6-401b-961d-48f7a7616705\",\"professor_name\":\"Teresa Kozłowski\",\"distinct_course_count\":0},{\"professor_id\":\"1ef09db2-d2f5-46a4-8805-75af1dc6f856\",\"professor_name\":\"Tomasz Kozłowski\",\"distinct_course_count\":0},{\"professor_id\":\"0d79d103-ec28-4ebf-831c-98b3fb34e9b0\",\"professor_name\":\"Zbigniew Górski\",\"distinct_course_count\":0}],\"metadata\":{\"columns\":[\"professor_id\",\"professor_name\",\"distinct_course_count\"],\"rowCount\":50,\"sample\":[{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"professor_name\":\"Jacek Wojciechowski\",\"distinct_course_count\":3},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"professor_name\":\"Adam Wieczorek\",\"distinct_course_count\":2}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Distinct courses taught per professor\",\"width\":900,\"height\":420,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Professor\",\"labelAngle\":-45},\"sort\":{\"field\":\"distinct_course_count\",\"order\":\"descending\"}},\"y\":{\"field\":\"distinct_course_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Distinct course count\"}},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"distinct_course_count\",\"type\":\"quantitative\",\"title\":\"Distinct courses\"},{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.8,\"issues\":[\"Visualization will include professors with zero courses due to the LEFT JOIN in the SQL (verify this is intended).\",\"If there are many professors, the nominal x-axis labels may become crowded; consider a horizontal bar chart or pagination/aggregation to improve readability.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771846633720}},\"input\":{\"question\":\"Compare the number of distinct courses taught by each professor\"},\"result\":{\"sql\":\"SELECT p.id AS professor_id,\\n       p.first_name || ' ' || p.last_name AS professor_name,\\n       COUNT(DISTINCT cs.course_id) AS distinct_course_count\\nFROM public.professors p\\nLEFT JOIN public.course_sections cs\\n  ON cs.professor_id = p.id\\nGROUP BY p.id, p.first_name, p.last_name\\nORDER BY distinct_course_count DESC, professor_name ASC;\",\"data\":[{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"professor_name\":\"Jacek Wojciechowski\",\"distinct_course_count\":3},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"professor_name\":\"Adam Wieczorek\",\"distinct_course_count\":2},{\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"professor_name\":\"Agnieszka Krawczyk\",\"distinct_course_count\":2},{\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"professor_name\":\"Marek Lewandowski\",\"distinct_course_count\":2},{\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"professor_name\":\"Ryszard Kowalczyk\",\"distinct_course_count\":2},{\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"professor_name\":\"Ryszard Woźniak\",\"distinct_course_count\":2},{\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"professor_name\":\"Teresa Woźniak\",\"distinct_course_count\":2},{\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"professor_name\":\"Tomasz Majewski\",\"distinct_course_count\":2},{\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"professor_name\":\"Agnieszka Kozłowski\",\"distinct_course_count\":1},{\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"professor_name\":\"Ewa Krawczyk\",\"distinct_course_count\":1},{\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"professor_name\":\"Ewa Michalski\",\"distinct_course_count\":1},{\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"professor_name\":\"Grzegorz Jankowski\",\"distinct_course_count\":1},{\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"professor_name\":\"Joanna Stępień\",\"distinct_course_count\":1},{\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"professor_name\":\"Katarzyna Kozłowski\",\"distinct_course_count\":1},{\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"professor_name\":\"Katarzyna Szymański\",\"distinct_course_count\":1},{\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"professor_name\":\"Magdalena Michalski\",\"distinct_course_count\":1},{\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"professor_name\":\"Magdalena Piotrowski\",\"distinct_course_count\":1},{\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"professor_name\":\"Małgorzata Olszewski\",\"distinct_course_count\":1},{\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"professor_name\":\"Marek Woźniak\",\"distinct_course_count\":1},{\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"professor_name\":\"Mariusz Nowakowski\",\"distinct_course_count\":1},{\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"professor_name\":\"Michał Nowak\",\"distinct_course_count\":1},{\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"professor_name\":\"Robert Jaworski\",\"distinct_course_count\":1},{\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"professor_name\":\"Teresa Pawłowski\",\"distinct_course_count\":1},{\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"professor_name\":\"Tomasz Wieczorek\",\"distinct_course_count\":1},{\"professor_id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"professor_name\":\"Zbigniew Majewski\",\"distinct_course_count\":1},{\"professor_id\":\"2dd66040-0bde-416d-b2dc-9faa4ef4cd44\",\"professor_name\":\"Adam Woźniak\",\"distinct_course_count\":0},{\"professor_id\":\"6fbff454-aa38-4740-9c1e-dcaf245581f7\",\"professor_name\":\"Andrzej Kozłowski\",\"distinct_course_count\":0},{\"professor_id\":\"b3caef8a-8a8a-49c7-ae98-0fa38441139a\",\"professor_name\":\"Dariusz Nowak\",\"distinct_course_count\":0},{\"professor_id\":\"7732eb5b-ba0d-4e3f-9b39-205a0771c02a\",\"professor_name\":\"Grzegorz Zieliński\",\"distinct_course_count\":0},{\"professor_id\":\"2adc085d-5924-47a1-9bf3-43472e564355\",\"professor_name\":\"Jacek Wieczorek\",\"distinct_course_count\":0},{\"professor_id\":\"be6b85ea-af27-41f9-9346-32e567c2b4bc\",\"professor_name\":\"Jan Krawczyk\",\"distinct_course_count\":0},{\"professor_id\":\"b84e485c-28ea-42b7-a13e-a02578274226\",\"professor_name\":\"Jan Olszewski\",\"distinct_course_count\":0},{\"professor_id\":\"b2f3236b-6aea-4ddf-9e72-ca1b944344db\",\"professor_name\":\"Jerzy Kwiatkowski\",\"distinct_course_count\":0},{\"professor_id\":\"bdacd65d-0634-47e8-894e-728fc9221207\",\"professor_name\":\"Jerzy Mazur\",\"distinct_course_count\":0},{\"professor_id\":\"ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef\",\"professor_name\":\"Jerzy Nowak\",\"distinct_course_count\":0},{\"professor_id\":\"8e54b65b-4864-47d8-b9b3-9b727991a6d2\",\"professor_name\":\"Magdalena Szymański\",\"distinct_course_count\":0},{\"professor_id\":\"42b2aaed-9cc2-452d-bd55-ce9c8f222b3d\",\"professor_name\":\"Mariusz Król\",\"distinct_course_count\":0},{\"professor_id\":\"69dc12ae-95ba-499f-9d04-5eefc2f2d4bf\",\"professor_name\":\"Mariusz Nowak\",\"distinct_course_count\":0},{\"professor_id\":\"3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8\",\"professor_name\":\"Michał Jaworski\",\"distinct_course_count\":0},{\"professor_id\":\"8247a0e4-17f5-4581-a78b-f33a1a2a518b\",\"professor_name\":\"Paweł Jankowski\",\"distinct_course_count\":0},{\"professor_id\":\"ad35d15d-f7ad-416c-ade2-89853d0729c9\",\"professor_name\":\"Paweł Piotrowski\",\"distinct_course_count\":0},{\"professor_id\":\"fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464\",\"professor_name\":\"Piotr Lewandowski\",\"distinct_course_count\":0},{\"professor_id\":\"cd0c2f92-7721-4952-96be-08e390bdeee5\",\"professor_name\":\"Ryszard Kowalski\",\"distinct_course_count\":0},{\"professor_id\":\"089c913f-8ec7-4162-9a7a-a67e41b3b935\",\"professor_name\":\"Ryszard Szymański\",\"distinct_course_count\":0},{\"professor_id\":\"8711908f-0ab8-4de0-8b45-c2a294d2de1c\",\"professor_name\":\"Stanisław Nowakowski\",\"distinct_course_count\":0},{\"professor_id\":\"9c934df1-9a06-49a7-96f4-351a647012ba\",\"professor_name\":\"Stanisław Stępień\",\"distinct_course_count\":0},{\"professor_id\":\"bdb7d368-ed33-4dd8-99e9-aedea2c36f60\",\"professor_name\":\"Stanisław Wójcik\",\"distinct_course_count\":0},{\"professor_id\":\"88077860-09c6-401b-961d-48f7a7616705\",\"professor_name\":\"Teresa Kozłowski\",\"distinct_course_count\":0},{\"professor_id\":\"1ef09db2-d2f5-46a4-8805-75af1dc6f856\",\"professor_name\":\"Tomasz Kozłowski\",\"distinct_course_count\":0},{\"professor_id\":\"0d79d103-ec28-4ebf-831c-98b3fb34e9b0\",\"professor_name\":\"Zbigniew Górski\",\"distinct_course_count\":0}],\"metadata\":{\"columns\":[\"professor_id\",\"professor_name\",\"distinct_course_count\"],\"rowCount\":50,\"sample\":[{\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"professor_name\":\"Jacek Wojciechowski\",\"distinct_course_count\":3},{\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"professor_name\":\"Adam Wieczorek\",\"distinct_course_count\":2}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Distinct courses taught per professor\",\"width\":900,\"height\":420,\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Professor\",\"labelAngle\":-45},\"sort\":{\"field\":\"distinct_course_count\",\"order\":\"descending\"}},\"y\":{\"field\":\"distinct_course_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Distinct course count\"}},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"distinct_course_count\",\"type\":\"quantitative\",\"title\":\"Distinct courses\"},{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"}]}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.8,\"issues\":[\"Visualization will include professors with zero courses due to the LEFT JOIN in the SQL (verify this is intended).\",\"If there are many professors, the nominal x-axis labels may become crowded; consider a horizontal bar chart or pagination/aggregation to improve readability.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"92e0bf2ead50224c58eb590eb94adf0a\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/professor-workload-comparison/run-0001/run.json",
+    "queryPath": "runs/professor-workload-comparison/run-0001/query.sql",
+    "vegaRawPath": "runs/professor-workload-comparison/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/professor-workload-comparison/run-0001/vega.resolved.json",
+    "imagePath": "runs/professor-workload-comparison/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:37:14.176Z",
+  "traceId": "92e0bf2ead50224c58eb590eb94adf0a",
+  "success": true,
+  "durationMs": 76586,
+  "resultRaw": {
+    "data": [
+      {
+        "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+        "professor_name": "Jacek Wojciechowski",
+        "distinct_course_count": 3
+      },
+      {
+        "professor_id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+        "professor_name": "Adam Wieczorek",
+        "distinct_course_count": 2
+      },
+      {
+        "professor_id": "ff61fe12-d98c-4d43-87db-710f2571c1f2",
+        "professor_name": "Agnieszka Krawczyk",
+        "distinct_course_count": 2
+      },
+      {
+        "professor_id": "037011f2-f3d4-406e-9554-a6ffba701e06",
+        "professor_name": "Marek Lewandowski",
+        "distinct_course_count": 2
+      },
+      {
+        "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+        "professor_name": "Ryszard Kowalczyk",
+        "distinct_course_count": 2
+      },
+      {
+        "professor_id": "5d70abe8-4f1a-44ec-9816-2ec96a2807cb",
+        "professor_name": "Ryszard Woźniak",
+        "distinct_course_count": 2
+      },
+      {
+        "professor_id": "173e49aa-5a27-41e8-b1fa-4d19423bdc0b",
+        "professor_name": "Teresa Woźniak",
+        "distinct_course_count": 2
+      },
+      {
+        "professor_id": "f221aafd-0e9c-4345-aff5-7e290e1a7864",
+        "professor_name": "Tomasz Majewski",
+        "distinct_course_count": 2
+      },
+      {
+        "professor_id": "7fbf0e4c-fd08-4312-bb83-087368f81e46",
+        "professor_name": "Agnieszka Kozłowski",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "a82c40da-e7dc-4e49-9e66-386ea4bb7483",
+        "professor_name": "Ewa Krawczyk",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "dd993c5f-eb62-491f-a783-5ca9a0132ade",
+        "professor_name": "Ewa Michalski",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+        "professor_name": "Grzegorz Jankowski",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "007cb07c-c14f-4824-a62d-d42685252c75",
+        "professor_name": "Joanna Stępień",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "bcf3a47c-67cf-438d-93de-07c55ab583e0",
+        "professor_name": "Katarzyna Kozłowski",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "33ba2086-7c0f-4a57-9451-014db3e74209",
+        "professor_name": "Katarzyna Szymański",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "5b3ae75e-96e7-4a7b-be0f-7375938dcd62",
+        "professor_name": "Magdalena Michalski",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+        "professor_name": "Magdalena Piotrowski",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+        "professor_name": "Małgorzata Olszewski",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "2b5262b8-932c-4951-9390-c56d4b69d888",
+        "professor_name": "Marek Woźniak",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "d19adcea-56d6-4557-8f93-95ec58fa5d34",
+        "professor_name": "Mariusz Nowakowski",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "f24d24fc-5446-4d72-bb11-9d9dd1545f97",
+        "professor_name": "Michał Nowak",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "8f0ffcad-1af9-4da5-898a-dc47b8717d83",
+        "professor_name": "Robert Jaworski",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "cee911dc-17c4-4395-b173-2af1418983fe",
+        "professor_name": "Teresa Pawłowski",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "4050afec-f68c-49bb-9982-4a3c9d1a23d9",
+        "professor_name": "Tomasz Wieczorek",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4",
+        "professor_name": "Zbigniew Majewski",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "2dd66040-0bde-416d-b2dc-9faa4ef4cd44",
+        "professor_name": "Adam Woźniak",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "6fbff454-aa38-4740-9c1e-dcaf245581f7",
+        "professor_name": "Andrzej Kozłowski",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "b3caef8a-8a8a-49c7-ae98-0fa38441139a",
+        "professor_name": "Dariusz Nowak",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "7732eb5b-ba0d-4e3f-9b39-205a0771c02a",
+        "professor_name": "Grzegorz Zieliński",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "2adc085d-5924-47a1-9bf3-43472e564355",
+        "professor_name": "Jacek Wieczorek",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "be6b85ea-af27-41f9-9346-32e567c2b4bc",
+        "professor_name": "Jan Krawczyk",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "b84e485c-28ea-42b7-a13e-a02578274226",
+        "professor_name": "Jan Olszewski",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "b2f3236b-6aea-4ddf-9e72-ca1b944344db",
+        "professor_name": "Jerzy Kwiatkowski",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "bdacd65d-0634-47e8-894e-728fc9221207",
+        "professor_name": "Jerzy Mazur",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef",
+        "professor_name": "Jerzy Nowak",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "8e54b65b-4864-47d8-b9b3-9b727991a6d2",
+        "professor_name": "Magdalena Szymański",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "42b2aaed-9cc2-452d-bd55-ce9c8f222b3d",
+        "professor_name": "Mariusz Król",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "69dc12ae-95ba-499f-9d04-5eefc2f2d4bf",
+        "professor_name": "Mariusz Nowak",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8",
+        "professor_name": "Michał Jaworski",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "8247a0e4-17f5-4581-a78b-f33a1a2a518b",
+        "professor_name": "Paweł Jankowski",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "ad35d15d-f7ad-416c-ade2-89853d0729c9",
+        "professor_name": "Paweł Piotrowski",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464",
+        "professor_name": "Piotr Lewandowski",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "cd0c2f92-7721-4952-96be-08e390bdeee5",
+        "professor_name": "Ryszard Kowalski",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "089c913f-8ec7-4162-9a7a-a67e41b3b935",
+        "professor_name": "Ryszard Szymański",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "8711908f-0ab8-4de0-8b45-c2a294d2de1c",
+        "professor_name": "Stanisław Nowakowski",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "9c934df1-9a06-49a7-96f4-351a647012ba",
+        "professor_name": "Stanisław Stępień",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "bdb7d368-ed33-4dd8-99e9-aedea2c36f60",
+        "professor_name": "Stanisław Wójcik",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "88077860-09c6-401b-961d-48f7a7616705",
+        "professor_name": "Teresa Kozłowski",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "1ef09db2-d2f5-46a4-8805-75af1dc6f856",
+        "professor_name": "Tomasz Kozłowski",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "0d79d103-ec28-4ebf-831c-98b3fb34e9b0",
+        "professor_name": "Zbigniew Górski",
+        "distinct_course_count": 0
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Distinct courses taught per professor",
+      "width": 900,
+      "height": 420,
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "professor_name",
+          "type": "nominal",
+          "axis": {
+            "title": "Professor",
+            "labelAngle": -45
+          },
+          "sort": {
+            "field": "distinct_course_count",
+            "order": "descending"
+          }
+        },
+        "y": {
+          "field": "distinct_course_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Distinct course count"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "professor_name",
+            "type": "nominal",
+            "title": "Professor"
+          },
+          {
+            "field": "distinct_course_count",
+            "type": "quantitative",
+            "title": "Distinct courses"
+          },
+          {
+            "field": "professor_id",
+            "type": "nominal",
+            "title": "Professor ID"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT p.id AS professor_id,\n       p.first_name || ' ' || p.last_name AS professor_name,\n       COUNT(DISTINCT cs.course_id) AS distinct_course_count\nFROM public.professors p\nLEFT JOIN public.course_sections cs\n  ON cs.professor_id = p.id\nGROUP BY p.id, p.first_name, p.last_name\nORDER BY distinct_course_count DESC, professor_name ASC;",
+    "metadata": {
+      "columns": [
+        "professor_id",
+        "professor_name",
+        "distinct_course_count"
+      ],
+      "rowCount": 50,
+      "sample": [
+        {
+          "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+          "professor_name": "Jacek Wojciechowski",
+          "distinct_course_count": 3
+        },
+        {
+          "professor_id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+          "professor_name": "Adam Wieczorek",
+          "distinct_course_count": 2
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.8,
+      "issues": [
+        "Visualization will include professors with zero courses due to the LEFT JOIN in the SQL (verify this is intended).",
+        "If there are many professors, the nominal x-axis labels may become crowded; consider a horizontal bar chart or pagination/aggregation to improve readability."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+        "professor_name": "Jacek Wojciechowski",
+        "distinct_course_count": 3
+      },
+      {
+        "professor_id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+        "professor_name": "Adam Wieczorek",
+        "distinct_course_count": 2
+      },
+      {
+        "professor_id": "ff61fe12-d98c-4d43-87db-710f2571c1f2",
+        "professor_name": "Agnieszka Krawczyk",
+        "distinct_course_count": 2
+      },
+      {
+        "professor_id": "037011f2-f3d4-406e-9554-a6ffba701e06",
+        "professor_name": "Marek Lewandowski",
+        "distinct_course_count": 2
+      },
+      {
+        "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+        "professor_name": "Ryszard Kowalczyk",
+        "distinct_course_count": 2
+      },
+      {
+        "professor_id": "5d70abe8-4f1a-44ec-9816-2ec96a2807cb",
+        "professor_name": "Ryszard Woźniak",
+        "distinct_course_count": 2
+      },
+      {
+        "professor_id": "173e49aa-5a27-41e8-b1fa-4d19423bdc0b",
+        "professor_name": "Teresa Woźniak",
+        "distinct_course_count": 2
+      },
+      {
+        "professor_id": "f221aafd-0e9c-4345-aff5-7e290e1a7864",
+        "professor_name": "Tomasz Majewski",
+        "distinct_course_count": 2
+      },
+      {
+        "professor_id": "7fbf0e4c-fd08-4312-bb83-087368f81e46",
+        "professor_name": "Agnieszka Kozłowski",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "a82c40da-e7dc-4e49-9e66-386ea4bb7483",
+        "professor_name": "Ewa Krawczyk",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "dd993c5f-eb62-491f-a783-5ca9a0132ade",
+        "professor_name": "Ewa Michalski",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+        "professor_name": "Grzegorz Jankowski",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "007cb07c-c14f-4824-a62d-d42685252c75",
+        "professor_name": "Joanna Stępień",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "bcf3a47c-67cf-438d-93de-07c55ab583e0",
+        "professor_name": "Katarzyna Kozłowski",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "33ba2086-7c0f-4a57-9451-014db3e74209",
+        "professor_name": "Katarzyna Szymański",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "5b3ae75e-96e7-4a7b-be0f-7375938dcd62",
+        "professor_name": "Magdalena Michalski",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+        "professor_name": "Magdalena Piotrowski",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+        "professor_name": "Małgorzata Olszewski",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "2b5262b8-932c-4951-9390-c56d4b69d888",
+        "professor_name": "Marek Woźniak",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "d19adcea-56d6-4557-8f93-95ec58fa5d34",
+        "professor_name": "Mariusz Nowakowski",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "f24d24fc-5446-4d72-bb11-9d9dd1545f97",
+        "professor_name": "Michał Nowak",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "8f0ffcad-1af9-4da5-898a-dc47b8717d83",
+        "professor_name": "Robert Jaworski",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "cee911dc-17c4-4395-b173-2af1418983fe",
+        "professor_name": "Teresa Pawłowski",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "4050afec-f68c-49bb-9982-4a3c9d1a23d9",
+        "professor_name": "Tomasz Wieczorek",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4",
+        "professor_name": "Zbigniew Majewski",
+        "distinct_course_count": 1
+      },
+      {
+        "professor_id": "2dd66040-0bde-416d-b2dc-9faa4ef4cd44",
+        "professor_name": "Adam Woźniak",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "6fbff454-aa38-4740-9c1e-dcaf245581f7",
+        "professor_name": "Andrzej Kozłowski",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "b3caef8a-8a8a-49c7-ae98-0fa38441139a",
+        "professor_name": "Dariusz Nowak",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "7732eb5b-ba0d-4e3f-9b39-205a0771c02a",
+        "professor_name": "Grzegorz Zieliński",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "2adc085d-5924-47a1-9bf3-43472e564355",
+        "professor_name": "Jacek Wieczorek",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "be6b85ea-af27-41f9-9346-32e567c2b4bc",
+        "professor_name": "Jan Krawczyk",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "b84e485c-28ea-42b7-a13e-a02578274226",
+        "professor_name": "Jan Olszewski",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "b2f3236b-6aea-4ddf-9e72-ca1b944344db",
+        "professor_name": "Jerzy Kwiatkowski",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "bdacd65d-0634-47e8-894e-728fc9221207",
+        "professor_name": "Jerzy Mazur",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef",
+        "professor_name": "Jerzy Nowak",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "8e54b65b-4864-47d8-b9b3-9b727991a6d2",
+        "professor_name": "Magdalena Szymański",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "42b2aaed-9cc2-452d-bd55-ce9c8f222b3d",
+        "professor_name": "Mariusz Król",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "69dc12ae-95ba-499f-9d04-5eefc2f2d4bf",
+        "professor_name": "Mariusz Nowak",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8",
+        "professor_name": "Michał Jaworski",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "8247a0e4-17f5-4581-a78b-f33a1a2a518b",
+        "professor_name": "Paweł Jankowski",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "ad35d15d-f7ad-416c-ade2-89853d0729c9",
+        "professor_name": "Paweł Piotrowski",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464",
+        "professor_name": "Piotr Lewandowski",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "cd0c2f92-7721-4952-96be-08e390bdeee5",
+        "professor_name": "Ryszard Kowalski",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "089c913f-8ec7-4162-9a7a-a67e41b3b935",
+        "professor_name": "Ryszard Szymański",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "8711908f-0ab8-4de0-8b45-c2a294d2de1c",
+        "professor_name": "Stanisław Nowakowski",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "9c934df1-9a06-49a7-96f4-351a647012ba",
+        "professor_name": "Stanisław Stępień",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "bdb7d368-ed33-4dd8-99e9-aedea2c36f60",
+        "professor_name": "Stanisław Wójcik",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "88077860-09c6-401b-961d-48f7a7616705",
+        "professor_name": "Teresa Kozłowski",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "1ef09db2-d2f5-46a4-8805-75af1dc6f856",
+        "professor_name": "Tomasz Kozłowski",
+        "distinct_course_count": 0
+      },
+      {
+        "professor_id": "0d79d103-ec28-4ebf-831c-98b3fb34e9b0",
+        "professor_name": "Zbigniew Górski",
+        "distinct_course_count": 0
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Distinct courses taught per professor",
+      "width": 900,
+      "height": 420,
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "professor_name",
+          "type": "nominal",
+          "axis": {
+            "title": "Professor",
+            "labelAngle": -45
+          },
+          "sort": {
+            "field": "distinct_course_count",
+            "order": "descending"
+          }
+        },
+        "y": {
+          "field": "distinct_course_count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Distinct course count"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "professor_name",
+            "type": "nominal",
+            "title": "Professor"
+          },
+          {
+            "field": "distinct_course_count",
+            "type": "quantitative",
+            "title": "Distinct courses"
+          },
+          {
+            "field": "professor_id",
+            "type": "nominal",
+            "title": "Professor ID"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT p.id AS professor_id,\n       p.first_name || ' ' || p.last_name AS professor_name,\n       COUNT(DISTINCT cs.course_id) AS distinct_course_count\nFROM public.professors p\nLEFT JOIN public.course_sections cs\n  ON cs.professor_id = p.id\nGROUP BY p.id, p.first_name, p.last_name\nORDER BY distinct_course_count DESC, professor_name ASC;",
+    "metadata": {
+      "columns": [
+        "professor_id",
+        "professor_name",
+        "distinct_course_count"
+      ],
+      "rowCount": 50,
+      "sample": [
+        {
+          "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+          "professor_name": "Jacek Wojciechowski",
+          "distinct_course_count": 3
+        },
+        {
+          "professor_id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+          "professor_name": "Adam Wieczorek",
+          "distinct_course_count": 2
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.8,
+      "issues": [
+        "Visualization will include professors with zero courses due to the LEFT JOIN in the SQL (verify this is intended).",
+        "If there are many professors, the nominal x-axis labels may become crowded; consider a horizontal bar chart or pagination/aggregation to improve readability."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:37:14.176Z",
+    "traceId": "92e0bf2ead50224c58eb590eb94adf0a",
+    "attempts": 6,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 19222,
+      "outputTokens": 4902,
+      "totalTokens": 24124,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 3200,
+      "costUsd": 0.0146095
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 19222,
+        "outputTokens": 4902,
+        "totalTokens": 24124,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 3200,
+        "costUsd": 0.0146095
+      }
+    ],
+    "warnings": []
+  }
+}

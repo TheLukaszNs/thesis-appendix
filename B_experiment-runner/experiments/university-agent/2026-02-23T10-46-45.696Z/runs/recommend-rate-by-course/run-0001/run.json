@@ -1,0 +1,174 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "recommend-rate-by-course",
+  "caseDirectory": "recommend-rate-by-course",
+  "repeatIndex": 1,
+  "prompt": "What percentage of students would recommend each course?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What percentage of students would recommend each course?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:48:10.802Z",
+    "endedAtUtc": "2026-02-23T10:48:29.809Z",
+    "durationMs": 19007
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2478",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:48:29 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"What percentage of students would recommend each course?\"},\"agent\":{\"payload\":{\"question\":\"What percentage of students would recommend each course?\"},\"startedAt\":1771843690822,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  cf.course_id AS course_id,\\n  cf.course_name AS course_name,\\n  COUNT(*) AS total_responses,\\n  SUM(CASE WHEN cf.would_recommend = TRUE THEN 1 ELSE 0 END) AS recommend_count,\\n  ROUND(100.0 * SUM(CASE WHEN cf.would_recommend = TRUE THEN 1 ELSE 0 END) / COUNT(*), 2) AS recommend_percentage\\nFROM course_feedback cf\\nGROUP BY cf.course_id, cf.course_name\\nORDER BY recommend_percentage DESC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Bar chart showing the percentage of students who would recommend each course.\",\"data\":{\"name\":\"query_result\"},\"title\":\"Percentage of Students Who Would Recommend Each Course\",\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"title\":\"Recommend (%)\",\"axis\":{\"format\":\"%\"}},\"y\":{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course\",\"sort\":\"-x\"},\"color\":{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"legend\":null},\"tooltip\":[{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course\"},{\"field\":\"total_responses\",\"type\":\"quantitative\",\"title\":\"Responses\"},{\"field\":\"recommend_count\",\"type\":\"quantitative\",\"title\":\"Recommend Count\"},{\"field\":\"recommend_percentage\",\"type\":\"quantitative\",\"title\":\"Recommend (%)\"}]}}},\"endedAt\":1771843709748},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  cf.course_id AS course_id,\\n  cf.course_name AS course_name,\\n  COUNT(*) AS total_responses,\\n  SUM(CASE WHEN cf.would_recommend = TRUE THEN 1 ELSE 0 END) AS recommend_count,\\n  ROUND(100.0 * SUM(CASE WHEN cf.would_recommend = TRUE THEN 1 ELSE 0 END) / COUNT(*), 2) AS recommend_percentage\\nFROM course_feedback cf\\nGROUP BY cf.course_id, cf.course_name\\nORDER BY recommend_percentage DESC;\"},\"startedAt\":1771843709753,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: relation \\\"course_feedback\\\" does not exist\\nLINE 8: FROM course_feedback cf\\n             ^\",\"name\":\"Error\"},\"endedAt\":1771843709804}},\"input\":{\"question\":\"What percentage of students would recommend each course?\"},\"error\":{\"message\":\"SQL execution failed: relation \\\"course_feedback\\\" does not exist\\nLINE 8: FROM course_feedback cf\\n             ^\",\"name\":\"Error\"},\"traceId\":\"44ccc100b8c85464fb42431aa020ab2c\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/recommend-rate-by-course/run-0001/run.json",
+    "queryPath": "runs/recommend-rate-by-course/run-0001/query.sql",
+    "vegaRawPath": "runs/recommend-rate-by-course/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/recommend-rate-by-course/run-0001/vega.resolved.json",
+    "imagePath": "runs/recommend-rate-by-course/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:48:29.809Z",
+  "traceId": "44ccc100b8c85464fb42431aa020ab2c",
+  "success": false,
+  "durationMs": 19007,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "What percentage of students would recommend each course?"
+      },
+      "agent": {
+        "payload": {
+          "question": "What percentage of students would recommend each course?"
+        },
+        "startedAt": 1771843690822,
+        "status": "success",
+        "output": {
+          "sql": "SELECT\n  cf.course_id AS course_id,\n  cf.course_name AS course_name,\n  COUNT(*) AS total_responses,\n  SUM(CASE WHEN cf.would_recommend = TRUE THEN 1 ELSE 0 END) AS recommend_count,\n  ROUND(100.0 * SUM(CASE WHEN cf.would_recommend = TRUE THEN 1 ELSE 0 END) / COUNT(*), 2) AS recommend_percentage\nFROM course_feedback cf\nGROUP BY cf.course_id, cf.course_name\nORDER BY recommend_percentage DESC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Bar chart showing the percentage of students who would recommend each course.",
+            "data": {
+              "name": "query_result"
+            },
+            "title": "Percentage of Students Who Would Recommend Each Course",
+            "mark": {
+              "type": "bar"
+            },
+            "encoding": {
+              "x": {
+                "field": "recommend_percentage",
+                "type": "quantitative",
+                "title": "Recommend (%)",
+                "axis": {
+                  "format": "%"
+                }
+              },
+              "y": {
+                "field": "course_name",
+                "type": "nominal",
+                "title": "Course",
+                "sort": "-x"
+              },
+              "color": {
+                "field": "recommend_percentage",
+                "type": "quantitative",
+                "legend": null
+              },
+              "tooltip": [
+                {
+                  "field": "course_name",
+                  "type": "nominal",
+                  "title": "Course"
+                },
+                {
+                  "field": "total_responses",
+                  "type": "quantitative",
+                  "title": "Responses"
+                },
+                {
+                  "field": "recommend_count",
+                  "type": "quantitative",
+                  "title": "Recommend Count"
+                },
+                {
+                  "field": "recommend_percentage",
+                  "type": "quantitative",
+                  "title": "Recommend (%)"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843709748
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT\n  cf.course_id AS course_id,\n  cf.course_name AS course_name,\n  COUNT(*) AS total_responses,\n  SUM(CASE WHEN cf.would_recommend = TRUE THEN 1 ELSE 0 END) AS recommend_count,\n  ROUND(100.0 * SUM(CASE WHEN cf.would_recommend = TRUE THEN 1 ELSE 0 END) / COUNT(*), 2) AS recommend_percentage\nFROM course_feedback cf\nGROUP BY cf.course_id, cf.course_name\nORDER BY recommend_percentage DESC;"
+        },
+        "startedAt": 1771843709753,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: relation \"course_feedback\" does not exist\nLINE 8: FROM course_feedback cf\n             ^",
+          "name": "Error"
+        },
+        "endedAt": 1771843709804
+      }
+    },
+    "input": {
+      "question": "What percentage of students would recommend each course?"
+    },
+    "error": {
+      "message": "SQL execution failed: relation \"course_feedback\" does not exist\nLINE 8: FROM course_feedback cf\n             ^",
+      "name": "Error"
+    },
+    "traceId": "44ccc100b8c85464fb42431aa020ab2c"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:48:29.809Z",
+    "traceId": "44ccc100b8c85464fb42431aa020ab2c",
+    "attempts": 4,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 265,
+      "outputTokens": 1437,
+      "totalTokens": 1702,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 960,
+      "costUsd": 0.00294025
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 265,
+        "outputTokens": 1437,
+        "totalTokens": 1702,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 960,
+        "costUsd": 0.00294025
+      }
+    ],
+    "warnings": []
+  }
+}

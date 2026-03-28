@@ -1,0 +1,590 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "exam-vs-project-score-avg",
+  "caseDirectory": "exam-vs-project-score-avg",
+  "repeatIndex": 1,
+  "prompt": "Compare average exam scores vs project scores by department",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Compare average exam scores vs project scores by department"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:45:23.112Z",
+    "endedAtUtc": "2026-02-22T23:46:49.668Z",
+    "durationMs": 86556
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "26147",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:46:49 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Compare average exam scores vs project scores by department\"},\"sql\":{\"payload\":{\"question\":\"Compare average exam scores vs project scores by department\"},\"startedAt\":1771803923132,\"status\":\"success\",\"output\":{\"reasoning\":\"Compute department-level averages by joining grades → enrollments → course_sections → courses → departments, using FILTER to ignore NULL scores and providing a diff and categorical comparison. Results ordered deterministically by department_name.\",\"sql\":\"WITH dept_scores AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    AVG(gr.exam_score) FILTER (WHERE gr.exam_score IS NOT NULL) AS avg_exam_score,\\n    AVG(gr.project_score) FILTER (WHERE gr.project_score IS NOT NULL) AS avg_project_score,\\n    COUNT(gr.id) FILTER (WHERE gr.exam_score IS NOT NULL OR gr.project_score IS NOT NULL) AS score_count\\n  FROM public.grades gr\\n  JOIN public.enrollments e ON e.id = gr.enrollment_id\\n  JOIN public.course_sections cs ON cs.id = e.course_section_id\\n  JOIN public.courses c ON c.id = cs.course_id\\n  JOIN public.departments d ON d.id = c.department_id\\n  GROUP BY d.id, d.name\\n)\\nSELECT\\n  department_id,\\n  department_name,\\n  ROUND(avg_exam_score::numeric, 2) AS avg_exam_score,\\n  ROUND(avg_project_score::numeric, 2) AS avg_project_score,\\n  ROUND((avg_exam_score - avg_project_score)::numeric, 2) AS exam_minus_project_diff,\\n  CASE\\n    WHEN avg_exam_score IS NULL AND avg_project_score IS NULL THEN 'no_scores'\\n    WHEN avg_exam_score > avg_project_score THEN 'exam_higher'\\n    WHEN avg_exam_score < avg_project_score THEN 'project_higher'\\n    ELSE 'equal'\\n  END AS exam_vs_project,\\n  score_count\\nFROM dept_scores\\nORDER BY department_name ASC;\",\"assumptions\":[\"All required tables/columns exist in the public schema as discovered (public.grades.enrollment_id, public.grades.exam_score, public.grades.project_score, public.enrollments.course_section_id, public.course_sections.course_id, public.courses.department_id, public.departments.id/name).\",\"Exam and project scores use the same scale (so averages are directly comparable).\",\"Departments with no non-null exam/project scores will appear with NULL averages and are labeled 'no_scores'.\"]},\"endedAt\":1771803972341},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH dept_scores AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    AVG(gr.exam_score) FILTER (WHERE gr.exam_score IS NOT NULL) AS avg_exam_score,\\n    AVG(gr.project_score) FILTER (WHERE gr.project_score IS NOT NULL) AS avg_project_score,\\n    COUNT(gr.id) FILTER (WHERE gr.exam_score IS NOT NULL OR gr.project_score IS NOT NULL) AS score_count\\n  FROM public.grades gr\\n  JOIN public.enrollments e ON e.id = gr.enrollment_id\\n  JOIN public.course_sections cs ON cs.id = e.course_section_id\\n  JOIN public.courses c ON c.id = cs.course_id\\n  JOIN public.departments d ON d.id = c.department_id\\n  GROUP BY d.id, d.name\\n)\\nSELECT\\n  department_id,\\n  department_name,\\n  ROUND(avg_exam_score::numeric, 2) AS avg_exam_score,\\n  ROUND(avg_project_score::numeric, 2) AS avg_project_score,\\n  ROUND((avg_exam_score - avg_project_score)::numeric, 2) AS exam_minus_project_diff,\\n  CASE\\n    WHEN avg_exam_score IS NULL AND avg_project_score IS NULL THEN 'no_scores'\\n    WHEN avg_exam_score > avg_project_score THEN 'exam_higher'\\n    WHEN avg_exam_score < avg_project_score THEN 'project_higher'\\n    ELSE 'equal'\\n  END AS exam_vs_project,\\n  score_count\\nFROM dept_scores\\nORDER BY department_name ASC;\"},\"startedAt\":1771803972344,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH dept_scores AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    AVG(gr.exam_score) FILTER (WHERE gr.exam_score IS NOT NULL) AS avg_exam_score,\\n    AVG(gr.project_score) FILTER (WHERE gr.project_score IS NOT NULL) AS avg_project_score,\\n    COUNT(gr.id) FILTER (WHERE gr.exam_score IS NOT NULL OR gr.project_score IS NOT NULL) AS score_count\\n  FROM public.grades gr\\n  JOIN public.enrollments e ON e.id = gr.enrollment_id\\n  JOIN public.course_sections cs ON cs.id = e.course_section_id\\n  JOIN public.courses c ON c.id = cs.course_id\\n  JOIN public.departments d ON d.id = c.department_id\\n  GROUP BY d.id, d.name\\n)\\nSELECT\\n  department_id,\\n  department_name,\\n  ROUND(avg_exam_score::numeric, 2) AS avg_exam_score,\\n  ROUND(avg_project_score::numeric, 2) AS avg_project_score,\\n  ROUND((avg_exam_score - avg_project_score)::numeric, 2) AS exam_minus_project_diff,\\n  CASE\\n    WHEN avg_exam_score IS NULL AND avg_project_score IS NULL THEN 'no_scores'\\n    WHEN avg_exam_score > avg_project_score THEN 'exam_higher'\\n    WHEN avg_exam_score < avg_project_score THEN 'project_higher'\\n    ELSE 'equal'\\n  END AS exam_vs_project,\\n  score_count\\nFROM dept_scores\\nORDER BY department_name ASC\",\"metadata\":{\"columns\":[\"score_count\",\"department_id\",\"avg_exam_score\",\"department_name\",\"exam_vs_project\",\"avg_project_score\",\"exam_minus_project_diff\"],\"rowCount\":6,\"sample\":[{\"score_count\":8,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"avg_exam_score\":45.97,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"exam_vs_project\":\"project_higher\",\"avg_project_score\":60.59,\"exam_minus_project_diff\":-14.62},{\"score_count\":3,\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"avg_exam_score\":37.4,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"exam_vs_project\":\"exam_higher\",\"avg_project_score\":29.6,\"exam_minus_project_diff\":7.8}]},\"data\":[{\"score_count\":8,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"avg_exam_score\":45.97,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"exam_vs_project\":\"project_higher\",\"avg_project_score\":60.59,\"exam_minus_project_diff\":-14.62},{\"score_count\":3,\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"avg_exam_score\":37.4,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"exam_vs_project\":\"exam_higher\",\"avg_project_score\":29.6,\"exam_minus_project_diff\":7.8},{\"score_count\":8,\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"avg_exam_score\":53.99,\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"exam_vs_project\":\"exam_higher\",\"avg_project_score\":47.97,\"exam_minus_project_diff\":6.03},{\"score_count\":10,\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"avg_exam_score\":34.6,\"department_name\":\"Wydział Inżynierii Produkcji\",\"exam_vs_project\":\"project_higher\",\"avg_project_score\":44.96,\"exam_minus_project_diff\":-10.36},{\"score_count\":16,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"avg_exam_score\":60,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"exam_vs_project\":\"exam_higher\",\"avg_project_score\":41.77,\"exam_minus_project_diff\":18.23},{\"score_count\":6,\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"avg_exam_score\":42.73,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"exam_vs_project\":\"project_higher\",\"avg_project_score\":60.18,\"exam_minus_project_diff\":-17.45}]},\"endedAt\":1771803972375},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"WITH dept_scores AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    AVG(gr.exam_score) FILTER (WHERE gr.exam_score IS NOT NULL) AS avg_exam_score,\\n    AVG(gr.project_score) FILTER (WHERE gr.project_score IS NOT NULL) AS avg_project_score,\\n    COUNT(gr.id) FILTER (WHERE gr.exam_score IS NOT NULL OR gr.project_score IS NOT NULL) AS score_count\\n  FROM public.grades gr\\n  JOIN public.enrollments e ON e.id = gr.enrollment_id\\n  JOIN public.course_sections cs ON cs.id = e.course_section_id\\n  JOIN public.courses c ON c.id = cs.course_id\\n  JOIN public.departments d ON d.id = c.department_id\\n  GROUP BY d.id, d.name\\n)\\nSELECT\\n  department_id,\\n  department_name,\\n  ROUND(avg_exam_score::numeric, 2) AS avg_exam_score,\\n  ROUND(avg_project_score::numeric, 2) AS avg_project_score,\\n  ROUND((avg_exam_score - avg_project_score)::numeric, 2) AS exam_minus_project_diff,\\n  CASE\\n    WHEN avg_exam_score IS NULL AND avg_project_score IS NULL THEN 'no_scores'\\n    WHEN avg_exam_score > avg_project_score THEN 'exam_higher'\\n    WHEN avg_exam_score < avg_project_score THEN 'project_higher'\\n    ELSE 'equal'\\n  END AS exam_vs_project,\\n  score_count\\nFROM dept_scores\\nORDER BY department_name ASC\",\"metadata\":{\"columns\":[\"score_count\",\"department_id\",\"avg_exam_score\",\"department_name\",\"exam_vs_project\",\"avg_project_score\",\"exam_minus_project_diff\"],\"rowCount\":6,\"sample\":[{\"score_count\":8,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"avg_exam_score\":45.97,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"exam_vs_project\":\"project_higher\",\"avg_project_score\":60.59,\"exam_minus_project_diff\":-14.62},{\"score_count\":3,\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"avg_exam_score\":37.4,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"exam_vs_project\":\"exam_higher\",\"avg_project_score\":29.6,\"exam_minus_project_diff\":7.8}]},\"data\":[{\"score_count\":8,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"avg_exam_score\":45.97,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"exam_vs_project\":\"project_higher\",\"avg_project_score\":60.59,\"exam_minus_project_diff\":-14.62},{\"score_count\":3,\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"avg_exam_score\":37.4,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"exam_vs_project\":\"exam_higher\",\"avg_project_score\":29.6,\"exam_minus_project_diff\":7.8},{\"score_count\":8,\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"avg_exam_score\":53.99,\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"exam_vs_project\":\"exam_higher\",\"avg_project_score\":47.97,\"exam_minus_project_diff\":6.03},{\"score_count\":10,\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"avg_exam_score\":34.6,\"department_name\":\"Wydział Inżynierii Produkcji\",\"exam_vs_project\":\"project_higher\",\"avg_project_score\":44.96,\"exam_minus_project_diff\":-10.36},{\"score_count\":16,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"avg_exam_score\":60,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"exam_vs_project\":\"exam_higher\",\"avg_project_score\":41.77,\"exam_minus_project_diff\":18.23},{\"score_count\":6,\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"avg_exam_score\":42.73,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"exam_vs_project\":\"project_higher\",\"avg_project_score\":60.18,\"exam_minus_project_diff\":-17.45}]},\"startedAt\":1771803972378,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Exam vs Project Scores by Department\",\"width\":700,\"height\":{\"step\":36},\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3,\"opacity\":0.85},\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":{\"field\":\"department_name\",\"order\":\"ascending\"},\"axis\":{\"title\":null}},\"x\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Score\",\"grid\":true}},\"xOffset\":{\"value\":-6},\"color\":{\"value\":\"#1f77b4\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\"},{\"field\":\"avg_project_score\",\"type\":\"quantitative\",\"title\":\"Avg Project Score\"},{\"field\":\"exam_minus_project_diff\",\"type\":\"quantitative\",\"title\":\"Exam - Project\"},{\"field\":\"exam_vs_project\",\"type\":\"nominal\",\"title\":\"Which Higher?\"},{\"field\":\"score_count\",\"type\":\"quantitative\",\"title\":\"Score Count\"}]}},{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3,\"opacity\":0.85},\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":{\"field\":\"department_name\",\"order\":\"ascending\"},\"axis\":null},\"x\":{\"field\":\"avg_project_score\",\"type\":\"quantitative\"},\"xOffset\":{\"value\":6},\"color\":{\"value\":\"#ff7f0e\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\"},{\"field\":\"avg_project_score\",\"type\":\"quantitative\",\"title\":\"Avg Project Score\"},{\"field\":\"exam_minus_project_diff\",\"type\":\"quantitative\",\"title\":\"Exam - Project\"},{\"field\":\"exam_vs_project\",\"type\":\"nominal\",\"title\":\"Which Higher?\"},{\"field\":\"score_count\",\"type\":\"quantitative\",\"title\":\"Score Count\"}]}}],\"resolve\":{\"scale\":{\"x\":\"shared\"}},\"config\":{\"axis\":{\"labelFontSize\":11,\"titleFontSize\":12}}},\"reasoning\":\"Layered horizontal bars offset slightly left/right compare avg_exam_score and avg_project_score per department. Tooltip includes all relevant fields (avg scores, difference, classification, and count).\"},\"endedAt\":1771804009475},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Exam vs Project Scores by Department\",\"width\":700,\"height\":{\"step\":36},\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3,\"opacity\":0.85},\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":{\"field\":\"department_name\",\"order\":\"ascending\"},\"axis\":{\"title\":null}},\"x\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Score\",\"grid\":true}},\"xOffset\":{\"value\":-6},\"color\":{\"value\":\"#1f77b4\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\"},{\"field\":\"avg_project_score\",\"type\":\"quantitative\",\"title\":\"Avg Project Score\"},{\"field\":\"exam_minus_project_diff\",\"type\":\"quantitative\",\"title\":\"Exam - Project\"},{\"field\":\"exam_vs_project\",\"type\":\"nominal\",\"title\":\"Which Higher?\"},{\"field\":\"score_count\",\"type\":\"quantitative\",\"title\":\"Score Count\"}]}},{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3,\"opacity\":0.85},\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":{\"field\":\"department_name\",\"order\":\"ascending\"},\"axis\":null},\"x\":{\"field\":\"avg_project_score\",\"type\":\"quantitative\"},\"xOffset\":{\"value\":6},\"color\":{\"value\":\"#ff7f0e\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\"},{\"field\":\"avg_project_score\",\"type\":\"quantitative\",\"title\":\"Avg Project Score\"},{\"field\":\"exam_minus_project_diff\",\"type\":\"quantitative\",\"title\":\"Exam - Project\"},{\"field\":\"exam_vs_project\",\"type\":\"nominal\",\"title\":\"Which Higher?\"},{\"field\":\"score_count\",\"type\":\"quantitative\",\"title\":\"Score Count\"}]}}],\"resolve\":{\"scale\":{\"x\":\"shared\"}},\"config\":{\"axis\":{\"labelFontSize\":11,\"titleFontSize\":12}}},\"reasoning\":\"Layered horizontal bars offset slightly left/right compare avg_exam_score and avg_project_score per department. Tooltip includes all relevant fields (avg scores, difference, classification, and count).\"},\"startedAt\":1771804009479,\"status\":\"success\",\"output\":{\"sql\":\"WITH dept_scores AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    AVG(gr.exam_score) FILTER (WHERE gr.exam_score IS NOT NULL) AS avg_exam_score,\\n    AVG(gr.project_score) FILTER (WHERE gr.project_score IS NOT NULL) AS avg_project_score,\\n    COUNT(gr.id) FILTER (WHERE gr.exam_score IS NOT NULL OR gr.project_score IS NOT NULL) AS score_count\\n  FROM public.grades gr\\n  JOIN public.enrollments e ON e.id = gr.enrollment_id\\n  JOIN public.course_sections cs ON cs.id = e.course_section_id\\n  JOIN public.courses c ON c.id = cs.course_id\\n  JOIN public.departments d ON d.id = c.department_id\\n  GROUP BY d.id, d.name\\n)\\nSELECT\\n  department_id,\\n  department_name,\\n  ROUND(avg_exam_score::numeric, 2) AS avg_exam_score,\\n  ROUND(avg_project_score::numeric, 2) AS avg_project_score,\\n  ROUND((avg_exam_score - avg_project_score)::numeric, 2) AS exam_minus_project_diff,\\n  CASE\\n    WHEN avg_exam_score IS NULL AND avg_project_score IS NULL THEN 'no_scores'\\n    WHEN avg_exam_score > avg_project_score THEN 'exam_higher'\\n    WHEN avg_exam_score < avg_project_score THEN 'project_higher'\\n    ELSE 'equal'\\n  END AS exam_vs_project,\\n  score_count\\nFROM dept_scores\\nORDER BY department_name ASC;\",\"data\":[{\"score_count\":8,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"avg_exam_score\":45.97,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"exam_vs_project\":\"project_higher\",\"avg_project_score\":60.59,\"exam_minus_project_diff\":-14.62},{\"score_count\":3,\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"avg_exam_score\":37.4,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"exam_vs_project\":\"exam_higher\",\"avg_project_score\":29.6,\"exam_minus_project_diff\":7.8},{\"score_count\":8,\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"avg_exam_score\":53.99,\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"exam_vs_project\":\"exam_higher\",\"avg_project_score\":47.97,\"exam_minus_project_diff\":6.03},{\"score_count\":10,\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"avg_exam_score\":34.6,\"department_name\":\"Wydział Inżynierii Produkcji\",\"exam_vs_project\":\"project_higher\",\"avg_project_score\":44.96,\"exam_minus_project_diff\":-10.36},{\"score_count\":16,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"avg_exam_score\":60,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"exam_vs_project\":\"exam_higher\",\"avg_project_score\":41.77,\"exam_minus_project_diff\":18.23},{\"score_count\":6,\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"avg_exam_score\":42.73,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"exam_vs_project\":\"project_higher\",\"avg_project_score\":60.18,\"exam_minus_project_diff\":-17.45}],\"metadata\":{\"columns\":[\"score_count\",\"department_id\",\"avg_exam_score\",\"department_name\",\"exam_vs_project\",\"avg_project_score\",\"exam_minus_project_diff\"],\"rowCount\":6,\"sample\":[{\"score_count\":8,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"avg_exam_score\":45.97,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"exam_vs_project\":\"project_higher\",\"avg_project_score\":60.59,\"exam_minus_project_diff\":-14.62},{\"score_count\":3,\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"avg_exam_score\":37.4,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"exam_vs_project\":\"exam_higher\",\"avg_project_score\":29.6,\"exam_minus_project_diff\":7.8}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Exam vs Project Scores by Department\",\"width\":700,\"height\":{\"step\":36},\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3,\"opacity\":0.85},\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":{\"field\":\"department_name\",\"order\":\"ascending\"},\"axis\":{\"title\":null}},\"x\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Score\",\"grid\":true}},\"xOffset\":{\"value\":-6},\"color\":{\"value\":\"#1f77b4\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\"},{\"field\":\"avg_project_score\",\"type\":\"quantitative\",\"title\":\"Avg Project Score\"},{\"field\":\"exam_minus_project_diff\",\"type\":\"quantitative\",\"title\":\"Exam - Project\"},{\"field\":\"exam_vs_project\",\"type\":\"nominal\",\"title\":\"Which Higher?\"},{\"field\":\"score_count\",\"type\":\"quantitative\",\"title\":\"Score Count\"}]}},{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3,\"opacity\":0.85},\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":{\"field\":\"department_name\",\"order\":\"ascending\"},\"axis\":null},\"x\":{\"field\":\"avg_project_score\",\"type\":\"quantitative\"},\"xOffset\":{\"value\":6},\"color\":{\"value\":\"#ff7f0e\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\"},{\"field\":\"avg_project_score\",\"type\":\"quantitative\",\"title\":\"Avg Project Score\"},{\"field\":\"exam_minus_project_diff\",\"type\":\"quantitative\",\"title\":\"Exam - Project\"},{\"field\":\"exam_vs_project\",\"type\":\"nominal\",\"title\":\"Which Higher?\"},{\"field\":\"score_count\",\"type\":\"quantitative\",\"title\":\"Score Count\"}]}}],\"resolve\":{\"scale\":{\"x\":\"shared\"}},\"config\":{\"axis\":{\"labelFontSize\":11,\"titleFontSize\":12}}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"]}},\"endedAt\":1771804009482}},\"input\":{\"question\":\"Compare average exam scores vs project scores by department\"},\"result\":{\"sql\":\"WITH dept_scores AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.name AS department_name,\\n    AVG(gr.exam_score) FILTER (WHERE gr.exam_score IS NOT NULL) AS avg_exam_score,\\n    AVG(gr.project_score) FILTER (WHERE gr.project_score IS NOT NULL) AS avg_project_score,\\n    COUNT(gr.id) FILTER (WHERE gr.exam_score IS NOT NULL OR gr.project_score IS NOT NULL) AS score_count\\n  FROM public.grades gr\\n  JOIN public.enrollments e ON e.id = gr.enrollment_id\\n  JOIN public.course_sections cs ON cs.id = e.course_section_id\\n  JOIN public.courses c ON c.id = cs.course_id\\n  JOIN public.departments d ON d.id = c.department_id\\n  GROUP BY d.id, d.name\\n)\\nSELECT\\n  department_id,\\n  department_name,\\n  ROUND(avg_exam_score::numeric, 2) AS avg_exam_score,\\n  ROUND(avg_project_score::numeric, 2) AS avg_project_score,\\n  ROUND((avg_exam_score - avg_project_score)::numeric, 2) AS exam_minus_project_diff,\\n  CASE\\n    WHEN avg_exam_score IS NULL AND avg_project_score IS NULL THEN 'no_scores'\\n    WHEN avg_exam_score > avg_project_score THEN 'exam_higher'\\n    WHEN avg_exam_score < avg_project_score THEN 'project_higher'\\n    ELSE 'equal'\\n  END AS exam_vs_project,\\n  score_count\\nFROM dept_scores\\nORDER BY department_name ASC;\",\"data\":[{\"score_count\":8,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"avg_exam_score\":45.97,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"exam_vs_project\":\"project_higher\",\"avg_project_score\":60.59,\"exam_minus_project_diff\":-14.62},{\"score_count\":3,\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"avg_exam_score\":37.4,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"exam_vs_project\":\"exam_higher\",\"avg_project_score\":29.6,\"exam_minus_project_diff\":7.8},{\"score_count\":8,\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"avg_exam_score\":53.99,\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"exam_vs_project\":\"exam_higher\",\"avg_project_score\":47.97,\"exam_minus_project_diff\":6.03},{\"score_count\":10,\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"avg_exam_score\":34.6,\"department_name\":\"Wydział Inżynierii Produkcji\",\"exam_vs_project\":\"project_higher\",\"avg_project_score\":44.96,\"exam_minus_project_diff\":-10.36},{\"score_count\":16,\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"avg_exam_score\":60,\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"exam_vs_project\":\"exam_higher\",\"avg_project_score\":41.77,\"exam_minus_project_diff\":18.23},{\"score_count\":6,\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"avg_exam_score\":42.73,\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"exam_vs_project\":\"project_higher\",\"avg_project_score\":60.18,\"exam_minus_project_diff\":-17.45}],\"metadata\":{\"columns\":[\"score_count\",\"department_id\",\"avg_exam_score\",\"department_name\",\"exam_vs_project\",\"avg_project_score\",\"exam_minus_project_diff\"],\"rowCount\":6,\"sample\":[{\"score_count\":8,\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"avg_exam_score\":45.97,\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"exam_vs_project\":\"project_higher\",\"avg_project_score\":60.59,\"exam_minus_project_diff\":-14.62},{\"score_count\":3,\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"avg_exam_score\":37.4,\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"exam_vs_project\":\"exam_higher\",\"avg_project_score\":29.6,\"exam_minus_project_diff\":7.8}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Exam vs Project Scores by Department\",\"width\":700,\"height\":{\"step\":36},\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3,\"opacity\":0.85},\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":{\"field\":\"department_name\",\"order\":\"ascending\"},\"axis\":{\"title\":null}},\"x\":{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Score\",\"grid\":true}},\"xOffset\":{\"value\":-6},\"color\":{\"value\":\"#1f77b4\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\"},{\"field\":\"avg_project_score\",\"type\":\"quantitative\",\"title\":\"Avg Project Score\"},{\"field\":\"exam_minus_project_diff\",\"type\":\"quantitative\",\"title\":\"Exam - Project\"},{\"field\":\"exam_vs_project\",\"type\":\"nominal\",\"title\":\"Which Higher?\"},{\"field\":\"score_count\",\"type\":\"quantitative\",\"title\":\"Score Count\"}]}},{\"mark\":{\"type\":\"bar\",\"cornerRadius\":3,\"opacity\":0.85},\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"sort\":{\"field\":\"department_name\",\"order\":\"ascending\"},\"axis\":null},\"x\":{\"field\":\"avg_project_score\",\"type\":\"quantitative\"},\"xOffset\":{\"value\":6},\"color\":{\"value\":\"#ff7f0e\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\"},{\"field\":\"avg_exam_score\",\"type\":\"quantitative\",\"title\":\"Avg Exam Score\"},{\"field\":\"avg_project_score\",\"type\":\"quantitative\",\"title\":\"Avg Project Score\"},{\"field\":\"exam_minus_project_diff\",\"type\":\"quantitative\",\"title\":\"Exam - Project\"},{\"field\":\"exam_vs_project\",\"type\":\"nominal\",\"title\":\"Which Higher?\"},{\"field\":\"score_count\",\"type\":\"quantitative\",\"title\":\"Score Count\"}]}}],\"resolve\":{\"scale\":{\"x\":\"shared\"}},\"config\":{\"axis\":{\"labelFontSize\":11,\"titleFontSize\":12}}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"]}},\"traceId\":\"d6aae2314e1fafceeb959f4a606bcfb3\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/exam-vs-project-score-avg/run-0001/run.json",
+    "queryPath": "runs/exam-vs-project-score-avg/run-0001/query.sql",
+    "vegaRawPath": "runs/exam-vs-project-score-avg/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/exam-vs-project-score-avg/run-0001/vega.resolved.json",
+    "imagePath": "runs/exam-vs-project-score-avg/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:46:50.101Z",
+  "traceId": "d6aae2314e1fafceeb959f4a606bcfb3",
+  "success": true,
+  "durationMs": 86990,
+  "resultRaw": {
+    "data": [
+      {
+        "score_count": 8,
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "avg_exam_score": 45.97,
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "exam_vs_project": "project_higher",
+        "avg_project_score": 60.59,
+        "exam_minus_project_diff": -14.62
+      },
+      {
+        "score_count": 3,
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "avg_exam_score": 37.4,
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "exam_vs_project": "exam_higher",
+        "avg_project_score": 29.6,
+        "exam_minus_project_diff": 7.8
+      },
+      {
+        "score_count": 8,
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "avg_exam_score": 53.99,
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "exam_vs_project": "exam_higher",
+        "avg_project_score": 47.97,
+        "exam_minus_project_diff": 6.03
+      },
+      {
+        "score_count": 10,
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "avg_exam_score": 34.6,
+        "department_name": "Wydział Inżynierii Produkcji",
+        "exam_vs_project": "project_higher",
+        "avg_project_score": 44.96,
+        "exam_minus_project_diff": -10.36
+      },
+      {
+        "score_count": 16,
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "avg_exam_score": 60,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "exam_vs_project": "exam_higher",
+        "avg_project_score": 41.77,
+        "exam_minus_project_diff": 18.23
+      },
+      {
+        "score_count": 6,
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "avg_exam_score": 42.73,
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "exam_vs_project": "project_higher",
+        "avg_project_score": 60.18,
+        "exam_minus_project_diff": -17.45
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Exam vs Project Scores by Department",
+      "width": 700,
+      "height": {
+        "step": 36
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "bar",
+            "cornerRadius": 3,
+            "opacity": 0.85
+          },
+          "encoding": {
+            "y": {
+              "field": "department_name",
+              "type": "nominal",
+              "sort": {
+                "field": "department_name",
+                "order": "ascending"
+              },
+              "axis": {
+                "title": null
+              }
+            },
+            "x": {
+              "field": "avg_exam_score",
+              "type": "quantitative",
+              "axis": {
+                "title": "Average Score",
+                "grid": true
+              }
+            },
+            "xOffset": {
+              "value": -6
+            },
+            "color": {
+              "value": "#1f77b4"
+            },
+            "tooltip": [
+              {
+                "field": "department_name",
+                "type": "nominal"
+              },
+              {
+                "field": "avg_exam_score",
+                "type": "quantitative",
+                "title": "Avg Exam Score"
+              },
+              {
+                "field": "avg_project_score",
+                "type": "quantitative",
+                "title": "Avg Project Score"
+              },
+              {
+                "field": "exam_minus_project_diff",
+                "type": "quantitative",
+                "title": "Exam - Project"
+              },
+              {
+                "field": "exam_vs_project",
+                "type": "nominal",
+                "title": "Which Higher?"
+              },
+              {
+                "field": "score_count",
+                "type": "quantitative",
+                "title": "Score Count"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "bar",
+            "cornerRadius": 3,
+            "opacity": 0.85
+          },
+          "encoding": {
+            "y": {
+              "field": "department_name",
+              "type": "nominal",
+              "sort": {
+                "field": "department_name",
+                "order": "ascending"
+              },
+              "axis": null
+            },
+            "x": {
+              "field": "avg_project_score",
+              "type": "quantitative"
+            },
+            "xOffset": {
+              "value": 6
+            },
+            "color": {
+              "value": "#ff7f0e"
+            },
+            "tooltip": [
+              {
+                "field": "department_name",
+                "type": "nominal"
+              },
+              {
+                "field": "avg_exam_score",
+                "type": "quantitative",
+                "title": "Avg Exam Score"
+              },
+              {
+                "field": "avg_project_score",
+                "type": "quantitative",
+                "title": "Avg Project Score"
+              },
+              {
+                "field": "exam_minus_project_diff",
+                "type": "quantitative",
+                "title": "Exam - Project"
+              },
+              {
+                "field": "exam_vs_project",
+                "type": "nominal",
+                "title": "Which Higher?"
+              },
+              {
+                "field": "score_count",
+                "type": "quantitative",
+                "title": "Score Count"
+              }
+            ]
+          }
+        }
+      ],
+      "resolve": {
+        "scale": {
+          "x": "shared"
+        }
+      },
+      "config": {
+        "axis": {
+          "labelFontSize": 11,
+          "titleFontSize": 12
+        }
+      }
+    },
+    "sql": "WITH dept_scores AS (\n  SELECT\n    d.id AS department_id,\n    d.name AS department_name,\n    AVG(gr.exam_score) FILTER (WHERE gr.exam_score IS NOT NULL) AS avg_exam_score,\n    AVG(gr.project_score) FILTER (WHERE gr.project_score IS NOT NULL) AS avg_project_score,\n    COUNT(gr.id) FILTER (WHERE gr.exam_score IS NOT NULL OR gr.project_score IS NOT NULL) AS score_count\n  FROM public.grades gr\n  JOIN public.enrollments e ON e.id = gr.enrollment_id\n  JOIN public.course_sections cs ON cs.id = e.course_section_id\n  JOIN public.courses c ON c.id = cs.course_id\n  JOIN public.departments d ON d.id = c.department_id\n  GROUP BY d.id, d.name\n)\nSELECT\n  department_id,\n  department_name,\n  ROUND(avg_exam_score::numeric, 2) AS avg_exam_score,\n  ROUND(avg_project_score::numeric, 2) AS avg_project_score,\n  ROUND((avg_exam_score - avg_project_score)::numeric, 2) AS exam_minus_project_diff,\n  CASE\n    WHEN avg_exam_score IS NULL AND avg_project_score IS NULL THEN 'no_scores'\n    WHEN avg_exam_score > avg_project_score THEN 'exam_higher'\n    WHEN avg_exam_score < avg_project_score THEN 'project_higher'\n    ELSE 'equal'\n  END AS exam_vs_project,\n  score_count\nFROM dept_scores\nORDER BY department_name ASC;",
+    "metadata": {
+      "columns": [
+        "score_count",
+        "department_id",
+        "avg_exam_score",
+        "department_name",
+        "exam_vs_project",
+        "avg_project_score",
+        "exam_minus_project_diff"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "score_count": 8,
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "avg_exam_score": 45.97,
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "exam_vs_project": "project_higher",
+          "avg_project_score": 60.59,
+          "exam_minus_project_diff": -14.62
+        },
+        {
+          "score_count": 3,
+          "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+          "avg_exam_score": 37.4,
+          "department_name": "Wydział Informatyki i Nauki o Materiałach",
+          "exam_vs_project": "exam_higher",
+          "avg_project_score": 29.6,
+          "exam_minus_project_diff": 7.8
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "score_count": 8,
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "avg_exam_score": 45.97,
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "exam_vs_project": "project_higher",
+        "avg_project_score": 60.59,
+        "exam_minus_project_diff": -14.62
+      },
+      {
+        "score_count": 3,
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "avg_exam_score": 37.4,
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "exam_vs_project": "exam_higher",
+        "avg_project_score": 29.6,
+        "exam_minus_project_diff": 7.8
+      },
+      {
+        "score_count": 8,
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "avg_exam_score": 53.99,
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "exam_vs_project": "exam_higher",
+        "avg_project_score": 47.97,
+        "exam_minus_project_diff": 6.03
+      },
+      {
+        "score_count": 10,
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "avg_exam_score": 34.6,
+        "department_name": "Wydział Inżynierii Produkcji",
+        "exam_vs_project": "project_higher",
+        "avg_project_score": 44.96,
+        "exam_minus_project_diff": -10.36
+      },
+      {
+        "score_count": 16,
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "avg_exam_score": 60,
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "exam_vs_project": "exam_higher",
+        "avg_project_score": 41.77,
+        "exam_minus_project_diff": 18.23
+      },
+      {
+        "score_count": 6,
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "avg_exam_score": 42.73,
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "exam_vs_project": "project_higher",
+        "avg_project_score": 60.18,
+        "exam_minus_project_diff": -17.45
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Exam vs Project Scores by Department",
+      "width": 700,
+      "height": {
+        "step": 36
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "bar",
+            "cornerRadius": 3,
+            "opacity": 0.85
+          },
+          "encoding": {
+            "y": {
+              "field": "department_name",
+              "type": "nominal",
+              "sort": {
+                "field": "department_name",
+                "order": "ascending"
+              },
+              "axis": {
+                "title": null
+              }
+            },
+            "x": {
+              "field": "avg_exam_score",
+              "type": "quantitative",
+              "axis": {
+                "title": "Average Score",
+                "grid": true
+              }
+            },
+            "xOffset": {
+              "value": -6
+            },
+            "color": {
+              "value": "#1f77b4"
+            },
+            "tooltip": [
+              {
+                "field": "department_name",
+                "type": "nominal"
+              },
+              {
+                "field": "avg_exam_score",
+                "type": "quantitative",
+                "title": "Avg Exam Score"
+              },
+              {
+                "field": "avg_project_score",
+                "type": "quantitative",
+                "title": "Avg Project Score"
+              },
+              {
+                "field": "exam_minus_project_diff",
+                "type": "quantitative",
+                "title": "Exam - Project"
+              },
+              {
+                "field": "exam_vs_project",
+                "type": "nominal",
+                "title": "Which Higher?"
+              },
+              {
+                "field": "score_count",
+                "type": "quantitative",
+                "title": "Score Count"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "bar",
+            "cornerRadius": 3,
+            "opacity": 0.85
+          },
+          "encoding": {
+            "y": {
+              "field": "department_name",
+              "type": "nominal",
+              "sort": {
+                "field": "department_name",
+                "order": "ascending"
+              },
+              "axis": null
+            },
+            "x": {
+              "field": "avg_project_score",
+              "type": "quantitative"
+            },
+            "xOffset": {
+              "value": 6
+            },
+            "color": {
+              "value": "#ff7f0e"
+            },
+            "tooltip": [
+              {
+                "field": "department_name",
+                "type": "nominal"
+              },
+              {
+                "field": "avg_exam_score",
+                "type": "quantitative",
+                "title": "Avg Exam Score"
+              },
+              {
+                "field": "avg_project_score",
+                "type": "quantitative",
+                "title": "Avg Project Score"
+              },
+              {
+                "field": "exam_minus_project_diff",
+                "type": "quantitative",
+                "title": "Exam - Project"
+              },
+              {
+                "field": "exam_vs_project",
+                "type": "nominal",
+                "title": "Which Higher?"
+              },
+              {
+                "field": "score_count",
+                "type": "quantitative",
+                "title": "Score Count"
+              }
+            ]
+          }
+        }
+      ],
+      "resolve": {
+        "scale": {
+          "x": "shared"
+        }
+      },
+      "config": {
+        "axis": {
+          "labelFontSize": 11,
+          "titleFontSize": 12
+        }
+      }
+    },
+    "sql": "WITH dept_scores AS (\n  SELECT\n    d.id AS department_id,\n    d.name AS department_name,\n    AVG(gr.exam_score) FILTER (WHERE gr.exam_score IS NOT NULL) AS avg_exam_score,\n    AVG(gr.project_score) FILTER (WHERE gr.project_score IS NOT NULL) AS avg_project_score,\n    COUNT(gr.id) FILTER (WHERE gr.exam_score IS NOT NULL OR gr.project_score IS NOT NULL) AS score_count\n  FROM public.grades gr\n  JOIN public.enrollments e ON e.id = gr.enrollment_id\n  JOIN public.course_sections cs ON cs.id = e.course_section_id\n  JOIN public.courses c ON c.id = cs.course_id\n  JOIN public.departments d ON d.id = c.department_id\n  GROUP BY d.id, d.name\n)\nSELECT\n  department_id,\n  department_name,\n  ROUND(avg_exam_score::numeric, 2) AS avg_exam_score,\n  ROUND(avg_project_score::numeric, 2) AS avg_project_score,\n  ROUND((avg_exam_score - avg_project_score)::numeric, 2) AS exam_minus_project_diff,\n  CASE\n    WHEN avg_exam_score IS NULL AND avg_project_score IS NULL THEN 'no_scores'\n    WHEN avg_exam_score > avg_project_score THEN 'exam_higher'\n    WHEN avg_exam_score < avg_project_score THEN 'project_higher'\n    ELSE 'equal'\n  END AS exam_vs_project,\n  score_count\nFROM dept_scores\nORDER BY department_name ASC;",
+    "metadata": {
+      "columns": [
+        "score_count",
+        "department_id",
+        "avg_exam_score",
+        "department_name",
+        "exam_vs_project",
+        "avg_project_score",
+        "exam_minus_project_diff"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "score_count": 8,
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "avg_exam_score": 45.97,
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "exam_vs_project": "project_higher",
+          "avg_project_score": 60.59,
+          "exam_minus_project_diff": -14.62
+        },
+        {
+          "score_count": 3,
+          "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+          "avg_exam_score": 37.4,
+          "department_name": "Wydział Informatyki i Nauki o Materiałach",
+          "exam_vs_project": "exam_higher",
+          "avg_project_score": 29.6,
+          "exam_minus_project_diff": 7.8
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:46:50.101Z",
+    "traceId": "d6aae2314e1fafceeb959f4a606bcfb3",
+    "attempts": 3,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 21688,
+      "outputTokens": 5184,
+      "totalTokens": 26872,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 3456,
+      "costUsd": 0.01579
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 21688,
+        "outputTokens": 5184,
+        "totalTokens": 26872,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 3456,
+        "costUsd": 0.01579
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,406 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "evaluation-overall-histogram",
+  "caseDirectory": "evaluation-overall-histogram",
+  "repeatIndex": 1,
+  "prompt": "Show the distribution of overall course evaluation ratings (1-5)",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show the distribution of overall course evaluation ratings (1-5)"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:46:52.127Z",
+    "endedAtUtc": "2026-02-22T23:47:57.963Z",
+    "durationMs": 65836
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "11988",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:47:57 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show the distribution of overall course evaluation ratings (1-5)\"},\"sql\":{\"payload\":{\"question\":\"Show the distribution of overall course evaluation ratings (1-5)\"},\"startedAt\":1771804012150,\"status\":\"success\",\"output\":{\"reasoning\":\"Count ratings 1–5 (including zeros) and show percent of non-null evaluations; deterministic ordering by rating.\",\"sql\":\"WITH totals AS (\\n  SELECT COUNT(*) FILTER (WHERE overall_rating IS NOT NULL) AS total\\n  FROM public.course_evaluations\\n)\\nSELECT\\n  r.rating AS rating,\\n  COALESCE(c.cnt, 0) AS rating_count,\\n  CASE WHEN t.total = 0 THEN 0\\n       ELSE ROUND((COALESCE(c.cnt,0)::numeric / t.total) * 100.0, 2)\\n  END AS percentage\\nFROM (VALUES (1),(2),(3),(4),(5)) AS r(rating)\\nLEFT JOIN (\\n  SELECT overall_rating, COUNT(*) AS cnt\\n  FROM public.course_evaluations\\n  WHERE overall_rating BETWEEN 1 AND 5\\n  GROUP BY overall_rating\\n) c ON c.overall_rating = r.rating\\nCROSS JOIN totals t\\nORDER BY r.rating ASC;\",\"assumptions\":[\"overall_rating is an integer rating on a 1–5 scale or NULL for missing; include only values 1–5 in distribution\",\"percentage is computed over non-null overall_rating values\",\"table is public.course_evaluations with column overall_rating (confirmed)\"]},\"endedAt\":1771804034091},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH totals AS (\\n  SELECT COUNT(*) FILTER (WHERE overall_rating IS NOT NULL) AS total\\n  FROM public.course_evaluations\\n)\\nSELECT\\n  r.rating AS rating,\\n  COALESCE(c.cnt, 0) AS rating_count,\\n  CASE WHEN t.total = 0 THEN 0\\n       ELSE ROUND((COALESCE(c.cnt,0)::numeric / t.total) * 100.0, 2)\\n  END AS percentage\\nFROM (VALUES (1),(2),(3),(4),(5)) AS r(rating)\\nLEFT JOIN (\\n  SELECT overall_rating, COUNT(*) AS cnt\\n  FROM public.course_evaluations\\n  WHERE overall_rating BETWEEN 1 AND 5\\n  GROUP BY overall_rating\\n) c ON c.overall_rating = r.rating\\nCROSS JOIN totals t\\nORDER BY r.rating ASC;\"},\"startedAt\":1771804034096,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH totals AS (\\n  SELECT COUNT(*) FILTER (WHERE overall_rating IS NOT NULL) AS total\\n  FROM public.course_evaluations\\n)\\nSELECT\\n  r.rating AS rating,\\n  COALESCE(c.cnt, 0) AS rating_count,\\n  CASE WHEN t.total = 0 THEN 0\\n       ELSE ROUND((COALESCE(c.cnt,0)::numeric / t.total) * 100.0, 2)\\n  END AS percentage\\nFROM (VALUES (1),(2),(3),(4),(5)) AS r(rating)\\nLEFT JOIN (\\n  SELECT overall_rating, COUNT(*) AS cnt\\n  FROM public.course_evaluations\\n  WHERE overall_rating BETWEEN 1 AND 5\\n  GROUP BY overall_rating\\n) c ON c.overall_rating = r.rating\\nCROSS JOIN totals t\\nORDER BY r.rating ASC\",\"metadata\":{\"columns\":[\"rating\",\"percentage\",\"rating_count\"],\"rowCount\":5,\"sample\":[{\"rating\":1,\"percentage\":29.27,\"rating_count\":12},{\"rating\":2,\"percentage\":12.2,\"rating_count\":5}]},\"data\":[{\"rating\":1,\"percentage\":29.27,\"rating_count\":12},{\"rating\":2,\"percentage\":12.2,\"rating_count\":5},{\"rating\":3,\"percentage\":12.2,\"rating_count\":5},{\"rating\":4,\"percentage\":21.95,\"rating_count\":9},{\"rating\":5,\"percentage\":24.39,\"rating_count\":10}]},\"endedAt\":1771804034128},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"WITH totals AS (\\n  SELECT COUNT(*) FILTER (WHERE overall_rating IS NOT NULL) AS total\\n  FROM public.course_evaluations\\n)\\nSELECT\\n  r.rating AS rating,\\n  COALESCE(c.cnt, 0) AS rating_count,\\n  CASE WHEN t.total = 0 THEN 0\\n       ELSE ROUND((COALESCE(c.cnt,0)::numeric / t.total) * 100.0, 2)\\n  END AS percentage\\nFROM (VALUES (1),(2),(3),(4),(5)) AS r(rating)\\nLEFT JOIN (\\n  SELECT overall_rating, COUNT(*) AS cnt\\n  FROM public.course_evaluations\\n  WHERE overall_rating BETWEEN 1 AND 5\\n  GROUP BY overall_rating\\n) c ON c.overall_rating = r.rating\\nCROSS JOIN totals t\\nORDER BY r.rating ASC\",\"metadata\":{\"columns\":[\"rating\",\"percentage\",\"rating_count\"],\"rowCount\":5,\"sample\":[{\"rating\":1,\"percentage\":29.27,\"rating_count\":12},{\"rating\":2,\"percentage\":12.2,\"rating_count\":5}]},\"data\":[{\"rating\":1,\"percentage\":29.27,\"rating_count\":12},{\"rating\":2,\"percentage\":12.2,\"rating_count\":5},{\"rating\":3,\"percentage\":12.2,\"rating_count\":5},{\"rating\":4,\"percentage\":21.95,\"rating_count\":9},{\"rating\":5,\"percentage\":24.39,\"rating_count\":10}]},\"startedAt\":1771804034129,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Distribution of Overall Course Evaluation Ratings (1–5)\",\"width\":480,\"height\":320,\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadiusTopLeft\":4,\"cornerRadiusTopRight\":4},\"encoding\":{\"x\":{\"field\":\"rating\",\"type\":\"ordinal\",\"sort\":[1,2,3,4,5],\"axis\":{\"title\":\"Rating\"}},\"y\":{\"field\":\"percentage\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Percentage (%)\",\"format\":\".0f\"}},\"color\":{\"field\":\"rating\",\"type\":\"ordinal\",\"legend\":null},\"tooltip\":[{\"field\":\"rating\",\"type\":\"quantitative\",\"title\":\"Rating\"},{\"field\":\"rating_count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"percentage\",\"type\":\"quantitative\",\"title\":\"Percentage\",\"format\":\".2f\"}]}},{\"mark\":{\"type\":\"text\",\"dy\":-6,\"fontWeight\":\"bold\"},\"encoding\":{\"x\":{\"field\":\"rating\",\"type\":\"ordinal\",\"sort\":[1,2,3,4,5]},\"y\":{\"field\":\"percentage\",\"type\":\"quantitative\"},\"text\":{\"field\":\"percentage\",\"type\":\"quantitative\",\"format\":\".2f\"},\"color\":{\"value\":\"black\"}}}]},\"reasoning\":\"Bar chart shows percent of responses for each rating (1–5). Tooltips include raw counts and percentage; labels on bars display the percentage value. Encodings use only the provided columns: rating, percentage, rating_count.\"},\"endedAt\":1771804077941},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Distribution of Overall Course Evaluation Ratings (1–5)\",\"width\":480,\"height\":320,\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadiusTopLeft\":4,\"cornerRadiusTopRight\":4},\"encoding\":{\"x\":{\"field\":\"rating\",\"type\":\"ordinal\",\"sort\":[1,2,3,4,5],\"axis\":{\"title\":\"Rating\"}},\"y\":{\"field\":\"percentage\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Percentage (%)\",\"format\":\".0f\"}},\"color\":{\"field\":\"rating\",\"type\":\"ordinal\",\"legend\":null},\"tooltip\":[{\"field\":\"rating\",\"type\":\"quantitative\",\"title\":\"Rating\"},{\"field\":\"rating_count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"percentage\",\"type\":\"quantitative\",\"title\":\"Percentage\",\"format\":\".2f\"}]}},{\"mark\":{\"type\":\"text\",\"dy\":-6,\"fontWeight\":\"bold\"},\"encoding\":{\"x\":{\"field\":\"rating\",\"type\":\"ordinal\",\"sort\":[1,2,3,4,5]},\"y\":{\"field\":\"percentage\",\"type\":\"quantitative\"},\"text\":{\"field\":\"percentage\",\"type\":\"quantitative\",\"format\":\".2f\"},\"color\":{\"value\":\"black\"}}}]},\"reasoning\":\"Bar chart shows percent of responses for each rating (1–5). Tooltips include raw counts and percentage; labels on bars display the percentage value. Encodings use only the provided columns: rating, percentage, rating_count.\"},\"startedAt\":1771804077945,\"status\":\"success\",\"output\":{\"sql\":\"WITH totals AS (\\n  SELECT COUNT(*) FILTER (WHERE overall_rating IS NOT NULL) AS total\\n  FROM public.course_evaluations\\n)\\nSELECT\\n  r.rating AS rating,\\n  COALESCE(c.cnt, 0) AS rating_count,\\n  CASE WHEN t.total = 0 THEN 0\\n       ELSE ROUND((COALESCE(c.cnt,0)::numeric / t.total) * 100.0, 2)\\n  END AS percentage\\nFROM (VALUES (1),(2),(3),(4),(5)) AS r(rating)\\nLEFT JOIN (\\n  SELECT overall_rating, COUNT(*) AS cnt\\n  FROM public.course_evaluations\\n  WHERE overall_rating BETWEEN 1 AND 5\\n  GROUP BY overall_rating\\n) c ON c.overall_rating = r.rating\\nCROSS JOIN totals t\\nORDER BY r.rating ASC;\",\"data\":[{\"rating\":1,\"percentage\":29.27,\"rating_count\":12},{\"rating\":2,\"percentage\":12.2,\"rating_count\":5},{\"rating\":3,\"percentage\":12.2,\"rating_count\":5},{\"rating\":4,\"percentage\":21.95,\"rating_count\":9},{\"rating\":5,\"percentage\":24.39,\"rating_count\":10}],\"metadata\":{\"columns\":[\"rating\",\"percentage\",\"rating_count\"],\"rowCount\":5,\"sample\":[{\"rating\":1,\"percentage\":29.27,\"rating_count\":12},{\"rating\":2,\"percentage\":12.2,\"rating_count\":5}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Distribution of Overall Course Evaluation Ratings (1–5)\",\"width\":480,\"height\":320,\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadiusTopLeft\":4,\"cornerRadiusTopRight\":4},\"encoding\":{\"x\":{\"field\":\"rating\",\"type\":\"ordinal\",\"sort\":[1,2,3,4,5],\"axis\":{\"title\":\"Rating\"}},\"y\":{\"field\":\"percentage\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Percentage (%)\",\"format\":\".0f\"}},\"color\":{\"field\":\"rating\",\"type\":\"ordinal\",\"legend\":null},\"tooltip\":[{\"field\":\"rating\",\"type\":\"quantitative\",\"title\":\"Rating\"},{\"field\":\"rating_count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"percentage\",\"type\":\"quantitative\",\"title\":\"Percentage\",\"format\":\".2f\"}]}},{\"mark\":{\"type\":\"text\",\"dy\":-6,\"fontWeight\":\"bold\"},\"encoding\":{\"x\":{\"field\":\"rating\",\"type\":\"ordinal\",\"sort\":[1,2,3,4,5]},\"y\":{\"field\":\"percentage\",\"type\":\"quantitative\"},\"text\":{\"field\":\"percentage\",\"type\":\"quantitative\",\"format\":\".2f\"},\"color\":{\"value\":\"black\"}}}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"]}},\"endedAt\":1771804077948}},\"input\":{\"question\":\"Show the distribution of overall course evaluation ratings (1-5)\"},\"result\":{\"sql\":\"WITH totals AS (\\n  SELECT COUNT(*) FILTER (WHERE overall_rating IS NOT NULL) AS total\\n  FROM public.course_evaluations\\n)\\nSELECT\\n  r.rating AS rating,\\n  COALESCE(c.cnt, 0) AS rating_count,\\n  CASE WHEN t.total = 0 THEN 0\\n       ELSE ROUND((COALESCE(c.cnt,0)::numeric / t.total) * 100.0, 2)\\n  END AS percentage\\nFROM (VALUES (1),(2),(3),(4),(5)) AS r(rating)\\nLEFT JOIN (\\n  SELECT overall_rating, COUNT(*) AS cnt\\n  FROM public.course_evaluations\\n  WHERE overall_rating BETWEEN 1 AND 5\\n  GROUP BY overall_rating\\n) c ON c.overall_rating = r.rating\\nCROSS JOIN totals t\\nORDER BY r.rating ASC;\",\"data\":[{\"rating\":1,\"percentage\":29.27,\"rating_count\":12},{\"rating\":2,\"percentage\":12.2,\"rating_count\":5},{\"rating\":3,\"percentage\":12.2,\"rating_count\":5},{\"rating\":4,\"percentage\":21.95,\"rating_count\":9},{\"rating\":5,\"percentage\":24.39,\"rating_count\":10}],\"metadata\":{\"columns\":[\"rating\",\"percentage\",\"rating_count\"],\"rowCount\":5,\"sample\":[{\"rating\":1,\"percentage\":29.27,\"rating_count\":12},{\"rating\":2,\"percentage\":12.2,\"rating_count\":5}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Distribution of Overall Course Evaluation Ratings (1–5)\",\"width\":480,\"height\":320,\"layer\":[{\"mark\":{\"type\":\"bar\",\"cornerRadiusTopLeft\":4,\"cornerRadiusTopRight\":4},\"encoding\":{\"x\":{\"field\":\"rating\",\"type\":\"ordinal\",\"sort\":[1,2,3,4,5],\"axis\":{\"title\":\"Rating\"}},\"y\":{\"field\":\"percentage\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Percentage (%)\",\"format\":\".0f\"}},\"color\":{\"field\":\"rating\",\"type\":\"ordinal\",\"legend\":null},\"tooltip\":[{\"field\":\"rating\",\"type\":\"quantitative\",\"title\":\"Rating\"},{\"field\":\"rating_count\",\"type\":\"quantitative\",\"title\":\"Count\"},{\"field\":\"percentage\",\"type\":\"quantitative\",\"title\":\"Percentage\",\"format\":\".2f\"}]}},{\"mark\":{\"type\":\"text\",\"dy\":-6,\"fontWeight\":\"bold\"},\"encoding\":{\"x\":{\"field\":\"rating\",\"type\":\"ordinal\",\"sort\":[1,2,3,4,5]},\"y\":{\"field\":\"percentage\",\"type\":\"quantitative\"},\"text\":{\"field\":\"percentage\",\"type\":\"quantitative\",\"format\":\".2f\"},\"color\":{\"value\":\"black\"}}}]},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":false,\"score\":0,\"issues\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"],\"repairPrompt\":\"Fix SQL or visualization hard contract issues.\"},\"attempts\":{\"used\":1,\"max\":1,\"history\":[\"Visualization is missing a valid 'encoding' object.\",\"Visualization should reference at least one SQL output field.\"]}},\"traceId\":\"2cd25586b0bbdebfe21c2f21930edb36\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/evaluation-overall-histogram/run-0001/run.json",
+    "queryPath": "runs/evaluation-overall-histogram/run-0001/query.sql",
+    "vegaRawPath": "runs/evaluation-overall-histogram/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/evaluation-overall-histogram/run-0001/vega.resolved.json",
+    "imagePath": "runs/evaluation-overall-histogram/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:47:58.355Z",
+  "traceId": "2cd25586b0bbdebfe21c2f21930edb36",
+  "success": true,
+  "durationMs": 66228,
+  "resultRaw": {
+    "data": [
+      {
+        "rating": 1,
+        "percentage": 29.27,
+        "rating_count": 12
+      },
+      {
+        "rating": 2,
+        "percentage": 12.2,
+        "rating_count": 5
+      },
+      {
+        "rating": 3,
+        "percentage": 12.2,
+        "rating_count": 5
+      },
+      {
+        "rating": 4,
+        "percentage": 21.95,
+        "rating_count": 9
+      },
+      {
+        "rating": 5,
+        "percentage": 24.39,
+        "rating_count": 10
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Distribution of Overall Course Evaluation Ratings (1–5)",
+      "width": 480,
+      "height": 320,
+      "layer": [
+        {
+          "mark": {
+            "type": "bar",
+            "cornerRadiusTopLeft": 4,
+            "cornerRadiusTopRight": 4
+          },
+          "encoding": {
+            "x": {
+              "field": "rating",
+              "type": "ordinal",
+              "sort": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              "axis": {
+                "title": "Rating"
+              }
+            },
+            "y": {
+              "field": "percentage",
+              "type": "quantitative",
+              "axis": {
+                "title": "Percentage (%)",
+                "format": ".0f"
+              }
+            },
+            "color": {
+              "field": "rating",
+              "type": "ordinal",
+              "legend": null
+            },
+            "tooltip": [
+              {
+                "field": "rating",
+                "type": "quantitative",
+                "title": "Rating"
+              },
+              {
+                "field": "rating_count",
+                "type": "quantitative",
+                "title": "Count"
+              },
+              {
+                "field": "percentage",
+                "type": "quantitative",
+                "title": "Percentage",
+                "format": ".2f"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "dy": -6,
+            "fontWeight": "bold"
+          },
+          "encoding": {
+            "x": {
+              "field": "rating",
+              "type": "ordinal",
+              "sort": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            "y": {
+              "field": "percentage",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "percentage",
+              "type": "quantitative",
+              "format": ".2f"
+            },
+            "color": {
+              "value": "black"
+            }
+          }
+        }
+      ]
+    },
+    "sql": "WITH totals AS (\n  SELECT COUNT(*) FILTER (WHERE overall_rating IS NOT NULL) AS total\n  FROM public.course_evaluations\n)\nSELECT\n  r.rating AS rating,\n  COALESCE(c.cnt, 0) AS rating_count,\n  CASE WHEN t.total = 0 THEN 0\n       ELSE ROUND((COALESCE(c.cnt,0)::numeric / t.total) * 100.0, 2)\n  END AS percentage\nFROM (VALUES (1),(2),(3),(4),(5)) AS r(rating)\nLEFT JOIN (\n  SELECT overall_rating, COUNT(*) AS cnt\n  FROM public.course_evaluations\n  WHERE overall_rating BETWEEN 1 AND 5\n  GROUP BY overall_rating\n) c ON c.overall_rating = r.rating\nCROSS JOIN totals t\nORDER BY r.rating ASC;",
+    "metadata": {
+      "columns": [
+        "rating",
+        "percentage",
+        "rating_count"
+      ],
+      "rowCount": 5,
+      "sample": [
+        {
+          "rating": 1,
+          "percentage": 29.27,
+          "rating_count": 12
+        },
+        {
+          "rating": 2,
+          "percentage": 12.2,
+          "rating_count": 5
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "rating": 1,
+        "percentage": 29.27,
+        "rating_count": 12
+      },
+      {
+        "rating": 2,
+        "percentage": 12.2,
+        "rating_count": 5
+      },
+      {
+        "rating": 3,
+        "percentage": 12.2,
+        "rating_count": 5
+      },
+      {
+        "rating": 4,
+        "percentage": 21.95,
+        "rating_count": 9
+      },
+      {
+        "rating": 5,
+        "percentage": 24.39,
+        "rating_count": 10
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Distribution of Overall Course Evaluation Ratings (1–5)",
+      "width": 480,
+      "height": 320,
+      "layer": [
+        {
+          "mark": {
+            "type": "bar",
+            "cornerRadiusTopLeft": 4,
+            "cornerRadiusTopRight": 4
+          },
+          "encoding": {
+            "x": {
+              "field": "rating",
+              "type": "ordinal",
+              "sort": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              "axis": {
+                "title": "Rating"
+              }
+            },
+            "y": {
+              "field": "percentage",
+              "type": "quantitative",
+              "axis": {
+                "title": "Percentage (%)",
+                "format": ".0f"
+              }
+            },
+            "color": {
+              "field": "rating",
+              "type": "ordinal",
+              "legend": null
+            },
+            "tooltip": [
+              {
+                "field": "rating",
+                "type": "quantitative",
+                "title": "Rating"
+              },
+              {
+                "field": "rating_count",
+                "type": "quantitative",
+                "title": "Count"
+              },
+              {
+                "field": "percentage",
+                "type": "quantitative",
+                "title": "Percentage",
+                "format": ".2f"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "dy": -6,
+            "fontWeight": "bold"
+          },
+          "encoding": {
+            "x": {
+              "field": "rating",
+              "type": "ordinal",
+              "sort": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            "y": {
+              "field": "percentage",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "percentage",
+              "type": "quantitative",
+              "format": ".2f"
+            },
+            "color": {
+              "value": "black"
+            }
+          }
+        }
+      ]
+    },
+    "sql": "WITH totals AS (\n  SELECT COUNT(*) FILTER (WHERE overall_rating IS NOT NULL) AS total\n  FROM public.course_evaluations\n)\nSELECT\n  r.rating AS rating,\n  COALESCE(c.cnt, 0) AS rating_count,\n  CASE WHEN t.total = 0 THEN 0\n       ELSE ROUND((COALESCE(c.cnt,0)::numeric / t.total) * 100.0, 2)\n  END AS percentage\nFROM (VALUES (1),(2),(3),(4),(5)) AS r(rating)\nLEFT JOIN (\n  SELECT overall_rating, COUNT(*) AS cnt\n  FROM public.course_evaluations\n  WHERE overall_rating BETWEEN 1 AND 5\n  GROUP BY overall_rating\n) c ON c.overall_rating = r.rating\nCROSS JOIN totals t\nORDER BY r.rating ASC;",
+    "metadata": {
+      "columns": [
+        "rating",
+        "percentage",
+        "rating_count"
+      ],
+      "rowCount": 5,
+      "sample": [
+        {
+          "rating": 1,
+          "percentage": 29.27,
+          "rating_count": 12
+        },
+        {
+          "rating": 2,
+          "percentage": 12.2,
+          "rating_count": 5
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": false,
+      "score": 0,
+      "issues": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ],
+      "repairPrompt": "Fix SQL or visualization hard contract issues."
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": [
+        "Visualization is missing a valid 'encoding' object.",
+        "Visualization should reference at least one SQL output field."
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:47:58.355Z",
+    "traceId": "2cd25586b0bbdebfe21c2f21930edb36",
+    "attempts": 4,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 5860,
+      "outputTokens": 3817,
+      "totalTokens": 9677,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2880,
+      "costUsd": 0.009099
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 5860,
+        "outputTokens": 3817,
+        "totalTokens": 9677,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2880,
+        "costUsd": 0.009099
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,572 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "enrollment-trend-by-department",
+  "caseDirectory": "enrollment-trend-by-department",
+  "repeatIndex": 1,
+  "prompt": "Show enrollment trends by department over academic years",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Show enrollment trends by department over academic years"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:50:33.605Z",
+    "endedAtUtc": "2026-02-22T23:51:17.281Z",
+    "durationMs": 43676
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "27662",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:51:17 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Show enrollment trends by department over academic years\"},\"sql\":{\"payload\":{\"question\":\"Show enrollment trends by department over academic years\"},\"startedAt\":1771804233613,\"status\":\"success\",\"output\":{\"reasoning\":\"Aggregate enrollments per department and academic year by joining enrollments -> course_sections -> courses -> departments, counting active enrollments. Results ordered deterministically by department code then academic year.\",\"sql\":\"WITH dept_year_enrollments AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.code AS department_code,\\n    d.name AS department_name,\\n    cs.academic_year AS academic_year,\\n    COUNT(e.id) AS enrollments_count\\n  FROM public.enrollments e\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.courses c ON cs.course_id = c.id\\n  JOIN public.departments d ON c.department_id = d.id\\n  WHERE e.is_active = true\\n  GROUP BY d.id, d.code, d.name, cs.academic_year\\n)\\nSELECT\\n  department_id,\\n  department_code,\\n  department_name,\\n  academic_year,\\n  enrollments_count\\nFROM dept_year_enrollments\\nORDER BY department_code ASC, academic_year ASC;\",\"assumptions\":[\"Count only active enrollments (e.is_active = true) to represent current/valid enrollments; change or remove this filter if you want to include withdrawn/inactive enrollments.\"]},\"endedAt\":1771804261210},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH dept_year_enrollments AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.code AS department_code,\\n    d.name AS department_name,\\n    cs.academic_year AS academic_year,\\n    COUNT(e.id) AS enrollments_count\\n  FROM public.enrollments e\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.courses c ON cs.course_id = c.id\\n  JOIN public.departments d ON c.department_id = d.id\\n  WHERE e.is_active = true\\n  GROUP BY d.id, d.code, d.name, cs.academic_year\\n)\\nSELECT\\n  department_id,\\n  department_code,\\n  department_name,\\n  academic_year,\\n  enrollments_count\\nFROM dept_year_enrollments\\nORDER BY department_code ASC, academic_year ASC;\"},\"startedAt\":1771804261212,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH dept_year_enrollments AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.code AS department_code,\\n    d.name AS department_name,\\n    cs.academic_year AS academic_year,\\n    COUNT(e.id) AS enrollments_count\\n  FROM public.enrollments e\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.courses c ON cs.course_id = c.id\\n  JOIN public.departments d ON c.department_id = d.id\\n  WHERE e.is_active = true\\n  GROUP BY d.id, d.code, d.name, cs.academic_year\\n)\\nSELECT\\n  department_id,\\n  department_code,\\n  department_name,\\n  academic_year,\\n  enrollments_count\\nFROM dept_year_enrollments\\nORDER BY department_code ASC, academic_year ASC\",\"metadata\":{\"columns\":[\"academic_year\",\"department_id\",\"department_code\",\"department_name\",\"enrollments_count\"],\"rowCount\":21,\"sample\":[{\"academic_year\":\"2020/2021\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":2},{\"academic_year\":\"2021/2022\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":2}]},\"data\":[{\"academic_year\":\"2020/2021\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":2},{\"academic_year\":\"2021/2022\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":2},{\"academic_year\":\"2023/2024\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":7},{\"academic_year\":\"2024/2025\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":5},{\"academic_year\":\"2019/2020\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollments_count\":1},{\"academic_year\":\"2020/2021\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollments_count\":2},{\"academic_year\":\"2023/2024\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollments_count\":2},{\"academic_year\":\"2024/2025\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollments_count\":1},{\"academic_year\":\"2020/2021\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollments_count\":2},{\"academic_year\":\"2021/2022\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollments_count\":2},{\"academic_year\":\"2022/2023\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollments_count\":2},{\"academic_year\":\"2019/2020\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollments_count\":1},{\"academic_year\":\"2020/2021\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollments_count\":7},{\"academic_year\":\"2022/2023\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollments_count\":4},{\"academic_year\":\"2023/2024\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollments_count\":3},{\"academic_year\":\"2019/2020\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollments_count\":2},{\"academic_year\":\"2022/2023\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollments_count\":3},{\"academic_year\":\"2024/2025\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollments_count\":2},{\"academic_year\":\"2019/2020\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollments_count\":1},{\"academic_year\":\"2020/2021\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollments_count\":2},{\"academic_year\":\"2021/2022\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollments_count\":4}]},\"endedAt\":1771804261241},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"WITH dept_year_enrollments AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.code AS department_code,\\n    d.name AS department_name,\\n    cs.academic_year AS academic_year,\\n    COUNT(e.id) AS enrollments_count\\n  FROM public.enrollments e\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.courses c ON cs.course_id = c.id\\n  JOIN public.departments d ON c.department_id = d.id\\n  WHERE e.is_active = true\\n  GROUP BY d.id, d.code, d.name, cs.academic_year\\n)\\nSELECT\\n  department_id,\\n  department_code,\\n  department_name,\\n  academic_year,\\n  enrollments_count\\nFROM dept_year_enrollments\\nORDER BY department_code ASC, academic_year ASC\",\"metadata\":{\"columns\":[\"academic_year\",\"department_id\",\"department_code\",\"department_name\",\"enrollments_count\"],\"rowCount\":21,\"sample\":[{\"academic_year\":\"2020/2021\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":2},{\"academic_year\":\"2021/2022\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":2}]},\"data\":[{\"academic_year\":\"2020/2021\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":2},{\"academic_year\":\"2021/2022\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":2},{\"academic_year\":\"2023/2024\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":7},{\"academic_year\":\"2024/2025\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":5},{\"academic_year\":\"2019/2020\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollments_count\":1},{\"academic_year\":\"2020/2021\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollments_count\":2},{\"academic_year\":\"2023/2024\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollments_count\":2},{\"academic_year\":\"2024/2025\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollments_count\":1},{\"academic_year\":\"2020/2021\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollments_count\":2},{\"academic_year\":\"2021/2022\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollments_count\":2},{\"academic_year\":\"2022/2023\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollments_count\":2},{\"academic_year\":\"2019/2020\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollments_count\":1},{\"academic_year\":\"2020/2021\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollments_count\":7},{\"academic_year\":\"2022/2023\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollments_count\":4},{\"academic_year\":\"2023/2024\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollments_count\":3},{\"academic_year\":\"2019/2020\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollments_count\":2},{\"academic_year\":\"2022/2023\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollments_count\":3},{\"academic_year\":\"2024/2025\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollments_count\":2},{\"academic_year\":\"2019/2020\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollments_count\":1},{\"academic_year\":\"2020/2021\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollments_count\":2},{\"academic_year\":\"2021/2022\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollments_count\":4}]},\"startedAt\":1771804261245,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":420,\"title\":\"Enrollment trends by department over academic years\",\"mark\":{\"type\":\"line\",\"point\":true,\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic year\",\"sort\":null},\"y\":{\"field\":\"enrollments_count\",\"type\":\"quantitative\",\"title\":\"Enrollments\"},\"color\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Dept code\"},{\"field\":\"department_id\",\"type\":\"nominal\",\"title\":\"Dept id\"},{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic year\"},{\"field\":\"enrollments_count\",\"type\":\"quantitative\",\"title\":\"Enrollments\"}]}},\"reasoning\":\"Line chart with points shows trends across academic years; color identifies departments. Tooltip includes department code and id for clarity. X uses ordinal to preserve academic year labels.\"},\"endedAt\":1771804277256},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":420,\"title\":\"Enrollment trends by department over academic years\",\"mark\":{\"type\":\"line\",\"point\":true,\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic year\",\"sort\":null},\"y\":{\"field\":\"enrollments_count\",\"type\":\"quantitative\",\"title\":\"Enrollments\"},\"color\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Dept code\"},{\"field\":\"department_id\",\"type\":\"nominal\",\"title\":\"Dept id\"},{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic year\"},{\"field\":\"enrollments_count\",\"type\":\"quantitative\",\"title\":\"Enrollments\"}]}},\"reasoning\":\"Line chart with points shows trends across academic years; color identifies departments. Tooltip includes department code and id for clarity. X uses ordinal to preserve academic year labels.\"},\"startedAt\":1771804277263,\"status\":\"success\",\"output\":{\"sql\":\"WITH dept_year_enrollments AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.code AS department_code,\\n    d.name AS department_name,\\n    cs.academic_year AS academic_year,\\n    COUNT(e.id) AS enrollments_count\\n  FROM public.enrollments e\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.courses c ON cs.course_id = c.id\\n  JOIN public.departments d ON c.department_id = d.id\\n  WHERE e.is_active = true\\n  GROUP BY d.id, d.code, d.name, cs.academic_year\\n)\\nSELECT\\n  department_id,\\n  department_code,\\n  department_name,\\n  academic_year,\\n  enrollments_count\\nFROM dept_year_enrollments\\nORDER BY department_code ASC, academic_year ASC;\",\"data\":[{\"academic_year\":\"2020/2021\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":2},{\"academic_year\":\"2021/2022\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":2},{\"academic_year\":\"2023/2024\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":7},{\"academic_year\":\"2024/2025\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":5},{\"academic_year\":\"2019/2020\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollments_count\":1},{\"academic_year\":\"2020/2021\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollments_count\":2},{\"academic_year\":\"2023/2024\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollments_count\":2},{\"academic_year\":\"2024/2025\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollments_count\":1},{\"academic_year\":\"2020/2021\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollments_count\":2},{\"academic_year\":\"2021/2022\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollments_count\":2},{\"academic_year\":\"2022/2023\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollments_count\":2},{\"academic_year\":\"2019/2020\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollments_count\":1},{\"academic_year\":\"2020/2021\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollments_count\":7},{\"academic_year\":\"2022/2023\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollments_count\":4},{\"academic_year\":\"2023/2024\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollments_count\":3},{\"academic_year\":\"2019/2020\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollments_count\":2},{\"academic_year\":\"2022/2023\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollments_count\":3},{\"academic_year\":\"2024/2025\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollments_count\":2},{\"academic_year\":\"2019/2020\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollments_count\":1},{\"academic_year\":\"2020/2021\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollments_count\":2},{\"academic_year\":\"2021/2022\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollments_count\":4}],\"metadata\":{\"columns\":[\"academic_year\",\"department_id\",\"department_code\",\"department_name\",\"enrollments_count\"],\"rowCount\":21,\"sample\":[{\"academic_year\":\"2020/2021\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":2},{\"academic_year\":\"2021/2022\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":2}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":420,\"title\":\"Enrollment trends by department over academic years\",\"mark\":{\"type\":\"line\",\"point\":true,\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic year\",\"sort\":null},\"y\":{\"field\":\"enrollments_count\",\"type\":\"quantitative\",\"title\":\"Enrollments\"},\"color\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Dept code\"},{\"field\":\"department_id\",\"type\":\"nominal\",\"title\":\"Dept id\"},{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic year\"},{\"field\":\"enrollments_count\",\"type\":\"quantitative\",\"title\":\"Enrollments\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771804277265}},\"input\":{\"question\":\"Show enrollment trends by department over academic years\"},\"result\":{\"sql\":\"WITH dept_year_enrollments AS (\\n  SELECT\\n    d.id AS department_id,\\n    d.code AS department_code,\\n    d.name AS department_name,\\n    cs.academic_year AS academic_year,\\n    COUNT(e.id) AS enrollments_count\\n  FROM public.enrollments e\\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\\n  JOIN public.courses c ON cs.course_id = c.id\\n  JOIN public.departments d ON c.department_id = d.id\\n  WHERE e.is_active = true\\n  GROUP BY d.id, d.code, d.name, cs.academic_year\\n)\\nSELECT\\n  department_id,\\n  department_code,\\n  department_name,\\n  academic_year,\\n  enrollments_count\\nFROM dept_year_enrollments\\nORDER BY department_code ASC, academic_year ASC;\",\"data\":[{\"academic_year\":\"2020/2021\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":2},{\"academic_year\":\"2021/2022\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":2},{\"academic_year\":\"2023/2024\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":7},{\"academic_year\":\"2024/2025\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":5},{\"academic_year\":\"2019/2020\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollments_count\":1},{\"academic_year\":\"2020/2021\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollments_count\":2},{\"academic_year\":\"2023/2024\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollments_count\":2},{\"academic_year\":\"2024/2025\",\"department_id\":\"227e8d78-55f1-4e19-8f80-3f2e56862493\",\"department_code\":\"IBM\",\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"enrollments_count\":1},{\"academic_year\":\"2020/2021\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollments_count\":2},{\"academic_year\":\"2021/2022\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollments_count\":2},{\"academic_year\":\"2022/2023\",\"department_id\":\"8878d0e0-7c2a-4919-a4f7-6d78606c1a35\",\"department_code\":\"INF\",\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"enrollments_count\":2},{\"academic_year\":\"2019/2020\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollments_count\":1},{\"academic_year\":\"2020/2021\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollments_count\":7},{\"academic_year\":\"2022/2023\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollments_count\":4},{\"academic_year\":\"2023/2024\",\"department_id\":\"bed1adca-ca58-42be-9816-e88fb629a20b\",\"department_code\":\"MTR\",\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"enrollments_count\":3},{\"academic_year\":\"2019/2020\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollments_count\":2},{\"academic_year\":\"2022/2023\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollments_count\":3},{\"academic_year\":\"2024/2025\",\"department_id\":\"4f6263ee-489a-4fe6-a9bb-7aa2e0336c28\",\"department_code\":\"TCH\",\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"enrollments_count\":2},{\"academic_year\":\"2019/2020\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollments_count\":1},{\"academic_year\":\"2020/2021\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollments_count\":2},{\"academic_year\":\"2021/2022\",\"department_id\":\"3c776454-8a37-4eb1-9000-c74ee4532b57\",\"department_code\":\"WIP\",\"department_name\":\"Wydział Inżynierii Produkcji\",\"enrollments_count\":4}],\"metadata\":{\"columns\":[\"academic_year\",\"department_id\",\"department_code\",\"department_name\",\"enrollments_count\"],\"rowCount\":21,\"sample\":[{\"academic_year\":\"2020/2021\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":2},{\"academic_year\":\"2021/2022\",\"department_id\":\"20067694-2ec2-4aa3-b7eb-eac50dded53d\",\"department_code\":\"AEI\",\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"enrollments_count\":2}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":420,\"title\":\"Enrollment trends by department over academic years\",\"mark\":{\"type\":\"line\",\"point\":true,\"tooltip\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic year\",\"sort\":null},\"y\":{\"field\":\"enrollments_count\",\"type\":\"quantitative\",\"title\":\"Enrollments\"},\"color\":{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"department_code\",\"type\":\"nominal\",\"title\":\"Dept code\"},{\"field\":\"department_id\",\"type\":\"nominal\",\"title\":\"Dept id\"},{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic year\"},{\"field\":\"enrollments_count\",\"type\":\"quantitative\",\"title\":\"Enrollments\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"3c69df64039f3437d2b42c06d081dd73\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/enrollment-trend-by-department/run-0001/run.json",
+    "queryPath": "runs/enrollment-trend-by-department/run-0001/query.sql",
+    "vegaRawPath": "runs/enrollment-trend-by-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/enrollment-trend-by-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/enrollment-trend-by-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:51:17.720Z",
+  "traceId": "3c69df64039f3437d2b42c06d081dd73",
+  "success": true,
+  "durationMs": 44115,
+  "resultRaw": {
+    "data": [
+      {
+        "academic_year": "2020/2021",
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_code": "AEI",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "enrollments_count": 2
+      },
+      {
+        "academic_year": "2021/2022",
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_code": "AEI",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "enrollments_count": 2
+      },
+      {
+        "academic_year": "2023/2024",
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_code": "AEI",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "enrollments_count": 7
+      },
+      {
+        "academic_year": "2024/2025",
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_code": "AEI",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "enrollments_count": 5
+      },
+      {
+        "academic_year": "2019/2020",
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_code": "IBM",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "enrollments_count": 1
+      },
+      {
+        "academic_year": "2020/2021",
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_code": "IBM",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "enrollments_count": 2
+      },
+      {
+        "academic_year": "2023/2024",
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_code": "IBM",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "enrollments_count": 2
+      },
+      {
+        "academic_year": "2024/2025",
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_code": "IBM",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "enrollments_count": 1
+      },
+      {
+        "academic_year": "2020/2021",
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_code": "INF",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "enrollments_count": 2
+      },
+      {
+        "academic_year": "2021/2022",
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_code": "INF",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "enrollments_count": 2
+      },
+      {
+        "academic_year": "2022/2023",
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_code": "INF",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "enrollments_count": 2
+      },
+      {
+        "academic_year": "2019/2020",
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "enrollments_count": 1
+      },
+      {
+        "academic_year": "2020/2021",
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "enrollments_count": 7
+      },
+      {
+        "academic_year": "2022/2023",
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "enrollments_count": 4
+      },
+      {
+        "academic_year": "2023/2024",
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "enrollments_count": 3
+      },
+      {
+        "academic_year": "2019/2020",
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_code": "TCH",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "enrollments_count": 2
+      },
+      {
+        "academic_year": "2022/2023",
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_code": "TCH",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "enrollments_count": 3
+      },
+      {
+        "academic_year": "2024/2025",
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_code": "TCH",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "enrollments_count": 2
+      },
+      {
+        "academic_year": "2019/2020",
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_code": "WIP",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "enrollments_count": 1
+      },
+      {
+        "academic_year": "2020/2021",
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_code": "WIP",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "enrollments_count": 2
+      },
+      {
+        "academic_year": "2021/2022",
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_code": "WIP",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "enrollments_count": 4
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 700,
+      "height": 420,
+      "title": "Enrollment trends by department over academic years",
+      "mark": {
+        "type": "line",
+        "point": true,
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "academic_year",
+          "type": "ordinal",
+          "title": "Academic year",
+          "sort": null
+        },
+        "y": {
+          "field": "enrollments_count",
+          "type": "quantitative",
+          "title": "Enrollments"
+        },
+        "color": {
+          "field": "department_name",
+          "type": "nominal",
+          "title": "Department"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "department_code",
+            "type": "nominal",
+            "title": "Dept code"
+          },
+          {
+            "field": "department_id",
+            "type": "nominal",
+            "title": "Dept id"
+          },
+          {
+            "field": "academic_year",
+            "type": "nominal",
+            "title": "Academic year"
+          },
+          {
+            "field": "enrollments_count",
+            "type": "quantitative",
+            "title": "Enrollments"
+          }
+        ]
+      }
+    },
+    "sql": "WITH dept_year_enrollments AS (\n  SELECT\n    d.id AS department_id,\n    d.code AS department_code,\n    d.name AS department_name,\n    cs.academic_year AS academic_year,\n    COUNT(e.id) AS enrollments_count\n  FROM public.enrollments e\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\n  JOIN public.courses c ON cs.course_id = c.id\n  JOIN public.departments d ON c.department_id = d.id\n  WHERE e.is_active = true\n  GROUP BY d.id, d.code, d.name, cs.academic_year\n)\nSELECT\n  department_id,\n  department_code,\n  department_name,\n  academic_year,\n  enrollments_count\nFROM dept_year_enrollments\nORDER BY department_code ASC, academic_year ASC;",
+    "metadata": {
+      "columns": [
+        "academic_year",
+        "department_id",
+        "department_code",
+        "department_name",
+        "enrollments_count"
+      ],
+      "rowCount": 21,
+      "sample": [
+        {
+          "academic_year": "2020/2021",
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "department_code": "AEI",
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "enrollments_count": 2
+        },
+        {
+          "academic_year": "2021/2022",
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "department_code": "AEI",
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "enrollments_count": 2
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "academic_year": "2020/2021",
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_code": "AEI",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "enrollments_count": 2
+      },
+      {
+        "academic_year": "2021/2022",
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_code": "AEI",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "enrollments_count": 2
+      },
+      {
+        "academic_year": "2023/2024",
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_code": "AEI",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "enrollments_count": 7
+      },
+      {
+        "academic_year": "2024/2025",
+        "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+        "department_code": "AEI",
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "enrollments_count": 5
+      },
+      {
+        "academic_year": "2019/2020",
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_code": "IBM",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "enrollments_count": 1
+      },
+      {
+        "academic_year": "2020/2021",
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_code": "IBM",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "enrollments_count": 2
+      },
+      {
+        "academic_year": "2023/2024",
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_code": "IBM",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "enrollments_count": 2
+      },
+      {
+        "academic_year": "2024/2025",
+        "department_id": "227e8d78-55f1-4e19-8f80-3f2e56862493",
+        "department_code": "IBM",
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "enrollments_count": 1
+      },
+      {
+        "academic_year": "2020/2021",
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_code": "INF",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "enrollments_count": 2
+      },
+      {
+        "academic_year": "2021/2022",
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_code": "INF",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "enrollments_count": 2
+      },
+      {
+        "academic_year": "2022/2023",
+        "department_id": "8878d0e0-7c2a-4919-a4f7-6d78606c1a35",
+        "department_code": "INF",
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "enrollments_count": 2
+      },
+      {
+        "academic_year": "2019/2020",
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "enrollments_count": 1
+      },
+      {
+        "academic_year": "2020/2021",
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "enrollments_count": 7
+      },
+      {
+        "academic_year": "2022/2023",
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "enrollments_count": 4
+      },
+      {
+        "academic_year": "2023/2024",
+        "department_id": "bed1adca-ca58-42be-9816-e88fb629a20b",
+        "department_code": "MTR",
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "enrollments_count": 3
+      },
+      {
+        "academic_year": "2019/2020",
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_code": "TCH",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "enrollments_count": 2
+      },
+      {
+        "academic_year": "2022/2023",
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_code": "TCH",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "enrollments_count": 3
+      },
+      {
+        "academic_year": "2024/2025",
+        "department_id": "4f6263ee-489a-4fe6-a9bb-7aa2e0336c28",
+        "department_code": "TCH",
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "enrollments_count": 2
+      },
+      {
+        "academic_year": "2019/2020",
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_code": "WIP",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "enrollments_count": 1
+      },
+      {
+        "academic_year": "2020/2021",
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_code": "WIP",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "enrollments_count": 2
+      },
+      {
+        "academic_year": "2021/2022",
+        "department_id": "3c776454-8a37-4eb1-9000-c74ee4532b57",
+        "department_code": "WIP",
+        "department_name": "Wydział Inżynierii Produkcji",
+        "enrollments_count": 4
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 700,
+      "height": 420,
+      "title": "Enrollment trends by department over academic years",
+      "mark": {
+        "type": "line",
+        "point": true,
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "academic_year",
+          "type": "ordinal",
+          "title": "Academic year",
+          "sort": null
+        },
+        "y": {
+          "field": "enrollments_count",
+          "type": "quantitative",
+          "title": "Enrollments"
+        },
+        "color": {
+          "field": "department_name",
+          "type": "nominal",
+          "title": "Department"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "department_code",
+            "type": "nominal",
+            "title": "Dept code"
+          },
+          {
+            "field": "department_id",
+            "type": "nominal",
+            "title": "Dept id"
+          },
+          {
+            "field": "academic_year",
+            "type": "nominal",
+            "title": "Academic year"
+          },
+          {
+            "field": "enrollments_count",
+            "type": "quantitative",
+            "title": "Enrollments"
+          }
+        ]
+      }
+    },
+    "sql": "WITH dept_year_enrollments AS (\n  SELECT\n    d.id AS department_id,\n    d.code AS department_code,\n    d.name AS department_name,\n    cs.academic_year AS academic_year,\n    COUNT(e.id) AS enrollments_count\n  FROM public.enrollments e\n  JOIN public.course_sections cs ON e.course_section_id = cs.id\n  JOIN public.courses c ON cs.course_id = c.id\n  JOIN public.departments d ON c.department_id = d.id\n  WHERE e.is_active = true\n  GROUP BY d.id, d.code, d.name, cs.academic_year\n)\nSELECT\n  department_id,\n  department_code,\n  department_name,\n  academic_year,\n  enrollments_count\nFROM dept_year_enrollments\nORDER BY department_code ASC, academic_year ASC;",
+    "metadata": {
+      "columns": [
+        "academic_year",
+        "department_id",
+        "department_code",
+        "department_name",
+        "enrollments_count"
+      ],
+      "rowCount": 21,
+      "sample": [
+        {
+          "academic_year": "2020/2021",
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "department_code": "AEI",
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "enrollments_count": 2
+        },
+        {
+          "academic_year": "2021/2022",
+          "department_id": "20067694-2ec2-4aa3-b7eb-eac50dded53d",
+          "department_code": "AEI",
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "enrollments_count": 2
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:51:17.720Z",
+    "traceId": "3c69df64039f3437d2b42c06d081dd73",
+    "attempts": 7,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 16654,
+      "outputTokens": 2498,
+      "totalTokens": 19152,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1408,
+      "costUsd": 0.0091595
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 16654,
+        "outputTokens": 2498,
+        "totalTokens": 19152,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1408,
+        "costUsd": 0.0091595
+      }
+    ],
+    "warnings": []
+  }
+}

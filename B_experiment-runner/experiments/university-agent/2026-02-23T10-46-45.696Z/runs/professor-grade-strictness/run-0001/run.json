@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "professor-grade-strictness",
+  "caseDirectory": "professor-grade-strictness",
+  "repeatIndex": 1,
+  "prompt": "Which professors give the lowest average grades (strictest graders)?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which professors give the lowest average grades (strictest graders)?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:53:38.498Z",
+    "endedAtUtc": "2026-02-23T10:54:01.236Z",
+    "durationMs": 22738
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2727",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:54:01 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Which professors give the lowest average grades (strictest graders)?\"},\"agent\":{\"payload\":{\"question\":\"Which professors give the lowest average grades (strictest graders)?\"},\"startedAt\":1771844018507,\"status\":\"success\",\"output\":{\"sql\":\"WITH avg_by_prof AS (\\n  SELECT\\n    professor_id AS professor_id,\\n    professor_name AS professor_name,\\n    AVG(grade) AS avg_grade,\\n    COUNT(*) AS grade_count,\\n    -AVG(grade) AS avg_grade_inv\\n  FROM grades\\n  GROUP BY professor_id, professor_name\\n  HAVING COUNT(*) >= 5\\n)\\nSELECT\\n  professor_id AS professor_id,\\n  professor_name AS professor_name,\\n  avg_grade AS avg_grade,\\n  grade_count AS grade_count,\\n  avg_grade_inv AS avg_grade_inv\\nFROM avg_by_prof\\nORDER BY avg_grade_inv DESC\\nLIMIT 10;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Top 10 professors with the lowest average grades (strictest graders).\",\"title\":\"Professors with Lowest Average Grades (Strictest Graders)\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\",\"sort\":{\"field\":\"avg_grade\",\"order\":\"ascending\"}},\"x\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},\"color\":{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"legend\":null,\"scale\":{\"scheme\":\"redblue\"}},\"tooltip\":[{\"field\":\"professor_name\",\"type\":\"nominal\",\"title\":\"Professor\"},{\"field\":\"avg_grade\",\"type\":\"quantitative\",\"title\":\"Average Grade\"},{\"field\":\"grade_count\",\"type\":\"quantitative\",\"title\":\"Number of Grades\"}]}}},\"endedAt\":1771844041100},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH avg_by_prof AS (\\n  SELECT\\n    professor_id AS professor_id,\\n    professor_name AS professor_name,\\n    AVG(grade) AS avg_grade,\\n    COUNT(*) AS grade_count,\\n    -AVG(grade) AS avg_grade_inv\\n  FROM grades\\n  GROUP BY professor_id, professor_name\\n  HAVING COUNT(*) >= 5\\n)\\nSELECT\\n  professor_id AS professor_id,\\n  professor_name AS professor_name,\\n  avg_grade AS avg_grade,\\n  grade_count AS grade_count,\\n  avg_grade_inv AS avg_grade_inv\\nFROM avg_by_prof\\nORDER BY avg_grade_inv DESC\\nLIMIT 10;\"},\"startedAt\":1771844041106,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column \\\"professor_id\\\" does not exist\\nLINE 4:     professor_id AS professor_id,\\n            ^\",\"name\":\"Error\"},\"endedAt\":1771844041230}},\"input\":{\"question\":\"Which professors give the lowest average grades (strictest graders)?\"},\"error\":{\"message\":\"SQL execution failed: column \\\"professor_id\\\" does not exist\\nLINE 4:     professor_id AS professor_id,\\n            ^\",\"name\":\"Error\"},\"traceId\":\"8b570e610d6cbe62a38d29b9e0804240\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/professor-grade-strictness/run-0001/run.json",
+    "queryPath": "runs/professor-grade-strictness/run-0001/query.sql",
+    "vegaRawPath": "runs/professor-grade-strictness/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/professor-grade-strictness/run-0001/vega.resolved.json",
+    "imagePath": "runs/professor-grade-strictness/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:54:01.237Z",
+  "traceId": "8b570e610d6cbe62a38d29b9e0804240",
+  "success": false,
+  "durationMs": 22740,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Which professors give the lowest average grades (strictest graders)?"
+      },
+      "agent": {
+        "payload": {
+          "question": "Which professors give the lowest average grades (strictest graders)?"
+        },
+        "startedAt": 1771844018507,
+        "status": "success",
+        "output": {
+          "sql": "WITH avg_by_prof AS (\n  SELECT\n    professor_id AS professor_id,\n    professor_name AS professor_name,\n    AVG(grade) AS avg_grade,\n    COUNT(*) AS grade_count,\n    -AVG(grade) AS avg_grade_inv\n  FROM grades\n  GROUP BY professor_id, professor_name\n  HAVING COUNT(*) >= 5\n)\nSELECT\n  professor_id AS professor_id,\n  professor_name AS professor_name,\n  avg_grade AS avg_grade,\n  grade_count AS grade_count,\n  avg_grade_inv AS avg_grade_inv\nFROM avg_by_prof\nORDER BY avg_grade_inv DESC\nLIMIT 10;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Top 10 professors with the lowest average grades (strictest graders).",
+            "title": "Professors with Lowest Average Grades (Strictest Graders)",
+            "data": {
+              "name": "query_result"
+            },
+            "width": 700,
+            "height": 400,
+            "mark": {
+              "type": "bar",
+              "tooltip": true
+            },
+            "encoding": {
+              "y": {
+                "field": "professor_name",
+                "type": "nominal",
+                "title": "Professor",
+                "sort": {
+                  "field": "avg_grade",
+                  "order": "ascending"
+                }
+              },
+              "x": {
+                "field": "avg_grade",
+                "type": "quantitative",
+                "title": "Average Grade"
+              },
+              "color": {
+                "field": "avg_grade",
+                "type": "quantitative",
+                "legend": null,
+                "scale": {
+                  "scheme": "redblue"
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "professor_name",
+                  "type": "nominal",
+                  "title": "Professor"
+                },
+                {
+                  "field": "avg_grade",
+                  "type": "quantitative",
+                  "title": "Average Grade"
+                },
+                {
+                  "field": "grade_count",
+                  "type": "quantitative",
+                  "title": "Number of Grades"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771844041100
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH avg_by_prof AS (\n  SELECT\n    professor_id AS professor_id,\n    professor_name AS professor_name,\n    AVG(grade) AS avg_grade,\n    COUNT(*) AS grade_count,\n    -AVG(grade) AS avg_grade_inv\n  FROM grades\n  GROUP BY professor_id, professor_name\n  HAVING COUNT(*) >= 5\n)\nSELECT\n  professor_id AS professor_id,\n  professor_name AS professor_name,\n  avg_grade AS avg_grade,\n  grade_count AS grade_count,\n  avg_grade_inv AS avg_grade_inv\nFROM avg_by_prof\nORDER BY avg_grade_inv DESC\nLIMIT 10;"
+        },
+        "startedAt": 1771844041106,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column \"professor_id\" does not exist\nLINE 4:     professor_id AS professor_id,\n            ^",
+          "name": "Error"
+        },
+        "endedAt": 1771844041230
+      }
+    },
+    "input": {
+      "question": "Which professors give the lowest average grades (strictest graders)?"
+    },
+    "error": {
+      "message": "SQL execution failed: column \"professor_id\" does not exist\nLINE 4:     professor_id AS professor_id,\n            ^",
+      "name": "Error"
+    },
+    "traceId": "8b570e610d6cbe62a38d29b9e0804240"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:54:01.237Z",
+    "traceId": "8b570e610d6cbe62a38d29b9e0804240",
+    "attempts": 6,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 268,
+      "outputTokens": 1484,
+      "totalTokens": 1752,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 960,
+      "costUsd": 0.003035
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 268,
+        "outputTokens": 1484,
+        "totalTokens": 1752,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 960,
+        "costUsd": 0.003035
+      }
+    ],
+    "warnings": []
+  }
+}

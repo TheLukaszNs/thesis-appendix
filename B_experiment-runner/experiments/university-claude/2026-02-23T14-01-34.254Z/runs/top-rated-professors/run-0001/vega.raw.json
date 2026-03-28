@@ -1,0 +1,67 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Top 10 Highest Rated Professors by Student Evaluations",
+  "data": {
+    "name": "query_result"
+  },
+  "mark": "bar",
+  "encoding": {
+    "y": {
+      "field": "last_name",
+      "type": "nominal",
+      "sort": "-x",
+      "axis": {
+        "label": "Professor Name",
+        "labelExpr": "datum.value + ', ' + data('query_result')[indexof(data('query_result'), datum)].first_name"
+      }
+    },
+    "x": {
+      "field": "average_professor_rating",
+      "type": "quantitative",
+      "axis": {
+        "title": "Average Rating"
+      },
+      "scale": {
+        "domain": [
+          0,
+          5
+        ]
+      }
+    },
+    "color": {
+      "field": "average_professor_rating",
+      "type": "quantitative",
+      "scale": {
+        "scheme": "greens"
+      },
+      "legend": {
+        "title": "Average Rating"
+      }
+    },
+    "tooltip": [
+      {
+        "field": "first_name",
+        "type": "nominal",
+        "title": "First Name"
+      },
+      {
+        "field": "last_name",
+        "type": "nominal",
+        "title": "Last Name"
+      },
+      {
+        "field": "average_professor_rating",
+        "type": "quantitative",
+        "title": "Average Rating",
+        "format": ".2f"
+      },
+      {
+        "field": "total_evaluations",
+        "type": "quantitative",
+        "title": "Total Evaluations"
+      }
+    ]
+  },
+  "width": 600,
+  "height": 400
+}

@@ -1,0 +1,1 @@
+SELECT d.name AS department_name, COUNT(s.id) AS student_count FROM departments d LEFT JOIN students s ON d.id = s.department_id GROUP BY d.id, d.name ORDER BY d.name

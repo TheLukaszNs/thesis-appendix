@@ -1,0 +1,1 @@
+SELECT building, COUNT(*) AS classroom_count FROM public.classrooms GROUP BY building ORDER BY building

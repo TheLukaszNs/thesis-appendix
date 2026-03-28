@@ -1,0 +1,232 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "gpa-vs-scholarship-type",
+  "caseDirectory": "gpa-vs-scholarship-type",
+  "repeatIndex": 1,
+  "prompt": "What is the average GPA of students by scholarship type received?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the average GPA of students by scholarship type received?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:08:43.574Z",
+    "endedAtUtc": "2026-02-23T14:09:14.662Z",
+    "durationMs": 31088
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "7203",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:09:14 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the average GPA of students by scholarship type received?\"},\"sql\":{\"payload\":{\"question\":\"What is the average GPA of students by scholarship type received?\"},\"startedAt\":1771855723587,\"status\":\"success\",\"output\":{\"reasoning\":\"The question asks for average GPA by scholarship type. I need to join the students table (which contains the gpa column) with the scholarships table (which contains the scholarship_type column). I'll group by scholarship_type and calculate the average GPA for each type. The students table has a gpa column (numeric, nullable), and scholarships has a scholarship_type column (USER-DEFINED enum type). I'll join on student_id and group by scholarship_type, ordering by scholarship_type for deterministic output.\",\"sql\":\"SELECT \\n  s.scholarship_type,\\n  AVG(st.gpa) AS average_gpa\\nFROM scholarships s\\nINNER JOIN students st ON s.student_id = st.id\\nGROUP BY s.scholarship_type\\nORDER BY s.scholarship_type;\",\"assumptions\":[\"Students with scholarships may have NULL GPA values, which will be excluded from the AVG calculation\",\"A student may have multiple scholarships of the same type, and each will be counted separately in the grouping\",\"Only students with at least one scholarship record are included in the result\"]},\"endedAt\":1771855751532},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT \\n  s.scholarship_type,\\n  AVG(st.gpa) AS average_gpa\\nFROM scholarships s\\nINNER JOIN students st ON s.student_id = st.id\\nGROUP BY s.scholarship_type\\nORDER BY s.scholarship_type;\"},\"startedAt\":1771855751543,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  s.scholarship_type,\\n  AVG(st.gpa) AS average_gpa\\nFROM scholarships s\\nINNER JOIN students st ON s.student_id = st.id\\nGROUP BY s.scholarship_type\\nORDER BY s.scholarship_type\",\"metadata\":{\"columns\":[\"scholarship_type\",\"average_gpa\"],\"rowCount\":3,\"sample\":[{\"scholarship_type\":\"MERIT\",\"average_gpa\":\"4.3000000000000000\"},{\"scholarship_type\":\"SOCIAL\",\"average_gpa\":\"3.5600000000000000\"}]},\"data\":[{\"scholarship_type\":\"MERIT\",\"average_gpa\":\"4.3000000000000000\"},{\"scholarship_type\":\"SOCIAL\",\"average_gpa\":\"3.5600000000000000\"},{\"scholarship_type\":\"SPECIAL\",\"average_gpa\":\"4.0800000000000000\"}]},\"endedAt\":1771855751555},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  s.scholarship_type,\\n  AVG(st.gpa) AS average_gpa\\nFROM scholarships s\\nINNER JOIN students st ON s.student_id = st.id\\nGROUP BY s.scholarship_type\\nORDER BY s.scholarship_type\",\"metadata\":{\"columns\":[\"scholarship_type\",\"average_gpa\"],\"rowCount\":3,\"sample\":[{\"scholarship_type\":\"MERIT\",\"average_gpa\":\"4.3000000000000000\"},{\"scholarship_type\":\"SOCIAL\",\"average_gpa\":\"3.5600000000000000\"}]},\"data\":[{\"scholarship_type\":\"MERIT\",\"average_gpa\":\"4.3000000000000000\"},{\"scholarship_type\":\"SOCIAL\",\"average_gpa\":\"3.5600000000000000\"},{\"scholarship_type\":\"SPECIAL\",\"average_gpa\":\"4.0800000000000000\"}]},\"startedAt\":1771855751558,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average GPA by Scholarship Type\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},\"y\":{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},\"tooltip\":[{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"format\":\".2f\"}]}},\"reasoning\":\"Bar chart is ideal for comparing average GPA across discrete scholarship types. The x-axis shows scholarship types (MERIT, SOCIAL, etc.) and the y-axis displays the average GPA values. Tooltip includes formatted GPA to 2 decimal places for clarity.\"},\"endedAt\":1771855754646},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average GPA by Scholarship Type\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},\"y\":{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},\"tooltip\":[{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"format\":\".2f\"}]}},\"reasoning\":\"Bar chart is ideal for comparing average GPA across discrete scholarship types. The x-axis shows scholarship types (MERIT, SOCIAL, etc.) and the y-axis displays the average GPA values. Tooltip includes formatted GPA to 2 decimal places for clarity.\"},\"startedAt\":1771855754653,\"status\":\"success\",\"output\":{\"sql\":\"SELECT \\n  s.scholarship_type,\\n  AVG(st.gpa) AS average_gpa\\nFROM scholarships s\\nINNER JOIN students st ON s.student_id = st.id\\nGROUP BY s.scholarship_type\\nORDER BY s.scholarship_type;\",\"data\":[{\"scholarship_type\":\"MERIT\",\"average_gpa\":\"4.3000000000000000\"},{\"scholarship_type\":\"SOCIAL\",\"average_gpa\":\"3.5600000000000000\"},{\"scholarship_type\":\"SPECIAL\",\"average_gpa\":\"4.0800000000000000\"}],\"metadata\":{\"columns\":[\"scholarship_type\",\"average_gpa\"],\"rowCount\":3,\"sample\":[{\"scholarship_type\":\"MERIT\",\"average_gpa\":\"4.3000000000000000\"},{\"scholarship_type\":\"SOCIAL\",\"average_gpa\":\"3.5600000000000000\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average GPA by Scholarship Type\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},\"y\":{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},\"tooltip\":[{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"format\":\".2f\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855754655}},\"input\":{\"question\":\"What is the average GPA of students by scholarship type received?\"},\"result\":{\"sql\":\"SELECT \\n  s.scholarship_type,\\n  AVG(st.gpa) AS average_gpa\\nFROM scholarships s\\nINNER JOIN students st ON s.student_id = st.id\\nGROUP BY s.scholarship_type\\nORDER BY s.scholarship_type;\",\"data\":[{\"scholarship_type\":\"MERIT\",\"average_gpa\":\"4.3000000000000000\"},{\"scholarship_type\":\"SOCIAL\",\"average_gpa\":\"3.5600000000000000\"},{\"scholarship_type\":\"SPECIAL\",\"average_gpa\":\"4.0800000000000000\"}],\"metadata\":{\"columns\":[\"scholarship_type\",\"average_gpa\"],\"rowCount\":3,\"sample\":[{\"scholarship_type\":\"MERIT\",\"average_gpa\":\"4.3000000000000000\"},{\"scholarship_type\":\"SOCIAL\",\"average_gpa\":\"3.5600000000000000\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average GPA by Scholarship Type\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},\"y\":{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\"},\"tooltip\":[{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},{\"field\":\"average_gpa\",\"type\":\"quantitative\",\"title\":\"Average GPA\",\"format\":\".2f\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"1a1d160caa998007f45d8de091c587ad\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/gpa-vs-scholarship-type/run-0001/run.json",
+    "queryPath": "runs/gpa-vs-scholarship-type/run-0001/query.sql",
+    "vegaRawPath": "runs/gpa-vs-scholarship-type/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/gpa-vs-scholarship-type/run-0001/vega.resolved.json",
+    "imagePath": "runs/gpa-vs-scholarship-type/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:09:14.991Z",
+  "traceId": "1a1d160caa998007f45d8de091c587ad",
+  "success": true,
+  "durationMs": 31417,
+  "resultRaw": {
+    "data": [
+      {
+        "scholarship_type": "MERIT",
+        "average_gpa": "4.3000000000000000"
+      },
+      {
+        "scholarship_type": "SOCIAL",
+        "average_gpa": "3.5600000000000000"
+      },
+      {
+        "scholarship_type": "SPECIAL",
+        "average_gpa": "4.0800000000000000"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average GPA by Scholarship Type",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "scholarship_type",
+          "type": "nominal",
+          "title": "Scholarship Type"
+        },
+        "y": {
+          "field": "average_gpa",
+          "type": "quantitative",
+          "title": "Average GPA"
+        },
+        "tooltip": [
+          {
+            "field": "scholarship_type",
+            "type": "nominal",
+            "title": "Scholarship Type"
+          },
+          {
+            "field": "average_gpa",
+            "type": "quantitative",
+            "title": "Average GPA",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT \n  s.scholarship_type,\n  AVG(st.gpa) AS average_gpa\nFROM scholarships s\nINNER JOIN students st ON s.student_id = st.id\nGROUP BY s.scholarship_type\nORDER BY s.scholarship_type;",
+    "metadata": {
+      "columns": [
+        "scholarship_type",
+        "average_gpa"
+      ],
+      "rowCount": 3,
+      "sample": [
+        {
+          "scholarship_type": "MERIT",
+          "average_gpa": "4.3000000000000000"
+        },
+        {
+          "scholarship_type": "SOCIAL",
+          "average_gpa": "3.5600000000000000"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "scholarship_type": "MERIT",
+        "average_gpa": "4.3000000000000000"
+      },
+      {
+        "scholarship_type": "SOCIAL",
+        "average_gpa": "3.5600000000000000"
+      },
+      {
+        "scholarship_type": "SPECIAL",
+        "average_gpa": "4.0800000000000000"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average GPA by Scholarship Type",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "scholarship_type",
+          "type": "nominal",
+          "title": "Scholarship Type"
+        },
+        "y": {
+          "field": "average_gpa",
+          "type": "quantitative",
+          "title": "Average GPA"
+        },
+        "tooltip": [
+          {
+            "field": "scholarship_type",
+            "type": "nominal",
+            "title": "Scholarship Type"
+          },
+          {
+            "field": "average_gpa",
+            "type": "quantitative",
+            "title": "Average GPA",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT \n  s.scholarship_type,\n  AVG(st.gpa) AS average_gpa\nFROM scholarships s\nINNER JOIN students st ON s.student_id = st.id\nGROUP BY s.scholarship_type\nORDER BY s.scholarship_type;",
+    "metadata": {
+      "columns": [
+        "scholarship_type",
+        "average_gpa"
+      ],
+      "rowCount": 3,
+      "sample": [
+        {
+          "scholarship_type": "MERIT",
+          "average_gpa": "4.3000000000000000"
+        },
+        {
+          "scholarship_type": "SOCIAL",
+          "average_gpa": "3.5600000000000000"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.344Z",
+    "traceId": "1a1d160caa998007f45d8de091c587ad",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 14053,
+      "outputTokens": 807,
+      "totalTokens": 14860,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.018088
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 14053,
+        "outputTokens": 807,
+        "totalTokens": 14860,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.018088
+      }
+    ],
+    "warnings": []
+  }
+}

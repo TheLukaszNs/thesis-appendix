@@ -1,0 +1,1 @@
+SELECT c.capacity AS capacity, COUNT(c.id) AS classroom_count FROM public.classrooms AS c GROUP BY c.capacity ORDER BY c.capacity ASC;

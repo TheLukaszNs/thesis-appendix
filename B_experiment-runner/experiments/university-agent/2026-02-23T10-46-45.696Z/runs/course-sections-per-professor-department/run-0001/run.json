@@ -1,0 +1,158 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "course-sections-per-professor-department",
+  "caseDirectory": "course-sections-per-professor-department",
+  "repeatIndex": 1,
+  "prompt": "Average number of sections taught per professor by department",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Average number of sections taught per professor by department"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:52:06.331Z",
+    "endedAtUtc": "2026-02-23T10:52:29.052Z",
+    "durationMs": 22721
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2583",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:52:29 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Average number of sections taught per professor by department\"},\"agent\":{\"payload\":{\"question\":\"Average number of sections taught per professor by department\"},\"startedAt\":1771843926337,\"status\":\"success\",\"output\":{\"sql\":\"WITH sections_per_prof AS (\\n  SELECT\\n    s.professor_id AS professor_id,\\n    COUNT(DISTINCT s.section_id) AS section_count\\n  FROM sections s\\n  GROUP BY s.professor_id\\n)\\nSELECT\\n  d.department_id AS department_id,\\n  d.name AS department_name,\\n  CAST(AVG(COALESCE(sp.section_count, 0)) AS numeric(10,2)) AS avg_sections_per_professor\\nFROM professors p\\nJOIN departments d ON p.department_id = d.department_id\\nLEFT JOIN sections_per_prof sp ON p.professor_id = sp.professor_id\\nGROUP BY d.department_id, d.name\\nORDER BY avg_sections_per_professor DESC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Average number of sections taught per professor, grouped by department.\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Sections per Professor by Department\",\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"title\":null},\"sort\":\"-x\"},\"x\":{\"field\":\"avg_sections_per_professor\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Avg Sections per Professor\"}},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"avg_sections_per_professor\",\"type\":\"quantitative\",\"title\":\"Avg Sections/Professor\"}]}}},\"endedAt\":1771843948976},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH sections_per_prof AS (\\n  SELECT\\n    s.professor_id AS professor_id,\\n    COUNT(DISTINCT s.section_id) AS section_count\\n  FROM sections s\\n  GROUP BY s.professor_id\\n)\\nSELECT\\n  d.department_id AS department_id,\\n  d.name AS department_name,\\n  CAST(AVG(COALESCE(sp.section_count, 0)) AS numeric(10,2)) AS avg_sections_per_professor\\nFROM professors p\\nJOIN departments d ON p.department_id = d.department_id\\nLEFT JOIN sections_per_prof sp ON p.professor_id = sp.professor_id\\nGROUP BY d.department_id, d.name\\nORDER BY avg_sections_per_professor DESC;\"},\"startedAt\":1771843948984,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: relation \\\"sections\\\" does not exist\\nLINE 6:   FROM sections s\\n               ^\",\"name\":\"Error\"},\"endedAt\":1771843949044}},\"input\":{\"question\":\"Average number of sections taught per professor by department\"},\"error\":{\"message\":\"SQL execution failed: relation \\\"sections\\\" does not exist\\nLINE 6:   FROM sections s\\n               ^\",\"name\":\"Error\"},\"traceId\":\"a634fb815fd99da1adbe5c1cb3ed5fc6\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/course-sections-per-professor-department/run-0001/run.json",
+    "queryPath": "runs/course-sections-per-professor-department/run-0001/query.sql",
+    "vegaRawPath": "runs/course-sections-per-professor-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/course-sections-per-professor-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/course-sections-per-professor-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:52:29.052Z",
+  "traceId": "a634fb815fd99da1adbe5c1cb3ed5fc6",
+  "success": false,
+  "durationMs": 22721,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Average number of sections taught per professor by department"
+      },
+      "agent": {
+        "payload": {
+          "question": "Average number of sections taught per professor by department"
+        },
+        "startedAt": 1771843926337,
+        "status": "success",
+        "output": {
+          "sql": "WITH sections_per_prof AS (\n  SELECT\n    s.professor_id AS professor_id,\n    COUNT(DISTINCT s.section_id) AS section_count\n  FROM sections s\n  GROUP BY s.professor_id\n)\nSELECT\n  d.department_id AS department_id,\n  d.name AS department_name,\n  CAST(AVG(COALESCE(sp.section_count, 0)) AS numeric(10,2)) AS avg_sections_per_professor\nFROM professors p\nJOIN departments d ON p.department_id = d.department_id\nLEFT JOIN sections_per_prof sp ON p.professor_id = sp.professor_id\nGROUP BY d.department_id, d.name\nORDER BY avg_sections_per_professor DESC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Average number of sections taught per professor, grouped by department.",
+            "data": {
+              "name": "query_result"
+            },
+            "title": "Average Sections per Professor by Department",
+            "mark": "bar",
+            "encoding": {
+              "y": {
+                "field": "department_name",
+                "type": "nominal",
+                "axis": {
+                  "title": null
+                },
+                "sort": "-x"
+              },
+              "x": {
+                "field": "avg_sections_per_professor",
+                "type": "quantitative",
+                "axis": {
+                  "title": "Avg Sections per Professor"
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "department_name",
+                  "type": "nominal",
+                  "title": "Department"
+                },
+                {
+                  "field": "avg_sections_per_professor",
+                  "type": "quantitative",
+                  "title": "Avg Sections/Professor"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843948976
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH sections_per_prof AS (\n  SELECT\n    s.professor_id AS professor_id,\n    COUNT(DISTINCT s.section_id) AS section_count\n  FROM sections s\n  GROUP BY s.professor_id\n)\nSELECT\n  d.department_id AS department_id,\n  d.name AS department_name,\n  CAST(AVG(COALESCE(sp.section_count, 0)) AS numeric(10,2)) AS avg_sections_per_professor\nFROM professors p\nJOIN departments d ON p.department_id = d.department_id\nLEFT JOIN sections_per_prof sp ON p.professor_id = sp.professor_id\nGROUP BY d.department_id, d.name\nORDER BY avg_sections_per_professor DESC;"
+        },
+        "startedAt": 1771843948984,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: relation \"sections\" does not exist\nLINE 6:   FROM sections s\n               ^",
+          "name": "Error"
+        },
+        "endedAt": 1771843949044
+      }
+    },
+    "input": {
+      "question": "Average number of sections taught per professor by department"
+    },
+    "error": {
+      "message": "SQL execution failed: relation \"sections\" does not exist\nLINE 6:   FROM sections s\n               ^",
+      "name": "Error"
+    },
+    "traceId": "a634fb815fd99da1adbe5c1cb3ed5fc6"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:52:29.052Z",
+    "traceId": "a634fb815fd99da1adbe5c1cb3ed5fc6",
+    "attempts": 5,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 265,
+      "outputTokens": 1600,
+      "totalTokens": 1865,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1152,
+      "costUsd": 0.00326625
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 265,
+        "outputTokens": 1600,
+        "totalTokens": 1865,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1152,
+        "costUsd": 0.00326625
+      }
+    ],
+    "warnings": []
+  }
+}

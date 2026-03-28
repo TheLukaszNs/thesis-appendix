@@ -1,0 +1,232 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "active-vs-inactive-enrollments",
+  "caseDirectory": "active-vs-inactive-enrollments",
+  "repeatIndex": 1,
+  "prompt": "What is the ratio of active to inactive enrollments?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the ratio of active to inactive enrollments?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:07:29.834Z",
+    "endedAtUtc": "2026-02-23T14:07:48.518Z",
+    "durationMs": 18684
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "8742",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:07:48 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the ratio of active to inactive enrollments?\"},\"sql\":{\"payload\":{\"question\":\"What is the ratio of active to inactive enrollments?\"},\"startedAt\":1771855649841,\"status\":\"success\",\"output\":{\"reasoning\":\"The enrollments table has an is_active boolean column that distinguishes active from inactive enrollments. To calculate the ratio of active to inactive enrollments, I'll count enrollments grouped by is_active status and compute the ratio. The query will count active enrollments (is_active = true) and inactive enrollments (is_active = false), then calculate the ratio as active_count / inactive_count.\",\"sql\":\"\\nSELECT \\n  SUM(CASE WHEN is_active = true THEN 1 ELSE 0 END) AS active_count,\\n  SUM(CASE WHEN is_active = false THEN 1 ELSE 0 END) AS inactive_count,\\n  ROUND(\\n    SUM(CASE WHEN is_active = true THEN 1 ELSE 0 END)::numeric / \\n    NULLIF(SUM(CASE WHEN is_active = false THEN 1 ELSE 0 END), 0),\\n    2\\n  ) AS active_to_inactive_ratio\\nFROM public.enrollments\\n\",\"assumptions\":[\"The is_active column in the enrollments table indicates whether an enrollment is active (true) or inactive (false)\",\"The ratio is calculated as active_count / inactive_count, rounded to 2 decimal places\",\"If there are no inactive enrollments, the ratio will be NULL to avoid division by zero\"]},\"endedAt\":1771855664118},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  SUM(CASE WHEN is_active = true THEN 1 ELSE 0 END) AS active_count,\\n  SUM(CASE WHEN is_active = false THEN 1 ELSE 0 END) AS inactive_count,\\n  ROUND(\\n    SUM(CASE WHEN is_active = true THEN 1 ELSE 0 END)::numeric / \\n    NULLIF(SUM(CASE WHEN is_active = false THEN 1 ELSE 0 END), 0),\\n    2\\n  ) AS active_to_inactive_ratio\\nFROM public.enrollments\\n\"},\"startedAt\":1771855664124,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  SUM(CASE WHEN is_active = true THEN 1 ELSE 0 END) AS active_count,\\n  SUM(CASE WHEN is_active = false THEN 1 ELSE 0 END) AS inactive_count,\\n  ROUND(\\n    SUM(CASE WHEN is_active = true THEN 1 ELSE 0 END)::numeric / \\n    NULLIF(SUM(CASE WHEN is_active = false THEN 1 ELSE 0 END), 0),\\n    2\\n  ) AS active_to_inactive_ratio\\nFROM public.enrollments\",\"metadata\":{\"columns\":[\"active_count\",\"inactive_count\",\"active_to_inactive_ratio\"],\"rowCount\":1,\"sample\":[{\"active_count\":\"57\",\"inactive_count\":\"76\",\"active_to_inactive_ratio\":\"0.75\"}]},\"data\":[{\"active_count\":\"57\",\"inactive_count\":\"76\",\"active_to_inactive_ratio\":\"0.75\"}]},\"endedAt\":1771855664129},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  SUM(CASE WHEN is_active = true THEN 1 ELSE 0 END) AS active_count,\\n  SUM(CASE WHEN is_active = false THEN 1 ELSE 0 END) AS inactive_count,\\n  ROUND(\\n    SUM(CASE WHEN is_active = true THEN 1 ELSE 0 END)::numeric / \\n    NULLIF(SUM(CASE WHEN is_active = false THEN 1 ELSE 0 END), 0),\\n    2\\n  ) AS active_to_inactive_ratio\\nFROM public.enrollments\",\"metadata\":{\"columns\":[\"active_count\",\"inactive_count\",\"active_to_inactive_ratio\"],\"rowCount\":1,\"sample\":[{\"active_count\":\"57\",\"inactive_count\":\"76\",\"active_to_inactive_ratio\":\"0.75\"}]},\"data\":[{\"active_count\":\"57\",\"inactive_count\":\"76\",\"active_to_inactive_ratio\":\"0.75\"}]},\"startedAt\":1771855664131,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Active to Inactive Enrollments Ratio\",\"data\":{\"name\":\"query_result\"},\"transform\":[{\"calculate\":\"'Active: ' + datum.active_count + ' | Inactive: ' + datum.inactive_count + ' | Ratio: ' + datum.active_to_inactive_ratio + ':1'\",\"as\":\"tooltip_text\"}],\"mark\":{\"type\":\"text\",\"fontSize\":24,\"fontWeight\":\"bold\",\"align\":\"center\"},\"encoding\":{\"text\":{\"field\":\"active_to_inactive_ratio\",\"type\":\"nominal\"},\"tooltip\":[{\"field\":\"active_count\",\"type\":\"quantitative\",\"title\":\"Active Enrollments\"},{\"field\":\"inactive_count\",\"type\":\"quantitative\",\"title\":\"Inactive Enrollments\"},{\"field\":\"active_to_inactive_ratio\",\"type\":\"quantitative\",\"title\":\"Ratio (Active:Inactive)\"}]}},\"reasoning\":\"The query returns a single row with the active count (57), inactive count (76), and their ratio (0.75). I've created a text-based visualization that prominently displays the ratio value with a tooltip showing all three metrics. This directly answers the question about the ratio of active to inactive enrollments, which is 0.75:1 (or approximately 3:4).\"},\"endedAt\":1771855668501},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Active to Inactive Enrollments Ratio\",\"data\":{\"name\":\"query_result\"},\"transform\":[{\"calculate\":\"'Active: ' + datum.active_count + ' | Inactive: ' + datum.inactive_count + ' | Ratio: ' + datum.active_to_inactive_ratio + ':1'\",\"as\":\"tooltip_text\"}],\"mark\":{\"type\":\"text\",\"fontSize\":24,\"fontWeight\":\"bold\",\"align\":\"center\"},\"encoding\":{\"text\":{\"field\":\"active_to_inactive_ratio\",\"type\":\"nominal\"},\"tooltip\":[{\"field\":\"active_count\",\"type\":\"quantitative\",\"title\":\"Active Enrollments\"},{\"field\":\"inactive_count\",\"type\":\"quantitative\",\"title\":\"Inactive Enrollments\"},{\"field\":\"active_to_inactive_ratio\",\"type\":\"quantitative\",\"title\":\"Ratio (Active:Inactive)\"}]}},\"reasoning\":\"The query returns a single row with the active count (57), inactive count (76), and their ratio (0.75). I've created a text-based visualization that prominently displays the ratio value with a tooltip showing all three metrics. This directly answers the question about the ratio of active to inactive enrollments, which is 0.75:1 (or approximately 3:4).\"},\"startedAt\":1771855668502,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT \\n  SUM(CASE WHEN is_active = true THEN 1 ELSE 0 END) AS active_count,\\n  SUM(CASE WHEN is_active = false THEN 1 ELSE 0 END) AS inactive_count,\\n  ROUND(\\n    SUM(CASE WHEN is_active = true THEN 1 ELSE 0 END)::numeric / \\n    NULLIF(SUM(CASE WHEN is_active = false THEN 1 ELSE 0 END), 0),\\n    2\\n  ) AS active_to_inactive_ratio\\nFROM public.enrollments\\n\",\"data\":[{\"active_count\":\"57\",\"inactive_count\":\"76\",\"active_to_inactive_ratio\":\"0.75\"}],\"metadata\":{\"columns\":[\"active_count\",\"inactive_count\",\"active_to_inactive_ratio\"],\"rowCount\":1,\"sample\":[{\"active_count\":\"57\",\"inactive_count\":\"76\",\"active_to_inactive_ratio\":\"0.75\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Active to Inactive Enrollments Ratio\",\"data\":{\"name\":\"query_result\"},\"transform\":[{\"calculate\":\"'Active: ' + datum.active_count + ' | Inactive: ' + datum.inactive_count + ' | Ratio: ' + datum.active_to_inactive_ratio + ':1'\",\"as\":\"tooltip_text\"}],\"mark\":{\"type\":\"text\",\"fontSize\":24,\"fontWeight\":\"bold\",\"align\":\"center\"},\"encoding\":{\"text\":{\"field\":\"active_to_inactive_ratio\",\"type\":\"nominal\"},\"tooltip\":[{\"field\":\"active_count\",\"type\":\"quantitative\",\"title\":\"Active Enrollments\"},{\"field\":\"inactive_count\",\"type\":\"quantitative\",\"title\":\"Inactive Enrollments\"},{\"field\":\"active_to_inactive_ratio\",\"type\":\"quantitative\",\"title\":\"Ratio (Active:Inactive)\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855668504}},\"input\":{\"question\":\"What is the ratio of active to inactive enrollments?\"},\"result\":{\"sql\":\"\\nSELECT \\n  SUM(CASE WHEN is_active = true THEN 1 ELSE 0 END) AS active_count,\\n  SUM(CASE WHEN is_active = false THEN 1 ELSE 0 END) AS inactive_count,\\n  ROUND(\\n    SUM(CASE WHEN is_active = true THEN 1 ELSE 0 END)::numeric / \\n    NULLIF(SUM(CASE WHEN is_active = false THEN 1 ELSE 0 END), 0),\\n    2\\n  ) AS active_to_inactive_ratio\\nFROM public.enrollments\\n\",\"data\":[{\"active_count\":\"57\",\"inactive_count\":\"76\",\"active_to_inactive_ratio\":\"0.75\"}],\"metadata\":{\"columns\":[\"active_count\",\"inactive_count\",\"active_to_inactive_ratio\"],\"rowCount\":1,\"sample\":[{\"active_count\":\"57\",\"inactive_count\":\"76\",\"active_to_inactive_ratio\":\"0.75\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Active to Inactive Enrollments Ratio\",\"data\":{\"name\":\"query_result\"},\"transform\":[{\"calculate\":\"'Active: ' + datum.active_count + ' | Inactive: ' + datum.inactive_count + ' | Ratio: ' + datum.active_to_inactive_ratio + ':1'\",\"as\":\"tooltip_text\"}],\"mark\":{\"type\":\"text\",\"fontSize\":24,\"fontWeight\":\"bold\",\"align\":\"center\"},\"encoding\":{\"text\":{\"field\":\"active_to_inactive_ratio\",\"type\":\"nominal\"},\"tooltip\":[{\"field\":\"active_count\",\"type\":\"quantitative\",\"title\":\"Active Enrollments\"},{\"field\":\"inactive_count\",\"type\":\"quantitative\",\"title\":\"Inactive Enrollments\"},{\"field\":\"active_to_inactive_ratio\",\"type\":\"quantitative\",\"title\":\"Ratio (Active:Inactive)\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"f12cdd5e97017b26a12e172ce4680712\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/active-vs-inactive-enrollments/run-0001/run.json",
+    "queryPath": "runs/active-vs-inactive-enrollments/run-0001/query.sql",
+    "vegaRawPath": "runs/active-vs-inactive-enrollments/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/active-vs-inactive-enrollments/run-0001/vega.resolved.json",
+    "imagePath": "runs/active-vs-inactive-enrollments/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:07:48.855Z",
+  "traceId": "f12cdd5e97017b26a12e172ce4680712",
+  "success": true,
+  "durationMs": 19021,
+  "resultRaw": {
+    "data": [
+      {
+        "active_count": "57",
+        "inactive_count": "76",
+        "active_to_inactive_ratio": "0.75"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Active to Inactive Enrollments Ratio",
+      "data": {
+        "name": "query_result"
+      },
+      "transform": [
+        {
+          "calculate": "'Active: ' + datum.active_count + ' | Inactive: ' + datum.inactive_count + ' | Ratio: ' + datum.active_to_inactive_ratio + ':1'",
+          "as": "tooltip_text"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "fontSize": 24,
+        "fontWeight": "bold",
+        "align": "center"
+      },
+      "encoding": {
+        "text": {
+          "field": "active_to_inactive_ratio",
+          "type": "nominal"
+        },
+        "tooltip": [
+          {
+            "field": "active_count",
+            "type": "quantitative",
+            "title": "Active Enrollments"
+          },
+          {
+            "field": "inactive_count",
+            "type": "quantitative",
+            "title": "Inactive Enrollments"
+          },
+          {
+            "field": "active_to_inactive_ratio",
+            "type": "quantitative",
+            "title": "Ratio (Active:Inactive)"
+          }
+        ]
+      }
+    },
+    "sql": "\nSELECT \n  SUM(CASE WHEN is_active = true THEN 1 ELSE 0 END) AS active_count,\n  SUM(CASE WHEN is_active = false THEN 1 ELSE 0 END) AS inactive_count,\n  ROUND(\n    SUM(CASE WHEN is_active = true THEN 1 ELSE 0 END)::numeric / \n    NULLIF(SUM(CASE WHEN is_active = false THEN 1 ELSE 0 END), 0),\n    2\n  ) AS active_to_inactive_ratio\nFROM public.enrollments\n",
+    "metadata": {
+      "columns": [
+        "active_count",
+        "inactive_count",
+        "active_to_inactive_ratio"
+      ],
+      "rowCount": 1,
+      "sample": [
+        {
+          "active_count": "57",
+          "inactive_count": "76",
+          "active_to_inactive_ratio": "0.75"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "active_count": "57",
+        "inactive_count": "76",
+        "active_to_inactive_ratio": "0.75"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Active to Inactive Enrollments Ratio",
+      "data": {
+        "name": "query_result"
+      },
+      "transform": [
+        {
+          "calculate": "'Active: ' + datum.active_count + ' | Inactive: ' + datum.inactive_count + ' | Ratio: ' + datum.active_to_inactive_ratio + ':1'",
+          "as": "tooltip_text"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "fontSize": 24,
+        "fontWeight": "bold",
+        "align": "center"
+      },
+      "encoding": {
+        "text": {
+          "field": "active_to_inactive_ratio",
+          "type": "nominal"
+        },
+        "tooltip": [
+          {
+            "field": "active_count",
+            "type": "quantitative",
+            "title": "Active Enrollments"
+          },
+          {
+            "field": "inactive_count",
+            "type": "quantitative",
+            "title": "Inactive Enrollments"
+          },
+          {
+            "field": "active_to_inactive_ratio",
+            "type": "quantitative",
+            "title": "Ratio (Active:Inactive)"
+          }
+        ]
+      }
+    },
+    "sql": "\nSELECT \n  SUM(CASE WHEN is_active = true THEN 1 ELSE 0 END) AS active_count,\n  SUM(CASE WHEN is_active = false THEN 1 ELSE 0 END) AS inactive_count,\n  ROUND(\n    SUM(CASE WHEN is_active = true THEN 1 ELSE 0 END)::numeric / \n    NULLIF(SUM(CASE WHEN is_active = false THEN 1 ELSE 0 END), 0),\n    2\n  ) AS active_to_inactive_ratio\nFROM public.enrollments\n",
+    "metadata": {
+      "columns": [
+        "active_count",
+        "inactive_count",
+        "active_to_inactive_ratio"
+      ],
+      "rowCount": 1,
+      "sample": [
+        {
+          "active_count": "57",
+          "inactive_count": "76",
+          "active_to_inactive_ratio": "0.75"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.223Z",
+    "traceId": "f12cdd5e97017b26a12e172ce4680712",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 10212,
+      "outputTokens": 953,
+      "totalTokens": 11165,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.014977
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 10212,
+        "outputTokens": 953,
+        "totalTokens": 11165,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.014977
+      }
+    ],
+    "warnings": []
+  }
+}

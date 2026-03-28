@@ -1,0 +1,320 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-complex",
+  "caseId": "professor-evaluation-trend-by-year",
+  "caseDirectory": "professor-evaluation-trend-by-year",
+  "repeatIndex": 1,
+  "prompt": "How have average professor ratings changed over academic years?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/complexWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How have average professor ratings changed over academic years?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T11:20:06.967Z",
+    "endedAtUtc": "2026-02-23T11:21:51.447Z",
+    "durationMs": 104480
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "31173",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 11:21:51 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How have average professor ratings changed over academic years?\"},\"planner\":{\"payload\":{\"question\":\"How have average professor ratings changed over academic years?\"},\"startedAt\":1771845607003,\"status\":\"success\",\"output\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.professor_rating)\",\"COUNT(course_evaluations.id)\"],\"dimensions\":[\"course_sections.academic_year\"],\"filters\":[\"course_evaluations.professor_rating IS NOT NULL\",\"course_sections.academic_year IS NOT NULL\"],\"grain\":\"academic_year\",\"aliases\":{\"AVG(course_evaluations.professor_rating)\":\"avg_professor_rating\",\"COUNT(course_evaluations.id)\":\"eval_count\",\"course_sections.academic_year\":\"academic_year\"},\"output_fields\":[\"academic_year\",\"avg_professor_rating\",\"eval_count\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"avg_professor_rating\",\"title\":\"Average Professor Rating by Academic Year\"},\"assumptions\":[\"We interpret the question as asking for the overall average professor_rating per academic_year (a single trend line), not separate lines per professor. If you want per-professor trends, we must join professors and include professor identifier as a color_group dimension.\",\"Join path used (confirmed by schema in this run): course_evaluations.enrollment_id -> enrollments.id, enrollments.course_section_id -> course_sections.id. course_sections.academic_year provides the academic year dimension.\",\"Only evaluations with a non-null professor_rating are included (filter professor_rating IS NOT NULL).\",\"academic_year is stored as a text/varchar in course_sections. Ordering in the visualization will follow the raw academic_year values; if semantic chronological sorting is required (e.g., '2020-2021' -> '2021-2022'), the consuming SQL/visualization should parse or normalize the field before sorting.\",\"Output includes eval_count (COUNT of course_evaluations.id) to allow filtering or showing confidence/weight; this field is optional for the visualization but provided in the output.\",\"No additional date-range or active-enrollment filters applied; if you want to restrict to a particular range of submitted_at or only active enrollments, specify and we will add filters.\",\"All referenced tables and columns (course_evaluations.professor_rating, course_evaluations.enrollment_id, enrollments.course_section_id, course_sections.academic_year) were confirmed to exist in the preflight schema inspection performed in this run.\"]}},\"endedAt\":1771845645419},\"react-loop-input\":{\"payload\":{\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.professor_rating)\",\"COUNT(course_evaluations.id)\"],\"dimensions\":[\"course_sections.academic_year\"],\"filters\":[\"course_evaluations.professor_rating IS NOT NULL\",\"course_sections.academic_year IS NOT NULL\"],\"grain\":\"academic_year\",\"aliases\":{\"AVG(course_evaluations.professor_rating)\":\"avg_professor_rating\",\"COUNT(course_evaluations.id)\":\"eval_count\",\"course_sections.academic_year\":\"academic_year\"},\"output_fields\":[\"academic_year\",\"avg_professor_rating\",\"eval_count\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"avg_professor_rating\",\"title\":\"Average Professor Rating by Academic Year\"},\"assumptions\":[\"We interpret the question as asking for the overall average professor_rating per academic_year (a single trend line), not separate lines per professor. If you want per-professor trends, we must join professors and include professor identifier as a color_group dimension.\",\"Join path used (confirmed by schema in this run): course_evaluations.enrollment_id -> enrollments.id, enrollments.course_section_id -> course_sections.id. course_sections.academic_year provides the academic year dimension.\",\"Only evaluations with a non-null professor_rating are included (filter professor_rating IS NOT NULL).\",\"academic_year is stored as a text/varchar in course_sections. Ordering in the visualization will follow the raw academic_year values; if semantic chronological sorting is required (e.g., '2020-2021' -> '2021-2022'), the consuming SQL/visualization should parse or normalize the field before sorting.\",\"Output includes eval_count (COUNT of course_evaluations.id) to allow filtering or showing confidence/weight; this field is optional for the visualization but provided in the output.\",\"No additional date-range or active-enrollment filters applied; if you want to restrict to a particular range of submitted_at or only active enrollments, specify and we will add filters.\",\"All referenced tables and columns (course_evaluations.professor_rating, course_evaluations.enrollment_id, enrollments.course_section_id, course_sections.academic_year) were confirmed to exist in the preflight schema inspection performed in this run.\"]}},\"startedAt\":1771845645426,\"status\":\"success\",\"output\":{\"question\":\"How have average professor ratings changed over academic years?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.professor_rating)\",\"COUNT(course_evaluations.id)\"],\"dimensions\":[\"course_sections.academic_year\"],\"filters\":[\"course_evaluations.professor_rating IS NOT NULL\",\"course_sections.academic_year IS NOT NULL\"],\"grain\":\"academic_year\",\"aliases\":{\"AVG(course_evaluations.professor_rating)\":\"avg_professor_rating\",\"COUNT(course_evaluations.id)\":\"eval_count\",\"course_sections.academic_year\":\"academic_year\"},\"output_fields\":[\"academic_year\",\"avg_professor_rating\",\"eval_count\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"avg_professor_rating\",\"title\":\"Average Professor Rating by Academic Year\"},\"assumptions\":[\"We interpret the question as asking for the overall average professor_rating per academic_year (a single trend line), not separate lines per professor. If you want per-professor trends, we must join professors and include professor identifier as a color_group dimension.\",\"Join path used (confirmed by schema in this run): course_evaluations.enrollment_id -> enrollments.id, enrollments.course_section_id -> course_sections.id. course_sections.academic_year provides the academic year dimension.\",\"Only evaluations with a non-null professor_rating are included (filter professor_rating IS NOT NULL).\",\"academic_year is stored as a text/varchar in course_sections. Ordering in the visualization will follow the raw academic_year values; if semantic chronological sorting is required (e.g., '2020-2021' -> '2021-2022'), the consuming SQL/visualization should parse or normalize the field before sorting.\",\"Output includes eval_count (COUNT of course_evaluations.id) to allow filtering or showing confidence/weight; this field is optional for the visualization but provided in the output.\",\"No additional date-range or active-enrollment filters applied; if you want to restrict to a particular range of submitted_at or only active enrollments, specify and we will add filters.\",\"All referenced tables and columns (course_evaluations.professor_rating, course_evaluations.enrollment_id, enrollments.course_section_id, course_sections.academic_year) were confirmed to exist in the preflight schema inspection performed in this run.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"endedAt\":1771845645427},\"react-sql-viz-iteration\":{\"payload\":{\"question\":\"How have average professor ratings changed over academic years?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.professor_rating)\",\"COUNT(course_evaluations.id)\"],\"dimensions\":[\"course_sections.academic_year\"],\"filters\":[\"course_evaluations.professor_rating IS NOT NULL\",\"course_sections.academic_year IS NOT NULL\"],\"grain\":\"academic_year\",\"aliases\":{\"AVG(course_evaluations.professor_rating)\":\"avg_professor_rating\",\"COUNT(course_evaluations.id)\":\"eval_count\",\"course_sections.academic_year\":\"academic_year\"},\"output_fields\":[\"academic_year\",\"avg_professor_rating\",\"eval_count\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"avg_professor_rating\",\"title\":\"Average Professor Rating by Academic Year\"},\"assumptions\":[\"We interpret the question as asking for the overall average professor_rating per academic_year (a single trend line), not separate lines per professor. If you want per-professor trends, we must join professors and include professor identifier as a color_group dimension.\",\"Join path used (confirmed by schema in this run): course_evaluations.enrollment_id -> enrollments.id, enrollments.course_section_id -> course_sections.id. course_sections.academic_year provides the academic year dimension.\",\"Only evaluations with a non-null professor_rating are included (filter professor_rating IS NOT NULL).\",\"academic_year is stored as a text/varchar in course_sections. Ordering in the visualization will follow the raw academic_year values; if semantic chronological sorting is required (e.g., '2020-2021' -> '2021-2022'), the consuming SQL/visualization should parse or normalize the field before sorting.\",\"Output includes eval_count (COUNT of course_evaluations.id) to allow filtering or showing confidence/weight; this field is optional for the visualization but provided in the output.\",\"No additional date-range or active-enrollment filters applied; if you want to restrict to a particular range of submitted_at or only active enrollments, specify and we will add filters.\",\"All referenced tables and columns (course_evaluations.professor_rating, course_evaluations.enrollment_id, enrollments.course_section_id, course_sections.academic_year) were confirmed to exist in the preflight schema inspection performed in this run.\"]},\"attempt\":1,\"maxAttempts\":4,\"historySummary\":\"\"},\"startedAt\":1771845645429,\"status\":\"success\",\"output\":{\"question\":\"How have average professor ratings changed over academic years?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.professor_rating)\",\"COUNT(course_evaluations.id)\"],\"dimensions\":[\"course_sections.academic_year\"],\"filters\":[\"course_evaluations.professor_rating IS NOT NULL\",\"course_sections.academic_year IS NOT NULL\"],\"grain\":\"academic_year\",\"aliases\":{\"AVG(course_evaluations.professor_rating)\":\"avg_professor_rating\",\"COUNT(course_evaluations.id)\":\"eval_count\",\"course_sections.academic_year\":\"academic_year\"},\"output_fields\":[\"academic_year\",\"avg_professor_rating\",\"eval_count\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"avg_professor_rating\",\"title\":\"Average Professor Rating by Academic Year\"},\"assumptions\":[\"We interpret the question as asking for the overall average professor_rating per academic_year (a single trend line), not separate lines per professor. If you want per-professor trends, we must join professors and include professor identifier as a color_group dimension.\",\"Join path used (confirmed by schema in this run): course_evaluations.enrollment_id -> enrollments.id, enrollments.course_section_id -> course_sections.id. course_sections.academic_year provides the academic year dimension.\",\"Only evaluations with a non-null professor_rating are included (filter professor_rating IS NOT NULL).\",\"academic_year is stored as a text/varchar in course_sections. Ordering in the visualization will follow the raw academic_year values; if semantic chronological sorting is required (e.g., '2020-2021' -> '2021-2022'), the consuming SQL/visualization should parse or normalize the field before sorting.\",\"Output includes eval_count (COUNT of course_evaluations.id) to allow filtering or showing confidence/weight; this field is optional for the visualization but provided in the output.\",\"No additional date-range or active-enrollment filters applied; if you want to restrict to a particular range of submitted_at or only active enrollments, specify and we will add filters.\",\"All referenced tables and columns (course_evaluations.professor_rating, course_evaluations.enrollment_id, enrollments.course_section_id, course_sections.academic_year) were confirmed to exist in the preflight schema inspection performed in this run.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT\\n  cs.academic_year AS academic_year,\\n  AVG(ce.professor_rating)::numeric(5,2) AS avg_professor_rating,\\n  COUNT(ce.id) AS eval_count\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nWHERE ce.professor_rating IS NOT NULL\\n  AND cs.academic_year IS NOT NULL\\nGROUP BY cs.academic_year\\nORDER BY\\n  (CASE WHEN cs.academic_year ~ '^[0-9]{4}' THEN substring(cs.academic_year from '^[0-9]{4}')::int ELSE NULL END) ASC NULLS LAST,\\n  cs.academic_year ASC;\",\"validationIssues\":[\"academic_year is encoded as ordinal/text — ensure the axis follows the SQL chronological order (e.g., set explicit x.sort based on the SQL ordering or convert/normalize academic_year to a temporal/parsed field) because lexicographic ordering could misorder seasons like '2019/2020' vs '2020/2021'.\",\"If the user wanted per-professor trends rather than an overall average, the current chart is aggregated to a single line; include a professor identifier as a color/grouping dimension to show separate lines.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Aggregate average professor_rating by academic_year using confirmed join path (course_evaluations -> enrollments -> course_sections). Ensure non-null filters and deterministic ordering by extracting a leading 4-digit year when possible.\",\"sql\":\"SELECT\\n  cs.academic_year AS academic_year,\\n  AVG(ce.professor_rating)::numeric(5,2) AS avg_professor_rating,\\n  COUNT(ce.id) AS eval_count\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nWHERE ce.professor_rating IS NOT NULL\\n  AND cs.academic_year IS NOT NULL\\nGROUP BY cs.academic_year\\nORDER BY\\n  (CASE WHEN cs.academic_year ~ '^[0-9]{4}' THEN substring(cs.academic_year from '^[0-9]{4}')::int ELSE NULL END) ASC NULLS LAST,\\n  cs.academic_year ASC;\",\"assumptions\":[\"academic_year values generally follow a 'YYYY-YYYY' pattern so extracting the leading 4 digits yields chronological order; if they use a different format you may want to provide a normalization rule.\",\"professor_rating is stored as integer (confirmed) so AVG(...) is cast to numeric(5,2) to show decimals.\",\"Join path used and all referenced tables/columns were confirmed to exist in the preflight schema inspection in this run (course_evaluations.enrollment_id, enrollments.course_section_id, course_sections.academic_year).\",\"No additional date-range or active-enrollment filters applied; results include all academic years present in course_sections where academic_year is not null.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT\\n  cs.academic_year AS academic_year,\\n  AVG(ce.professor_rating)::numeric(5,2) AS avg_professor_rating,\\n  COUNT(ce.id) AS eval_count\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nWHERE ce.professor_rating IS NOT NULL\\n  AND cs.academic_year IS NOT NULL\\nGROUP BY cs.academic_year\\nORDER BY\\n  (CASE WHEN cs.academic_year ~ '^[0-9]{4}' THEN substring(cs.academic_year from '^[0-9]{4}')::int ELSE NULL END) ASC NULLS LAST,\\n  cs.academic_year ASC\",\"metadata\":{\"columns\":[\"eval_count\",\"academic_year\",\"avg_professor_rating\"],\"rowCount\":6,\"sample\":[{\"eval_count\":8,\"academic_year\":\"2019/2020\",\"avg_professor_rating\":4.13},{\"eval_count\":11,\"academic_year\":\"2020/2021\",\"avg_professor_rating\":2.73}]},\"data\":[{\"eval_count\":8,\"academic_year\":\"2019/2020\",\"avg_professor_rating\":4.13},{\"eval_count\":11,\"academic_year\":\"2020/2021\",\"avg_professor_rating\":2.73},{\"eval_count\":2,\"academic_year\":\"2021/2022\",\"avg_professor_rating\":2},{\"eval_count\":8,\"academic_year\":\"2022/2023\",\"avg_professor_rating\":3.13},{\"eval_count\":6,\"academic_year\":\"2023/2024\",\"avg_professor_rating\":3},{\"eval_count\":6,\"academic_year\":\"2024/2025\",\"avg_professor_rating\":2.5}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Professor Rating by Academic Year\",\"width\":700,\"height\":360,\"mark\":{\"type\":\"line\",\"point\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Academic Year\",\"labelAngle\":-40}},\"y\":{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Professor Rating\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic Year\"},{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"title\":\"Avg Rating\"},{\"field\":\"eval_count\",\"type\":\"quantitative\",\"title\":\"Evaluation Count\"}],\"order\":{\"field\":\"academic_year\",\"type\":\"ordinal\"}}},\"reasoning\":\"Line chart with academic_year on the discrete x-axis (stored as text) and avg_professor_rating on the quantitative y-axis. Points enabled to show per-year values; tooltip includes eval_count to indicate sample size. Using ordinal x and order by academic_year preserves the SQL ordering of the rows.\"},\"validation\":{\"passed\":true,\"score\":0.8,\"issues\":[\"academic_year is encoded as ordinal/text — ensure the axis follows the SQL chronological order (e.g., set explicit x.sort based on the SQL ordering or convert/normalize academic_year to a temporal/parsed field) because lexicographic ordering could misorder seasons like '2019/2020' vs '2020/2021'.\",\"If the user wanted per-professor trends rather than an overall average, the current chart is aggregated to a single line; include a professor identifier as a color/grouping dimension to show separate lines.\"]}}},\"endedAt\":1771845711426,\"metadata\":{\"iterationCount\":1}},\"final-data\":{\"payload\":{\"question\":\"How have average professor ratings changed over academic years?\",\"plan\":{\"data_requirements\":{\"metrics\":[\"AVG(course_evaluations.professor_rating)\",\"COUNT(course_evaluations.id)\"],\"dimensions\":[\"course_sections.academic_year\"],\"filters\":[\"course_evaluations.professor_rating IS NOT NULL\",\"course_sections.academic_year IS NOT NULL\"],\"grain\":\"academic_year\",\"aliases\":{\"AVG(course_evaluations.professor_rating)\":\"avg_professor_rating\",\"COUNT(course_evaluations.id)\":\"eval_count\",\"course_sections.academic_year\":\"academic_year\"},\"output_fields\":[\"academic_year\",\"avg_professor_rating\",\"eval_count\"]},\"visual_requirements\":{\"chart_type\":\"line\",\"x_axis\":\"academic_year\",\"y_axis\":\"avg_professor_rating\",\"title\":\"Average Professor Rating by Academic Year\"},\"assumptions\":[\"We interpret the question as asking for the overall average professor_rating per academic_year (a single trend line), not separate lines per professor. If you want per-professor trends, we must join professors and include professor identifier as a color_group dimension.\",\"Join path used (confirmed by schema in this run): course_evaluations.enrollment_id -> enrollments.id, enrollments.course_section_id -> course_sections.id. course_sections.academic_year provides the academic year dimension.\",\"Only evaluations with a non-null professor_rating are included (filter professor_rating IS NOT NULL).\",\"academic_year is stored as a text/varchar in course_sections. Ordering in the visualization will follow the raw academic_year values; if semantic chronological sorting is required (e.g., '2020-2021' -> '2021-2022'), the consuming SQL/visualization should parse or normalize the field before sorting.\",\"Output includes eval_count (COUNT of course_evaluations.id) to allow filtering or showing confidence/weight; this field is optional for the visualization but provided in the output.\",\"No additional date-range or active-enrollment filters applied; if you want to restrict to a particular range of submitted_at or only active enrollments, specify and we will add filters.\",\"All referenced tables and columns (course_evaluations.professor_rating, course_evaluations.enrollment_id, enrollments.course_section_id, course_sections.academic_year) were confirmed to exist in the preflight schema inspection performed in this run.\"]},\"attempt\":2,\"maxAttempts\":4,\"previousAttempt\":{\"sql\":\"SELECT\\n  cs.academic_year AS academic_year,\\n  AVG(ce.professor_rating)::numeric(5,2) AS avg_professor_rating,\\n  COUNT(ce.id) AS eval_count\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nWHERE ce.professor_rating IS NOT NULL\\n  AND cs.academic_year IS NOT NULL\\nGROUP BY cs.academic_year\\nORDER BY\\n  (CASE WHEN cs.academic_year ~ '^[0-9]{4}' THEN substring(cs.academic_year from '^[0-9]{4}')::int ELSE NULL END) ASC NULLS LAST,\\n  cs.academic_year ASC;\",\"validationIssues\":[\"academic_year is encoded as ordinal/text — ensure the axis follows the SQL chronological order (e.g., set explicit x.sort based on the SQL ordering or convert/normalize academic_year to a temporal/parsed field) because lexicographic ordering could misorder seasons like '2019/2020' vs '2020/2021'.\",\"If the user wanted per-professor trends rather than an overall average, the current chart is aggregated to a single line; include a professor identifier as a color/grouping dimension to show separate lines.\"]},\"historySummary\":\"Attempt 1: passed\",\"latest\":{\"sqlDraft\":{\"reasoning\":\"Aggregate average professor_rating by academic_year using confirmed join path (course_evaluations -> enrollments -> course_sections). Ensure non-null filters and deterministic ordering by extracting a leading 4-digit year when possible.\",\"sql\":\"SELECT\\n  cs.academic_year AS academic_year,\\n  AVG(ce.professor_rating)::numeric(5,2) AS avg_professor_rating,\\n  COUNT(ce.id) AS eval_count\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nWHERE ce.professor_rating IS NOT NULL\\n  AND cs.academic_year IS NOT NULL\\nGROUP BY cs.academic_year\\nORDER BY\\n  (CASE WHEN cs.academic_year ~ '^[0-9]{4}' THEN substring(cs.academic_year from '^[0-9]{4}')::int ELSE NULL END) ASC NULLS LAST,\\n  cs.academic_year ASC;\",\"assumptions\":[\"academic_year values generally follow a 'YYYY-YYYY' pattern so extracting the leading 4 digits yields chronological order; if they use a different format you may want to provide a normalization rule.\",\"professor_rating is stored as integer (confirmed) so AVG(...) is cast to numeric(5,2) to show decimals.\",\"Join path used and all referenced tables/columns were confirmed to exist in the preflight schema inspection in this run (course_evaluations.enrollment_id, enrollments.course_section_id, course_sections.academic_year).\",\"No additional date-range or active-enrollment filters applied; results include all academic years present in course_sections where academic_year is not null.\"]},\"execution\":{\"ok\":true,\"sql\":\"SELECT\\n  cs.academic_year AS academic_year,\\n  AVG(ce.professor_rating)::numeric(5,2) AS avg_professor_rating,\\n  COUNT(ce.id) AS eval_count\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nWHERE ce.professor_rating IS NOT NULL\\n  AND cs.academic_year IS NOT NULL\\nGROUP BY cs.academic_year\\nORDER BY\\n  (CASE WHEN cs.academic_year ~ '^[0-9]{4}' THEN substring(cs.academic_year from '^[0-9]{4}')::int ELSE NULL END) ASC NULLS LAST,\\n  cs.academic_year ASC\",\"metadata\":{\"columns\":[\"eval_count\",\"academic_year\",\"avg_professor_rating\"],\"rowCount\":6,\"sample\":[{\"eval_count\":8,\"academic_year\":\"2019/2020\",\"avg_professor_rating\":4.13},{\"eval_count\":11,\"academic_year\":\"2020/2021\",\"avg_professor_rating\":2.73}]},\"data\":[{\"eval_count\":8,\"academic_year\":\"2019/2020\",\"avg_professor_rating\":4.13},{\"eval_count\":11,\"academic_year\":\"2020/2021\",\"avg_professor_rating\":2.73},{\"eval_count\":2,\"academic_year\":\"2021/2022\",\"avg_professor_rating\":2},{\"eval_count\":8,\"academic_year\":\"2022/2023\",\"avg_professor_rating\":3.13},{\"eval_count\":6,\"academic_year\":\"2023/2024\",\"avg_professor_rating\":3},{\"eval_count\":6,\"academic_year\":\"2024/2025\",\"avg_professor_rating\":2.5}]},\"visualization\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Professor Rating by Academic Year\",\"width\":700,\"height\":360,\"mark\":{\"type\":\"line\",\"point\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Academic Year\",\"labelAngle\":-40}},\"y\":{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Professor Rating\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic Year\"},{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"title\":\"Avg Rating\"},{\"field\":\"eval_count\",\"type\":\"quantitative\",\"title\":\"Evaluation Count\"}],\"order\":{\"field\":\"academic_year\",\"type\":\"ordinal\"}}},\"reasoning\":\"Line chart with academic_year on the discrete x-axis (stored as text) and avg_professor_rating on the quantitative y-axis. Points enabled to show per-year values; tooltip includes eval_count to indicate sample size. Using ordinal x and order by academic_year preserves the SQL ordering of the rows.\"},\"validation\":{\"passed\":true,\"score\":0.8,\"issues\":[\"academic_year is encoded as ordinal/text — ensure the axis follows the SQL chronological order (e.g., set explicit x.sort based on the SQL ordering or convert/normalize academic_year to a temporal/parsed field) because lexicographic ordering could misorder seasons like '2019/2020' vs '2020/2021'.\",\"If the user wanted per-professor trends rather than an overall average, the current chart is aggregated to a single line; include a professor identifier as a color/grouping dimension to show separate lines.\"]}}},\"startedAt\":1771845711430,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  cs.academic_year AS academic_year,\\n  AVG(ce.professor_rating)::numeric(5,2) AS avg_professor_rating,\\n  COUNT(ce.id) AS eval_count\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nWHERE ce.professor_rating IS NOT NULL\\n  AND cs.academic_year IS NOT NULL\\nGROUP BY cs.academic_year\\nORDER BY\\n  (CASE WHEN cs.academic_year ~ '^[0-9]{4}' THEN substring(cs.academic_year from '^[0-9]{4}')::int ELSE NULL END) ASC NULLS LAST,\\n  cs.academic_year ASC;\",\"data\":[{\"eval_count\":8,\"academic_year\":\"2019/2020\",\"avg_professor_rating\":4.13},{\"eval_count\":11,\"academic_year\":\"2020/2021\",\"avg_professor_rating\":2.73},{\"eval_count\":2,\"academic_year\":\"2021/2022\",\"avg_professor_rating\":2},{\"eval_count\":8,\"academic_year\":\"2022/2023\",\"avg_professor_rating\":3.13},{\"eval_count\":6,\"academic_year\":\"2023/2024\",\"avg_professor_rating\":3},{\"eval_count\":6,\"academic_year\":\"2024/2025\",\"avg_professor_rating\":2.5}],\"metadata\":{\"columns\":[\"eval_count\",\"academic_year\",\"avg_professor_rating\"],\"rowCount\":6,\"sample\":[{\"eval_count\":8,\"academic_year\":\"2019/2020\",\"avg_professor_rating\":4.13},{\"eval_count\":11,\"academic_year\":\"2020/2021\",\"avg_professor_rating\":2.73}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Professor Rating by Academic Year\",\"width\":700,\"height\":360,\"mark\":{\"type\":\"line\",\"point\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Academic Year\",\"labelAngle\":-40}},\"y\":{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Professor Rating\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic Year\"},{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"title\":\"Avg Rating\"},{\"field\":\"eval_count\",\"type\":\"quantitative\",\"title\":\"Evaluation Count\"}],\"order\":{\"field\":\"academic_year\",\"type\":\"ordinal\"}}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.8,\"issues\":[\"academic_year is encoded as ordinal/text — ensure the axis follows the SQL chronological order (e.g., set explicit x.sort based on the SQL ordering or convert/normalize academic_year to a temporal/parsed field) because lexicographic ordering could misorder seasons like '2019/2020' vs '2020/2021'.\",\"If the user wanted per-professor trends rather than an overall average, the current chart is aggregated to a single line; include a professor identifier as a color/grouping dimension to show separate lines.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"endedAt\":1771845711433}},\"input\":{\"question\":\"How have average professor ratings changed over academic years?\"},\"result\":{\"sql\":\"SELECT\\n  cs.academic_year AS academic_year,\\n  AVG(ce.professor_rating)::numeric(5,2) AS avg_professor_rating,\\n  COUNT(ce.id) AS eval_count\\nFROM public.course_evaluations AS ce\\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\\nWHERE ce.professor_rating IS NOT NULL\\n  AND cs.academic_year IS NOT NULL\\nGROUP BY cs.academic_year\\nORDER BY\\n  (CASE WHEN cs.academic_year ~ '^[0-9]{4}' THEN substring(cs.academic_year from '^[0-9]{4}')::int ELSE NULL END) ASC NULLS LAST,\\n  cs.academic_year ASC;\",\"data\":[{\"eval_count\":8,\"academic_year\":\"2019/2020\",\"avg_professor_rating\":4.13},{\"eval_count\":11,\"academic_year\":\"2020/2021\",\"avg_professor_rating\":2.73},{\"eval_count\":2,\"academic_year\":\"2021/2022\",\"avg_professor_rating\":2},{\"eval_count\":8,\"academic_year\":\"2022/2023\",\"avg_professor_rating\":3.13},{\"eval_count\":6,\"academic_year\":\"2023/2024\",\"avg_professor_rating\":3},{\"eval_count\":6,\"academic_year\":\"2024/2025\",\"avg_professor_rating\":2.5}],\"metadata\":{\"columns\":[\"eval_count\",\"academic_year\",\"avg_professor_rating\"],\"rowCount\":6,\"sample\":[{\"eval_count\":8,\"academic_year\":\"2019/2020\",\"avg_professor_rating\":4.13},{\"eval_count\":11,\"academic_year\":\"2020/2021\",\"avg_professor_rating\":2.73}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Average Professor Rating by Academic Year\",\"width\":700,\"height\":360,\"mark\":{\"type\":\"line\",\"point\":true},\"encoding\":{\"x\":{\"field\":\"academic_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Academic Year\",\"labelAngle\":-40}},\"y\":{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Average Professor Rating\"}},\"tooltip\":[{\"field\":\"academic_year\",\"type\":\"ordinal\",\"title\":\"Academic Year\"},{\"field\":\"avg_professor_rating\",\"type\":\"quantitative\",\"title\":\"Avg Rating\"},{\"field\":\"eval_count\",\"type\":\"quantitative\",\"title\":\"Evaluation Count\"}],\"order\":{\"field\":\"academic_year\",\"type\":\"ordinal\"}}},\"quality\":{\"workflow\":\"complex-workflow\",\"passed\":true,\"score\":0.8,\"issues\":[\"academic_year is encoded as ordinal/text — ensure the axis follows the SQL chronological order (e.g., set explicit x.sort based on the SQL ordering or convert/normalize academic_year to a temporal/parsed field) because lexicographic ordering could misorder seasons like '2019/2020' vs '2020/2021'.\",\"If the user wanted per-professor trends rather than an overall average, the current chart is aggregated to a single line; include a professor identifier as a color/grouping dimension to show separate lines.\"]},\"attempts\":{\"used\":1,\"max\":4,\"history\":[\"Attempt 1: passed\"]}},\"traceId\":\"57b8e7665280435126a725e3dc8c6f97\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/professor-evaluation-trend-by-year/run-0001/run.json",
+    "queryPath": "runs/professor-evaluation-trend-by-year/run-0001/query.sql",
+    "vegaRawPath": "runs/professor-evaluation-trend-by-year/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/professor-evaluation-trend-by-year/run-0001/vega.resolved.json",
+    "imagePath": "runs/professor-evaluation-trend-by-year/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T11:21:51.861Z",
+  "traceId": "57b8e7665280435126a725e3dc8c6f97",
+  "success": true,
+  "durationMs": 104894,
+  "resultRaw": {
+    "data": [
+      {
+        "eval_count": 8,
+        "academic_year": "2019/2020",
+        "avg_professor_rating": 4.13
+      },
+      {
+        "eval_count": 11,
+        "academic_year": "2020/2021",
+        "avg_professor_rating": 2.73
+      },
+      {
+        "eval_count": 2,
+        "academic_year": "2021/2022",
+        "avg_professor_rating": 2
+      },
+      {
+        "eval_count": 8,
+        "academic_year": "2022/2023",
+        "avg_professor_rating": 3.13
+      },
+      {
+        "eval_count": 6,
+        "academic_year": "2023/2024",
+        "avg_professor_rating": 3
+      },
+      {
+        "eval_count": 6,
+        "academic_year": "2024/2025",
+        "avg_professor_rating": 2.5
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Professor Rating by Academic Year",
+      "width": 700,
+      "height": 360,
+      "mark": {
+        "type": "line",
+        "point": true
+      },
+      "encoding": {
+        "x": {
+          "field": "academic_year",
+          "type": "ordinal",
+          "axis": {
+            "title": "Academic Year",
+            "labelAngle": -40
+          }
+        },
+        "y": {
+          "field": "avg_professor_rating",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average Professor Rating"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "academic_year",
+            "type": "ordinal",
+            "title": "Academic Year"
+          },
+          {
+            "field": "avg_professor_rating",
+            "type": "quantitative",
+            "title": "Avg Rating"
+          },
+          {
+            "field": "eval_count",
+            "type": "quantitative",
+            "title": "Evaluation Count"
+          }
+        ],
+        "order": {
+          "field": "academic_year",
+          "type": "ordinal"
+        }
+      }
+    },
+    "sql": "SELECT\n  cs.academic_year AS academic_year,\n  AVG(ce.professor_rating)::numeric(5,2) AS avg_professor_rating,\n  COUNT(ce.id) AS eval_count\nFROM public.course_evaluations AS ce\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\nWHERE ce.professor_rating IS NOT NULL\n  AND cs.academic_year IS NOT NULL\nGROUP BY cs.academic_year\nORDER BY\n  (CASE WHEN cs.academic_year ~ '^[0-9]{4}' THEN substring(cs.academic_year from '^[0-9]{4}')::int ELSE NULL END) ASC NULLS LAST,\n  cs.academic_year ASC;",
+    "metadata": {
+      "columns": [
+        "eval_count",
+        "academic_year",
+        "avg_professor_rating"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "eval_count": 8,
+          "academic_year": "2019/2020",
+          "avg_professor_rating": 4.13
+        },
+        {
+          "eval_count": 11,
+          "academic_year": "2020/2021",
+          "avg_professor_rating": 2.73
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.8,
+      "issues": [
+        "academic_year is encoded as ordinal/text — ensure the axis follows the SQL chronological order (e.g., set explicit x.sort based on the SQL ordering or convert/normalize academic_year to a temporal/parsed field) because lexicographic ordering could misorder seasons like '2019/2020' vs '2020/2021'.",
+        "If the user wanted per-professor trends rather than an overall average, the current chart is aggregated to a single line; include a professor identifier as a color/grouping dimension to show separate lines."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "eval_count": 8,
+        "academic_year": "2019/2020",
+        "avg_professor_rating": 4.13
+      },
+      {
+        "eval_count": 11,
+        "academic_year": "2020/2021",
+        "avg_professor_rating": 2.73
+      },
+      {
+        "eval_count": 2,
+        "academic_year": "2021/2022",
+        "avg_professor_rating": 2
+      },
+      {
+        "eval_count": 8,
+        "academic_year": "2022/2023",
+        "avg_professor_rating": 3.13
+      },
+      {
+        "eval_count": 6,
+        "academic_year": "2023/2024",
+        "avg_professor_rating": 3
+      },
+      {
+        "eval_count": 6,
+        "academic_year": "2024/2025",
+        "avg_professor_rating": 2.5
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Average Professor Rating by Academic Year",
+      "width": 700,
+      "height": 360,
+      "mark": {
+        "type": "line",
+        "point": true
+      },
+      "encoding": {
+        "x": {
+          "field": "academic_year",
+          "type": "ordinal",
+          "axis": {
+            "title": "Academic Year",
+            "labelAngle": -40
+          }
+        },
+        "y": {
+          "field": "avg_professor_rating",
+          "type": "quantitative",
+          "axis": {
+            "title": "Average Professor Rating"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "academic_year",
+            "type": "ordinal",
+            "title": "Academic Year"
+          },
+          {
+            "field": "avg_professor_rating",
+            "type": "quantitative",
+            "title": "Avg Rating"
+          },
+          {
+            "field": "eval_count",
+            "type": "quantitative",
+            "title": "Evaluation Count"
+          }
+        ],
+        "order": {
+          "field": "academic_year",
+          "type": "ordinal"
+        }
+      }
+    },
+    "sql": "SELECT\n  cs.academic_year AS academic_year,\n  AVG(ce.professor_rating)::numeric(5,2) AS avg_professor_rating,\n  COUNT(ce.id) AS eval_count\nFROM public.course_evaluations AS ce\nJOIN public.enrollments AS e ON ce.enrollment_id = e.id\nJOIN public.course_sections AS cs ON e.course_section_id = cs.id\nWHERE ce.professor_rating IS NOT NULL\n  AND cs.academic_year IS NOT NULL\nGROUP BY cs.academic_year\nORDER BY\n  (CASE WHEN cs.academic_year ~ '^[0-9]{4}' THEN substring(cs.academic_year from '^[0-9]{4}')::int ELSE NULL END) ASC NULLS LAST,\n  cs.academic_year ASC;",
+    "metadata": {
+      "columns": [
+        "eval_count",
+        "academic_year",
+        "avg_professor_rating"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "eval_count": 8,
+          "academic_year": "2019/2020",
+          "avg_professor_rating": 4.13
+        },
+        {
+          "eval_count": 11,
+          "academic_year": "2020/2021",
+          "avg_professor_rating": 2.73
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "complex-workflow",
+      "passed": true,
+      "score": 0.8,
+      "issues": [
+        "academic_year is encoded as ordinal/text — ensure the axis follows the SQL chronological order (e.g., set explicit x.sort based on the SQL ordering or convert/normalize academic_year to a temporal/parsed field) because lexicographic ordering could misorder seasons like '2019/2020' vs '2020/2021'.",
+        "If the user wanted per-professor trends rather than an overall average, the current chart is aggregated to a single line; include a professor identifier as a color/grouping dimension to show separate lines."
+      ]
+    },
+    "attempts": {
+      "used": 1,
+      "max": 4,
+      "history": [
+        "Attempt 1: passed"
+      ]
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T11:21:51.861Z",
+    "traceId": "57b8e7665280435126a725e3dc8c6f97",
+    "attempts": 6,
+    "spanCount": 4,
+    "totals": {
+      "inputTokens": 28348,
+      "outputTokens": 6020,
+      "totalTokens": 34368,
+      "cachedInputTokens": 3968,
+      "reasoningTokens": 3968,
+      "costUsd": 0.019127
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 4,
+        "inputTokens": 28348,
+        "outputTokens": 6020,
+        "totalTokens": 34368,
+        "cachedInputTokens": 3968,
+        "reasoningTokens": 3968,
+        "costUsd": 0.019127
+      }
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "classrooms-with-projectors",
+  "caseDirectory": "classrooms-with-projectors",
+  "repeatIndex": 1,
+  "prompt": "What percentage of classrooms have projectors, grouped by building?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What percentage of classrooms have projectors, grouped by building?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:48:21.080Z",
+    "endedAtUtc": "2026-02-23T10:48:38.349Z",
+    "durationMs": 17269
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2420",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:48:38 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"What percentage of classrooms have projectors, grouped by building?\"},\"agent\":{\"payload\":{\"question\":\"What percentage of classrooms have projectors, grouped by building?\"},\"startedAt\":1771843701096,\"status\":\"success\",\"output\":{\"sql\":\"SELECT\\n  building AS building,\\n  COUNT(*) AS total_classrooms,\\n  SUM(CASE WHEN projector IS TRUE THEN 1 ELSE 0 END) AS classrooms_with_projectors,\\n  ROUND(100.0 * SUM(CASE WHEN projector IS TRUE THEN 1 ELSE 0 END) / NULLIF(COUNT(*), 0), 2) AS percentage_with_projectors\\nFROM classrooms\\nGROUP BY building\\nORDER BY percentage_with_projectors DESC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Percentage of Classrooms with Projectors by Building\",\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"building\",\"type\":\"nominal\",\"axis\":{\"title\":\"Building\"}},\"y\":{\"field\":\"percentage_with_projectors\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Percentage of Classrooms with Projectors (%)\",\"format\":\".2f\"},\"scale\":{\"domain\":[0,100]}},\"tooltip\":[{\"field\":\"building\",\"type\":\"nominal\",\"title\":\"Building\"},{\"field\":\"percentage_with_projectors\",\"type\":\"quantitative\",\"title\":\"% with projectors\"},{\"field\":\"classrooms_with_projectors\",\"type\":\"quantitative\",\"title\":\"Classrooms with projectors\"},{\"field\":\"total_classrooms\",\"type\":\"quantitative\",\"title\":\"Total classrooms\"}]}}},\"endedAt\":1771843718247},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT\\n  building AS building,\\n  COUNT(*) AS total_classrooms,\\n  SUM(CASE WHEN projector IS TRUE THEN 1 ELSE 0 END) AS classrooms_with_projectors,\\n  ROUND(100.0 * SUM(CASE WHEN projector IS TRUE THEN 1 ELSE 0 END) / NULLIF(COUNT(*), 0), 2) AS percentage_with_projectors\\nFROM classrooms\\nGROUP BY building\\nORDER BY percentage_with_projectors DESC;\"},\"startedAt\":1771843718251,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column \\\"projector\\\" does not exist\\nLINE 5:   SUM(CASE WHEN projector IS TRUE THEN 1 ELSE 0 END) AS clas...\\n                        ^\",\"name\":\"Error\"},\"endedAt\":1771843718338}},\"input\":{\"question\":\"What percentage of classrooms have projectors, grouped by building?\"},\"error\":{\"message\":\"SQL execution failed: column \\\"projector\\\" does not exist\\nLINE 5:   SUM(CASE WHEN projector IS TRUE THEN 1 ELSE 0 END) AS clas...\\n                        ^\",\"name\":\"Error\"},\"traceId\":\"4b873d88d80131365f99d18b71bf0253\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/classrooms-with-projectors/run-0001/run.json",
+    "queryPath": "runs/classrooms-with-projectors/run-0001/query.sql",
+    "vegaRawPath": "runs/classrooms-with-projectors/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/classrooms-with-projectors/run-0001/vega.resolved.json",
+    "imagePath": "runs/classrooms-with-projectors/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:48:38.350Z",
+  "traceId": "4b873d88d80131365f99d18b71bf0253",
+  "success": false,
+  "durationMs": 17270,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "What percentage of classrooms have projectors, grouped by building?"
+      },
+      "agent": {
+        "payload": {
+          "question": "What percentage of classrooms have projectors, grouped by building?"
+        },
+        "startedAt": 1771843701096,
+        "status": "success",
+        "output": {
+          "sql": "SELECT\n  building AS building,\n  COUNT(*) AS total_classrooms,\n  SUM(CASE WHEN projector IS TRUE THEN 1 ELSE 0 END) AS classrooms_with_projectors,\n  ROUND(100.0 * SUM(CASE WHEN projector IS TRUE THEN 1 ELSE 0 END) / NULLIF(COUNT(*), 0), 2) AS percentage_with_projectors\nFROM classrooms\nGROUP BY building\nORDER BY percentage_with_projectors DESC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "data": {
+              "name": "query_result"
+            },
+            "title": "Percentage of Classrooms with Projectors by Building",
+            "mark": "bar",
+            "encoding": {
+              "x": {
+                "field": "building",
+                "type": "nominal",
+                "axis": {
+                  "title": "Building"
+                }
+              },
+              "y": {
+                "field": "percentage_with_projectors",
+                "type": "quantitative",
+                "axis": {
+                  "title": "Percentage of Classrooms with Projectors (%)",
+                  "format": ".2f"
+                },
+                "scale": {
+                  "domain": [
+                    0,
+                    100
+                  ]
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "building",
+                  "type": "nominal",
+                  "title": "Building"
+                },
+                {
+                  "field": "percentage_with_projectors",
+                  "type": "quantitative",
+                  "title": "% with projectors"
+                },
+                {
+                  "field": "classrooms_with_projectors",
+                  "type": "quantitative",
+                  "title": "Classrooms with projectors"
+                },
+                {
+                  "field": "total_classrooms",
+                  "type": "quantitative",
+                  "title": "Total classrooms"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843718247
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT\n  building AS building,\n  COUNT(*) AS total_classrooms,\n  SUM(CASE WHEN projector IS TRUE THEN 1 ELSE 0 END) AS classrooms_with_projectors,\n  ROUND(100.0 * SUM(CASE WHEN projector IS TRUE THEN 1 ELSE 0 END) / NULLIF(COUNT(*), 0), 2) AS percentage_with_projectors\nFROM classrooms\nGROUP BY building\nORDER BY percentage_with_projectors DESC;"
+        },
+        "startedAt": 1771843718251,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column \"projector\" does not exist\nLINE 5:   SUM(CASE WHEN projector IS TRUE THEN 1 ELSE 0 END) AS clas...\n                        ^",
+          "name": "Error"
+        },
+        "endedAt": 1771843718338
+      }
+    },
+    "input": {
+      "question": "What percentage of classrooms have projectors, grouped by building?"
+    },
+    "error": {
+      "message": "SQL execution failed: column \"projector\" does not exist\nLINE 5:   SUM(CASE WHEN projector IS TRUE THEN 1 ELSE 0 END) AS clas...\n                        ^",
+      "name": "Error"
+    },
+    "traceId": "4b873d88d80131365f99d18b71bf0253"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:48:38.350Z",
+    "traceId": "4b873d88d80131365f99d18b71bf0253",
+    "attempts": 6,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 268,
+      "outputTokens": 1335,
+      "totalTokens": 1603,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 896,
+      "costUsd": 0.002737
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 268,
+        "outputTokens": 1335,
+        "totalTokens": 1603,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 896,
+        "costUsd": 0.002737
+      }
+    ],
+    "warnings": []
+  }
+}

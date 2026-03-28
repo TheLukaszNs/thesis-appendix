@@ -1,0 +1,524 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "low-capacity-high-enrollment",
+  "caseDirectory": "low-capacity-high-enrollment",
+  "repeatIndex": 1,
+  "prompt": "Which course sections have the most overbooked ratio (enrolled / max)?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which course sections have the most overbooked ratio (enrolled / max)?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:52:50.333Z",
+    "endedAtUtc": "2026-02-22T23:53:36.664Z",
+    "durationMs": 46331
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "24637",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:53:36 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Which course sections have the most overbooked ratio (enrolled / max)?\"},\"sql\":{\"payload\":{\"question\":\"Which course sections have the most overbooked ratio (enrolled / max)?\"},\"startedAt\":1771804370344,\"status\":\"success\",\"output\":{\"reasoning\":\"Count active enrollments per course_section, compute enrolled / max_students (handling max_students = 0), and return the top 10 sections ordered by highest overbooked ratio (deterministic tie-breakers). Preflight inspected public.course_sections and public.enrollments to confirm columns used.\",\"sql\":\"WITH enrolled AS (\\n  SELECT\\n    e.course_section_id AS course_section_id,\\n    COUNT(*) FILTER (WHERE e.is_active = true) AS enrolled_count\\n  FROM public.enrollments e\\n  GROUP BY e.course_section_id\\n)\\nSELECT\\n  cs.id AS section_id,\\n  cs.course_id AS course_id,\\n  cs.academic_year AS academic_year,\\n  cs.semester_type AS semester_type,\\n  cs.section_number AS section_number,\\n  cs.max_students AS max_students,\\n  COALESCE(en.enrolled_count, 0) AS enrolled_count,\\n  CASE\\n    WHEN cs.max_students = 0 AND COALESCE(en.enrolled_count, 0) > 0 THEN 1e9\\n    WHEN cs.max_students = 0 THEN NULL\\n    ELSE COALESCE(en.enrolled_count, 0)::numeric / cs.max_students\\n  END AS overbooked_ratio\\nFROM public.course_sections cs\\nLEFT JOIN enrolled en ON cs.id = en.course_section_id\\nORDER BY overbooked_ratio DESC NULLS LAST, enrolled_count DESC, cs.id\\nLIMIT 10;\",\"assumptions\":[\"Count only active enrollments (enrollments.is_active = true).\",\"Return the top 10 course sections by overbooked ratio.\",\"Treat sections with max_students = 0 and enrolled_count > 0 as extremely overbooked (represented with a very large numeric 1e9 for ranking).\"]},\"endedAt\":1771804401040},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH enrolled AS (\\n  SELECT\\n    e.course_section_id AS course_section_id,\\n    COUNT(*) FILTER (WHERE e.is_active = true) AS enrolled_count\\n  FROM public.enrollments e\\n  GROUP BY e.course_section_id\\n)\\nSELECT\\n  cs.id AS section_id,\\n  cs.course_id AS course_id,\\n  cs.academic_year AS academic_year,\\n  cs.semester_type AS semester_type,\\n  cs.section_number AS section_number,\\n  cs.max_students AS max_students,\\n  COALESCE(en.enrolled_count, 0) AS enrolled_count,\\n  CASE\\n    WHEN cs.max_students = 0 AND COALESCE(en.enrolled_count, 0) > 0 THEN 1e9\\n    WHEN cs.max_students = 0 THEN NULL\\n    ELSE COALESCE(en.enrolled_count, 0)::numeric / cs.max_students\\n  END AS overbooked_ratio\\nFROM public.course_sections cs\\nLEFT JOIN enrolled en ON cs.id = en.course_section_id\\nORDER BY overbooked_ratio DESC NULLS LAST, enrolled_count DESC, cs.id\\nLIMIT 10;\"},\"startedAt\":1771804401043,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"WITH enrolled AS (\\n  SELECT\\n    e.course_section_id AS course_section_id,\\n    COUNT(*) FILTER (WHERE e.is_active = true) AS enrolled_count\\n  FROM public.enrollments e\\n  GROUP BY e.course_section_id\\n)\\nSELECT\\n  cs.id AS section_id,\\n  cs.course_id AS course_id,\\n  cs.academic_year AS academic_year,\\n  cs.semester_type AS semester_type,\\n  cs.section_number AS section_number,\\n  cs.max_students AS max_students,\\n  COALESCE(en.enrolled_count, 0) AS enrolled_count,\\n  CASE\\n    WHEN cs.max_students = 0 AND COALESCE(en.enrolled_count, 0) > 0 THEN 1e9\\n    WHEN cs.max_students = 0 THEN NULL\\n    ELSE COALESCE(en.enrolled_count, 0)::numeric / cs.max_students\\n  END AS overbooked_ratio\\nFROM public.course_sections cs\\nLEFT JOIN enrolled en ON cs.id = en.course_section_id\\nORDER BY overbooked_ratio DESC NULLS LAST, enrolled_count DESC, cs.id\\nLIMIT 10\",\"metadata\":{\"columns\":[\"course_id\",\"section_id\",\"max_students\",\"academic_year\",\"semester_type\",\"enrolled_count\",\"section_number\",\"overbooked_ratio\"],\"rowCount\":10,\"sample\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"section_id\":\"6e3b949d-6eac-4149-a959-45ad57cf79c2\",\"max_students\":35,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":5,\"section_number\":4,\"overbooked_ratio\":0.14285714285714285},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"section_id\":\"d8c5aba7-2155-4deb-97f4-2c0375c7a496\",\"max_students\":15,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":2,\"section_number\":4,\"overbooked_ratio\":0.13333333333333333}]},\"data\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"section_id\":\"6e3b949d-6eac-4149-a959-45ad57cf79c2\",\"max_students\":35,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":5,\"section_number\":4,\"overbooked_ratio\":0.14285714285714285},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"section_id\":\"d8c5aba7-2155-4deb-97f4-2c0375c7a496\",\"max_students\":15,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":2,\"section_number\":4,\"overbooked_ratio\":0.13333333333333333},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"section_id\":\"c4c01152-e52f-4d3b-b011-18d3285df638\",\"max_students\":35,\"academic_year\":\"2022/2023\",\"semester_type\":\"SUMMER\",\"enrolled_count\":4,\"section_number\":2,\"overbooked_ratio\":0.11428571428571428},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"section_id\":\"028da36f-4664-46ed-a392-6ce5761c8349\",\"max_students\":35,\"academic_year\":\"2022/2023\",\"semester_type\":\"WINTER\",\"enrolled_count\":3,\"section_number\":5,\"overbooked_ratio\":0.08571428571428572},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"section_id\":\"b3eeca71-41fd-4b5e-9c1e-96a7b5f27b77\",\"max_students\":35,\"academic_year\":\"2024/2025\",\"semester_type\":\"WINTER\",\"enrolled_count\":3,\"section_number\":5,\"overbooked_ratio\":0.08571428571428572},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"section_id\":\"9663ebf9-c382-429f-aae8-b62f00431a0f\",\"max_students\":60,\"academic_year\":\"2021/2022\",\"semester_type\":\"WINTER\",\"enrolled_count\":4,\"section_number\":4,\"overbooked_ratio\":0.06666666666666667},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"section_id\":\"bf21a0a6-aacd-4258-9c2c-7a728a251b0d\",\"max_students\":30,\"academic_year\":\"2020/2021\",\"semester_type\":\"SUMMER\",\"enrolled_count\":2,\"section_number\":3,\"overbooked_ratio\":0.06666666666666667},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"section_id\":\"e2fba3f0-94b8-4349-ac7c-97bfe1cb5649\",\"max_students\":30,\"academic_year\":\"2024/2025\",\"semester_type\":\"SUMMER\",\"enrolled_count\":2,\"section_number\":2,\"overbooked_ratio\":0.06666666666666667},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"section_id\":\"0b0c4cb5-28c0-49db-ba0b-7fbf56d3cd18\",\"max_students\":15,\"academic_year\":\"2024/2025\",\"semester_type\":\"WINTER\",\"enrolled_count\":1,\"section_number\":5,\"overbooked_ratio\":0.06666666666666667},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"section_id\":\"3b977eb3-7f04-40db-9fb9-1dab5fa91796\",\"max_students\":35,\"academic_year\":\"2022/2023\",\"semester_type\":\"SUMMER\",\"enrolled_count\":2,\"section_number\":5,\"overbooked_ratio\":0.05714285714285714}]},\"endedAt\":1771804401077},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"WITH enrolled AS (\\n  SELECT\\n    e.course_section_id AS course_section_id,\\n    COUNT(*) FILTER (WHERE e.is_active = true) AS enrolled_count\\n  FROM public.enrollments e\\n  GROUP BY e.course_section_id\\n)\\nSELECT\\n  cs.id AS section_id,\\n  cs.course_id AS course_id,\\n  cs.academic_year AS academic_year,\\n  cs.semester_type AS semester_type,\\n  cs.section_number AS section_number,\\n  cs.max_students AS max_students,\\n  COALESCE(en.enrolled_count, 0) AS enrolled_count,\\n  CASE\\n    WHEN cs.max_students = 0 AND COALESCE(en.enrolled_count, 0) > 0 THEN 1e9\\n    WHEN cs.max_students = 0 THEN NULL\\n    ELSE COALESCE(en.enrolled_count, 0)::numeric / cs.max_students\\n  END AS overbooked_ratio\\nFROM public.course_sections cs\\nLEFT JOIN enrolled en ON cs.id = en.course_section_id\\nORDER BY overbooked_ratio DESC NULLS LAST, enrolled_count DESC, cs.id\\nLIMIT 10\",\"metadata\":{\"columns\":[\"course_id\",\"section_id\",\"max_students\",\"academic_year\",\"semester_type\",\"enrolled_count\",\"section_number\",\"overbooked_ratio\"],\"rowCount\":10,\"sample\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"section_id\":\"6e3b949d-6eac-4149-a959-45ad57cf79c2\",\"max_students\":35,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":5,\"section_number\":4,\"overbooked_ratio\":0.14285714285714285},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"section_id\":\"d8c5aba7-2155-4deb-97f4-2c0375c7a496\",\"max_students\":15,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":2,\"section_number\":4,\"overbooked_ratio\":0.13333333333333333}]},\"data\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"section_id\":\"6e3b949d-6eac-4149-a959-45ad57cf79c2\",\"max_students\":35,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":5,\"section_number\":4,\"overbooked_ratio\":0.14285714285714285},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"section_id\":\"d8c5aba7-2155-4deb-97f4-2c0375c7a496\",\"max_students\":15,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":2,\"section_number\":4,\"overbooked_ratio\":0.13333333333333333},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"section_id\":\"c4c01152-e52f-4d3b-b011-18d3285df638\",\"max_students\":35,\"academic_year\":\"2022/2023\",\"semester_type\":\"SUMMER\",\"enrolled_count\":4,\"section_number\":2,\"overbooked_ratio\":0.11428571428571428},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"section_id\":\"028da36f-4664-46ed-a392-6ce5761c8349\",\"max_students\":35,\"academic_year\":\"2022/2023\",\"semester_type\":\"WINTER\",\"enrolled_count\":3,\"section_number\":5,\"overbooked_ratio\":0.08571428571428572},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"section_id\":\"b3eeca71-41fd-4b5e-9c1e-96a7b5f27b77\",\"max_students\":35,\"academic_year\":\"2024/2025\",\"semester_type\":\"WINTER\",\"enrolled_count\":3,\"section_number\":5,\"overbooked_ratio\":0.08571428571428572},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"section_id\":\"9663ebf9-c382-429f-aae8-b62f00431a0f\",\"max_students\":60,\"academic_year\":\"2021/2022\",\"semester_type\":\"WINTER\",\"enrolled_count\":4,\"section_number\":4,\"overbooked_ratio\":0.06666666666666667},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"section_id\":\"bf21a0a6-aacd-4258-9c2c-7a728a251b0d\",\"max_students\":30,\"academic_year\":\"2020/2021\",\"semester_type\":\"SUMMER\",\"enrolled_count\":2,\"section_number\":3,\"overbooked_ratio\":0.06666666666666667},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"section_id\":\"e2fba3f0-94b8-4349-ac7c-97bfe1cb5649\",\"max_students\":30,\"academic_year\":\"2024/2025\",\"semester_type\":\"SUMMER\",\"enrolled_count\":2,\"section_number\":2,\"overbooked_ratio\":0.06666666666666667},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"section_id\":\"0b0c4cb5-28c0-49db-ba0b-7fbf56d3cd18\",\"max_students\":15,\"academic_year\":\"2024/2025\",\"semester_type\":\"WINTER\",\"enrolled_count\":1,\"section_number\":5,\"overbooked_ratio\":0.06666666666666667},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"section_id\":\"3b977eb3-7f04-40db-9fb9-1dab5fa91796\",\"max_students\":35,\"academic_year\":\"2022/2023\",\"semester_type\":\"SUMMER\",\"enrolled_count\":2,\"section_number\":5,\"overbooked_ratio\":0.05714285714285714}]},\"startedAt\":1771804401080,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Top course sections by overbooked ratio (enrolled / max_students).\",\"title\":\"Top 10 Course Sections by Overbooked Ratio (enrolled / max_students)\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"section_id\",\"type\":\"nominal\",\"title\":\"Section ID\",\"sort\":\"-x\"},\"x\":{\"field\":\"overbooked_ratio\",\"type\":\"quantitative\",\"title\":\"Overbooked Ratio (enrolled / max_students)\",\"axis\":{\"format\":\".2f\"}},\"color\":{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},\"tooltip\":[{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"},{\"field\":\"section_number\",\"type\":\"quantitative\",\"title\":\"Section #\"},{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"enrolled_count\",\"type\":\"quantitative\",\"title\":\"Enrolled\"},{\"field\":\"max_students\",\"type\":\"quantitative\",\"title\":\"Max Students\"},{\"field\":\"overbooked_ratio\",\"type\":\"quantitative\",\"title\":\"Overbooked Ratio\",\"format\":\".3f\"}]}},\"reasoning\":\"Horizontal bar chart ranks the top 10 sections (query result) by overbooked ratio, with semester color to show term and a tooltip exposing course, section, enrollment and capacity details.\"},\"endedAt\":1771804416640},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Top course sections by overbooked ratio (enrolled / max_students).\",\"title\":\"Top 10 Course Sections by Overbooked Ratio (enrolled / max_students)\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"section_id\",\"type\":\"nominal\",\"title\":\"Section ID\",\"sort\":\"-x\"},\"x\":{\"field\":\"overbooked_ratio\",\"type\":\"quantitative\",\"title\":\"Overbooked Ratio (enrolled / max_students)\",\"axis\":{\"format\":\".2f\"}},\"color\":{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},\"tooltip\":[{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"},{\"field\":\"section_number\",\"type\":\"quantitative\",\"title\":\"Section #\"},{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"enrolled_count\",\"type\":\"quantitative\",\"title\":\"Enrolled\"},{\"field\":\"max_students\",\"type\":\"quantitative\",\"title\":\"Max Students\"},{\"field\":\"overbooked_ratio\",\"type\":\"quantitative\",\"title\":\"Overbooked Ratio\",\"format\":\".3f\"}]}},\"reasoning\":\"Horizontal bar chart ranks the top 10 sections (query result) by overbooked ratio, with semester color to show term and a tooltip exposing course, section, enrollment and capacity details.\"},\"startedAt\":1771804416649,\"status\":\"success\",\"output\":{\"sql\":\"WITH enrolled AS (\\n  SELECT\\n    e.course_section_id AS course_section_id,\\n    COUNT(*) FILTER (WHERE e.is_active = true) AS enrolled_count\\n  FROM public.enrollments e\\n  GROUP BY e.course_section_id\\n)\\nSELECT\\n  cs.id AS section_id,\\n  cs.course_id AS course_id,\\n  cs.academic_year AS academic_year,\\n  cs.semester_type AS semester_type,\\n  cs.section_number AS section_number,\\n  cs.max_students AS max_students,\\n  COALESCE(en.enrolled_count, 0) AS enrolled_count,\\n  CASE\\n    WHEN cs.max_students = 0 AND COALESCE(en.enrolled_count, 0) > 0 THEN 1e9\\n    WHEN cs.max_students = 0 THEN NULL\\n    ELSE COALESCE(en.enrolled_count, 0)::numeric / cs.max_students\\n  END AS overbooked_ratio\\nFROM public.course_sections cs\\nLEFT JOIN enrolled en ON cs.id = en.course_section_id\\nORDER BY overbooked_ratio DESC NULLS LAST, enrolled_count DESC, cs.id\\nLIMIT 10;\",\"data\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"section_id\":\"6e3b949d-6eac-4149-a959-45ad57cf79c2\",\"max_students\":35,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":5,\"section_number\":4,\"overbooked_ratio\":0.14285714285714285},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"section_id\":\"d8c5aba7-2155-4deb-97f4-2c0375c7a496\",\"max_students\":15,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":2,\"section_number\":4,\"overbooked_ratio\":0.13333333333333333},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"section_id\":\"c4c01152-e52f-4d3b-b011-18d3285df638\",\"max_students\":35,\"academic_year\":\"2022/2023\",\"semester_type\":\"SUMMER\",\"enrolled_count\":4,\"section_number\":2,\"overbooked_ratio\":0.11428571428571428},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"section_id\":\"028da36f-4664-46ed-a392-6ce5761c8349\",\"max_students\":35,\"academic_year\":\"2022/2023\",\"semester_type\":\"WINTER\",\"enrolled_count\":3,\"section_number\":5,\"overbooked_ratio\":0.08571428571428572},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"section_id\":\"b3eeca71-41fd-4b5e-9c1e-96a7b5f27b77\",\"max_students\":35,\"academic_year\":\"2024/2025\",\"semester_type\":\"WINTER\",\"enrolled_count\":3,\"section_number\":5,\"overbooked_ratio\":0.08571428571428572},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"section_id\":\"9663ebf9-c382-429f-aae8-b62f00431a0f\",\"max_students\":60,\"academic_year\":\"2021/2022\",\"semester_type\":\"WINTER\",\"enrolled_count\":4,\"section_number\":4,\"overbooked_ratio\":0.06666666666666667},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"section_id\":\"bf21a0a6-aacd-4258-9c2c-7a728a251b0d\",\"max_students\":30,\"academic_year\":\"2020/2021\",\"semester_type\":\"SUMMER\",\"enrolled_count\":2,\"section_number\":3,\"overbooked_ratio\":0.06666666666666667},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"section_id\":\"e2fba3f0-94b8-4349-ac7c-97bfe1cb5649\",\"max_students\":30,\"academic_year\":\"2024/2025\",\"semester_type\":\"SUMMER\",\"enrolled_count\":2,\"section_number\":2,\"overbooked_ratio\":0.06666666666666667},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"section_id\":\"0b0c4cb5-28c0-49db-ba0b-7fbf56d3cd18\",\"max_students\":15,\"academic_year\":\"2024/2025\",\"semester_type\":\"WINTER\",\"enrolled_count\":1,\"section_number\":5,\"overbooked_ratio\":0.06666666666666667},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"section_id\":\"3b977eb3-7f04-40db-9fb9-1dab5fa91796\",\"max_students\":35,\"academic_year\":\"2022/2023\",\"semester_type\":\"SUMMER\",\"enrolled_count\":2,\"section_number\":5,\"overbooked_ratio\":0.05714285714285714}],\"metadata\":{\"columns\":[\"course_id\",\"section_id\",\"max_students\",\"academic_year\",\"semester_type\",\"enrolled_count\",\"section_number\",\"overbooked_ratio\"],\"rowCount\":10,\"sample\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"section_id\":\"6e3b949d-6eac-4149-a959-45ad57cf79c2\",\"max_students\":35,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":5,\"section_number\":4,\"overbooked_ratio\":0.14285714285714285},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"section_id\":\"d8c5aba7-2155-4deb-97f4-2c0375c7a496\",\"max_students\":15,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":2,\"section_number\":4,\"overbooked_ratio\":0.13333333333333333}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Top course sections by overbooked ratio (enrolled / max_students).\",\"title\":\"Top 10 Course Sections by Overbooked Ratio (enrolled / max_students)\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"section_id\",\"type\":\"nominal\",\"title\":\"Section ID\",\"sort\":\"-x\"},\"x\":{\"field\":\"overbooked_ratio\",\"type\":\"quantitative\",\"title\":\"Overbooked Ratio (enrolled / max_students)\",\"axis\":{\"format\":\".2f\"}},\"color\":{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},\"tooltip\":[{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"},{\"field\":\"section_number\",\"type\":\"quantitative\",\"title\":\"Section #\"},{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"enrolled_count\",\"type\":\"quantitative\",\"title\":\"Enrolled\"},{\"field\":\"max_students\",\"type\":\"quantitative\",\"title\":\"Max Students\"},{\"field\":\"overbooked_ratio\",\"type\":\"quantitative\",\"title\":\"Overbooked Ratio\",\"format\":\".3f\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771804416652}},\"input\":{\"question\":\"Which course sections have the most overbooked ratio (enrolled / max)?\"},\"result\":{\"sql\":\"WITH enrolled AS (\\n  SELECT\\n    e.course_section_id AS course_section_id,\\n    COUNT(*) FILTER (WHERE e.is_active = true) AS enrolled_count\\n  FROM public.enrollments e\\n  GROUP BY e.course_section_id\\n)\\nSELECT\\n  cs.id AS section_id,\\n  cs.course_id AS course_id,\\n  cs.academic_year AS academic_year,\\n  cs.semester_type AS semester_type,\\n  cs.section_number AS section_number,\\n  cs.max_students AS max_students,\\n  COALESCE(en.enrolled_count, 0) AS enrolled_count,\\n  CASE\\n    WHEN cs.max_students = 0 AND COALESCE(en.enrolled_count, 0) > 0 THEN 1e9\\n    WHEN cs.max_students = 0 THEN NULL\\n    ELSE COALESCE(en.enrolled_count, 0)::numeric / cs.max_students\\n  END AS overbooked_ratio\\nFROM public.course_sections cs\\nLEFT JOIN enrolled en ON cs.id = en.course_section_id\\nORDER BY overbooked_ratio DESC NULLS LAST, enrolled_count DESC, cs.id\\nLIMIT 10;\",\"data\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"section_id\":\"6e3b949d-6eac-4149-a959-45ad57cf79c2\",\"max_students\":35,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":5,\"section_number\":4,\"overbooked_ratio\":0.14285714285714285},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"section_id\":\"d8c5aba7-2155-4deb-97f4-2c0375c7a496\",\"max_students\":15,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":2,\"section_number\":4,\"overbooked_ratio\":0.13333333333333333},{\"course_id\":\"db9491f7-0572-4f56-a7b4-e21ea4851009\",\"section_id\":\"c4c01152-e52f-4d3b-b011-18d3285df638\",\"max_students\":35,\"academic_year\":\"2022/2023\",\"semester_type\":\"SUMMER\",\"enrolled_count\":4,\"section_number\":2,\"overbooked_ratio\":0.11428571428571428},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"section_id\":\"028da36f-4664-46ed-a392-6ce5761c8349\",\"max_students\":35,\"academic_year\":\"2022/2023\",\"semester_type\":\"WINTER\",\"enrolled_count\":3,\"section_number\":5,\"overbooked_ratio\":0.08571428571428572},{\"course_id\":\"5c7f965c-bc6d-4b4b-abde-8c5976756d19\",\"section_id\":\"b3eeca71-41fd-4b5e-9c1e-96a7b5f27b77\",\"max_students\":35,\"academic_year\":\"2024/2025\",\"semester_type\":\"WINTER\",\"enrolled_count\":3,\"section_number\":5,\"overbooked_ratio\":0.08571428571428572},{\"course_id\":\"16ddacba-8b83-47b9-982b-bbcf58d95dad\",\"section_id\":\"9663ebf9-c382-429f-aae8-b62f00431a0f\",\"max_students\":60,\"academic_year\":\"2021/2022\",\"semester_type\":\"WINTER\",\"enrolled_count\":4,\"section_number\":4,\"overbooked_ratio\":0.06666666666666667},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"section_id\":\"bf21a0a6-aacd-4258-9c2c-7a728a251b0d\",\"max_students\":30,\"academic_year\":\"2020/2021\",\"semester_type\":\"SUMMER\",\"enrolled_count\":2,\"section_number\":3,\"overbooked_ratio\":0.06666666666666667},{\"course_id\":\"7dc872b8-c34e-4061-8f34-8b4c099b6325\",\"section_id\":\"e2fba3f0-94b8-4349-ac7c-97bfe1cb5649\",\"max_students\":30,\"academic_year\":\"2024/2025\",\"semester_type\":\"SUMMER\",\"enrolled_count\":2,\"section_number\":2,\"overbooked_ratio\":0.06666666666666667},{\"course_id\":\"c0ebb978-ac9c-4fbd-8f74-aa2162d22165\",\"section_id\":\"0b0c4cb5-28c0-49db-ba0b-7fbf56d3cd18\",\"max_students\":15,\"academic_year\":\"2024/2025\",\"semester_type\":\"WINTER\",\"enrolled_count\":1,\"section_number\":5,\"overbooked_ratio\":0.06666666666666667},{\"course_id\":\"a395f9b9-c83a-4df6-8d96-57f055f578de\",\"section_id\":\"3b977eb3-7f04-40db-9fb9-1dab5fa91796\",\"max_students\":35,\"academic_year\":\"2022/2023\",\"semester_type\":\"SUMMER\",\"enrolled_count\":2,\"section_number\":5,\"overbooked_ratio\":0.05714285714285714}],\"metadata\":{\"columns\":[\"course_id\",\"section_id\",\"max_students\",\"academic_year\",\"semester_type\",\"enrolled_count\",\"section_number\",\"overbooked_ratio\"],\"rowCount\":10,\"sample\":[{\"course_id\":\"642c094d-f45c-48f0-bddb-39d9326afb88\",\"section_id\":\"6e3b949d-6eac-4149-a959-45ad57cf79c2\",\"max_students\":35,\"academic_year\":\"2020/2021\",\"semester_type\":\"WINTER\",\"enrolled_count\":5,\"section_number\":4,\"overbooked_ratio\":0.14285714285714285},{\"course_id\":\"928fcf12-4eb9-42ca-a9e9-9711088d05f8\",\"section_id\":\"d8c5aba7-2155-4deb-97f4-2c0375c7a496\",\"max_students\":15,\"academic_year\":\"2019/2020\",\"semester_type\":\"SUMMER\",\"enrolled_count\":2,\"section_number\":4,\"overbooked_ratio\":0.13333333333333333}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Top course sections by overbooked ratio (enrolled / max_students).\",\"title\":\"Top 10 Course Sections by Overbooked Ratio (enrolled / max_students)\",\"data\":{\"name\":\"query_result\"},\"width\":700,\"height\":400,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"section_id\",\"type\":\"nominal\",\"title\":\"Section ID\",\"sort\":\"-x\"},\"x\":{\"field\":\"overbooked_ratio\",\"type\":\"quantitative\",\"title\":\"Overbooked Ratio (enrolled / max_students)\",\"axis\":{\"format\":\".2f\"}},\"color\":{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},\"tooltip\":[{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"},{\"field\":\"section_number\",\"type\":\"quantitative\",\"title\":\"Section #\"},{\"field\":\"academic_year\",\"type\":\"nominal\",\"title\":\"Academic Year\"},{\"field\":\"semester_type\",\"type\":\"nominal\",\"title\":\"Semester\"},{\"field\":\"enrolled_count\",\"type\":\"quantitative\",\"title\":\"Enrolled\"},{\"field\":\"max_students\",\"type\":\"quantitative\",\"title\":\"Max Students\"},{\"field\":\"overbooked_ratio\",\"type\":\"quantitative\",\"title\":\"Overbooked Ratio\",\"format\":\".3f\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"1e51320cb1a2036c13fa8ae19728efdc\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/low-capacity-high-enrollment/run-0001/run.json",
+    "queryPath": "runs/low-capacity-high-enrollment/run-0001/query.sql",
+    "vegaRawPath": "runs/low-capacity-high-enrollment/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/low-capacity-high-enrollment/run-0001/vega.resolved.json",
+    "imagePath": "runs/low-capacity-high-enrollment/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:53:37.040Z",
+  "traceId": "1e51320cb1a2036c13fa8ae19728efdc",
+  "success": true,
+  "durationMs": 46707,
+  "resultRaw": {
+    "data": [
+      {
+        "course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+        "section_id": "6e3b949d-6eac-4149-a959-45ad57cf79c2",
+        "max_students": 35,
+        "academic_year": "2020/2021",
+        "semester_type": "WINTER",
+        "enrolled_count": 5,
+        "section_number": 4,
+        "overbooked_ratio": 0.14285714285714285
+      },
+      {
+        "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "section_id": "d8c5aba7-2155-4deb-97f4-2c0375c7a496",
+        "max_students": 15,
+        "academic_year": "2019/2020",
+        "semester_type": "SUMMER",
+        "enrolled_count": 2,
+        "section_number": 4,
+        "overbooked_ratio": 0.13333333333333333
+      },
+      {
+        "course_id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "section_id": "c4c01152-e52f-4d3b-b011-18d3285df638",
+        "max_students": 35,
+        "academic_year": "2022/2023",
+        "semester_type": "SUMMER",
+        "enrolled_count": 4,
+        "section_number": 2,
+        "overbooked_ratio": 0.11428571428571428
+      },
+      {
+        "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "section_id": "028da36f-4664-46ed-a392-6ce5761c8349",
+        "max_students": 35,
+        "academic_year": "2022/2023",
+        "semester_type": "WINTER",
+        "enrolled_count": 3,
+        "section_number": 5,
+        "overbooked_ratio": 0.08571428571428572
+      },
+      {
+        "course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "section_id": "b3eeca71-41fd-4b5e-9c1e-96a7b5f27b77",
+        "max_students": 35,
+        "academic_year": "2024/2025",
+        "semester_type": "WINTER",
+        "enrolled_count": 3,
+        "section_number": 5,
+        "overbooked_ratio": 0.08571428571428572
+      },
+      {
+        "course_id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "section_id": "9663ebf9-c382-429f-aae8-b62f00431a0f",
+        "max_students": 60,
+        "academic_year": "2021/2022",
+        "semester_type": "WINTER",
+        "enrolled_count": 4,
+        "section_number": 4,
+        "overbooked_ratio": 0.06666666666666667
+      },
+      {
+        "course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "section_id": "bf21a0a6-aacd-4258-9c2c-7a728a251b0d",
+        "max_students": 30,
+        "academic_year": "2020/2021",
+        "semester_type": "SUMMER",
+        "enrolled_count": 2,
+        "section_number": 3,
+        "overbooked_ratio": 0.06666666666666667
+      },
+      {
+        "course_id": "7dc872b8-c34e-4061-8f34-8b4c099b6325",
+        "section_id": "e2fba3f0-94b8-4349-ac7c-97bfe1cb5649",
+        "max_students": 30,
+        "academic_year": "2024/2025",
+        "semester_type": "SUMMER",
+        "enrolled_count": 2,
+        "section_number": 2,
+        "overbooked_ratio": 0.06666666666666667
+      },
+      {
+        "course_id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+        "section_id": "0b0c4cb5-28c0-49db-ba0b-7fbf56d3cd18",
+        "max_students": 15,
+        "academic_year": "2024/2025",
+        "semester_type": "WINTER",
+        "enrolled_count": 1,
+        "section_number": 5,
+        "overbooked_ratio": 0.06666666666666667
+      },
+      {
+        "course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "section_id": "3b977eb3-7f04-40db-9fb9-1dab5fa91796",
+        "max_students": 35,
+        "academic_year": "2022/2023",
+        "semester_type": "SUMMER",
+        "enrolled_count": 2,
+        "section_number": 5,
+        "overbooked_ratio": 0.05714285714285714
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "description": "Top course sections by overbooked ratio (enrolled / max_students).",
+      "title": "Top 10 Course Sections by Overbooked Ratio (enrolled / max_students)",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 700,
+      "height": 400,
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "y": {
+          "field": "section_id",
+          "type": "nominal",
+          "title": "Section ID",
+          "sort": "-x"
+        },
+        "x": {
+          "field": "overbooked_ratio",
+          "type": "quantitative",
+          "title": "Overbooked Ratio (enrolled / max_students)",
+          "axis": {
+            "format": ".2f"
+          }
+        },
+        "color": {
+          "field": "semester_type",
+          "type": "nominal",
+          "title": "Semester"
+        },
+        "tooltip": [
+          {
+            "field": "course_id",
+            "type": "nominal",
+            "title": "Course ID"
+          },
+          {
+            "field": "section_number",
+            "type": "quantitative",
+            "title": "Section #"
+          },
+          {
+            "field": "academic_year",
+            "type": "nominal",
+            "title": "Academic Year"
+          },
+          {
+            "field": "semester_type",
+            "type": "nominal",
+            "title": "Semester"
+          },
+          {
+            "field": "enrolled_count",
+            "type": "quantitative",
+            "title": "Enrolled"
+          },
+          {
+            "field": "max_students",
+            "type": "quantitative",
+            "title": "Max Students"
+          },
+          {
+            "field": "overbooked_ratio",
+            "type": "quantitative",
+            "title": "Overbooked Ratio",
+            "format": ".3f"
+          }
+        ]
+      }
+    },
+    "sql": "WITH enrolled AS (\n  SELECT\n    e.course_section_id AS course_section_id,\n    COUNT(*) FILTER (WHERE e.is_active = true) AS enrolled_count\n  FROM public.enrollments e\n  GROUP BY e.course_section_id\n)\nSELECT\n  cs.id AS section_id,\n  cs.course_id AS course_id,\n  cs.academic_year AS academic_year,\n  cs.semester_type AS semester_type,\n  cs.section_number AS section_number,\n  cs.max_students AS max_students,\n  COALESCE(en.enrolled_count, 0) AS enrolled_count,\n  CASE\n    WHEN cs.max_students = 0 AND COALESCE(en.enrolled_count, 0) > 0 THEN 1e9\n    WHEN cs.max_students = 0 THEN NULL\n    ELSE COALESCE(en.enrolled_count, 0)::numeric / cs.max_students\n  END AS overbooked_ratio\nFROM public.course_sections cs\nLEFT JOIN enrolled en ON cs.id = en.course_section_id\nORDER BY overbooked_ratio DESC NULLS LAST, enrolled_count DESC, cs.id\nLIMIT 10;",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "section_id",
+        "max_students",
+        "academic_year",
+        "semester_type",
+        "enrolled_count",
+        "section_number",
+        "overbooked_ratio"
+      ],
+      "rowCount": 10,
+      "sample": [
+        {
+          "course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+          "section_id": "6e3b949d-6eac-4149-a959-45ad57cf79c2",
+          "max_students": 35,
+          "academic_year": "2020/2021",
+          "semester_type": "WINTER",
+          "enrolled_count": 5,
+          "section_number": 4,
+          "overbooked_ratio": 0.14285714285714285
+        },
+        {
+          "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+          "section_id": "d8c5aba7-2155-4deb-97f4-2c0375c7a496",
+          "max_students": 15,
+          "academic_year": "2019/2020",
+          "semester_type": "SUMMER",
+          "enrolled_count": 2,
+          "section_number": 4,
+          "overbooked_ratio": 0.13333333333333333
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+        "section_id": "6e3b949d-6eac-4149-a959-45ad57cf79c2",
+        "max_students": 35,
+        "academic_year": "2020/2021",
+        "semester_type": "WINTER",
+        "enrolled_count": 5,
+        "section_number": 4,
+        "overbooked_ratio": 0.14285714285714285
+      },
+      {
+        "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "section_id": "d8c5aba7-2155-4deb-97f4-2c0375c7a496",
+        "max_students": 15,
+        "academic_year": "2019/2020",
+        "semester_type": "SUMMER",
+        "enrolled_count": 2,
+        "section_number": 4,
+        "overbooked_ratio": 0.13333333333333333
+      },
+      {
+        "course_id": "db9491f7-0572-4f56-a7b4-e21ea4851009",
+        "section_id": "c4c01152-e52f-4d3b-b011-18d3285df638",
+        "max_students": 35,
+        "academic_year": "2022/2023",
+        "semester_type": "SUMMER",
+        "enrolled_count": 4,
+        "section_number": 2,
+        "overbooked_ratio": 0.11428571428571428
+      },
+      {
+        "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+        "section_id": "028da36f-4664-46ed-a392-6ce5761c8349",
+        "max_students": 35,
+        "academic_year": "2022/2023",
+        "semester_type": "WINTER",
+        "enrolled_count": 3,
+        "section_number": 5,
+        "overbooked_ratio": 0.08571428571428572
+      },
+      {
+        "course_id": "5c7f965c-bc6d-4b4b-abde-8c5976756d19",
+        "section_id": "b3eeca71-41fd-4b5e-9c1e-96a7b5f27b77",
+        "max_students": 35,
+        "academic_year": "2024/2025",
+        "semester_type": "WINTER",
+        "enrolled_count": 3,
+        "section_number": 5,
+        "overbooked_ratio": 0.08571428571428572
+      },
+      {
+        "course_id": "16ddacba-8b83-47b9-982b-bbcf58d95dad",
+        "section_id": "9663ebf9-c382-429f-aae8-b62f00431a0f",
+        "max_students": 60,
+        "academic_year": "2021/2022",
+        "semester_type": "WINTER",
+        "enrolled_count": 4,
+        "section_number": 4,
+        "overbooked_ratio": 0.06666666666666667
+      },
+      {
+        "course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "section_id": "bf21a0a6-aacd-4258-9c2c-7a728a251b0d",
+        "max_students": 30,
+        "academic_year": "2020/2021",
+        "semester_type": "SUMMER",
+        "enrolled_count": 2,
+        "section_number": 3,
+        "overbooked_ratio": 0.06666666666666667
+      },
+      {
+        "course_id": "7dc872b8-c34e-4061-8f34-8b4c099b6325",
+        "section_id": "e2fba3f0-94b8-4349-ac7c-97bfe1cb5649",
+        "max_students": 30,
+        "academic_year": "2024/2025",
+        "semester_type": "SUMMER",
+        "enrolled_count": 2,
+        "section_number": 2,
+        "overbooked_ratio": 0.06666666666666667
+      },
+      {
+        "course_id": "c0ebb978-ac9c-4fbd-8f74-aa2162d22165",
+        "section_id": "0b0c4cb5-28c0-49db-ba0b-7fbf56d3cd18",
+        "max_students": 15,
+        "academic_year": "2024/2025",
+        "semester_type": "WINTER",
+        "enrolled_count": 1,
+        "section_number": 5,
+        "overbooked_ratio": 0.06666666666666667
+      },
+      {
+        "course_id": "a395f9b9-c83a-4df6-8d96-57f055f578de",
+        "section_id": "3b977eb3-7f04-40db-9fb9-1dab5fa91796",
+        "max_students": 35,
+        "academic_year": "2022/2023",
+        "semester_type": "SUMMER",
+        "enrolled_count": 2,
+        "section_number": 5,
+        "overbooked_ratio": 0.05714285714285714
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "description": "Top course sections by overbooked ratio (enrolled / max_students).",
+      "title": "Top 10 Course Sections by Overbooked Ratio (enrolled / max_students)",
+      "data": {
+        "name": "query_result"
+      },
+      "width": 700,
+      "height": 400,
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "y": {
+          "field": "section_id",
+          "type": "nominal",
+          "title": "Section ID",
+          "sort": "-x"
+        },
+        "x": {
+          "field": "overbooked_ratio",
+          "type": "quantitative",
+          "title": "Overbooked Ratio (enrolled / max_students)",
+          "axis": {
+            "format": ".2f"
+          }
+        },
+        "color": {
+          "field": "semester_type",
+          "type": "nominal",
+          "title": "Semester"
+        },
+        "tooltip": [
+          {
+            "field": "course_id",
+            "type": "nominal",
+            "title": "Course ID"
+          },
+          {
+            "field": "section_number",
+            "type": "quantitative",
+            "title": "Section #"
+          },
+          {
+            "field": "academic_year",
+            "type": "nominal",
+            "title": "Academic Year"
+          },
+          {
+            "field": "semester_type",
+            "type": "nominal",
+            "title": "Semester"
+          },
+          {
+            "field": "enrolled_count",
+            "type": "quantitative",
+            "title": "Enrolled"
+          },
+          {
+            "field": "max_students",
+            "type": "quantitative",
+            "title": "Max Students"
+          },
+          {
+            "field": "overbooked_ratio",
+            "type": "quantitative",
+            "title": "Overbooked Ratio",
+            "format": ".3f"
+          }
+        ]
+      }
+    },
+    "sql": "WITH enrolled AS (\n  SELECT\n    e.course_section_id AS course_section_id,\n    COUNT(*) FILTER (WHERE e.is_active = true) AS enrolled_count\n  FROM public.enrollments e\n  GROUP BY e.course_section_id\n)\nSELECT\n  cs.id AS section_id,\n  cs.course_id AS course_id,\n  cs.academic_year AS academic_year,\n  cs.semester_type AS semester_type,\n  cs.section_number AS section_number,\n  cs.max_students AS max_students,\n  COALESCE(en.enrolled_count, 0) AS enrolled_count,\n  CASE\n    WHEN cs.max_students = 0 AND COALESCE(en.enrolled_count, 0) > 0 THEN 1e9\n    WHEN cs.max_students = 0 THEN NULL\n    ELSE COALESCE(en.enrolled_count, 0)::numeric / cs.max_students\n  END AS overbooked_ratio\nFROM public.course_sections cs\nLEFT JOIN enrolled en ON cs.id = en.course_section_id\nORDER BY overbooked_ratio DESC NULLS LAST, enrolled_count DESC, cs.id\nLIMIT 10;",
+    "metadata": {
+      "columns": [
+        "course_id",
+        "section_id",
+        "max_students",
+        "academic_year",
+        "semester_type",
+        "enrolled_count",
+        "section_number",
+        "overbooked_ratio"
+      ],
+      "rowCount": 10,
+      "sample": [
+        {
+          "course_id": "642c094d-f45c-48f0-bddb-39d9326afb88",
+          "section_id": "6e3b949d-6eac-4149-a959-45ad57cf79c2",
+          "max_students": 35,
+          "academic_year": "2020/2021",
+          "semester_type": "WINTER",
+          "enrolled_count": 5,
+          "section_number": 4,
+          "overbooked_ratio": 0.14285714285714285
+        },
+        {
+          "course_id": "928fcf12-4eb9-42ca-a9e9-9711088d05f8",
+          "section_id": "d8c5aba7-2155-4deb-97f4-2c0375c7a496",
+          "max_students": 15,
+          "academic_year": "2019/2020",
+          "semester_type": "SUMMER",
+          "enrolled_count": 2,
+          "section_number": 4,
+          "overbooked_ratio": 0.13333333333333333
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:53:37.040Z",
+    "traceId": "1e51320cb1a2036c13fa8ae19728efdc",
+    "attempts": 5,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 9144,
+      "outputTokens": 3114,
+      "totalTokens": 12258,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2048,
+      "costUsd": 0.008514
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 9144,
+        "outputTokens": 3114,
+        "totalTokens": 12258,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2048,
+        "costUsd": 0.008514
+      }
+    ],
+    "warnings": []
+  }
+}

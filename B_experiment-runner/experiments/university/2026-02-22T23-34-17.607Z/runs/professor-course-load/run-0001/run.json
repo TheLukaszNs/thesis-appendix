@@ -1,0 +1,860 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "professor-course-load",
+  "caseDirectory": "professor-course-load",
+  "repeatIndex": 1,
+  "prompt": "How many course sections does each professor teach?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many course sections does each professor teach?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:37:04.704Z",
+    "endedAtUtc": "2026-02-22T23:37:46.695Z",
+    "durationMs": 41991
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "32202",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:37:46 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"How many course sections does each professor teach?\"},\"sql\":{\"payload\":{\"question\":\"How many course sections does each professor teach?\"},\"startedAt\":1771803424715,\"status\":\"success\",\"output\":{\"reasoning\":\"Count course_sections per professor including professors with zero sections; join confirmed columns (professors.id, course_sections.professor_id). Order deterministically by count desc then last/first name.\",\"sql\":\"SELECT p.id AS professor_id, p.first_name AS first_name, p.last_name AS last_name, COUNT(cs.id) AS section_count FROM public.professors p LEFT JOIN public.course_sections cs ON cs.professor_id = p.id GROUP BY p.id, p.first_name, p.last_name ORDER BY section_count DESC, p.last_name ASC, p.first_name ASC;\",\"assumptions\":[\"Count should include professors with zero sections (LEFT JOIN).\",\"No filters on semester or academic_year — count covers all course_sections in the table.\"]},\"endedAt\":1771803444884},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT p.id AS professor_id, p.first_name AS first_name, p.last_name AS last_name, COUNT(cs.id) AS section_count FROM public.professors p LEFT JOIN public.course_sections cs ON cs.professor_id = p.id GROUP BY p.id, p.first_name, p.last_name ORDER BY section_count DESC, p.last_name ASC, p.first_name ASC;\"},\"startedAt\":1771803444890,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT p.id AS professor_id, p.first_name AS first_name, p.last_name AS last_name, COUNT(cs.id) AS section_count FROM public.professors p LEFT JOIN public.course_sections cs ON cs.professor_id = p.id GROUP BY p.id, p.first_name, p.last_name ORDER BY section_count DESC, p.last_name ASC, p.first_name ASC\",\"metadata\":{\"columns\":[\"last_name\",\"first_name\",\"professor_id\",\"section_count\"],\"rowCount\":50,\"sample\":[{\"last_name\":\"Wojciechowski\",\"first_name\":\"Jacek\",\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"section_count\":3},{\"last_name\":\"Kowalczyk\",\"first_name\":\"Ryszard\",\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"section_count\":2}]},\"data\":[{\"last_name\":\"Wojciechowski\",\"first_name\":\"Jacek\",\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"section_count\":3},{\"last_name\":\"Kowalczyk\",\"first_name\":\"Ryszard\",\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"section_count\":2},{\"last_name\":\"Krawczyk\",\"first_name\":\"Agnieszka\",\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"section_count\":2},{\"last_name\":\"Lewandowski\",\"first_name\":\"Marek\",\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"section_count\":2},{\"last_name\":\"Majewski\",\"first_name\":\"Tomasz\",\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"section_count\":2},{\"last_name\":\"Wieczorek\",\"first_name\":\"Adam\",\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"section_count\":2},{\"last_name\":\"Woźniak\",\"first_name\":\"Ryszard\",\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"section_count\":2},{\"last_name\":\"Woźniak\",\"first_name\":\"Teresa\",\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"section_count\":2},{\"last_name\":\"Jankowski\",\"first_name\":\"Grzegorz\",\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"section_count\":1},{\"last_name\":\"Jaworski\",\"first_name\":\"Robert\",\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"section_count\":1},{\"last_name\":\"Kozłowski\",\"first_name\":\"Agnieszka\",\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"section_count\":1},{\"last_name\":\"Kozłowski\",\"first_name\":\"Katarzyna\",\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"section_count\":1},{\"last_name\":\"Krawczyk\",\"first_name\":\"Ewa\",\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"section_count\":1},{\"last_name\":\"Majewski\",\"first_name\":\"Zbigniew\",\"professor_id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"section_count\":1},{\"last_name\":\"Michalski\",\"first_name\":\"Ewa\",\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"section_count\":1},{\"last_name\":\"Michalski\",\"first_name\":\"Magdalena\",\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"section_count\":1},{\"last_name\":\"Nowak\",\"first_name\":\"Michał\",\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"section_count\":1},{\"last_name\":\"Nowakowski\",\"first_name\":\"Mariusz\",\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"section_count\":1},{\"last_name\":\"Olszewski\",\"first_name\":\"Małgorzata\",\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"section_count\":1},{\"last_name\":\"Pawłowski\",\"first_name\":\"Teresa\",\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"section_count\":1},{\"last_name\":\"Piotrowski\",\"first_name\":\"Magdalena\",\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"section_count\":1},{\"last_name\":\"Stępień\",\"first_name\":\"Joanna\",\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"section_count\":1},{\"last_name\":\"Szymański\",\"first_name\":\"Katarzyna\",\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"section_count\":1},{\"last_name\":\"Wieczorek\",\"first_name\":\"Tomasz\",\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"section_count\":1},{\"last_name\":\"Woźniak\",\"first_name\":\"Marek\",\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"section_count\":1},{\"last_name\":\"Górski\",\"first_name\":\"Zbigniew\",\"professor_id\":\"0d79d103-ec28-4ebf-831c-98b3fb34e9b0\",\"section_count\":0},{\"last_name\":\"Jankowski\",\"first_name\":\"Paweł\",\"professor_id\":\"8247a0e4-17f5-4581-a78b-f33a1a2a518b\",\"section_count\":0},{\"last_name\":\"Jaworski\",\"first_name\":\"Michał\",\"professor_id\":\"3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8\",\"section_count\":0},{\"last_name\":\"Kowalski\",\"first_name\":\"Ryszard\",\"professor_id\":\"cd0c2f92-7721-4952-96be-08e390bdeee5\",\"section_count\":0},{\"last_name\":\"Kozłowski\",\"first_name\":\"Andrzej\",\"professor_id\":\"6fbff454-aa38-4740-9c1e-dcaf245581f7\",\"section_count\":0},{\"last_name\":\"Kozłowski\",\"first_name\":\"Teresa\",\"professor_id\":\"88077860-09c6-401b-961d-48f7a7616705\",\"section_count\":0},{\"last_name\":\"Kozłowski\",\"first_name\":\"Tomasz\",\"professor_id\":\"1ef09db2-d2f5-46a4-8805-75af1dc6f856\",\"section_count\":0},{\"last_name\":\"Krawczyk\",\"first_name\":\"Jan\",\"professor_id\":\"be6b85ea-af27-41f9-9346-32e567c2b4bc\",\"section_count\":0},{\"last_name\":\"Król\",\"first_name\":\"Mariusz\",\"professor_id\":\"42b2aaed-9cc2-452d-bd55-ce9c8f222b3d\",\"section_count\":0},{\"last_name\":\"Kwiatkowski\",\"first_name\":\"Jerzy\",\"professor_id\":\"b2f3236b-6aea-4ddf-9e72-ca1b944344db\",\"section_count\":0},{\"last_name\":\"Lewandowski\",\"first_name\":\"Piotr\",\"professor_id\":\"fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464\",\"section_count\":0},{\"last_name\":\"Mazur\",\"first_name\":\"Jerzy\",\"professor_id\":\"bdacd65d-0634-47e8-894e-728fc9221207\",\"section_count\":0},{\"last_name\":\"Nowak\",\"first_name\":\"Dariusz\",\"professor_id\":\"b3caef8a-8a8a-49c7-ae98-0fa38441139a\",\"section_count\":0},{\"last_name\":\"Nowak\",\"first_name\":\"Jerzy\",\"professor_id\":\"ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef\",\"section_count\":0},{\"last_name\":\"Nowak\",\"first_name\":\"Mariusz\",\"professor_id\":\"69dc12ae-95ba-499f-9d04-5eefc2f2d4bf\",\"section_count\":0},{\"last_name\":\"Nowakowski\",\"first_name\":\"Stanisław\",\"professor_id\":\"8711908f-0ab8-4de0-8b45-c2a294d2de1c\",\"section_count\":0},{\"last_name\":\"Olszewski\",\"first_name\":\"Jan\",\"professor_id\":\"b84e485c-28ea-42b7-a13e-a02578274226\",\"section_count\":0},{\"last_name\":\"Piotrowski\",\"first_name\":\"Paweł\",\"professor_id\":\"ad35d15d-f7ad-416c-ade2-89853d0729c9\",\"section_count\":0},{\"last_name\":\"Stępień\",\"first_name\":\"Stanisław\",\"professor_id\":\"9c934df1-9a06-49a7-96f4-351a647012ba\",\"section_count\":0},{\"last_name\":\"Szymański\",\"first_name\":\"Magdalena\",\"professor_id\":\"8e54b65b-4864-47d8-b9b3-9b727991a6d2\",\"section_count\":0},{\"last_name\":\"Szymański\",\"first_name\":\"Ryszard\",\"professor_id\":\"089c913f-8ec7-4162-9a7a-a67e41b3b935\",\"section_count\":0},{\"last_name\":\"Wieczorek\",\"first_name\":\"Jacek\",\"professor_id\":\"2adc085d-5924-47a1-9bf3-43472e564355\",\"section_count\":0},{\"last_name\":\"Wójcik\",\"first_name\":\"Stanisław\",\"professor_id\":\"bdb7d368-ed33-4dd8-99e9-aedea2c36f60\",\"section_count\":0},{\"last_name\":\"Woźniak\",\"first_name\":\"Adam\",\"professor_id\":\"2dd66040-0bde-416d-b2dc-9faa4ef4cd44\",\"section_count\":0},{\"last_name\":\"Zieliński\",\"first_name\":\"Grzegorz\",\"professor_id\":\"7732eb5b-ba0d-4e3f-9b39-205a0771c02a\",\"section_count\":0}]},\"endedAt\":1771803444907},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT p.id AS professor_id, p.first_name AS first_name, p.last_name AS last_name, COUNT(cs.id) AS section_count FROM public.professors p LEFT JOIN public.course_sections cs ON cs.professor_id = p.id GROUP BY p.id, p.first_name, p.last_name ORDER BY section_count DESC, p.last_name ASC, p.first_name ASC\",\"metadata\":{\"columns\":[\"last_name\",\"first_name\",\"professor_id\",\"section_count\"],\"rowCount\":50,\"sample\":[{\"last_name\":\"Wojciechowski\",\"first_name\":\"Jacek\",\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"section_count\":3},{\"last_name\":\"Kowalczyk\",\"first_name\":\"Ryszard\",\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"section_count\":2}]},\"data\":[{\"last_name\":\"Wojciechowski\",\"first_name\":\"Jacek\",\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"section_count\":3},{\"last_name\":\"Kowalczyk\",\"first_name\":\"Ryszard\",\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"section_count\":2},{\"last_name\":\"Krawczyk\",\"first_name\":\"Agnieszka\",\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"section_count\":2},{\"last_name\":\"Lewandowski\",\"first_name\":\"Marek\",\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"section_count\":2},{\"last_name\":\"Majewski\",\"first_name\":\"Tomasz\",\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"section_count\":2},{\"last_name\":\"Wieczorek\",\"first_name\":\"Adam\",\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"section_count\":2},{\"last_name\":\"Woźniak\",\"first_name\":\"Ryszard\",\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"section_count\":2},{\"last_name\":\"Woźniak\",\"first_name\":\"Teresa\",\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"section_count\":2},{\"last_name\":\"Jankowski\",\"first_name\":\"Grzegorz\",\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"section_count\":1},{\"last_name\":\"Jaworski\",\"first_name\":\"Robert\",\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"section_count\":1},{\"last_name\":\"Kozłowski\",\"first_name\":\"Agnieszka\",\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"section_count\":1},{\"last_name\":\"Kozłowski\",\"first_name\":\"Katarzyna\",\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"section_count\":1},{\"last_name\":\"Krawczyk\",\"first_name\":\"Ewa\",\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"section_count\":1},{\"last_name\":\"Majewski\",\"first_name\":\"Zbigniew\",\"professor_id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"section_count\":1},{\"last_name\":\"Michalski\",\"first_name\":\"Ewa\",\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"section_count\":1},{\"last_name\":\"Michalski\",\"first_name\":\"Magdalena\",\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"section_count\":1},{\"last_name\":\"Nowak\",\"first_name\":\"Michał\",\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"section_count\":1},{\"last_name\":\"Nowakowski\",\"first_name\":\"Mariusz\",\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"section_count\":1},{\"last_name\":\"Olszewski\",\"first_name\":\"Małgorzata\",\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"section_count\":1},{\"last_name\":\"Pawłowski\",\"first_name\":\"Teresa\",\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"section_count\":1},{\"last_name\":\"Piotrowski\",\"first_name\":\"Magdalena\",\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"section_count\":1},{\"last_name\":\"Stępień\",\"first_name\":\"Joanna\",\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"section_count\":1},{\"last_name\":\"Szymański\",\"first_name\":\"Katarzyna\",\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"section_count\":1},{\"last_name\":\"Wieczorek\",\"first_name\":\"Tomasz\",\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"section_count\":1},{\"last_name\":\"Woźniak\",\"first_name\":\"Marek\",\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"section_count\":1},{\"last_name\":\"Górski\",\"first_name\":\"Zbigniew\",\"professor_id\":\"0d79d103-ec28-4ebf-831c-98b3fb34e9b0\",\"section_count\":0},{\"last_name\":\"Jankowski\",\"first_name\":\"Paweł\",\"professor_id\":\"8247a0e4-17f5-4581-a78b-f33a1a2a518b\",\"section_count\":0},{\"last_name\":\"Jaworski\",\"first_name\":\"Michał\",\"professor_id\":\"3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8\",\"section_count\":0},{\"last_name\":\"Kowalski\",\"first_name\":\"Ryszard\",\"professor_id\":\"cd0c2f92-7721-4952-96be-08e390bdeee5\",\"section_count\":0},{\"last_name\":\"Kozłowski\",\"first_name\":\"Andrzej\",\"professor_id\":\"6fbff454-aa38-4740-9c1e-dcaf245581f7\",\"section_count\":0},{\"last_name\":\"Kozłowski\",\"first_name\":\"Teresa\",\"professor_id\":\"88077860-09c6-401b-961d-48f7a7616705\",\"section_count\":0},{\"last_name\":\"Kozłowski\",\"first_name\":\"Tomasz\",\"professor_id\":\"1ef09db2-d2f5-46a4-8805-75af1dc6f856\",\"section_count\":0},{\"last_name\":\"Krawczyk\",\"first_name\":\"Jan\",\"professor_id\":\"be6b85ea-af27-41f9-9346-32e567c2b4bc\",\"section_count\":0},{\"last_name\":\"Król\",\"first_name\":\"Mariusz\",\"professor_id\":\"42b2aaed-9cc2-452d-bd55-ce9c8f222b3d\",\"section_count\":0},{\"last_name\":\"Kwiatkowski\",\"first_name\":\"Jerzy\",\"professor_id\":\"b2f3236b-6aea-4ddf-9e72-ca1b944344db\",\"section_count\":0},{\"last_name\":\"Lewandowski\",\"first_name\":\"Piotr\",\"professor_id\":\"fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464\",\"section_count\":0},{\"last_name\":\"Mazur\",\"first_name\":\"Jerzy\",\"professor_id\":\"bdacd65d-0634-47e8-894e-728fc9221207\",\"section_count\":0},{\"last_name\":\"Nowak\",\"first_name\":\"Dariusz\",\"professor_id\":\"b3caef8a-8a8a-49c7-ae98-0fa38441139a\",\"section_count\":0},{\"last_name\":\"Nowak\",\"first_name\":\"Jerzy\",\"professor_id\":\"ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef\",\"section_count\":0},{\"last_name\":\"Nowak\",\"first_name\":\"Mariusz\",\"professor_id\":\"69dc12ae-95ba-499f-9d04-5eefc2f2d4bf\",\"section_count\":0},{\"last_name\":\"Nowakowski\",\"first_name\":\"Stanisław\",\"professor_id\":\"8711908f-0ab8-4de0-8b45-c2a294d2de1c\",\"section_count\":0},{\"last_name\":\"Olszewski\",\"first_name\":\"Jan\",\"professor_id\":\"b84e485c-28ea-42b7-a13e-a02578274226\",\"section_count\":0},{\"last_name\":\"Piotrowski\",\"first_name\":\"Paweł\",\"professor_id\":\"ad35d15d-f7ad-416c-ade2-89853d0729c9\",\"section_count\":0},{\"last_name\":\"Stępień\",\"first_name\":\"Stanisław\",\"professor_id\":\"9c934df1-9a06-49a7-96f4-351a647012ba\",\"section_count\":0},{\"last_name\":\"Szymański\",\"first_name\":\"Magdalena\",\"professor_id\":\"8e54b65b-4864-47d8-b9b3-9b727991a6d2\",\"section_count\":0},{\"last_name\":\"Szymański\",\"first_name\":\"Ryszard\",\"professor_id\":\"089c913f-8ec7-4162-9a7a-a67e41b3b935\",\"section_count\":0},{\"last_name\":\"Wieczorek\",\"first_name\":\"Jacek\",\"professor_id\":\"2adc085d-5924-47a1-9bf3-43472e564355\",\"section_count\":0},{\"last_name\":\"Wójcik\",\"first_name\":\"Stanisław\",\"professor_id\":\"bdb7d368-ed33-4dd8-99e9-aedea2c36f60\",\"section_count\":0},{\"last_name\":\"Woźniak\",\"first_name\":\"Adam\",\"professor_id\":\"2dd66040-0bde-416d-b2dc-9faa4ef4cd44\",\"section_count\":0},{\"last_name\":\"Zieliński\",\"first_name\":\"Grzegorz\",\"professor_id\":\"7732eb5b-ba0d-4e3f-9b39-205a0771c02a\",\"section_count\":0}]},\"startedAt\":1771803444911,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of course sections taught by each professor\",\"width\":700,\"height\":{\"step\":18},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Section count\"},\"y\":{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor (ID)\",\"sort\":{\"field\":\"section_count\",\"op\":\"sum\",\"order\":\"descending\"}},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last name\"},{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Sections\"},{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"}]}},\"reasoning\":\"Horizontal bars show each professor's section count using the available columns. Professor identity is encoded with professor_id (unique) on the y-axis; full names are exposed in the tooltip so you can read the human-friendly label while preserving uniqueness and correct counts.\"},\"endedAt\":1771803466656},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of course sections taught by each professor\",\"width\":700,\"height\":{\"step\":18},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Section count\"},\"y\":{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor (ID)\",\"sort\":{\"field\":\"section_count\",\"op\":\"sum\",\"order\":\"descending\"}},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last name\"},{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Sections\"},{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"}]}},\"reasoning\":\"Horizontal bars show each professor's section count using the available columns. Professor identity is encoded with professor_id (unique) on the y-axis; full names are exposed in the tooltip so you can read the human-friendly label while preserving uniqueness and correct counts.\"},\"startedAt\":1771803466667,\"status\":\"success\",\"output\":{\"sql\":\"SELECT p.id AS professor_id, p.first_name AS first_name, p.last_name AS last_name, COUNT(cs.id) AS section_count FROM public.professors p LEFT JOIN public.course_sections cs ON cs.professor_id = p.id GROUP BY p.id, p.first_name, p.last_name ORDER BY section_count DESC, p.last_name ASC, p.first_name ASC;\",\"data\":[{\"last_name\":\"Wojciechowski\",\"first_name\":\"Jacek\",\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"section_count\":3},{\"last_name\":\"Kowalczyk\",\"first_name\":\"Ryszard\",\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"section_count\":2},{\"last_name\":\"Krawczyk\",\"first_name\":\"Agnieszka\",\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"section_count\":2},{\"last_name\":\"Lewandowski\",\"first_name\":\"Marek\",\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"section_count\":2},{\"last_name\":\"Majewski\",\"first_name\":\"Tomasz\",\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"section_count\":2},{\"last_name\":\"Wieczorek\",\"first_name\":\"Adam\",\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"section_count\":2},{\"last_name\":\"Woźniak\",\"first_name\":\"Ryszard\",\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"section_count\":2},{\"last_name\":\"Woźniak\",\"first_name\":\"Teresa\",\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"section_count\":2},{\"last_name\":\"Jankowski\",\"first_name\":\"Grzegorz\",\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"section_count\":1},{\"last_name\":\"Jaworski\",\"first_name\":\"Robert\",\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"section_count\":1},{\"last_name\":\"Kozłowski\",\"first_name\":\"Agnieszka\",\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"section_count\":1},{\"last_name\":\"Kozłowski\",\"first_name\":\"Katarzyna\",\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"section_count\":1},{\"last_name\":\"Krawczyk\",\"first_name\":\"Ewa\",\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"section_count\":1},{\"last_name\":\"Majewski\",\"first_name\":\"Zbigniew\",\"professor_id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"section_count\":1},{\"last_name\":\"Michalski\",\"first_name\":\"Ewa\",\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"section_count\":1},{\"last_name\":\"Michalski\",\"first_name\":\"Magdalena\",\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"section_count\":1},{\"last_name\":\"Nowak\",\"first_name\":\"Michał\",\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"section_count\":1},{\"last_name\":\"Nowakowski\",\"first_name\":\"Mariusz\",\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"section_count\":1},{\"last_name\":\"Olszewski\",\"first_name\":\"Małgorzata\",\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"section_count\":1},{\"last_name\":\"Pawłowski\",\"first_name\":\"Teresa\",\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"section_count\":1},{\"last_name\":\"Piotrowski\",\"first_name\":\"Magdalena\",\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"section_count\":1},{\"last_name\":\"Stępień\",\"first_name\":\"Joanna\",\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"section_count\":1},{\"last_name\":\"Szymański\",\"first_name\":\"Katarzyna\",\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"section_count\":1},{\"last_name\":\"Wieczorek\",\"first_name\":\"Tomasz\",\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"section_count\":1},{\"last_name\":\"Woźniak\",\"first_name\":\"Marek\",\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"section_count\":1},{\"last_name\":\"Górski\",\"first_name\":\"Zbigniew\",\"professor_id\":\"0d79d103-ec28-4ebf-831c-98b3fb34e9b0\",\"section_count\":0},{\"last_name\":\"Jankowski\",\"first_name\":\"Paweł\",\"professor_id\":\"8247a0e4-17f5-4581-a78b-f33a1a2a518b\",\"section_count\":0},{\"last_name\":\"Jaworski\",\"first_name\":\"Michał\",\"professor_id\":\"3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8\",\"section_count\":0},{\"last_name\":\"Kowalski\",\"first_name\":\"Ryszard\",\"professor_id\":\"cd0c2f92-7721-4952-96be-08e390bdeee5\",\"section_count\":0},{\"last_name\":\"Kozłowski\",\"first_name\":\"Andrzej\",\"professor_id\":\"6fbff454-aa38-4740-9c1e-dcaf245581f7\",\"section_count\":0},{\"last_name\":\"Kozłowski\",\"first_name\":\"Teresa\",\"professor_id\":\"88077860-09c6-401b-961d-48f7a7616705\",\"section_count\":0},{\"last_name\":\"Kozłowski\",\"first_name\":\"Tomasz\",\"professor_id\":\"1ef09db2-d2f5-46a4-8805-75af1dc6f856\",\"section_count\":0},{\"last_name\":\"Krawczyk\",\"first_name\":\"Jan\",\"professor_id\":\"be6b85ea-af27-41f9-9346-32e567c2b4bc\",\"section_count\":0},{\"last_name\":\"Król\",\"first_name\":\"Mariusz\",\"professor_id\":\"42b2aaed-9cc2-452d-bd55-ce9c8f222b3d\",\"section_count\":0},{\"last_name\":\"Kwiatkowski\",\"first_name\":\"Jerzy\",\"professor_id\":\"b2f3236b-6aea-4ddf-9e72-ca1b944344db\",\"section_count\":0},{\"last_name\":\"Lewandowski\",\"first_name\":\"Piotr\",\"professor_id\":\"fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464\",\"section_count\":0},{\"last_name\":\"Mazur\",\"first_name\":\"Jerzy\",\"professor_id\":\"bdacd65d-0634-47e8-894e-728fc9221207\",\"section_count\":0},{\"last_name\":\"Nowak\",\"first_name\":\"Dariusz\",\"professor_id\":\"b3caef8a-8a8a-49c7-ae98-0fa38441139a\",\"section_count\":0},{\"last_name\":\"Nowak\",\"first_name\":\"Jerzy\",\"professor_id\":\"ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef\",\"section_count\":0},{\"last_name\":\"Nowak\",\"first_name\":\"Mariusz\",\"professor_id\":\"69dc12ae-95ba-499f-9d04-5eefc2f2d4bf\",\"section_count\":0},{\"last_name\":\"Nowakowski\",\"first_name\":\"Stanisław\",\"professor_id\":\"8711908f-0ab8-4de0-8b45-c2a294d2de1c\",\"section_count\":0},{\"last_name\":\"Olszewski\",\"first_name\":\"Jan\",\"professor_id\":\"b84e485c-28ea-42b7-a13e-a02578274226\",\"section_count\":0},{\"last_name\":\"Piotrowski\",\"first_name\":\"Paweł\",\"professor_id\":\"ad35d15d-f7ad-416c-ade2-89853d0729c9\",\"section_count\":0},{\"last_name\":\"Stępień\",\"first_name\":\"Stanisław\",\"professor_id\":\"9c934df1-9a06-49a7-96f4-351a647012ba\",\"section_count\":0},{\"last_name\":\"Szymański\",\"first_name\":\"Magdalena\",\"professor_id\":\"8e54b65b-4864-47d8-b9b3-9b727991a6d2\",\"section_count\":0},{\"last_name\":\"Szymański\",\"first_name\":\"Ryszard\",\"professor_id\":\"089c913f-8ec7-4162-9a7a-a67e41b3b935\",\"section_count\":0},{\"last_name\":\"Wieczorek\",\"first_name\":\"Jacek\",\"professor_id\":\"2adc085d-5924-47a1-9bf3-43472e564355\",\"section_count\":0},{\"last_name\":\"Wójcik\",\"first_name\":\"Stanisław\",\"professor_id\":\"bdb7d368-ed33-4dd8-99e9-aedea2c36f60\",\"section_count\":0},{\"last_name\":\"Woźniak\",\"first_name\":\"Adam\",\"professor_id\":\"2dd66040-0bde-416d-b2dc-9faa4ef4cd44\",\"section_count\":0},{\"last_name\":\"Zieliński\",\"first_name\":\"Grzegorz\",\"professor_id\":\"7732eb5b-ba0d-4e3f-9b39-205a0771c02a\",\"section_count\":0}],\"metadata\":{\"columns\":[\"last_name\",\"first_name\",\"professor_id\",\"section_count\"],\"rowCount\":50,\"sample\":[{\"last_name\":\"Wojciechowski\",\"first_name\":\"Jacek\",\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"section_count\":3},{\"last_name\":\"Kowalczyk\",\"first_name\":\"Ryszard\",\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"section_count\":2}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of course sections taught by each professor\",\"width\":700,\"height\":{\"step\":18},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Section count\"},\"y\":{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor (ID)\",\"sort\":{\"field\":\"section_count\",\"op\":\"sum\",\"order\":\"descending\"}},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last name\"},{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Sections\"},{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771803466672}},\"input\":{\"question\":\"How many course sections does each professor teach?\"},\"result\":{\"sql\":\"SELECT p.id AS professor_id, p.first_name AS first_name, p.last_name AS last_name, COUNT(cs.id) AS section_count FROM public.professors p LEFT JOIN public.course_sections cs ON cs.professor_id = p.id GROUP BY p.id, p.first_name, p.last_name ORDER BY section_count DESC, p.last_name ASC, p.first_name ASC;\",\"data\":[{\"last_name\":\"Wojciechowski\",\"first_name\":\"Jacek\",\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"section_count\":3},{\"last_name\":\"Kowalczyk\",\"first_name\":\"Ryszard\",\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"section_count\":2},{\"last_name\":\"Krawczyk\",\"first_name\":\"Agnieszka\",\"professor_id\":\"ff61fe12-d98c-4d43-87db-710f2571c1f2\",\"section_count\":2},{\"last_name\":\"Lewandowski\",\"first_name\":\"Marek\",\"professor_id\":\"037011f2-f3d4-406e-9554-a6ffba701e06\",\"section_count\":2},{\"last_name\":\"Majewski\",\"first_name\":\"Tomasz\",\"professor_id\":\"f221aafd-0e9c-4345-aff5-7e290e1a7864\",\"section_count\":2},{\"last_name\":\"Wieczorek\",\"first_name\":\"Adam\",\"professor_id\":\"da3a7394-3b19-4057-a07c-d343555b7ca2\",\"section_count\":2},{\"last_name\":\"Woźniak\",\"first_name\":\"Ryszard\",\"professor_id\":\"5d70abe8-4f1a-44ec-9816-2ec96a2807cb\",\"section_count\":2},{\"last_name\":\"Woźniak\",\"first_name\":\"Teresa\",\"professor_id\":\"173e49aa-5a27-41e8-b1fa-4d19423bdc0b\",\"section_count\":2},{\"last_name\":\"Jankowski\",\"first_name\":\"Grzegorz\",\"professor_id\":\"a9d4f491-5550-4538-bffd-b7002867c10e\",\"section_count\":1},{\"last_name\":\"Jaworski\",\"first_name\":\"Robert\",\"professor_id\":\"8f0ffcad-1af9-4da5-898a-dc47b8717d83\",\"section_count\":1},{\"last_name\":\"Kozłowski\",\"first_name\":\"Agnieszka\",\"professor_id\":\"7fbf0e4c-fd08-4312-bb83-087368f81e46\",\"section_count\":1},{\"last_name\":\"Kozłowski\",\"first_name\":\"Katarzyna\",\"professor_id\":\"bcf3a47c-67cf-438d-93de-07c55ab583e0\",\"section_count\":1},{\"last_name\":\"Krawczyk\",\"first_name\":\"Ewa\",\"professor_id\":\"a82c40da-e7dc-4e49-9e66-386ea4bb7483\",\"section_count\":1},{\"last_name\":\"Majewski\",\"first_name\":\"Zbigniew\",\"professor_id\":\"b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4\",\"section_count\":1},{\"last_name\":\"Michalski\",\"first_name\":\"Ewa\",\"professor_id\":\"dd993c5f-eb62-491f-a783-5ca9a0132ade\",\"section_count\":1},{\"last_name\":\"Michalski\",\"first_name\":\"Magdalena\",\"professor_id\":\"5b3ae75e-96e7-4a7b-be0f-7375938dcd62\",\"section_count\":1},{\"last_name\":\"Nowak\",\"first_name\":\"Michał\",\"professor_id\":\"f24d24fc-5446-4d72-bb11-9d9dd1545f97\",\"section_count\":1},{\"last_name\":\"Nowakowski\",\"first_name\":\"Mariusz\",\"professor_id\":\"d19adcea-56d6-4557-8f93-95ec58fa5d34\",\"section_count\":1},{\"last_name\":\"Olszewski\",\"first_name\":\"Małgorzata\",\"professor_id\":\"cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6\",\"section_count\":1},{\"last_name\":\"Pawłowski\",\"first_name\":\"Teresa\",\"professor_id\":\"cee911dc-17c4-4395-b173-2af1418983fe\",\"section_count\":1},{\"last_name\":\"Piotrowski\",\"first_name\":\"Magdalena\",\"professor_id\":\"bd20af15-589a-4d17-b8b8-8255d4edd776\",\"section_count\":1},{\"last_name\":\"Stępień\",\"first_name\":\"Joanna\",\"professor_id\":\"007cb07c-c14f-4824-a62d-d42685252c75\",\"section_count\":1},{\"last_name\":\"Szymański\",\"first_name\":\"Katarzyna\",\"professor_id\":\"33ba2086-7c0f-4a57-9451-014db3e74209\",\"section_count\":1},{\"last_name\":\"Wieczorek\",\"first_name\":\"Tomasz\",\"professor_id\":\"4050afec-f68c-49bb-9982-4a3c9d1a23d9\",\"section_count\":1},{\"last_name\":\"Woźniak\",\"first_name\":\"Marek\",\"professor_id\":\"2b5262b8-932c-4951-9390-c56d4b69d888\",\"section_count\":1},{\"last_name\":\"Górski\",\"first_name\":\"Zbigniew\",\"professor_id\":\"0d79d103-ec28-4ebf-831c-98b3fb34e9b0\",\"section_count\":0},{\"last_name\":\"Jankowski\",\"first_name\":\"Paweł\",\"professor_id\":\"8247a0e4-17f5-4581-a78b-f33a1a2a518b\",\"section_count\":0},{\"last_name\":\"Jaworski\",\"first_name\":\"Michał\",\"professor_id\":\"3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8\",\"section_count\":0},{\"last_name\":\"Kowalski\",\"first_name\":\"Ryszard\",\"professor_id\":\"cd0c2f92-7721-4952-96be-08e390bdeee5\",\"section_count\":0},{\"last_name\":\"Kozłowski\",\"first_name\":\"Andrzej\",\"professor_id\":\"6fbff454-aa38-4740-9c1e-dcaf245581f7\",\"section_count\":0},{\"last_name\":\"Kozłowski\",\"first_name\":\"Teresa\",\"professor_id\":\"88077860-09c6-401b-961d-48f7a7616705\",\"section_count\":0},{\"last_name\":\"Kozłowski\",\"first_name\":\"Tomasz\",\"professor_id\":\"1ef09db2-d2f5-46a4-8805-75af1dc6f856\",\"section_count\":0},{\"last_name\":\"Krawczyk\",\"first_name\":\"Jan\",\"professor_id\":\"be6b85ea-af27-41f9-9346-32e567c2b4bc\",\"section_count\":0},{\"last_name\":\"Król\",\"first_name\":\"Mariusz\",\"professor_id\":\"42b2aaed-9cc2-452d-bd55-ce9c8f222b3d\",\"section_count\":0},{\"last_name\":\"Kwiatkowski\",\"first_name\":\"Jerzy\",\"professor_id\":\"b2f3236b-6aea-4ddf-9e72-ca1b944344db\",\"section_count\":0},{\"last_name\":\"Lewandowski\",\"first_name\":\"Piotr\",\"professor_id\":\"fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464\",\"section_count\":0},{\"last_name\":\"Mazur\",\"first_name\":\"Jerzy\",\"professor_id\":\"bdacd65d-0634-47e8-894e-728fc9221207\",\"section_count\":0},{\"last_name\":\"Nowak\",\"first_name\":\"Dariusz\",\"professor_id\":\"b3caef8a-8a8a-49c7-ae98-0fa38441139a\",\"section_count\":0},{\"last_name\":\"Nowak\",\"first_name\":\"Jerzy\",\"professor_id\":\"ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef\",\"section_count\":0},{\"last_name\":\"Nowak\",\"first_name\":\"Mariusz\",\"professor_id\":\"69dc12ae-95ba-499f-9d04-5eefc2f2d4bf\",\"section_count\":0},{\"last_name\":\"Nowakowski\",\"first_name\":\"Stanisław\",\"professor_id\":\"8711908f-0ab8-4de0-8b45-c2a294d2de1c\",\"section_count\":0},{\"last_name\":\"Olszewski\",\"first_name\":\"Jan\",\"professor_id\":\"b84e485c-28ea-42b7-a13e-a02578274226\",\"section_count\":0},{\"last_name\":\"Piotrowski\",\"first_name\":\"Paweł\",\"professor_id\":\"ad35d15d-f7ad-416c-ade2-89853d0729c9\",\"section_count\":0},{\"last_name\":\"Stępień\",\"first_name\":\"Stanisław\",\"professor_id\":\"9c934df1-9a06-49a7-96f4-351a647012ba\",\"section_count\":0},{\"last_name\":\"Szymański\",\"first_name\":\"Magdalena\",\"professor_id\":\"8e54b65b-4864-47d8-b9b3-9b727991a6d2\",\"section_count\":0},{\"last_name\":\"Szymański\",\"first_name\":\"Ryszard\",\"professor_id\":\"089c913f-8ec7-4162-9a7a-a67e41b3b935\",\"section_count\":0},{\"last_name\":\"Wieczorek\",\"first_name\":\"Jacek\",\"professor_id\":\"2adc085d-5924-47a1-9bf3-43472e564355\",\"section_count\":0},{\"last_name\":\"Wójcik\",\"first_name\":\"Stanisław\",\"professor_id\":\"bdb7d368-ed33-4dd8-99e9-aedea2c36f60\",\"section_count\":0},{\"last_name\":\"Woźniak\",\"first_name\":\"Adam\",\"professor_id\":\"2dd66040-0bde-416d-b2dc-9faa4ef4cd44\",\"section_count\":0},{\"last_name\":\"Zieliński\",\"first_name\":\"Grzegorz\",\"professor_id\":\"7732eb5b-ba0d-4e3f-9b39-205a0771c02a\",\"section_count\":0}],\"metadata\":{\"columns\":[\"last_name\",\"first_name\",\"professor_id\",\"section_count\"],\"rowCount\":50,\"sample\":[{\"last_name\":\"Wojciechowski\",\"first_name\":\"Jacek\",\"professor_id\":\"31cd50a7-1657-4a1f-939b-2fef224e48a8\",\"section_count\":3},{\"last_name\":\"Kowalczyk\",\"first_name\":\"Ryszard\",\"professor_id\":\"089bea41-7aee-4467-b7ad-36bf22181040\",\"section_count\":2}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Number of course sections taught by each professor\",\"width\":700,\"height\":{\"step\":18},\"mark\":{\"type\":\"bar\"},\"encoding\":{\"x\":{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Section count\"},\"y\":{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor (ID)\",\"sort\":{\"field\":\"section_count\",\"op\":\"sum\",\"order\":\"descending\"}},\"tooltip\":[{\"field\":\"first_name\",\"type\":\"nominal\",\"title\":\"First name\"},{\"field\":\"last_name\",\"type\":\"nominal\",\"title\":\"Last name\"},{\"field\":\"section_count\",\"type\":\"quantitative\",\"title\":\"Sections\"},{\"field\":\"professor_id\",\"type\":\"nominal\",\"title\":\"Professor ID\"}]}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"d70058c4112802aa0de056674e12b4c8\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/professor-course-load/run-0001/run.json",
+    "queryPath": "runs/professor-course-load/run-0001/query.sql",
+    "vegaRawPath": "runs/professor-course-load/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/professor-course-load/run-0001/vega.resolved.json",
+    "imagePath": "runs/professor-course-load/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:37:47.205Z",
+  "traceId": "d70058c4112802aa0de056674e12b4c8",
+  "success": true,
+  "durationMs": 42501,
+  "resultRaw": {
+    "data": [
+      {
+        "last_name": "Wojciechowski",
+        "first_name": "Jacek",
+        "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+        "section_count": 3
+      },
+      {
+        "last_name": "Kowalczyk",
+        "first_name": "Ryszard",
+        "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+        "section_count": 2
+      },
+      {
+        "last_name": "Krawczyk",
+        "first_name": "Agnieszka",
+        "professor_id": "ff61fe12-d98c-4d43-87db-710f2571c1f2",
+        "section_count": 2
+      },
+      {
+        "last_name": "Lewandowski",
+        "first_name": "Marek",
+        "professor_id": "037011f2-f3d4-406e-9554-a6ffba701e06",
+        "section_count": 2
+      },
+      {
+        "last_name": "Majewski",
+        "first_name": "Tomasz",
+        "professor_id": "f221aafd-0e9c-4345-aff5-7e290e1a7864",
+        "section_count": 2
+      },
+      {
+        "last_name": "Wieczorek",
+        "first_name": "Adam",
+        "professor_id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+        "section_count": 2
+      },
+      {
+        "last_name": "Woźniak",
+        "first_name": "Ryszard",
+        "professor_id": "5d70abe8-4f1a-44ec-9816-2ec96a2807cb",
+        "section_count": 2
+      },
+      {
+        "last_name": "Woźniak",
+        "first_name": "Teresa",
+        "professor_id": "173e49aa-5a27-41e8-b1fa-4d19423bdc0b",
+        "section_count": 2
+      },
+      {
+        "last_name": "Jankowski",
+        "first_name": "Grzegorz",
+        "professor_id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+        "section_count": 1
+      },
+      {
+        "last_name": "Jaworski",
+        "first_name": "Robert",
+        "professor_id": "8f0ffcad-1af9-4da5-898a-dc47b8717d83",
+        "section_count": 1
+      },
+      {
+        "last_name": "Kozłowski",
+        "first_name": "Agnieszka",
+        "professor_id": "7fbf0e4c-fd08-4312-bb83-087368f81e46",
+        "section_count": 1
+      },
+      {
+        "last_name": "Kozłowski",
+        "first_name": "Katarzyna",
+        "professor_id": "bcf3a47c-67cf-438d-93de-07c55ab583e0",
+        "section_count": 1
+      },
+      {
+        "last_name": "Krawczyk",
+        "first_name": "Ewa",
+        "professor_id": "a82c40da-e7dc-4e49-9e66-386ea4bb7483",
+        "section_count": 1
+      },
+      {
+        "last_name": "Majewski",
+        "first_name": "Zbigniew",
+        "professor_id": "b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4",
+        "section_count": 1
+      },
+      {
+        "last_name": "Michalski",
+        "first_name": "Ewa",
+        "professor_id": "dd993c5f-eb62-491f-a783-5ca9a0132ade",
+        "section_count": 1
+      },
+      {
+        "last_name": "Michalski",
+        "first_name": "Magdalena",
+        "professor_id": "5b3ae75e-96e7-4a7b-be0f-7375938dcd62",
+        "section_count": 1
+      },
+      {
+        "last_name": "Nowak",
+        "first_name": "Michał",
+        "professor_id": "f24d24fc-5446-4d72-bb11-9d9dd1545f97",
+        "section_count": 1
+      },
+      {
+        "last_name": "Nowakowski",
+        "first_name": "Mariusz",
+        "professor_id": "d19adcea-56d6-4557-8f93-95ec58fa5d34",
+        "section_count": 1
+      },
+      {
+        "last_name": "Olszewski",
+        "first_name": "Małgorzata",
+        "professor_id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+        "section_count": 1
+      },
+      {
+        "last_name": "Pawłowski",
+        "first_name": "Teresa",
+        "professor_id": "cee911dc-17c4-4395-b173-2af1418983fe",
+        "section_count": 1
+      },
+      {
+        "last_name": "Piotrowski",
+        "first_name": "Magdalena",
+        "professor_id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+        "section_count": 1
+      },
+      {
+        "last_name": "Stępień",
+        "first_name": "Joanna",
+        "professor_id": "007cb07c-c14f-4824-a62d-d42685252c75",
+        "section_count": 1
+      },
+      {
+        "last_name": "Szymański",
+        "first_name": "Katarzyna",
+        "professor_id": "33ba2086-7c0f-4a57-9451-014db3e74209",
+        "section_count": 1
+      },
+      {
+        "last_name": "Wieczorek",
+        "first_name": "Tomasz",
+        "professor_id": "4050afec-f68c-49bb-9982-4a3c9d1a23d9",
+        "section_count": 1
+      },
+      {
+        "last_name": "Woźniak",
+        "first_name": "Marek",
+        "professor_id": "2b5262b8-932c-4951-9390-c56d4b69d888",
+        "section_count": 1
+      },
+      {
+        "last_name": "Górski",
+        "first_name": "Zbigniew",
+        "professor_id": "0d79d103-ec28-4ebf-831c-98b3fb34e9b0",
+        "section_count": 0
+      },
+      {
+        "last_name": "Jankowski",
+        "first_name": "Paweł",
+        "professor_id": "8247a0e4-17f5-4581-a78b-f33a1a2a518b",
+        "section_count": 0
+      },
+      {
+        "last_name": "Jaworski",
+        "first_name": "Michał",
+        "professor_id": "3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8",
+        "section_count": 0
+      },
+      {
+        "last_name": "Kowalski",
+        "first_name": "Ryszard",
+        "professor_id": "cd0c2f92-7721-4952-96be-08e390bdeee5",
+        "section_count": 0
+      },
+      {
+        "last_name": "Kozłowski",
+        "first_name": "Andrzej",
+        "professor_id": "6fbff454-aa38-4740-9c1e-dcaf245581f7",
+        "section_count": 0
+      },
+      {
+        "last_name": "Kozłowski",
+        "first_name": "Teresa",
+        "professor_id": "88077860-09c6-401b-961d-48f7a7616705",
+        "section_count": 0
+      },
+      {
+        "last_name": "Kozłowski",
+        "first_name": "Tomasz",
+        "professor_id": "1ef09db2-d2f5-46a4-8805-75af1dc6f856",
+        "section_count": 0
+      },
+      {
+        "last_name": "Krawczyk",
+        "first_name": "Jan",
+        "professor_id": "be6b85ea-af27-41f9-9346-32e567c2b4bc",
+        "section_count": 0
+      },
+      {
+        "last_name": "Król",
+        "first_name": "Mariusz",
+        "professor_id": "42b2aaed-9cc2-452d-bd55-ce9c8f222b3d",
+        "section_count": 0
+      },
+      {
+        "last_name": "Kwiatkowski",
+        "first_name": "Jerzy",
+        "professor_id": "b2f3236b-6aea-4ddf-9e72-ca1b944344db",
+        "section_count": 0
+      },
+      {
+        "last_name": "Lewandowski",
+        "first_name": "Piotr",
+        "professor_id": "fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464",
+        "section_count": 0
+      },
+      {
+        "last_name": "Mazur",
+        "first_name": "Jerzy",
+        "professor_id": "bdacd65d-0634-47e8-894e-728fc9221207",
+        "section_count": 0
+      },
+      {
+        "last_name": "Nowak",
+        "first_name": "Dariusz",
+        "professor_id": "b3caef8a-8a8a-49c7-ae98-0fa38441139a",
+        "section_count": 0
+      },
+      {
+        "last_name": "Nowak",
+        "first_name": "Jerzy",
+        "professor_id": "ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef",
+        "section_count": 0
+      },
+      {
+        "last_name": "Nowak",
+        "first_name": "Mariusz",
+        "professor_id": "69dc12ae-95ba-499f-9d04-5eefc2f2d4bf",
+        "section_count": 0
+      },
+      {
+        "last_name": "Nowakowski",
+        "first_name": "Stanisław",
+        "professor_id": "8711908f-0ab8-4de0-8b45-c2a294d2de1c",
+        "section_count": 0
+      },
+      {
+        "last_name": "Olszewski",
+        "first_name": "Jan",
+        "professor_id": "b84e485c-28ea-42b7-a13e-a02578274226",
+        "section_count": 0
+      },
+      {
+        "last_name": "Piotrowski",
+        "first_name": "Paweł",
+        "professor_id": "ad35d15d-f7ad-416c-ade2-89853d0729c9",
+        "section_count": 0
+      },
+      {
+        "last_name": "Stępień",
+        "first_name": "Stanisław",
+        "professor_id": "9c934df1-9a06-49a7-96f4-351a647012ba",
+        "section_count": 0
+      },
+      {
+        "last_name": "Szymański",
+        "first_name": "Magdalena",
+        "professor_id": "8e54b65b-4864-47d8-b9b3-9b727991a6d2",
+        "section_count": 0
+      },
+      {
+        "last_name": "Szymański",
+        "first_name": "Ryszard",
+        "professor_id": "089c913f-8ec7-4162-9a7a-a67e41b3b935",
+        "section_count": 0
+      },
+      {
+        "last_name": "Wieczorek",
+        "first_name": "Jacek",
+        "professor_id": "2adc085d-5924-47a1-9bf3-43472e564355",
+        "section_count": 0
+      },
+      {
+        "last_name": "Wójcik",
+        "first_name": "Stanisław",
+        "professor_id": "bdb7d368-ed33-4dd8-99e9-aedea2c36f60",
+        "section_count": 0
+      },
+      {
+        "last_name": "Woźniak",
+        "first_name": "Adam",
+        "professor_id": "2dd66040-0bde-416d-b2dc-9faa4ef4cd44",
+        "section_count": 0
+      },
+      {
+        "last_name": "Zieliński",
+        "first_name": "Grzegorz",
+        "professor_id": "7732eb5b-ba0d-4e3f-9b39-205a0771c02a",
+        "section_count": 0
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Number of course sections taught by each professor",
+      "width": 700,
+      "height": {
+        "step": 18
+      },
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "section_count",
+          "type": "quantitative",
+          "title": "Section count"
+        },
+        "y": {
+          "field": "professor_id",
+          "type": "nominal",
+          "title": "Professor (ID)",
+          "sort": {
+            "field": "section_count",
+            "op": "sum",
+            "order": "descending"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "first_name",
+            "type": "nominal",
+            "title": "First name"
+          },
+          {
+            "field": "last_name",
+            "type": "nominal",
+            "title": "Last name"
+          },
+          {
+            "field": "section_count",
+            "type": "quantitative",
+            "title": "Sections"
+          },
+          {
+            "field": "professor_id",
+            "type": "nominal",
+            "title": "Professor ID"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT p.id AS professor_id, p.first_name AS first_name, p.last_name AS last_name, COUNT(cs.id) AS section_count FROM public.professors p LEFT JOIN public.course_sections cs ON cs.professor_id = p.id GROUP BY p.id, p.first_name, p.last_name ORDER BY section_count DESC, p.last_name ASC, p.first_name ASC;",
+    "metadata": {
+      "columns": [
+        "last_name",
+        "first_name",
+        "professor_id",
+        "section_count"
+      ],
+      "rowCount": 50,
+      "sample": [
+        {
+          "last_name": "Wojciechowski",
+          "first_name": "Jacek",
+          "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+          "section_count": 3
+        },
+        {
+          "last_name": "Kowalczyk",
+          "first_name": "Ryszard",
+          "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+          "section_count": 2
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "last_name": "Wojciechowski",
+        "first_name": "Jacek",
+        "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+        "section_count": 3
+      },
+      {
+        "last_name": "Kowalczyk",
+        "first_name": "Ryszard",
+        "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+        "section_count": 2
+      },
+      {
+        "last_name": "Krawczyk",
+        "first_name": "Agnieszka",
+        "professor_id": "ff61fe12-d98c-4d43-87db-710f2571c1f2",
+        "section_count": 2
+      },
+      {
+        "last_name": "Lewandowski",
+        "first_name": "Marek",
+        "professor_id": "037011f2-f3d4-406e-9554-a6ffba701e06",
+        "section_count": 2
+      },
+      {
+        "last_name": "Majewski",
+        "first_name": "Tomasz",
+        "professor_id": "f221aafd-0e9c-4345-aff5-7e290e1a7864",
+        "section_count": 2
+      },
+      {
+        "last_name": "Wieczorek",
+        "first_name": "Adam",
+        "professor_id": "da3a7394-3b19-4057-a07c-d343555b7ca2",
+        "section_count": 2
+      },
+      {
+        "last_name": "Woźniak",
+        "first_name": "Ryszard",
+        "professor_id": "5d70abe8-4f1a-44ec-9816-2ec96a2807cb",
+        "section_count": 2
+      },
+      {
+        "last_name": "Woźniak",
+        "first_name": "Teresa",
+        "professor_id": "173e49aa-5a27-41e8-b1fa-4d19423bdc0b",
+        "section_count": 2
+      },
+      {
+        "last_name": "Jankowski",
+        "first_name": "Grzegorz",
+        "professor_id": "a9d4f491-5550-4538-bffd-b7002867c10e",
+        "section_count": 1
+      },
+      {
+        "last_name": "Jaworski",
+        "first_name": "Robert",
+        "professor_id": "8f0ffcad-1af9-4da5-898a-dc47b8717d83",
+        "section_count": 1
+      },
+      {
+        "last_name": "Kozłowski",
+        "first_name": "Agnieszka",
+        "professor_id": "7fbf0e4c-fd08-4312-bb83-087368f81e46",
+        "section_count": 1
+      },
+      {
+        "last_name": "Kozłowski",
+        "first_name": "Katarzyna",
+        "professor_id": "bcf3a47c-67cf-438d-93de-07c55ab583e0",
+        "section_count": 1
+      },
+      {
+        "last_name": "Krawczyk",
+        "first_name": "Ewa",
+        "professor_id": "a82c40da-e7dc-4e49-9e66-386ea4bb7483",
+        "section_count": 1
+      },
+      {
+        "last_name": "Majewski",
+        "first_name": "Zbigniew",
+        "professor_id": "b519eee1-fbd5-4ef9-bdf9-5f9f0346acc4",
+        "section_count": 1
+      },
+      {
+        "last_name": "Michalski",
+        "first_name": "Ewa",
+        "professor_id": "dd993c5f-eb62-491f-a783-5ca9a0132ade",
+        "section_count": 1
+      },
+      {
+        "last_name": "Michalski",
+        "first_name": "Magdalena",
+        "professor_id": "5b3ae75e-96e7-4a7b-be0f-7375938dcd62",
+        "section_count": 1
+      },
+      {
+        "last_name": "Nowak",
+        "first_name": "Michał",
+        "professor_id": "f24d24fc-5446-4d72-bb11-9d9dd1545f97",
+        "section_count": 1
+      },
+      {
+        "last_name": "Nowakowski",
+        "first_name": "Mariusz",
+        "professor_id": "d19adcea-56d6-4557-8f93-95ec58fa5d34",
+        "section_count": 1
+      },
+      {
+        "last_name": "Olszewski",
+        "first_name": "Małgorzata",
+        "professor_id": "cfd5d6c8-a14b-4fbd-9cc0-024b3f740aa6",
+        "section_count": 1
+      },
+      {
+        "last_name": "Pawłowski",
+        "first_name": "Teresa",
+        "professor_id": "cee911dc-17c4-4395-b173-2af1418983fe",
+        "section_count": 1
+      },
+      {
+        "last_name": "Piotrowski",
+        "first_name": "Magdalena",
+        "professor_id": "bd20af15-589a-4d17-b8b8-8255d4edd776",
+        "section_count": 1
+      },
+      {
+        "last_name": "Stępień",
+        "first_name": "Joanna",
+        "professor_id": "007cb07c-c14f-4824-a62d-d42685252c75",
+        "section_count": 1
+      },
+      {
+        "last_name": "Szymański",
+        "first_name": "Katarzyna",
+        "professor_id": "33ba2086-7c0f-4a57-9451-014db3e74209",
+        "section_count": 1
+      },
+      {
+        "last_name": "Wieczorek",
+        "first_name": "Tomasz",
+        "professor_id": "4050afec-f68c-49bb-9982-4a3c9d1a23d9",
+        "section_count": 1
+      },
+      {
+        "last_name": "Woźniak",
+        "first_name": "Marek",
+        "professor_id": "2b5262b8-932c-4951-9390-c56d4b69d888",
+        "section_count": 1
+      },
+      {
+        "last_name": "Górski",
+        "first_name": "Zbigniew",
+        "professor_id": "0d79d103-ec28-4ebf-831c-98b3fb34e9b0",
+        "section_count": 0
+      },
+      {
+        "last_name": "Jankowski",
+        "first_name": "Paweł",
+        "professor_id": "8247a0e4-17f5-4581-a78b-f33a1a2a518b",
+        "section_count": 0
+      },
+      {
+        "last_name": "Jaworski",
+        "first_name": "Michał",
+        "professor_id": "3d1e6f8f-7fc3-48fc-a392-bf9407e6edb8",
+        "section_count": 0
+      },
+      {
+        "last_name": "Kowalski",
+        "first_name": "Ryszard",
+        "professor_id": "cd0c2f92-7721-4952-96be-08e390bdeee5",
+        "section_count": 0
+      },
+      {
+        "last_name": "Kozłowski",
+        "first_name": "Andrzej",
+        "professor_id": "6fbff454-aa38-4740-9c1e-dcaf245581f7",
+        "section_count": 0
+      },
+      {
+        "last_name": "Kozłowski",
+        "first_name": "Teresa",
+        "professor_id": "88077860-09c6-401b-961d-48f7a7616705",
+        "section_count": 0
+      },
+      {
+        "last_name": "Kozłowski",
+        "first_name": "Tomasz",
+        "professor_id": "1ef09db2-d2f5-46a4-8805-75af1dc6f856",
+        "section_count": 0
+      },
+      {
+        "last_name": "Krawczyk",
+        "first_name": "Jan",
+        "professor_id": "be6b85ea-af27-41f9-9346-32e567c2b4bc",
+        "section_count": 0
+      },
+      {
+        "last_name": "Król",
+        "first_name": "Mariusz",
+        "professor_id": "42b2aaed-9cc2-452d-bd55-ce9c8f222b3d",
+        "section_count": 0
+      },
+      {
+        "last_name": "Kwiatkowski",
+        "first_name": "Jerzy",
+        "professor_id": "b2f3236b-6aea-4ddf-9e72-ca1b944344db",
+        "section_count": 0
+      },
+      {
+        "last_name": "Lewandowski",
+        "first_name": "Piotr",
+        "professor_id": "fa9bdf84-6b3e-4f3d-9d72-8dbaef8c5464",
+        "section_count": 0
+      },
+      {
+        "last_name": "Mazur",
+        "first_name": "Jerzy",
+        "professor_id": "bdacd65d-0634-47e8-894e-728fc9221207",
+        "section_count": 0
+      },
+      {
+        "last_name": "Nowak",
+        "first_name": "Dariusz",
+        "professor_id": "b3caef8a-8a8a-49c7-ae98-0fa38441139a",
+        "section_count": 0
+      },
+      {
+        "last_name": "Nowak",
+        "first_name": "Jerzy",
+        "professor_id": "ca79dba9-22ff-4df8-8fb5-3e56acc8b5ef",
+        "section_count": 0
+      },
+      {
+        "last_name": "Nowak",
+        "first_name": "Mariusz",
+        "professor_id": "69dc12ae-95ba-499f-9d04-5eefc2f2d4bf",
+        "section_count": 0
+      },
+      {
+        "last_name": "Nowakowski",
+        "first_name": "Stanisław",
+        "professor_id": "8711908f-0ab8-4de0-8b45-c2a294d2de1c",
+        "section_count": 0
+      },
+      {
+        "last_name": "Olszewski",
+        "first_name": "Jan",
+        "professor_id": "b84e485c-28ea-42b7-a13e-a02578274226",
+        "section_count": 0
+      },
+      {
+        "last_name": "Piotrowski",
+        "first_name": "Paweł",
+        "professor_id": "ad35d15d-f7ad-416c-ade2-89853d0729c9",
+        "section_count": 0
+      },
+      {
+        "last_name": "Stępień",
+        "first_name": "Stanisław",
+        "professor_id": "9c934df1-9a06-49a7-96f4-351a647012ba",
+        "section_count": 0
+      },
+      {
+        "last_name": "Szymański",
+        "first_name": "Magdalena",
+        "professor_id": "8e54b65b-4864-47d8-b9b3-9b727991a6d2",
+        "section_count": 0
+      },
+      {
+        "last_name": "Szymański",
+        "first_name": "Ryszard",
+        "professor_id": "089c913f-8ec7-4162-9a7a-a67e41b3b935",
+        "section_count": 0
+      },
+      {
+        "last_name": "Wieczorek",
+        "first_name": "Jacek",
+        "professor_id": "2adc085d-5924-47a1-9bf3-43472e564355",
+        "section_count": 0
+      },
+      {
+        "last_name": "Wójcik",
+        "first_name": "Stanisław",
+        "professor_id": "bdb7d368-ed33-4dd8-99e9-aedea2c36f60",
+        "section_count": 0
+      },
+      {
+        "last_name": "Woźniak",
+        "first_name": "Adam",
+        "professor_id": "2dd66040-0bde-416d-b2dc-9faa4ef4cd44",
+        "section_count": 0
+      },
+      {
+        "last_name": "Zieliński",
+        "first_name": "Grzegorz",
+        "professor_id": "7732eb5b-ba0d-4e3f-9b39-205a0771c02a",
+        "section_count": 0
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Number of course sections taught by each professor",
+      "width": 700,
+      "height": {
+        "step": 18
+      },
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "section_count",
+          "type": "quantitative",
+          "title": "Section count"
+        },
+        "y": {
+          "field": "professor_id",
+          "type": "nominal",
+          "title": "Professor (ID)",
+          "sort": {
+            "field": "section_count",
+            "op": "sum",
+            "order": "descending"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "first_name",
+            "type": "nominal",
+            "title": "First name"
+          },
+          {
+            "field": "last_name",
+            "type": "nominal",
+            "title": "Last name"
+          },
+          {
+            "field": "section_count",
+            "type": "quantitative",
+            "title": "Sections"
+          },
+          {
+            "field": "professor_id",
+            "type": "nominal",
+            "title": "Professor ID"
+          }
+        ]
+      }
+    },
+    "sql": "SELECT p.id AS professor_id, p.first_name AS first_name, p.last_name AS last_name, COUNT(cs.id) AS section_count FROM public.professors p LEFT JOIN public.course_sections cs ON cs.professor_id = p.id GROUP BY p.id, p.first_name, p.last_name ORDER BY section_count DESC, p.last_name ASC, p.first_name ASC;",
+    "metadata": {
+      "columns": [
+        "last_name",
+        "first_name",
+        "professor_id",
+        "section_count"
+      ],
+      "rowCount": 50,
+      "sample": [
+        {
+          "last_name": "Wojciechowski",
+          "first_name": "Jacek",
+          "professor_id": "31cd50a7-1657-4a1f-939b-2fef224e48a8",
+          "section_count": 3
+        },
+        {
+          "last_name": "Kowalczyk",
+          "first_name": "Ryszard",
+          "professor_id": "089bea41-7aee-4467-b7ad-36bf22181040",
+          "section_count": 2
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:37:47.205Z",
+    "traceId": "d70058c4112802aa0de056674e12b4c8",
+    "attempts": 4,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 8885,
+      "outputTokens": 3082,
+      "totalTokens": 11967,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 2432,
+      "costUsd": 0.00838525
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 8885,
+        "outputTokens": 3082,
+        "totalTokens": 11967,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 2432,
+        "costUsd": 0.00838525
+      }
+    ],
+    "warnings": []
+  }
+}

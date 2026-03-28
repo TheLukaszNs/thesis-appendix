@@ -1,0 +1,162 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "courses-no-enrollments",
+  "caseDirectory": "courses-no-enrollments",
+  "repeatIndex": 1,
+  "prompt": "Which courses have no enrollments at all?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which courses have no enrollments at all?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:53:16.894Z",
+    "endedAtUtc": "2026-02-23T10:53:37.483Z",
+    "durationMs": 20589
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "1868",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:53:37 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Which courses have no enrollments at all?\"},\"agent\":{\"payload\":{\"question\":\"Which courses have no enrollments at all?\"},\"startedAt\":1771843996907,\"status\":\"success\",\"output\":{\"sql\":\"SELECT c.id AS course_id, c.name AS course_name, COUNT(e.enrollment_id) AS enrollments_count\\nFROM courses c\\nLEFT JOIN enrollments e ON e.course_id = c.id\\nGROUP BY c.id, c.name\\nHAVING COUNT(e.enrollment_id) = 0\\nORDER BY c.name;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Courses with No Enrollments\",\"mark\":\"bar\",\"encoding\":{\"y\":{\"field\":\"course_name\",\"type\":\"nominal\",\"axis\":{\"title\":\"Course\"},\"sort\":\"-x\"},\"x\":{\"field\":\"enrollments_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Enrollments (count)\"}},\"tooltip\":[{\"field\":\"course_id\",\"type\":\"nominal\",\"title\":\"Course ID\"},{\"field\":\"course_name\",\"type\":\"nominal\",\"title\":\"Course Name\"},{\"field\":\"enrollments_count\",\"type\":\"quantitative\",\"title\":\"Enrollments\"}]}}},\"endedAt\":1771844017361},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT c.id AS course_id, c.name AS course_name, COUNT(e.enrollment_id) AS enrollments_count\\nFROM courses c\\nLEFT JOIN enrollments e ON e.course_id = c.id\\nGROUP BY c.id, c.name\\nHAVING COUNT(e.enrollment_id) = 0\\nORDER BY c.name;\"},\"startedAt\":1771844017366,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column e.course_id does not exist\\nLINE 4: LEFT JOIN enrollments e ON e.course_id = c.id\\n                                   ^\",\"name\":\"Error\"},\"endedAt\":1771844017473}},\"input\":{\"question\":\"Which courses have no enrollments at all?\"},\"error\":{\"message\":\"SQL execution failed: column e.course_id does not exist\\nLINE 4: LEFT JOIN enrollments e ON e.course_id = c.id\\n                                   ^\",\"name\":\"Error\"},\"traceId\":\"f9f662e89aa990b69a3be09dcf52e270\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/courses-no-enrollments/run-0001/run.json",
+    "queryPath": "runs/courses-no-enrollments/run-0001/query.sql",
+    "vegaRawPath": "runs/courses-no-enrollments/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/courses-no-enrollments/run-0001/vega.resolved.json",
+    "imagePath": "runs/courses-no-enrollments/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:53:37.485Z",
+  "traceId": "f9f662e89aa990b69a3be09dcf52e270",
+  "success": false,
+  "durationMs": 20591,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Which courses have no enrollments at all?"
+      },
+      "agent": {
+        "payload": {
+          "question": "Which courses have no enrollments at all?"
+        },
+        "startedAt": 1771843996907,
+        "status": "success",
+        "output": {
+          "sql": "SELECT c.id AS course_id, c.name AS course_name, COUNT(e.enrollment_id) AS enrollments_count\nFROM courses c\nLEFT JOIN enrollments e ON e.course_id = c.id\nGROUP BY c.id, c.name\nHAVING COUNT(e.enrollment_id) = 0\nORDER BY c.name;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "data": {
+              "name": "query_result"
+            },
+            "title": "Courses with No Enrollments",
+            "mark": "bar",
+            "encoding": {
+              "y": {
+                "field": "course_name",
+                "type": "nominal",
+                "axis": {
+                  "title": "Course"
+                },
+                "sort": "-x"
+              },
+              "x": {
+                "field": "enrollments_count",
+                "type": "quantitative",
+                "axis": {
+                  "title": "Enrollments (count)"
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "course_id",
+                  "type": "nominal",
+                  "title": "Course ID"
+                },
+                {
+                  "field": "course_name",
+                  "type": "nominal",
+                  "title": "Course Name"
+                },
+                {
+                  "field": "enrollments_count",
+                  "type": "quantitative",
+                  "title": "Enrollments"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771844017361
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "SELECT c.id AS course_id, c.name AS course_name, COUNT(e.enrollment_id) AS enrollments_count\nFROM courses c\nLEFT JOIN enrollments e ON e.course_id = c.id\nGROUP BY c.id, c.name\nHAVING COUNT(e.enrollment_id) = 0\nORDER BY c.name;"
+        },
+        "startedAt": 1771844017366,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column e.course_id does not exist\nLINE 4: LEFT JOIN enrollments e ON e.course_id = c.id\n                                   ^",
+          "name": "Error"
+        },
+        "endedAt": 1771844017473
+      }
+    },
+    "input": {
+      "question": "Which courses have no enrollments at all?"
+    },
+    "error": {
+      "message": "SQL execution failed: column e.course_id does not exist\nLINE 4: LEFT JOIN enrollments e ON e.course_id = c.id\n                                   ^",
+      "name": "Error"
+    },
+    "traceId": "f9f662e89aa990b69a3be09dcf52e270"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:53:37.486Z",
+    "traceId": "f9f662e89aa990b69a3be09dcf52e270",
+    "attempts": 2,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 265,
+      "outputTokens": 1276,
+      "totalTokens": 1541,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 960,
+      "costUsd": 0.00261825
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 265,
+        "outputTokens": 1276,
+        "totalTokens": 1541,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 960,
+        "costUsd": 0.00261825
+      }
+    ],
+    "warnings": []
+  }
+}

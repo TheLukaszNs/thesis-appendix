@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "highest-scholarship-departments-per-year",
+  "caseDirectory": "highest-scholarship-departments-per-year",
+  "repeatIndex": 1,
+  "prompt": "Which department received the most total scholarship money each academic year?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Which department received the most total scholarship money each academic year?"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:15:16.714Z",
+    "endedAtUtc": "2026-02-23T14:15:50.706Z",
+    "durationMs": 33992
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "3044",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:15:50 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"Which department received the most total scholarship money each academic year?\"},\"sql\":{\"payload\":{\"question\":\"Which department received the most total scholarship money each academic year?\"},\"startedAt\":1771856116718,\"status\":\"success\",\"output\":{\"reasoning\":\"The question asks for the department that received the most total scholarship money each academic year. I need to:\\n1. Join scholarships to students to get department_id\\n2. Join students to departments to get department name\\n3. Group by academic_year and department\\n4. Sum the scholarship amounts\\n5. Rank departments within each academic year to find the top one per year\\n\\nThe schema shows:\\n- scholarships table has: student_id, amount, academic_year\\n- students table has: id (student_id), department_id\\n- departments table has: id (department_id), name, code\\n\\nI'll use a window function to rank departments by total scholarship amount within each academic year, then filter for rank 1.\\n\",\"sql\":\"\\nWITH dept_scholarship_totals AS (\\n  SELECT\\n    s.academic_year,\\n    d.id,\\n    d.code,\\n    d.name,\\n    SUM(sch.amount) AS total_scholarship_amount,\\n    ROW_NUMBER() OVER (PARTITION BY s.academic_year ORDER BY SUM(sch.amount) DESC) AS rank_in_year\\n  FROM scholarships sch\\n  JOIN students s ON sch.student_id = s.id\\n  JOIN departments d ON s.department_id = d.id\\n  GROUP BY s.academic_year, d.id, d.code, d.name\\n)\\nSELECT\\n  academic_year,\\n  code AS department_code,\\n  name AS department_name,\\n  total_scholarship_amount\\nFROM dept_scholarship_totals\\nWHERE rank_in_year = 1\\nORDER BY academic_year DESC\\n\",\"assumptions\":[\"The question asks for the single department with the most scholarship money per academic year\",\"Scholarship amounts are numeric values that should be summed\",\"Academic year is a string field in the scholarships table\",\"Department identification uses the departments table joined through students\"]},\"endedAt\":1771856150694},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nWITH dept_scholarship_totals AS (\\n  SELECT\\n    s.academic_year,\\n    d.id,\\n    d.code,\\n    d.name,\\n    SUM(sch.amount) AS total_scholarship_amount,\\n    ROW_NUMBER() OVER (PARTITION BY s.academic_year ORDER BY SUM(sch.amount) DESC) AS rank_in_year\\n  FROM scholarships sch\\n  JOIN students s ON sch.student_id = s.id\\n  JOIN departments d ON s.department_id = d.id\\n  GROUP BY s.academic_year, d.id, d.code, d.name\\n)\\nSELECT\\n  academic_year,\\n  code AS department_code,\\n  name AS department_name,\\n  total_scholarship_amount\\nFROM dept_scholarship_totals\\nWHERE rank_in_year = 1\\nORDER BY academic_year DESC\\n\"},\"startedAt\":1771856150698,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column s.academic_year does not exist\",\"name\":\"Error\"},\"endedAt\":1771856150703}},\"input\":{\"question\":\"Which department received the most total scholarship money each academic year?\"},\"error\":{\"message\":\"SQL execution failed: column s.academic_year does not exist\",\"name\":\"Error\"},\"traceId\":\"feabd295f35cd975a209b83c214f2b03\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/highest-scholarship-departments-per-year/run-0001/run.json",
+    "queryPath": "runs/highest-scholarship-departments-per-year/run-0001/query.sql",
+    "vegaRawPath": "runs/highest-scholarship-departments-per-year/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/highest-scholarship-departments-per-year/run-0001/vega.resolved.json",
+    "imagePath": "runs/highest-scholarship-departments-per-year/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:15:50.706Z",
+  "traceId": "feabd295f35cd975a209b83c214f2b03",
+  "success": false,
+  "durationMs": 33993,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "Which department received the most total scholarship money each academic year?"
+      },
+      "sql": {
+        "payload": {
+          "question": "Which department received the most total scholarship money each academic year?"
+        },
+        "startedAt": 1771856116718,
+        "status": "success",
+        "output": {
+          "reasoning": "The question asks for the department that received the most total scholarship money each academic year. I need to:\n1. Join scholarships to students to get department_id\n2. Join students to departments to get department name\n3. Group by academic_year and department\n4. Sum the scholarship amounts\n5. Rank departments within each academic year to find the top one per year\n\nThe schema shows:\n- scholarships table has: student_id, amount, academic_year\n- students table has: id (student_id), department_id\n- departments table has: id (department_id), name, code\n\nI'll use a window function to rank departments by total scholarship amount within each academic year, then filter for rank 1.\n",
+          "sql": "\nWITH dept_scholarship_totals AS (\n  SELECT\n    s.academic_year,\n    d.id,\n    d.code,\n    d.name,\n    SUM(sch.amount) AS total_scholarship_amount,\n    ROW_NUMBER() OVER (PARTITION BY s.academic_year ORDER BY SUM(sch.amount) DESC) AS rank_in_year\n  FROM scholarships sch\n  JOIN students s ON sch.student_id = s.id\n  JOIN departments d ON s.department_id = d.id\n  GROUP BY s.academic_year, d.id, d.code, d.name\n)\nSELECT\n  academic_year,\n  code AS department_code,\n  name AS department_name,\n  total_scholarship_amount\nFROM dept_scholarship_totals\nWHERE rank_in_year = 1\nORDER BY academic_year DESC\n",
+          "assumptions": [
+            "The question asks for the single department with the most scholarship money per academic year",
+            "Scholarship amounts are numeric values that should be summed",
+            "Academic year is a string field in the scholarships table",
+            "Department identification uses the departments table joined through students"
+          ]
+        },
+        "endedAt": 1771856150694
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "\nWITH dept_scholarship_totals AS (\n  SELECT\n    s.academic_year,\n    d.id,\n    d.code,\n    d.name,\n    SUM(sch.amount) AS total_scholarship_amount,\n    ROW_NUMBER() OVER (PARTITION BY s.academic_year ORDER BY SUM(sch.amount) DESC) AS rank_in_year\n  FROM scholarships sch\n  JOIN students s ON sch.student_id = s.id\n  JOIN departments d ON s.department_id = d.id\n  GROUP BY s.academic_year, d.id, d.code, d.name\n)\nSELECT\n  academic_year,\n  code AS department_code,\n  name AS department_name,\n  total_scholarship_amount\nFROM dept_scholarship_totals\nWHERE rank_in_year = 1\nORDER BY academic_year DESC\n"
+        },
+        "startedAt": 1771856150698,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column s.academic_year does not exist",
+          "name": "Error"
+        },
+        "endedAt": 1771856150703
+      }
+    },
+    "input": {
+      "question": "Which department received the most total scholarship money each academic year?"
+    },
+    "error": {
+      "message": "SQL execution failed: column s.academic_year does not exist",
+      "name": "Error"
+    },
+    "traceId": "feabd295f35cd975a209b83c214f2b03"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.354Z",
+    "traceId": "feabd295f35cd975a209b83c214f2b03",
+    "attempts": 1,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 17147,
+      "outputTokens": 708,
+      "totalTokens": 17855,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.020687
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 1,
+        "inputTokens": 17147,
+        "outputTokens": 708,
+        "totalTokens": 17855,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.020687
+      }
+    ],
+    "warnings": []
+  }
+}

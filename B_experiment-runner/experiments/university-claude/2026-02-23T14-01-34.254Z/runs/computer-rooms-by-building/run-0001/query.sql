@@ -1,0 +1,1 @@
+SELECT building, COUNT(*) AS computer_lab_count FROM classrooms WHERE has_computers = true GROUP BY building ORDER BY building;

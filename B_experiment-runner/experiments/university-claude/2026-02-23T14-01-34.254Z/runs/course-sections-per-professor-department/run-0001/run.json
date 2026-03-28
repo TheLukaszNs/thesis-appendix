@@ -1,0 +1,268 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-claude",
+  "caseId": "course-sections-per-professor-department",
+  "caseDirectory": "course-sections-per-professor-department",
+  "repeatIndex": 1,
+  "prompt": "Average number of sections taught per professor by department",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "Average number of sections taught per professor by department"
+      },
+      "requestContext": {
+        "model": "vercel/anthropic/claude-haiku-4.5"
+      }
+    },
+    "startedAtUtc": "2026-02-23T14:10:42.981Z",
+    "endedAtUtc": "2026-02-23T14:11:10.343Z",
+    "durationMs": 27362
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "11479",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 14:11:10 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"Average number of sections taught per professor by department\"},\"sql\":{\"payload\":{\"question\":\"Average number of sections taught per professor by department\"},\"startedAt\":1771855842993,\"status\":\"success\",\"output\":{\"reasoning\":\"The question asks for the average number of sections taught per professor by department. I need to:\\n1. Join professors to departments (via department_id)\\n2. Join professors to course_sections (via professor_id)\\n3. Count the number of sections per professor\\n4. Group by department and calculate the average sections per professor within each department\\n\\nThe schema confirms:\\n- professors table has department_id (FK to departments)\\n- course_sections table has professor_id (FK to professors)\\n- departments table has id and name\\n\\nThe query will:\\n1. Count distinct sections per professor per department\\n2. Calculate the average of those counts grouped by department\\n3. Order by department name for deterministic output\",\"sql\":\"\\nSELECT \\n  d.name AS department_name,\\n  ROUND(AVG(section_count), 2) AS avg_sections_per_professor\\nFROM (\\n  SELECT \\n    p.id,\\n    p.department_id,\\n    COUNT(cs.id) AS section_count\\n  FROM professors p\\n  LEFT JOIN course_sections cs ON p.id = cs.professor_id\\n  GROUP BY p.id, p.department_id\\n) prof_sections\\nJOIN departments d ON prof_sections.department_id = d.id\\nGROUP BY d.id, d.name\\nORDER BY d.name\\n\",\"assumptions\":[\"Sections are counted from the course_sections table where professor_id matches\",\"Each row in course_sections represents one section taught\",\"Professors with no sections are included with a count of 0\",\"The average is calculated across all professors in each department\"]},\"endedAt\":1771855866731},\"run-raw-sql\":{\"payload\":{\"sql\":\"\\nSELECT \\n  d.name AS department_name,\\n  ROUND(AVG(section_count), 2) AS avg_sections_per_professor\\nFROM (\\n  SELECT \\n    p.id,\\n    p.department_id,\\n    COUNT(cs.id) AS section_count\\n  FROM professors p\\n  LEFT JOIN course_sections cs ON p.id = cs.professor_id\\n  GROUP BY p.id, p.department_id\\n) prof_sections\\nJOIN departments d ON prof_sections.department_id = d.id\\nGROUP BY d.id, d.name\\nORDER BY d.name\\n\"},\"startedAt\":1771855866733,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT \\n  d.name AS department_name,\\n  ROUND(AVG(section_count), 2) AS avg_sections_per_professor\\nFROM (\\n  SELECT \\n    p.id,\\n    p.department_id,\\n    COUNT(cs.id) AS section_count\\n  FROM professors p\\n  LEFT JOIN course_sections cs ON p.id = cs.professor_id\\n  GROUP BY p.id, p.department_id\\n) prof_sections\\nJOIN departments d ON prof_sections.department_id = d.id\\nGROUP BY d.id, d.name\\nORDER BY d.name\",\"metadata\":{\"columns\":[\"department_name\",\"avg_sections_per_professor\"],\"rowCount\":6,\"sample\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"avg_sections_per_professor\":\"0.56\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"avg_sections_per_professor\":\"1.00\"}]},\"data\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"avg_sections_per_professor\":\"0.56\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"avg_sections_per_professor\":\"1.00\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"avg_sections_per_professor\":\"0.90\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"avg_sections_per_professor\":\"0.40\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"avg_sections_per_professor\":\"0.44\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"avg_sections_per_professor\":\"0.70\"}]},\"endedAt\":1771855866739},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT \\n  d.name AS department_name,\\n  ROUND(AVG(section_count), 2) AS avg_sections_per_professor\\nFROM (\\n  SELECT \\n    p.id,\\n    p.department_id,\\n    COUNT(cs.id) AS section_count\\n  FROM professors p\\n  LEFT JOIN course_sections cs ON p.id = cs.professor_id\\n  GROUP BY p.id, p.department_id\\n) prof_sections\\nJOIN departments d ON prof_sections.department_id = d.id\\nGROUP BY d.id, d.name\\nORDER BY d.name\",\"metadata\":{\"columns\":[\"department_name\",\"avg_sections_per_professor\"],\"rowCount\":6,\"sample\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"avg_sections_per_professor\":\"0.56\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"avg_sections_per_professor\":\"1.00\"}]},\"data\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"avg_sections_per_professor\":\"0.56\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"avg_sections_per_professor\":\"1.00\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"avg_sections_per_professor\":\"0.90\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"avg_sections_per_professor\":\"0.40\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"avg_sections_per_professor\":\"0.44\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"avg_sections_per_professor\":\"0.70\"}]},\"startedAt\":1771855866741,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Number of Sections Taught per Professor by Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Department\"},\"y\":{\"field\":\"avg_sections_per_professor\",\"type\":\"quantitative\",\"title\":\"Average Sections per Professor\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"avg_sections_per_professor\",\"type\":\"quantitative\",\"title\":\"Avg Sections\",\"format\":\".2f\"}]},\"width\":600,\"height\":400},\"reasoning\":\"Bar chart is ideal for comparing average sections across departments. Horizontal axis shows department names (rotated for readability), vertical axis shows the average number of sections. Tooltip provides detailed values on hover. The chart directly answers the question of which departments have professors teaching more sections on average.\"},\"endedAt\":1771855870320},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Number of Sections Taught per Professor by Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Department\"},\"y\":{\"field\":\"avg_sections_per_professor\",\"type\":\"quantitative\",\"title\":\"Average Sections per Professor\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"avg_sections_per_professor\",\"type\":\"quantitative\",\"title\":\"Avg Sections\",\"format\":\".2f\"}]},\"width\":600,\"height\":400},\"reasoning\":\"Bar chart is ideal for comparing average sections across departments. Horizontal axis shows department names (rotated for readability), vertical axis shows the average number of sections. Tooltip provides detailed values on hover. The chart directly answers the question of which departments have professors teaching more sections on average.\"},\"startedAt\":1771855870325,\"status\":\"success\",\"output\":{\"sql\":\"\\nSELECT \\n  d.name AS department_name,\\n  ROUND(AVG(section_count), 2) AS avg_sections_per_professor\\nFROM (\\n  SELECT \\n    p.id,\\n    p.department_id,\\n    COUNT(cs.id) AS section_count\\n  FROM professors p\\n  LEFT JOIN course_sections cs ON p.id = cs.professor_id\\n  GROUP BY p.id, p.department_id\\n) prof_sections\\nJOIN departments d ON prof_sections.department_id = d.id\\nGROUP BY d.id, d.name\\nORDER BY d.name\\n\",\"data\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"avg_sections_per_professor\":\"0.56\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"avg_sections_per_professor\":\"1.00\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"avg_sections_per_professor\":\"0.90\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"avg_sections_per_professor\":\"0.40\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"avg_sections_per_professor\":\"0.44\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"avg_sections_per_professor\":\"0.70\"}],\"metadata\":{\"columns\":[\"department_name\",\"avg_sections_per_professor\"],\"rowCount\":6,\"sample\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"avg_sections_per_professor\":\"0.56\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"avg_sections_per_professor\":\"1.00\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Number of Sections Taught per Professor by Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Department\"},\"y\":{\"field\":\"avg_sections_per_professor\",\"type\":\"quantitative\",\"title\":\"Average Sections per Professor\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"avg_sections_per_professor\",\"type\":\"quantitative\",\"title\":\"Avg Sections\",\"format\":\".2f\"}]},\"width\":600,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771855870329}},\"input\":{\"question\":\"Average number of sections taught per professor by department\"},\"result\":{\"sql\":\"\\nSELECT \\n  d.name AS department_name,\\n  ROUND(AVG(section_count), 2) AS avg_sections_per_professor\\nFROM (\\n  SELECT \\n    p.id,\\n    p.department_id,\\n    COUNT(cs.id) AS section_count\\n  FROM professors p\\n  LEFT JOIN course_sections cs ON p.id = cs.professor_id\\n  GROUP BY p.id, p.department_id\\n) prof_sections\\nJOIN departments d ON prof_sections.department_id = d.id\\nGROUP BY d.id, d.name\\nORDER BY d.name\\n\",\"data\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"avg_sections_per_professor\":\"0.56\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"avg_sections_per_professor\":\"1.00\"},{\"department_name\":\"Wydział Inżynierii Biomedycznej\",\"avg_sections_per_professor\":\"0.90\"},{\"department_name\":\"Wydział Inżynierii Produkcji\",\"avg_sections_per_professor\":\"0.40\"},{\"department_name\":\"Wydział Metalurgii i Inżynierii Materiałowej\",\"avg_sections_per_professor\":\"0.44\"},{\"department_name\":\"Wydział Technologii i Inżynierii Chemicznej\",\"avg_sections_per_professor\":\"0.70\"}],\"metadata\":{\"columns\":[\"department_name\",\"avg_sections_per_professor\"],\"rowCount\":6,\"sample\":[{\"department_name\":\"Wydział Automatyki, Elektroniki i Informatyki\",\"avg_sections_per_professor\":\"0.56\"},{\"department_name\":\"Wydział Informatyki i Nauki o Materiałach\",\"avg_sections_per_professor\":\"1.00\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"title\":\"Average Number of Sections Taught per Professor by Department\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"department_name\",\"type\":\"nominal\",\"axis\":{\"labelAngle\":-45,\"labelAlign\":\"right\"},\"title\":\"Department\"},\"y\":{\"field\":\"avg_sections_per_professor\",\"type\":\"quantitative\",\"title\":\"Average Sections per Professor\"},\"tooltip\":[{\"field\":\"department_name\",\"type\":\"nominal\",\"title\":\"Department\"},{\"field\":\"avg_sections_per_professor\",\"type\":\"quantitative\",\"title\":\"Avg Sections\",\"format\":\".2f\"}]},\"width\":600,\"height\":400},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"ea934368c29f29be985dc44815b5cd0a\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/course-sections-per-professor-department/run-0001/run.json",
+    "queryPath": "runs/course-sections-per-professor-department/run-0001/query.sql",
+    "vegaRawPath": "runs/course-sections-per-professor-department/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/course-sections-per-professor-department/run-0001/vega.resolved.json",
+    "imagePath": "runs/course-sections-per-professor-department/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T14:11:10.827Z",
+  "traceId": "ea934368c29f29be985dc44815b5cd0a",
+  "success": true,
+  "durationMs": 27846,
+  "resultRaw": {
+    "data": [
+      {
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "avg_sections_per_professor": "0.56"
+      },
+      {
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "avg_sections_per_professor": "1.00"
+      },
+      {
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "avg_sections_per_professor": "0.90"
+      },
+      {
+        "department_name": "Wydział Inżynierii Produkcji",
+        "avg_sections_per_professor": "0.40"
+      },
+      {
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "avg_sections_per_professor": "0.44"
+      },
+      {
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "avg_sections_per_professor": "0.70"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Number of Sections Taught per Professor by Department",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "department_name",
+          "type": "nominal",
+          "axis": {
+            "labelAngle": -45,
+            "labelAlign": "right"
+          },
+          "title": "Department"
+        },
+        "y": {
+          "field": "avg_sections_per_professor",
+          "type": "quantitative",
+          "title": "Average Sections per Professor"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "avg_sections_per_professor",
+            "type": "quantitative",
+            "title": "Avg Sections",
+            "format": ".2f"
+          }
+        ]
+      },
+      "width": 600,
+      "height": 400
+    },
+    "sql": "\nSELECT \n  d.name AS department_name,\n  ROUND(AVG(section_count), 2) AS avg_sections_per_professor\nFROM (\n  SELECT \n    p.id,\n    p.department_id,\n    COUNT(cs.id) AS section_count\n  FROM professors p\n  LEFT JOIN course_sections cs ON p.id = cs.professor_id\n  GROUP BY p.id, p.department_id\n) prof_sections\nJOIN departments d ON prof_sections.department_id = d.id\nGROUP BY d.id, d.name\nORDER BY d.name\n",
+    "metadata": {
+      "columns": [
+        "department_name",
+        "avg_sections_per_professor"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "avg_sections_per_professor": "0.56"
+        },
+        {
+          "department_name": "Wydział Informatyki i Nauki o Materiałach",
+          "avg_sections_per_professor": "1.00"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+        "avg_sections_per_professor": "0.56"
+      },
+      {
+        "department_name": "Wydział Informatyki i Nauki o Materiałach",
+        "avg_sections_per_professor": "1.00"
+      },
+      {
+        "department_name": "Wydział Inżynierii Biomedycznej",
+        "avg_sections_per_professor": "0.90"
+      },
+      {
+        "department_name": "Wydział Inżynierii Produkcji",
+        "avg_sections_per_professor": "0.40"
+      },
+      {
+        "department_name": "Wydział Metalurgii i Inżynierii Materiałowej",
+        "avg_sections_per_professor": "0.44"
+      },
+      {
+        "department_name": "Wydział Technologii i Inżynierii Chemicznej",
+        "avg_sections_per_professor": "0.70"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Average Number of Sections Taught per Professor by Department",
+      "data": {
+        "name": "query_result"
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "department_name",
+          "type": "nominal",
+          "axis": {
+            "labelAngle": -45,
+            "labelAlign": "right"
+          },
+          "title": "Department"
+        },
+        "y": {
+          "field": "avg_sections_per_professor",
+          "type": "quantitative",
+          "title": "Average Sections per Professor"
+        },
+        "tooltip": [
+          {
+            "field": "department_name",
+            "type": "nominal",
+            "title": "Department"
+          },
+          {
+            "field": "avg_sections_per_professor",
+            "type": "quantitative",
+            "title": "Avg Sections",
+            "format": ".2f"
+          }
+        ]
+      },
+      "width": 600,
+      "height": 400
+    },
+    "sql": "\nSELECT \n  d.name AS department_name,\n  ROUND(AVG(section_count), 2) AS avg_sections_per_professor\nFROM (\n  SELECT \n    p.id,\n    p.department_id,\n    COUNT(cs.id) AS section_count\n  FROM professors p\n  LEFT JOIN course_sections cs ON p.id = cs.professor_id\n  GROUP BY p.id, p.department_id\n) prof_sections\nJOIN departments d ON prof_sections.department_id = d.id\nGROUP BY d.id, d.name\nORDER BY d.name\n",
+    "metadata": {
+      "columns": [
+        "department_name",
+        "avg_sections_per_professor"
+      ],
+      "rowCount": 6,
+      "sample": [
+        {
+          "department_name": "Wydział Automatyki, Elektroniki i Informatyki",
+          "avg_sections_per_professor": "0.56"
+        },
+        {
+          "department_name": "Wydział Informatyki i Nauki o Materiałach",
+          "avg_sections_per_professor": "1.00"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T14:20:58.298Z",
+    "traceId": "ea934368c29f29be985dc44815b5cd0a",
+    "attempts": 1,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 11567,
+      "outputTokens": 1056,
+      "totalTokens": 12623,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 0,
+      "costUsd": 0.016847
+    },
+    "perModel": [
+      {
+        "modelKey": "anthropic/claude-haiku-4.5",
+        "calls": 2,
+        "inputTokens": 11567,
+        "outputTokens": 1056,
+        "totalTokens": 12623,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0,
+        "costUsd": 0.016847
+      }
+    ],
+    "warnings": []
+  }
+}

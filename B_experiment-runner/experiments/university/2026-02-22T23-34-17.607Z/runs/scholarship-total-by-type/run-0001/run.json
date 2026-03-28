@@ -1,0 +1,256 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university",
+  "caseId": "scholarship-total-by-type",
+  "caseDirectory": "scholarship-total-by-type",
+  "repeatIndex": 1,
+  "prompt": "What is the total scholarship amount awarded by scholarship type?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/simpleWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "What is the total scholarship amount awarded by scholarship type?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-22T23:35:36.011Z",
+    "endedAtUtc": "2026-02-22T23:36:03.463Z",
+    "durationMs": 27452
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "6992",
+      "content-type": "application/json",
+      "date": "Sun, 22 Feb 2026 23:36:03 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"success\",\"steps\":{\"input\":{\"question\":\"What is the total scholarship amount awarded by scholarship type?\"},\"sql\":{\"payload\":{\"question\":\"What is the total scholarship amount awarded by scholarship type?\"},\"startedAt\":1771803336021,\"status\":\"success\",\"output\":{\"reasoning\":\"Aggregate total awarded per scholarship_type from the confirmed public.scholarships table. Results ordered deterministically by descending total amount and then scholarship_type.\",\"sql\":\"SELECT scholarship_type AS scholarship_type, SUM(amount) AS total_amount\\nFROM public.scholarships\\nGROUP BY scholarship_type\\nORDER BY SUM(amount) DESC, scholarship_type ASC;\",\"assumptions\":[\"The scholarships table in schema public is the correct source and contains the columns scholarship_type and amount as discovered.\",\"All amount values are stored in the numeric column and represent awarded scholarship amounts to be summed.\"]},\"endedAt\":1771803346450},\"run-raw-sql\":{\"payload\":{\"sql\":\"SELECT scholarship_type AS scholarship_type, SUM(amount) AS total_amount\\nFROM public.scholarships\\nGROUP BY scholarship_type\\nORDER BY SUM(amount) DESC, scholarship_type ASC;\"},\"startedAt\":1771803346453,\"status\":\"success\",\"output\":{\"ok\":true,\"sql\":\"SELECT scholarship_type AS scholarship_type, SUM(amount) AS total_amount\\nFROM public.scholarships\\nGROUP BY scholarship_type\\nORDER BY SUM(amount) DESC, scholarship_type ASC\",\"metadata\":{\"columns\":[\"total_amount\",\"scholarship_type\"],\"rowCount\":3,\"sample\":[{\"total_amount\":10500,\"scholarship_type\":\"SPECIAL\"},{\"total_amount\":9500,\"scholarship_type\":\"MERIT\"}]},\"data\":[{\"total_amount\":10500,\"scholarship_type\":\"SPECIAL\"},{\"total_amount\":9500,\"scholarship_type\":\"MERIT\"},{\"total_amount\":5500,\"scholarship_type\":\"SOCIAL\"}]},\"endedAt\":1771803346500},\"visualize\":{\"payload\":{\"ok\":true,\"sql\":\"SELECT scholarship_type AS scholarship_type, SUM(amount) AS total_amount\\nFROM public.scholarships\\nGROUP BY scholarship_type\\nORDER BY SUM(amount) DESC, scholarship_type ASC\",\"metadata\":{\"columns\":[\"total_amount\",\"scholarship_type\"],\"rowCount\":3,\"sample\":[{\"total_amount\":10500,\"scholarship_type\":\"SPECIAL\"},{\"total_amount\":9500,\"scholarship_type\":\"MERIT\"}]},\"data\":[{\"total_amount\":10500,\"scholarship_type\":\"SPECIAL\"},{\"total_amount\":9500,\"scholarship_type\":\"MERIT\"},{\"total_amount\":5500,\"scholarship_type\":\"SOCIAL\"}]},\"startedAt\":1771803346502,\"status\":\"success\",\"output\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Total Scholarship Amount by Scholarship Type\",\"width\":600,\"height\":200,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\",\"sort\":{\"field\":\"total_amount\",\"order\":\"descending\"}},\"x\":{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total Amount (USD)\"},\"tooltip\":[{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total Amount\",\"format\":\"$,.0f\"}],\"color\":{\"value\":\"#4C78A8\"}}},\"reasoning\":\"Used a horizontal bar chart to compare total scholarship amounts across scholarship_type. Bars are sorted by total_amount descending (matching the SQL ORDER BY). Tooltip shows both type and formatted amount.\"},\"endedAt\":1771803363443},\"final-data\":{\"payload\":{\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Total Scholarship Amount by Scholarship Type\",\"width\":600,\"height\":200,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\",\"sort\":{\"field\":\"total_amount\",\"order\":\"descending\"}},\"x\":{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total Amount (USD)\"},\"tooltip\":[{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total Amount\",\"format\":\"$,.0f\"}],\"color\":{\"value\":\"#4C78A8\"}}},\"reasoning\":\"Used a horizontal bar chart to compare total scholarship amounts across scholarship_type. Bars are sorted by total_amount descending (matching the SQL ORDER BY). Tooltip shows both type and formatted amount.\"},\"startedAt\":1771803363446,\"status\":\"success\",\"output\":{\"sql\":\"SELECT scholarship_type AS scholarship_type, SUM(amount) AS total_amount\\nFROM public.scholarships\\nGROUP BY scholarship_type\\nORDER BY SUM(amount) DESC, scholarship_type ASC;\",\"data\":[{\"total_amount\":10500,\"scholarship_type\":\"SPECIAL\"},{\"total_amount\":9500,\"scholarship_type\":\"MERIT\"},{\"total_amount\":5500,\"scholarship_type\":\"SOCIAL\"}],\"metadata\":{\"columns\":[\"total_amount\",\"scholarship_type\"],\"rowCount\":3,\"sample\":[{\"total_amount\":10500,\"scholarship_type\":\"SPECIAL\"},{\"total_amount\":9500,\"scholarship_type\":\"MERIT\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Total Scholarship Amount by Scholarship Type\",\"width\":600,\"height\":200,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\",\"sort\":{\"field\":\"total_amount\",\"order\":\"descending\"}},\"x\":{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total Amount (USD)\"},\"tooltip\":[{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total Amount\",\"format\":\"$,.0f\"}],\"color\":{\"value\":\"#4C78A8\"}}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"endedAt\":1771803363451}},\"input\":{\"question\":\"What is the total scholarship amount awarded by scholarship type?\"},\"result\":{\"sql\":\"SELECT scholarship_type AS scholarship_type, SUM(amount) AS total_amount\\nFROM public.scholarships\\nGROUP BY scholarship_type\\nORDER BY SUM(amount) DESC, scholarship_type ASC;\",\"data\":[{\"total_amount\":10500,\"scholarship_type\":\"SPECIAL\"},{\"total_amount\":9500,\"scholarship_type\":\"MERIT\"},{\"total_amount\":5500,\"scholarship_type\":\"SOCIAL\"}],\"metadata\":{\"columns\":[\"total_amount\",\"scholarship_type\"],\"rowCount\":3,\"sample\":[{\"total_amount\":10500,\"scholarship_type\":\"SPECIAL\"},{\"total_amount\":9500,\"scholarship_type\":\"MERIT\"}]},\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"data\":{\"name\":\"query_result\"},\"title\":\"Total Scholarship Amount by Scholarship Type\",\"width\":600,\"height\":200,\"mark\":{\"type\":\"bar\",\"tooltip\":true},\"encoding\":{\"y\":{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\",\"sort\":{\"field\":\"total_amount\",\"order\":\"descending\"}},\"x\":{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total Amount (USD)\"},\"tooltip\":[{\"field\":\"scholarship_type\",\"type\":\"nominal\",\"title\":\"Scholarship Type\"},{\"field\":\"total_amount\",\"type\":\"quantitative\",\"title\":\"Total Amount\",\"format\":\"$,.0f\"}],\"color\":{\"value\":\"#4C78A8\"}}},\"quality\":{\"workflow\":\"simple-workflow\",\"passed\":true,\"score\":1,\"issues\":[]},\"attempts\":{\"used\":1,\"max\":1,\"history\":[]}},\"traceId\":\"5f8e2e5eb9bd713b5f3ab1ceff620dcb\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/scholarship-total-by-type/run-0001/run.json",
+    "queryPath": "runs/scholarship-total-by-type/run-0001/query.sql",
+    "vegaRawPath": "runs/scholarship-total-by-type/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/scholarship-total-by-type/run-0001/vega.resolved.json",
+    "imagePath": "runs/scholarship-total-by-type/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-22T23:36:03.810Z",
+  "traceId": "5f8e2e5eb9bd713b5f3ab1ceff620dcb",
+  "success": true,
+  "durationMs": 27799,
+  "resultRaw": {
+    "data": [
+      {
+        "total_amount": 10500,
+        "scholarship_type": "SPECIAL"
+      },
+      {
+        "total_amount": 9500,
+        "scholarship_type": "MERIT"
+      },
+      {
+        "total_amount": 5500,
+        "scholarship_type": "SOCIAL"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Total Scholarship Amount by Scholarship Type",
+      "width": 600,
+      "height": 200,
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "y": {
+          "field": "scholarship_type",
+          "type": "nominal",
+          "title": "Scholarship Type",
+          "sort": {
+            "field": "total_amount",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "total_amount",
+          "type": "quantitative",
+          "title": "Total Amount (USD)"
+        },
+        "tooltip": [
+          {
+            "field": "scholarship_type",
+            "type": "nominal",
+            "title": "Scholarship Type"
+          },
+          {
+            "field": "total_amount",
+            "type": "quantitative",
+            "title": "Total Amount",
+            "format": "$,.0f"
+          }
+        ],
+        "color": {
+          "value": "#4C78A8"
+        }
+      }
+    },
+    "sql": "SELECT scholarship_type AS scholarship_type, SUM(amount) AS total_amount\nFROM public.scholarships\nGROUP BY scholarship_type\nORDER BY SUM(amount) DESC, scholarship_type ASC;",
+    "metadata": {
+      "columns": [
+        "total_amount",
+        "scholarship_type"
+      ],
+      "rowCount": 3,
+      "sample": [
+        {
+          "total_amount": 10500,
+          "scholarship_type": "SPECIAL"
+        },
+        {
+          "total_amount": 9500,
+          "scholarship_type": "MERIT"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "result": {
+    "data": [
+      {
+        "total_amount": 10500,
+        "scholarship_type": "SPECIAL"
+      },
+      {
+        "total_amount": 9500,
+        "scholarship_type": "MERIT"
+      },
+      {
+        "total_amount": 5500,
+        "scholarship_type": "SOCIAL"
+      }
+    ],
+    "visualization": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "name": "query_result"
+      },
+      "title": "Total Scholarship Amount by Scholarship Type",
+      "width": 600,
+      "height": 200,
+      "mark": {
+        "type": "bar",
+        "tooltip": true
+      },
+      "encoding": {
+        "y": {
+          "field": "scholarship_type",
+          "type": "nominal",
+          "title": "Scholarship Type",
+          "sort": {
+            "field": "total_amount",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "total_amount",
+          "type": "quantitative",
+          "title": "Total Amount (USD)"
+        },
+        "tooltip": [
+          {
+            "field": "scholarship_type",
+            "type": "nominal",
+            "title": "Scholarship Type"
+          },
+          {
+            "field": "total_amount",
+            "type": "quantitative",
+            "title": "Total Amount",
+            "format": "$,.0f"
+          }
+        ],
+        "color": {
+          "value": "#4C78A8"
+        }
+      }
+    },
+    "sql": "SELECT scholarship_type AS scholarship_type, SUM(amount) AS total_amount\nFROM public.scholarships\nGROUP BY scholarship_type\nORDER BY SUM(amount) DESC, scholarship_type ASC;",
+    "metadata": {
+      "columns": [
+        "total_amount",
+        "scholarship_type"
+      ],
+      "rowCount": 3,
+      "sample": [
+        {
+          "total_amount": 10500,
+          "scholarship_type": "SPECIAL"
+        },
+        {
+          "total_amount": 9500,
+          "scholarship_type": "MERIT"
+        }
+      ]
+    },
+    "quality": {
+      "workflow": "simple-workflow",
+      "passed": true,
+      "score": 1,
+      "issues": []
+    },
+    "attempts": {
+      "used": 1,
+      "max": 1,
+      "history": []
+    }
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-22T23:36:03.810Z",
+    "traceId": "5f8e2e5eb9bd713b5f3ab1ceff620dcb",
+    "attempts": 3,
+    "spanCount": 2,
+    "totals": {
+      "inputTokens": 5724,
+      "outputTokens": 1859,
+      "totalTokens": 7583,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 1280,
+      "costUsd": 0.005149
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 2,
+        "inputTokens": 5724,
+        "outputTokens": 1859,
+        "totalTokens": 7583,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 1280,
+        "costUsd": 0.005149
+      }
+    ],
+    "warnings": []
+  }
+}

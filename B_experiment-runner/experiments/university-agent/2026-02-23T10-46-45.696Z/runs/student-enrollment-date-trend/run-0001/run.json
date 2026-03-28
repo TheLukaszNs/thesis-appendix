@@ -1,0 +1,158 @@
+{
+  "schemaVersion": "agent-runner/v2",
+  "experimentName": "university-agent",
+  "caseId": "student-enrollment-date-trend",
+  "caseDirectory": "student-enrollment-date-trend",
+  "repeatIndex": 1,
+  "prompt": "How many students enrolled per year at the university?",
+  "request": {
+    "url": "http://localhost:4111/api/workflows/agentWorkflow/start-async",
+    "method": "POST",
+    "timeoutMs": 120000,
+    "body": {
+      "inputData": {
+        "question": "How many students enrolled per year at the university?"
+      },
+      "requestContext": {
+        "model": "vercel/openai/gpt-5-mini"
+      }
+    },
+    "startedAtUtc": "2026-02-23T10:49:05.142Z",
+    "endedAtUtc": "2026-02-23T10:49:18.175Z",
+    "durationMs": 13033
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "Content-Length,X-Requested-With",
+      "connection": "keep-alive",
+      "content-length": "2051",
+      "content-type": "application/json",
+      "date": "Mon, 23 Feb 2026 10:49:18 GMT",
+      "keep-alive": "timeout=5"
+    },
+    "bodyRaw": "{\"status\":\"failed\",\"steps\":{\"input\":{\"question\":\"How many students enrolled per year at the university?\"},\"agent\":{\"payload\":{\"question\":\"How many students enrolled per year at the university?\"},\"startedAt\":1771843745160,\"status\":\"success\",\"output\":{\"sql\":\"WITH yearly_enrollments AS (\\n  SELECT\\n    student_id,\\n    CAST(EXTRACT(YEAR FROM enrollment_date) AS INTEGER) AS enrollment_year\\n  FROM students\\n  WHERE enrollment_date IS NOT NULL\\n)\\nSELECT\\n  enrollment_year AS enrollment_year,\\n  COUNT(student_id) AS student_count\\nFROM yearly_enrollments\\nGROUP BY enrollment_year\\nORDER BY enrollment_year ASC;\",\"visualization\":{\"$schema\":\"https://vega.github.io/schema/vega-lite/v5.json\",\"description\":\"Number of students enrolled per year\",\"title\":\"Students Enrolled Per Year\",\"data\":{\"name\":\"query_result\"},\"mark\":\"bar\",\"encoding\":{\"x\":{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"axis\":{\"title\":\"Year\"},\"sort\":\"ascending\"},\"y\":{\"field\":\"student_count\",\"type\":\"quantitative\",\"axis\":{\"title\":\"Number of students enrolled\"}},\"tooltip\":[{\"field\":\"enrollment_year\",\"type\":\"ordinal\",\"title\":\"Year\"},{\"field\":\"student_count\",\"type\":\"quantitative\",\"title\":\"Students\"}]}}},\"endedAt\":1771843758052},\"run-raw-sql\":{\"payload\":{\"sql\":\"WITH yearly_enrollments AS (\\n  SELECT\\n    student_id,\\n    CAST(EXTRACT(YEAR FROM enrollment_date) AS INTEGER) AS enrollment_year\\n  FROM students\\n  WHERE enrollment_date IS NOT NULL\\n)\\nSELECT\\n  enrollment_year AS enrollment_year,\\n  COUNT(student_id) AS student_count\\nFROM yearly_enrollments\\nGROUP BY enrollment_year\\nORDER BY enrollment_year ASC;\"},\"startedAt\":1771843758058,\"status\":\"failed\",\"error\":{\"message\":\"SQL execution failed: column \\\"student_id\\\" does not exist\\nLINE 4:     student_id,\\n            ^\",\"name\":\"Error\"},\"endedAt\":1771843758169}},\"input\":{\"question\":\"How many students enrolled per year at the university?\"},\"error\":{\"message\":\"SQL execution failed: column \\\"student_id\\\" does not exist\\nLINE 4:     student_id,\\n            ^\",\"name\":\"Error\"},\"traceId\":\"d86a6478b6e6580d78b3a88e2ac22632\"}"
+  },
+  "artifacts": {
+    "runPath": "runs/student-enrollment-date-trend/run-0001/run.json",
+    "queryPath": "runs/student-enrollment-date-trend/run-0001/query.sql",
+    "vegaRawPath": "runs/student-enrollment-date-trend/run-0001/vega.raw.json",
+    "vegaResolvedPath": "runs/student-enrollment-date-trend/run-0001/vega.resolved.json",
+    "imagePath": "runs/student-enrollment-date-trend/run-0001/viz.png"
+  },
+  "createdAtUtc": "2026-02-23T10:49:18.175Z",
+  "traceId": "d86a6478b6e6580d78b3a88e2ac22632",
+  "success": false,
+  "durationMs": 13033,
+  "resultRaw": {
+    "status": "failed",
+    "steps": {
+      "input": {
+        "question": "How many students enrolled per year at the university?"
+      },
+      "agent": {
+        "payload": {
+          "question": "How many students enrolled per year at the university?"
+        },
+        "startedAt": 1771843745160,
+        "status": "success",
+        "output": {
+          "sql": "WITH yearly_enrollments AS (\n  SELECT\n    student_id,\n    CAST(EXTRACT(YEAR FROM enrollment_date) AS INTEGER) AS enrollment_year\n  FROM students\n  WHERE enrollment_date IS NOT NULL\n)\nSELECT\n  enrollment_year AS enrollment_year,\n  COUNT(student_id) AS student_count\nFROM yearly_enrollments\nGROUP BY enrollment_year\nORDER BY enrollment_year ASC;",
+          "visualization": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Number of students enrolled per year",
+            "title": "Students Enrolled Per Year",
+            "data": {
+              "name": "query_result"
+            },
+            "mark": "bar",
+            "encoding": {
+              "x": {
+                "field": "enrollment_year",
+                "type": "ordinal",
+                "axis": {
+                  "title": "Year"
+                },
+                "sort": "ascending"
+              },
+              "y": {
+                "field": "student_count",
+                "type": "quantitative",
+                "axis": {
+                  "title": "Number of students enrolled"
+                }
+              },
+              "tooltip": [
+                {
+                  "field": "enrollment_year",
+                  "type": "ordinal",
+                  "title": "Year"
+                },
+                {
+                  "field": "student_count",
+                  "type": "quantitative",
+                  "title": "Students"
+                }
+              ]
+            }
+          }
+        },
+        "endedAt": 1771843758052
+      },
+      "run-raw-sql": {
+        "payload": {
+          "sql": "WITH yearly_enrollments AS (\n  SELECT\n    student_id,\n    CAST(EXTRACT(YEAR FROM enrollment_date) AS INTEGER) AS enrollment_year\n  FROM students\n  WHERE enrollment_date IS NOT NULL\n)\nSELECT\n  enrollment_year AS enrollment_year,\n  COUNT(student_id) AS student_count\nFROM yearly_enrollments\nGROUP BY enrollment_year\nORDER BY enrollment_year ASC;"
+        },
+        "startedAt": 1771843758058,
+        "status": "failed",
+        "error": {
+          "message": "SQL execution failed: column \"student_id\" does not exist\nLINE 4:     student_id,\n            ^",
+          "name": "Error"
+        },
+        "endedAt": 1771843758169
+      }
+    },
+    "input": {
+      "question": "How many students enrolled per year at the university?"
+    },
+    "error": {
+      "message": "SQL execution failed: column \"student_id\" does not exist\nLINE 4:     student_id,\n            ^",
+      "name": "Error"
+    },
+    "traceId": "d86a6478b6e6580d78b3a88e2ac22632"
+  },
+  "failureStage": "sql",
+  "error": {
+    "kind": "invalid_shape",
+    "message": "Missing or invalid 'data' in endpoint response (expected result.finalData.data, result.data, or data)."
+  },
+  "traceAnalysis": {
+    "status": "computed",
+    "analyzedAtUtc": "2026-02-23T10:49:18.175Z",
+    "traceId": "d86a6478b6e6580d78b3a88e2ac22632",
+    "attempts": 4,
+    "spanCount": 1,
+    "totals": {
+      "inputTokens": 266,
+      "outputTokens": 1129,
+      "totalTokens": 1395,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 768,
+      "costUsd": 0.0023245
+    },
+    "perModel": [
+      {
+        "modelKey": "openai/gpt-5-mini",
+        "calls": 1,
+        "inputTokens": 266,
+        "outputTokens": 1129,
+        "totalTokens": 1395,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 768,
+        "costUsd": 0.0023245
+      }
+    ],
+    "warnings": []
+  }
+}
